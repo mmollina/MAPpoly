@@ -161,11 +161,5 @@ compare_haplotypes(m = 6,  h1.mds.Q, h2.mds.Q) ## Comparing phased haplotypes
 plot(map_mds_ord)
 ```
 
-Due to local misplacement, the HMM based map is quite long. Thus, in these cases, we use the weighted ordinary least squares to reestimate the final map. 
-
-```{R}
-map_mds_ord_ols <- reest_map(map_mds_ord, mat, method = "ols")
-plot(map_mds_ord_ols)
-```
-
+Due to local marker misplacement, the MDS based map, reestimated using HMM is longer than the one estimated considering the simulated order. 
 

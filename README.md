@@ -268,7 +268,7 @@ map_given_ord
     ##        log-likelihood:    -11713.53
     ##        LOD:       0
     ## 
-    ##       M_1     | | | | | |         o | | | | |       0.0 
+    ##   M_1     | | | | | |         o | | | | |       0.0 
     ##       M_2     o o o | | |         | o | | | |       0.1 
     ##       M_3     | | | o o o         | | | | | |       0.6 
     ##       M_4     o | | o | |         | | | | | |       1.3 
@@ -445,17 +445,13 @@ map_mds_ord
     ##        log-likelihood:    -15620.42
     ##        LOD:       0
     ## 
-    ##       M_3     o o o | | |         | | | | | |        0 
+    ##   M_3     o o o | | |         | | | | | |        0 
     ##       M_5     | | | o o o         o | | | | |        1 
     ##       M_12    | | | o | |         | o o o | |        2 
     ##       M_13    o o | | | |         | o o o | |        3 
     ##       M_6     o | | o o |         | | | | o |        4 
     ##       M_7     | | | o o |         | o | | o |        4 
     ##       M_9     | | | | o o         | | | | | |        6 
-    ##       M_10    | | | | o |         | o o | | o        6 
-    ##       M_17    | | | | | |         o | | | | o        8 
-    ##       M_4     | | o | o |         | | | | | |        8 
-    ##       M_8     | | | | o |         | | | | | |        9 
     .
     .
     .
@@ -502,11 +498,4 @@ plot(map_mds_ord)
 
 ![](README_files/figure-markdown_github/unnamed-chunk-10-1.png)
 
-Due to local misplacement, the HMM based map is quite long. Thus, in these cases, we use the weighted ordinary least squares to reestimate the final map.
-
-``` r
-map_mds_ord_ols <- reest_map(map_mds_ord, mat, method = "ols")
-plot(map_mds_ord_ols)
-```
-
-![](README_files/figure-markdown_github/unnamed-chunk-11-1.png)
+Due to local marker misplacement, the MDS based map, reestimated using HMM is longer than the one estimated considering the simulated order.
