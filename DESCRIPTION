@@ -1,0 +1,31 @@
+Package: mappoly
+Type: Package
+Title: Construction of Genetic Linkage Maps in Autopolyploids
+Version: 0.1.0
+Authors@R: c( person("Marcelo", "Mollinari", role =
+           c("aut", "cre"), email = "mmollin@ncsu.edu"))
+Author: Marcelo Mollinari [aut, cre]
+Maintainer: Marcelo Mollinari <mmollin@ncsu.edu>
+Description: Software to construct genetic maps in autopolyploid full sib
+    populations.
+License: GPL-2 | file LICENSE
+LazyData: TRUE
+Depends:
+    R (>= 3.4.0)
+Imports:
+    Rcpp (>= 0.12.6),
+    parallel,
+    RCurl,
+    fields,
+    grid,
+    bitops,
+    spam,
+    maps,
+    reshape,
+    ggplot2,
+    smacof,
+    princurve,
+    dendextend
+LinkingTo: Rcpp
+RoxygenNote: 6.0.1
+SystemRequirements: C++11
