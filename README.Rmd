@@ -16,17 +16,9 @@ knitr::opts_chunk$set(cache = TRUE)
 
 **NOTE** `mappoly` is under development. This is preliminary version of `mappoly`.
 
-`mappoly` is a package to construct genetic maps in autopolyploids with even ploidy 
-levels. In its current version,  `mappoly` can handle ploidy levels up to 8, when 
-using hidden Markov models (HMM), and up to 12, when using the two-point simplification. 
-All the two-point based functions are fast enough to run in standard computers, but we 
-strongly recommend to use high performance computation, specially for ploidy levels 
-higher than 4.
+`mappoly` is a package to construct genetic maps in autopolyploids with even ploidy levels. In its current version, `mappoly` can handle ploidy levels up to 8, when using hidden Markov models (HMM), and up to 12, when using the two-point simplification. All the two-point based functions are fast enough to run on standard computers, but we strongly recommend to use high-performance computation, especially for ploidy levels higher than 4. 
 
-Here we assume that the genotypic data is available and in the format required by `mappoly`. 
-In a future version this document will include instructions about genotype 
-calling. The main purpose of this tutorial is to show some functions available in 
-`mappoly`. 
+Here we assume that the genotypic data is available and in the format required by `mappoly`. In a future version, this document will include instructions about genotype calling. The primary purpose of this tutorial is to show some functions available in `mappoly`.
 
 `mappoly` is not available in CRAN, but you can install it from Git Hub
 
@@ -34,16 +26,8 @@ Within R, you need to install and load the package `devtools`:
 
 ```R
 install.packages("devtools")
-library(devtools)
 ```
-
-This will allow you to automatically build and install packages from
-Git Hub. If you use Windows, first install
-[Rtools](https://cran.r-project.org/bin/windows/Rtools/). On a Mac,
-you will need Xcode (available on the App Store). On Linux, you are
-good to go.
-
-Then, to install `mappoly` from Git Hub
+To install `mappoly` from Git Hub
 
 ```R
 devtools::install_github("mmollina/mappoly")
@@ -57,52 +41,42 @@ First, we need to simulate a linkage phase configuration in both parents. We can
 ```{r, echo=TRUE}
 require(mappoly)
 ph.temp<-sim_homologous(m = 6,                          # ploidy level
-                        n.mrk = 2000,                    # number of markers 
+                        n.mrk = 200,                    # number of markers 
                         max.d = 3,                      # maximum dosage number
                         choose.hom.at.random = TRUE,    # allelic variants randomly attributed to homologous
                         seed = 3141593)                 # simulation seed
-names(ph.temp$hom.allele.p)<-names(ph.temp$hom.allele.q)<-1:2000
+names(ph.temp$hom.allele.p)<-names(ph.temp$hom.allele.q)<-1:200
 ```
 
-Now, let us simulate a full sib mapping population. Here, the inter-marker distance is 0.5 centimorgans and the population has 300 individuals.
+Now, let us simulate a full-sib mapping population. Here, the inter-marker distance is 0.5 centimorgans, and the population has 300 individuals.
 ```{r, echo=TRUE}
 #Recombination fraction vector
-rf.vec<-rep(mf_h(0.07), 1999)
+rf.vec<-rep(mf_h(0.5), 199)
 
 #dummy simulation just to cache genotype counts
 dat <- poly_cross_simulate(m = 6,
                            rf.vec = rf.vec,
-                           n.mrk = 2000,
+                           n.mrk = 200,
                            n.ind = 300,
                            hom.allele = ph.temp)
 dat
 ```
 
-The program prints a summary of the simulated data. The first step when constructing a genetic map is to perform the 
-two-point analysis. To select all markers, we need to use function `make_seq_mappoly` 
-with `arg = 'all'`. The argument `'all'` tells `mappoly` to select all markers available 
-in the dataset. It is also possible to load data only for a specific sequence provided 
-along with the dataset using `arg = 'seqx'`, where `x` is the number of the sequence. 
-Yet, is is possible to load specific markers using a vector of numbers which indicates 
-the positions of the markers in the dataset.
+The program prints a summary of the simulated data. The first step when constructing a genetic map is to perform the two-point analysis. To select all markers, we need to use function `make_seq_mappoly` with `arg = 'all'`. The argument `'all'` tells `mappoly` to select all markers available in the dataset. It is also possible to load data only for a specific sequence provided along with the dataset using `arg = 'seqx'`, where `x` is the number of the sequence. Is possible to load specific markers using a vector of numbers which indicates the positions of the markers in the dataset.
 
 ```{r}
 all_snp<-make_seq_mappoly(input.obj = dat, arg = 'all')
 all_snp
 ```
 
-Now, let us load all the $$\zeta_{\mbox{T}_{k},\mbox{T}_{k^{\prime}}}(l_{P}, l_{Q})$$ defined 
-in equation 20 in [Mollinari and Garcia 2017](https://github.com/mmollina/mappoly/blob/master/inst/doc/Mollinari_and_garcia_2017.pdf).
-This object is fundamental to perform the dimension reduction of the transition space.
+Now, let us load all the $$\zeta_{\mbox{T}_{k},\mbox{T}_{k^{\prime}}}(l_{P}, l_{Q})$$ defined in equation 20 in [Mollinari and Garcia 2018](doi). This object is fundamental to perform the dimension reduction of the transition space.
 
 ```{r}
 counts<-cache_counts_twopt(input.seq = all_snp, get.from.web = TRUE)
 counts
 ```
 
-The function `est_pairwise_rf` estimates all the pairwise recombination fraction in the 
-sequence. Since the output object is to big, `mappoly` shows a summary. Notice that parallel 
-computation is available.
+The function `est_pairwise_rf` estimates all the pairwise recombination fractions in the sequence. Since the output object is to big, `mappoly` shows only a summary. Notice that parallel computation is available.
 ```{r}
 all_rf_pairwise <- est_pairwise_rf(input.seq = all_snp, 
                                    count.cache = counts, 
@@ -116,31 +90,25 @@ all_rf_pairwise$pairwise$`40-51`
 plot(all_rf_pairwise, first.mrk = 40, second.mrk = 51)
 ```
 
-In this case, `40-51` represents the number (position) of the markers in the original data set. 
-In the output, the name of the rows is of the form `x-y`, where `x` indicates how many homologous 
-chromosomes share the same allelic variant in parent $P$ and `y` in parent $Q$ 
-(see [Mollinari and Garcia 2017](https://github.com/mmollina/mappoly/blob/master/inst/doc/Mollinari_and_garcia_2017.pdf) for notation). 
-First column indicates the LOD Score in relation to the most likely linkage phase configuration.
-The second column indicates the recombination fraction and the third indicates the LOD Score comparing 
-the likelihood under no linkage ($r = 0.5$) and the estimated recombination fraction (evidence of linkage).
-In the next step, the two-point object should be converted in to recombination fraction and LOD Score matrices. To select the recombination fractions for each one of the SNP combinations, one needs to assume thresholds for 
-the three columns observed in the previous output. The arguments `thresh.LOD.ph` and `thresh.LOD.rf` set LOD Scores thresholds for the second most likely linkage phase configuration and recombination fraction. In this case `thresh.LOD.ph = 0` and `thresh.LOD.rf = 0`, thus no matter how likely is the second best option, all the computed values will be considered. The argument `thresh.rf = 0.5` indicates that the maximim accepted recombination fraction is `0.5`. To convert these values in a recombination fraction matrix we use the function `rf_list_to_matrix`
+In this case, `40-51` represents the number (position) of the markers in the original dataset. In the output, the name of the rows is of the form `x-y`, where `x` indicates how many homologous chromosomes share the same allelic variant in parent $P$ and `y` in parent $Q$ (see [Mollinari and Garcia 2018](doi) for notation). 
+The first column indicates the LOD Score in relation to the most likely linkage phase configuration. The second column shows the recombination fraction, and the third indicates the LOD Score comparing the likelihood under no linkage ($r = 0.5$) and the estimated recombination fraction (evidence of linkage).
+In the next step, the two-point object should be converted into recombination fraction and LOD Score matrices. To select the recombination fractions for each one of the SNP combinations, one needs to assume thresholds for the three columns observed in the previous output. The arguments `thresh.LOD.ph` and `thresh.LOD.rf` set LOD Scores thresholds for the second most likely linkage phase configuration and recombination fraction. In this case `thresh.LOD.ph = 0` and `thresh.LOD.rf = 0`, thus no matter how likely is the second best option, all the computed values will be considered. The argument `thresh.rf = 0.5` indicates that the maximum accepted recombination fraction is `0.5`. To convert these values in a recombination fraction matrix, we use the function `rf_list_to_matrix`
 
 ```{r}
 mat <- rf_list_to_matrix(input.twopt = all_rf_pairwise, n.clusters = 16)
 plot(mat)
 ```
 
-In the previous case, the thresholds allowed to show almost all points on the recombination fraction matrix. If these values become more stringent (LOD higher and lower rf) the result becomes more sparse. It is also important to notice that since the reference genome of potato is publicaly available, the dataset was already ordered using this reference and it is possible to see a clear block diagonal pattern on the recombination fraction matrix. Also, within each matrix, it is possible to observe a monotonicity pattern.
+In the previous case, the thresholds allowed to show almost all points on the recombination fraction matrix. If these values become more stringent (LOD higher and lower rf), the result becomes more sparse. It is also important to notice that since the reference genome of potato is publicly available, the dataset was already ordered using this reference and it is possible to see a clear block diagonal pattern on the recombination fraction matrix. Also, within each matrix, it is possible to observe a monotonicity pattern.
 
 
 ### Estimating the map for a given order
 
-Let us estimate the map (recombination fraction and linkage phase) for this given order. (Use high performance compting for this function) 
+Let us estimate the map (recombination fraction and linkage phase) for this given order. (Preferably, use high-performance computing for this function.) 
 ```{r}
 map_given_ord<-est_rf_hmm_sequential(input.seq = all_snp,
-                                     thres.twopt = 5,
-                                     thres.hmm = 5,
+                                     thres.twopt = 3,
+                                     thres.hmm = 10,
                                      extend.tail = 50,
                                      twopt = all_rf_pairwise,
                                      tol = 0.1, 
@@ -160,9 +128,9 @@ compare_haplotypes(m = 6,  h1.given.Q, h2.given.Q) ## Comparing phased haplotype
 plot(map_given_ord)
 ```
 
-### Ordering markers (SNP-based)
+### Ordering markers
 
-Given the recombination fraction matrix, it is possible to use two-point procedures to order the markers. MDS (multidimensional scaling), proposed by Preedy and Hackett (2016), is one of the best procedures available nowadays. 
+Given the recombination fraction matrix, it is possible to use two-point procedures to order the markers. Here we use the MDS (multidimensional scaling) algorithm, proposed by Preedy and Hackett (2016). 
 ```{r}
 mds_o<-mds_mappoly(input.mat = mat)
 plot(mds_o)
@@ -174,7 +142,6 @@ Reconstructing genetic map:
 ```{R}
 all_snp_mds<-make_seq_mappoly(input.obj = mds_o)
 all_snp_mds
-system.time(
 map_mds_ord<-est_rf_hmm_sequential(input.seq = all_snp_mds,
                                      thres.twopt = 5,
                                      thres.hmm = 5,
@@ -183,7 +150,7 @@ map_mds_ord<-est_rf_hmm_sequential(input.seq = all_snp_mds,
                                      tol = 0.1, 
                                      tol.final = 10e-4, 
                                      verbose = TRUE, 
-                                     phase.number.limit = 60))
+                                     phase.number.limit = 60)
 map_mds_ord
 h1.mds.P <- map_mds_ord$maps[[1]]$seq.ph$P
 h2.mds.P <- ph.temp$hom.allele.p[names(h1.mds.P)]
@@ -194,16 +161,11 @@ compare_haplotypes(m = 6,  h1.mds.Q, h2.mds.Q) ## Comparing phased haplotypes
 plot(map_mds_ord)
 ```
 
-Due to local misplacement, the HMM based map is quite long. Thus we use the weighted ordinary least squares to reestimate the final map. 
+Due to local misplacement, the HMM based map is quite long. Thus, in these cases, we use the weighted ordinary least squares to reestimate the final map. 
 
 ```{R}
 map_mds_ord_ols <- reest_map(map_mds_ord, mat, method = "ols")
 plot(map_mds_ord_ols)
-```
-
-
-```{R}
-save.image("~/repos/temp.RData")
 ```
 
 
