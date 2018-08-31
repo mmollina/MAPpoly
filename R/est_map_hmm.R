@@ -1,7 +1,7 @@
 #' Multipoint analysis using Hidden Markov Models in autopolyploids
 #'
 #' Performs the multipoint analysis proposed by \cite{Mollinari and
-  #'  Garcia et al.  (2017)} in a sequence of markers
+  #'  Garcia  (2018)} in a sequence of markers
 #'
 #'  This function first enumerates a set of linkage phase configurations
 #'  based on two-point recombination fraction information using a threshold
@@ -45,6 +45,9 @@
 #' is intended to be used in a sequential map contruction.
 #'
 #' @param x an object of one of the classes \code{mappoly.map}
+#'
+#' @param detailed if TRUE print the linkage phase configuration and the marker 
+#' position for all maps. if FALSE print a map summary 
 #'
 #' @param config should be a string \code{'best'} or the position of the
 #'     configuration to be plotted. If \code{'best'}, plot the configuration
@@ -604,7 +607,7 @@ est_rf_hmm_sequential <- function(input.seq,
 }
 
 #' @export
-print.mappoly.map <- function(x, ...) {
+print.mappoly.map <- function(x, detailed = FALSE, ...) {
   cat("This is an object of class 'mappoly.map'\n")
   cat("    Ploidy level:\t", x$info$m, "\n")
   cat("    No. individuals:\t", get(x$info$data.name)$n.ind, "\n")
@@ -612,21 +615,35 @@ print.mappoly.map <- function(x, ...) {
   cat("    No. linkage phases:\t", length(x$maps), "\n")
   l <- sapply(x$maps, function(x) x$loglike)
   LOD <- round(l - max(l), 2)
-  for (j in 1:length(x$maps)) {
-    cat("\n    ---------------------------------------------\n")
-    cat("    Linkage phase configuration: ", j)
-    cat("\n       log-likelihood:\t", x$map[[j]]$loglike)
-    cat("\n       LOD:\t\t", format(round(LOD[j], 2), digits = 2))
-    cat("\n\n")
-    M <- matrix("|", x$info$n.mrk, x$info$m * 2)
-    M <- cbind(M, "    ")
-    M <- cbind(M, format(round(cumsum(c(0, imf_h(x$maps[[j]]$seq.rf))), 1), digits = 1))
-    for (i in 1:x$info$n.mrk) {
-      if (all(x$maps[[j]]$seq.ph$Q[[i]] != 0))
-        M[i, c(x$maps[[j]]$seq.ph$P[[i]], x$maps[[j]]$seq.ph$Q[[i]] + x$info$m)] <- "o" else M[i, x$maps[[j]]$seq.ph$P[[i]]] <- "o"
+  if(detailed)
+  {
+    for (j in 1:length(x$maps)) {
+      cat("\n    ---------------------------------------------\n")
+      cat("    Linkage phase configuration: ", j)
+      cat("\n       log-likelihood:\t", x$map[[j]]$loglike)
+      cat("\n       LOD:\t\t", format(round(LOD[j], 2), digits = 2))
+      cat("\n\n")
+      M <- matrix("|", x$info$n.mrk, x$info$m * 2)
+      M <- cbind(M, "    ")
+      M <- cbind(M, format(round(cumsum(c(0, imf_h(x$maps[[j]]$seq.rf))), 1), digits = 1))
+      for (i in 1:x$info$n.mrk) {
+        if (all(x$maps[[j]]$seq.ph$Q[[i]] != 0))
+          M[i, c(x$maps[[j]]$seq.ph$P[[i]], x$maps[[j]]$seq.ph$Q[[i]] + x$info$m)] <- "o" else M[i, x$maps[[j]]$seq.ph$P[[i]]] <- "o"
+      }
+      M <- cbind(get(x$info$data.name)$mrk.names[x$maps[[j]]$seq.num], M)
+      format(apply(M, 1, function(y) cat(c("\t", y[1], "\t", y[2:(x$info$m + 1)], rep(" ", 4), y[(x$info$m + 2):(x$info$m * 2 + 3)], "\n"), collapse = "")))
     }
-    M <- cbind(get(x$info$data.name)$mrk.names[x$maps[[j]]$seq.num], M)
-    format(apply(M, 1, function(y) cat(c("\t", y[1], "\t", y[2:(x$info$m + 1)], rep(" ", 4), y[(x$info$m + 2):(x$info$m * 2 + 3)], "\n"), collapse = "")))
+  } else {
+    cat("\n    ---------------------------------------------\n")
+    cat("    Number of linkage phase configurations: ", length(x$maps))
+    cat("\n    ---------------------------------------------\n")
+    for (j in 1:length(x$maps)) {
+      cat("    Linkage phase configuration: ", j)
+      cat("\n       map length:\t", format(round(sum(imf_h(x$map[[j]]$seq.rf)), 2)))
+      cat("\n       log-likelihood:\t", format(round(x$map[[j]]$loglike, 2)))
+      cat("\n       LOD:\t\t", format(round(LOD[j], 2), digits = 2))
+      cat("\n    ~~~~~~~~~~~~~~~~~~\n")
+    }
   }
 }
 

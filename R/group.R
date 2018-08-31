@@ -71,10 +71,10 @@
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2017) Linkage
+#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
-#'     models, _submited_
+#'     models, _under review_
 #'
 #' @importFrom graphics abline pie
 #' @importFrom stats as.dendrogram as.dist cutree hclust lm predict quantile rect.hclust
@@ -128,6 +128,7 @@ group_mappoly <- function(input.mat, input.seq, expected.groups = NULL,
       seq.vs.grouped.snp <- NULL
       warning("There is no physical reference information to generate a comparison matrix")
     }
+    groups.snp  <- cutree(tree = hc.snp, k = expected.groups)
     if(comp.mat){
       seq.vs.grouped.snp<-matrix(0, expected.groups, length(na.omit(unique(input.seq$sequence)))+1,
                                  dimnames = list(1:expected.groups, c(na.omit(unique(input.seq$sequence)),"NH")))
@@ -136,17 +137,16 @@ group_mappoly <- function(input.mat, input.seq, expected.groups = NULL,
         x<-table(names(which(groups.snp==i)))
         seq.vs.grouped.snp[i,names(x)]<-x
       }
+      idtemp<-apply(seq.vs.grouped.snp, 1, which.max)
+      seq.vs.grouped.snp<-cbind(seq.vs.grouped.snp[,unique(idtemp)], seq.vs.grouped.snp[,"NH"])
+      #colnames(seq.vs.grouped.snp)<-c(na.omit(unique(input.seq$sequence)),"NH")
+      grtemp<-idtemp[as.character(groups.snp)]
+      names(grtemp)<-names(groups.snp)
+    } else {
+      grtemp <- groups.snp
+      seq.vs.grouped.snp <- NULL
     }
-    MSNP <- input.mat$rec.mat
-    diag(MSNP)<-0
-    MSNP[is.na(MSNP)]<-.5
-    hc.snp<-hclust(as.dist(MSNP), method = "average")
-    groups.snp  <- cutree(tree = hc.snp, k = expected.groups)
-    idtemp<-apply(seq.vs.grouped.snp, 1, which.max)
-    seq.vs.grouped.snp<-cbind(seq.vs.grouped.snp[,unique(idtemp)], seq.vs.grouped.snp[,"NH"])
-    #colnames(seq.vs.grouped.snp)<-c(na.omit(unique(input.seq$sequence)),"NH")
-    grtemp<-idtemp[as.character(groups.snp)]
-    names(grtemp)<-names(groups.snp)
+    names(grtemp)<-input.seq$seq.num
     structure(list(data.name = input.mat$data.name, hc.snp = hc.snp, expected.groups = expected.groups,
                    groups.snp = grtemp, seq.vs.grouped.snp = seq.vs.grouped.snp),
                    class = "mappoly.group")
@@ -162,11 +162,19 @@ print.mappoly.group <- function(x, detailed = TRUE, ...) {
     cat("  This is an object of class 'mappoly.group'\n  ------------------------------------------\n")
     ## criteria
     cat("  Criteria used to assign markers to groups:\n\n")
-    cat("    - Number of expected groups =", x$expected.groups, "\n  ------------------------------------------\n")
+    cat("    - Number of markers =        ", length(x$groups.snp), "\n")
+    cat("    - Number of linkage groups =", length(unique(x$groups.snp)), "\n")
+    cat("    - Number of markers per linkage groups: \n")
+    w<-data.frame(table(x$groups.snp, useNA = "ifany"))
+    colnames(w) = c("   group", "n.mrk")
+    print (w, row.names = FALSE)
+    cat("  ------------------------------------------\n")
+    
     ## printing summary
-    cat("  No. markers:           ", length(x$groups.snp), "\n")
-    print(x$seq.vs.grouped.snp)
-    cat("\n  ------------------------------------------\n")
+    if(!is.null(x$seq.vs.grouped.snp)){
+      print(x$seq.vs.grouped.snp)
+      cat("\n  ------------------------------------------\n")
+    }
 }
 
 #' @export
