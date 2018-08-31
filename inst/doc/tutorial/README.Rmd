@@ -3,6 +3,12 @@ title: MAPpoly Turorial - A software to construct genetic maps in autopolyploids
 author: "Marcelo Mollinari, Guilhereme Pereira and Zhao-Bang Zeng"
 date: "`r Sys.Date()`"
 output:
+ pdf_document:
+   toc: yes
+   toc_depth: '3'
+   highlight: tango
+ md_document:
+   variant: markdown_github
  html_document:
    highlight: tango
    keep_md: yes
@@ -11,12 +17,6 @@ output:
    toc_depth: '3'
    toc_float:
      collapsed: no
- md_document:
-   variant: markdown_github
- pdf_document:
-   toc: yes
-   toc_depth: '3'
-   highlight: tango
 linestretch: 1.2
 bibliography: biblio.bib
 #output: rmarkdown::html_vignette
@@ -350,6 +350,6 @@ for(i in 1:3)
 }
 ```
 
-The `genoprob` object obtained here can be used to perform QTL analysis using the R package `QTLpoly` [@Pereira2019], which is an under development software to map multiple QTLs in full-sib families of outcrossing autopolyploid species. 
+In this figure, the x-axis represents the genetic map and the y-axis represents the 400 possible genotypes in the full-sib population. The color scale varies from dark purple (high probabilityes) to light yellow (low probabilities). The `genoprob` object obtained here can be used to perform QTL analysis using the R package `QTLpoly` [@Pereira2019], which is an under development software to map multiple QTLs in full-sib families of outcrossing autopolyploid species. 
 
 # References
