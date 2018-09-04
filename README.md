@@ -1,7 +1,7 @@
 ---
 title: MAPpoly Turorial - A software to construct genetic maps in autopolyploids with high ploidy level
 author: "Marcelo Mollinari, Guilhereme Pereira and Zhao-Bang Zeng"
-date: "2018-08-31"
+date: "2018-09-04"
 output:
  html_document:
    highlight: tango
@@ -554,26 +554,26 @@ Graphical representations
 ![](README_files/figure-html/unnamed-chunk-25-1.png)<!-- -->![](README_files/figure-html/unnamed-chunk-25-2.png)<!-- -->![](README_files/figure-html/unnamed-chunk-25-3.png)<!-- -->
 
 ```
-##      [,1]         [,2]         [,3]        
-## path NULL         NULL         NULL        
-## name "GRID.VP.12" "GRID.VP.15" "GRID.VP.18"
-## n    1            1            1
+##      [,1]        [,2]        [,3]       
+## path NULL        NULL        NULL       
+## name "GRID.VP.3" "GRID.VP.6" "GRID.VP.9"
+## n    1           1           1
 ```
 
 Again, let us compare the simulated and the estimated linkage phases and the length of the map.  For parent $P$ we have 
 
 
 ```r
-h1.given.P <- lapply(maps.denovo, function(x) x$maps[[1]]$seq.ph$P)
+h1.denovo.P <- lapply(maps.denovo, function(x) x$maps[[1]]$seq.ph$P)
 temp <- read.csv2("~/repos/MAPPoly/inst/doc/phase_sim_hexa_P.csv")[,2:7]
-h2.given.P <- lapply(h1.given.P, 
+h2.denovo.P <- lapply(h1.denovo.P, 
                      function(x, temp) ph_matrix_to_list(temp[names(x),]), 
                      temp = temp)
 is.same.haplo.P <-NULL
 for(i in 1:3)
   is.same.haplo.P <- c(is.same.haplo.P, compare_haplotypes(m = 6,  
-                                                           h1 = h1.given.P[[i]], 
-                                                           h2 = h2.given.P[[i]])$is.same.haplo)
+                                                           h1 = h1.denovo.P[[i]], 
+                                                           h2 = h2.denovo.P[[i]])$is.same.haplo)
 is.same.haplo.P
 ```
 
@@ -583,16 +583,16 @@ is.same.haplo.P
 And for parent $Q$ we have 
 
 ```r
-h1.given.Q <- lapply(maps.denovo, function(x) x$maps[[1]]$seq.ph$Q)
+h1.denovo.Q <- lapply(maps.denovo, function(x) x$maps[[1]]$seq.ph$Q)
 temp <- read.csv2("~/repos/MAPPoly/inst/doc/phase_sim_hexa_Q.csv")[,2:7]
-h2.given.Q <- lapply(h1.given.Q, 
+h2.denovo.Q <- lapply(h1.denovo.Q, 
                      function(x, temp) ph_matrix_to_list(temp[names(x),]), 
                      temp = temp)
 is.same.haplo.Q <-NULL
 for(i in 1:3)
   is.same.haplo.Q <- c(is.same.haplo.Q, compare_haplotypes(m = 6,  
-                                                           h1 = h1.given.Q[[i]], 
-                                                           h2 = h2.given.Q[[i]])$is.same.haplo)
+                                                           h1 = h1.denovo.Q[[i]], 
+                                                           h2 = h2.denovo.Q[[i]])$is.same.haplo)
 is.same.haplo.Q
 ```
 
