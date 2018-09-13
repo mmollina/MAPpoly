@@ -20,16 +20,6 @@ To install `mappoly` from Git Hub use
 devtools::install_github("mmollina/mappoly")
 ```
 
-# Loading `mappoly`
-
-To load `mappoly`, simply type 
-
-
-```r
-library(mappoly)
-```
-
-
 # Tutorial
 
 1. [Building a genetic map in an hexaploid full-sib population](http://)
