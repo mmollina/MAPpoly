@@ -499,6 +499,7 @@ est_rf_hmm_sequential <- function(input.seq,
     return(cur.map)
   }
   all.ph.temp<-all.ph
+  i1 <- j
   ## Submap for the remaining markers
   for(i in (j+1):length(input.seq$seq.num))
   {
@@ -552,7 +553,7 @@ est_rf_hmm_sequential <- function(input.seq,
     size <- sapply(cur.map.temp$maps, function(x) round(sum(imf_h(x$seq.rf)),1))
     last.rf <- imf_h(rev(cur.map.temp$maps[[1]]$seq.rf)[1])
     sub.maps[i,seq.cur$seq.mrk.names]  <- c(0, imf_h(cur.map.temp$maps[[1]]$seq.rf))
-    size.dif<-sum(sub.maps[i,], na.rm = TRUE)-sum(sub.maps[i-1,], na.rm = TRUE)
+    size.dif<-sum(sub.maps[i,], na.rm = TRUE)-sum(sub.maps[i1,], na.rm = TRUE)
     LOD <- get_LOD(cur.map.temp, sorted = FALSE)
     if(verbose){
       #cat("\n----------------------------\n")
@@ -573,6 +574,7 @@ est_rf_hmm_sequential <- function(input.seq,
       ## selecting configuration that yield higher likelihood
       ## given the map length limit
       conf<-min(which(w))
+      i1 <- i
     } else {
       if(verbose)
         cat(" --> not included...")
