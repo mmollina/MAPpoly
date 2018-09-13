@@ -1,6 +1,6 @@
 ---
 title: MAPpoly Turorial - A software to construct genetic maps in autopolyploids with high ploidy level
-author: "Marcelo Mollinari, Guilhereme Pereira and Zhao-Bang Zeng"
+author: "Marcelo Mollinari, Guilhereme Pereira, A Augusto F Garcia and Zhao-Bang Zeng"
 date: "2018-09-13"
 output:
  html_document:
