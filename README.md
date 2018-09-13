@@ -1,7 +1,6 @@
 
 [![Build Status](https://travis-ci.org/mmollina/MAPPoly.svg?branch=master)](https://travis-ci.org/mmollina/MAPPoly) [![Development](https://img.shields.io/badge/development-active-blue.svg)](https://img.shields.io/badge/development-active-blue.svg)
-![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg)
-
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 # Introduction
 
 `mappoly` (v. 0.1.0) is an under development R package to construct genetic maps in autopolyploids with even ploidy levels. In its current version, `mappoly` can handle ploidy levels up to 8 when using hidden Markov models (HMM), and up to 12 when using the two-point simplification. All the two-point based functions are fast enough to run on standard computers. However, we strongly recommend to use high-performance computation for HMM-based analysis, especially for ploidy levels higher than 4. 
