@@ -80,10 +80,10 @@ Identifies linkage groups of markers, using results from two-point
    }
 }
 \references{
-Mollinari, M., and Garcia, A.  A. F. (2017) Linkage
+Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
     analysis and haplotype phasing in experimental autopolyploid
     populations with high ploidy level using hidden Markov
-    models, _submited_
+    models, _under review_
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

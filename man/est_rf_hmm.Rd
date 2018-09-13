@@ -37,6 +37,9 @@ is intended to be used in a sequential map contruction.}
 
 \item{x}{an object of one of the classes \code{mappoly.map}}
 
+\item{detailed}{if TRUE print the linkage phase configuration and the marker 
+position for all maps. if FALSE print a map summary}
+
 \item{config}{should be a string \code{'best'} or the position of the
 configuration to be plotted. If \code{'best'}, plot the configuration
 with the highest likelihood.}
@@ -48,7 +51,7 @@ An object of class 'mappoly.map'
 }
 \description{
 Performs the multipoint analysis proposed by \cite{Mollinari and
- Garcia et al.  (2017)} in a sequence of markers
+ Garcia  (2018)} in a sequence of markers
 }
 \details{
 This function first enumerates a set of linkage phase configurations

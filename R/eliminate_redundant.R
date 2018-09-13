@@ -6,8 +6,6 @@
 #'
 #' @param input.seq an object of class \code{'mappoly.sequence'}
 #'
-#' @param x an object \code{'mappoly.unique.seq'}
-#'
 #' @param ... currently ignored
 #'
 #' @return An object of class \code{'mappoly.unique.seq'} which

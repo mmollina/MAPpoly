@@ -16,7 +16,7 @@ calc_genoprob_dist<-function(input.map, dat.dist,  phase.config = "best", verbos
   } else if (phase.config > length(LOD.conf)) {
     stop("invalid linkage phase configuration")
   } else i.lpc <- phase.config
-
+  mrk<-NULL
   original.map.mrk<-get(input.map$info$data.name, pos=1)$mrk.names[input.map$maps[[i.lpc]]$seq.num]
   dat.dist.pos<-match(original.map.mrk, dat.dist$mrk.names)
   which.is.na<-which(is.na(dat.dist.pos))

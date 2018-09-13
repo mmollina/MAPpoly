@@ -1,4 +1,4 @@
-#' Compute QTL conditional probability
+#' Compute QTL conditional probabilities
 #'
 #' The conditional probabilities are calculeted for each marker.
 #' In this version, the probabilities are not calculated bewtween
@@ -11,8 +11,6 @@
 #'
 #' @param verbose if \code{TRUE}, current progress is shown; if
 #'     \code{FALSE}, no output is produced.
-#'
-#' @param x an object of one of the classes \code{mappoly.map}
 #'
 #' @param ... currently ignored
 #'
@@ -44,7 +42,7 @@
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2017) Linkage
+#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
 #'     models, _submited_

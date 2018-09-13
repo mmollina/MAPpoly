@@ -11,6 +11,8 @@ drop_mrk(input.map, drop.mrk, reest.map = TRUE, input.mat = NULL,
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}
 
+\item{drop.mrk}{Markers to be removed from the map}
+
 \item{reest.map}{if \code{TRUE}, reestimate the map using the
 method indicated in the argument 'method'}
 
@@ -30,8 +32,6 @@ regression when the Ordinary Least Saquares is chosen}
 
 \item{verbose}{If \code{TRUE}, current progress is shown; if
 \code{FALSE}, no output is produced.}
-
-\item{drop.mark}{Markers to be removed from the map}
 }
 \description{
 Drop markers in a genetic map
@@ -68,7 +68,7 @@ Drop markers in a genetic map
 
 }
 \references{
-Mollinari, M., and Garcia, A.  A. F. (2017) Linkage
+Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
     analysis and haplotype phasing in experimental autopolyploid
     populations with high ploidy level using hidden Markov
     models, _submited_

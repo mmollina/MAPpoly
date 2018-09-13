@@ -1,7 +1,7 @@
 #' Drop markers in a genetic map
 #'
 #' @param input.map An object of class \code{mappoly.map}
-#' @param drop.mark Markers to be removed from the map
+#' @param drop.mrk Markers to be removed from the map
 #' @param reest.map if \code{TRUE}, reestimate the map using the
 #'     method indicated in the argument 'method'
 #' @param input.mat An object of class \code{mappoly.rf.matrix}
@@ -48,7 +48,7 @@
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2017) Linkage
+#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
 #'     models, _submited_

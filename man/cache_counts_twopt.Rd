@@ -28,8 +28,6 @@ genotypes for transition probabilities (conditional
 probabilities). If \code{TRUE} returns the frequency for joint
 probabilities#' @param x an object of one of the classes \code{mappoly.map}}
 
-\item{x}{an object of one of the classes \code{cache.info}}
-
 \item{...}{currently ignored}
 }
 \value{
@@ -45,7 +43,7 @@ An object of class \code{cache.info} which contains a list
     represents the number of homologous chromosomes that share
     alleles. The rows on these matrices represents the dosages in k
     and k+1 in an individual in the offspring. See Table 6 of
-    Mollinari and Garcia (2017) for an example.
+    Mollinari and Garcia (2018) for an example.
 }
 \description{
 Returns the frequency of each genotype for the two-point reduction
@@ -64,7 +62,7 @@ combination and for all possible linkage phase configuration.
 
 }
 \references{
-Mollinari, M., and Garcia, A.  A. F. (2017) Linkage
+Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
     analysis and haplotype phasing in experimental autopolyploid
     populations with high ploidy level using hidden Markov
     models, _submited_

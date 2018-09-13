@@ -9,8 +9,6 @@ elim_redundant(input.seq)
 \arguments{
 \item{input.seq}{an object of class \code{'mappoly.sequence'}}
 
-\item{x}{an object \code{'mappoly.unique.seq'}}
-
 \item{...}{currently ignored}
 }
 \value{

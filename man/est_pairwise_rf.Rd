@@ -2,11 +2,17 @@
 % Please edit documentation in R/pairwise_rf.R
 \name{est_pairwise_rf}
 \alias{est_pairwise_rf}
+\alias{print.poly.est.two.pts.pairwise}
+\alias{plot.poly.est.two.pts.pairwise}
 \title{Pairwise two-point analysis}
 \usage{
 est_pairwise_rf(input.seq, count.cache, n.clusters = 1,
   tol = .Machine$double.eps^0.25, mrk.pairs = NULL, batch.size = NULL,
   verbose = TRUE)
+
+\method{print}{poly.est.two.pts.pairwise}(x, ...)
+
+\method{plot}{poly.est.two.pts.pairwise}(x, first.mrk, second.mrk, ...)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}.}
@@ -31,11 +37,11 @@ If \code{NULL}, all pairs are analyized.}
 
 \item{x}{an object of one of the classes \code{poly.est.two.pts.pairwise}}
 
+\item{...}{currently ignored}
+
 \item{first.mrk}{index indicating the position of the first marker}
 
 \item{second.mrk}{index indicating the position of the second marker}
-
-\item{...}{currently ignored}
 }
 \value{
 An object of class \code{poly.est.two.pts.dosage.pairwise} which

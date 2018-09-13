@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_genoprob.R
 \name{calc_genoprob}
 \alias{calc_genoprob}
-\title{Compute QTL conditional probability}
+\title{Compute QTL conditional probabilities}
 \usage{
 calc_genoprob(input.map, phase.config = "best", verbose = TRUE)
 }
@@ -14,8 +14,6 @@ calc_genoprob(input.map, phase.config = "best", verbose = TRUE)
 
 \item{verbose}{if \code{TRUE}, current progress is shown; if
 \code{FALSE}, no output is produced.}
-
-\item{x}{an object of one of the classes \code{mappoly.map}}
 
 \item{...}{currently ignored}
 }
@@ -53,7 +51,7 @@ markers for for efficiency purposes.
  }
 }
 \references{
-Mollinari, M., and Garcia, A.  A. F. (2017) Linkage
+Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
     analysis and haplotype phasing in experimental autopolyploid
     populations with high ploidy level using hidden Markov
     models, _submited_
