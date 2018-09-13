@@ -1,5 +1,5 @@
 
-[![Build Status](https://travis-ci.org/mmollina/mappoly.svg?branch=master)](https://travis-ci.org/mmollina/mappoly) [![Development](https://img.shields.io/badge/development-active-blue.svg)](https://img.shields.io/badge/development-active-blue.svg)
+[![Build Status](https://travis-ci.org/mmollina/MAPPoly.svg?branch=master)](https://travis-ci.org/mmollina/MAPPoly) [![Development](https://img.shields.io/badge/development-active-blue.svg)](https://img.shields.io/badge/development-active-blue.svg)
 
 # Introduction
 
