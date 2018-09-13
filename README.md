@@ -1,30 +1,5 @@
----
-title: MAPpoly Turorial - A software to construct genetic maps in autopolyploids with high ploidy level
-author: "Marcelo Mollinari, Guilhereme Pereira, A Augusto F Garcia and Zhao-Bang Zeng"
-date: "2018-09-13"
-output:
- html_document:
-   highlight: tango
-   keep_md: yes
-   theme: united
-   toc: yes
-   toc_depth: '3'
-   toc_float:
-     collapsed: no
- md_document:
-   variant: markdown_github
- pdf_document:
-   toc: yes
-   toc_depth: '3'
-   highlight: tango
-linestretch: 1.2
-bibliography: biblio.bib
-#output: rmarkdown::html_vignette
-#vignette: >
-#  %\VignetteEngine{knitr::rmarkdown}
----
 
-
+[![Build Status](https://travis-ci.org/mmollina/mappoly.svg?branch=master)](https://travis-ci.org/mmollina/mappoly) [![Development](https://img.shields.io/badge/development-active-blue.svg)](https://img.shields.io/badge/development-active-blue.svg)
 
 # Introduction
 
