@@ -1,7 +1,5 @@
 
-<!-- [![Build Status](https://travis-ci.org/mmollina/MAPPoly.svg?branch=master)](https://travis-ci.org/mmollina/MAPPoly) -->
-
-[![Development](https://img.shields.io/badge/development-active-blue.svg)](https://img.shields.io/badge/development-active-blue.svg)
+[![Build Status](https://travis-ci.org/mmollina/MAPPoly.svg?branch=master)](https://travis-ci.org/mmollina/MAPPoly) [![Development](https://img.shields.io/badge/development-active-blue.svg)](https://img.shields.io/badge/development-active-blue.svg)
 
 # Introduction
 
@@ -22,4 +20,4 @@ devtools::install_github("mmollina/mappoly")
 
 # Tutorial
 
-1. [Building a genetic map in an hexaploid full-sib population](http://)
+1. [Building a genetic map in an hexaploid full-sib population using MAPPoly](https://mmollina.github.io/MAPPoly/)

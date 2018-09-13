@@ -2,9 +2,12 @@
 % Please edit documentation in R/read_polymap.R
 \name{read_geno}
 \alias{read_geno}
+\alias{plot.mappoly.data}
 \title{Data Input}
 \usage{
 read_geno(file.in)
+
+\method{plot}{mappoly.data}(x, detailed = FALSE, ...)
 }
 \arguments{
 \item{file.in}{the name of the input file which contains the data to

@@ -22,6 +22,8 @@
 #'
 #' @param x an object of class onemap.segreg.test
 #'
+#' @param ... currently ignored
+#' 
 #' @param detailed logical. If \code{TRUE} the markers in each
 #'     linkage group are printed.
 #'

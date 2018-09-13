@@ -35,6 +35,8 @@ if \code{FALSE}, no output is produced.}
 
 \item{detailed}{logical. If \code{TRUE} the markers in each
 linkage group are printed.}
+
+\item{...}{currently ignored}
 }
 \value{
 Returns an object of class \code{mappoly.group}, which is a list

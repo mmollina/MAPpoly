@@ -230,6 +230,7 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
         cat("\n    This dataset contains phenotypic information.\n")
 }
 
+#' @rdname read_geno
 #' @export
 #' @importFrom graphics barplot
 plot.mappoly.data <- function(x, detailed = FALSE, ...)

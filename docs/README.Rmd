@@ -1,5 +1,5 @@
 ---
-title: MAPpoly Turorial - A software to construct genetic maps in autopolyploids with high ploidy level
+title: Building a genetic map in an hexaploid full-sib population using MAPPoly
 author: "Marcelo Mollinari, Guilhereme Pereira, A Augusto F Garcia and Zhao-Bang Zeng"
 date: "`r Sys.Date()`"
 output:
@@ -27,14 +27,14 @@ bibliography: biblio.bib
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(cache = TRUE)
-load("~/repos/MAPPoly/inst/doc/maps.RData")
+#load("~/repos/MAPPoly/inst/doc/maps.RData")
 ```
 
 # Introduction
 
 `mappoly` (v. 0.1.0) is an under development R package to construct genetic maps in autopolyploids with even ploidy levels. In its current version, `mappoly` can handle ploidy levels up to 8 when using hidden Markov models (HMM), and up to 12 when using the two-point simplification. All the two-point based functions are fast enough to run on standard computers. However, we strongly recommend to use high-performance computation for HMM-based analysis, especially for ploidy levels higher than 4. 
 
-Here we assume that the genotypic data is available and in the format required by `mappoly`. In a future version, this document will include instructions about genotype calling and `vcf` files. The primary purpose of this tutorial is to show some functions available in `mappoly` and how to use them in as sequential fashion to construct a genetic map. The derivation of the HMM used in `mappoly` can be found in [@Mollinari2018](https://doi.org/10.1101/415232 ). A comprehensive  example of using `mappoly` to build an ultra-dense hexaploid map can be found in [@Mollinari2019].
+Here we assume that the genotypic data is available and in the format required by `mappoly`. In a future version, this document will include instructions about genotype calling and `vcf` files. The primary purpose of this tutorial is to show some functions available in `mappoly` and how to use them in as sequential fashion to construct a genetic map. The derivation of the HMM used in `mappoly` can be found in [@Mollinari2018](https://doi.org/10.1101/415232 ).
 
 `mappoly` is not available in CRAN, but you can install it from Git Hub. Within R, you need to install and load the package `devtools`:
 
