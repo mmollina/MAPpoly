@@ -2,16 +2,24 @@
 % Please edit documentation in R/group.R
 \name{group_mappoly}
 \alias{group_mappoly}
+\alias{print.mappoly.group}
+\alias{plot.mappoly.group}
 \title{Assign markers to linkage groups}
 \usage{
 group_mappoly(input.mat, input.seq, expected.groups = NULL, inter = TRUE,
   comp.mat = FALSE, verbose = TRUE)
+
+\method{print}{mappoly.group}(x, detailed = TRUE, ...)
+
+\method{plot}{mappoly.group}(x, ...)
 }
 \arguments{
 \item{input.mat}{an object of class \code{mappoly.rf.matrix}.}
 
 \item{input.seq}{an object of class \code{mappoly.sequence}.
 It must be contained in 'input.mat'}
+
+\item{expected.groups}{the number of expected groups for the species (if any)}
 
 \item{inter}{if \code{TRUE}, plots a dendrogram with highlighting the
 expected groups before continue.}
@@ -22,8 +30,6 @@ present}
 
 \item{verbose}{logical. If \code{TRUE}, current progress is shown;
 if \code{FALSE}, no output is produced.}
-
-\item{expected.group}{the number of expected groups for the species (if any)}
 
 \item{x}{an object of class onemap.segreg.test}
 

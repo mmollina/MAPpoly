@@ -200,7 +200,7 @@ read_geno_dist <- function(file.in) {
               class = "mappoly.data")
 }
 
-#' @rdname read_geno
+#' @rdname read_geno_dist
 #' @export
 print.mappoly.data <- function(x, detailed = FALSE, ...) {
     cat("This is an object of class 'mappoly.data'\n")

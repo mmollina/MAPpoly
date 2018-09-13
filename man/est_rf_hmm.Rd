@@ -2,11 +2,17 @@
 % Please edit documentation in R/est_map_hmm.R
 \name{est_rf_hmm}
 \alias{est_rf_hmm}
+\alias{print.mappoly.map}
+\alias{plot.mappoly.map}
 \title{Multipoint analysis using Hidden Markov Models in autopolyploids}
 \usage{
 est_rf_hmm(input.seq, input.ph = NULL, thres = 0.5, twopt = NULL,
   verbose = FALSE, rf.lim = 0.5, tol = 1e-04, est.given.0.rf = FALSE,
   reestimate.single.ph.configuration = TRUE)
+
+\method{print}{mappoly.map}(x, detailed = FALSE, ...)
+
+\method{plot}{mappoly.map}(x, col.cte = 2, config = "best", ...)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}.}
@@ -40,11 +46,14 @@ is intended to be used in a sequential map contruction.}
 \item{detailed}{if TRUE print the linkage phase configuration and the marker 
 position for all maps. if FALSE print a map summary}
 
-\item{config}{should be a string \code{'best'} or the position of the
+\item{...}{currently ignored}
+
+\item{col.cte}{a single value or a vector of with size equal to the number of 
+markers in the map indicating the color of the allelic variants. The default is \code{red}}
+
+\item{config}{should be \code{'best'} or the position of the
 configuration to be plotted. If \code{'best'}, plot the configuration
 with the highest likelihood.}
-
-\item{...}{currently ignored}
 }
 \value{
 An object of class 'mappoly.map'

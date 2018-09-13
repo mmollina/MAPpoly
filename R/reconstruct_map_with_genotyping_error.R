@@ -70,7 +70,7 @@ est_full_hmm_with_global_error <- function(input.map, error=NULL, tol=10e-4)
   indnames<-get(input.map$info$data.name, pos=1)$ind.names
   gen<-vector("list", length(indnames))
   names(gen)<-indnames
-  ind<-NULL
+  mrk<-ind<-NULL
   for(i in names(gen))
   {
     a<-subset(geno.temp, ind%in%i)

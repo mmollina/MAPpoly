@@ -176,7 +176,7 @@ mds_mappoly<-function(input.mat,
   map$data.name<-input.mat$data.name
   structure(map, class="mappoly.mds")
 }
-
+#' @rdname mds_mappoly
 #' @export
 print.mappoly.mds<-function(x, ...)
 {
@@ -184,7 +184,7 @@ print.mappoly.mds<-function(x, ...)
   cat("\nNumber of markers: ", nrow(x$locimap))
   cat("\nNumber of dimensions used: ", x$sm$ndim)
 }
-
+#' @rdname mds_mappoly
 #' @export
 plot.mappoly.mds<-function(x, displaytext = FALSE, ...)
 {

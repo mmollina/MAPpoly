@@ -49,7 +49,10 @@
 #' @param detailed if TRUE print the linkage phase configuration and the marker 
 #' position for all maps. if FALSE print a map summary 
 #'
-#' @param config should be a string \code{'best'} or the position of the
+#' @param col.cte a single value or a vector of with size equal to the number of 
+#' markers in the map indicating the color of the allelic variants. The default is \code{red}
+#' 
+#' @param config should be \code{'best'} or the position of the
 #'     configuration to be plotted. If \code{'best'}, plot the configuration
 #'     with the highest likelihood.
 #'
@@ -607,7 +610,7 @@ est_rf_hmm_sequential <- function(input.seq,
   res$sub.maps<-sub.maps
   return(res)
 }
-
+#' @rdname est_rf_hmm
 #' @export
 print.mappoly.map <- function(x, detailed = FALSE, ...) {
   cat("This is an object of class 'mappoly.map'\n")
@@ -649,7 +652,7 @@ print.mappoly.map <- function(x, detailed = FALSE, ...) {
   }
 }
 
-
+#' @rdname est_rf_hmm
 #' @importFrom grid grid.roundrect  grid.rect grid.newpage grid.lines viewport pushViewport upViewport grid.text gpar unit
 #' @importFrom grDevices rgb
 #' @export

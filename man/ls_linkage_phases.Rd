@@ -2,10 +2,16 @@
 % Please edit documentation in R/check_phase_configurations.R
 \name{ls_linkage_phases}
 \alias{ls_linkage_phases}
+\alias{print.two.pts.linkage.phases}
+\alias{plot.two.pts.linkage.phases}
 \title{List of linkage phases}
 \usage{
 ls_linkage_phases(input.seq, thres, twopt, mrk.to.add = NULL,
   prev.info = NULL)
+
+\method{print}{two.pts.linkage.phases}(x, ...)
+
+\method{plot}{two.pts.linkage.phases}(x, ...)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}.}

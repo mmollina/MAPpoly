@@ -2,10 +2,16 @@
 % Please edit documentation in R/mds.R
 \name{mds_mappoly}
 \alias{mds_mappoly}
+\alias{print.mappoly.mds}
+\alias{plot.mappoly.mds}
 \title{Estimates loci position using Multidimensional Scaling}
 \usage{
 mds_mappoly(input.mat, p = NULL, n = NULL, ndim = 2,
   weight.exponent = 2, verbose = TRUE)
+
+\method{print}{mappoly.mds}(x, ...)
+
+\method{plot}{mappoly.mds}(x, displaytext = FALSE, ...)
 }
 \arguments{
 \item{input.mat}{an object of class \code{mappoly.input.matrix}.}
@@ -24,10 +30,10 @@ MDS procedure.}
 
 \item{x}{an object of class \code{mappoly.mds}}
 
+\item{...}{currently ignored}
+
 \item{displaytext}{logical. If \code{TRUE}, display the name of the markers in the
 diagnostic plot.}
-
-\item{...}{currently ignored}
 }
 \value{
 A list containing:

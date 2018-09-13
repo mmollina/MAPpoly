@@ -141,6 +141,7 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL) {
         class = "mappoly.sequence")
 }
 
+#' @rdname make_seq_mappoly
 #' @export
 print.mappoly.sequence <- function(x, ...) {
     cat("This is an object of class 'mappoly.sequence'\n")

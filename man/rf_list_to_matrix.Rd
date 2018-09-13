@@ -2,10 +2,17 @@
 % Please edit documentation in R/rf_list_to_matrix.R
 \name{rf_list_to_matrix}
 \alias{rf_list_to_matrix}
+\alias{print.mappoly.rf.matrix}
+\alias{plot.mappoly.rf.matrix}
 \title{Recombination fraction list to matrix}
 \usage{
 rf_list_to_matrix(input.twopt, thresh.LOD.ph = 0, thresh.LOD.rf = 0,
   thresh.rf = 0.5, n.clusters = 1, verbose = TRUE)
+
+\method{print}{mappoly.rf.matrix}(x, ...)
+
+\method{plot}{mappoly.rf.matrix}(x, type = c("rf", "lod"), ord = NULL,
+  rem = NULL, main.text = NULL, index = TRUE, ...)
 }
 \arguments{
 \item{input.twopt}{an object of class \code{poly.est.two.pts.pairwise}}
@@ -24,6 +31,8 @@ configuration.}
 
 \item{x}{an object of class mappoly.rf.matrix}
 
+\item{...}{currently ignored}
+
 \item{type}{type of matrix that shuold be printed. Can be one of the
 following: \code{"rf"}, for recombination fraction or \code{"lod"}
 for LOD Score}
@@ -35,8 +44,6 @@ for LOD Score}
 \item{main.text}{title of the heatmap}
 
 \item{index}{should the numbers corresponding to the markers be printed in the diagonal of the heatmap?}
-
-\item{...}{currently ignored}
 }
 \value{
 A list containing two matrices. The first one contains the

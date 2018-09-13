@@ -8,7 +8,7 @@
 #' @param input.seq an object of class \code{mappoly.sequence}.
 #'     It must be contained in 'input.mat'
 #'
-#' @param expected.group the number of expected groups for the species (if any)
+#' @param expected.groups the number of expected groups for the species (if any)
 #'
 #' @param inter if \code{TRUE}, plots a dendrogram with highlighting the
 #'    expected groups before continue.
@@ -152,7 +152,7 @@ group_mappoly <- function(input.mat, input.seq, expected.groups = NULL,
                    class = "mappoly.group")
  }
 
-
+#' @rdname group_mappoly
 #' @export
 print.mappoly.group <- function(x, detailed = TRUE, ...) {
     ## checking for correct object
@@ -176,7 +176,7 @@ print.mappoly.group <- function(x, detailed = TRUE, ...) {
       cat("\n  ------------------------------------------\n")
     }
 }
-
+#' @rdname group_mappoly
 #' @export
 plot.mappoly.group <- function(x, ...) {
   dend <- as.dendrogram(x$hc.snp)
