@@ -1,5 +1,6 @@
 
 [![Build Status](https://travis-ci.org/mmollina/MAPPoly.svg?branch=master)](https://travis-ci.org/mmollina/MAPPoly) [![Development](https://img.shields.io/badge/development-active-blue.svg)](https://img.shields.io/badge/development-active-blue.svg)
+![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg)
 
 # Introduction
 
