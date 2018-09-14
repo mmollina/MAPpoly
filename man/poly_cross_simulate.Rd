@@ -45,7 +45,8 @@ S3 An object of class \code{mappoly.data}. See
     \code{\link[mappoly]{read_geno}} for more information
 }
 \description{
-Simulate an autopolyploid full-sib population with one or two informative parents.
+Simulate an autopolyploid full-sib population with one or two 
+informative parents under random chromosome segregation.
 }
 \details{
 \code{hom.allele.p} and \code{hom.allele.q} are lists of vectors
@@ -62,9 +63,10 @@ Simulate an autopolyploid full-sib population with one or two informative parent
                                   n.ind=200, h.temp, seed=123)
 }
 \references{
-Mollinari, M., and Garcia, A.  A. F. (2017) Theoretical
-    Basis of Genetic Mapping in Complex Polyploids Using
-    Hidden Markov Models, _submited_
+Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
+    analysis and haplotype phasing in experimental autopolyploid
+    populations with high ploidy level using hidden Markov
+    models, _submited_. \url{https://doi.org/10.1101/415232}
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

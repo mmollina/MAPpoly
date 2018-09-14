@@ -320,9 +320,10 @@ get_rf_from_list <- function(twopt, ph.list) {
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2017) Theoretical
-#'     Basis of Genetic Mapping in Complex Polyploids Using
-#'     Hidden Markov Models, _submited_
+#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
+#'     analysis and haplotype phasing in experimental autopolyploid
+#'     populations with high ploidy level using hidden Markov
+#'     models, _submited_. \url{https://doi.org/10.1101/415232}
 #'
 #' @importFrom utils tail
 #' @export ls_linkage_phases

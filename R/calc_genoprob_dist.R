@@ -1,8 +1,56 @@
-#' Compute the conditional QTL probabilities using genotype distribution
+#' Compute the conditional QTL probabilities using probability distribution of genotypes 
 #'
-#' @param void interfunction to be documented
-#' @keywords internal
-#' @export
+#' The conditional probabilities are calculeted for each marker.
+#' In this version, the probabilities are not calculated bewtween
+#' markers for for efficiency purposes.
+#'
+#' @param input.map An object of class \code{mappoly.map}
+#'
+#' @param dat.dist data set contaning the probability distribution of the 
+#'    genotypes. 
+#'
+#' @param verbose if \code{TRUE}, current progress is shown; if
+#'     \code{FALSE}, no output is produced.
+#'
+#' @param ... currently ignored
+#'
+#' @return An object of class 'mappoly.genoprob'
+#' @examples
+#'  \dontrun{
+#'     data(hexafake)
+#'     mrk.subset<-make_seq_mappoly(hexafake, 1:100)
+#'     red.mrk<-elim_redundant(mrk.subset)
+#'     unique.mrks<-make_seq_mappoly(red.mrk)
+#'     counts.web<-cache_counts_twopt(unique.mrks, get.from.web = TRUE)
+#'     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
+#'                                   count.cache = counts.web,
+#'                                   n.clusters = 16,
+#'                                   verbose=TRUE)
+#'     system.time(
+#'     subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
+#'                                         thres.twopt = 5,
+#'                                         thres.hmm = 3,
+#'                                         extend.tail = 50,
+#'                                         tol = 0.1,
+#'                                         tol.final = 10e-3,
+#'                                         twopt = subset.pairs,
+#'                                         verbose = TRUE))
+#'                                         
+#'    probs<-calc_genoprob_dist(input.map = subset.map,
+#'                              dat.dist = hexafake,
+#'                              verbose = TRUE)
+#'    probs                          
+#'    image(t(probs$probs[,,1]), col = rev(heat.colors(100)))
+#'  }
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
+#'
+#' @references
+#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
+#'     analysis and haplotype phasing in experimental autopolyploid
+#'     populations with high ploidy level using hidden Markov
+#'     models, _submited_. \url{https://doi.org/10.1101/415232}
+#'
+#' @export calc_genoprob_dist
 #'
 calc_genoprob_dist<-function(input.map, dat.dist,  phase.config = "best", verbose = TRUE)
 {

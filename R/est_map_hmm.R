@@ -112,10 +112,10 @@
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2017) Linkage
+#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
-#'     models, _submited_
+#'     models, _submited_. \url{https://doi.org/10.1101/415232}
 #'
 #' @export est_rf_hmm
 #'
@@ -229,18 +229,19 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #' @param input.seq an object of class \code{mappoly.sequence}.
 #'
 #' @param thres.twopt the threshold used to determine if the linkage
-#'     phases compared via two-point analysis should be considered
+#'     phases compared via two-point analysis should be considered. 
 #'
 #' @param thres.hmm the threshold used to determine if the linkage
 #'     phases compared via hmm analysis should be considered
 #'
 #' @param info.tail if \code{TRUE} uses the complete informative tail
-#'     of the chain to calculate the likelihood of the linkage phases
+#'     of the chain (i.e. ploidy x 2 homologous can be distinguished) 
+#'     to calculate the likelihood of the linkage phases
 #'
 #' @param extend.tail the length of the tail of the chain that should
 #'     be used to calculate the likelihood of the linkage phases. If
 #'     \code{info.tail = TRUE}, the function uses at least \code{extend.tail}
-#'     as the lengthof the tail.
+#'     as the length of the tail.
 #'
 #' @param twopt an object of class poly.est.two.pts.pairwise
 #'     containing the two-point information
@@ -318,10 +319,10 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2017) Linkage
+#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
-#'     models, _submited_
+#'     models, _submited_. \url{https://doi.org/10.1101/415232}
 #'
 #' @export est_rf_hmm_sequential
 est_rf_hmm_sequential <- function(input.seq,

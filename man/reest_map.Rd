@@ -36,3 +36,9 @@ a numeric vector of size \code{m} indicating which
 \description{
 Reestimate the recombination fractions in a genetic map
 }
+\references{
+Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
+    analysis and haplotype phasing in experimental autopolyploid
+    populations with high ploidy level using hidden Markov
+    models, _submited_. \url{https://doi.org/10.1101/415232}
+}

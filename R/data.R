@@ -1,12 +1,11 @@
 #' Simulated autohexaploid dataset.
 #'
-#' A dataset containing three homology groups of an hipotetical
-#' autohexaploid species
+#' A dataset of an hipotetical autohexaploid full-sib population 
+#' containing three homology groups of 
 #'
 #' @format An object of class \code{mappoly.data} which contains a
 #'     list with the following components:
 #' \describe{
-#'
 #'     \item{m}{ploidy level = 6}
 #'     \item{n.ind}{number individuals = 300}
 #'     \item{n.mrk}{total number of markers = 1500}

@@ -16,7 +16,14 @@
 #'     homologous in h2 represents the homologous in h1. If there is
 #'     no correspondence, i.e. different homologous, it returns NA for
 #'     that homologous.
+#' @references
+#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
+#'     analysis and haplotype phasing in experimental autopolyploid
+#'     populations with high ploidy level using hidden Markov
+#'     models, _submited_. \url{https://doi.org/10.1101/415232}     
+#'     
 #' @export reest_map
+#' 
 reest_map<-function(input.map, input.mat = NULL, tol = 10e-3,  phase.config = "best",
                     method = c("hmm", "ols"), weight = TRUE, verbose = TRUE)
 {

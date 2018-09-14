@@ -58,7 +58,7 @@ genotyping_global_error<-function(x, error=0.01, th.num=0.999)
 #'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
-#'     models, _submited_
+#'     models, _submited_. \url{https://doi.org/10.1101/415232}
 #'
 #' @export est_full_hmm_with_global_error
 #'

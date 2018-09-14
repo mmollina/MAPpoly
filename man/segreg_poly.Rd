@@ -30,9 +30,15 @@ barplot(seg, las=2)
 
 }
 \references{
-Mollinari, M., and Garcia, A.  A. F. (2017) Theoretical
-    Basis of Genetic Mapping in Complex Polyploids Using
-    Hidden Markov Models, _submited_
+Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
+    analysis and haplotype phasing in experimental autopolyploid
+    populations with high ploidy level using hidden Markov
+    models, _submited_. \url{https://doi.org/10.1101/415232}
+    
+    Serang O, Mollinari M, Garcia AAF (2012) Efficient Exact 
+    Maximum a Posteriori Computation for Bayesian SNP 
+    Genotyping in Polyploids. PLoS ONE 7(2): 
+    e30906. \url{https://doi.org/10.1371/journal.pone.0030906}
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

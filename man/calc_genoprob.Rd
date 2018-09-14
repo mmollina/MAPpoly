@@ -9,8 +9,8 @@ calc_genoprob(input.map, phase.config = "best", verbose = TRUE)
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}
 
-\item{phase.config}{which phase configuration should be used
-"best" will choose the one with highest likelihood}
+\item{phase.config}{which phase configuration should be used.
+"best" will use the one with highest likelihood}
 
 \item{verbose}{if \code{TRUE}, current progress is shown; if
 \code{FALSE}, no output is produced.}
@@ -54,7 +54,7 @@ markers for for efficiency purposes.
 Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
     analysis and haplotype phasing in experimental autopolyploid
     populations with high ploidy level using hidden Markov
-    models, _submited_
+    models, _submited_. \url{https://doi.org/10.1101/415232}
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

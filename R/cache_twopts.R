@@ -22,7 +22,9 @@
 #' @param joint.prob If \code{FALSE}, returns the frequency of
 #'     genotypes for transition probabilities (conditional
 #'     probabilities). If \code{TRUE} returns the frequency for joint
-#'     probabilities#' @param x an object of one of the classes \code{mappoly.map}
+#'     probabilities 
+#'     
+#'  @param x an object of one of the classes \code{mappoly.map}
 #'
 #' @param ... currently ignored
 #'
@@ -37,8 +39,8 @@
 #'     configuration are distributed in matrices whose names
 #'     represents the number of homologous chromosomes that share
 #'     alleles. The rows on these matrices represents the dosages in k
-#'     and k+1 in an individual in the offspring. See Table 6 of
-#'     Mollinari and Garcia (2018) for an example.
+#'     and k+1 in an individual in the offspring. See Table 3 of
+#'     S3 Appendix in Mollinari and Garcia (2018) for an example.
 #'
 #' @examples
 #'   \dontrun{
@@ -56,7 +58,7 @@
 #'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
-#'     models, _submited_
+#'     models, _submited_. \url{https://doi.org/10.1101/415232}
 #'
 #' @export
 #' @import parallel Rcpp RCurl

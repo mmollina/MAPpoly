@@ -5,7 +5,7 @@
 \title{Simulate homology groups}
 \usage{
 sim_homologous(m, n.mrk, min.d = 0, max.d, prob.dose = NULL, max.ph,
-  choose.hom.at.random = FALSE, restriction = TRUE, seed = NULL)
+  restriction = TRUE, seed = NULL)
 }
 \arguments{
 \item{m}{ploidy level. Must be an even number.}
@@ -21,9 +21,6 @@ different dosage to be simulated. (currently ignored)}
 
 \item{max.ph}{maximum phase difference. It is ignored if
 \code{choose.hom.at.random=TRUE}}
-
-\item{choose.hom.at.random}{logical. If \code{TRUE}, the alleles
-are positioned at random into the homologous chromosomes.}
 
 \item{restriction}{if TRUE, avoid cases where it is impossible to
 estmate recombination fraction and/or linkage phases via
@@ -58,13 +55,14 @@ methods
 }
 \examples{
     h.temp<-sim_homologous(m=6, n.mrk=20, max.d=3, max.ph=3,
-                           choose.hom.at.random=TRUE, seed=123)
+                           seed=123)
 
 }
 \references{
-Mollinari, M., and Garcia, A.  A. F. (2017) Theoretical
-    Basis of Genetic Mapping in Complex Polyploids Using
-    Hidden Markov Models, _submited_
+Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
+    analysis and haplotype phasing in experimental autopolyploid
+    populations with high ploidy level using hidden Markov
+    models, _submited_. \url{https://doi.org/10.1101/415232}
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

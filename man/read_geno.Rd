@@ -92,10 +92,10 @@ containing the dosage for each markers (rows) for each individual
 }
 }
 \references{
-Mollinari, M., and Garcia, A.  A. F. (2017) Linkage
+Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
     analysis and haplotype phasing in experimental autopolyploid
     populations with high ploidy level using hidden Markov
-    models, _submited_
+    models, _submited_. \url{https://doi.org/10.1101/415232}
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}
