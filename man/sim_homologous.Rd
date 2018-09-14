@@ -19,8 +19,7 @@ sim_homologous(m, n.mrk, min.d = 0, max.d, prob.dose = NULL, max.ph,
 \item{prob.dose}{a vector indicating the proportion of markers for
 different dosage to be simulated. (currently ignored)}
 
-\item{max.ph}{maximum phase difference. It is ignored if
-\code{choose.hom.at.random=TRUE}}
+\item{max.ph}{maximum phase difference.}
 
 \item{restriction}{if TRUE, avoid cases where it is impossible to
 estmate recombination fraction and/or linkage phases via

@@ -57,8 +57,7 @@ informative parents under random chromosome segregation.
  zero doses, use 0.
 }
 \examples{
-    h.temp<-sim_homologous(m=6, n.mrk=20, max.d=3, max.ph=3,
-                           choose.hom.at.random=TRUE, seed=123)
+    h.temp<-sim_homologous(m=6, n.mrk=20, max.d=3, max.ph=3, seed=123)
     fake.poly.dat<-poly_cross_simulate(m=6, rf.vec=.05, n.mrk=20,
                                   n.ind=200, h.temp, seed=123)
 }
