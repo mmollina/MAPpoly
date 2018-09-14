@@ -20,8 +20,8 @@
 #' @return An object of class 'mappoly.genoprob'
 #' @examples
 #'  \dontrun{
-#'     data(hexafake)
-#'     mrk.subset<-make_seq_mappoly(hexafake, 1:100)
+#'     data(hexafake.geno.dist)
+#'     mrk.subset<-make_seq_mappoly(hexafake.geno.dist, 1:100)
 #'     red.mrk<-elim_redundant(mrk.subset)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'     counts.web<-cache_counts_twopt(unique.mrks, get.from.web = TRUE)
@@ -40,7 +40,7 @@
 #'                                         verbose = TRUE))
 #'                                         
 #'    probs<-calc_genoprob_dist(input.map = subset.map,
-#'                              dat.dist = hexafake,
+#'                              dat.dist = hexafake.geno.dist,
 #'                              verbose = TRUE)
 #'    probs                          
 #'    image(t(probs$probs[,,1]), col = rev(heat.colors(100)))

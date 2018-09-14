@@ -36,8 +36,16 @@ An object of class \code{mappoly.data} which contains a
       sequence.}
     \item{sequence.pos}{Physical position of the markers into the
       sequence}
-    \item{geno}{a data.frame containing probability distribution
-                for each combination of marker and offspring.}
+    \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
+      for each individual (columns). Missing data are represented by 
+      \code{ploidy_level + 1}.}
+    \item{geno}{a data.frame 
+      containing the probability distribution for each combination of
+      marker and offspring. The first two columns represent the marker
+      and the offspring, respectively. The remaining elements represent
+      the probability associated to each one of the possible
+      dosages. Missing data are converted from \code{NA} to the expected
+      segregation ratio using function \code{\link[mappoly]{segreg_poly}}}
     \item{n.phen}{number of phenotypic traits}
     \item{phen}{a matrix containing the phenotypic data. The rows
                 corespond to the trais and the columns correspond
