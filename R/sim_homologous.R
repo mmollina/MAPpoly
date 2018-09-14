@@ -13,8 +13,7 @@
 #' @param max.d maximum dosage to be simulated
 #' @param prob.dose a vector indicating the proportion of markers for
 #'    different dosage to be simulated. (currently ignored)
-#' @param max.ph maximum phase difference. It is ignored if
-#'     \code{choose.hom.at.random=TRUE}
+#' @param max.ph maximum phase difference. 
 #' @param restriction if TRUE, avoid cases where it is impossible to
 #'     estmate recombination fraction and/or linkage phases via
 #'     two-point analysis.
