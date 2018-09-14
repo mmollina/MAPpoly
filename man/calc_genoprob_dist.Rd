@@ -13,6 +13,9 @@ calc_genoprob_dist(input.map, dat.dist, phase.config = "best",
 \item{dat.dist}{data set contaning the probability distribution of the 
 genotypes.}
 
+\item{phase.config}{which phase configuration should be used.
+"best" will use the one with highest likelihood}
+
 \item{verbose}{if \code{TRUE}, current progress is shown; if
 \code{FALSE}, no output is produced.}
 
@@ -24,7 +27,7 @@ An object of class 'mappoly.genoprob'
 \description{
 The conditional probabilities are calculeted for each marker.
 In this version, the probabilities are not calculated bewtween
-markers for for efficiency purposes.
+markers.
 }
 \examples{
  \dontrun{

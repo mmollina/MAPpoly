@@ -2,10 +2,13 @@
 #'
 #' The conditional probabilities are calculeted for each marker.
 #' In this version, the probabilities are not calculated bewtween
-#' markers for for efficiency purposes.
+#' markers.
 #'
 #' @param input.map An object of class \code{mappoly.map}
 #'
+#' @param phase.config which phase configuration should be used.
+#'    "best" will use the one with highest likelihood
+#'    
 #' @param dat.dist data set contaning the probability distribution of the 
 #'    genotypes. 
 #'

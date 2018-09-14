@@ -23,7 +23,7 @@ An object of class 'mappoly.genoprob'
 \description{
 The conditional probabilities are calculeted for each marker.
 In this version, the probabilities are not calculated bewtween
-markers for for efficiency purposes.
+markers.
 }
 \examples{
  \dontrun{
