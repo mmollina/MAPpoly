@@ -1,7 +1,7 @@
 ---
 title: Building a genetic map in an hexaploid full-sib population using MAPPoly
 author: "Marcelo Mollinari, Guilhereme Pereira, A Augusto F Garcia and Zhao-Bang Zeng"
-date: "2018-09-13"
+date: "2018-09-15"
 output:
  html_document:
    highlight: tango
@@ -112,7 +112,7 @@ The program prints a summary of the data set showing the ploidy level, the numbe
 plot(hexafake)
 ```
 
-![](README_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![](README_files/figure-html/plot_hexafake-1.png)<!-- -->
 
 The numbers separated by a dash indicate the dose in parents $P$ and $Q$ respectively. 
 
@@ -137,7 +137,7 @@ In this case, we could eliminate 190 markers (13%) from the 1500 available.
 plot(filt.mrk)
 ```
 
-![](README_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
+![](README_files/figure-html/plot_elim-1.png)<!-- -->
 
 # Two-point analysis
 
@@ -176,7 +176,7 @@ all.rf.pairwise <- est_pairwise_rf(input.seq = new.seq,
 ```
 ## INFO: Using  16  CPUs for calculation.
 ## INFO: Done with 857395  pairs of markers 
-## INFO: Calculation took: 252.876 seconds
+## INFO: Calculation took: 407.223 seconds
 ```
 
 ```r
@@ -195,8 +195,33 @@ To assess the recombination fraction between a particular pair of markers, say 8
 
 ```r
 all.rf.pairwise$pairwise$`802-959`
+```
+
+```
+##        LOD_ph         rf      LOD_rf
+## 2-2  0.000000 0.09356626 7.171220091
+## 3-2 -1.227626 0.28061984 6.214118480
+## 2-3 -1.227626 0.28061984 6.214118480
+## 3-1 -1.790012 0.14123804 5.651732223
+## 1-3 -1.790012 0.14123804 5.651732223
+## 3-3 -2.781879 0.37084615 5.105580976
+## 2-1 -7.169449 0.38978155 0.001771538
+## 1-2 -7.169449 0.38978155 0.001771538
+## 1-1 -7.172574 0.49995416 0.001353473
+## 2-0 -7.442947 0.49995416 0.001202309
+## 0-2 -7.442947 0.49995416 0.001202309
+## 1-0 -7.444241 0.49995416 0.002497107
+## 0-1 -7.444241 0.49995416 0.002497107
+## 3-0 -7.737330 0.33572880 0.150129983
+## 0-3 -7.737330 0.33572880 0.150129983
+## 0-0 -7.893650 0.49991909 0.006189804
+```
+
+```r
 plot(all.rf.pairwise, first.mrk = 802, second.mrk = 959)
 ```
+
+![](README_files/figure-html/plot_twopt_example-1.png)<!-- -->
 
 In this case, `802-959` represents the position of the markers in the original data set. The name of the rows in the output is of the form `x-y`, where `x` and `y` indicate how many homologous chromosomes share the same allelic variant in parents $P$ and $Q$, respectively (see [@Mollinari2018](https://doi.org/10.1101/415232 ) and  [@Mollinari2019] for notation). The first column indicates the LOD Score in relation to the most likely linkage phase configuration. The second column shows the recombination fraction, and the third indicates the LOD Score comparing the likelihood under no linkage ($r = 0.5$) and the estimated recombination fraction (evidence of linkage).
 In the next step, the two-point object should be converted into recombination fraction and LOD Score matrices. To select the recombination fractions for each one of the marker combinations, one needs to assume thresholds for the three columns observed in the previous output. The arguments `thresh.LOD.ph` and `thresh.LOD.rf` set LOD Scores thresholds for the second most likely linkage phase configuration and recombination fraction. Here we assume `thresh.LOD.ph = 0` and `thresh.LOD.rf = 0`, thus no matter how likely is the second best option, all the computed values will be considered. The argument `thresh.rf = 0.5` indicates that the maximum accepted recombination fraction is `0.5`. To convert these values in a recombination fraction matrix, we use the function `rf_list_to_matrix`
@@ -206,7 +231,7 @@ In the next step, the two-point object should be converted into recombination fr
 ## INFO: Going singlemode. Using one CPU.
 ```
 
-![](README_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+![](README_files/figure-html/rf_mat-1.png)<!-- -->
 
 In the previous case, the thresholds allowed to plot almost all points in the recombination fraction matrix. The empty cells in the matrix indicate markers where it is impossible to detect recombinant events using two-point estimates (e.g., between $1 \times 0$ and $0 \times 1$ marker). If these values become more stringent (LOD higher and lower rf), the matrix becomes more sparse. It is also important to notice that since the simulated data is ordered, it is possible to see a clear block diagonal pattern on the recombination fraction matrix. 
 
@@ -258,7 +283,7 @@ grs
 plot(grs)
 ```
 
-![](README_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+![](README_files/figure-html/plot_group-1.png)<!-- -->
 
 Once the linkage groups are properly assembled, we use the function `make_seq_mappoly` to make marker sequences from the group analysis. 
 
@@ -283,6 +308,20 @@ To control the inclusion and phasing of the markers in the chain, several argume
 ## Performing parallel computation
  cl <- parallel::makeCluster(3)
  parallel::clusterEvalQ(cl, require(mappoly))
+```
+
+```
+## [[1]]
+## [1] TRUE
+## 
+## [[2]]
+## [1] TRUE
+## 
+## [[3]]
+## [1] TRUE
+```
+
+```r
  maps.given.order <- parallel::parLapply(cl,
                                          LGS,
                                          est_rf_hmm_sequential,
@@ -355,13 +394,13 @@ To control the inclusion and phasing of the markers in the chain, several argume
 ```
 
 The results were stored in a list format in the object `maps.given.order`. A graphical representation of the linkage groups including the linkage phase configurations and the distance between markers can be obtained using
-![](README_files/figure-html/unnamed-chunk-17-1.png)<!-- -->![](README_files/figure-html/unnamed-chunk-17-2.png)<!-- -->![](README_files/figure-html/unnamed-chunk-17-3.png)<!-- -->
+![](README_files/figure-html/plot_maps-1.png)<!-- -->![](README_files/figure-html/plot_maps-2.png)<!-- -->![](README_files/figure-html/plot_maps-3.png)<!-- -->
 
 ```
-##      [,1]        [,2]        [,3]       
-## path NULL        NULL        NULL       
-## name "GRID.VP.3" "GRID.VP.6" "GRID.VP.9"
-## n    1           1           1
+##      [,1]         [,2]         [,3]        
+## path NULL         NULL         NULL        
+## name "GRID.VP.13" "GRID.VP.16" "GRID.VP.19"
+## n    1            1            1
 ```
 In these figures, the red and white rectangles indicate the two possible allelic variants. Each horizontal line
 containing these rectangles indicates one of the six homologous chromosomes which are grouped in homology groups. 
@@ -450,7 +489,7 @@ sapply(mds.ord, function(x) {
   })
 ```
 
-![](README_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
+![](README_files/figure-html/compare_order-1.png)<!-- -->
 
 ```
 ## [[1]]
@@ -479,6 +518,20 @@ Now, given the estimated order, we reestimate the final map using the function `
  LGS.mds<-lapply(mds.ord, make_seq_mappoly)
  cl <- parallel::makeCluster(3)
  parallel::clusterEvalQ(cl, require(mappoly))
+```
+
+```
+## [[1]]
+## [1] TRUE
+## 
+## [[2]]
+## [1] TRUE
+## 
+## [[3]]
+## [1] TRUE
+```
+
+```r
  maps.denovo <- parallel::parLapply(cl,
                                     LGS.mds,
                                     est_rf_hmm_sequential,
@@ -551,13 +604,13 @@ Now, given the estimated order, we reestimate the final map using the function `
 ```
 Graphical representations
 
-![](README_files/figure-html/unnamed-chunk-25-1.png)<!-- -->![](README_files/figure-html/unnamed-chunk-25-2.png)<!-- -->![](README_files/figure-html/unnamed-chunk-25-3.png)<!-- -->
+![](README_files/figure-html/plot_mds_hmm_map-1.png)<!-- -->![](README_files/figure-html/plot_mds_hmm_map-2.png)<!-- -->![](README_files/figure-html/plot_mds_hmm_map-3.png)<!-- -->
 
 ```
-##      [,1]        [,2]        [,3]       
-## path NULL        NULL        NULL       
-## name "GRID.VP.3" "GRID.VP.6" "GRID.VP.9"
-## n    1           1           1
+##      [,1]         [,2]         [,3]        
+## path NULL         NULL         NULL        
+## name "GRID.VP.22" "GRID.VP.25" "GRID.VP.28"
+## n    1            1            1
 ```
 
 Again, let us compare the simulated and the estimated linkage phases and the length of the map.  For parent $P$ we have 
@@ -611,6 +664,37 @@ In order to use the genetic map in QTL, we need to obtain the conditional probab
 genoprob <- sapply(maps.denovo, calc_genoprob)
 ```
 
+```
+## 	Ploidy level: 6
+## 	Number of markers: 538
+## 	Number of individuals: 300
+## 	..................................................
+## 	..................................................
+## 	..................................................
+## 	..................................................
+## 	..................................................
+## 	..................................................
+## 		Ploidy level: 6
+## 	Number of markers: 329
+## 	Number of individuals: 300
+## 	..................................................
+## 	..................................................
+## 	..................................................
+## 	..................................................
+## 	..................................................
+## 	..................................................
+## 		Ploidy level: 6
+## 	Number of markers: 443
+## 	Number of individuals: 300
+## 	..................................................
+## 	..................................................
+## 	..................................................
+## 	..................................................
+## 	..................................................
+## 	..................................................
+## 	
+```
+
 Each position of the object `genoprob` contains two elements: an array of dimensions $400 \times number \; of \; markers \times  number \; of \; individuals$ and the position of the markers in the maps in centimorgans. A graphical representation of the genotype probabilities along the three linkage groups in any individual (in this case individual 1) can be obtained using
 
 
@@ -632,8 +716,6 @@ for(i in 1:3)
        labels =rep("", length(d)), las=2)
 }
 ```
-
-![](README_files/figure-html/unnamed-chunk-29-1.png)<!-- -->
 
 In this figure, the x-axis represents the genetic map and the y-axis represents the 400 possible genotypes in the full-sib population. The color scale varies from dark purple (high probabilityes) to light yellow (low probabilities). The `genoprob` object obtained here can be used to perform QTL analysis using the R package `QTLpoly` [@Pereira2019], which is an under development software to map multiple QTLs in full-sib families of outcrossing autopolyploid species. 
 

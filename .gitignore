@@ -5,5 +5,5 @@
 src/*.o
 src/*.so
 src/*.dll
-docs/maps.RData
+docs/*.rda
 test_for_article.R
