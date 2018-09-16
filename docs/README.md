@@ -171,24 +171,7 @@ The function `est_pairwise_rf` estimates all the pairwise recombination fraction
 all.rf.pairwise <- est_pairwise_rf(input.seq = new.seq, 
                                    count.cache = counts, 
                                    n.clusters = 16)
-```
-
-```
-## INFO: Using  16  CPUs for calculation.
-## INFO: Done with 857395  pairs of markers 
-## INFO: Calculation took: 407.223 seconds
-```
-
-```r
 all.rf.pairwise
-```
-
-```
-##   This is an object of class 'poly.est.two.pts.pairwise'
-##   -----------------------------------------------------
-##   No. markers:                             1310 
-##   No. estimated recombination fractions:   687581 (80.2%)
-##   -----------------------------------------------------
 ```
 
 To assess the recombination fraction between a particular pair of markers, say 802 and 959, we use
@@ -308,20 +291,6 @@ To control the inclusion and phasing of the markers in the chain, several argume
 ## Performing parallel computation
  cl <- parallel::makeCluster(3)
  parallel::clusterEvalQ(cl, require(mappoly))
-```
-
-```
-## [[1]]
-## [1] TRUE
-## 
-## [[2]]
-## [1] TRUE
-## 
-## [[3]]
-## [1] TRUE
-```
-
-```r
  maps.given.order <- parallel::parLapply(cl,
                                          LGS,
                                          est_rf_hmm_sequential,
@@ -518,20 +487,6 @@ Now, given the estimated order, we reestimate the final map using the function `
  LGS.mds<-lapply(mds.ord, make_seq_mappoly)
  cl <- parallel::makeCluster(3)
  parallel::clusterEvalQ(cl, require(mappoly))
-```
-
-```
-## [[1]]
-## [1] TRUE
-## 
-## [[2]]
-## [1] TRUE
-## 
-## [[3]]
-## [1] TRUE
-```
-
-```r
  maps.denovo <- parallel::parLapply(cl,
                                     LGS.mds,
                                     est_rf_hmm_sequential,
@@ -661,38 +616,7 @@ In order to use the genetic map in QTL, we need to obtain the conditional probab
 
 
 ```r
-genoprob <- sapply(maps.denovo, calc_genoprob)
-```
-
-```
-## 	Ploidy level: 6
-## 	Number of markers: 538
-## 	Number of individuals: 300
-## 	..................................................
-## 	..................................................
-## 	..................................................
-## 	..................................................
-## 	..................................................
-## 	..................................................
-## 		Ploidy level: 6
-## 	Number of markers: 329
-## 	Number of individuals: 300
-## 	..................................................
-## 	..................................................
-## 	..................................................
-## 	..................................................
-## 	..................................................
-## 	..................................................
-## 		Ploidy level: 6
-## 	Number of markers: 443
-## 	Number of individuals: 300
-## 	..................................................
-## 	..................................................
-## 	..................................................
-## 	..................................................
-## 	..................................................
-## 	..................................................
-## 	
+genoprob <- lapply(maps.denovo, calc_genoprob)
 ```
 
 Each position of the object `genoprob` contains two elements: an array of dimensions $400 \times number \; of \; markers \times  number \; of \; individuals$ and the position of the markers in the maps in centimorgans. A graphical representation of the genotype probabilities along the three linkage groups in any individual (in this case individual 1) can be obtained using
@@ -716,6 +640,8 @@ for(i in 1:3)
        labels =rep("", length(d)), las=2)
 }
 ```
+
+![](README_files/figure-html/plot_genoprob-1.png)<!-- -->
 
 In this figure, the x-axis represents the genetic map and the y-axis represents the 400 possible genotypes in the full-sib population. The color scale varies from dark purple (high probabilityes) to light yellow (low probabilities). The `genoprob` object obtained here can be used to perform QTL analysis using the R package `QTLpoly` [@Pereira2019], which is an under development software to map multiple QTLs in full-sib families of outcrossing autopolyploid species. 
 

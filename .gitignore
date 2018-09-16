@@ -6,4 +6,5 @@ src/*.o
 src/*.so
 src/*.dll
 docs/*.rda
+docs/*.rdb
 test_for_article.R
