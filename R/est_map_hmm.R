@@ -229,10 +229,13 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #' @param input.seq an object of class \code{mappoly.sequence}.
 #'
 #' @param thres.twopt the threshold used to determine if the linkage
-#'     phases compared via two-point analysis should be considered. 
-#'
+#'     phases compared via two-point analysis should be considered 
+#'     for the search space reduction. (A.K.A. \deqn{\eta} in 
+#'     Mollinari and Garcia 2018). 
+#'     
 #' @param thres.hmm the threshold used to determine if the linkage
-#'     phases compared via hmm analysis should be considered
+#'     phases compared via hmm analysis should be evaluated in the 
+#'     next round of marker inclusion.  
 #'
 #' @param info.tail if \code{TRUE} uses the complete informative tail
 #'     of the chain (i.e. ploidy x 2 homologous can be distinguished) 
