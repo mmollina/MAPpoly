@@ -8,4 +8,4 @@ src/*.dll
 docs/*.rda
 docs/*.rdb
 test_for_article.R
-shirasawa/*
+docs/sweet_shirasawa/*
