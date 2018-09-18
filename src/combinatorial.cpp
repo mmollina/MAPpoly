@@ -1,10 +1,10 @@
 /*
-  Polymap: a package to construct genetic maps in autopolyploids
-  Copyright (C) 2014 Marcelo Mollinari
+  MAPPoly: a package to construct genetic maps in autopolyploids
+  Copyright (C) 2014-2018Marcelo Mollinari
 
-    This file is part of Polymap.
+    This file is part of MAPPoly.
 
-    Polymap is free software: you can redistribute it and/or modify
+    MAPPoly is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
     (at your option) any later version.
@@ -28,9 +28,7 @@
   written by Karl W Broman and can be found in the R package qtl
   Copyright (c) 2001-10, Karl W Broman
 
-  Escola Superior de Agricultura "Luiz de Queiroz"
-  Departamento de Genética - São Paulo, Brazil
-  Contact: mmollina@usp.br
+  Contact: mmollin@ncsu.edu
   First version: Dec 19, 2013
   Last update: Jul 31, 2014
 */

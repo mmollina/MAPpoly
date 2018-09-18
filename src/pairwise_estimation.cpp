@@ -1,10 +1,10 @@
 /*
-  Polymap: a package to construct genetic maps in autopolyploids
-  Copyright (C) 2014 Marcelo Mollinari
+  MAPPoly: a package to construct genetic maps in autopolyploids
+  Copyright (C) 2014-2018 Marcelo Mollinari
 
-  This file is part of Polymap.
+  This file is part of MAPPoly.
 
-  Polymap is free software: you can redistribute it and/or modify
+  MAPPoly is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
   the Free Software Foundation, either version 3 of the License, or
   (at your option) any later version.
@@ -23,9 +23,10 @@
 
   Functions Written by Marcelo Mollinari.
 
-  Escola Superior de Agricultura "Luiz de Queiroz"
-  Departamento de Genética - São Paulo, Brazil
-  Contact: mmollina@usp.br
+ Bioinformatics Research Center
+ Departments of Statistics
+ North Carolina State University
+ Contact: mmollin@ncsu.edu
   First version: Dec 19, 2013
   Last update: Jul 31, 2014
 */
@@ -138,7 +139,7 @@ RcppExport SEXP pairwise_rf_estimation(SEXP m_R,
 	      // Addapteed from Brent_fmin funcion, which can be found in R/src/library/stats/src/optimize.c
 	      //  Copyright (C) 1995, 1996  Robert Gentleman and Ross Ihaka
 	      //   Copyright (C) 2003-2004  The R Foundation
-	      //   Copyright (C) 1998--2014  The R Core Team
+	      //   Copyright (C) 1998--2014-2018 The R Core Team
 	      // This function subprogram is a slightly modified  version  of  the
 	      // Algol  60 procedure  localmin  given in Richard Brent, Algorithms for
 	      // Minimization without Derivatives, Prentice-Hall, Inc. (1973).
