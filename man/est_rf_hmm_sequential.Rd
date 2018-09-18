@@ -14,21 +14,24 @@ est_rf_hmm_sequential(input.seq, thres.twopt, thres.hmm, info.tail = TRUE,
 \item{input.seq}{an object of class \code{mappoly.sequence}.}
 
 \item{thres.twopt}{the threshold used to determine if the linkage
-phases compared via two-point analysis should be considered.}
+phases compared via two-point analysis should be considered 
+for the search space reduction. (A.K.A. \eqn{\eta} in 
+\cite{Mollinari and Garcia (2018)}).}
 
 \item{thres.hmm}{the threshold used to determine if the linkage
-phases compared via hmm analysis should be considered}
+phases compared via hmm analysis should be evaluated in the 
+next round of marker inclusion.}
 
 \item{info.tail}{if \code{TRUE} uses the complete informative tail
-of the chain (i.e. ploidy x 2 homologous can be distinguished) 
-to calculate the likelihood of the linkage phases}
+of the chain (i.e. number of markers where \eqn{ploidy x 2} 
+homologous can be distinguished) to calculate the map likelihood}
 
 \item{extend.tail}{the length of the tail of the chain that should
-be used to calculate the likelihood of the linkage phases. If
-\code{info.tail = TRUE}, the function uses at least \code{extend.tail}
-as the length of the tail.}
+be used to calculate the likelihood of the map. Even if function 
+\code{info.tail = TRUE}, it uses at least \code{extend.tail}
+as the tail length.}
 
-\item{twopt}{an object of class poly.est.two.pts.pairwise
+\item{twopt}{an object of class \code{poly.est.two.pts.pairwise}
 containing the two-point information}
 
 \item{verbose}{If \code{TRUE}, current progress is shown; if
@@ -41,18 +44,20 @@ containing the two-point information}
 \item{tol.final}{the desired accuracy for the final map.}
 
 \item{est.given.0.rf}{logical. If TRUE returns a map forcing all
-recombination fractions equal to 0 (1e-5)}
+recombination fractions equals to 0 (1e-5, for internal use only)}
 
-\item{reestimate.single.ph.configuration}{logical. If \code{TRUE}
-returns a map without reestimating the map parameters for cases
+\item{reestimate.single.ph.configuration}{logical. If \code{FALSE}
+returns a map without reestimating the map parameters in cases
 where there are only one possible linkage phase configuration.}
 
 \item{sub.map.size.diff.limit}{the maximum accepted length
-xdifference between the current submap and the previous one. If the
+difference between the current and the previous sub-map defined 
+by arguments \code{info.tail} and \code{extend.tail}. If the
 size exceeds the limit, the marker will not be inserted. If
 \code{NULL}, the it will insert all markers.}
 
-\item{phase.number.limit}{the maximum number of linkage phases of the sub-maps. If the
+\item{phase.number.limit}{the maximum number of linkage phases of the sub-maps defined 
+by arguments \code{info.tail} and \code{extend.tail}. If the
 size exceeds the limit, the marker will not be inserted. If
 \code{NULL}, the it will insert all markers.}
 }
@@ -61,7 +66,7 @@ An object of class 'mappoly.map'
 }
 \description{
 Performs the multipoint analysis proposed by \cite{Mollinari and
- Garcia et al.  (2017)} in a sequence of markers removing unlikely phases
+ Garcia (2018)} in a sequence of markers removing unlikely phases
 using sequential multipoint information
 }
 \details{
@@ -70,7 +75,7 @@ ordered sequence. It uses two-point information to eliminate
 unlikely linkage phase configurations given \code{thres.twopt}. The
 search is made within a window of size \code{extend.tail}. For the
 remaining configurations the HMM-based likelihood is computed and
-the ones that pass \code{thres.hmm} are eliminated.
+the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
 }
 \examples{
  \dontrun{

@@ -17,29 +17,34 @@ est_rf_hmm(input.seq, input.ph = NULL, thres = 0.5, twopt = NULL,
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}.}
 
-\item{input.ph}{an object of class \code{two.pts.linkage.phases}.}
+\item{input.ph}{an object of class \code{two.pts.linkage.phases}. 
+If it is not available (\code{NULL}), it will be computed.}
 
 \item{thres}{the threshold used to determine if the linkage phases
-compared via two-point analysis should be considered}
+compared via two-point analysis should be considered. Smaller 
+values will result in smaller number of linkage phase 
+configurations.}
 
 \item{twopt}{an object of class \code{poly.est.two.pts.pairwise}
-containing the two-point information}
+containing two-point information.}
 
 \item{verbose}{if \code{TRUE}, current progress is shown; if
 \code{FALSE}, no output is produced.}
 
-\item{rf.lim}{limit of recombination fraction during convergence.
-This is specially useful for marker blocks.}
+\item{rf.lim}{limit of recombination fraction during convergence. 
+If any the recombination fraction exceed this value, the EM 
+algorithm will stop. this can be useful if you do not expect 
+gaps in the genetic map.}
 
 \item{tol}{the desired accuracy.}
 
 \item{est.given.0.rf}{logical. If TRUE returns a map forcing all
-recombination fractions equals to 0 (1e-5)}
+recombination fractions equals to 0 (1e-5, for internal use only)}
 
 \item{reestimate.single.ph.configuration}{logical. If \code{TRUE}
 returns a map without reestimating the map parameters for cases
-where there are only one possible linkage phase configuration. This argument
-is intended to be used in a sequential map contruction.}
+where there are only one possible linkage phase configuration. 
+This argument is intended to be used in a sequential map contruction.}
 
 \item{x}{an object of one of the classes \code{mappoly.map}}
 
@@ -48,8 +53,9 @@ position for all maps. if FALSE print a map summary}
 
 \item{...}{currently ignored}
 
-\item{col.cte}{a single value or a vector of with size equal to the number of 
-markers in the map indicating the color of the allelic variants. The default is \code{red}}
+\item{col.cte}{a single value or a vector with size equal to the number of 
+markers in the map indicating the color of the allelic variants. 
+The default is \code{red}}
 
 \item{config}{should be \code{'best'} or the position of the
 configuration to be plotted. If \code{'best'}, plot the configuration
@@ -66,17 +72,14 @@ Performs the multipoint analysis proposed by \cite{Mollinari and
 This function first enumerates a set of linkage phase configurations
  based on two-point recombination fraction information using a threshold
  provided by the user (argument \code{'thresh'}). After that, for each
- one of the configurations, it reconstructs the genetic map for using the
- HMM approach. As result, it returns the multipoint likelihood for each
- configuration in form of LOD Score comparing each configuration to the most
- likely one. It is recommended to use a small number of markers (e.g. 50 markers
+ configuration, it reconstructs the genetic map using the
+ HMM approach described in (Mollinari and Garcia, 2018). As result, it returns 
+ the multipoint likelihood for each configuration in form of LOD Score comparing 
+ each configuration to the most likely one. It is recommended to use a small number of markers (e.g. 50 markers
  for hexaploids) since the possible linkage phase combinations bounded only
  by the two-point information can be huge. Also, it can be quite sensible
- to small changes in \code{'thresh'}. Thus it is strongly recommended use a small
- \code{'thresh'} value in the first run (0.1 - 0.5) and raises it to find a
- reasonable number of linkage phase configurations to be evaluated by the
- HMM approach. For higher number of markers, please see  \code{'est_rf_hmm_sequential'}
- and \code{'est_map_haplotype'}
+ to small changes in \code{'thresh'}. For higher number of markers, please see  
+ \code{\link[mappoly]{est_rf_hmm_sequential}}.
 }
 \examples{
  \dontrun{
