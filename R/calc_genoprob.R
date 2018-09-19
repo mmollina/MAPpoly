@@ -1,13 +1,13 @@
-#' Compute QTL conditional probabilities
+#' Compute genotype conditional probabilities
 #'
 #' The conditional probabilities are calculeted for each marker.
 #' In this version, the probabilities are not calculated bewtween
-#' markers.
+#' markers (pseudomerkers).
 #'
 #' @param input.map An object of class \code{mappoly.map}
 #'
-#' @param phase.config which phase configuration should be used.
-#'    "best" will use the one with highest likelihood
+#' @param phase.config indicates which phase configuration should be used.
+#'    "best" will use the maximum likelihood configuration
 #'
 #' @param verbose if \code{TRUE}, current progress is shown; if
 #'     \code{FALSE}, no output is produced.
