@@ -1,8 +1,8 @@
-#' Frequency of genotypes for two-point estimaton of recombination fractions
+#' Frequency of genotypes for two-point recombination fractions estimation
 #'
-#' Returns the frequency of each genotype for the two-point reduction
+#' Returns the frequency of each genotype for two-point reduction
 #' of dimensionality. The frequency is calculated for all pairwise
-#' combination and for all possible linkage phase configuration.
+#' combination and for all possible linkage phase configurations.
 #'
 #' @param  input.seq an object of class \code{mappoly.sequence}
 #'
@@ -22,14 +22,14 @@
 #' @param joint.prob If \code{FALSE}, returns the frequency of
 #'     genotypes for transition probabilities (conditional
 #'     probabilities). If \code{TRUE} returns the frequency for joint
-#'     probabilities 
+#'     probabilities.
 #'     
 #'  @param x an object of one of the classes \code{mappoly.map}
 #'
 #' @param ... currently ignored
 #'
 #' @return An object of class \code{cache.info} which contains a list
-#'     for all pairs of dosages contained in the dataset. The names of
+#'     for all pairs of dosages contained in the dataset. The names in
 #'     this list are of the form 'A-B-C-D', where A represents the
 #'     dosage in parent 1, marker k, B represents the dosage in parent
 #'     1, marker k+1, C represents the dosage in parent 2, marker k
