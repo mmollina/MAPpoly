@@ -1,6 +1,6 @@
-#'  Remove snps that do not meet a LOD criteria
+#'  Remove markers that do not meet a LOD criteria
 #'
-#'  Remove snps that do not meet a LOD and recombination fraction
+#'  Remove markers that do not meet a LOD and recombination fraction
 #'  criteria for at least a percentage of the pairwise markers
 #'  combinations.
 #'
@@ -125,6 +125,6 @@ rf_snp_filter<-function(input.twopt,
   ## Removing markers that have too many large recombination fractions
   x <- apply(rf_mat$rec.mat, 1, function(x) sum(is.na(x)))
   o <- names(which(x < quantile(x, probs = thresh.missing)))
-  ch_filt<-make_seq_mappoly(input.obj = get(input.twopt$data.name), as.numeric(o), data.name = input.twopt$data.name)
+  ch_filt<-make_seq_mappoly(input.obj = get(input.twopt$data.name), arg = o, data.name = input.twopt$data.name)
   ch_filt
 }

@@ -109,11 +109,11 @@ group_mappoly <- function(input.mat, input.seq, expected.groups = NULL,
           expected.group <- as.numeric(readline("Enter the number of expected groups: "))
         z<-rect.hclust(hc.snp, k = expected.groups, border = "red")
         groups.snp  <- cutree(tree = hc.snp, k = expected.groups)
-        xt<-sapply(z, length)
-        xt<-as.numeric(cumsum(xt)-ceiling(xt/2))
+        xy<-sapply(z, length)
+        xt<-as.numeric(cumsum(xy)-ceiling(xy/2))
         yt<-.1
         points(x = xt, y = rep(yt, length(xt)), cex = 6, pch = 20, col = "lightgray")
-        text(x = xt, y = yt, labels = names(table(groups.snp)), adj = .5)
+        text(x = xt, y = yt, labels = match(xy, table(x$groups.snp, useNA = "ifany")), adj = .5)
         ANSWER <- readline("Enter 'y' to proceed or update the number of expected groups: ")
         if(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
           expected.groups <- as.numeric(ANSWER)
@@ -185,10 +185,10 @@ plot.mappoly.group <- function(x, ...) {
   dend1 <- dendextend::color_branches(dend, k = x$expected.groups)
   plot(dend1, leaflab = "none")
   z<-rect.hclust(x$hc.snp, k = x$expected.groups, border = "red")
-  xt<-sapply(z, length)
-  xt<-as.numeric(cumsum(xt)-ceiling(xt/2))
+  xy<-sapply(z, length)
+  xt<-as.numeric(cumsum(xy)-ceiling(xy/2))
   yt<-.1
   points(x = xt, y = rep(yt, length(xt)), cex = 6, pch = 20, col = "lightgray")
-  text(x = xt, y = yt, labels = names(table(x$groups.snp)), adj = .5)
+  text(x = xt, y = yt, labels = match(xy, table(x$groups.snp, useNA = "ifany")), adj = .5)
 }
 

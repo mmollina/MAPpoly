@@ -94,27 +94,13 @@ rf_list_to_matrix <-  function(input.twopt,
     stop(deparse(substitute(input.twopt)),
          " is not an object of class 'poly.est.two.pts.pairwise'")
   }
-  if (inherits(input.twopt, "poly.haplo.est.two.pts.pairwise")) {
-    pair_input <- lapply(input.twopt$pairwise, function(x) {
-      if(any(is.na(x)))
-        return(NA)
-      else
-        return(x$rf.stats)
-    }
-    )
-    marnames <- input.twopt$seq.blocks
-    lod.mat <- rec.mat <- matrix(NA, length(marnames), length(marnames))
-    dimnames(lod.mat) = dimnames(rec.mat) = list(marnames, marnames)
-  } else {
     pair_input <- input.twopt$pairwise
-
-    marnames <- rownames(get(input.twopt$data.name)$geno)[input.twopt$seq.num]
+    marnames <- rownames(get(input.twopt$data.name, pos = 1)$geno.dose)[input.twopt$seq.num]
     lod.mat <- rec.mat <- matrix(NA, input.twopt$n.mrk, input.twopt$n.mrk)
     #### UPDATE: instead of recovering the order from names, provide using the object 'input.twopt'
-    seq.num.orig<-unique(sapply(strsplit(x = names(input.twopt$pairwise), split = "-"), function(x) as.numeric(x[1])))
-    seq.num.orig<-c(seq.num.orig, strsplit(tail(names(input.twopt$pairwise), n = 1), "-")[[1]][2])
-    dimnames(lod.mat) = dimnames(rec.mat) = list(seq.num.orig, seq.num.orig)
-  }
+    #seq.num.orig<-unique(sapply(strsplit(x = names(input.twopt$pairwise), split = "-"), function(x) as.numeric(x[1])))
+    #seq.num.orig<-c(seq.num.orig, strsplit(tail(names(input.twopt$pairwise), n = 1), "-")[[1]][2])
+    #dimnames(lod.mat) = dimnames(rec.mat) = list(seq.num.orig, seq.num.orig)
   if (n.clusters > 1) {
     start <- proc.time()
     if (verbose)
@@ -155,6 +141,7 @@ rf_list_to_matrix <-  function(input.twopt,
   rec.mat[upper.tri(rec.mat)] <- t(rec.mat)[upper.tri(rec.mat)]
   lod.mat[lower.tri(lod.mat)] <- as.numeric(rf.lod.mat[2,])
   lod.mat[upper.tri(lod.mat)] <- t(lod.mat)[upper.tri(lod.mat)]
+  dimnames(rec.mat)<-dimnames(lod.mat)<-list(marnames, marnames)
   structure(list(thresh.LOD.ph = thresh.LOD.ph,
                  thresh.LOD.rf = thresh.LOD.rf,
                  thresh.rf = thresh.rf,

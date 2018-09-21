@@ -8,7 +8,7 @@ est_rf_hmm_sequential(input.seq, thres.twopt, thres.hmm, info.tail = TRUE,
   extend.tail = NULL, twopt, verbose = FALSE, rf.lim = 0.5, tol = 0.1,
   tol.final = 0.01, est.given.0.rf = FALSE,
   reestimate.single.ph.configuration = TRUE, sub.map.size.diff.limit = Inf,
-  phase.number.limit = Inf)
+  phase.number.limit = Inf, high.prec = TRUE)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}.}
@@ -60,6 +60,9 @@ size exceeds the limit, the marker will not be inserted. If
 by arguments \code{info.tail} and \code{extend.tail}. If the
 size exceeds the limit, the marker will not be inserted. If
 \code{NULL}, the it will insert all markers.}
+
+\item{high.prec}{logical. If \code{TRUE} (default) uses high precision 
+long double numbers in the HMM procedure.}
 }
 \value{
 An object of class 'mappoly.map'

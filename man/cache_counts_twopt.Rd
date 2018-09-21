@@ -2,7 +2,7 @@
 % Please edit documentation in R/cache_twopts.R
 \name{cache_counts_twopt}
 \alias{cache_counts_twopt}
-\title{Frequency of genotypes for two-point estimaton of recombination fractions}
+\title{Frequency of genotypes for two-point recombination fractions estimation}
 \usage{
 cache_counts_twopt(input.seq, get.from.web = FALSE, cache.prev = NULL,
   n.clusters = 1, verbose = TRUE, joint.prob = FALSE)
@@ -26,7 +26,7 @@ printed, since all linkage phase configurations will be cached.}
 \item{joint.prob}{If \code{FALSE}, returns the frequency of
    genotypes for transition probabilities (conditional
    probabilities). If \code{TRUE} returns the frequency for joint
-   probabilities 
+   probabilities.
    
 @param x an object of one of the classes \code{mappoly.map}}
 
@@ -34,7 +34,7 @@ printed, since all linkage phase configurations will be cached.}
 }
 \value{
 An object of class \code{cache.info} which contains a list
-    for all pairs of dosages contained in the dataset. The names of
+    for all pairs of dosages contained in the dataset. The names in
     this list are of the form 'A-B-C-D', where A represents the
     dosage in parent 1, marker k, B represents the dosage in parent
     1, marker k+1, C represents the dosage in parent 2, marker k
@@ -48,9 +48,9 @@ An object of class \code{cache.info} which contains a list
     S3 Appendix in Mollinari and Garcia (2018) for an example.
 }
 \description{
-Returns the frequency of each genotype for the two-point reduction
+Returns the frequency of each genotype for two-point reduction
 of dimensionality. The frequency is calculated for all pairwise
-combination and for all possible linkage phase configuration.
+combination and for all possible linkage phase configurations.
 }
 \examples{
   \dontrun{

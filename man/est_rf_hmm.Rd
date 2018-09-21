@@ -8,7 +8,7 @@
 \usage{
 est_rf_hmm(input.seq, input.ph = NULL, thres = 0.5, twopt = NULL,
   verbose = FALSE, rf.lim = 0.5, tol = 1e-04, est.given.0.rf = FALSE,
-  reestimate.single.ph.configuration = TRUE)
+  reestimate.single.ph.configuration = TRUE, high.prec = TRUE)
 
 \method{print}{mappoly.map}(x, detailed = FALSE, ...)
 
@@ -45,6 +45,9 @@ recombination fractions equals to 0 (1e-5, for internal use only)}
 returns a map without reestimating the map parameters for cases
 where there are only one possible linkage phase configuration. 
 This argument is intended to be used in a sequential map contruction.}
+
+\item{high.prec}{logical. If \code{TRUE} (default) uses high precision 
+long double numbers in the HMM procedure.}
 
 \item{x}{an object of one of the classes \code{mappoly.map}}
 
@@ -140,3 +143,4 @@ Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }
+\keyword{internal}

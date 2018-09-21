@@ -45,7 +45,10 @@
 #' returns a map without reestimating the map parameters for cases
 #' where there are only one possible linkage phase configuration. 
 #' This argument is intended to be used in a sequential map contruction.
-#'
+#' 
+#' @param high.prec logical. If \code{TRUE} (default) uses high precision 
+#' long double numbers in the HMM procedure. 
+#' 
 #' @param x an object of one of the classes \code{mappoly.map}
 #'
 #' @param detailed if TRUE print the linkage phase configuration and the marker 
@@ -127,7 +130,8 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
                        verbose = FALSE, rf.lim = 0.5,
                        tol = 1e-04,
                        est.given.0.rf=FALSE,
-                       reestimate.single.ph.configuration = TRUE) {
+                       reestimate.single.ph.configuration = TRUE,
+                       high.prec = TRUE) {
   ## checking for correct object
   input_classes <- c("mappoly.sequence", "two.pts.linkage.phases")
   if (!inherits(input.seq, input_classes[1])) {
@@ -203,7 +207,8 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
                                    rf.temp = rf.temp,
                                    tol = tol,
                                    verbose = FALSE,
-                                   ret.map.no.rf.estimation = ret.map.no.rf.estimation)
+                                   ret.map.no.rf.estimation = ret.map.no.rf.estimation, 
+                                   high.prec = high.prec)
   }
   id<-order(sapply(maps, function(x) x$loglike), decreasing = TRUE)
   maps<-maps[id]
@@ -278,7 +283,10 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'     by arguments \code{info.tail} and \code{extend.tail}. If the
 #'     size exceeds the limit, the marker will not be inserted. If
 #'     \code{NULL}, the it will insert all markers.
-#'
+#'     
+#' @param high.prec logical. If \code{TRUE} (default) uses high precision 
+#' long double numbers in the HMM procedure. 
+#' 
 #' @return An object of class 'mappoly.map'
 #'
 #' @examples
@@ -346,7 +354,8 @@ est_rf_hmm_sequential <- function(input.seq,
                                   est.given.0.rf=FALSE,
                                   reestimate.single.ph.configuration = TRUE,
                                   sub.map.size.diff.limit = Inf,
-                                  phase.number.limit = Inf) {
+                                  phase.number.limit = Inf,
+                                  high.prec = TRUE) {
   ## checking for correct object
   if (!any(class(input.seq) == "mappoly.sequence"))
     stop(deparse(substitute(input.seq)),
@@ -454,7 +463,8 @@ est_rf_hmm_sequential <- function(input.seq,
                           est.given.0.rf = est.given.0.rf,
                           rf.lim = rf.lim,
                           verbose = FALSE,
-                          reestimate.single.ph.configuration = reestimate.single.ph.configuration)
+                          reestimate.single.ph.configuration = reestimate.single.ph.configuration, 
+                          high.prec = high.prec)
     ## Checking for quality (map size and LOD Score)
     size <- sapply(cur.map$maps, function(x) round(sum(imf_h(x$seq.rf)),1))
     sub.maps[2,seq.cur$seq.mrk.names]  <- c(0, imf_h(cur.map$maps[[1]]$seq.rf))
@@ -507,7 +517,8 @@ est_rf_hmm_sequential <- function(input.seq,
                       rf.lim = rf.lim,
                       tol = tol.final,
                       est.given.0.rf = est.given.0.rf,
-                      verbose = verbose)
+                      verbose = verbose,  
+                      high.prec = high.prec)
     return(cur.map)
   }
   all.ph.temp<-all.ph
@@ -560,7 +571,8 @@ est_rf_hmm_sequential <- function(input.seq,
                                tol = tol,
                                est.given.0.rf = est.given.0.rf,
                                verbose = FALSE,
-                               reestimate.single.ph.configuration = reestimate.single.ph.configuration)
+                               reestimate.single.ph.configuration = reestimate.single.ph.configuration,
+                               high.prec = high.prec)
     ## Checking for quality (map size and LOD Score)
     size <- sapply(cur.map.temp$maps, function(x) round(sum(imf_h(x$seq.rf)),1))
     last.rf <- imf_h(rev(cur.map.temp$maps[[1]]$seq.rf)[1])
@@ -615,11 +627,14 @@ est_rf_hmm_sequential <- function(input.seq,
                     rf.lim = rf.lim,
                     tol = tol.final,
                     est.given.0.rf = est.given.0.rf,
-                    verbose = verbose)
-  res$sub.maps<-sub.maps
+                    verbose = verbose, 
+                    high.prec = TRUE)
+  #res$sub.maps<-sub.maps
   return(res)
 }
+
 #' @rdname est_rf_hmm
+#' @keywords internal
 #' @export
 print.mappoly.map <- function(x, detailed = FALSE, ...) {
   cat("This is an object of class 'mappoly.map'\n")
@@ -664,6 +679,7 @@ print.mappoly.map <- function(x, detailed = FALSE, ...) {
 #' @rdname est_rf_hmm
 #' @importFrom grid grid.roundrect  grid.rect grid.newpage grid.lines viewport pushViewport upViewport grid.text gpar unit
 #' @importFrom grDevices rgb
+#' @keywords internal
 #' @export
 plot.mappoly.map <- function(x, col.cte = 2, config = "best", ...) {
   grid::grid.newpage()

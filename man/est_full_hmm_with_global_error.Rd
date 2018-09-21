@@ -4,7 +4,8 @@
 \alias{est_full_hmm_with_global_error}
 \title{Reestimate gentic map given a global genotyping error}
 \usage{
-est_full_hmm_with_global_error(input.map, error = NULL, tol = 0.001)
+est_full_hmm_with_global_error(input.map, error = NULL, tol = 0.001,
+  verbose = FALSE)
 }
 \arguments{
 \item{input.map}{an object of class \code{mappoly.map}.}
@@ -12,6 +13,9 @@ est_full_hmm_with_global_error(input.map, error = NULL, tol = 0.001)
 \item{error}{global error rate}
 
 \item{tol}{the desired accuracy.}
+
+\item{verbose}{if \code{TRUE}, current progress is shown; if
+\code{FALSE}, no output is produced.}
 }
 \value{
 An object of class 'mappoly.map'

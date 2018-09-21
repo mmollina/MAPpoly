@@ -24,6 +24,8 @@ genotyping_global_error<-function(x, error=0.01, th.num=0.999)
 #' @param input.map an object of class \code{mappoly.map}.
 #' @param error global error rate
 #' @param tol the desired accuracy.
+#' @param verbose if \code{TRUE}, current progress is shown; if
+#'     \code{FALSE}, no output is produced.
 #'
 #' @return An object of class 'mappoly.map'
 #'
@@ -62,7 +64,7 @@ genotyping_global_error<-function(x, error=0.01, th.num=0.999)
 #'
 #' @export est_full_hmm_with_global_error
 #'
-est_full_hmm_with_global_error <- function(input.map, error=NULL, tol=10e-4)
+est_full_hmm_with_global_error <- function(input.map, error=NULL, tol=10e-4, verbose = FALSE)
   {
   output.seq<-input.map
   mrknames<-get(input.map$info$data.name, pos=1)$mrk.names[input.map$maps[[1]]$seq.num]
@@ -94,7 +96,7 @@ est_full_hmm_with_global_error <- function(input.map, error=NULL, tol=10e-4)
                       dq = as.numeric(cumsum(c(0, sapply(YQ, function(x) sum(length(x)))))),
                       g = as.double(unlist(gen)),
                       rf = as.double(input.map$maps[[i]]$seq.rf),
-                      verbose = TRUE,
+                      verbose = verbose,
                       tol = tol)
     output.seq$maps[[i]]$seq.rf<-map$rf
     output.seq$maps[[i]]$loglike<-map$loglike

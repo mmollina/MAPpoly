@@ -2,15 +2,15 @@
 % Please edit documentation in R/calc_genoprob.R
 \name{calc_genoprob}
 \alias{calc_genoprob}
-\title{Compute QTL conditional probabilities}
+\title{Compute genotype conditional probabilities}
 \usage{
 calc_genoprob(input.map, phase.config = "best", verbose = TRUE)
 }
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}
 
-\item{phase.config}{which phase configuration should be used.
-"best" will use the one with highest likelihood}
+\item{phase.config}{indicates which phase configuration should be used.
+"best" will use the maximum likelihood configuration}
 
 \item{verbose}{if \code{TRUE}, current progress is shown; if
 \code{FALSE}, no output is produced.}
@@ -23,7 +23,7 @@ An object of class 'mappoly.genoprob'
 \description{
 The conditional probabilities are calculeted for each marker.
 In this version, the probabilities are not calculated bewtween
-markers.
+markers (pseudomerkers).
 }
 \examples{
  \dontrun{

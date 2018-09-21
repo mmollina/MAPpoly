@@ -156,7 +156,7 @@ mds_mappoly<-function(input.mat,
   if(weight.exponent != 1)
     input.mat$lod.mat<-input.mat$lod.mat^weight.exponent
   diag(input.mat$lod.mat)<-diag(input.mat$rec.mat)<-NA
-  locinames <- get(input.mat$data.name, pos=1)$mrk.names[as.numeric(colnames(input.mat$rec.mat))]
+  locinames <- rownames(input.mat$rec.mat)
   X <- list(rf = input.mat$rec.mat, lod = input.mat$lod.mat, nloci = ncol(input.mat$rec.mat), locinames = locinames)
   if(!is.null(n)){
     t<-table(n)[(table(n)>1)]
