@@ -1,5 +1,5 @@
 ---
-title: Building a genetic map in an hexaploid full-sib population using MAPPoly
+title: Building a genetic map in an hexaploid full-sib population using MAPpoly
 author: "Marcelo Mollinari, Guilhereme Pereira, A Augusto F Garcia and Zhao-Bang Zeng"
 date: "`r Sys.Date()`"
 output:
@@ -27,7 +27,7 @@ bibliography: biblio.bib
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(cache = TRUE)
-load("~/repos/MAPPoly/docs/maps.rda")
+load("~/repos/MAPpoly/docs/maps.rda")
 ```
 
 # Introduction
@@ -197,7 +197,7 @@ The top homology group represents parent $P$ and the bottom represents parent $Q
 
 ```{r compare_phases_P}
 h1.given.P <- lapply(maps.given.order, function(x) x$maps[[1]]$seq.ph$P)
-temp <- read.csv2("~/repos/MAPPoly/inst/doc/phase_sim_hexa_P.csv")[,2:7]
+temp <- read.csv2("~/repos/MAPpoly/inst/doc/phase_sim_hexa_P.csv")[,2:7]
 h2.given.P <- lapply(h1.given.P, 
                      function(x, temp) ph_matrix_to_list(temp[names(x),]), 
                      temp = temp)
@@ -211,7 +211,7 @@ is.same.haplo.P
 The results for all three linkage groups returned `TRUE`, meaning that the linkage phase configuration was correctly inferred for all linkage groups. For parent $Q$ we have 
 ```{r compare_phases_Q}
 h1.given.Q <- lapply(maps.given.order, function(x) x$maps[[1]]$seq.ph$Q)
-temp <- read.csv2("~/repos/MAPPoly/inst/doc/phase_sim_hexa_Q.csv")[,2:7]
+temp <- read.csv2("~/repos/MAPpoly/inst/doc/phase_sim_hexa_Q.csv")[,2:7]
 h2.given.Q <- lapply(h1.given.Q, 
                      function(x, temp) ph_matrix_to_list(temp[names(x),]), 
                      temp = temp)
@@ -293,7 +293,7 @@ Again, let us compare the simulated and the estimated linkage phases and the len
 
 ```{r compare_phase_mds_hmm_P}
 h1.denovo.P <- lapply(maps.denovo, function(x) x$maps[[1]]$seq.ph$P)
-temp <- read.csv2("~/repos/MAPPoly/inst/doc/phase_sim_hexa_P.csv")[,2:7]
+temp <- read.csv2("~/repos/MAPpoly/inst/doc/phase_sim_hexa_P.csv")[,2:7]
 h2.denovo.P <- lapply(h1.denovo.P, 
                      function(x, temp) ph_matrix_to_list(temp[names(x),]), 
                      temp = temp)
@@ -307,7 +307,7 @@ is.same.haplo.P
 And for parent $Q$ we have 
 ```{r compare_phase_mds_hmm_Q}
 h1.denovo.Q <- lapply(maps.denovo, function(x) x$maps[[1]]$seq.ph$Q)
-temp <- read.csv2("~/repos/MAPPoly/inst/doc/phase_sim_hexa_Q.csv")[,2:7]
+temp <- read.csv2("~/repos/MAPpoly/inst/doc/phase_sim_hexa_Q.csv")[,2:7]
 h2.denovo.Q <- lapply(h1.denovo.Q, 
                      function(x, temp) ph_matrix_to_list(temp[names(x),]), 
                      temp = temp)

@@ -1,5 +1,5 @@
 ---
-title: Building a genetic map in an hexaploid full-sib population using MAPPoly
+title: Building a genetic map in an hexaploid full-sib population using MAPpoly
 author: "Marcelo Mollinari, Guilhereme Pereira, A Augusto F Garcia and Zhao-Bang Zeng"
 date: "2018-09-15"
 output:
@@ -378,7 +378,7 @@ The top homology group represents parent $P$ and the bottom represents parent $Q
 
 ```r
 h1.given.P <- lapply(maps.given.order, function(x) x$maps[[1]]$seq.ph$P)
-temp <- read.csv2("~/repos/MAPPoly/inst/doc/phase_sim_hexa_P.csv")[,2:7]
+temp <- read.csv2("~/repos/MAPpoly/inst/doc/phase_sim_hexa_P.csv")[,2:7]
 h2.given.P <- lapply(h1.given.P, 
                      function(x, temp) ph_matrix_to_list(temp[names(x),]), 
                      temp = temp)
@@ -397,7 +397,7 @@ The results for all three linkage groups returned `TRUE`, meaning that the linka
 
 ```r
 h1.given.Q <- lapply(maps.given.order, function(x) x$maps[[1]]$seq.ph$Q)
-temp <- read.csv2("~/repos/MAPPoly/inst/doc/phase_sim_hexa_Q.csv")[,2:7]
+temp <- read.csv2("~/repos/MAPpoly/inst/doc/phase_sim_hexa_Q.csv")[,2:7]
 h2.given.Q <- lapply(h1.given.Q, 
                      function(x, temp) ph_matrix_to_list(temp[names(x),]), 
                      temp = temp)
@@ -573,7 +573,7 @@ Again, let us compare the simulated and the estimated linkage phases and the len
 
 ```r
 h1.denovo.P <- lapply(maps.denovo, function(x) x$maps[[1]]$seq.ph$P)
-temp <- read.csv2("~/repos/MAPPoly/inst/doc/phase_sim_hexa_P.csv")[,2:7]
+temp <- read.csv2("~/repos/MAPpoly/inst/doc/phase_sim_hexa_P.csv")[,2:7]
 h2.denovo.P <- lapply(h1.denovo.P, 
                      function(x, temp) ph_matrix_to_list(temp[names(x),]), 
                      temp = temp)
@@ -592,7 +592,7 @@ And for parent $Q$ we have
 
 ```r
 h1.denovo.Q <- lapply(maps.denovo, function(x) x$maps[[1]]$seq.ph$Q)
-temp <- read.csv2("~/repos/MAPPoly/inst/doc/phase_sim_hexa_Q.csv")[,2:7]
+temp <- read.csv2("~/repos/MAPpoly/inst/doc/phase_sim_hexa_Q.csv")[,2:7]
 h2.denovo.Q <- lapply(h1.denovo.Q, 
                      function(x, temp) ph_matrix_to_list(temp[names(x),]), 
                      temp = temp)

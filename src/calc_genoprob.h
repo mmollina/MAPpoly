@@ -1,10 +1,10 @@
 /*
- MAPPoly: a package to construct genetic maps in autopolyploids
+ MAPpoly: a package to construct genetic maps in autopolyploids
  Copyright (C) 2014-2018 Marcelo Mollinari
 
- This file is part of MAPPoly.
+ This file is part of MAPpoly.
 
- MAPPoly is free software: you can redistribute it and/or modify
+ MAPpoly is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
