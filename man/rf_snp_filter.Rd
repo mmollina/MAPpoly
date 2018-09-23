@@ -2,7 +2,7 @@
 % Please edit documentation in R/rf_snp_filter.R
 \name{rf_snp_filter}
 \alias{rf_snp_filter}
-\title{Remove snps that do not meet a LOD criteria}
+\title{Remove markers that do not meet a LOD criteria}
 \usage{
 rf_snp_filter(input.twopt, thresh.LOD.ph = 5, thresh.LOD.rf = 5,
   thresh.rf = 0.15, thresh.perc = 0.05, n.clusters = 1)
@@ -29,7 +29,7 @@ kept the marker.}
 A filtered object of class \code{mappoly.sequence}
 }
 \description{
-Remove snps that do not meet a LOD and recombination fraction
+Remove markers that do not meet a LOD and recombination fraction
  criteria for at least a percentage of the pairwise markers
  combinations.
 }
