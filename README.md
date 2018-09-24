@@ -24,4 +24,4 @@ devtools::install_github("mmollina/mappoly")
 
 # Acknowledgment 
 
-This package has been developed as part of the [Genomic Tools for Sweetpotato Improvement project](https://sweetpotatogenomics.cals.ncsu.edu/) (GT4SP), founded by [Bill & Melinda Gates Foundation](https://www.gatesfoundation.org/).
+This package has been developed as part of the [Genomic Tools for Sweetpotato Improvement project](https://sweetpotatogenomics.cals.ncsu.edu/) (GT4SP), funded by [Bill & Melinda Gates Foundation](https://www.gatesfoundation.org/).
