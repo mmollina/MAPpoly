@@ -1,27 +1,27 @@
 ---
-title: Building a genetic map in an hexaploid full-sib population using MAPpoly
+title: "Building a genetic map in an hexaploid full-sib population using MAPpoly"
 author: "Marcelo Mollinari, Guilhereme Pereira, A Augusto F Garcia and Zhao-Bang Zeng"
-date: "`r Sys.Date()`"
+date: '`r Sys.Date()`'
 output:
- html_document:
-   highlight: tango
-   keep_md: yes
-   theme: united
-   toc: yes
-   toc_depth: '3'
-   toc_float:
-     collapsed: no
- md_document:
-   variant: markdown_github
- pdf_document:
-   toc: yes
-   toc_depth: '3'
-   highlight: tango
+  word_document:
+    toc: yes
+    toc_depth: '2'
+  md_document:
+    variant: markdown_github
+  pdf_document:
+    highlight: tango
+    toc: yes
+    toc_depth: '2'
+  html_document:
+    highlight: tango
+    keep_md: yes
+    theme: united
+    toc: yes
+    toc_depth: '2'
+    toc_float:
+      collapsed: no
 linestretch: 1.2
 bibliography: biblio.bib
-#output: rmarkdown::html_vignette
-#vignette: >
-#  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 ```{r setup, include=FALSE}
