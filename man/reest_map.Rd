@@ -4,8 +4,9 @@
 \alias{reest_map}
 \title{Reestimate the recombination fractions in a genetic map}
 \usage{
-reest_map(input.map, input.mat = NULL, tol = 0.01, phase.config = "best",
-  method = c("hmm", "ols"), weight = TRUE, verbose = TRUE)
+reest_map(input.map, input.mat = NULL, tol = 0.01,
+  phase.config = "best", method = c("hmm", "ols"), weight = TRUE,
+  verbose = TRUE)
 }
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}

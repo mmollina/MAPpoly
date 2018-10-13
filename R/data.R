@@ -23,8 +23,8 @@
 #'     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
 #'       for each individual (columns). Missing data are represented by 
 #'       \code{ploidy_level + 1}.}
-#'     \item{n.phen}{There is no phenotypes in this simulation}
-#'     \item{phen}{There is no phenotypes in this simulation}
+#'     \item{n.phen}{There are no phenotypes in this simulation}
+#'     \item{phen}{There are no phenotypes in this simulation}
 #' }
 "hexafake"
 
@@ -61,7 +61,17 @@
 #'       and the offspring, respectively. The remaining elements represent
 #'       the probability associated to each one of the possible
 #'       dosages.}
-#'     \item{n.phen}{There is no phenotypes in this simulation}
-#'     \item{phen}{There is no phenotypes in this simulation}
+#'     \item{n.phen}{There are no phenotypes in this simulation}
+#'     \item{phen}{There are no phenotypes in this simulation}
 #' }
 "hexafake.geno.dist"
+
+#' Resulting maps from \code{\link[mappoly]{hexafake}}
+#'
+#' A list containing three linkage groups estimated using the procedure available in  
+#' [MAPpoly's tutorial](https://mmollina.github.io/MAPpoly/#estimating_the_map_for_a_given_order)
+#' 
+#' @format A list containing three objects of class \code{mappoly.map}, each one 
+#' representing one linkage group in the simulated data. 
+#' 
+"maps.hexafake"

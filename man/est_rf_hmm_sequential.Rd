@@ -4,11 +4,12 @@
 \alias{est_rf_hmm_sequential}
 \title{Multipoint analysis using Hidden Markov Models - Sequential phase elimination}
 \usage{
-est_rf_hmm_sequential(input.seq, thres.twopt, thres.hmm, info.tail = TRUE,
-  extend.tail = NULL, twopt, verbose = FALSE, rf.lim = 0.5, tol = 0.1,
-  tol.final = 0.01, est.given.0.rf = FALSE,
-  reestimate.single.ph.configuration = TRUE, sub.map.size.diff.limit = Inf,
-  phase.number.limit = Inf, high.prec = TRUE)
+est_rf_hmm_sequential(input.seq, thres.twopt, thres.hmm,
+  info.tail = TRUE, extend.tail = NULL, twopt, verbose = FALSE,
+  rf.lim = 0.5, tol = 0.1, tol.final = 0.01,
+  est.given.0.rf = FALSE, reestimate.single.ph.configuration = TRUE,
+  sub.map.size.diff.limit = Inf, phase.number.limit = Inf,
+  high.prec = TRUE)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}.}

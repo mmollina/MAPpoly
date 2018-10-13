@@ -5,7 +5,8 @@
 \title{Multipoint analysis using Hidden Markov Models (single phase)}
 \usage{
 est_rf_hmm_single(input.seq, input.ph.single, rf.temp = NULL, tol,
-  verbose = FALSE, ret.map.no.rf.estimation = FALSE, high.prec = TRUE)
+  verbose = FALSE, ret.map.no.rf.estimation = FALSE,
+  high.prec = TRUE)
 }
 \arguments{
 \item{void}{interfunction to be documented}

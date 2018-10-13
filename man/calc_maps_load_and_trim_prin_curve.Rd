@@ -4,8 +4,8 @@
 \alias{calc_maps_load_and_trim_prin_curve}
 \title{Estimates loci position using Principal curves}
 \usage{
-calc_maps_load_and_trim_prin_curve(lodrf, spar = NULL, n = NULL, ndim = 2,
-  weightfn = "lod")
+calc_maps_load_and_trim_prin_curve(lodrf, spar = NULL, n = NULL,
+  ndim = 2, weightfn = "lod")
 }
 \arguments{
 \item{void}{interfunction to be documented}

@@ -7,8 +7,9 @@
 \title{Multipoint analysis using Hidden Markov Models in autopolyploids}
 \usage{
 est_rf_hmm(input.seq, input.ph = NULL, thres = 0.5, twopt = NULL,
-  verbose = FALSE, rf.lim = 0.5, tol = 1e-04, est.given.0.rf = FALSE,
-  reestimate.single.ph.configuration = TRUE, high.prec = TRUE)
+  verbose = FALSE, rf.lim = 0.5, tol = 1e-04,
+  est.given.0.rf = FALSE, reestimate.single.ph.configuration = TRUE,
+  high.prec = TRUE)
 
 \method{print}{mappoly.map}(x, detailed = FALSE, ...)
 

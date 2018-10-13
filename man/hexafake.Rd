@@ -24,8 +24,8 @@
     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
       for each individual (columns). Missing data are represented by 
       \code{ploidy_level + 1}.}
-    \item{n.phen}{There is no phenotypes in this simulation}
-    \item{phen}{There is no phenotypes in this simulation}
+    \item{n.phen}{There are no phenotypes in this simulation}
+    \item{phen}{There are no phenotypes in this simulation}
 }}
 \usage{
 hexafake

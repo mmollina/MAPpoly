@@ -30,8 +30,8 @@
       and the offspring, respectively. The remaining elements represent
       the probability associated to each one of the possible
       dosages.}
-    \item{n.phen}{There is no phenotypes in this simulation}
-    \item{phen}{There is no phenotypes in this simulation}
+    \item{n.phen}{There are no phenotypes in this simulation}
+    \item{phen}{There are no phenotypes in this simulation}
 }}
 \usage{
 hexafake.geno.dist
