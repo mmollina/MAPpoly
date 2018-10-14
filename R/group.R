@@ -156,6 +156,7 @@ group_mappoly <- function(input.mat, input.seq, expected.groups = NULL,
  }
 
 #' @rdname group_mappoly
+#' @keywords internal
 #' @export
 print.mappoly.group <- function(x, detailed = TRUE, ...) {
     ## checking for correct object
@@ -179,6 +180,7 @@ print.mappoly.group <- function(x, detailed = TRUE, ...) {
       cat("\n  ------------------------------------------\n")
     }
 }
+
 #' @rdname group_mappoly
 #' @keywords internal
 #' @export

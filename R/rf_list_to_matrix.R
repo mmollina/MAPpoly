@@ -95,7 +95,7 @@ rf_list_to_matrix <-  function(input.twopt,
          " is not an object of class 'poly.est.two.pts.pairwise'")
   }
     pair_input <- input.twopt$pairwise
-    marnames <- rownames(get(input.twopt$data.name, pos = 1)$geno.dose)[input.twopt$seq.num]
+    marnames <- rownames(get(input.twopt$data.name, pos = 1)$geno.dose)[sort(input.twopt$seq.num)]
     lod.mat <- rec.mat <- matrix(NA, input.twopt$n.mrk, input.twopt$n.mrk)
     #### UPDATE: instead of recovering the order from names, provide using the object 'input.twopt'
     #seq.num.orig<-unique(sapply(strsplit(x = names(input.twopt$pairwise), split = "-"), function(x) as.numeric(x[1])))

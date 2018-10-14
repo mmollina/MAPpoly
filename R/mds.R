@@ -337,7 +337,6 @@ calc_maps_load_and_trim_prin_curve<-function(lodrf, spar=NULL, n=NULL, ndim=2, w
 #' @keywords internal
 #' @export
 plot_diag_pc<-function(mappc,D1lim=NULL,D2lim=NULL,displaytext=TRUE){
-
   with(mappc,{
     if (displaytext==TRUE) labels=locikey$locus else labels=locikey$confplotno
     #png(paste(st,'_diagplot.png',sep=""),width=960,height=480)
