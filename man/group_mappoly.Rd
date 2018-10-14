@@ -51,14 +51,14 @@ Identifies linkage groups of markers, using results from two-point
 \examples{
  \dontrun{
     data(hexafake)
-    all.mrk<-make_seq_mappoly(hexafake, 'all')
-    red.mrk<-elim_redundant(all.mrk)
-    unique.mrks<-make_seq_mappoly(red.mrk)
-    counts.web<-cache_counts_twopt(unique.mrks, get.from.web = TRUE)
-    all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-                               count.cache = counts.web,
-                               n.clusters = 16,
-                               verbose=TRUE)
+    all.mrk <- make_seq_mappoly(hexafake, 'all')
+    red.mrk <- elim_redundant(all.mrk)
+    unique.mrks <- make_seq_mappoly(red.mrk)
+    counts <- cache_counts_twopt(unique.mrks, get.from.web = TRUE)
+    all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
+                                 count.cache = counts,
+                                 n.clusters = 16,
+                                 verbose=TRUE)
 
     ## Full recombination fraction matrix
     mat.full<-rf_list_to_matrix(input.twopt=all.pairs)
@@ -69,7 +69,7 @@ Identifies linkage groups of markers, using results from two-point
                          expected.groups = 3,
                          inter = TRUE,
                          comp.mat = TRUE, #this data has physical information
-                         verbose=TRUE)
+                         verbose = TRUE)
     lgs
     plot(lgs)
     lg1 <- make_seq_mappoly(lgs, 1)
@@ -96,3 +96,4 @@ Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }
+\keyword{internal}

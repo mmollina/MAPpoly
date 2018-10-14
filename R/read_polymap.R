@@ -209,6 +209,9 @@ read_geno <- function(file.in ) {
               class = "mappoly.data")
 }
 
+#' @rdname read_geno
+#' @rdname read_geno_dist
+#' @keywords internal
 #' @export
 print.mappoly.data <- function(x, detailed = FALSE, ...) {
     cat("This is an object of class 'mappoly.data'\n")
@@ -232,7 +235,9 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
 }
 
 #' @rdname read_geno
+#' @rdname read_geno_dist
 #' @export
+#' @keywords internal
 #' @importFrom graphics barplot
 plot.mappoly.data <- function(x, detailed = FALSE, ...)
 {

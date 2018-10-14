@@ -154,5 +154,6 @@ Preedy, K. F., & Hackett, C. A. (2016). A rapid marker ordering approach for
  2117-2132. \url{http://doi.org/10.1007/s00122-016-2761-8}
 }
 \author{
-Marcelo Mollinari, \email{mmollin@ncsu.edu} mostly adapding from TetraploidSNPMap codes
+Marcelo Mollinari, \email{mmollin@ncsu.edu} mostly adapted from TetraploidSNPMap codes
 }
+\keyword{internal}

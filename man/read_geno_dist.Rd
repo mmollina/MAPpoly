@@ -2,20 +2,13 @@
 % Please edit documentation in R/read_polymap_dist.R
 \name{read_geno_dist}
 \alias{read_geno_dist}
-\alias{print.mappoly.data}
 \title{Data Input}
 \usage{
 read_geno_dist(file.in)
-
-\method{print}{mappoly.data}(x, detailed = FALSE, ...)
 }
 \arguments{
 \item{file.in}{the name of the input file which contains the data to
 be read.}
-
-\item{x}{an object of one of the classes \code{mappoly.data}}
-
-\item{detailed}{if available, print the number of markers per sequence}
 
 \item{...}{curentlly ignored}
 }

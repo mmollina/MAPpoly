@@ -42,10 +42,6 @@
 #' @param file.in the name of the input file which contains the data to
 #'     be read.
 #'
-#' @param x an object of one of the classes \code{mappoly.data}
-#'
-#' @param detailed if available, print the number of markers per sequence
-#'
 #' @param ... curentlly ignored
 #'
 #' @return An object of class \code{mappoly.data} which contains a
@@ -208,27 +204,4 @@ read_geno_dist <- function(file.in) {
                    nphen = nphen,
                    phen = phen),
               class = "mappoly.data")
-}
-
-#' @rdname read_geno_dist
-#' @export
-print.mappoly.data <- function(x, detailed = FALSE, ...) {
-    cat("This is an object of class 'mappoly.data'\n")
-    cat("    Ploidy level:   ", x$m, "\n")
-    cat("    No. individuals:   ", x$n.ind, "\n")
-    cat("    No. markers:       ", x$n.mrk, "\n")
-    w <- table(x$sequence)
-    if (length(x$sequence) <= 1)
-        cat("\n    No. markers per sequence: not available") else if (detailed) {
-        cat("\n    ----------\n    No. markers per sequence:\n")
-        print(data.frame(sequence = paste0("       ", names(w)), No.mrk = as.numeric(w)), row.names = FALSE)
-        cat("    ----------\n")
-        cat(paste0("       Not allocated markers: ", sum(is.na(x$sequence))))
-    } else cat("\n    This dataset contains sequence information.")
-    cat("\n    ----------\n    No. of markers per dosage in both parents:\n")
-    freq <- table(paste(x$dosage.p, x$dosage.q, sep = "-"))
-    d.temp <- matrix(unlist(strsplit(names(freq), "-")), ncol = 2, byrow = TRUE)
-    print(data.frame(dP = paste0("    ", d.temp[, 1]), dQ = d.temp[, 2], freq = as.numeric(freq)), row.names = FALSE)
-    if (x$nphen != 0)
-        cat("\n    This dataset contains phenotypic information.\n")
 }

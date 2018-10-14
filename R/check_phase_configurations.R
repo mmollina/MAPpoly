@@ -425,6 +425,7 @@ ls_linkage_phases <- function(input.seq, thres, twopt, mrk.to.add = NULL, prev.i
 
 
 #' @rdname ls_linkage_phases
+#' @keywords internal
 #' @export
 print.two.pts.linkage.phases <- function(x, ...) {
     cat("\nThis object is too complex to print in its entirety.")
@@ -434,6 +435,7 @@ print.two.pts.linkage.phases <- function(x, ...) {
     cat("\nThe threshold assumed to discard unlikely\nlinkage phases was ", x$thres, "\n")
 }
 #' @rdname ls_linkage_phases
+#' @keywords internal
 #' @export
 plot.two.pts.linkage.phases <- function(x, ...) {
     if (length(x$config.to.test) == 1) {

@@ -130,7 +130,7 @@
 #'
 #'    }
 #'
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} mostly adapding from TetraploidSNPMap codes
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} mostly adapted from TetraploidSNPMap codes
 #'
 #' @references
 #'  Preedy, K. F., & Hackett, C. A. (2016). A rapid marker ordering approach for
@@ -177,6 +177,7 @@ mds_mappoly<-function(input.mat,
   structure(map, class="mappoly.mds")
 }
 #' @rdname mds_mappoly
+#' @keywords internal
 #' @export
 print.mappoly.mds<-function(x, ...)
 {
@@ -185,6 +186,7 @@ print.mappoly.mds<-function(x, ...)
   cat("\nNumber of dimensions used: ", x$sm$ndim)
 }
 #' @rdname mds_mappoly
+#' @keywords internal
 #' @export
 plot.mappoly.mds<-function(x, displaytext = FALSE, ...)
 {

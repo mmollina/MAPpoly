@@ -261,6 +261,7 @@ format_rf <- function(res) {
 }
 
 #' @rdname est_pairwise_rf
+#' @keywords internal
 #' @export
 print.poly.est.two.pts.pairwise <- function(x, ...) {
   cat("  This is an object of class 'poly.est.two.pts.pairwise'")
@@ -274,6 +275,7 @@ print.poly.est.two.pts.pairwise <- function(x, ...) {
 }
 
 #' @rdname est_pairwise_rf
+#' @keywords internal
 #' @export
 plot.poly.est.two.pts.pairwise <- function(x, first.mrk, second.mrk, ...) {
   i<-which(names(x$pairwise)%in%paste(sort(c(first.mrk, second.mrk)), collapse = "-"))

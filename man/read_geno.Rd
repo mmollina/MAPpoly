@@ -2,10 +2,13 @@
 % Please edit documentation in R/read_polymap.R
 \name{read_geno}
 \alias{read_geno}
+\alias{print.mappoly.data}
 \alias{plot.mappoly.data}
 \title{Data Input}
 \usage{
 read_geno(file.in)
+
+\method{print}{mappoly.data}(x, detailed = FALSE, ...)
 
 \method{plot}{mappoly.data}(x, detailed = FALSE, ...)
 }
@@ -101,3 +104,4 @@ Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }
+\keyword{internal}

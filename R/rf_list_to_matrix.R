@@ -152,7 +152,8 @@ rf_list_to_matrix <-  function(input.twopt,
                  cl = class(input.twopt)),
             class = "mappoly.rf.matrix")
 }
-#' @rdname rf_list_to_matrix 
+#' @rdname rf_list_to_matrix
+#' @keywords internal 
 #' @export
 print.mappoly.rf.matrix <- function(x, ...) {
   ## checking for correct object
@@ -179,7 +180,8 @@ print.mappoly.rf.matrix <- function(x, ...) {
   cat("  Percentage filled:       ", per.fill, "%\n")
 }
 
-#' @rdname rf_list_to_matrix 
+#' @rdname rf_list_to_matrix
+#' @keywords internal 
 #' @export
 plot.mappoly.rf.matrix <- function(x, type = c("rf", "lod"), ord = NULL, rem = NULL, main.text = NULL, index = TRUE, ...)
 {

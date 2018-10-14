@@ -35,14 +35,14 @@
 #' @examples
 #'  \dontrun{
 #'     data(hexafake)
-#'     all.mrk<-make_seq_mappoly(hexafake, 'all')
-#'     red.mrk<-elim_redundant(all.mrk)
-#'     unique.mrks<-make_seq_mappoly(red.mrk)
-#'     counts.web<-cache_counts_twopt(unique.mrks, get.from.web = TRUE)
-#'     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-#'                                count.cache = counts.web,
-#'                                n.clusters = 16,
-#'                                verbose=TRUE)
+#'     all.mrk <- make_seq_mappoly(hexafake, 'all')
+#'     red.mrk <- elim_redundant(all.mrk)
+#'     unique.mrks <- make_seq_mappoly(red.mrk)
+#'     counts <- cache_counts_twopt(unique.mrks, get.from.web = TRUE)
+#'     all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
+#'                                  count.cache = counts,
+#'                                  n.clusters = 16,
+#'                                  verbose=TRUE)
 #'
 #'     ## Full recombination fraction matrix
 #'     mat.full<-rf_list_to_matrix(input.twopt=all.pairs)
@@ -53,7 +53,7 @@
 #'                          expected.groups = 3,
 #'                          inter = TRUE,
 #'                          comp.mat = TRUE, #this data has physical information
-#'                          verbose=TRUE)
+#'                          verbose = TRUE)
 #'     lgs
 #'     plot(lgs)
 #'     lg1 <- make_seq_mappoly(lgs, 1)
@@ -91,7 +91,8 @@ group_mappoly <- function(input.mat, input.seq, expected.groups = NULL,
       stop(deparse(substitute(input.mat)), " is not an object of class 'mappoly.rf.matrix'")
     }
     MSNP <- input.mat$rec.mat
-    mn<-get(input.mat$data.name, pos = 1)$sequence[as.numeric(colnames(MSNP))]
+    o<-pmatch(colnames(MSNP), get(input.mat$data.name, pos = 1)$mrk.names)
+    mn<-get(input.mat$data.name, pos = 1)$sequence[o]
     mn[is.na(mn)]<-"NH"
     dimnames(MSNP)<-list(mn, mn)
     diag(MSNP)<-0
@@ -113,7 +114,7 @@ group_mappoly <- function(input.mat, input.seq, expected.groups = NULL,
         xt<-as.numeric(cumsum(xy)-ceiling(xy/2))
         yt<-.1
         points(x = xt, y = rep(yt, length(xt)), cex = 6, pch = 20, col = "lightgray")
-        text(x = xt, y = yt, labels = match(xy, table(x$groups.snp, useNA = "ifany")), adj = .5)
+        text(x = xt, y = yt, labels = match(xy, table(groups.snp, useNA = "ifany")), adj = .5)
         ANSWER <- readline("Enter 'y' to proceed or update the number of expected groups: ")
         if(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
           expected.groups <- as.numeric(ANSWER)
@@ -141,7 +142,7 @@ group_mappoly <- function(input.mat, input.seq, expected.groups = NULL,
       }
       idtemp<-apply(seq.vs.grouped.snp, 1, which.max)
       seq.vs.grouped.snp<-cbind(seq.vs.grouped.snp[,unique(idtemp)], seq.vs.grouped.snp[,"NH"])
-      #colnames(seq.vs.grouped.snp)<-c(na.omit(unique(input.seq$sequence)),"NH")
+      colnames(seq.vs.grouped.snp)<-c(na.omit(unique(input.seq$sequence)),"NH")
       grtemp<-idtemp[as.character(groups.snp)]
       names(grtemp)<-names(groups.snp)
     } else {
@@ -179,6 +180,7 @@ print.mappoly.group <- function(x, detailed = TRUE, ...) {
     }
 }
 #' @rdname group_mappoly
+#' @keywords internal
 #' @export
 plot.mappoly.group <- function(x, ...) {
   dend <- as.dendrogram(x$hc.snp)
