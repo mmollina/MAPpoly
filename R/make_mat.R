@@ -14,38 +14,20 @@
 #' @examples
 #'  \dontrun{
 #'     data(hexafake)
-#'     all.mrk<-make_seq_mappoly(hexafake, 'all')
-#'     red.mrk<-elim_redundant(all.mrk)
-#'     unique.mrks<-make_seq_mappoly(red.mrk)
-#'     counts.web<-cache_counts_twopt(unique.mrks, get.from.web = TRUE)
-#'     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
+#'     # sequence with 100 markers
+#'     mrk.seq<-make_seq_mappoly(hexafake, 1:100)
+#'     counts.web<-cache_counts_twopt(mrk.seq, get.from.web = TRUE)
+#'     mrk.pairs<-est_pairwise_rf(input.seq = mrk.seq,
 #'                                count.cache = counts.web,
-#'                                n.clusters = 16,
+#'                                n.clusters = 1,
 #'                                verbose=TRUE)
-#'
 #'     ## Full recombination fraction matrix
-#'     mat.full<-rf_list_to_matrix(input.twopt=all.pairs)
-#'     plot(mat.full)
-#'
-#'     lgs <- group_mappoly(input.mat = mat.full,
-#'                          input.seq = unique.mrks,
-#'                          expected.groups = 3,
-#'                          verbose=TRUE)
-#'     lgs
-#'     plot(lgs)
-#'     lg1 <- make_seq_mappoly(lgs, 1)
-#'     lg2 <- make_seq_mappoly(lgs, 2)
-#'     lg3 <- make_seq_mappoly(lgs, 3)
-#'
-#'     ##Plot matrices
-#'     m1<-make_mat_mappoly(input.seq = lg1, input.mat = mat.full)
-#'     m2<-make_mat_mappoly(input.seq = lg2, input.mat = mat.full)
-#'     m3<-make_mat_mappoly(input.seq = lg3, input.mat = mat.full)
-#'     op<-par(mfrow = c(1,3), pty = "s")
-#'     plot(m1, main.text = "LG1")
-#'     plot(m2, main.text = "LG2")
-#'     plot(m3, main.text = "LG3")
-#'     par(op)
+#'     mat<-rf_list_to_matrix(input.twopt=mrk.pairs)
+#'     plot(mat)
+#'     ## Matrix subset
+#'     id <- make_seq_mappoly(hexafake, 1:10)
+#'     mat.sub<-make_mat_mappoly(mat, id)
+#'     plot(mat.sub)
 #'    }
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
@@ -72,7 +54,8 @@ make_mat_mappoly<-function(input.mat, input.seq){
   input.mat$thresh.LOD.ph <- NULL
   input.mat$thresh.LOD.rf <- NULL
   input.mat$thresh.rf <- NULL
-  input.mat$rec.mat <- input.mat$rec.mat[as.character(input.seq$seq.num), as.character(input.seq$seq.num)]
-  input.mat$lod.mat <- input.mat$lod.mat[as.character(input.seq$seq.num), as.character(input.seq$seq.num)]
+  id <- get(input.seq$data.name, pos =1)$mrk.names[input.seq$seq.num]
+  input.mat$rec.mat <- input.mat$rec.mat[id, id]
+  input.mat$lod.mat <- input.mat$lod.mat[id, id]
   input.mat
 }
