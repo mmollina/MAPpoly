@@ -42,7 +42,7 @@ reest_map<-function(input.map, input.mat = NULL, tol = 10e-3,  phase.config = "b
     stop("'input.mat' is expected when 'method = ols'")
   if(method == "ols")
   {
-    id<-as.character(input.map$maps[[i.lpc]]$seq.num)
+    id<-get(input.map$info$data.name, pos =1)$mrk.names[input.map$maps[[i.lpc]]$seq.num]
     y<-as.numeric((imf_h(as.dist(input.mat$rec.mat[id, id]))))
     w<-as.numeric((imf_h(as.dist(input.mat$lod.mat[id, id]))))
     v<-t(combn(id,2))
