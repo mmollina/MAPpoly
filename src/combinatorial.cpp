@@ -260,7 +260,7 @@ std::vector <int>  boolean_lexicographic_k_choose_m_and_collapse(int ploidy,
    -----------------------------------------------------
    This function takes as arguments the ploidy level and a
    lexicographical index and returns the boolean lexicographical
-   combination for that index (in a boolean vector). It is importante
+   combination for that index (in a boolean vector). It is important
    to notice that the algorithm does not calculate all possible
    lexicographical combinations to get the requested combination.
  */

@@ -3,14 +3,18 @@
 #' Makes a sequence of markers based on an object of another type.
 #'
 #' @param input.obj an object of one of the classes
-#'     \code{mappoly.data}, \code{mappoly.group}
+#'     \code{mappoly.data}, \code{mappoly.group}, \code{mappoly.unique.seq} or
+#'     \code{mappoly.mds}
 #'
 #' @param arg can be one of the following objects: i) a string 'all',
-#'     resulting in a sequence with all markers in the raw data ii) a
+#'     resulting in a sequence with all markers in the raw data; ii) a
 #'     string or a vector of strings \code{'seqx'}, where \code{x}
-#'     is the sequence (\code{x=0} indicates unassigned markers) or iii) a
+#'     is the sequence (\code{x=0} indicates unassigned markers); iii) a
 #'     \code{vector} of integers specifying which markers comprise the
-#'     sequence.
+#'     sequence; iv) an integer representing linkage group if 
+#'     \code{class(input.object)=='mappoly.group'} or v) NULL if 
+#'     \code{class(input.object)=='mappoly.mds'} or 
+#'     \code{class(input.object)=='mappoly.unique.seq'}
 #'
 #' @param data.name name of the object of class \code{mappoly.data}
 #'
@@ -21,7 +25,7 @@
 #' @return An object of class \code{mappoly.sequence}, which is a
 #'     list containing the following components:
 #'     \item{seq.num}{a \code{vector} containing the (ordered) indices
-#'         of markers inthe sequence, according to the input file.}
+#'         of markers in the sequence, according to the input file.}
 #'     \item{seq.phases}{a \code{list} with the linkage phases between
 #'         markers in the sequence, in corresponding positions. \code{-1}
 #'         means that there are no defined linkage phases.}
