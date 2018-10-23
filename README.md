@@ -21,6 +21,7 @@ devtools::install_github("mmollina/mappoly")
 # Tutorial
 
 1. [Building a genetic map in an hexaploid full-sib population using MAPpoly](https://mmollina.github.io/MAPpoly/)
+2. [Building a genetic map using potato genotype data from SolCAP](https://mmollina.github.io/tutorials/solcap/solcap_example.html)
 
 # Acknowledgment 
 
