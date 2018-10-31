@@ -20,7 +20,7 @@ configuration.}
 \item{thresh.perc}{threshold for the percentage of the pairwise markers
 combinations that should be considered in order to
 kept the marker. A \code{thresh.perc = 0.05} means that, at least
-5% of the pairwise combinations should be present in order to
+5\% of the pairwise combinations should be present in order to
 kept the marker.}
 
 \item{n.clusters}{number of parallel processes to spawn}
