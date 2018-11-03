@@ -4,15 +4,19 @@
 \alias{est_rf_hmm_sequential}
 \title{Multipoint analysis using Hidden Markov Models - Sequential phase elimination}
 \usage{
-est_rf_hmm_sequential(input.seq, thres.twopt, thres.hmm,
-  info.tail = TRUE, extend.tail = NULL, twopt, verbose = FALSE,
-  rf.lim = 0.5, tol = 0.1, tol.final = 0.01,
-  est.given.0.rf = FALSE, reestimate.single.ph.configuration = TRUE,
-  sub.map.size.diff.limit = Inf, phase.number.limit = Inf,
-  high.prec = TRUE)
+est_rf_hmm_sequential(input.seq, twopt, start.set = 3, thres.twopt = 5,
+  thres.hmm = 50, extend.tail = 50, phase.number.limit = Inf,
+  sub.map.size.diff.limit = Inf, info.tail = TRUE,
+  reestimate.single.ph.configuration = FALSE, tol = 0.1,
+  tol.final = 0.001, verbose = TRUE, high.prec = FALSE)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}.}
+
+\item{twopt}{an object of class \code{poly.est.two.pts.pairwise}
+containing the two-point information}
+
+\item{start.set}{number of markers to start the phasing procedure.}
 
 \item{thres.twopt}{the threshold used to determine if the linkage
 phases compared via two-point analysis should be considered 
@@ -23,33 +27,15 @@ for the search space reduction. (A.K.A. \eqn{\eta} in
 phases compared via hmm analysis should be evaluated in the 
 next round of marker inclusion.}
 
-\item{info.tail}{if \code{TRUE} uses the complete informative tail
-of the chain (i.e. number of markers where \eqn{ploidy x 2} 
-homologous can be distinguished) to calculate the map likelihood}
-
 \item{extend.tail}{the length of the tail of the chain that should
 be used to calculate the likelihood of the map. Even if function 
 \code{info.tail = TRUE}, it uses at least \code{extend.tail}
 as the tail length.}
 
-\item{twopt}{an object of class \code{poly.est.two.pts.pairwise}
-containing the two-point information}
-
-\item{verbose}{If \code{TRUE}, current progress is shown; if
-\code{FALSE}, no output is produced.}
-
-\item{rf.lim}{limit of recombination fraction convergence.}
-
-\item{tol}{the desired accuracy during the sequential phase.}
-
-\item{tol.final}{the desired accuracy for the final map.}
-
-\item{est.given.0.rf}{logical. If TRUE returns a map forcing all
-recombination fractions equals to 0 (1e-5, for internal use only)}
-
-\item{reestimate.single.ph.configuration}{logical. If \code{FALSE}
-returns a map without reestimating the map parameters in cases
-where there are only one possible linkage phase configuration.}
+\item{phase.number.limit}{the maximum number of linkage phases of the sub-maps defined 
+by arguments \code{info.tail} and \code{extend.tail}. If the
+size exceeds the limit, the marker will not be inserted. If
+\code{NULL}, the it will insert all markers.}
 
 \item{sub.map.size.diff.limit}{the maximum accepted length
 difference between the current and the previous sub-map defined 
@@ -57,10 +43,20 @@ by arguments \code{info.tail} and \code{extend.tail}. If the
 size exceeds the limit, the marker will not be inserted. If
 \code{NULL}, the it will insert all markers.}
 
-\item{phase.number.limit}{the maximum number of linkage phases of the sub-maps defined 
-by arguments \code{info.tail} and \code{extend.tail}. If the
-size exceeds the limit, the marker will not be inserted. If
-\code{NULL}, the it will insert all markers.}
+\item{info.tail}{if \code{TRUE} uses the complete informative tail
+of the chain (i.e. number of markers where \eqn{ploidy x 2} 
+homologous can be distinguished) to calculate the map likelihood}
+
+\item{reestimate.single.ph.configuration}{logical. If \code{FALSE}
+returns a map without reestimating the map parameters in cases
+where there are only one possible linkage phase configuration.}
+
+\item{tol}{the desired accuracy during the sequential phase.}
+
+\item{tol.final}{the desired accuracy for the final map.}
+
+\item{verbose}{If \code{TRUE}, current progress is shown; if
+\code{FALSE}, no output is produced.}
 
 \item{high.prec}{logical. If \code{TRUE} (default) uses high precision 
 long double numbers in the HMM procedure.}
@@ -95,8 +91,8 @@ the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
     system.time(
     subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
                                         thres.twopt = 5,
-                                        thres.hmm = 3,
-                                        extend.tail = 50,
+                                        thres.hmm = 10,
+                                        extend.tail = 10,
                                         tol = 0.1,
                                         tol.final = 10e-3,
                                         twopt = subset.pairs,
@@ -119,7 +115,6 @@ the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
      compare_haplotypes(m = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
      compare_haplotypes(m = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
 
-     try(dev.off(), silent = TRUE)
      plot(subset.map, 1)
 
    }

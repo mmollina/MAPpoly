@@ -7,9 +7,8 @@
 \title{Multipoint analysis using Hidden Markov Models in autopolyploids}
 \usage{
 est_rf_hmm(input.seq, input.ph = NULL, thres = 0.5, twopt = NULL,
-  verbose = FALSE, rf.lim = 0.5, tol = 1e-04,
-  est.given.0.rf = FALSE, reestimate.single.ph.configuration = TRUE,
-  high.prec = TRUE)
+  verbose = FALSE, tol = 1e-04, est.given.0.rf = FALSE,
+  reestimate.single.ph.configuration = TRUE, high.prec = TRUE)
 
 \method{print}{mappoly.map}(x, detailed = FALSE, ...)
 
@@ -31,11 +30,6 @@ containing two-point information.}
 
 \item{verbose}{if \code{TRUE}, current progress is shown; if
 \code{FALSE}, no output is produced.}
-
-\item{rf.lim}{limit of recombination fraction during convergence. 
-If any the recombination fraction exceed this value, the EM 
-algorithm will stop. this can be useful if you do not expect 
-gaps in the genetic map.}
 
 \item{tol}{the desired accuracy.}
 
@@ -102,7 +96,6 @@ This function first enumerates a set of linkage phase configurations
                              thres = 2,
                              twopt = subset.pairs,
                              verbose = TRUE,
-                             rf.lim = 0.5,
                              tol = 0.1,
                              est.given.0.rf = FALSE)
 

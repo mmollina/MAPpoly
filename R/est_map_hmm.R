@@ -31,11 +31,6 @@
 #' @param verbose if \code{TRUE}, current progress is shown; if
 #'     \code{FALSE}, no output is produced.
 #'
-#' @param rf.lim limit of recombination fraction during convergence. 
-#'     If any the recombination fraction exceed this value, the EM 
-#'     algorithm will stop. this can be useful if you do not expect 
-#'     gaps in the genetic map.
-#'
 #' @param tol the desired accuracy.
 #'
 #' @param est.given.0.rf logical. If TRUE returns a map forcing all
@@ -83,7 +78,6 @@
 #'                              thres = 2,
 #'                              twopt = subset.pairs,
 #'                              verbose = TRUE,
-#'                              rf.lim = 0.5,
 #'                              tol = 0.1,
 #'                              est.given.0.rf = FALSE)
 #'
@@ -127,7 +121,7 @@
 #'
 est_rf_hmm <- function(input.seq, input.ph = NULL,
                        thres = 0.5, twopt = NULL,
-                       verbose = FALSE, rf.lim = 0.5,
+                       verbose = FALSE, 
                        tol = 1e-04,
                        est.given.0.rf=FALSE,
                        reestimate.single.ph.configuration = TRUE,
@@ -137,6 +131,8 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   if (!inherits(input.seq, input_classes[1])) {
     stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
   }
+  if(length(input.seq$seq.num) == 1)
+    stop("Input sequence contains only one marker.", call. = FALSE)
   if (is.null(input.ph)) {
     if (is.null(twopt))
       stop("Two-point analysis not found!")
@@ -184,7 +180,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
     ret.map.no.rf.estimation <- TRUE
   if (verbose) {
     cat("\nNumber of linkage phase configurations: ", n.ph)
-    cat("\n---------------------------------------------\n")
+    cat("\n---------------------------------------------\n|\n|--->")
   }
   maps <- vector("list", n.ph)
   if (verbose)
@@ -235,7 +231,12 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #' the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
 #'
 #' @param input.seq an object of class \code{mappoly.sequence}.
-#'
+#' 
+#' @param twopt an object of class \code{poly.est.two.pts.pairwise}
+#'     containing the two-point information
+#'  
+#' @param start.set number of markers to start the phasing procedure.      
+#'     
 #' @param thres.twopt the threshold used to determine if the linkage
 #'     phases compared via two-point analysis should be considered 
 #'     for the search space reduction. (A.K.A. \eqn{\eta} in 
@@ -248,41 +249,33 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #' @param info.tail if \code{TRUE} uses the complete informative tail
 #'     of the chain (i.e. number of markers where \eqn{ploidy x 2} 
 #'     homologous can be distinguished) to calculate the map likelihood 
-#'
+#'     
+#'@param reestimate.single.ph.configuration logical. If \code{FALSE}
+#'     returns a map without reestimating the map parameters in cases
+#'     where there are only one possible linkage phase configuration.
+#' 
 #' @param extend.tail the length of the tail of the chain that should
 #'     be used to calculate the likelihood of the map. Even if function 
 #'     \code{info.tail = TRUE}, it uses at least \code{extend.tail}
 #'     as the tail length.
-#'
-#' @param twopt an object of class \code{poly.est.two.pts.pairwise}
-#'     containing the two-point information
-#'
-#' @param verbose If \code{TRUE}, current progress is shown; if
-#'     \code{FALSE}, no output is produced.
-#'
-#' @param rf.lim limit of recombination fraction convergence.
-#'
-#' @param tol the desired accuracy during the sequential phase.
-#'
-#' @param tol.final the desired accuracy for the final map.
-#'
-#' @param est.given.0.rf logical. If TRUE returns a map forcing all
-#'     recombination fractions equals to 0 (1e-5, for internal use only)
-#'
-#'@param reestimate.single.ph.configuration logical. If \code{FALSE}
-#' returns a map without reestimating the map parameters in cases
-#' where there are only one possible linkage phase configuration.
-#'
-#' @param sub.map.size.diff.limit the maximum accepted length
-#'     difference between the current and the previous sub-map defined 
-#'     by arguments \code{info.tail} and \code{extend.tail}. If the
-#'     size exceeds the limit, the marker will not be inserted. If
-#'     \code{NULL}, the it will insert all markers.
-#'
+#'     
 #' @param phase.number.limit the maximum number of linkage phases of the sub-maps defined 
 #'     by arguments \code{info.tail} and \code{extend.tail}. If the
 #'     size exceeds the limit, the marker will not be inserted. If
 #'     \code{NULL}, the it will insert all markers.
+#'     
+#' @param sub.map.size.diff.limit the maximum accepted length
+#'     difference between the current and the previous sub-map defined 
+#'     by arguments \code{info.tail} and \code{extend.tail}. If the
+#'     size exceeds the limit, the marker will not be inserted. If
+#'     \code{NULL}, the it will insert all markers.    
+#'      
+#' @param tol the desired accuracy during the sequential phase. 
+#'     
+#' @param tol.final the desired accuracy for the final map.
+#'     
+#' @param verbose If \code{TRUE}, current progress is shown; if
+#'     \code{FALSE}, no output is produced.
 #'     
 #' @param high.prec logical. If \code{TRUE} (default) uses high precision 
 #' long double numbers in the HMM procedure. 
@@ -303,8 +296,8 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'     system.time(
 #'     subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
 #'                                         thres.twopt = 5,
-#'                                         thres.hmm = 3,
-#'                                         extend.tail = 50,
+#'                                         thres.hmm = 10,
+#'                                         extend.tail = 10,
 #'                                         tol = 0.1,
 #'                                         tol.final = 10e-3,
 #'                                         twopt = subset.pairs,
@@ -327,7 +320,6 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'      compare_haplotypes(m = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
 #'      compare_haplotypes(m = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
 #'
-#'      try(dev.off(), silent = TRUE)
 #'      plot(subset.map, 1)
 #'
 #'    }
@@ -340,22 +332,23 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'     populations with high ploidy level using hidden Markov
 #'     models, _submited_. \url{https://doi.org/10.1101/415232}
 #'
+#' @importFrom utils head
 #' @export est_rf_hmm_sequential
-est_rf_hmm_sequential <- function(input.seq,
-                                  thres.twopt,
-                                  thres.hmm,
-                                  info.tail = TRUE,
-                                  extend.tail = NULL,
-                                  twopt,
-                                  verbose = FALSE,
-                                  rf.lim = 0.5,
-                                  tol = 0.1,
-                                  tol.final = 10e-3,
-                                  est.given.0.rf=FALSE,
-                                  reestimate.single.ph.configuration = TRUE,
-                                  sub.map.size.diff.limit = Inf,
-                                  phase.number.limit = Inf,
-                                  high.prec = TRUE) {
+est_rf_hmm_sequential<-function(input.seq,
+                                twopt,
+                                start.set = 3,
+                                thres.twopt = 5,
+                                thres.hmm = 50,
+                                extend.tail = 50,
+                                phase.number.limit = Inf,
+                                sub.map.size.diff.limit = Inf,
+                                info.tail = TRUE,
+                                reestimate.single.ph.configuration = FALSE,
+                                tol = 10e-2,
+                                tol.final = 10e-4,
+                                verbose = TRUE,
+                                high.prec = FALSE)
+{
   ## checking for correct object
   if (!any(class(input.seq) == "mappoly.sequence"))
     stop(deparse(substitute(input.seq)),
@@ -363,8 +356,6 @@ est_rf_hmm_sequential <- function(input.seq,
   if (!any(class(twopt) == "poly.est.two.pts.pairwise"))
     stop(deparse(substitute(twopt)),
          " is not an object of class 'poly.est.two.pts.pairwise'")
-  if(rf.lim > mf_h(sub.map.size.diff.limit))
-    rf.lim <- mf_h(sub.map.size.diff.limit)
   ## Information about the map
   if(verbose) {
     cat("Number of markers :", length(input.seq$seq.num), "\n")
@@ -372,266 +363,160 @@ est_rf_hmm_sequential <- function(input.seq,
   }
   if(is.null(extend.tail))
     extend.tail<-length(input.seq$seq.num)
-  flag <- FALSE
+  #####
+  ## Map in case of two markers
+  #####
   if(length(input.seq$seq.num) == 2)
   {
-    if(pos_twopt_est(input.seq))
-      stop("Impossible to estimate recombination fraction due to lack of information")
-    maps<-vector("list", 1)
-    res.temp <- twopt$pairwise[[paste(input.seq$seq.num, collapse = "-")]]
-    dp <- get(twopt$data.name, pos =1)$dosage.p[input.seq$seq.num]
-    dq <- get(twopt$data.name, pos =1)$dosage.q[input.seq$seq.num]
-    sh <- as.numeric(unlist(strsplit(rownames(res.temp)[1], split = "-")))
-    res.ph <- list(P = c(list(0),list(0)), Q = c(list(0),list(0)))
-    if(dp[1] != 0)
-      res.ph$P[[1]] <- 1:dp[1]
-    if(dq[1] != 0)
-      res.ph$Q[[1]] <- 1:dq[1]
-    if(dp[2] != 0)
-    {
-      v<-(rev(res.ph$P[[1]])[1]+1):(dp[2]+rev(res.ph$P[[1]])[1])
-      res.ph$P[[2]]<-v-sh[1]
-    }
-    if(dq[2] != 0)
-    {
-      v<-(rev(res.ph$Q[[1]])[1]+1):(dq[2]+rev(res.ph$Q[[1]])[1])
-      res.ph$Q[[2]]<-v-sh[2]
-    }
-    names(res.ph$P)<-names(res.ph$Q)<-input.seq$seq.num
-    maps[[1]] <- list(seq.num = input.seq$seq.num,
-                      seq.rf = res.temp[1,"rf"],
-                      seq.ph = res.ph,
-                      loglike = 0)
-    return(structure(list(info = list(m = input.seq$m, n.mrk = length(input.seq$seq.num),
-                                      data.name = input.seq$data.name, ph.thresh = abs(res.temp[2,1])),
-                          maps = maps),
-                     class = "mappoly.map"))
+    cur.map <- est_rf_hmm(input.seq = input.seq, thres = thres.twopt, 
+                          twopt = twopt, tol = tol.final, high.prec = high.prec, 
+                          verbose = verbose, 
+                          reestimate.single.ph.configuration = reestimate.single.ph.configuration)
+    return(filter_map_at_hmm_thres(cur.map, thres.hmm))
+  } 
+  #####
+  ##Starting sequential algorithm for maps with more than 3 markers
+  ## Fisrt step: test all possible phase configurations under 
+  ## a 'thres.twopt' threshold for a sequence of size 'start.set'
+  #####
+  if(start.set > length(input.seq$seq.num))
+    start.set <- length(input.seq$seq.num)
+  if(verbose) cat("Initial sequence:", start.set, "markers...")
+  cur.seq <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1), input.seq$seq.num[1:start.set], data.name = input.seq$data.name)
+  input.ph <- ls_linkage_phases(input.seq = cur.seq,
+                                thres = thres.twopt,
+                                twopt = twopt)
+  cur.map <- est_rf_hmm(input.seq = cur.seq, thres = thres.twopt, 
+                        twopt = twopt, tol = tol, high.prec = high.prec, 
+                        verbose = verbose, input.ph = input.ph,
+                        reestimate.single.ph.configuration = reestimate.single.ph.configuration)
+  cur.map <- filter_map_at_hmm_thres(cur.map, thres.hmm)
+  if(start.set >= length(input.seq$seq.num)){
+    if(verbose) cat("\nDone phasing", cur.map$info$n.mrk, "markers\nReestimating final recombination fractions.")
+    return(reest_rf(cur.map))
   }
-  z1<-pos_twopt_est(input.seq)
-  if(min(which(!z1 == TRUE)) > 1)
+  #####
+  ## For maps with more markers than 'start.set', include
+  ## next makres in a sequential fashion
+  #####
+  ct <- start.set + 1
+  all.ph <- update_ph_list_at_hmm_thres(cur.map, thres.hmm)
+  if(sub.map.size.diff.limit!=Inf & !reestimate.single.ph.configuration){
+    message("Making 'reestimate.single.ph.configuration = TRUE' to use map expansion")
+    reestimate.single.ph.configuration <- TRUE
+  }
+  while(ct <= length(input.seq$seq.num))
   {
-    s<-min(which(!z1 == TRUE)):length(input.seq$seq.num)
-    warning("It was not possible to use two-point info for the first ", min(which(!z1 == TRUE))-1, " marker(s)")
-    input.seq<-make_seq_mappoly(input.obj = get(input.seq$data.name, pos = 1), input.seq$seq.num[s], data.name = input.seq$data.name)
-  }
-  max.mrkname.size<-max(nchar(input.seq$seq.mrk.names))
-  max.id.size<-max(nchar(input.seq$seq.num))
-  ## Submap for the first two markers
-  j <- 2
-  while(j <= length(input.seq$seq.num)) {
-    if(z1[j]){
-      j<-j+1
-      next()
-    }
-    seq.num <- input.seq$seq.num[c(j-1, j)]
-    all.ph <- input.ph <- NULL
-    ## Matrix for submap distances
-    sub.maps <- matrix(NA, length(input.seq$seq.num), length(input.seq$seq.num))
-    dimnames(sub.maps) <- list(input.seq$seq.mrk.names, input.seq$seq.mrk.names)
-    sub.maps[1] <- 0
-    ## Make sequence and constructing map with two markers
-    seq.cur <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos= 1),
-                                arg = seq.num,
-                                data.name = input.seq$data.name)
-    if (verbose){
-      cat("(1):\t", format(as.character(input.seq$seq.num[j-1]), width = max.id.size),
-          " - ", input.seq$seq.mrk.names[j-1], sep="")
-      cat("\n(2):\t", format(as.character(input.seq$seq.num[j]), width = max.id.size),
-          " - ", format(input.seq$seq.mrk.names[j], width = max.mrkname.size), " --> ", sep="")
-    }
-    if(z1[j-1])
-    {
-      if(verbose)
-      {
-        cat("\n-------\n")
-        cat("marker (", input.seq$seq.num[j-1], ")",
-            input.seq$seq.mrk.names[j-1], " was not included.")
-        cat("\n-------\n")
-      }
-      j <- j + 1
-      flag<-TRUE
-      next()
-    }
-    input.ph <- ls_linkage_phases(input.seq = seq.cur,
-                                  thres = thres.twopt,
-                                  twopt = twopt,
-                                  prev.info = input.ph)
-    cur.map <- est_rf_hmm(input.seq = seq.cur,
-                          input.ph = input.ph,
-                          twopt = twopt,
-                          tol = tol,
-                          est.given.0.rf = est.given.0.rf,
-                          rf.lim = rf.lim,
-                          verbose = FALSE,
-                          reestimate.single.ph.configuration = reestimate.single.ph.configuration, 
-                          high.prec = high.prec)
-    ## Checking for quality (map size and LOD Score)
-    size <- sapply(cur.map$maps, function(x) round(sum(imf_h(x$seq.rf)),1))
-    sub.maps[2,seq.cur$seq.mrk.names]  <- c(0, imf_h(cur.map$maps[[1]]$seq.rf))
-    LOD <- get_LOD(cur.map, sorted = FALSE)
-    if(verbose){
-      #cat("\n-------\n")
-      inf<-rbind(size, round(LOD,2))
-      dimnames(inf)<-list(c("length", "LOD"), paste0("conf.", 1:ncol(inf)))
-      cat(inf[1,])
-      #print(inf)
-    }
-    w <- size < sub.map.size.diff.limit & LOD < thres.hmm
-    if(any(w))
-    {
-      ## selecting configuration that yield higher likelihood
-      ## given the map length limit
-      conf<-min(which(w))
-      break()
-    } else {
-      if(verbose)
-      {
-        cat("\n-------\n")
-        cat("marker (", input.seq$seq.num[j-1], ")",
-            input.seq$seq.mrk.names[j-1], " was not included.")
-        cat("\n-------\n")
-      }
-      j <- j + 1
-      flag<-TRUE
-    }
-  }
-  if(j == length(input.seq$seq.num) && flag)
-    stop("It was not possible to build a map using the informed threshold")
-  ## cat(sum(sub.maps[j,], na.rm = TRUE), "\n")
-  cur.map$maps <- cur.map$maps[conf]
-  #print(cur.map)
-  all.ph$config.to.test<-list(cur.map$maps[[1]]$seq.ph)
-  if(length(input.seq$seq.num) == j)
-  {
-    final.seq.num<-as.numeric(names(all.ph$config.to.test[[1]]$P))
-    final.ph <- input.ph
-    final.ph$config.to.test <- all.ph$config.to.test
-    final.ph$rec.frac<-rep(0.01, length(final.ph$config.to.test[[1]]$P)-1)
-    final.ph$seq.num<-final.seq.num
-    final.seq <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1),
-                                  arg = final.seq.num,
-                                  data.name = input.seq$data.name)
-    res <- est_rf_hmm(input.seq = final.seq,
-                      input.ph = final.ph,
-                      twopt = twopt,
-                      rf.lim = rf.lim,
-                      tol = tol.final,
-                      est.given.0.rf = est.given.0.rf,
-                      verbose = verbose,  
-                      high.prec = high.prec)
-    return(cur.map)
-  }
-  all.ph.temp<-all.ph
-  i1 <- j
-  ## Submap for the remaining markers
-  for(i in (j+1):length(input.seq$seq.num))
-  {
-    #print(i)
-    if (verbose)
-      #cat("\n")
-      #cat("----------------------------\n")
-      #cat("----------------------------\n")
-      cat("\n(", i, "):\t",
-          format(as.character(input.seq$seq.num[i]), width = max.id.size),
-          " - ",
-          format(input.seq$seq.mrk.names[i], width = max.mrkname.size),
-          " --> ",
-          sep="")
-    seq.num <- NULL
+    hmm.phase.number<-length(cur.map$maps)
     if(info.tail)
-      seq.num <- get_full_info_tail(cur.map)$maps[[1]]$seq.num
-    if(length(seq.num) < extend.tail)
-      seq.num <- tail(cur.map$maps[[1]]$seq.num, extend.tail)
-    seq.cur <- make_seq_mappoly(input.obj = get(input.seq$data.name),
-                                arg = seq.num,
-                                data.name = input.seq$data.name)
-    ## eliminating phase cofigurations based on two point
-    all.ph.temp$config.to.test[[1]]$P<-all.ph$config.to.test[[1]]$P[as.character(seq.num)]
-    all.ph.temp$config.to.test[[1]]$Q<-all.ph$config.to.test[[1]]$Q[as.character(seq.num)]
-    input.ph <- ls_linkage_phases(input.seq = seq.cur,
-                                  thres = thres.twopt,
-                                  twopt = twopt,
-                                  mrk.to.add = input.seq$seq.num[i],
-                                  prev.info = all.ph.temp)
-
+      tail.temp <- get_full_info_tail(cur.map)
+    input.ph <- NULL
+    for(i in 1:length(all.ph$config.to.test))
+    {
+      seq.num <- NULL
+      if(info.tail)
+        seq.num <- tail.temp$maps[[i]]$seq.num
+      if(length(seq.num) < extend.tail)
+        seq.num <- tail(cur.map$maps[[i]]$seq.num, extend.tail)
+      seq.cur <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1),
+                                  arg = seq.num,
+                                  data.name = input.seq$data.name)
+      all.ph.temp <- get_ph_list_subset(all.ph, seq.num, i)
+      input.ph.temp <- ls_linkage_phases(input.seq = seq.cur,
+                                         thres = thres.twopt,
+                                         twopt = twopt,
+                                         mrk.to.add = input.seq$seq.num[ct],
+                                         prev.info = all.ph.temp)
+      input.ph <- concatenate_ph_list(input.ph, input.ph.temp)
+    }
+    twopt.phase.number<-length(input.ph$config.to.test)
     if(length(input.ph$config.to.test) > phase.number.limit) {
       if(verbose)
-        cat("not included (too many linkage phases)...")
+        cat(ct ,": not included (too many linkage phases)\n", sep = "")
+      ct <- ct + 1
       next()
     }
-    seq.num <- c(seq.num, input.seq$seq.num[i])
+    seq.num <- c(seq.num, input.seq$seq.num[ct])
     seq.cur <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1),
                                 arg = seq.num,
                                 data.name = input.seq$data.name)
-    if(verbose) cat(length(input.ph$config.to.test), "ph(s) / ")
+    if(verbose)
+    {
+      pc <- round(100*ct/length(input.seq$seq.num),1)
+      cat(ct,": ", pc,"% (", input.seq$seq.num[ct] ,"): ", length(input.ph$config.to.test), 
+          " ph(s) : (", hmm.phase.number, "/", twopt.phase.number,")", 
+          "--t: ", length(seq.num),"\n",
+          sep = "")
+    }
     cur.map.temp <- est_rf_hmm(input.seq = seq.cur,
                                input.ph = input.ph,
                                twopt = twopt,
-                               rf.lim = rf.lim,
                                tol = tol,
-                               est.given.0.rf = est.given.0.rf,
                                verbose = FALSE,
                                reestimate.single.ph.configuration = reestimate.single.ph.configuration,
                                high.prec = high.prec)
+    cur.map.temp <- filter_map_at_hmm_thres(cur.map.temp, thres.hmm)
+    ph.new<-lapply(cur.map.temp$maps, function(x) list(P = head(x$seq.ph$P, -1), 
+                                                       Q = head(x$seq.ph$Q, -1)))
+    ph.old<-lapply(cur.map$maps, function(x, id) list(P = x$seq.ph$P[id], 
+                                                      Q = x$seq.ph$Q[id]), id = names(ph.new[[1]]$P))
+    MQ<-MP<-matrix(NA, length(ph.old), length(ph.new))
+    for(j1 in 1:nrow(MP)){
+      for(j2 in 1:ncol(MP)){
+        MP[j1, j2]<-identical(ph.old[[j1]]$P, ph.new[[j2]]$P)
+        MQ[j1, j2]<-identical(ph.old[[j1]]$Q, ph.new[[j2]]$Q)
+      }
+    }
+    M<-which(MP & MQ, arr.ind = TRUE)
+    colnames(M)<-c("old", "new")
     ## Checking for quality (map size and LOD Score)
-    size <- sapply(cur.map.temp$maps, function(x) round(sum(imf_h(x$seq.rf)),1))
-    last.rf <- imf_h(rev(cur.map.temp$maps[[1]]$seq.rf)[1])
-    sub.maps[i,seq.cur$seq.mrk.names]  <- c(0, imf_h(cur.map.temp$maps[[1]]$seq.rf))
-    size.dif<-sum(sub.maps[i,], na.rm = TRUE)-sum(sub.maps[i1,], na.rm = TRUE)
+    submap.length.old <- sapply(cur.map$maps, function(x) sum(imf_h(x$seq.rf)))
+    submap.length.new <- sapply(cur.map.temp$maps, function(x) sum(imf_h(x$seq.rf)))
+    submap.expansion <- numeric(nrow(M))
+    for(j1 in 1:nrow(M))
+      submap.expansion[j1] <- submap.length.new[M[j1,2]] - submap.length.old[M[j1,1]]
+    last.mrk.expansion <- sapply(cur.map.temp$maps, function(x) tail(imf_h(x$seq.rf), 1))
     LOD <- get_LOD(cur.map.temp, sorted = FALSE)
-    if(verbose){
-      #cat("\n----------------------------\n")
-      inf<-rbind(size, round(LOD,2))
-      dimnames(inf)<-list(c("length", "LOD"), paste0("conf.", 1:ncol(inf)))
-      #print(inf)
-      cat(formatC(round(size.dif, 1), 2, format = "f"),"(", round(last.rf,1),") tail: ", length(seq.num), sep = "")
-    }
-    #w <- size < sub.map.size.diff.limit & LOD < thres.hmm
-    ###############################################
-    ###############################################
-    ## TESTING ANOTHER APPROACH
-    ## Instead of using the length of the submap, use the
-    ## difference between the current and the previous map
-    w <- size.dif < sub.map.size.diff.limit & LOD < thres.hmm
-    if(any(w))
-    {
-      ## selecting configuration that yield higher likelihood
-      ## given the map length limit
-      conf<-min(which(w))
-      i1 <- i
-    } else {
-      if(verbose)
-        cat(" --> not included...")
-      next()
-    }
-    cur.map<-cur.map.temp
-    cur.map$maps <- cur.map$maps[conf]
-    #print(cur.map)
-    all.ph$config.to.test[[1]]$P<-c(all.ph$config.to.test[[1]]$P,
-                                    rev(cur.map$maps[[1]]$seq.ph$P)[1])
-    all.ph$config.to.test[[1]]$Q<-c(all.ph$config.to.test[[1]]$Q,
-                                    rev(cur.map$maps[[1]]$seq.ph$Q)[1])
-
+    
+    if(sub.map.size.diff.limit!=Inf){
+      selected.map <- submap.expansion < sub.map.size.diff.limit & LOD < thres.hmm
+      if(verbose){
+        x <- round(cbind(submap.length.new, submap.expansion, last.mrk.expansion),2)
+        for(j1 in 1:nrow(x))
+          cat("    ", x[j1,1], ": (", x[j1,2],  "/", x[j1,3],")\n", sep = "")
+      }
+      if(all(!selected.map)){
+        ct <- ct + 1
+        if(verbose) cat(ct ,": not included (map expansion)\n", sep = "")
+        next()
+      }
+    } else { selected.map <- LOD < thres.hmm }
+    all.ph.temp <- update_ph_list_at_hmm_thres(cur.map.temp, Inf)
+    cur.map.temp$maps <- cur.map.temp$maps[selected.map]
+    cur.map <- cur.map.temp
+    all.ph <- add_mrk_at_tail_ph_list(all.ph, all.ph.temp, M[selected.map,,drop=FALSE])
+    ct <- ct + 1
   }
-  final.seq.num<-as.numeric(names(all.ph$config.to.test[[1]]$P))
-  final.ph <- input.ph
-  final.ph$config.to.test <- all.ph$config.to.test
-  final.ph$rec.frac<-rep(0.01, length(final.ph$config.to.test[[1]]$P)-1)
-  final.ph$seq.num<-final.seq.num
-  final.seq <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1),
-                                arg = final.seq.num,
+  #####
+  ## Reestimating final map with higher tolerance
+  #####
+  seq.final <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1), 
+                                arg = as.numeric(names(all.ph$config.to.test[[1]]$P)), 
                                 data.name = input.seq$data.name)
-  res <- est_rf_hmm(input.seq = final.seq,
-                    input.ph = final.ph,
-                    twopt = twopt,
-                    rf.lim = rf.lim,
-                    tol = tol.final,
-                    est.given.0.rf = est.given.0.rf,
-                    verbose = verbose, 
-                    high.prec = TRUE)
-  #res$sub.maps<-sub.maps
-  return(res)
+  if(verbose) cat("\nDone phasing", length(seq.final$seq.num), "markers\nReestimating final recombination fractions.")
+  final.map <- est_rf_hmm(input.seq = seq.final,
+                          input.ph = all.ph,
+                          twopt = twopt,
+                          tol = tol.final,
+                          verbose = FALSE,
+                          reestimate.single.ph.configuration = TRUE,
+                          high.prec = TRUE)
+  return(final.map)
 }
+
+
+
+
 
 #' @rdname est_rf_hmm
 #' @keywords internal
@@ -763,6 +648,7 @@ draw_alleles <- function(m, x, v, col.cte = 2, y.pos = 0.5) {
 #'
 #' @param void interfunction to be documented
 #' @keywords internal
+#' @export get_full_info_tail
 get_full_info_tail <- function(input.obj, extend = NULL) {
   ## checking for correct object
   if (all(is.na(match(class(input.obj), c("mappoly.map", "mappoly.map.haplo")))))
@@ -794,3 +680,76 @@ get_full_info_tail <- function(input.obj, extend = NULL) {
   }
   return(input.obj)
 }
+
+#' remove maps under a certain threshold
+#' @param void interfunction to be documented
+#' @keywords internal
+#' @export filter_map_at_hmm_thres
+filter_map_at_hmm_thres <- function(map, thres.hmm){
+  map$info$ph.thresh <- NULL
+  map$maps<-map$maps[get_LOD(map, sorted = FALSE) < thres.hmm]
+  map
+}
+#' makes a phase list from map, selecting only 
+#' configurations under a certain threshold
+#' @param void interfunction to be documented
+#' @keywords internal
+#' @export update_ph_list_at_hmm_thres
+update_ph_list_at_hmm_thres <- function(map, thres.hmm){
+  temp.map <- filter_map_at_hmm_thres(map, thres.hmm)
+  config.to.test <- lapply(temp.map$maps, function(x) x$seq.ph)
+  rf.vec <- t(sapply(temp.map$maps, function(x) x$seq.rf))
+  rownames(rf.vec) <- names(config.to.test) <- paste("Conf", 1:length(config.to.test), sep = "-")
+  structure(list(config.to.test = config.to.test, rec.frac = rf.vec, 
+                 m = map$info$m, seq.num = map$maps[[1]]$seq.num, 
+                 thres = map$info$ph.thresh, data.name = map$info$data.name, 
+                 thres.hmm = thres.hmm),
+            class = "two.pts.linkage.phases")
+}
+#' subset of a linkage phase list
+#' @param void interfunction to be documented
+#' @keywords internal
+#' @export get_ph_list_subset
+get_ph_list_subset<-function(ph.list, seq.num, conf){
+  config.to.test <- list(lapply(ph.list$config.to.test[[conf]], function(x, seq.num) x[as.character(seq.num)], seq.num))
+  rf.vec <- ph.list$rec.frac[conf, , drop = FALSE]
+  names(config.to.test) <- rownames(rf.vec)
+  structure(list(config.to.test = config.to.test, rec.frac = rf.vec, 
+                 m = ph.list$m, seq.num = ph.list$seq.num, 
+                 thres = ph.list$ph.thresh, data.name = ph.list$data.name, 
+                 thres.hmm = ph.list$thres.hmm),
+            class = "two.pts.linkage.phases")
+}
+#' concatenate two linkage phase lists
+#' @param void interfunction to be documented
+#' @keywords internal
+#' @export concatenate_ph_list
+concatenate_ph_list<-function(ph.list.1, ph.list.2){
+  if(length(ph.list.1)==0)
+    return(ph.list.2)
+  config.to.test <- c(ph.list.1$config.to.test, ph.list.2$config.to.test)
+  rf.vec <- rbind(ph.list.1$rec.frac, ph.list.2$rec.frac)
+  rownames(rf.vec) <- names(config.to.test) <- paste("Conf", 1:length(config.to.test), sep = "-")
+  structure(list(config.to.test = config.to.test, rec.frac = rf.vec, 
+                 m = ph.list.1$m, seq.num = ph.list.1$seq.num, 
+                 thres = ph.list.1$ph.thresh, data.name = ph.list.1$data.name, 
+                 thres.hmm = ph.list.1$thres.hmm),
+            class = "two.pts.linkage.phases")
+}
+#' add a single marker at the tail of a linkage phase list
+#' @param void interfunction to be documented
+#' @keywords internal
+#' @export add_mrk_at_tail_ph_list
+add_mrk_at_tail_ph_list <- function(ph.list.1, ph.list.2, cor.index){
+  config.to.test <- vector("list", length = nrow(cor.index))
+  for(i in 1:nrow(cor.index)){
+    config.to.test[[i]] <- list(P = c(ph.list.1$config.to.test[[cor.index[i,1]]]$P, tail(ph.list.2$config.to.test[[cor.index[i,2]]]$P,1)),
+                                Q = c(ph.list.1$config.to.test[[cor.index[i,1]]]$Q, tail(ph.list.2$config.to.test[[cor.index[i,2]]]$Q,1)))
+  }
+  structure(list(config.to.test = config.to.test, rec.frac = NULL, 
+                 m = ph.list.1$m, seq.num = ph.list.1$seq.num, 
+                 thres = ph.list.1$ph.thresh, data.name = ph.list.1$data.name, 
+                 thres.hmm = ph.list.1$thres.hmm),
+            class = "two.pts.linkage.phases")
+}
+

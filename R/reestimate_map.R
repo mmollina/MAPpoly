@@ -22,9 +22,9 @@
 #'     populations with high ploidy level using hidden Markov
 #'     models, _submited_. \url{https://doi.org/10.1101/415232}     
 #'     
-#' @export reest_map
+#' @export reest_rf
 #' 
-reest_map<-function(input.map, input.mat = NULL, tol = 10e-3,  phase.config = "best",
+reest_rf<-function(input.map, input.mat = NULL, tol = 10e-3,  phase.config = "all",
                     method = c("hmm", "ols"), weight = TRUE, verbose = TRUE)
 {
   if (!inherits(input.map, "mappoly.map")) {
@@ -35,47 +35,48 @@ reest_map<-function(input.map, input.mat = NULL, tol = 10e-3,  phase.config = "b
   LOD.conf <- get_LOD(input.map, sorted = FALSE)
   if(phase.config == "best") {
     i.lpc <- which.min(LOD.conf)
-  } else if (phase.config > length(LOD.conf)) {
+  } else if(phase.config == "all"){
+    i.lpc <- seq_along(LOD.conf) } else if (phase.config > length(LOD.conf)) {
     stop("invalid linkage phase configuration")
   } else i.lpc <- phase.config
   if(is.null(input.mat) & method == "ols")
     stop("'input.mat' is expected when 'method = ols'")
+  output.map<-input.map
   if(method == "ols")
   {
-    id<-get(input.map$info$data.name, pos =1)$mrk.names[input.map$maps[[i.lpc]]$seq.num]
-    y<-as.numeric((imf_h(as.dist(input.mat$rec.mat[id, id]))))
-    w<-as.numeric((imf_h(as.dist(input.mat$lod.mat[id, id]))))
-    v<-t(combn(id,2))
-    z<-cumsum(imf_h(c(0,input.map$maps[[i.lpc]]$seq.rf)))
-    names(z)<-id
-    x<-numeric(nrow(v))
-    names(x)<-names(y)<-apply(v, 1, paste0, collapse="-")
-    for(i in 1:nrow(v))
-      x[i]<-z[v[i,2]]-z[v[i,1]]
-    if(weight)
-      model <- lm(y ~ x-1, weights=w)
-    else
-      model <- lm(y ~ x-1)
-    new <- data.frame(x = z)
-    u<-predict(model, new)
-    output.map<-input.map
-    output.map$maps<-output.map$maps[i.lpc]
-    output.map$maps[[1]]$seq.rf<-mf_h(diff(u))
-    output.map$maps[[1]]$loglike<-0
-    return(output.map)
+    for(j in i.lpc){
+      id<-get(input.map$info$data.name, pos =1)$mrk.names[input.map$maps[[i.lpc]]$seq.num]
+      y<-as.numeric((imf_h(as.dist(input.mat$rec.mat[id, id]))))
+      w<-as.numeric((imf_h(as.dist(input.mat$lod.mat[id, id]))))
+      v<-t(combn(id,2))
+      z<-cumsum(imf_h(c(0,input.map$maps[[i.lpc]]$seq.rf)))
+      names(z)<-id
+      x<-numeric(nrow(v))
+      names(x)<-names(y)<-apply(v, 1, paste0, collapse="-")
+      for(i in 1:nrow(v))
+        x[i]<-z[v[i,2]]-z[v[i,1]]
+      if(weight)
+        model <- lm(y ~ x-1, weights=w)
+      else
+        model <- lm(y ~ x-1)
+      new <- data.frame(x = z)
+      u<-predict(model, new)
+      output.map$maps[[j]]$seq.rf<-mf_h(diff(u))
+      output.map$maps[[j]]$loglike<-0
+    }
   }
   else if(method == "hmm")
   {
+    for(j in i.lpc){
     s<-make_seq_mappoly(input.obj = get(input.map$info$data.name, pos =1),
-                        arg = input.map$maps[[i.lpc]]$seq.num,
+                        arg = input.map$maps[[j]]$seq.num,
                         data.name = input.map$info$data.name)
     mtemp<-est_rf_hmm_single(input.seq = s,
-                             input.ph.single = input.map$maps[[i.lpc]]$seq.ph,
-                             rf.temp = input.map$maps[[i.lpc]]$seq.rf,
+                             input.ph.single = input.map$maps[[j]]$seq.ph,
+                             rf.temp = input.map$maps[[j]]$seq.rf,
                              tol = tol, verbose = verbose)
-    output.map<-input.map
-    output.map$maps<-output.map$maps[i.lpc]
-    output.map$maps[[1]]<-mtemp
-    return(output.map)
+    output.map$maps[[j]]<-mtemp
+    }
   }
+  return(output.map)
 }
