@@ -38,7 +38,7 @@ recombination fractions equals to 0 (1e-5, for internal use only)}
 
 \item{reestimate.single.ph.configuration}{logical. If \code{TRUE}
 returns a map without reestimating the map parameters for cases
-where there are only one possible linkage phase configuration. 
+where there is only one possible linkage phase configuration. 
 This argument is intended to be used in a sequential map contruction.}
 
 \item{high.prec}{logical. If \code{TRUE} (default) uses high precision 
