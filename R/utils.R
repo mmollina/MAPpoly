@@ -67,7 +67,7 @@ rev_map<-function(input.map)
 #'     marker. Missing data are represented by NAs
 #' @keywords internal
 #' @export
-dist_prob_to_class <- function(geno, prob.thres = 0.8) {
+dist_prob_to_class <- function(geno, prob.thres = 0.95) {
   d <- apply(geno[, -c(1:2)], 1, function(x) {
     a <- which(x > prob.thres)
     if (length(a) > 0)
@@ -162,6 +162,7 @@ compare_haplotypes <- function(m, h1, h2) {
 #' @keywords internal
 #' @export plot_compare_haplotypes
 plot_compare_haplotypes <- function(m, hom.allele.p1, hom.allele.q1, hom.allele.p2 = NULL, hom.allele.q2 = NULL) {
+  nmmrk<-names(hom.allele.p1)
   op <- par(mar = c(5.1, 4.1, 4.1, 2.1))
   o1 <- order(apply(ph_list_to_matrix(hom.allele.p1, m), 2, paste, collapse = ""), decreasing = TRUE)
   hom.allele.p1 <- ph_matrix_to_list(ph_list_to_matrix(hom.allele.p1, m)[, o1])
@@ -187,22 +188,24 @@ plot_compare_haplotypes <- function(m, hom.allele.p1, hom.allele.q1, hom.allele.
   }
   pos.p <- cumsum(c(0, rep(1, n.mrk - 1)/sum(rep(1, n.mrk - 1))) * 10)
   for (i in 1:n.mrk) {
-    points(x = rep(pos.p[i], m), y = -c(1:m), pch = 19, col = col2, cex = 2)
+    points(x = rep(pos.p[i], m), y = -c(1:m), pch = 15, col = col2, cex = 2)
     if (any(hom.allele.p1[[i]] != 0))
-      points(x = rep(pos.p[i], length(hom.allele.p1[[i]])), y = -hom.allele.p1[[i]], col = col1, pch = 19, cex = 2)
+      points(x = rep(pos.p[i], length(hom.allele.p1[[i]])), y = -hom.allele.p1[[i]], col = col1, pch = 15, cex = 2)
     if (any(hom.allele.p2[[i]] != 0))
       if (!is.null(hom.allele.p2))
-        points(x = rep(pos.p[i], length(hom.allele.p2[[i]])), y = -hom.allele.p2[[i]], col = col3, pch = 19, cex = 2)
+        points(x = rep(pos.p[i], length(hom.allele.p2[[i]])), y = -hom.allele.p2[[i]], col = col3, pch = 15, cex = 2)
   }
+  text(x = pos.p, y = rep(-(m+1), length(pos.p)), labels = nmmrk, cex = .5)
   pos.q <- pos.p + 12
   for (i in 1:n.mrk) {
-    points(x = rep(pos.q[i], m), y = -c(1:m), col = col2, pch = 19, cex = 2)
+    points(x = rep(pos.q[i], m), y = -c(1:m), col = col2, pch = 15, cex = 2)
     if (any(hom.allele.q1[[i]] != 0))
-      points(x = rep(pos.q[i], length(hom.allele.q1[[i]])), y = -hom.allele.q1[[i]], col = col1, pch = 19, cex = 2)
+      points(x = rep(pos.q[i], length(hom.allele.q1[[i]])), y = -hom.allele.q1[[i]], col = col1, pch = 15, cex = 2)
     if (any(hom.allele.q2[[i]] != 0))
       if (!is.null(hom.allele.q2))
-        points(x = rep(pos.q[i], length(hom.allele.q2[[i]])), y = -hom.allele.q2[[i]], col = col3, pch = 19, cex = 2)
+        points(x = rep(pos.q[i], length(hom.allele.q2[[i]])), y = -hom.allele.q2[[i]], col = col3, pch = 15, cex = 2)
   }
+  text(x = pos.q, y = rep(-(m+1) , length(pos.q)), labels = nmmrk, cex = .5)
   text(x = 11, y = -(m + 1)/2, labels = "X", cex = 1)
   par(op)
 }

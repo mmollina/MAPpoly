@@ -4,11 +4,13 @@
 \alias{read_geno_dist}
 \title{Data Input}
 \usage{
-read_geno_dist(file.in)
+read_geno_dist(file.in, prob.thres = 0.95)
 }
 \arguments{
 \item{file.in}{the name of the input file which contains the data to
 be read.}
+
+\item{prob.thres}{the probability threshold to associate a SNP call to a dosage}
 
 \item{...}{curentlly ignored}
 }

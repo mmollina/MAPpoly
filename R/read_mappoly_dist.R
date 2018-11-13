@@ -41,6 +41,8 @@
 #'
 #' @param file.in the name of the input file which contains the data to
 #'     be read.
+#'     
+#' @param prob.thres the probability threshold to associate a SNP call to a dosage
 #'
 #' @param ... curentlly ignored
 #'
@@ -85,7 +87,7 @@
 #'     
 #' @export read_geno_dist
 
-read_geno_dist <- function(file.in) {
+read_geno_dist <- function(file.in, prob.thres = 0.95) {
     ## get ploidy level ----------------------
     temp <- scan(file.in, what = character(), sep = " ", nlines = 1, quiet = TRUE)
     m <- na.omit(as.numeric(temp[2]))
@@ -186,7 +188,7 @@ read_geno_dist <- function(file.in) {
         for (i in 1:length(m.na)) geno[i.na[i], -c(1, 2)] <- segreg_poly(m, dp.na[i], dq.na[i])
     }
     ## dosage info
-    geno.dose <- dist_prob_to_class(geno)
+    geno.dose <- dist_prob_to_class(geno, prob.thres)
     geno.dose[is.na(geno.dose)] <- m + 1
     ## returning the 'mappoly.data' object
     cat("\n    Done with reading.\n")
