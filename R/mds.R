@@ -140,7 +140,7 @@
 #'
 #' @importFrom smacof smacofSym
 #' @importFrom princurve principal.curve
-#' @importFrom stats runif
+#' @importFrom stats runif 
 #' @importFrom utils read.csv write.csv
 #' @export mds_mappoly
 mds_mappoly<-function(input.mat,
@@ -157,278 +157,78 @@ mds_mappoly<-function(input.mat,
     input.mat$lod.mat<-input.mat$lod.mat^weight.exponent
   diag(input.mat$lod.mat)<-diag(input.mat$rec.mat)<-NA
   locinames <- rownames(input.mat$rec.mat)
-  X <- list(rf = input.mat$rec.mat, lod = input.mat$lod.mat, nloci = ncol(input.mat$rec.mat), locinames = locinames)
+  lodrf <- list(rf = input.mat$rec.mat, lod = input.mat$lod.mat, nloci = ncol(input.mat$rec.mat), locinames = locinames)
+  confplotno<-1:lodrf$nloci
   if(!is.null(n)){
-    t<-table(n)[(table(n)>1)]
-    if(length(t)>0){
-      write("Warning: the list of omitted loci is not unique, please remove duplicates of the loci listed below","")
-      write(names(t),"")
-      return(0)
-    }
+    if(!is.numeric(n))n<-which(lodrf$locinames%in%n)    
+    r<-lodrf$rf[-n,-n]
+    lod<-lodrf$lod[-n,-n]
+    confplotno<-confplotno[-n]
+  } else {
+    r<-lodrf$rf
+    lod<-lodrf$lod
   }
-  map<-calc_maps_load_and_trim_prin_curve(lodrf = X ,spar=p,n,ndim=ndim)
+  M<-MDSMap::dmap(r,"haldane")
+  nloci=length(confplotno)
+  smacofsym<-smacof::smacofSym(M,ndim=ndim,weightmat=lod,itmax=100000)
+  pc1<-princurve::principal_curve(smacofsym$conf,maxit=150,spar=p,smoother="smooth_spline")
+  scale<-sum(smacofsym$delta)/sum(smacofsym$dhat) 
+  # Configuration dissim are based on the normalized observed diss - dhat. 
+  # True observed dissimilarities are delta
+  maporder<-pc1$ord
+  estpos<-pc1$lambda[maporder]*scale*100
+  # gives the estimated length from the beginning of the line
+  rownames<-lodrf$locinames[maporder]
+  distmap<-outer(maporder,maporder,Vectorize(function(i,j)M[i,j]))
+  lodmap<-outer(maporder,maporder, Vectorize(function(i,j)lod[i,j]))
+  rownames(distmap)<-rownames;colnames(distmap)<-rownames
+  rownames(lodmap)<-rownames;colnames(lodmap)<-rownames
+  if(!is.null(n))  {
+    locikey<-data.frame(locus=lodrf$locinames[-n],confplotno=confplotno)
+  } else {
+    locikey<-data.frame(locus=lodrf$locinames,confplotno=confplotno)
+  }
+  nnfit<-MDSMap::calc.nnfit(distmap,lodmap,estpos)
+  locimap<-data.frame(confplotno=confplotno[maporder],locus=locikey$locus[maporder],position=estpos,nnfit=nnfit$pointfits,row.names=1:nloci)
+  if(!is.null(n)) {
+    removedloci<-data.frame(n,lodrf$locinames[n],row.names=NULL)
+  } else {
+    removedloci<-n
+  }
+  map<-list(smacofsym=smacofsym,pc=pc1,distmap=distmap,lodmap=lodmap,locimap=locimap,length=max(estpos),removed=n,locikey=locikey,meannnfit=nnfit$meanfit)
   if(verbose)
   {
-    write(paste('Stress:',map$sm$stress),"")
-    write(paste('Nearest Neighbour Fit:',sum(map$locimap$nnfit)),"")
-    write(paste('Mean Nearest Neighbour Fit:',mean(map$locimap$nnfit)),"")
+    write(paste('Stress:', map$smacofsym$stress))
+    write(paste('Mean Nearest Neighbour Fit:', map$meannnfit))
   }
   map$data.name<-input.mat$data.name
-  structure(map, class="mappoly.mds")
+  if(ndim == 2) {
+    return(structure(map, class="pcmap"))
+  } else {
+    return(structure(map, class="pcmap3d"))
+  }
 }
+
 #' @rdname mds_mappoly
 #' @keywords internal
 #' @export
-print.mappoly.mds<-function(x, ...)
+print.pcmap<-function(x, ...)
 {
   cat("\nThis is an object of class 'mappoly.mds'")
   cat("\nNumber of markers: ", nrow(x$locimap))
   cat("\nNumber of dimensions used: ", x$sm$ndim)
+  cat("\nStress: ", x$smacofsym$stress)
+  cat("\nMean Nearest Neighbour Fit:", x$meannnfit)
 }
+
 #' @rdname mds_mappoly
 #' @keywords internal
 #' @export
-plot.mappoly.mds<-function(x, displaytext = FALSE, ...)
+print.pcmap3d<-function(x, ...)
 {
-  if(x$sm$ndim==2)
-    plot_diag_pc(x, displaytext = displaytext)
-  else
-    plot_diag_pc_3d(x, displaytext = displaytext)
-}
-
-#' Get nearest informative marker
-#'
-#' @param void interfunction to be documented
-#' @keywords internal
-#' @export
-get_nearest_informative<-function(loci,lodmap){
-  #split matrix by loci
-  neighbours<-NULL
-
-  if(loci>1) {
-    locileft<-lodmap[loci,(loci-1):1]
-    if(length(which(locileft!=0))>0)    neighbours<-loci-min(which(locileft!=0))
-  }
-  if(loci<dim(lodmap)[2]){
-    lociright<-lodmap[loci,(loci+1):dim(lodmap)[2]]
-    if(length(which(lociright!=0))>0)  neighbours<-c(neighbours,loci+min(which(lociright!=0)))
-  }
-  neighbours
-}
-
-#' Get nearest informative marker
-#'
-#' @param void interfunction to be documented
-#' @keywords internal
-#' @export
-calc_nnfit_loci<-function(loci,distmap,lodmap,estmap){
-  nns<-get_nearest_informative(loci,lodmap)
-  obs<-distmap[loci,nns]
-  est<-estmap[loci]-estmap[nns]
-  nn.fit<-sum(abs(obs-est))
-  nn.fit
-}
-
-#' calc nnfit
-#'
-#' @param void interfunction to be documented
-#' @keywords internal
-#' @export
-calc_nnfit<-function(distmap,lodmap,estmap){
-  pointfits<-unlist(lapply(1:dim(distmap)[2],calc_nnfit_loci,distmap=distmap,lodmap=lodmap,estmap=estmap))
-  fit<-sum(pointfits)
-  meanfit<-mean(pointfits)
-  list(fit=fit,pointfits=pointfits,meanfit=meanfit)
-}
-
-#'  Estimates loci position using Principal curves
-#'
-#' @param void interfunction to be documented
-#' @keywords internal
-#' @importFrom smacof smacofSym
-#' @importFrom princurve principal.curve
-#' @export
-calc_maps_load_and_trim_prin_curve<-function(lodrf, spar=NULL, n=NULL, ndim=2, weightfn='lod')
-  {
-  confplotno<-1:lodrf$nloci
-  if(!is.null(n)){
-    if(!is.numeric(n))n<-which(lodrf$locinames%in%n)
-    r<-lodrf$rf[-n,-n]
-    lod<-lodrf$lod[-n,-n]
-    confplotno<-confplotno[-n]
-    locinames<-lodrf$locinames[-n]
-  }
-  else
-  {
-    r<-lodrf$rf
-    lod<-lodrf$lod
-    locinames<-lodrf$locinames
-  }
-  M<-imf_h(r) # Haldane
-  nloci=length(confplotno)
-  sm <- smacof::smacofSym(delta = M, ndim = ndim,
-                        weightmat = lod,
-                        itmax = 100000)
-  pc1 <- princurve::principal.curve(x = sm$conf,
-                                    maxit = 150,
-                                    spar = spar)
-  if(ndim==2) {
-    conf<-data.frame(plotno=confplotno,
-                     name=locinames,
-                     MDS1=sm$conf[,1],
-                     MDS2=sm$conf[,2],
-                     Smooth1=pc1$s[,"D1"],
-                     Smooth2=pc1$s[,"D2"])
-  } else {
-    if(ndim > 3) warning("Using 3 dimensions on MDS")
-    conf<-data.frame(plotno=confplotno,
-                     name=locinames,
-                     MDS1=sm$conf[,1],
-                     MDS2=sm$conf[,2],
-                     MDS3=sm$conf[,3],
-                     Smooth1=pc1$s[,"D1"],
-                     Smooth2=pc1$s[,"D2"],
-                     Smooth3=pc1$s[,"D3"])
-  }
-  # gives the projection of points onto the line
-  # configuration dissim are basedon the normalized observed distances - dhat.
-  # True observed dissimilarities are delta
-  scale<-sum(sm$delta)/sum(sm$dhat)
-  maporder<-pc1$tag
-  estpos<-pc1$lambda[maporder]*scale#*100                #gives the estimated length from the beginning of the line
-  distmap<-outer(maporder,maporder,Vectorize(function(i,j)M[i,j]))
-  lodmap<-outer(maporder,maporder, Vectorize(function(i,j)lod[i,j]))
-
-  if(!is.null(n)){
-    locikey<-data.frame(locus=lodrf$locinames[-n],confplotno=confplotno)
-  } else
-    locikey<-data.frame(locus=lodrf$locinames,confplotno=confplotno)
-  if(!is.null(n)){
-    removedloci<-data.frame(n,lodrf$locinames[n],row.names=NULL)
-  } else removedloci<-n
-  l<-dim(sm$conf)[1]
-  nnfit<-calc_nnfit(distmap,lodmap,estpos)
-  locimap<-data.frame(confplotno=confplotno[maporder],
-                      name=locikey$locus[maporder],
-                      position=estpos,
-                      nnfit=nnfit$pointfits)
-  phasemap<-data.frame(locikey$locus[maporder],
-                       estpos)
-  #write.table(nloci,file=paste(st,'_phasemap.txt',sep=""),sep=",",row.names=FALSE,quote=FALSE,col.names=FALSE)
-  #write.table(phasemap,file=paste(st,'_phasemap.txt',sep=""),sep=",",row.names=FALSE,quote=FALSE,col.names=FALSE,append=TRUE)
-  #write.table(conf,file=paste(st,'_conf.txt',sep=""),sep=",",row.names=FALSE)
-  #write.table(locimap,file=paste(st,'_estimatedmap.txt',sep=""),sep=",",row.names=FALSE,quote=FALSE)
-  list(M=M,
-       lod=lod,
-       sm=sm,
-       pc=pc1,
-       locimap=locimap,
-       length=max(estpos),
-       removed=n,
-       locikey=locikey,
-       scale=scale,
-       confplotno=confplotno,
-       nnfit=nnfit)
-}
-
-#'  Plot disgnostic graphics (2D)
-#'
-#' @param void interfunction to be documented
-#' @keywords internal
-#' @export
-plot_diag_pc<-function(mappc,D1lim=NULL,D2lim=NULL,displaytext=TRUE){
-  with(mappc,{
-    if (displaytext==TRUE) labels=locikey$locus else labels=locikey$confplotno
-    #png(paste(st,'_diagplot.png',sep=""),width=960,height=480)
-    op<-par(mfrow=c(1,2))
-    plot(sm$conf,type="n",main='MDS with principal curve',xlim=D1lim,ylim=D2lim,xlab='Dim 1',ylab='Dim 2')
-    text(sm$conf,labels=labels,cex=0.8)
-    lines(pc)
-    if (displaytext==TRUE) labels1=locimap$name else labels1=locimap$confplotno
-    plot(locimap$position,locimap$nnfit,type='n',xlab='Position',ylab='nnfit')
-    text(locimap$position,locimap$nnfit,labels1)
-    par(op)
-    #dev.off()
-    })
-}
-
-#'  Plot disgnostic graphics (3D)
-#'
-#' @param void interfunction to be documented
-#' @keywords internal
-#' @export
-plot_diag_pc_3d<-function(mappc,D1lim=NULL,D2lim=NULL,D3lim=NULL,displaytext=TRUE){
-  numscale = 1.0
-  with(mappc,{
-    if (displaytext==TRUE) labels=locikey$locus else labels=locikey$confplotno
-    #png(paste(st,'_diagplot.png',sep=""),height=1200,width=1200)
-    op<-par(mfrow=c(2,2))
-    plot(sm$conf[,'D1'],sm$conf[,'D2'],type="n",main='MDS with principal curve',xlab='Dimension 1',ylab='Dimension 2',xlim=D1lim,ylim=D2lim)
-    text(sm$conf[,'D1'],sm$conf[,'D2'],labels=labels,cex=numscale)
-    lines(pc$s[,'D1'][pc$tag],pc$s[,'D2'][pc$tag])
-    plot(sm$conf[,'D1'],sm$conf[,'D3'],type="n",main='MDS with principal curve',xlab='Dimension 1',ylab='Dimension 3',xlim=D1lim,ylim=D3lim)
-    text(sm$conf[,'D1'],sm$conf[,'D3'],labels=labels,cex=numscale)
-    lines(pc$s[,'D1'][pc$tag],pc$s[,'D3'][pc$tag])
-    plot(sm$conf[,'D2'],sm$conf[,'D3'],type="n",main='MDS with principal curve',xlab='Dimension 2',ylab='Dimension 3',xlim=D2lim,ylim=D3lim)
-    text(sm$conf[,'D2'],sm$conf[,'D3'],labels=labels,cex=numscale)
-    lines(pc$s[,'D2'][pc$tag],pc$s[,'D3'][pc$tag])
-    if (displaytext==TRUE)
-      labels1=locimap$name
-    else
-      labels1=locimap$confplotno
-    plot(locimap$position,locimap$nnfit,type='n',xlab='Position',ylab='nnfit')
-    text(locimap$position,locimap$nnfit,labels1)
-    par(op)
-    #dev.off()
-    #write.table(sm$conf, "sm.conf")
-    #write.table(locikey, "locikey")
-    #write.table(pc$s[pc$tag,], "pc")
-    #plot3d(sm$conf,type="n")
-    #text3d(sm$conf,text=labels)
-    #lines3d(pc$s[pc$tag,])
-  }
-  )
-}
-
-#' Calculates a new nnfit based on a new order after estimating a map.
-#'
-#' @param void interfunction to be documented
-#' @keywords internal
-#' @export
-recalc_nnfit_from_map<-function(estmap,mapobject,fname=NULL){
-  estmap<-read.csv(estmap,header=FALSE)
-  M<-mapobject$map$M
-  lod<-mapobject$map$lod
-  lnames<-colnames(M)
-  names<-estmap[,1]
-  maporder<- sapply(1:length(names),function(i)which(lnames==names[i]))
-  distmap<-outer(maporder,maporder,Vectorize(function(i,j)M[i,j]))
-  lodmap<-outer(maporder,maporder,Vectorize(function(i,j)lod[i,j]))
-  nnfit<-calc_nnfit(distmap,lodmap,estmap[,2])
-  newmap<-data.frame(name=estmap[,1],position=estmap[,2],nnfit=nnfit$pointfits)
-  if(!is.null(fname)) write.csv(newmap,file=fname)
-  nnfit
-}
-
-#' get_dist_loci
-#'
-#' @param void interfunction to be documented
-#' @keywords internal
-#' @export
-get_dist_loci<-function(loci,estmap,realmap){
-  l<-estmap$name[loci]
-  dist<-estmap[estmap$name==l,]$position-realmap[which(realmap[,1]==l),2]
-  dist
-}
-
-#' Calculates the mean of the square distances of points from their real position
-#'
-#' @param void interfunction to be documented
-#' @keywords internal
-#' @export
-mean_dist_from_truth<-function(estmap,realmap){
-  dist<-unlist(lapply(1:dim(estmap)[1],get_dist_loci,estmap=estmap,realmap=realmap))
-  meansquaredist<-mean(dist^2)
-  pointdist<-cbind(name=estmap$name,dist=dist)
-  list(pointdist=pointdist, meansquaredist=meansquaredist)
+  cat("\nThis is an object of class 'mappoly.mds'")
+  cat("\nNumber of markers: ", nrow(x$locimap))
+  cat("\nNumber of dimensions used: ", x$sm$ndim)
+  cat("\nStress: ", x$smacofsym$stress)
+  cat("\nMean Nearest Neighbour Fit:", x$meannnfit)
 }

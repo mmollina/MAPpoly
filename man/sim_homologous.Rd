@@ -17,7 +17,7 @@ sim_homologous(m, n.mrk, min.d = 0, max.d, prob.dose = NULL, max.ph,
 \item{max.d}{maximum dosage to be simulated}
 
 \item{prob.dose}{a vector indicating the proportion of markers for
-different dosage to be simulated. (currently ignored)}
+different dosage to be simulated.}
 
 \item{max.ph}{maximum phase difference.}
 

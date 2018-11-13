@@ -25,6 +25,7 @@ Imports:
     maps,
     reshape,
     ggplot2,
+    MDSMap, 
     smacof,
     princurve,
     dendextend

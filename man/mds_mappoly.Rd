@@ -2,16 +2,16 @@
 % Please edit documentation in R/mds.R
 \name{mds_mappoly}
 \alias{mds_mappoly}
-\alias{print.mappoly.mds}
-\alias{plot.mappoly.mds}
+\alias{print.pcmap}
+\alias{print.pcmap3d}
 \title{Estimates loci position using Multidimensional Scaling}
 \usage{
 mds_mappoly(input.mat, p = NULL, n = NULL, ndim = 2,
   weight.exponent = 2, verbose = TRUE)
 
-\method{print}{mappoly.mds}(x, ...)
+\method{print}{pcmap}(x, ...)
 
-\method{plot}{mappoly.mds}(x, displaytext = FALSE, ...)
+\method{print}{pcmap3d}(x, ...)
 }
 \arguments{
 \item{input.mat}{an object of class \code{mappoly.input.matrix}.}

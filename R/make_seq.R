@@ -3,8 +3,8 @@
 #' Makes a sequence of markers based on an object of another type.
 #'
 #' @param input.obj an object of one of the classes
-#'     \code{mappoly.data}, \code{mappoly.group}, \code{mappoly.unique.seq} or
-#'     \code{mappoly.mds}
+#'     \code{mappoly.data}, \code{mappoly.group}, \code{mappoly.unique.seq},
+#'     \code{pcmap} or \code{pcmap3d}
 #'
 #' @param arg can be one of the following objects: i) a string 'all',
 #'     resulting in a sequence with all markers in the raw data; ii) a
@@ -13,7 +13,7 @@
 #'     \code{vector} of integers specifying which markers comprise the
 #'     sequence; iv) an integer representing linkage group if 
 #'     \code{class(input.object)=='mappoly.group'} or v) NULL if 
-#'     \code{class(input.object)=='mappoly.mds'} or 
+#'     \code{class(input.object)=='pcmap'}, \code{class(input.object)=='pcmap3d'} or 
 #'     \code{class(input.object)=='mappoly.unique.seq'}
 #'
 #' @param data.name name of the object of class \code{mappoly.data}
@@ -67,13 +67,13 @@
 
 make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL) {
     ## checking for correct object
-    input_classes <- c("mappoly.data", "mappoly.unique.seq", "mappoly.mds", "mappoly.group")
+    input_classes <- c("mappoly.data", "mappoly.unique.seq", "pcmap", "pcmap3d", "mappoly.group")
     if (!inherits(input.obj, input_classes)) {
         stop(deparse(substitute(input.obj)), " is not an object of class 'mappoly.data',
-               'mappoly.unique.seq', 'mappoly.mds' or 'mappoly.group'")
+               'mappoly.unique.seq', 'pcmap', 'pcmap3d', or 'mappoly.group'")
     }
     ## checking for argument to make a sequence
-    if (is.null(arg) && class(input.obj) != "mappoly.unique.seq" && class(input.obj) != "mappoly.mds") {
+    if (is.null(arg) && class(input.obj) != "mappoly.unique.seq" && class(input.obj) != "pcmap"&& class(input.obj) != "pcmap3d") {
         stop("argument 'arg' expected.")
     }
     if (class(input.obj) == "mappoly.data")
@@ -134,10 +134,10 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL) {
       else
         sequence <- sequence.pos <- NULL
     }
-    if (class(input.obj) == "mappoly.mds")
+    if (class(input.obj) == "pcmap" | class(input.obj) == "pcmap3d" )
       {
       return(make_seq_mappoly(get(input.obj$data.name, pos = 1),
-                              arg = as.character(input.obj$locimap$name),
+                              arg = as.character(input.obj$locimap$locus),
                               data.name = input.obj$data.name))
       }
     structure(list(m = input.obj$m, seq.num = seq.num, seq.mrk.names = input.obj$mrk.names[seq.num], seq.dose.p = input.obj$dosage.p[seq.num], seq.dose.q = input.obj$dosage.q[seq.num],
