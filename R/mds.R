@@ -170,8 +170,7 @@ mds_mappoly<-function(input.mat,
   if(verbose)
   {
     write(paste('Stress:',map$sm$stress),"")
-    write(paste('Nearest Neighbour Fit:',sum(map$locimap$nnfit)),"")
-    write(paste('Mean Nearest Neighbour Fit:',mean(map$locimap$nnfit)),"")
+    write(paste('Mean Nearest Neighbour Fit:', map$nnfit$meanfit),"")
   }
   map$data.name<-input.mat$data.name
   structure(map, class="mappoly.mds")
@@ -237,8 +236,7 @@ calc_nnfit_loci<-function(loci,distmap,lodmap,estmap){
 calc_nnfit<-function(distmap,lodmap,estmap){
   pointfits<-unlist(lapply(1:dim(distmap)[2],calc_nnfit_loci,distmap=distmap,lodmap=lodmap,estmap=estmap))
   fit<-sum(pointfits)
-  meanfit<-mean(pointfits)
-  list(fit=fit,pointfits=pointfits,meanfit=meanfit)
+  list(fit=fit,pointfits=pointfits,meanfit=mean(pointfits))
 }
 
 #'  Estimates loci position using Principal curves

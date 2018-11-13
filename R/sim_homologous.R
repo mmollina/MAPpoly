@@ -12,7 +12,7 @@
 #' @param min.d minimum dosage to be simulated
 #' @param max.d maximum dosage to be simulated
 #' @param prob.dose a vector indicating the proportion of markers for
-#'    different dosage to be simulated. (currently ignored)
+#'    different dosage to be simulated. 
 #' @param max.ph maximum phase difference. 
 #' @param restriction if TRUE, avoid cases where it is impossible to
 #'     estmate recombination fraction and/or linkage phases via
@@ -47,11 +47,12 @@
 #'     models, _submited_. \url{https://doi.org/10.1101/415232}
 #'
 #' @export
-sim_homologous<-function(m, n.mrk, min.d = 0, max.d, prob.dose = NULL,
-                         max.ph, 
-                         restriction=TRUE, seed=NULL)
+sim_homologous<-function(m, n.mrk, min.d = 0, 
+                         max.d, prob.dose = NULL,
+                         max.ph, restriction=TRUE, 
+                         seed=NULL)
 {
-  prob.dose<-NULL
+  #prob.dose<-NULL
   if(!is.null(seed)) set.seed(seed)
   
   hom.allele.q<-hom.allele.p<-vector("list", n.mrk)

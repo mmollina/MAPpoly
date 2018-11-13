@@ -5,7 +5,7 @@
 \title{Selects the class with high probability and return it instead of
 the distribution of probabilities for all classes}
 \usage{
-dist_prob_to_class(geno, prob.thres = 0.8)
+dist_prob_to_class(geno, prob.thres = 0.95)
 }
 \arguments{
 \item{geno}{the genotypes contained in the object
