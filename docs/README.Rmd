@@ -3,15 +3,6 @@ title: "Building a genetic map in an hexaploid full-sib population using MAPpoly
 author: "Marcelo Mollinari, Guilhereme Pereira, A Augusto F Garcia and Zhao-Bang Zeng"
 date: '`r Sys.Date()`'
 output:
-  word_document:
-    toc: yes
-    toc_depth: '2'
-  md_document:
-    variant: markdown_github
-  pdf_document:
-    highlight: tango
-    toc: yes
-    toc_depth: '2'
   html_document:
     highlight: tango
     keep_md: yes
@@ -20,6 +11,15 @@ output:
     toc_depth: '2'
     toc_float:
       collapsed: no
+  md_document:
+    variant: markdown_github
+  pdf_document:
+    highlight: tango
+    toc: yes
+    toc_depth: '2'
+  word_document:
+    toc: yes
+    toc_depth: '2'
 linestretch: 1.2
 bibliography: biblio.bib
 ---
@@ -245,7 +245,7 @@ Now, let us compare the estimated and the simulated order using
 op <- par(mfrow = c(1, 3), 
           pty = "s")       
 sapply(mds.ord, function(x) {
-  plot(x = x$confplotno, 
+  plot(x = x$locikey$confplotno, 
        y = x$locimap$confplotno, 
        xlab = "simulated order", 
        ylab = "estimated order")

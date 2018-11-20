@@ -575,7 +575,7 @@ plot.mappoly.map <- function(x, col.cte = 2, config = "best", ...) {
   pushViewport(vp1)
   draw_homologous(m, y.pos = 0.1)
   if (config == "best")
-    config <- which.min(abs(get_LOD(x, sorted=FALSE)))
+    config <- which.min(abs(get_LOD(x)))
   if (!is.numeric(config))
     stop("config must be numeic")
   if (length(x$maps) < config) {

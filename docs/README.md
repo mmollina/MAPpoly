@@ -1,27 +1,27 @@
 ---
-title: Building a genetic map in an hexaploid full-sib population using MAPpoly
+title: "Building a genetic map in an hexaploid full-sib population using MAPpoly"
 author: "Marcelo Mollinari, Guilhereme Pereira, A Augusto F Garcia and Zhao-Bang Zeng"
-date: "2018-09-15"
+date: '2018-11-20'
 output:
- html_document:
-   highlight: tango
-   keep_md: yes
-   theme: united
-   toc: yes
-   toc_depth: '3'
-   toc_float:
-     collapsed: no
- md_document:
-   variant: markdown_github
- pdf_document:
-   toc: yes
-   toc_depth: '3'
-   highlight: tango
+  html_document:
+    highlight: tango
+    keep_md: yes
+    theme: united
+    toc: yes
+    toc_depth: '2'
+    toc_float:
+      collapsed: no
+  md_document:
+    variant: markdown_github
+  pdf_document:
+    highlight: tango
+    toc: yes
+    toc_depth: '2'
+  word_document:
+    toc: yes
+    toc_depth: '2'
 linestretch: 1.2
 bibliography: biblio.bib
-#output: rmarkdown::html_vignette
-#vignette: >
-#  %\VignetteEngine{knitr::rmarkdown}
 ---
 
 
@@ -77,32 +77,32 @@ hexafake
 ##     This dataset contains sequence information.
 ##     ----------
 ##     No. of markers per dosage in both parents:
-##     dP dQ freq
-##      0  1  361
-##      0  2   83
-##      0  3   19
-##      0  4    5
-##      0  5    1
-##      1  0  394
-##      1  1  147
-##      1  2   67
-##      1  3   20
-##      1  4    6
-##      1  5    3
-##      2  0  107
-##      2  1   66
-##      2  2   54
-##      2  3   40
-##      2  4    9
-##      3  0   22
-##      3  1   24
-##      3  2   26
-##      3  3   16
-##      4  0    3
-##      4  1   14
-##      4  2   10
-##      5  0    2
-##      5  1    1
+##      P Q freq
+##      0 1  361
+##      0 2   83
+##      0 3   19
+##      0 4    5
+##      0 5    1
+##      1 0  394
+##      1 1  147
+##      1 2   67
+##      1 3   20
+##      1 4    6
+##      1 5    3
+##      2 0  107
+##      2 1   66
+##      2 2   54
+##      2 3   40
+##      2 4    9
+##      3 0   22
+##      3 1   24
+##      3 2   26
+##      3 3   16
+##      4 0    3
+##      4 1   14
+##      4 2   10
+##      5 0    2
+##      5 1    1
 ```
 
 The program prints a summary of the data set showing the ploidy level, the number of individuals and the number of markers. Also it prints the frequency of the possible markers dosage combination in both parents. A graphical representation of the frequencies can be obtained using
@@ -254,10 +254,10 @@ grs
 ##         2   329
 ##         3   443
 ##   ------------------------------------------
-##     1   2   3  
-## 1 538   0   0 0
-## 2   0 329   0 0
-## 3   0   0 443 0
+##     1   2   3 NH
+## 1 538   0   0  0
+## 2   0 329   0  0
+## 3   0   0 443  0
 ## 
 ##   ------------------------------------------
 ```
@@ -433,25 +433,13 @@ Now, for each matrix contained in the object in `mt`, we use the MDS algorithm
 mds.ord <- lapply(mt, mds_mappoly)
 ```
 
-```
-## Stress: 0.265143590147656
-## Nearest Neighbour Fit: 5238.94901969669
-## Mean Nearest Neighbour Fit: 9.7378234566853
-## Stress: 0.255222953140157
-## Nearest Neighbour Fit: 3882.0756194952
-## Mean Nearest Neighbour Fit: 11.7996219437544
-## Stress: 0.271446129580154
-## Nearest Neighbour Fit: 3995.89837429857
-## Mean Nearest Neighbour Fit: 9.02008662369881
-```
-
 Now, let us compare the estimated and the simulated order using 
 
 ```r
 op <- par(mfrow = c(1, 3), 
           pty = "s")       
 sapply(mds.ord, function(x) {
-  plot(x = x$confplotno, 
+  plot(x = x$locikey$confplotno, 
        y = x$locimap$confplotno, 
        xlab = "simulated order", 
        ylab = "estimated order")
@@ -562,10 +550,10 @@ Graphical representations
 ![](README_files/figure-html/plot_mds_hmm_map-1.png)<!-- -->![](README_files/figure-html/plot_mds_hmm_map-2.png)<!-- -->![](README_files/figure-html/plot_mds_hmm_map-3.png)<!-- -->
 
 ```
-##      [,1]         [,2]         [,3]        
-## path NULL         NULL         NULL        
-## name "GRID.VP.22" "GRID.VP.25" "GRID.VP.28"
-## n    1            1            1
+##      [,1]        [,2]        [,3]       
+## path NULL        NULL        NULL       
+## name "GRID.VP.3" "GRID.VP.6" "GRID.VP.9"
+## n    1           1           1
 ```
 
 Again, let us compare the simulated and the estimated linkage phases and the length of the map.  For parent $P$ we have 
