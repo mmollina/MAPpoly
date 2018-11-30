@@ -514,10 +514,6 @@ est_rf_hmm_sequential<-function(input.seq,
   return(final.map)
 }
 
-
-
-
-
 #' @rdname est_rf_hmm
 #' @keywords internal
 #' @export
@@ -545,7 +541,11 @@ print.mappoly.map <- function(x, detailed = FALSE, ...) {
           M[i, c(x$maps[[j]]$seq.ph$P[[i]], x$maps[[j]]$seq.ph$Q[[i]] + x$info$m)] <- "o" else M[i, x$maps[[j]]$seq.ph$P[[i]]] <- "o"
       }
       M <- cbind(get(x$info$data.name)$mrk.names[x$maps[[j]]$seq.num], M)
-      format(apply(M, 1, function(y) cat(c("\t", y[1], "\t", y[2:(x$info$m + 1)], rep(" ", 4), y[(x$info$m + 2):(x$info$m * 2 + 3)], "\n"), collapse = "")))
+      big.name<-max(nchar(M[,1]))
+      format_name<-function(y, big.name){
+        paste0(y, paste0(rep(" ", big.name-nchar(y)), collapse = ""))
+      }
+      format(apply(M, 1, function(y) cat(c("\t", format_name(y[1], big.name), "\t", y[2:(x$info$m + 1)], rep(" ", 4), y[(x$info$m + 2):(x$info$m * 2 + 3)], "\n"), collapse = "")))
     }
   } else {
     cat("\n    ---------------------------------------------\n")
