@@ -77,10 +77,12 @@ get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf =
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
   }
   high.prec <- use.high.precision
-  if(!use.high.precision & length(mrk.pos) > 1000) 
+  if(!use.high.precision & length(mrk.pos) > 1000)
+  {
     high.prec <- TRUE
-  message("Number of markers is greater than 1000: \nusing high precision estimation")
-  ## choosing the linkage phase configuration
+    message("Number of markers is greater than 1000: \nusing high precision estimation")
+  }
+ ## choosing the linkage phase configuration
   LOD.conf <- get_LOD(input.map)
   if(phase.config == "best") {
     i.lpc <- which.min(LOD.conf)

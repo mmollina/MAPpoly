@@ -545,6 +545,7 @@ print.mappoly.map <- function(x, detailed = FALSE, ...) {
       format_name<-function(y, big.name){
         paste0(y, paste0(rep(" ", big.name-nchar(y)), collapse = ""))
       }
+      M<-rbind(c("", letters[1:(ncol(M)-3)], "", ""), M)
       format(apply(M, 1, function(y) cat(c("\t", format_name(y[1], big.name), "\t", y[2:(x$info$m + 1)], rep(" ", 4), y[(x$info$m + 2):(x$info$m * 2 + 3)], "\n"), collapse = "")))
     }
   } else {
