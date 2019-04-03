@@ -336,7 +336,7 @@ RcppExport SEXP poly_hmm_est_CPP(SEXP m_R,
     }
     for(int j=0; j < n_ind; j++)
     {
-      loglike += log(term[j]);
+      loglike += log10(term[j]);
     }
     List z  = List::create(loglike, rf);
     return z ;
@@ -382,7 +382,7 @@ RcppExport SEXP poly_hmm_est_CPP(SEXP m_R,
 
   for(int j=0; j < n_ind; j++)
   {
-    loglike += log(term[j]);
+    loglike += log10(term[j]);
   }
   List z  = List::create(loglike, rf);
   return z ;

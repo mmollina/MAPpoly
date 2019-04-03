@@ -195,13 +195,13 @@ plot.mappoly.rf.matrix <- function(x, type = c("rf", "lod"), ord = NULL, rem = N
     brks<-NULL
   } else if(type == "lod")
   {
-    w<-log(x$lod.mat)
+    w<-log10(x$lod.mat)
     if(is.null(main.text))
       main.text<-"log(LOD) Score matrix"
     col.range <- na.omit(fields::tim.colors()[1:(ceiling(128 * max(x$lod.mat, na.rm = TRUE)) + 1)])
     col.range <- col.range[ceiling(seq(1, length(col.range), length.out = 10))]
     brks<-seq(min(w, na.rm = TRUE), max(w, na.rm = TRUE), length.out = 11)
-    brks<-round(exp(brks),1)
+    brks<-round(exp(brks/log10(exp(1))),1)
   } else stop("Invalid matrix type.")
   if(!is.null(ord))
   {

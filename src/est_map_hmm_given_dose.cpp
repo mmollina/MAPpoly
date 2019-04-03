@@ -400,7 +400,7 @@ RcppExport SEXP est_map_hmm_highprec(SEXP ploidyR,
           temp += alpha[i][n_mar-1][j];
         }
         if(temp > 0)
-          loglike += log(temp);
+          loglike += log10(temp);
       }
       if(verbose) Rcpp::Rcout << "\n";
       List z = List::create(wrap(loglike), rf);

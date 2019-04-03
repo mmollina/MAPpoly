@@ -1,8 +1,6 @@
 #' Eliminate redundant markers
 #'
-#' Eliminate markers with identical infomation leaving only one
-#' representative marker. At the end of the analysis, the markers
-#' are placed in the final map.
+#' Eliminate markers with identical dosage infomation.
 #'
 #' @param input.seq an object of class \code{'mappoly.sequence'}
 #'
@@ -39,7 +37,7 @@ elim_redundant<-function(input.seq)
   dat_temp <- unique(x, dinmanes = TRUE)
   output.seq <- make_seq_mappoly(get(input.seq$data.name, pos = 1), rownames(dat_temp), data.name = input.seq$data.name)
   mrknames <- get(input.seq$data.name, pos = 1)$mrk.names
-  elim<-which(!input.seq$seq.num%in%output.seq$seq.num)
+  elim<-setdiff(input.seq$seq.num,output.seq$seq.num)
   n1<-apply(dat_temp, 1, paste, collapse="")
   n2<-apply(x[mrknames[elim],], 1, paste, collapse="")
   elim.out <- data.frame(kept = rownames(dat_temp)[match(n2,n1)], elim = mrknames[elim])

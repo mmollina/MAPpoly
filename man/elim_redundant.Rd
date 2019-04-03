@@ -20,9 +20,7 @@ An object of class \code{'mappoly.unique.seq'} which
     \item{eliminated}{a vector containing the name of the eliminated markers}
 }
 \description{
-Eliminate markers with identical infomation leaving only one
-representative marker. At the end of the analysis, the markers
-are placed in the final map.
+Eliminate markers with identical dosage infomation.
 }
 \examples{
   \dontrun{

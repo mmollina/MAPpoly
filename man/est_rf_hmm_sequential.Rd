@@ -4,7 +4,7 @@
 \alias{est_rf_hmm_sequential}
 \title{Multipoint analysis using Hidden Markov Models - Sequential phase elimination}
 \usage{
-est_rf_hmm_sequential(input.seq, twopt, start.set = 3, thres.twopt = 5,
+est_rf_hmm_sequential(input.seq, twopt, start.set = 4, thres.twopt = 5,
   thres.hmm = 50, extend.tail = 50, phase.number.limit = Inf,
   sub.map.size.diff.limit = Inf, info.tail = TRUE,
   reestimate.single.ph.configuration = FALSE, tol = 0.1,

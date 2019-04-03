@@ -37,10 +37,10 @@ get_rf_from_mat <- function(M){
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2017) Linkage
+#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
-#'     models, _submited_
+#'     models, _submited_. \url{https://doi.org/10.1101/415232}
 #'
 rev_map<-function(input.map)
 {
@@ -67,25 +67,27 @@ rev_map<-function(input.map)
 #'     marker. Missing data are represented by NAs
 #' @keywords internal
 #' @export
+#' @importFrom magrittr "%>%"
+#' @importFrom reshape melt cast
+#' @importFrom dplyr group_by filter arrange
 dist_prob_to_class <- function(geno, prob.thres = 0.95) {
-  d <- apply(geno[, -c(1:2)], 1, function(x) {
-    a <- which(x > prob.thres)
-    if (length(a) > 0)
-      return(a - 1)
-    return(NA)
-  })
-  d <- cbind(geno[, c(1:2)], d)
-  mrk <- unique(d$mrk)
-  ind <- unique(d$ind)
-  z <- matrix(NA, length(mrk), length(ind))
-  dimnames(z) <- list(mrk, ind)
-  for (i in mrk){
-    s.temp<-subset(d, mrk == i)
-    z[i, ] <- as.matrix(s.temp[match(ind, s.temp$ind),]$d)
+  a<-reshape::melt(geno, id.vars = c("mrk", "ind"))
+  b<-a %>%
+    dplyr::group_by(mrk, ind) %>%
+    dplyr::filter(value > prob.thres) %>%
+    dplyr::arrange(mrk, ind, variable)
+  z<-reshape::cast(data = b[,1:3], formula = mrk ~ ind, value = "variable")
+  rownames(z)<-z[,"mrk"]
+  z<-data.matrix(frame = z[,-1]) - 1
+  dim(z)
+  n<-setdiff(unique(geno$mrk), rownames(z))
+  if(length(n) > 0)
+  {
+    m<-matrix(NA, nrow = length(n), ncol = ncol(z), dimnames = list(n, colnames(z)))
+    z<-rbind(z,m)
   }
-  z
+  return(z[unique(geno$mrk),])
 }
-
 
 #' Map functions
 #'
@@ -316,3 +318,48 @@ perm_pars <- function(v) {
     }
     return(result)
 }
+
+#' Color pallete ggplot-like
+#'
+#' @param void interfunction to be documented
+#' @keywords internal
+#' @export
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
+}
+
+
+#' Update missing information
+#'
+#' Updates the missing data in the dosage matrix of an object of class 
+#' \code{mappoly.data} given a new probability threshold
+#' 
+#' @param input.data an object of class \code{mappoly.data}
+#' 
+#' @param prob.thres probability threshold to associate a marker call to a 
+#'     dosage. Markers with maximum genotype probability smaller than 'prob.thres' 
+#'     are considered as missing data for the dosage calling purposes
+#'     
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
+#'
+#' @references
+#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
+#'     analysis and haplotype phasing in experimental autopolyploid
+#'     populations with high ploidy level using hidden Markov
+#'     models, _submited_. \url{https://doi.org/10.1101/415232}
+#'     
+#' @export
+update_missing<-function(input.data, 
+                         prob.thres = 0.95)
+{
+  geno.dose <- dist_prob_to_class(geno = input.data$geno, 
+                                  prob.thres = prob.thres)
+  geno.dose[is.na(geno.dose)] <- input.data$m + 1
+  input.data$geno.dose<-geno.dose
+  input.data$prob.thres<-prob.thres
+  return(input.data)
+}
+
+
+

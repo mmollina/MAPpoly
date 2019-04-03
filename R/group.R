@@ -90,9 +90,11 @@ group_mappoly <- function(input.mat, input.seq, expected.groups = NULL,
     if (!inherits(input.mat, input_classes)) {
       stop(deparse(substitute(input.mat)), " is not an object of class 'mappoly.rf.matrix'")
     }
-    MSNP <- input.mat$rec.mat
-    o<-pmatch(colnames(MSNP), get(input.mat$data.name, pos = 1)$mrk.names)
-    mn<-get(input.mat$data.name, pos = 1)$sequence[o]
+    if(!setequal(intersect(input.seq$seq.mrk.names,colnames(input.mat$rec.mat)), input.seq$seq.mrk.names)){
+      stop(deparse(substitute(input.mat)), " does not contain all markers present in", deparse(substitute(input.seq)))
+    }
+    MSNP <- input.mat$rec.mat[input.seq$seq.mrk.names, input.seq$seq.mrk.names]
+    mn<-input.seq$sequence
     mn[is.na(mn)]<-"NH"
     dimnames(MSNP)<-list(mn, mn)
     diag(MSNP)<-0
@@ -123,7 +125,7 @@ group_mappoly <- function(input.mat, input.seq, expected.groups = NULL,
     if(is.null(expected.groups))
       stop("Inform the 'expected.groups' or use 'inter = TRUE'")
 
-    # Distribution of the SNPs into the linkage groups
+    # Distribution of SNPs into linkage groups
     seq.vs.grouped.snp <- NULL
     if(all(unique(mn) == "NH") && comp.mat)
     {

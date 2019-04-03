@@ -92,7 +92,7 @@ calc_genoprob_dist<-function(input.map, dat.dist,  phase.config = "best", verbos
   q = as.numeric(unlist(temp.map$maps[[1]]$seq.ph$Q))
   dq = as.numeric(cumsum(c(0, sapply(temp.map$maps[[1]]$seq.ph$Q, function(x) sum(length(x))))))
   rf = temp.map$maps[[1]]$seq.rf
-  indnames<-get(input.map$info$data.name, pos=1)$ind.names
+  indnames<-dat.dist$ind.names
   res.temp <-
     .Call(
       "calc_genoprob_prior",

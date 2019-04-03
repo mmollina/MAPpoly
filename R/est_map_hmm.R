@@ -183,11 +183,15 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
     cat("\n---------------------------------------------\n|\n|--->")
   }
   maps <- vector("list", n.ph)
-  if (verbose)
-    cat(n.ph, "phase(s): ")
+  if (verbose){
+    txt<-paste0(n.ph, "phase(s): ")
+    cat(txt)
+  }
   for (i in 1:n.ph) {
     if (verbose) {
-      cat(i, " ")
+      if((i+1)%%20==0)
+        cat("\n", paste0(rep(" ", nchar(txt)), collapse = ""))
+      cat(". ")
     }
     if(est.given.0.rf){
       rf.temp <- rep(1e-5, length(input.seq$seq.num) - 1)
@@ -336,7 +340,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #' @export est_rf_hmm_sequential
 est_rf_hmm_sequential<-function(input.seq,
                                 twopt,
-                                start.set = 3,
+                                start.set = 4,
                                 thres.twopt = 5,
                                 thres.hmm = 50,
                                 extend.tail = 50,
@@ -381,25 +385,39 @@ est_rf_hmm_sequential<-function(input.seq,
   #####
   if(start.set > length(input.seq$seq.num))
     start.set <- length(input.seq$seq.num)
-  if(verbose) cat("Initial sequence:", start.set, "markers...")
-  cur.seq <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1), input.seq$seq.num[1:start.set], data.name = input.seq$data.name)
-  input.ph <- ls_linkage_phases(input.seq = cur.seq,
-                                thres = thres.twopt,
-                                twopt = twopt)
-  cur.map <- est_rf_hmm(input.seq = cur.seq, thres = thres.twopt, 
-                        twopt = twopt, tol = tol, high.prec = high.prec, 
-                        verbose = verbose, input.ph = input.ph,
-                        reestimate.single.ph.configuration = reestimate.single.ph.configuration)
-  cur.map <- filter_map_at_hmm_thres(cur.map, thres.hmm)
+  if(verbose) cat("Initial sequence:", start.set, "markers...\n")
+  cte<-1
+  rf.temp<-c(Inf, Inf)
+  while(any(rf.temp >= sub.map.size.diff.limit))
+  {
+    if(length(rf.temp)==1) {
+      cat("Impossible to build a map for the given thresholds\n")
+      stop()
+    }
+    if(verbose) cat("Trying sequence:", cte:(start.set+cte-1), "...\n")
+    cur.seq <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1), na.omit(input.seq$seq.num[cte:(start.set+cte-1)]), data.name = input.seq$data.name)
+    input.ph <- ls_linkage_phases(input.seq = cur.seq,
+                                  thres = thres.twopt,
+                                  twopt = twopt)
+    cur.map <- est_rf_hmm(input.seq = cur.seq, thres = thres.twopt, 
+                          twopt = twopt, tol = tol, high.prec = high.prec, 
+                          verbose = verbose, input.ph = input.ph,
+                          reestimate.single.ph.configuration = reestimate.single.ph.configuration)
+    cur.map <- filter_map_at_hmm_thres(cur.map, thres.hmm)
+    cur.map <- reest_rf(cur.map, tol=tol.final/2, verbose = FALSE)
+    rf.temp<-imf_h(cur.map$maps[[1]]$seq.rf)
+    cte<-cte+1
+  }
+  if(verbose) cat("Done with initial sequence.\n")
   if(start.set >= length(input.seq$seq.num)){
     if(verbose) cat("\nDone phasing", cur.map$info$n.mrk, "markers\nReestimating final recombination fractions.")
-    return(reest_rf(cur.map))
+    return(reest_rf(cur.map, tol=tol.final))
   }
   #####
   ## For maps with more markers than 'start.set', include
   ## next makres in a sequential fashion
   #####
-  ct <- start.set + 1
+  ct <- start.set+cte
   all.ph <- update_ph_list_at_hmm_thres(cur.map, thres.hmm)
   if(sub.map.size.diff.limit!=Inf & !reestimate.single.ph.configuration){
     message("Making 'reestimate.single.ph.configuration = TRUE' to use map expansion")
@@ -432,7 +450,7 @@ est_rf_hmm_sequential<-function(input.seq,
     twopt.phase.number<-length(input.ph$config.to.test)
     if(length(input.ph$config.to.test) > phase.number.limit) {
       if(verbose)
-        cat(ct ,": not included (too many linkage phases)\n", sep = "")
+        cat(crayon::red(paste0(ct ,": not included (too many linkage phases)\n", sep = "")))
       ct <- ct + 1
       next()
     }
@@ -483,11 +501,15 @@ est_rf_hmm_sequential<-function(input.seq,
       if(verbose){
         x <- round(cbind(submap.length.new, submap.expansion, last.mrk.expansion),2)
         for(j1 in 1:nrow(x))
-          cat("    ", x[j1,1], ": (", x[j1,2],  "/", x[j1,3],")\n", sep = "")
+          cat("    ", x[j1,1], ": (", x[j1,2],  "/", x[j1,3],") ", sep = "")
+      }
+      if(verbose){
+        if(all(!selected.map)) cat(paste0(crayon::red(cli::symbol$cross), "\n"))
+        else cat(paste0(crayon::green(cli::symbol$tick), "\n"))
       }
       if(all(!selected.map)){
+        if(verbose) cat(crayon::red(paste0(ct ,": not included (map expansion)\n", sep = "")))
         ct <- ct + 1
-        if(verbose) cat(ct ,": not included (map expansion)\n", sep = "")
         next()
       }
     } else { selected.map <- LOD < thres.hmm }

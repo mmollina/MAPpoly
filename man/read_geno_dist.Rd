@@ -10,7 +10,9 @@ read_geno_dist(file.in, prob.thres = 0.95)
 \item{file.in}{the name of the input file which contains the data to
 be read.}
 
-\item{prob.thres}{the probability threshold to associate a SNP call to a dosage}
+\item{prob.thres}{probability threshold to associate a marker call to a 
+dosage. Markers with maximum genotype probability smaller than 'prob.thres' 
+are considered as missing data for the dosage calling purposes}
 
 \item{...}{curentlly ignored}
 }
@@ -29,8 +31,11 @@ An object of class \code{mappoly.data} which contains a
     \item{sequence}{a vector indicating which sequence each marker
       belongs. Zero indicates that the marker was not assigned to any
       sequence.}
-    \item{sequence.pos}{Physical position of the markers into the
+    \item{sequence.pos}{physical position of the markers into the
       sequence}
+    \item{prob.thres}{probability threshold to associate a marker call to a 
+    dosage. Markers with maximum genotype probability smaller than 'prob.thres' 
+    were considered as missing data in the 'geno.dose' matrix}
     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
       for each individual (columns). Missing data are represented by 
       \code{ploidy_level + 1}.}
@@ -51,41 +56,27 @@ Reads an external data file. The format of the file is described in \code{detail
 section. This fucntion creates an object of class \code{mappoly.data}
 }
 \details{
-The first line of the input file contains the word \code{ploidy}
-followed by the ploidy level of the parents.  The second and third
-lines contains the words \code{nind} and \code{nmrk} followed by
-the number of individuals in the dataset and the total number of
-markers, respectively. The lines number 4 and 5 should contain the
-word \code{mrknames} and \code{indnames} followed by a sequence of
-the names of the markers and the name of the individuals,
-respectively. Lines 6 and 7 contain the words \code{dosageP} and
-\code{dosageQ} followed by a sequence of numbers containing the
-dosage of all markers in parent P and Q. Line 8, contain the string
-\code{seq} fallowed by a sequence of integer numbers indicating the
-sequence each marker belongs. It can be any 'a priori' information
-regarding the physical distance between markers. For example, these
-numbers could refer to chromosomes, scaffolds or even contigs, in
-which the markers are positioned. If this information is not
-available for a particular marker, NA should be used. If this
-information is not available for any of the markers, the string
-\code{seq} should be followed by a single NA. Line number 9 contain
-the word \code{seqpos} fallowed by the physical position of the
-markers into the sequence. The physical position can be given in
-any unity of physical genomic distance (base pairs, for
-instance). However, the user should be able to take decisions based
-on these values, such as occurrence of crossing overs. Line number
-10 should contains the word \code{nphen} fallowed by the number of
-phenotypic traits. Line number 11 is skipped (Usually used as
-spacer).  The next elements are strings containing the name of the
-phenotypic trait followed by the phenotypic values. The number of
-lines should be the same number of phenotypic traits. Missing
-values are represented by \code{NA}. The line number 12 +
-\code{nphen} is skipped.  Finally, the last element is a table
-containing the probability distribution for each combination of
-marker and offspring. The first two columns represent the marker
-and the offspring, respectively. The remaining elements represent
-the probability associated to each one of the possible
-dosages. Missing data are represented by \code{NA}.'
+The first line of the input file contains the string \code{ploidy} followed by the ploidy level of the parents.
+The second and third lines contains the strings \code{nind} and \code{nmrk} followed by the number of individuals in 
+the dataset and the total number of markers, respectively. Lines number 4 and 5 contain the string 
+\code{mrknames} and \code{indnames} followed by a sequence of the names of the markers and the name of the individuals, 
+respectively. Lines 6 and 7 contain the strings \code{dosageP} and \code{dosageQ} followed by a sequence of numbers 
+containing the dosage of all markers in parent \code{P} and \code{Q}. Line 8, contains the string seq followed by 
+a sequence of integer numbers indicating the sequence each marker belongs. It can be any 'a priori' 
+information regarding the physical distance between markers. For example, these numbers could refer 
+to chromosomes, scaffolds or even contigs, in which the markers are positioned. If this information 
+is not available for a particular marker, NA should be used. If this information is not available for 
+any of the markers, the string \code{seq} should be followed by a single \code{NA}. Line number 9 contains the string 
+\code{seqpos} followed by the physical position of the markers into the sequence. The physical position can be 
+given in any unity of physical genomic distance (base pairs, for instance). However, the user should be 
+able to make decisions based on these values, such as the occurrence of crossing overs, etc. Line number 10 
+should contain the string \code{nphen} followed by the number of phenotypic traits. Line number 11 is skipped 
+(Usually used as a spacer). The next elements are strings containing the name of the phenotypic trait 
+followed by the phenotypic values. The number of lines should be the same number of phenotypic traits. 
+\code{NA} represents missing values. The line number 12 + \code{nphen} is skipped. Finally, the last element is a table 
+containing the probability distribution for each combination of marker and offspring. The first two columns 
+represent the marker and the offspring, respectively. The remaining elements represent the probability 
+associated with each one of the possible dosages. \code{NA} represents missing data.'
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
