@@ -12,7 +12,8 @@ est_rf_hmm(input.seq, input.ph = NULL, thres = 0.5, twopt = NULL,
 
 \method{print}{mappoly.map}(x, detailed = FALSE, ...)
 
-\method{plot}{mappoly.map}(x, col.cte = 2, config = "best", ...)
+\method{plot}{mappoly.map}(x, col.P = "#e41a1c", col.Q = "#377eb8",
+  mrk.names = FALSE, cex = 1, config = "best", ...)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}.}
@@ -46,18 +47,26 @@ long double numbers in the HMM procedure.}
 
 \item{x}{an object of one of the classes \code{mappoly.map}}
 
-\item{detailed}{if TRUE print the linkage phase configuration and the marker 
-position for all maps. if FALSE print a map summary}
+\item{detailed}{if TRUE, prints the linkage phase configuration and the marker 
+position for all maps. if FALSE prints a map summary}
 
 \item{...}{currently ignored}
 
-\item{col.cte}{a single value or a vector with size equal to the number of 
-markers in the map indicating the color of the allelic variants. 
-The default is \code{red}}
+\item{mrk.names}{if TRUE, marker names are displayed.}
+
+\item{cex}{The magnification to be used for marker names.}
 
 \item{config}{should be \code{'best'} or the position of the
 configuration to be plotted. If \code{'best'}, plot the configuration
 with the highest likelihood.}
+
+\item{col.cte.P}{a single value or a vector with size equal to the number of 
+markers in the map indicating the color of the allelic variants for parent P. 
+The default is \code{red}}
+
+\item{col.cte.Q}{a single value or a vector with size equal to the number of 
+markers in the map indicating the color of the allelic variants for parent Q. 
+The default is \code{blue}}
 }
 \value{
 An object of class 'mappoly.map'

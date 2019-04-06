@@ -46,12 +46,20 @@
 #' 
 #' @param x an object of one of the classes \code{mappoly.map}
 #'
-#' @param detailed if TRUE print the linkage phase configuration and the marker 
-#' position for all maps. if FALSE print a map summary 
+#' @param detailed if TRUE, prints the linkage phase configuration and the marker 
+#' position for all maps. if FALSE prints a map summary 
 #'
-#' @param col.cte a single value or a vector with size equal to the number of 
-#' markers in the map indicating the color of the allelic variants. 
+#' @param col.cte.P a single value or a vector with size equal to the number of 
+#' markers in the map indicating the color of the allelic variants for parent P. 
 #' The default is \code{red}
+#' 
+#' @param col.cte.Q a single value or a vector with size equal to the number of 
+#' markers in the map indicating the color of the allelic variants for parent Q. 
+#' The default is \code{blue}
+#' 
+#' @param mrk.names if TRUE, marker names are displayed.
+#' 
+#' @param cex The magnification to be used for marker names.
 #' 
 #' @param config should be \code{'best'} or the position of the
 #'     configuration to be plotted. If \code{'best'}, plot the configuration
@@ -589,14 +597,17 @@ print.mappoly.map <- function(x, detailed = FALSE, ...) {
 #' @importFrom grDevices rgb
 #' @keywords internal
 #' @export
-plot.mappoly.map <- function(x, col.cte = 2, config = "best", ...) {
+plot.mappoly.map <- function(x, 
+                             col.P = "#e41a1c",
+                             col.Q = "#377eb8",
+                             mrk.names = FALSE, cex = 1, config = "best", ...) {
   grid::grid.newpage()
   m <- x$info$m
-  vp1 <- viewport(x = 0, y = 0.85, width = 1, height = 0.15, just = c("left", "bottom"))
-  vp2 <- viewport(x = 0, y = 0.6, width = 1, height = 0.15, just = c("left", "bottom"))
-  vp3 <- viewport(x = 0.04, y = 0.4, width = 0.92, height = 0.2, just = c("left", "bottom"))
-  pushViewport(vp1)
-  draw_homologous(m, y.pos = 0.1)
+  vp1 <- grid::viewport(x = 0, y = 0.8, width = 1, height = 0.15, just = c("left", "bottom"))
+  vp2 <- grid::viewport(x = 0, y = 0.6, width = 1, height = 0.15, just = c("left", "bottom"))
+  vp3 <- grid::viewport(x = 0.04, y = 0.4, width = 0.92, height = 0.2, just = c("left", "bottom"))
+  grid::pushViewport(vp1)
+  draw_homologous(m, y.pos = 0.1, h.names = letters[1:m], parent = "P")
   if (config == "best")
     config <- which.min(abs(get_LOD(x)))
   if (!is.numeric(config))
@@ -606,51 +617,65 @@ plot.mappoly.map <- function(x, col.cte = 2, config = "best", ...) {
     config <- which.min(abs(get_LOD(x, sorted = FALSE)))
   }
   P <- x$maps[[config]]$seq.ph$P
-  if(length(col.cte)==1)
-    col.cte<-rep(col.cte, length(P))
+  if(length(col.P)==1)
+    col.P<-rep(col.P, length(P))
   y <- seq(from = 0.05, to = 0.95, length.out = length(P))
   for (i in 1:length(P))
-    draw_alleles(m, y[i], P[[i]], col.cte = col.cte[i], y.pos = 0.1)
-  upViewport()
-  pushViewport(vp2)
-  draw_homologous(m)
+    draw_alleles(m, y[i], P[[i]], col.cte = col.P[i], y.pos = 0.1)
+  grid::upViewport()
+  grid::pushViewport(vp2)
+  draw_homologous(m, h.names = letters[(m+1):(2*m)], parent = "Q")
   Q <- x$maps[[config]]$seq.ph$Q
+  if(length(col.Q)==1)
+    col.Q<-rep(col.Q, length(Q))
   y <- seq(from = 0.05, to = 0.95, length.out = length(Q))
   for (i in 1:length(Q))
-    draw_alleles(m, y[i], Q[[i]], col.cte = col.cte[i])
-  upViewport()
-  pushViewport(vp3)
+    draw_alleles(m, y[i], Q[[i]], col.cte = col.Q[i])
+  grid::upViewport()
+  grid::pushViewport(vp3)
   d <- cumsum(c(0, imf_h(x$maps[[config]]$seq.rf)))
   x1 <- d/max(d)
-  grid.roundrect(x = -0.01, y = 0.5, width = 1.02, height = 0.07, r = unit(2, "mm"), gp = gpar(fill = "white", col = "black", lwd = 0.7), just = c("left",
-                                                                                                                                                   "center"))
+  grid::grid.roundrect(x = -0.01, y = 0.5, width = 1.02, height = 0.07, r = grid::unit(2, "mm"), gp = grid::gpar(fill = "white", col = "black", lwd = 0.7), just = c("left",                                                                                                                                           "center"))
   x2 <- seq(from = 0.01125, to = 0.99, length.out = length(x1))
+  id<-x$maps[[config]]$seq.num
+  id<-paste0(get(x$info$data.name, pos =1)$mrk.names[id], " - (", id, ")")
   for (i in 1:length(x1)) {
-    grid.lines(x = x1[i], y = c(0.45, 0.55), gp = gpar(lwd = 1))
-    grid.lines(x = c(x1[i], x2[i]), y = c(0.55, 1.19), gp = gpar(lwd = 0.5, lty = 1, col = "gray"))
-    grid.text(label = x$maps[[config]]$seq.num[i], x = x2[i], y = 1.24,
-              rot = 90, just = "right", gp = gpar(cex = 0.5))
+    grid::grid.lines(x = x1[i], y = c(0.45, 0.55), gp = grid::gpar(lwd = 1))
+    grid::grid.lines(x = c(x1[i], x2[i]), y = c(0.55, 1.19), gp = grid::gpar(lwd = 0.5, lty = 1, col = "gray"))
+    if(mrk.names){
+      grid::grid.text(label = id[i], x = x2[i], y = 1.22,
+                      rot = 90, just = "right", gp = grid::gpar(cex = cex))      
+    } 
   }
-  dmax <- max(d)  #-max(d)%%10#+10
-  d1 <- seq(0, dmax, length.out = 20)
-  x3 <- seq(from = 0, to = dmax/max(d), length.out = length(d1))
-  grid.lines(x = c(-0.01, 1.02), y = c(0, 0), gp = gpar(lwd = 0.5))
+  dmax <- max(d)
+  d1<-pretty(seq(0, dmax, length.out = 10), n = 10)
+  if(rev(d1)[1] > dmax) d1<-d1[-length(d1)]
+  x3 <- seq(from = 0, to = max(d1)/dmax, length.out = length(d1))
+  grid::grid.lines(x = c(0, max(x3)), y = c(0.2, 0.2), gp = grid::gpar(lwd = 0.5))
   for (i in 1:length(x3)) {
-    grid.lines(x = x3[i], y = c(0, -0.03), gp = gpar(lwd = 2))
-    grid.text(label = round(d1[i], 1), x = x3[i], y = -0.045, rot = 90, just = "right", gp = gpar(cex = 0.8))
+    grid::grid.lines(x = x3[i], y = c(0.2, 0.17), gp = grid::gpar(lwd = 2))
+    grid::grid.text(label = round(d1[i], 1), x = x3[i], y = 0.155, rot = 90, just = "right", gp = grid::gpar(cex = 0.8))
   }
-  grid.text(label = "centimorgans (cM)", x = 0.5, y = -0.5)
+  grid::grid.text(label = "centimorgans (cM)", x = 0.5, y = -0.5)
   upViewport()
 }
 
 #' draw homologous
 #' @param void interfunction to be documented
 #' @keywords internal
-draw_homologous <- function(m, y.pos = 0.5) {
+draw_homologous <- function(m, y.pos = 0.5, h.names = letters[1:m], parent = "P") {
   st <- y.pos - m/40
   s <- seq(from = st, by = 0.1, length.out = m)
-  for (i in s) grid.roundrect(x = 0.04, y = i, width = 0.92, height = 0.09, r = unit(1, "mm"), gp = gpar(fill = "gray", col = "darkgray", lwd = 0.1),
-                              just = c("left", "center"))
+  ct<-1
+  for (i in s){
+    grid::grid.roundrect(x = 0.04, y = i, width = 0.92, height = 0.09, r = grid::unit(1, "mm"), gp = grid::gpar(fill = "gray", col = "darkgray", lwd = 0.1),
+                         just = c("left", "center"))
+    grid::grid.text(label = h.names[ct], x = 0.03, y = i,
+                    just = "right", gp = grid::gpar(cex =.7))  
+    ct<-ct+1
+  } 
+  grid::grid.text(label = parent, x = 0.055, y = i+0.2,
+                  just = "right", gp = grid::gpar(cex = 1))  
 }
 
 #' draw alleles
@@ -660,10 +685,10 @@ draw_alleles <- function(m, x, v, col.cte = 2, y.pos = 0.5) {
   st <- y.pos - m/40
   s <- seq(from = st, by = 0.1, length.out = m)
   u <- is.na(match(1:m, v)) + 1
-  gp <- list(gpar(fill = col.cte, col = col.cte, lineend = "square", linejoin = 	"bevel"),
-             gpar(fill = "white", col = "white", lineend = "square", linejoin = 	"bevel"),
+  gp <- list(grid::gpar(fill = col.cte, col = col.cte, lineend = "square", linejoin = 	"mitre"),
+             grid::gpar(fill = "white", col = "white", lineend = "square", linejoin = 	"mitre"),
              just = c("center", "center"))
-  for (i in 1:length(s)) grid.rect(x = x, y = s[i], width = 0.006, height = 0.075, gp = gp[[u[i]]])
+  for (i in 1:length(s)) grid::grid.rect(x = x, y = s[i], width = 0.006, height = 0.075, gp = gp[[u[i]]])
 }
 
 #' Get the tail of a marker sequence up to the point where the markers

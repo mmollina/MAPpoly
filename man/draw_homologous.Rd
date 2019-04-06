@@ -4,7 +4,7 @@
 \alias{draw_homologous}
 \title{draw homologous}
 \usage{
-draw_homologous(m, y.pos = 0.5)
+draw_homologous(m, y.pos = 0.5, h.names = letters[1:m], parent = "P")
 }
 \arguments{
 \item{void}{interfunction to be documented}
