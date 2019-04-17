@@ -153,7 +153,9 @@ group_mappoly <- function(input.mat, input.seq, expected.groups = NULL,
     }
     names(grtemp)<-input.seq$seq.num
     structure(list(data.name = input.mat$data.name, hc.snp = hc.snp, expected.groups = expected.groups,
-                   groups.snp = grtemp, seq.vs.grouped.snp = seq.vs.grouped.snp),
+                   groups.snp = grtemp, seq.vs.grouped.snp = seq.vs.grouped.snp, 
+                   chisq.pval.thres = input.seq$chisq.pval.thres, 
+                   chisq.pval = input.seq$chisq.pval),
                    class = "mappoly.group")
  }
 
@@ -168,8 +170,8 @@ print.mappoly.group <- function(x, detailed = TRUE, ...) {
     cat("  This is an object of class 'mappoly.group'\n  ------------------------------------------\n")
     ## criteria
     cat("  Criteria used to assign markers to groups:\n\n")
-    cat("    - Number of markers =        ", length(x$groups.snp), "\n")
-    cat("    - Number of linkage groups =", length(unique(x$groups.snp)), "\n")
+    cat("    - Number of markers:         ", length(x$groups.snp), "\n")
+    cat("    - Number of linkage groups:  ", length(unique(x$groups.snp)), "\n")
     cat("    - Number of markers per linkage groups: \n")
     w<-data.frame(table(x$groups.snp, useNA = "ifany"))
     colnames(w) = c("   group", "n.mrk")
@@ -179,7 +181,7 @@ print.mappoly.group <- function(x, detailed = TRUE, ...) {
     ## printing summary
     if(!is.null(x$seq.vs.grouped.snp)){
       print(x$seq.vs.grouped.snp)
-      cat("\n  ------------------------------------------\n")
+      cat("  ------------------------------------------\n")
     }
 }
 

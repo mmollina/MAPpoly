@@ -72,14 +72,14 @@ rev_map<-function(input.map)
 #' @importFrom dplyr group_by filter arrange
 dist_prob_to_class <- function(geno, prob.thres = 0.95) {
   a<-reshape::melt(geno, id.vars = c("mrk", "ind"))
+  a$variable<-as.numeric(levels(a$variable))[a$variable]
   b<-a %>%
     dplyr::group_by(mrk, ind) %>%
     dplyr::filter(value > prob.thres) %>%
     dplyr::arrange(mrk, ind, variable)
   z<-reshape::cast(data = b[,1:3], formula = mrk ~ ind, value = "variable")
   rownames(z)<-z[,"mrk"]
-  z<-data.matrix(frame = z[,-1]) - 1
-  dim(z)
+  z<-data.matrix(frame = z[,-1])
   n<-setdiff(unique(geno$mrk), rownames(z))
   if(length(n) > 0)
   {
@@ -361,5 +361,188 @@ update_missing<-function(input.data,
   return(input.data)
 }
 
+#' Filter non-conforming classes in F1 segregation
+#'
+#' @param void interfunction to be documented
+#' @keywords internal
+#' @export
+filter_non_conforming_classes<-function(input.data, 
+                                        prob.thres = NULL)
+  {
+  m<-input.data$m
+  dp<-input.data$dosage.p
+  dq<-input.data$dosage.q
+  Ds<-array(NA, dim = c(m+1, m+1, m+1))
+  for(i in 0:m)
+    for(j in 0:m)
+      Ds[i+1,j+1,] <- segreg_poly(m = m, dP = i, dQ = j)
+  Dpop<-cbind(dp,dq)
+  M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
+  M[M!=0]<-1
+  ## 1 represents conforming classes/ 0 represents non-conforming classes
+  dp<-rep(dp, input.data$n.ind)
+  dq<-rep(dq, input.data$n.ind)
+  M<-do.call("rbind", replicate(input.data$n.ind, M, simplify = FALSE))
+  R<-input.data$geno[,-c(1:2)] - input.data$geno[,-c(1:2)]*M
+  id1<-apply(R, 1, sum) > 0.3 # if the sum of the excluded classes is greater than 0.3, use segreg_poly
+  N<-NULL
+  for(i in which(id1))
+    N<-rbind(N, Ds[dp[i]+1, dq[i]+1, ])
+  input.data$geno[id1,-c(1:2)]<-N
+  # if the sum of the excluded classes is greater than zero
+  # and smaller than 0.3, assign zero to those classes and normalize the vector
+  input.data$geno[,-c(1:2)][R > 0]<-0
+  input.data$geno[,-c(1:2)]<-sweep(input.data$geno[,-c(1:2)], 1, rowSums(input.data$geno[,-c(1:2)]), FUN="/")
+  if(is.null(prob.thres))
+    prob.thres<-input.data$prob.thres
+  geno.dose <- dist_prob_to_class(input.data$geno, prob.thres)
+  geno.dose[is.na(geno.dose)] <- m + 1
+  input.data$geno.dose<-geno.dose
+  input.data
+}
+
+#' Filter missing genotypes
+#'
+#' @param void interfunction to be documented
+#' @keywords internal
+#' @export
+#' @importFrom magrittr "%>%"
+#' @importFrom dplyr filter
+filter_missing<-function(input.data, filter.thres = 0.8, inter = TRUE)
+{
+  op<-par(bg = "gray", xpd = TRUE)
+  ANSWER <- "flag"
+  if(interactive() && inter)
+  {
+    while(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
+    {
+      na.num<-apply(input.data$geno.dose, 1, function(x,m) sum(x!=m+1), m = input.data$m)
+      perc.na<-na.num/input.data$n.ind
+      plot(sort(perc.na), xlab = "markers", ylab = "frequency of genotyped markers", axes = FALSE);
+      axis(1);axis(2)
+      lines(x = c(0, input.data$n.mrk), y = rep(filter.thres,2), col = 4, lty = 2)
+      text(x = input.data$n.mrk/2, y = filter.thres + 0.05, labels = paste0("Included mrks: ", sum(perc.na >= filter.thres)), adj = 0, col = "darkgreen")
+      text(x = input.data$n.mrk/2, y = filter.thres - 0.05, labels = paste0("Excluded mrks: ", sum(perc.na < filter.thres)), adj = 0, col = "darkred")
+      ANSWER <- readline("Enter 'y' to proceed or update the filter threshold: ")
+      if(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
+      filter.thres  <- as.numeric(ANSWER)
+    }
+    rm.mrks.id<-which(perc.na < filter.thres)
+      if(length(rm.mrks.id)==0) return(input.data)
+    rm.mrks<-names(rm.mrks.id)
+    if(nrow(input.data$geno)!=input.data$n.mrk)
+      input.data$geno <-  input.data$geno %>%
+      filter(!mrk%in%rm.mrks)
+    input.data$geno.dose<-input.data$geno.dose[-rm.mrks.id,]
+    input.data$n.mrk <- nrow(input.data$geno.dose)
+    input.data$mrk.names <- input.data$mrk.names[-rm.mrks.id]
+    input.data$dosage.p <- input.data$dosage.p[-rm.mrks.id]
+    input.data$dosage.q <- input.data$dosage.q[-rm.mrks.id]
+    input.data$sequence <- input.data$sequence[-rm.mrks.id]
+    if(!is.null(input.data$chisq.pval)) 
+      input.data$chisq.pval <- input.data$chisq.pval[-rm.mrks.id]
+    input.data$sequence.pos <- input.data$sequence.pos[-rm.mrks.id]
+    par(op)
+    return(input.data)
+  } else {
+    na.num<-apply(input.data$geno.dose, 1, function(x,m) sum(x!=m+1), m = input.data$m)
+    perc.na<-na.num/input.data$n.ind
+    rm.mrks.id<-which(perc.na < filter.thres)
+    if(length(rm.mrks.id)==0) return(input.data)
+    rm.mrks<-names(rm.mrks.id)
+    if(!is.null(input.data$geno))
+      input.data$geno <-  input.data$geno %>%
+      filter(!mrk%in%rm.mrks)
+    input.data$geno.dose<-input.data$geno.dose[-rm.mrks.id,]
+    input.data$n.mrk <- nrow(input.data$geno.dose)
+    input.data$mrk.names <- input.data$mrk.names[-rm.mrks.id]
+    input.data$dosage.p <- input.data$dosage.p[-rm.mrks.id]
+    input.data$dosage.q <- input.data$dosage.q[-rm.mrks.id]
+    input.data$sequence <- input.data$sequence[-rm.mrks.id]
+    if(!is.null(input.data$chisq.pval)) 
+      input.data$chisq.pval <- input.data$chisq.pval[-rm.mrks.id]
+    input.data$sequence.pos <- input.data$sequence.pos[-rm.mrks.id]
+    par(op)
+    return(input.data)
+  }
+}
 
 
+#' Chi-square test
+#'
+#' @param void interfunction to be documented
+#' @keywords internal
+mrk_chisq_test<-function(x, m){
+  y<-x[-c(1:(m+1))]
+  y[y==m+1]<-NA
+  y<-table(y, useNA = "always")
+  names(y)<-c(names(y)[-length(y)], "NA") 
+  seg.exp <- x[0:(m+1)]
+  seg.exp <- seg.exp[seg.exp!=0]
+  seg.obs <- seg.exp
+  seg.obs[names(y)[-length(y)]]<-y[-length(y)]
+  pval <- suppressWarnings(stats::chisq.test(x = seg.obs, p = seg.exp[names(seg.obs)])$p.value)
+  pval
+}
+
+
+#' marker filter based on chi-square test
+#'
+#' @param void interfunction to be documented
+#' @keywords internal
+#' @export
+filter_segregation<-function(input.data, chisq.pval.thres = 10e-5, inter = TRUE){
+  ANSWER <- "flag"
+  op<-par(bg = "gray", xpd = TRUE)
+  if(interactive() && inter)
+  {
+    while(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
+    {
+      plot(log10(sort(input.data$chisq.pval, decreasing = TRUE)), xlab = "markers", ylab = "log10(p.val)", axes=F)
+      axis(1); axis(2)
+      lines(x = c(0, input.data$n.mrk), y = rep(log10(chisq.pval.thres),2), col = 4, lty = 2)
+      text(x = input.data$n.mrk/2, y = 5, labels = paste0("Included mrks: ", sum(input.data$chisq.pval >= chisq.pval.thres)), adj = .5, col = "darkgreen")
+      text(x = input.data$n.mrk/2, y = log10(chisq.pval.thres) - 5, labels = paste0("Excluded mrks: ", sum(input.data$chisq.pval < chisq.pval.thres)), adj = .5, col = "darkred")
+      ANSWER <- readline("Enter 'y' to proceed or update the p value threshold: ")
+      if(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
+        chisq.pval.thres  <- as.numeric(ANSWER)
+    }
+  }
+  keep<-names(which(input.data$chisq.pval >= chisq.pval.thres))
+  exclude<-names(which(input.data$chisq.pval < chisq.pval.thres))
+  par(op)
+  structure(list(keep = keep, exclude = exclude, chisq.pval.thres = chisq.pval.thres, data.name = as.character(sys.call())[2]), class = "mappoly.chitest.seq")
+}
+
+#' get genomic order of the markers
+#'
+#' @param void interfunction to be documented
+#' @keywords internal
+#' @export
+get_genomic_order<-function(input.seq){
+  if (!class(input.seq) == "mappoly.sequence")
+    stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
+  if(all(is.na(input.seq$sequence.pos))){
+    if(all(is.na(input.seq$sequence))) 
+      stop("No sequence or sequence position information found.")
+    else{
+      message("Ordering markers based on sequence information")
+      M<-cbind(input.seq$sequence)
+      rownames(M)<-input.seq$seq.mrk.names
+      return(M[order(M[,1]),, drop = FALSE])
+    }
+  } else if(all(is.na(input.seq$sequence))){
+    if(all(is.na(input.seq$sequence.pos))) 
+      stop("No sequence or sequence position information found.")
+    else{
+      message("Ordering markers based on sequence position information")
+      M<-cbind(input.seq$sequence.pos)
+      rownames(M)<-input.seq$seq.mrk.names
+      return(M[order(M[,1]),, drop = FALSE])
+    }
+  } else{
+    M<-cbind(input.seq$sequence, input.seq$sequence.pos)
+    rownames(M)<-input.seq$seq.mrk.names
+    return(M[order(M[,1],M[,2]),])
+  }
+}

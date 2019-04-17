@@ -198,8 +198,8 @@ mds_mappoly<-function(input.mat,
   map<-list(smacofsym=smacofsym,pc=pc1,distmap=distmap,lodmap=lodmap,locimap=locimap,length=max(estpos),removed=n,locikey=locikey,meannnfit=nnfit$meanfit)
   if(verbose)
   {
-    write(paste('Stress:', map$smacofsym$stress))
-    write(paste('Mean Nearest Neighbour Fit:', map$meannnfit))
+    cat(paste('Stress:', round(map$smacofsym$stress,5)))
+    cat(paste('\nMean Nearest Neighbour Fit:', round(map$meannnfit,5)))
   }
   map$data.name<-input.mat$data.name
   if(ndim == 2) {

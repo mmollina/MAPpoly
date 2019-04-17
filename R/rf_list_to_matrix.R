@@ -149,6 +149,8 @@ rf_list_to_matrix <-  function(input.twopt,
                  rec.mat = rec.mat,
                  lod.mat = abs(lod.mat),
                  data.name  = input.twopt$data.name,
+                 chisq.pval.thres = input.twopt$chisq.pval.thres,
+                 chisq.pval = input.twopt$chisq.pval,
                  cl = class(input.twopt)),
             class = "mappoly.rf.matrix")
 }

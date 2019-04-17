@@ -80,6 +80,7 @@ calc_genoprob<-function(input.map,  phase.config = "best", verbose = TRUE)
                   as.numeric(rep(0, choose(m, m/2)^2 * n.mrk * n.ind)),
                   verbose=verbose,
                   PACKAGE = "mappoly")
+  cat("\n")
   dim(res.temp[[1]])<-c(choose(m,m/2)^2,n.mrk,n.ind)
   dimnames(res.temp[[1]])<-list(kronecker(apply(combn(letters[1:m],m/2),2, paste, collapse=""),
                                           apply(combn(letters[(m+1):(2*m)],m/2),2, paste, collapse=""), paste, sep=":"),

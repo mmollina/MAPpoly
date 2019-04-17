@@ -508,8 +508,10 @@ est_rf_hmm_sequential<-function(input.seq,
       selected.map <- submap.expansion < sub.map.size.diff.limit & LOD < thres.hmm
       if(verbose){
         x <- round(cbind(submap.length.new, submap.expansion, last.mrk.expansion),2)
-        for(j1 in 1:nrow(x))
-          cat("    ", x[j1,1], ": (", x[j1,2],  "/", x[j1,3],") ", sep = "")
+        for(j1 in 1:nrow(x)){
+          cat("    ", x[j1,1], ": (", x[j1,2],  "/", x[j1,3],")", sep = "")
+          if(j1!=nrow(x)) cat("\n")
+        }
       }
       if(verbose){
         if(all(!selected.map)) cat(paste0(crayon::red(cli::symbol$cross), "\n"))
@@ -607,7 +609,7 @@ plot.mappoly.map <- function(x,
   vp2 <- grid::viewport(x = 0, y = 0.6, width = 1, height = 0.15, just = c("left", "bottom"))
   vp3 <- grid::viewport(x = 0.04, y = 0.4, width = 0.92, height = 0.2, just = c("left", "bottom"))
   grid::pushViewport(vp1)
-  draw_homologous(m, y.pos = 0.1, h.names = letters[1:m], parent = "P")
+  draw_homologous(m, y.pos = 0.1, h.names = letters[1:m], parent = "P1")
   if (config == "best")
     config <- which.min(abs(get_LOD(x)))
   if (!is.numeric(config))
@@ -624,7 +626,7 @@ plot.mappoly.map <- function(x,
     draw_alleles(m, y[i], P[[i]], col.cte = col.P[i], y.pos = 0.1)
   grid::upViewport()
   grid::pushViewport(vp2)
-  draw_homologous(m, h.names = letters[(m+1):(2*m)], parent = "Q")
+  draw_homologous(m, h.names = letters[(m+1):(2*m)], parent = "P2")
   Q <- x$maps[[config]]$seq.ph$Q
   if(length(col.Q)==1)
     col.Q<-rep(col.Q, length(Q))

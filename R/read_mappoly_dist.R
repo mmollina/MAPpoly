@@ -18,7 +18,7 @@
 #' given in any unity of physical genomic distance (base pairs, for instance). However, the user should be 
 #' able to make decisions based on these values, such as the occurrence of crossing overs, etc. Line number 10 
 #' should contain the string \code{nphen} followed by the number of phenotypic traits. Line number 11 is skipped 
-#' (Usually used as a spacer). The next elements are strings containing the name of the phenotypic trait 
+#' (Usually used as a spacer). The next elements are strings containing the name of the phenotypic trait with no space characters
 #' followed by the phenotypic values. The number of lines should be the same number of phenotypic traits. 
 #' \code{NA} represents missing values. The line number 12 + \code{nphen} is skipped. Finally, the last element is a table 
 #' containing the probability distribution for each combination of marker and offspring. The first two columns 
@@ -31,6 +31,9 @@
 #' @param prob.thres probability threshold to associate a marker call to a 
 #'     dosage. Markers with maximum genotype probability smaller than 'prob.thres' 
 #'     are considered as missing data for the dosage calling purposes
+#'     
+#' @param filter.non.conforming if \code{TRUE} (default) exclude samples with non 
+#'     expected genotypes under randam chromosome pairing and no double reduction 
 #'
 #' @param ... curentlly ignored
 #'
@@ -78,7 +81,7 @@
 #'     
 #' @export read_geno_dist
 
-read_geno_dist <- function(file.in, prob.thres = 0.95) {
+read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = TRUE) {
     ## get ploidy level ----------------------
     temp <- scan(file.in, what = character(), sep = " ", nlines = 1, quiet = TRUE)
     m <- na.omit(as.numeric(temp[2]))
@@ -111,23 +114,27 @@ read_geno_dist <- function(file.in, prob.thres = 0.95) {
     ## get dosage in parent P ----------------
     temp <- scan(file.in, what = character(), sep = " ", skip = 5, nlines = 1, quiet = TRUE)
     temp <- temp[!temp == ""]
-    if (length(temp) - 1 != n.mrk)
+    dosage.p <- na.omit(as.numeric(temp[-1]))
+    if (length(dosage.p) != n.mrk)
         stop("\n\t\t--------------------------------------------------
                 The number of markers and the length of the dosage
                 vector for parent P do not match.\n
                 Please, check data.
                 --------------------------------------------------\n")
-    dosage.p <- na.omit(as.numeric(temp[-1]))
     ## get dosage in parent Q ----------------
     temp <- scan(file.in, what = character(), sep = " ", skip = 6, nlines = 1, quiet = TRUE)
     temp <- temp[!temp == ""]
-    if (length(temp) - 1 != n.mrk)
+    dosage.q <- na.omit(as.numeric(temp[-1]))
+    if (length(dosage.q) != n.mrk)
         stop("\n\t\t--------------------------------------------------
                 The number of markers and the length of the dosage
                 vector for parent Q do not match.\n
                 Please, check data.
                 --------------------------------------------------\n")
-    dosage.q <- na.omit(as.numeric(temp[-1]))
+    ## monomorphic markers
+    dp<-abs(abs(dosage.p-(m/2))-(m/2))
+    dq<-abs(abs(dosage.q-(m/2))-(m/2))
+    id<-dp+dq!=0
     ## get sequence info ---------------------
     temp <- scan(file.in, what = character(), sep = " ", skip = 7, nlines = 1, quiet = TRUE)
     temp <- temp[!temp == ""]
@@ -158,18 +165,19 @@ read_geno_dist <- function(file.in, prob.thres = 0.95) {
     }
     cat("Reading the following data:")
     cat("\n    Ploidy level:", m)
-    cat("\n    No. markers: ", n.mrk)
     cat("\n    No. individuals: ", n.ind)
+    cat("\n    No. markers: ", n.mrk) 
+    cat("\n    No. informative markers:  ", sum(id), " (", round(100*sum(id)/n.mrk,1), "%)", sep = "")
     if (all(unique(nphen) != 0))
         cat("\n    This dataset contains phenotypic information.")
 
     if (length(sequence) > 1)
         cat("\n    This dataset contains sequence information.")
-    cat("\n   ...")
+    cat("\n    ...")
     ## get genotypic info --------------------
     geno <- read.table(file.in, skip = 12 + nphen, colClasses = c("character", "character", rep("numeric", m + 1)), nrows = n.mrk * n.ind, comment.char = "")
-
     colnames(geno) <- c("mrk", "ind", as.character(0:m))
+    geno<-subset(geno, mrk%in%mrk.names[id])
     ## transforming na's in expected genotypes using mendilian segregation
     i.na <- which(apply(geno, 1, function(x) any(is.na(x))))
     if (length(i.na) > 0) {
@@ -179,23 +187,43 @@ read_geno_dist <- function(file.in, prob.thres = 0.95) {
         for (i in 1:length(m.na)) geno[i.na[i], -c(1, 2)] <- segreg_poly(m, dp.na[i], dq.na[i])
     }
     ## dosage info
-    geno.dose <- dist_prob_to_class(geno, prob.thres)
+    geno.dose <- dist_prob_to_class(geno = geno, prob.thres = prob.thres)
     geno.dose[is.na(geno.dose)] <- m + 1
+   
     ## returning the 'mappoly.data' object
     cat("\n    Done with reading.\n")
-    structure(list(m = m,
+    res<-structure(list(m = m,
                    n.ind = n.ind,
-                   n.mrk = n.mrk,
+                   n.mrk = sum(id),
                    ind.names = ind.names,
-                   mrk.names = mrk.names,
-                   dosage.p = dosage.p,
-                   dosage.q = dosage.q,
-                   sequence = sequence,
-                   sequence.pos = sequencepos,
+                   mrk.names = mrk.names[id],
+                   dosage.p = dosage.p[id],
+                   dosage.q = dosage.q[id],
+                   sequence = sequence[id],
+                   sequence.pos = sequencepos[id],
                    prob.thres = prob.thres,
                    geno = geno,
                    geno.dose = geno.dose,
                    nphen = nphen,
-                   phen = phen),
+                   phen = phen,
+                   chisq.pval = NULL),
               class = "mappoly.data")
+    
+    if(filter.non.conforming){
+      cat("    Filtering non-conforming markers.\n    ...")
+      res<-filter_non_conforming_classes(res)
+      ##Computing chi-square p.values
+      Ds <- array(NA, dim = c(m+1, m+1, m+1))
+      for(i in 0:m)
+        for(j in 0:m)
+          Ds[i+1,j+1,] <- segreg_poly(m = m, dP = i, dQ = j)
+      Dpop<-cbind(res$dosage.p, res$dosage.q)
+      M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
+      dimnames(M)<-list(res$mrk.names, c(0:m))
+      M<-cbind(M, res$geno.dose)
+      res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
+      cat("\n    Done with filtering.\n")
+      return(res)
+    }
+   return(res)
 }

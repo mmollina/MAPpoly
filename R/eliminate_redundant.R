@@ -36,6 +36,8 @@ elim_redundant<-function(input.seq)
   x<-get(input.seq$data.name, pos = 1)$geno.dose[input.seq$seq.num, ]
   dat_temp <- unique(x, dinmanes = TRUE)
   output.seq <- make_seq_mappoly(get(input.seq$data.name, pos = 1), rownames(dat_temp), data.name = input.seq$data.name)
+  output.seq$chisq.pval.thres <-input.seq$chisq.pval.thres
+  output.seq$chisq.pval <-input.seq$chisq.pval
   mrknames <- get(input.seq$data.name, pos = 1)$mrk.names
   elim<-setdiff(input.seq$seq.num,output.seq$seq.num)
   n1<-apply(dat_temp, 1, paste, collapse="")

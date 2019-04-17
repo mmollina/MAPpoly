@@ -3,11 +3,14 @@
 \name{make_seq_mappoly}
 \alias{make_seq_mappoly}
 \alias{print.mappoly.sequence}
+\alias{plot.mappoly.sequence}
 \title{Create a sequence of markers}
 \usage{
 make_seq_mappoly(input.obj, arg = NULL, data.name = NULL)
 
 \method{print}{mappoly.sequence}(x, ...)
+
+\method{plot}{mappoly.sequence}(x, ...)
 }
 \arguments{
 \item{input.obj}{an object of one of the classes

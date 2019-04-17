@@ -4,12 +4,12 @@
 \alias{plot_mrk_info}
 \title{Plot marker information}
 \usage{
-plot_mrk_info(input.data, mrk.name)
+plot_mrk_info(input.data, mrk)
 }
 \arguments{
 \item{input.data}{an object of class \code{mappoly.data}}
 
-\item{mrk.name}{marker name}
+\item{mrk}{marker name or position in the dataset}
 }
 \description{
 Plot summary statistics for a given marker

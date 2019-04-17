@@ -147,7 +147,9 @@ est_pairwise_rf <- function(input.seq, count.cache,
     return(structure(list(data.name = input.seq$data.name,
                           n.mrk = length(input.seq$seq.num),
                           seq.num = input.seq$seq.num,
-                          pairwise = res),
+                          pairwise = res,
+                          chisq.pval.thres = input.seq$chisq.pval.thres,
+                          chisq.pval = input.seq$chisq.pval),
                      class = "poly.est.two.pts.pairwise"))
   } else if (ncol(mrk.pairs) < batch.size) {
     if (verbose)
@@ -210,7 +212,9 @@ est_pairwise_rf <- function(input.seq, count.cache,
   return(structure(list(data.name = input.seq$data.name,
                         n.mrk = length(input.seq$seq.num),
                         seq.num = input.seq$seq.num,
-                        pairwise = res),
+                        pairwise = res,
+                        chisq.pval.thres = input.seq$chisq.pval.thres,
+                        chisq.pval = input.seq$chisq.pval),
                    class = "poly.est.two.pts.pairwise"))
 }
 

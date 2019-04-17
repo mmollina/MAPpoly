@@ -6,21 +6,26 @@
 \alias{plot.mappoly.data}
 \title{Data Input}
 \usage{
-read_geno(file.in)
+read_geno(file.in, filter.non.conforming = TRUE)
 
 \method{print}{mappoly.data}(x, detailed = FALSE, ...)
 
-\method{plot}{mappoly.data}(x, detailed = FALSE, ...)
+\method{plot}{mappoly.data}(x, thresh.line = 1e-05, ...)
 }
 \arguments{
 \item{file.in}{the name of the input file which contains the data to
 be read.}
+
+\item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
+expected genotypes under randam chromosome pairing and no double reduction}
 
 \item{x}{an object of one of the classes \code{mappoly.data}}
 
 \item{detailed}{if available, print the number of markers per sequence}
 
 \item{...}{currently ignored}
+
+\item{thresh.line}{position of a threshold line for p values of the segregation test}
 }
 \value{
 An object of class \code{mappoly.data} which contains a
@@ -65,7 +70,7 @@ any of the markers, the string \code{seq} should be followed by a single \code{N
 given in any unity of physical genomic distance (base pairs, for instance). However, the user should be 
 able to make decisions based on these values, such as the occurrence of crossing overs, etc. Line number 10 
 should contain the string \code{nphen} followed by the number of phenotypic traits. Line number 11 is skipped 
-(Usually used as a spacer). The next elements are strings containing the name of the phenotypic trait 
+(Usually used as a spacer). The next elements are strings containing the name of the phenotypic trait with no space characters
 followed by the phenotypic values. The number of lines should be the same number of phenotypic traits. 
 \code{NA} represents missing values. The line number 12 + \code{nphen} is skipped. Finally, Finally, the last element is a table
 containing the dosage for each markers (rows) for each individual
