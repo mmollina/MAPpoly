@@ -19,6 +19,7 @@ Imports:
     parallel,
     RCurl,
     fields,
+    RColorBrewer,
     grid,
     bitops,
     spam,

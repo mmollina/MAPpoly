@@ -259,6 +259,7 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
 #' @export
 #' @keywords internal
 #' @importFrom graphics barplot
+#' @importFrom RColorBrewer brewer.pal
 plot.mappoly.data <- function(x, thresh.line=10e-6,  ...)
 {
   freq <- table(paste(x$dosage.p, x$dosage.q, sep = "-"))

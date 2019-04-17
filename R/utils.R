@@ -72,6 +72,7 @@ rev_map<-function(input.map)
 #' @importFrom dplyr group_by filter arrange
 dist_prob_to_class <- function(geno, prob.thres = 0.95) {
   a<-reshape::melt(geno, id.vars = c("mrk", "ind"))
+  mrk <- ind <- value <- variables <- NULL # Setting the variables to NULL first
   a$variable<-as.numeric(levels(a$variable))[a$variable]
   b<-a %>%
     dplyr::group_by(mrk, ind) %>%
@@ -408,10 +409,12 @@ filter_non_conforming_classes<-function(input.data,
 #' @export
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
+#' @importFrom graphics axis
 filter_missing<-function(input.data, filter.thres = 0.8, inter = TRUE)
 {
   op<-par(bg = "gray", xpd = TRUE)
   ANSWER <- "flag"
+  mrk <- NULL
   if(interactive() && inter)
   {
     while(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
@@ -490,6 +493,7 @@ mrk_chisq_test<-function(x, m){
 #'
 #' @param void interfunction to be documented
 #' @keywords internal
+#' @importFrom graphics axis
 #' @export
 filter_segregation<-function(input.data, chisq.pval.thres = 10e-5, inter = TRUE){
   ANSWER <- "flag"
