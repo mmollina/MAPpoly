@@ -177,6 +177,7 @@ read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
     ## get genotypic info --------------------
     geno <- read.table(file.in, skip = 12 + nphen, colClasses = c("character", "character", rep("numeric", m + 1)), nrows = n.mrk * n.ind, comment.char = "")
     colnames(geno) <- c("mrk", "ind", as.character(0:m))
+    mrk <- NULL
     geno<-subset(geno, mrk%in%mrk.names[id])
     ## transforming na's in expected genotypes using mendilian segregation
     i.na <- which(apply(geno, 1, function(x) any(is.na(x))))

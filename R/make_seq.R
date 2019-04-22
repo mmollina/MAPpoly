@@ -201,7 +201,8 @@ print.mappoly.sequence <- function(x, ...) {
 #' @rdname make_seq_mappoly
 #' @export
 #' @keywords internal
-#' @importFrom graphics barplot
+#' @importFrom graphics barplot layout mtext image legend 
+#' @importFrom grDevices colorRampPalette
 plot.mappoly.sequence <- function(x, ...)
 {
   m<-x$m

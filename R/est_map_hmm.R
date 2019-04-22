@@ -394,12 +394,13 @@ est_rf_hmm_sequential<-function(input.seq,
   if(start.set > length(input.seq$seq.num))
     start.set <- length(input.seq$seq.num)
   if(verbose) cat("Initial sequence:", start.set, "markers...\n")
-  cte<-1
+  cte<-0
   rf.temp<-c(Inf, Inf)
   while(any(rf.temp >= sub.map.size.diff.limit))
   {
+    cte<-cte+1
     if(length(rf.temp)==1) {
-      cat("Impossible to build a map for the given thresholds\n")
+      cat("Impossible build a map using the given thresholds\n")
       stop()
     }
     if(verbose) cat("Trying sequence:", cte:(start.set+cte-1), "...\n")
@@ -414,7 +415,6 @@ est_rf_hmm_sequential<-function(input.seq,
     cur.map <- filter_map_at_hmm_thres(cur.map, thres.hmm)
     cur.map <- reest_rf(cur.map, tol=tol.final/2, verbose = FALSE)
     rf.temp<-imf_h(cur.map$maps[[1]]$seq.rf)
-    cte<-cte+1
   }
   if(verbose) cat("Done with initial sequence.\n")
   if(start.set >= length(input.seq$seq.num)){

@@ -202,7 +202,7 @@ read_geno <- function(file.in, filter.non.conforming = TRUE) {
                  dosage.q = dosage.q[id],
                  sequence = sequence[id],
                  sequence.pos = sequencepos[id],
-                 prob.thres = prob.thres,
+                 prob.thres = NULL,
                  geno.dose = geno.dose,
                  nphen = nphen,
                  phen = phen),
@@ -258,8 +258,9 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
 #' @rdname read_geno_dist
 #' @export
 #' @keywords internal
-#' @importFrom graphics barplot
+#' @importFrom graphics barplot layout mtext image legend 
 #' @importFrom RColorBrewer brewer.pal
+#' @importFrom grDevices colorRampPalette
 plot.mappoly.data <- function(x, thresh.line=10e-6,  ...)
 {
   freq <- table(paste(x$dosage.p, x$dosage.q, sep = "-"))
@@ -287,7 +288,7 @@ plot.mappoly.data <- function(x, thresh.line=10e-6,  ...)
   }
   par(mar = c(5,1,0,4))
   pal<-c(RColorBrewer::brewer.pal((x$m+1),"Spectral"),1)
-  image(x$geno.dose, axes = FALSE,
+  image(as.matrix(x$geno.dose), axes = FALSE,
                      col = pal, useRaster = TRUE)
   mtext(text = "Markers", side = 1)
   mtext(text = "Individuals", side = 2)

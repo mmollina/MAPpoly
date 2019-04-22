@@ -61,6 +61,7 @@ In this tutorial, we use a simulated data set to guide the user though the basic
 
 ```{r load_hexafake}
 data("hexafake")
+plot(hexafake)
 ```
 
 The `hexafake` data set contains 1500 markers distributed in three linkage groups and scored in a full-sib autohexaploid population containing 300 individuals. We denote the parents of this population $P$ and $Q$. The parental linkage phase and the recombination fraction used to simulate the population can be found in `inst\doc\` folder, also distributed with `mappoly`. To inspect the data set, we just type

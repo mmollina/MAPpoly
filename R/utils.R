@@ -72,7 +72,7 @@ rev_map<-function(input.map)
 #' @importFrom dplyr group_by filter arrange
 dist_prob_to_class <- function(geno, prob.thres = 0.95) {
   a<-reshape::melt(geno, id.vars = c("mrk", "ind"))
-  mrk <- ind <- value <- variables <- NULL # Setting the variables to NULL first
+  mrk <- ind <- value <- variable <- NULL # Setting the variables to NULL first
   a$variable<-as.numeric(levels(a$variable))[a$variable]
   b<-a %>%
     dplyr::group_by(mrk, ind) %>%
@@ -325,6 +325,7 @@ perm_pars <- function(v) {
 #' @param void interfunction to be documented
 #' @keywords internal
 #' @export
+#' @importFrom grDevices hcl
 gg_color_hue <- function(n) {
   hues = seq(15, 375, length = n + 1)
   hcl(h = hues, l = 65, c = 100)[1:n]
