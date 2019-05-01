@@ -214,7 +214,7 @@ plot.mappoly.sequence <- function(x, ...)
   names(mrk.dist)<-apply(d.temp, 1 , paste, collapse = "-")
   pal<-colorRampPalette(RColorBrewer::brewer.pal(9,"Greys"))(length(type.names))
   op <- par(mar = c(5,4,1,2))
-  layout(matrix(c(1,1,2,3), 2, 2), widths = c(1.5,3), heights = c(1,2))
+  layout(matrix(c(1,1,2,3,2,4), 2, 3), widths = c(1.2,3,.5), heights = c(1,2))
   barplot(mrk.dist, las = 2, col = pal[match(type, type.names)], 
           xlab = "dosage combination", 
           ylab = "number of markers", horiz = TRUE)
@@ -230,17 +230,18 @@ plot.mappoly.sequence <- function(x, ...)
     mtext(text = "log10(p.value)", side = 4, line = -1, cex = .7)
   }
   par(mar = c(5,1,0,4))
-  pal<-c(RColorBrewer::brewer.pal((x$m+1),"Spectral"),1)
+  pal<-c(RColorBrewer::brewer.pal((x$m+1),"Set1"),1)
   image(get(x$data.name, pos = 1)$geno.dose[x$seq.mrk.names,], axes = FALSE,
         col = pal, useRaster = TRUE)
   mtext(text = "Markers", side = 1)
   mtext(text = "Individuals", side = 2)
-  legend(x = .5, y = -.15, 
-         horiz=TRUE, 
-         legend=c(0:m,"missing"),
+  par(mar = c(0,0,0,0))
+  plot(0:10,0:10, type = "n", axes = FALSE, xlab = "", ylab = "")
+  legend(0,10, 
+         horiz=FALSE, 
+         legend=c(0:x$m,"missing"),
          pch=22,
          pt.cex = 3,
-         xjust = .5,
          pt.bg=pal, pt.lwd = 0,
          bty = "n", xpd=TRUE)
   par(op)

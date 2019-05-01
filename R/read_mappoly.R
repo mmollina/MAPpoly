@@ -1,10 +1,10 @@
 #' Data Input
 #'
-#' Reads an external data file. The format of the file is described in \code{details}
-#' section. This fucntion creates an object of class \code{mappoly.data}
-
+#' Reads an external data file. The format of the file is described in the \code{Details}
+#' section. This function creates an object of class \code{mappoly.data}
+#' 
 #' The first line of the input file contains the string \code{ploidy} followed by the ploidy level of the parents.
-#' The second and third lines contains the strings \code{nind} and \code{nmrk} followed by the number of individuals in 
+#' The second and third lines contain the strings \code{nind} and \code{nmrk} followed by the number of individuals in 
 #' the dataset and the total number of markers, respectively. Lines number 4 and 5 contain the string 
 #' \code{mrknames} and \code{indnames} followed by a sequence of the names of the markers and the name of the individuals, 
 #' respectively. Lines 6 and 7 contain the strings \code{dosageP} and \code{dosageQ} followed by a sequence of numbers 
@@ -21,7 +21,7 @@
 #' (Usually used as a spacer). The next elements are strings containing the name of the phenotypic trait with no space characters
 #' followed by the phenotypic values. The number of lines should be the same number of phenotypic traits. 
 #' \code{NA} represents missing values. The line number 12 + \code{nphen} is skipped. Finally, Finally, the last element is a table
-#' containing the dosage for each markers (rows) for each individual
+#' containing the dosage for each marker (rows) for each individual
 #' (columns). \code{NA} represents missing values.
 #'
 #' @param file.in  the name of the input file which contains the data to
@@ -244,9 +244,9 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
       cat("\n    ----------\n    No. markers per sequence:\n")
       print(data.frame(seq = paste0("       ", names(w)), No.mrk = as.numeric(w)), row.names = FALSE)
       cat("    ----------\n")
-      cat(paste0("    Markers not allocated to any sequence: ", sum(is.na(x$sequence))))
+      cat(paste0("    Markers with no sequence information: ", sum(is.na(x$sequence))))
     } else cat("\n    This dataset contains sequence information.")
-  cat("\n    ----------\n    No. of markers per dosage in both parents:\n")
+  cat("\n    ----------\n    No. of markers per dosage combination in both parents:\n")
   freq <- table(paste(x$dosage.p, x$dosage.q, sep = "-"))
   d.temp <- matrix(unlist(strsplit(names(freq), "-")), ncol = 2, byrow = TRUE)
   print(data.frame(P1 = paste0("    ", d.temp[, 1]), P2 = d.temp[, 2], freq = as.numeric(freq)), row.names = FALSE)
@@ -261,7 +261,7 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
 #' @importFrom graphics barplot layout mtext image legend 
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom grDevices colorRampPalette
-plot.mappoly.data <- function(x, thresh.line=10e-6,  ...)
+plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
 {
   freq <- table(paste(x$dosage.p, x$dosage.q, sep = "-"))
   d.temp <- matrix(unlist(strsplit(names(freq), "-")), ncol = 2, byrow = TRUE)
@@ -271,7 +271,7 @@ plot.mappoly.data <- function(x, thresh.line=10e-6,  ...)
   names(mrk.dist)<-apply(d.temp, 1 , paste, collapse = "-")
   pal<-colorRampPalette(RColorBrewer::brewer.pal(9,"Greys"))(length(type.names))
   op <- par(mar = c(5,4,1,2))
-  layout(matrix(c(1,1,2,3), 2, 2), widths = c(1.5,3), heights = c(1,2))
+  layout(matrix(c(1,1,2,3,2,4), 2, 3), widths = c(1.2,3,.5), heights = c(1,2))
   barplot(mrk.dist, las = 2, col = pal[match(type, type.names)], 
           xlab = "dosage combination", 
           ylab = "number of markers", horiz = TRUE)
@@ -286,18 +286,19 @@ plot.mappoly.data <- function(x, thresh.line=10e-6,  ...)
     mtext(text = "log10(p.value)", side = 4, line = -1, cex = .7)
     lines(x=c(0, x$n.mrk), y = rep(log10(thresh.line),2), col = 2, lty = 2)
   }
-  par(mar = c(5,1,0,4))
-  pal<-c(RColorBrewer::brewer.pal((x$m+1),"Spectral"),1)
+  par(mar = c(5,1,0,2))
+  pal<-c(RColorBrewer::brewer.pal((x$m+1),"Set1"),1)
   image(as.matrix(x$geno.dose), axes = FALSE,
                      col = pal, useRaster = TRUE)
   mtext(text = "Markers", side = 1)
   mtext(text = "Individuals", side = 2)
-  legend(x = .5, y = -.15, 
-         horiz=TRUE, 
+  par(mar = c(0,0,0,0))
+  plot(0:10,0:10, type = "n", axes = FALSE, xlab = "", ylab = "")
+  legend(0,10, 
+         horiz=FALSE, 
          legend=c(0:x$m,"missing"),
          pch=22,
          pt.cex = 3,
-         xjust = .5,
          pt.bg=pal, pt.lwd = 0,
          bty = "n", xpd=TRUE)
   par(op)

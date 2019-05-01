@@ -411,8 +411,9 @@ filter_non_conforming_classes<-function(input.data,
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
 #' @importFrom graphics axis
-filter_missing<-function(input.data, filter.thres = 0.8, inter = TRUE)
+filter_missing<-function(input.data, filter.thres = 0.2, inter = TRUE)
 {
+  filter.thres<-1-filter.thres
   op<-par(bg = "gray", xpd = TRUE)
   ANSWER <- "flag"
   mrk <- NULL
