@@ -413,7 +413,7 @@ est_rf_hmm_sequential<-function(input.seq,
                           verbose = verbose, input.ph = input.ph,
                           reestimate.single.ph.configuration = reestimate.single.ph.configuration)
     cur.map <- filter_map_at_hmm_thres(cur.map, thres.hmm)
-    cur.map <- reest_rf(cur.map, tol=tol.final/2, verbose = FALSE)
+    cur.map <- reest_rf(cur.map, tol=tol.final, verbose = FALSE)
     rf.temp<-imf_h(cur.map$maps[[1]]$seq.rf)
   }
   if(verbose) cat("Done with initial sequence.\n")
