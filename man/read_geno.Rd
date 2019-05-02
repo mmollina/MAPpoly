@@ -53,10 +53,12 @@ An object of class \code{mappoly.data} which contains a
                 to the individuals}
 }
 \description{
-Reads an external data file. The format of the file is described in \code{details}
-section. This fucntion creates an object of class \code{mappoly.data}
+Reads an external data file. The format of the file is described in the \code{Details}
+section. This function creates an object of class \code{mappoly.data}
+}
+\details{
 The first line of the input file contains the string \code{ploidy} followed by the ploidy level of the parents.
-The second and third lines contains the strings \code{nind} and \code{nmrk} followed by the number of individuals in 
+The second and third lines contain the strings \code{nind} and \code{nmrk} followed by the number of individuals in 
 the dataset and the total number of markers, respectively. Lines number 4 and 5 contain the string 
 \code{mrknames} and \code{indnames} followed by a sequence of the names of the markers and the name of the individuals, 
 respectively. Lines 6 and 7 contain the strings \code{dosageP} and \code{dosageQ} followed by a sequence of numbers 
@@ -73,7 +75,7 @@ should contain the string \code{nphen} followed by the number of phenotypic trai
 (Usually used as a spacer). The next elements are strings containing the name of the phenotypic trait with no space characters
 followed by the phenotypic values. The number of lines should be the same number of phenotypic traits. 
 \code{NA} represents missing values. The line number 12 + \code{nphen} is skipped. Finally, Finally, the last element is a table
-containing the dosage for each markers (rows) for each individual
+containing the dosage for each marker (rows) for each individual
 (columns). \code{NA} represents missing values.
 }
 \examples{

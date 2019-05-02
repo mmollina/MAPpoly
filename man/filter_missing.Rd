@@ -4,7 +4,7 @@
 \alias{filter_missing}
 \title{Filter missing genotypes}
 \usage{
-filter_missing(input.data, filter.thres = 0.8, inter = TRUE)
+filter_missing(input.data, filter.thres = 0.2, inter = TRUE)
 }
 \arguments{
 \item{void}{interfunction to be documented}
