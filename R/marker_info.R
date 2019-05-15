@@ -43,7 +43,7 @@ plot_mrk_info<-function(input.data, mrk)
       ## Genotype frequencies
       x<-input.data$geno.dose[mrk, ]
       x[x==input.data$m+1]<-NA
-      x<-table(x, useNA = "always")
+      x<-table(as.numeric(x), useNA = "always")
       names(x)<-c(names(x)[-length(x)], "NA") 
       ## empty plot area
       op<-par(mar = c(2,2,5,2))
@@ -105,8 +105,10 @@ plot_mrk_info<-function(input.data, mrk)
       text(x = 0, y = 30 , labels = paste0("seq. position: ", input.data$sequence.pos[input.data$mrk.names==mrk]), adj = 0)
       text(x = 0, y = 20 , labels = paste0("prob. threshold: ", input.data$prob.thres), adj = 0)
       par(op)
+      pal<-gg_color_hue(input.data$m + 1)
+      names(pal)<-0:input.data$m 
       op<-par(mar = c(5,3,0,2), cex = .7)
-      barplot(x, col = c(gg_color_hue(input.data$m + 1)[1:(length(x)-1)], "#404040"))
+      barplot(x, col = c(na.omit(pal[names(x)]), "#404040"))
       par(op)
       ## probability distribution of the genotypes
       mrk.name<-mrk

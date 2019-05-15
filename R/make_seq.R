@@ -231,7 +231,7 @@ plot.mappoly.sequence <- function(x, ...)
   }
   par(mar = c(5,1,0,4))
   pal<-c(RColorBrewer::brewer.pal((x$m+1),"Set1"),1)
-  image(get(x$data.name, pos = 1)$geno.dose[x$seq.mrk.names,], axes = FALSE,
+  image(as.matrix(get(x$data.name, pos = 1)$geno.dose[x$seq.mrk.names,]), axes = FALSE,
         col = pal, useRaster = TRUE)
   mtext(text = "Markers", side = 1)
   mtext(text = "Individuals", side = 2)

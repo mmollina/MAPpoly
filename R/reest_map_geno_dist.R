@@ -23,7 +23,8 @@ reest_map_geno_dist<-function(input.map, dat.dist,  phase.config = "best", verbo
   if(length(which.is.na) > 0)
     stop("Markers", original.map.mrk[which.is.na], "are not present in the 'dat.dist' object")
   temp.map<-input.map
-  temp.map$info$data.name<-as.character(sys.call())[3]
+  temp.map$info$data.name<-deparse(substitute(dat.dist))
+  #temp.map$info$data.name<-as.character(sys.call())[3]
   temp.map$maps[[i.lpc]]$seq.num<-dat.dist.pos
   names(temp.map$maps[[i.lpc]]$seq.ph$P)<-names(temp.map$maps[[i.lpc]]$seq.ph$Q)<-dat.dist.pos
   if(!all(sort(get(temp.map$info$data.name, pos = 1)$ind.names) %in% sort(get(input.map$info$data.name, pos = 1)$ind.names)))
@@ -35,7 +36,7 @@ reest_map_geno_dist<-function(input.map, dat.dist,  phase.config = "best", verbo
   g <- as.double(t(geno.new[, -c(1:2)]))
   map.res<-poly_hmm_est(m = as.numeric(temp.map$info$m),
                         n.mrk = as.numeric(temp.map$info$n.mrk),
-                        n.ind = get(temp.map$info$data.name, pos = 1)$n.ind,
+                        n.ind = dat.dist$n.ind,
                         p = as.numeric(unlist(temp.map$maps[[1]]$seq.ph$P)),
                         dp = as.numeric(cumsum(c(0, sapply(temp.map$maps[[1]]$seq.ph$P, function(x) sum(length(x)))))),
                         q = as.numeric(unlist(temp.map$maps[[1]]$seq.ph$Q)),

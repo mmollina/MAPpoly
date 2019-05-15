@@ -441,7 +441,7 @@ est_rf_hmm_sequential<-function(input.seq,
     {
       seq.num <- NULL
       if(info.tail)
-        seq.num <- tail.temp$maps[[i]]$seq.num
+        seq.num <- tail.temp$maps[[i]]$seq.num 
       if(length(seq.num) < extend.tail)
         seq.num <- tail(cur.map$maps[[i]]$seq.num, extend.tail)
       seq.cur <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1),
@@ -497,13 +497,15 @@ est_rf_hmm_sequential<-function(input.seq,
     colnames(M)<-c("old", "new")
     ## Checking for quality (map size and LOD Score)
     submap.length.old <- sapply(cur.map$maps, function(x) sum(imf_h(x$seq.rf)))
+    last.dist.old <- sapply(cur.map$maps, function(x) tail(imf_h(x$seq.rf),1))
     submap.length.new <- sapply(cur.map.temp$maps, function(x) sum(imf_h(x$seq.rf)))
-    submap.expansion <- numeric(nrow(M))
-    for(j1 in 1:nrow(M))
+    last.dist.new <- sapply(cur.map.temp$maps, function(x) tail(imf_h(x$seq.rf),1))
+    last.mrk.expansion <- submap.expansion <- numeric(nrow(M))
+    for(j1 in 1:nrow(M)){
       submap.expansion[j1] <- submap.length.new[M[j1,2]] - submap.length.old[M[j1,1]]
-    last.mrk.expansion <- sapply(cur.map.temp$maps, function(x) tail(imf_h(x$seq.rf), 1))
+      last.mrk.expansion[j1] <- last.dist.new[M[j1,2]] - last.dist.old[M[j1,1]]
+    }
     LOD <- get_LOD(cur.map.temp, sorted = FALSE)
-    
     if(sub.map.size.diff.limit!=Inf){
       selected.map <- submap.expansion < sub.map.size.diff.limit & LOD < thres.hmm
       if(verbose){

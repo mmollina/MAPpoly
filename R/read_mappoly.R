@@ -172,7 +172,7 @@ read_geno <- function(file.in, filter.non.conforming = TRUE) {
   
   if (length(sequence) > 1)
     cat("\n    This dataset contains sequence information.")
-  cat("\n   ...")
+  cat("\n    ...")
   ## get genotypic info --------------------
   geno.dose <- read.table(file.in , skip = 12 + nphen)
   if(nrow(geno.dose)!=length(mrk.names))
@@ -221,8 +221,8 @@ read_geno <- function(file.in, filter.non.conforming = TRUE) {
     dimnames(M)<-list(res$mrk.names, c(0:m))
     M<-cbind(M, res$geno.dose)
     res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
-    return(res)
     cat("\n    Done with filtering.\n")
+    return(res)
   }
   return(res)
 }
@@ -236,8 +236,13 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
   cat("    Ploidy level:                           ", x$m, "\n")
   cat("    No. individuals:                        ", x$n.ind, "\n")
   cat("    No. markers:                            ", x$n.mrk, "\n")
-  miss<-round(100*sum(x$geno.dose==x$m+1)/length(x$geno.dose),2)
-  cat("    Missing data under ", x$prob.thres, " prob. threshold: ", miss, "%\n", sep = "")
+  miss<-round(100*sum(x$geno.dose==x$m+1)/length(as.matrix(x$geno.dose)),2)
+  ##if no prior probabilities
+  if(nrow(x$geno)==x$n.mrk){
+  cat("    Missing data:                            ", miss, "%\n", sep = "")  
+  } else {
+    cat("    Missing data under ", x$prob.thres, " prob. threshold: ", miss, "%\n", sep = "")    
+  }
   w <- table(x$sequence)
   if (length(x$sequence) <= 1)
     cat("\n    No. markers per sequence: not available") else if (detailed) {

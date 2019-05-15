@@ -381,6 +381,16 @@ filter_non_conforming_classes<-function(input.data,
   Dpop<-cbind(dp,dq)
   M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
   M[M!=0]<-1
+  ##if no prior probabilities
+  if(nrow(input.data$geno)==input.data$n.mrk){
+    for(i in 1:nrow(M)){
+      id0<-!as.numeric(input.data$geno.dose[i,])%in%(which(M[i,]==1)-1)
+      if(any(id0))
+        input.data$geno.dose[i,id0]<-(m+1)     
+    }
+    input.data$prob.thres<-NULL
+  return(input.data)
+  }
   ## 1 represents conforming classes/ 0 represents non-conforming classes
   dp<-rep(dp, input.data$n.ind)
   dq<-rep(dq, input.data$n.ind)
@@ -455,7 +465,7 @@ filter_missing<-function(input.data, filter.thres = 0.2, inter = TRUE)
     rm.mrks.id<-which(perc.na < filter.thres)
     if(length(rm.mrks.id)==0) return(input.data)
     rm.mrks<-names(rm.mrks.id)
-    if(!is.null(input.data$geno))
+    if(nrow(input.data$geno)!=input.data$n.mrk)
       input.data$geno <-  input.data$geno %>%
       filter(!mrk%in%rm.mrks)
     input.data$geno.dose<-input.data$geno.dose[-rm.mrks.id,]
@@ -477,6 +487,7 @@ filter_missing<-function(input.data, filter.thres = 0.2, inter = TRUE)
 #'
 #' @param void interfunction to be documented
 #' @keywords internal
+#' @export
 mrk_chisq_test<-function(x, m){
   y<-x[-c(1:(m+1))]
   y[y==m+1]<-NA
