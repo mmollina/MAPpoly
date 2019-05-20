@@ -27,7 +27,7 @@ bibliography: biblio.bib
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(cache = TRUE)
-load("~/repos/MAPpoly/docs/maps.rda")
+#load("~/repos/MAPpoly/docs/maps.rda")
 ```
 
 # Introduction
@@ -60,7 +60,7 @@ library(mappoly)
 In this tutorial, we use a simulated data set to guide the user though the basic steps of a genetic map construction using the functions available in `mappoly`. The simulated data set is distributed with `mappoly` and can be loaded using
 
 ```{r load_hexafake}
-data("hexafake")
+hexafake
 plot(hexafake)
 ```
 
