@@ -69,40 +69,47 @@ genotyping_global_error<-function(x, error=0.01, th.prob=0.999)
 est_full_hmm_with_global_error <- function(input.map, error=NULL, tol=10e-4, 
                                            th.prob=0.95, verbose = FALSE)
   {
+  if (!inherits(input.map, "mappoly.map")) {
+    stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
+  }
   output.seq<-input.map
   mrknames<-get(input.map$info$data.name, pos=1)$mrk.names[input.map$maps[[1]]$seq.num]
-  geno.temp<-subset(get(input.map$info$data.name, pos=1)$geno, mrk%in%mrknames)
-  indnames<-get(input.map$info$data.name, pos=1)$ind.names
-  gen<-vector("list", length(indnames))
-  names(gen)<-indnames
-  mrk<-ind<-NULL
-  for(i in names(gen))
-  {
-    a<-subset(geno.temp, ind%in%i)
-    a<-a[match(mrknames, a$mrk),]
-    a.temp<-t(a[,-c(1:2)])
-    if(!is.null(error))
-      a.temp<-apply(a.temp, 2, genotyping_global_error, error=error, th.prob = th.prob)
-    colnames(a.temp)<-a[,1]
-    gen[[i]]<-a.temp
+  if(nrow(get(input.map$info$data.name, pos=1)$geno)==get(input.map$info$data.name, pos=1)$n.mrk){
+    stop("Not implemented to this type of data.")
+  } else {
+    geno.temp<-subset(get(input.map$info$data.name, pos=1)$geno, mrk%in%mrknames)
+    indnames<-get(input.map$info$data.name, pos=1)$ind.names
+    gen<-vector("list", length(indnames))
+    names(gen)<-indnames
+    mrk<-ind<-NULL
+    for(i in names(gen))
+    {
+      a<-subset(geno.temp, ind%in%i)
+      a<-a[match(mrknames, a$mrk),]
+      a.temp<-t(a[,-c(1:2)])
+      if(!is.null(error))
+        a.temp<-apply(a.temp, 2, genotyping_global_error, error=error, th.prob = th.prob)
+      colnames(a.temp)<-a[,1]
+      gen[[i]]<-a.temp
+    }
+    for(i in 1:length(input.map$maps))
+    {
+      YP<-input.map$maps[[i]]$seq.ph$P
+      YQ<-input.map$maps[[i]]$seq.ph$Q
+      map<-poly_hmm_est(m = as.numeric(input.map$info$m),
+                        n.mrk = as.numeric(input.map$info$n.mrk),
+                        n.ind = as.numeric(length(gen)),
+                        p = as.numeric(unlist(YP)),
+                        dp = as.numeric(cumsum(c(0, sapply(YP, function(x) sum(length(x)))))),
+                        q = as.numeric(unlist(YQ)),
+                        dq = as.numeric(cumsum(c(0, sapply(YQ, function(x) sum(length(x)))))),
+                        g = as.double(unlist(gen)),
+                        rf = as.double(input.map$maps[[i]]$seq.rf),
+                        verbose = verbose,
+                        tol = tol)
+      output.seq$maps[[i]]$seq.rf<-map$rf
+      output.seq$maps[[i]]$loglike<-map$loglike
+    }
+    return(output.seq)
   }
-  for(i in 1:length(input.map$maps))
-  {
-    YP<-input.map$maps[[i]]$seq.ph$P
-    YQ<-input.map$maps[[i]]$seq.ph$Q
-    map<-poly_hmm_est(m = as.numeric(input.map$info$m),
-                      n.mrk = as.numeric(input.map$info$n.mrk),
-                      n.ind = as.numeric(length(gen)),
-                      p = as.numeric(unlist(YP)),
-                      dp = as.numeric(cumsum(c(0, sapply(YP, function(x) sum(length(x)))))),
-                      q = as.numeric(unlist(YQ)),
-                      dq = as.numeric(cumsum(c(0, sapply(YQ, function(x) sum(length(x)))))),
-                      g = as.double(unlist(gen)),
-                      rf = as.double(input.map$maps[[i]]$seq.rf),
-                      verbose = verbose,
-                      tol = tol)
-    output.seq$maps[[i]]$seq.rf<-map$rf
-    output.seq$maps[[i]]$loglike<-map$loglike
-  }
-  return(output.seq)
 }
