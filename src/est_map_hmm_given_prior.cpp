@@ -75,7 +75,7 @@ void setup_pre_calc_n_rec_cache(int m, int gam)
  Given the number of recombinations provided by the two
  matrices above (tetraploid example), function
  pre_calc_prob returns Pr(pk+1|pk). For exemple, l1=0 and
- l2=0 --> function pre_calc_prob returns P(pk+1|pk={1,2,3,4}),
+ l2=0 --> function pre_calc_prob returns P(pk+1 = {*}|pk={1,2,3,4}),
  i.e.
  --                      --
  1 2 3 4   |x x x x x x ....x x x x |  <-- l1=0, l2=0;

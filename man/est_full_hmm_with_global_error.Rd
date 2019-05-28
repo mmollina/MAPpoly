@@ -29,27 +29,30 @@ a genetic map using hdden Markov models
 }
 \examples{
   \dontrun{
-    hexa_file<-system.file('extdata', 'hexa_fake', package = 'mappoly2')
-    hexa_dat<-read_geno(file_in = hexa_file)
-    all_mrk<-make_seq_mappoly(hexa_dat, 'all')
-    counts_all_mrk_from_web<-cache_counts_twopt(all_mrk,
-                                                get.from.web=TRUE)
-    all_pairs<-est_pairwise_rf(all_mrk, counts_all_mrk_from_web,
-                               n.clusters=2)
-
-    seq1.10<-make_seq_mappoly(hexa_dat, 1:10)
-
-    l_seq1_3.0 <- ls_linkage_phases(input.seq = seq1.10, thres = 1.3,
-                                    twopt = all_pairs)
-    l_seq1_3.0
-    plot(l_seq1_3.0)
-    res<-est_rf_hmm(input.seq=seq1.10, input.ph=l_seq1_3.0,
-                    verbose=TRUE, tol=10e-3)
-    res
-    plot(res)
-
-    res_final<-est_full_hmm_with_global_error(res, error=0.01, tol=10e-4)
-    plot(res_final)
+    hexa.file<-system.file('extdata', 'hexafake', package = 'mappoly')
+    hexa.dat<-read_geno(file.in = hexa.file)
+    seq1.20<-make_seq_mappoly(hexa.dat, 1:20)
+    counts<-cache_counts_twopt(seq1.20,
+                               get.from.web=TRUE)
+    subset.pairs<-est_pairwise_rf(seq1.20, counts,
+                               n.clusters=1)
+    subset.map <- est_rf_hmm_sequential(input.seq  = seq1.20,
+                                        thres.twopt = 5,
+                                        thres.hmm = 10,
+                                        extend.tail = 10,
+                                        tol = 0.1,
+                                        tol.final = 10e-4,
+                                        twopt = subset.pairs,
+                                        verbose = TRUE)
+    subset.map
+    plot(subset.map)
+     
+    subset.map.reest<-est_full_hmm_with_global_error(subset.map, 
+                                                     error=0.01, 
+                                                     tol=10e-4, 
+                                                     verbose = TRUE)
+    subset.map.reest
+    plot(subset.map.reest)
     }
 
 }

@@ -185,7 +185,7 @@ int n_rec_given_genk_and_k1(int ploidy, int index1, int index2)
    This is equation 6 on the paper
    -----------------------------------------------------
    Calculates the genotypic transition probability based on l_P and
-   l_Q l_P and l_Q denote the number of recombinant bivalents between
+   l_Q, where l_P and l_Q denote the number of recombinant bivalents between
    loci k and k + 1 in parents P and Q respectively.
  */
 double prob_k1_given_k_lp_lq_m(int m,

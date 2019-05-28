@@ -33,27 +33,30 @@ genotyping_global_error<-function(x, error=0.01, th.prob=0.999)
 #'
 #' @examples
 #'   \dontrun{
-#'     hexa_file<-system.file('extdata', 'hexa_fake', package = 'mappoly2')
-#'     hexa_dat<-read_geno(file_in = hexa_file)
-#'     all_mrk<-make_seq_mappoly(hexa_dat, 'all')
-#'     counts_all_mrk_from_web<-cache_counts_twopt(all_mrk,
-#'                                                 get.from.web=TRUE)
-#'     all_pairs<-est_pairwise_rf(all_mrk, counts_all_mrk_from_web,
-#'                                n.clusters=2)
-#'
-#'     seq1.10<-make_seq_mappoly(hexa_dat, 1:10)
-#'
-#'     l_seq1_3.0 <- ls_linkage_phases(input.seq = seq1.10, thres = 1.3,
-#'                                     twopt = all_pairs)
-#'     l_seq1_3.0
-#'     plot(l_seq1_3.0)
-#'     res<-est_rf_hmm(input.seq=seq1.10, input.ph=l_seq1_3.0,
-#'                     verbose=TRUE, tol=10e-3)
-#'     res
-#'     plot(res)
-#'
-#'     res_final<-est_full_hmm_with_global_error(res, error=0.01, tol=10e-4)
-#'     plot(res_final)
+#'     hexa.file<-system.file('extdata', 'hexafake', package = 'mappoly')
+#'     hexa.dat<-read_geno(file.in = hexa.file)
+#'     seq1.20<-make_seq_mappoly(hexa.dat, 1:20)
+#'     counts<-cache_counts_twopt(seq1.20,
+#'                                get.from.web=TRUE)
+#'     subset.pairs<-est_pairwise_rf(seq1.20, counts,
+#'                                n.clusters=1)
+#'     subset.map <- est_rf_hmm_sequential(input.seq  = seq1.20,
+#'                                         thres.twopt = 5,
+#'                                         thres.hmm = 10,
+#'                                         extend.tail = 10,
+#'                                         tol = 0.1,
+#'                                         tol.final = 10e-4,
+#'                                         twopt = subset.pairs,
+#'                                         verbose = TRUE)
+#'     subset.map
+#'     plot(subset.map)
+#'      
+#'     subset.map.reest<-est_full_hmm_with_global_error(subset.map, 
+#'                                                      error=0.01, 
+#'                                                      tol=10e-4, 
+#'                                                      verbose = TRUE)
+#'     subset.map.reest
+#'     plot(subset.map.reest)
 #'     }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -68,15 +71,39 @@ genotyping_global_error<-function(x, error=0.01, th.prob=0.999)
 #'
 est_full_hmm_with_global_error <- function(input.map, error=NULL, tol=10e-4, 
                                            th.prob=0.95, verbose = FALSE)
-  {
+{
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
   }
   output.seq<-input.map
   mrknames<-get(input.map$info$data.name, pos=1)$mrk.names[input.map$maps[[1]]$seq.num]
+  ## 
   if(nrow(get(input.map$info$data.name, pos=1)$geno)==get(input.map$info$data.name, pos=1)$n.mrk){
-    stop("Not implemented to this type of data.")
-  } else {
+    geno.temp<-get(input.map$info$data.name, pos=1)$geno.dose[mrknames,]
+    indnames<-get(input.map$info$data.name, pos=1)$ind.names
+    gen<-vector("list", length(indnames))
+    names(gen)<-indnames
+    mrk<-ind<-NULL
+    dp<-get(input.map$info$data.name, pos=1)$dosage.p[input.map$maps[[1]]$seq.num]
+    dq<-get(input.map$info$data.name, pos=1)$dosage.q[input.map$maps[[1]]$seq.num]
+    names(dp)<-names(dq)<-mrknames
+    for(i in names(gen))
+    {
+      a<-matrix(0, nrow(geno.temp), input.map$info$m+1, dimnames = list(mrknames, 0:input.map$info$m))
+      for(j in rownames(a)){
+        if(geno.temp[j,i] == input.map$info$m+1){
+          a[j,]<-segreg_poly(m = input.map$info$m, dP = dp[j], dQ = dq[j])
+        } else {
+          a[j,geno.temp[j,i]+1]<-1          
+        }
+      }
+      a.temp<-t(a)
+      if(!is.null(error))
+        a.temp<-apply(a.temp, 2, genotyping_global_error, error=error, th.prob = 0.9)
+      gen[[i]]<-a.temp
+    }
+  } 
+  else {##
     geno.temp<-subset(get(input.map$info$data.name, pos=1)$geno, mrk%in%mrknames)
     indnames<-get(input.map$info$data.name, pos=1)$ind.names
     gen<-vector("list", length(indnames))
@@ -92,24 +119,29 @@ est_full_hmm_with_global_error <- function(input.map, error=NULL, tol=10e-4,
       colnames(a.temp)<-a[,1]
       gen[[i]]<-a.temp
     }
-    for(i in 1:length(input.map$maps))
-    {
-      YP<-input.map$maps[[i]]$seq.ph$P
-      YQ<-input.map$maps[[i]]$seq.ph$Q
-      map<-poly_hmm_est(m = as.numeric(input.map$info$m),
-                        n.mrk = as.numeric(input.map$info$n.mrk),
-                        n.ind = as.numeric(length(gen)),
-                        p = as.numeric(unlist(YP)),
-                        dp = as.numeric(cumsum(c(0, sapply(YP, function(x) sum(length(x)))))),
-                        q = as.numeric(unlist(YQ)),
-                        dq = as.numeric(cumsum(c(0, sapply(YQ, function(x) sum(length(x)))))),
-                        g = as.double(unlist(gen)),
-                        rf = as.double(input.map$maps[[i]]$seq.rf),
-                        verbose = verbose,
-                        tol = tol)
-      output.seq$maps[[i]]$seq.rf<-map$rf
-      output.seq$maps[[i]]$loglike<-map$loglike
-    }
-    return(output.seq)
   }
+  cat("
+ ----------------------------------------------
+ INFO: running HMM using full transition space:
+       this operation may take a while.
+-----------------------------------------------\n")
+  for(i in 1:length(input.map$maps))
+  {
+    YP<-input.map$maps[[i]]$seq.ph$P
+    YQ<-input.map$maps[[i]]$seq.ph$Q
+    map<-poly_hmm_est(m = as.numeric(input.map$info$m),
+                      n.mrk = as.numeric(input.map$info$n.mrk),
+                      n.ind = as.numeric(length(gen)),
+                      p = as.numeric(unlist(YP)),
+                      dp = as.numeric(cumsum(c(0, sapply(YP, function(x) sum(length(x)))))),
+                      q = as.numeric(unlist(YQ)),
+                      dq = as.numeric(cumsum(c(0, sapply(YQ, function(x) sum(length(x)))))),
+                      g = as.double(unlist(gen)),
+                      rf = as.double(input.map$maps[[i]]$seq.rf),
+                      verbose = verbose,
+                      tol = tol)
+    output.seq$maps[[i]]$seq.rf<-map$rf
+    output.seq$maps[[i]]$loglike<-map$loglike
+  }
+  return(output.seq)
 }
