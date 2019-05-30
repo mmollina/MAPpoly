@@ -18,11 +18,17 @@ To install `mappoly` from Git Hub use
 devtools::install_github("mmollina/mappoly")
 ```
 
-# Tutorial
+# Vignettes
 
 1. [Building a genetic map in an hexaploid full-sib population using MAPpoly](https://mmollina.github.io/MAPpoly/)
 2. [Building a genetic map using potato genotype data from SolCAP](https://mmollina.github.io/tutorials/solcap/solcap_example.html)
-
+3. Dataset examples
+  3.1 [Hexaploid simulation with dosage call in MAPpoly format](https://github.com/mmollina/tutorials/blob/master/datasets/hexafake)
+  3.2 [Hexaploid simulation with dosage probabilities in MAPpoly format](https://github.com/mmollina/tutorials/blob/master/datasets/hexafake_geno_dist)
+  3.3 [Tetraploid potato with dosage call in MAPpoly format](https://github.com/mmollina/tutorials/blob/master/datasets/SolCAP_dosage)
+  3.4 [Tetraploid potato with dosage call in CSV format](https://github.com/mmollina/tutorials/blob/master/datasets/tetra_solcap.csv)
+  3.5 [Tetraploid potato with dosage probabilities in MAPpoly format](https://github.com/mmollina/tutorials/blob/master/datasets/SolCAP)
+  
 # Acknowledgment 
 
 This package has been developed as part of the [Genomic Tools for Sweetpotato Improvement project](https://sweetpotatogenomics.cals.ncsu.edu/) (GT4SP), funded by [Bill & Melinda Gates Foundation](https://www.gatesfoundation.org/).
