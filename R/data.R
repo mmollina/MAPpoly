@@ -35,7 +35,7 @@
 #'
 #' A dataset of an hipotetical autohexaploid full-sib population 
 #' containing three homology groups. This data set contains the
-#' probability distribution of the genotypes and 2% of missing data, 
+#' probability distribution of the genotypes and 2\% of missing data, 
 #' but is essentialy the same data set found in \code{\link[mappoly]{hexafake}}
 #'
 #' @format An object of class \code{mappoly.data} which contains a
@@ -190,7 +190,7 @@
 #' }
 #' 
 #' @rdname solcap.maps
-"solcap.map"
+"solcap.dose.map"
 #' @rdname solcap.maps
 "solcap.mds.map"
 #' @rdname solcap.maps

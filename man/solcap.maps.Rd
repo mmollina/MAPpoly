@@ -3,6 +3,7 @@
 \docType{data}
 \name{solcap.maps}
 \alias{solcap.maps}
+\alias{solcap.dose.map}
 \alias{solcap.map}
 \alias{solcap.mds.map}
 \alias{solcap.prior.map}
@@ -19,7 +20,7 @@ representing one linkage group.
     \item{solcap.err.map}{genetic map using genomic order, dosage call and global calling error}     
 }}
 \usage{
-solcap.map
+solcap.dose.map
 
 solcap.mds.map
 

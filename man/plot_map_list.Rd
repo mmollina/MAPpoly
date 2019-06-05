@@ -34,17 +34,19 @@ Plot a genetic map
  
  w<-NULL
  for(i in 1:12)
-   w<-c(w, c(solcap.mds.map[i],
-             solcap.map[i], 
+   w<-c(w, c(solcap.dose.map[i], 
              solcap.prior.map[i],
              solcap.err.map[i]))
              
- names(w) <- apply(expand.grid(c("mds", "gen", "pri", "err"), paste0("LG_", 1:12), 
+ names(w) <- apply(expand.grid(c("dose", "prior", "error"), paste0("LG_", 1:12), 
                              stringsAsFactors = FALSE)[,2:1], 1, paste, 
                  collapse = "_")
- op <- par(cex.axis = .5)
- plot_map_list(w, horiz = FALSE, col = rep(gg_color_hue(4), 12))
+                 
+ op <- par(cex.axis = .7)
+ plot_map_list(w, horiz = FALSE, col = rep(gg_color_hue(3), 12))
  par(op)
+ legend("bottomright", legend = c("Dosage based", "Prior", "Error"), 
+         pch=15, col = rep(gg_color_hue(3)))
  }
  
 }

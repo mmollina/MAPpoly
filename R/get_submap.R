@@ -146,8 +146,9 @@ get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf =
     The recombination fractions provided were
     obtained using the marker positions in the 
     input map; For accurate values, plese 
-    reestimate the map using functions 'reest_rf' 
-    or 'reest_map_geno_dist'")
+    reestimate the map using functions 'reest_rf', 
+    'est_full_hmm_with_global_error' or 
+    'est_full_hmm_with_prior_dist'")
   output.map$maps[[i.lpc]]$seq.rf <- rf.vec
   output.map$maps[[i.lpc]]$seq.num <- input.map$maps[[i.lpc]]$seq.num[mrk.pos]
   output.map$maps[[i.lpc]]$seq.ph$P <- input.map$maps[[i.lpc]]$seq.ph$P[mrk.pos]

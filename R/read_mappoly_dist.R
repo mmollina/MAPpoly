@@ -70,7 +70,18 @@
 #'     \item{phen}{a matrix containing the phenotypic data. The rows
 #'                 corespond to the trais and the columns correspond
 #'                 to the individuals}
+#' @examples
+#' \dontrun{
+#'     solcap.file <- system.file('extdata', 'SolCAP.bz2', package = 'mappoly')
+#'     dat <- read_geno_dist(file.in  = solcap.file)
+#'     print(tetra.solcap, detailed = TRUE)
 #'
+#'     ## Same data set
+#'     data("tetra.solcap.geno.dist")
+#'     
+#'     identical(tetra.solcap.geno.dist, dat)
+#'     
+#'}
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
