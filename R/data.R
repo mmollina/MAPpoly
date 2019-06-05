@@ -125,7 +125,7 @@
 
 #' Autotetraploid potato dataset with genotype probabilities.
 #'
-#' #' A data set of the B2721 population which derived from is a cross between 
+#' A data set of the B2721 population which derived from is a cross between 
 #' two tetraploid potato varieties: Atlantic × B1829-5. The population comprises 160 
 #' offsprings genotyped with the SolCAP Infinium 8303 potato array. The original data 
 #' set can be found in [The Solanaceae Coordinated Agricultural Project (SolCAP) webpage](http://solcap.msu.edu/potato_infinium.shtml) 
@@ -170,5 +170,31 @@
 #' }
 "tetra.solcap.geno.dist"
 
-
+#' @name solcap.maps
+#' @aliases solcap.map
+#' @aliases solcap.mds.map
+#' @aliases solcap.prior.map
+#' @aliases solcap.err.map
+#' 
+#' @title Solcap Maps
+#' 
+#' Resulting maps from \code{\link[mappoly]{tetra.solcap}} and \code{\link[mappoly]{tetra.solcap.geno.dist}} datasets.
+#'
+#' @format All resulting maps have the same format: a list containing 12 objects of class \code{mappoly.map}, each one 
+#' representing one linkage group. 
+#' \describe{
+#'     \item{solcap.map}{genetic map using genomic order and dosage call}
+#'     \item{solcap.mds.map}{genetic map using \code{\link[mappoly]{mds_mappoly} order and dosage call}}
+#'     \item{solcap.prior.map}{genetic map using genomic order and prior probability distribution}
+#'     \item{solcap.err.map}{genetic map using genomic order, dosage call and global calling error}     
+#' }
+#' 
+#' @rdname solcap.maps
+"solcap.map"
+#' @rdname solcap.maps
+"solcap.mds.map"
+#' @rdname solcap.maps
+"solcap.prior.map"
+#' @rdname solcap.maps
+"solcap.err.map"
 

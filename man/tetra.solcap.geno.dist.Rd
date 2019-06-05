@@ -41,7 +41,7 @@
 tetra.solcap.geno.dist
 }
 \description{
-#' A data set of the B2721 population which derived from is a cross between 
+A data set of the B2721 population which derived from is a cross between 
 two tetraploid potato varieties: Atlantic × B1829-5. The population comprises 160 
 offsprings genotyped with the SolCAP Infinium 8303 potato array. The original data 
 set can be found in [The Solanaceae Coordinated Agricultural Project (SolCAP) webpage](http://solcap.msu.edu/potato_infinium.shtml) 
