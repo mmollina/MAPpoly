@@ -94,18 +94,16 @@
 #'     ## Re-estimating the map with the most likely configuration
 #'     subset.map1 <- est_rf_hmm_single(input.seq = unique.mrks,
 #'                                     input.ph.single = subset.map$maps[[1]]$seq.ph,
-#'                                     tol = 10e-4,
+#'                                     tol = 10e-3,
 #'                                     verbose = TRUE)
 #'
 #'     subset.map$maps[[1]]$seq.ph <- subset.map1$seq.ph
+#'     
+#'     plot(subset.map)
 #'
 #'      ## Retrieving simulated linkage phase
-#'      sim.ph.P.file <- system.file('doc', 'phase_sim_hexa_P.csv', package = 'mappoly')
-#'      ph.P <- read.csv2(sim.ph.P.file)
-#'      ph.P <- ph_matrix_to_list(ph.P[1:50,-1])
-#'      sim.ph.Q.file <- system.file('doc', 'phase_sim_hexa_Q.csv', package = 'mappoly')
-#'      ph.Q <- read.csv2(sim.ph.Q.file)
-#'      ph.Q <- ph_matrix_to_list(ph.Q[1:50,-1])
+#'      ph.P <- maps.hexafake[[1]]$maps[[1]]$seq.ph$P
+#'      ph.Q <- maps.hexafake[[1]]$maps[[1]]$seq.ph$Q
 #'
 #'      ## Estimated linkage phase
 #'      ph.P.est <- subset.map$maps[[1]]$seq.ph$P
@@ -113,10 +111,6 @@
 #'
 #'      compare_haplotypes(m = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
 #'      compare_haplotypes(m = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
-#'
-#'      try(dev.off(), silent = TRUE)
-#'      plot(subset.map, 1)
-#'
 #'    }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -299,15 +293,15 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #' @examples
 #'  \dontrun{
 #'     data(hexafake)
-#'     mrk.subset<-make_seq_mappoly(hexafake, 'seq1')
+#'     mrk.subset<-make_seq_mappoly(hexafake, 1:50)
 #'     red.mrk<-elim_redundant(mrk.subset)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'     counts.web<-cache_counts_twopt(unique.mrks, get.from.web = TRUE)
 #'     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
 #'                                   count.cache = counts.web,
-#'                                   n.clusters = 16,
+#'                                   n.clusters = 1,
 #'                                   verbose=TRUE)
-#'     system.time(
+#'                                   
 #'     subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
 #'                                         thres.twopt = 5,
 #'                                         thres.hmm = 10,
@@ -315,16 +309,14 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'                                         tol = 0.1,
 #'                                         tol.final = 10e-3,
 #'                                         twopt = subset.pairs,
-#'                                         verbose = TRUE))
+#'                                         verbose = TRUE)
+#'                                         
+#'      plot(subset.map)
 #'
 #'      ## Retrieving simulated linkage phase
-#'      sim.ph.P.file <- system.file('doc', 'phase_sim_hexa_P.csv', package = 'mappoly')
-#'      ph.P <- read.csv2(sim.ph.P.file)
-#'      ph.P <- ph_matrix_to_list(ph.P[,-1])
-#'      sim.ph.Q.file <- system.file('doc', 'phase_sim_hexa_Q.csv', package = 'mappoly')
-#'      ph.Q <- read.csv2(sim.ph.Q.file)
-#'      ph.Q <- ph_matrix_to_list(ph.Q[,-1])
-#'
+#'      ph.P <- maps.hexafake[[1]]$maps[[1]]$seq.ph$P
+#'      ph.Q <- maps.hexafake[[1]]$maps[[1]]$seq.ph$Q
+#'      
 #'      ## Estimated linkage phase
 #'      ph.P.est <- subset.map$maps[[1]]$seq.ph$P
 #'      ph.Q.est <- subset.map$maps[[1]]$seq.ph$Q
@@ -333,9 +325,39 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'      ##from the simulated ones
 #'      compare_haplotypes(m = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
 #'      compare_haplotypes(m = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
-#'
-#'      plot(subset.map, 1)
-#'
+#'      
+#'      
+#'      ############# Autotetraploid example
+#'      
+#'     data(tetra.solcap)
+#'     s1<-make_seq_mappoly(tetra.solcap, 'seq1')
+#'     red.mrk<-elim_redundant(s1)
+#'     s1.unique.mrks<-make_seq_mappoly(red.mrk)
+#'     counts.web<-cache_counts_twopt(s1.unique.mrks, get.from.web = TRUE)
+#'     s1.pairs<-est_pairwise_rf(input.seq = s1.unique.mrks,
+#'                                   count.cache = counts.web,
+#'                                   n.clusters = 10,
+#'                                   verbose=TRUE)
+#'                                   
+#'     unique.gen.ord<-get_genomic_order(s1.unique.mrks)
+#'     
+#'     ## Selecting a subset of 100 markers at the beginning of chromosome 1 
+#'     s1.gen.subset<-make_seq_mappoly(tetra.solcap, rownames(unique.gen.ord)[1:100])
+#'     
+#'     system.time(s1.gen.subset.map <- est_rf_hmm_sequential(input.seq = s1.gen.subset,
+#'                                         start.set = 10,
+#'                                         thres.twopt = 10, 
+#'                                         thres.hmm = 10,
+#'                                         extend.tail = 50,
+#'                                         info.tail = TRUE, 
+#'                                         twopt = s1.pairs,
+#'                                         sub.map.size.diff.limit = 10, 
+#'                                         phase.number.limit = 40,
+#'                                         reestimate.single.ph.configuration = TRUE,
+#'                                         tol = 10e-3,
+#'                                         tol.final = 10e-4))
+#'      plot(s1.gen.subset.map)
+#'      
 #'    }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -539,6 +561,7 @@ est_rf_hmm_sequential<-function(input.seq,
   seq.final <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1), 
                                 arg = as.numeric(names(all.ph$config.to.test[[1]]$P)), 
                                 data.name = input.seq$data.name)
+  cat("\n------------------------------------------")
   if(verbose) cat("\nDone phasing", length(seq.final$seq.num), "markers\nReestimating final recombination fractions.")
   final.map <- est_rf_hmm(input.seq = seq.final,
                           input.ph = all.ph,
@@ -547,6 +570,13 @@ est_rf_hmm_sequential<-function(input.seq,
                           verbose = FALSE,
                           reestimate.single.ph.configuration = TRUE,
                           high.prec = TRUE)
+  if(verbose) {
+    cat("\n------------------------------------------")
+    cat("\nMarkers in the initial sequence  : ", length(input.seq$seq.num), sep = "")
+    cat("\nMaped markers                    : ", final.map$info$n.mrk, " (", 
+        round(100*final.map$info$n.mrk/length(input.seq$seq.num),1) ,"%)", sep = "")
+    cat("\n------------------------------------------\n")
+  }
   return(final.map)
 }
 
