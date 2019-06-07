@@ -25,6 +25,7 @@ Imports:
     spam,
     maps,
     berryFunctions,
+    rstudioapi,
     plot3D,
     dplyr,
     crayon,

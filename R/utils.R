@@ -90,6 +90,38 @@ dist_prob_to_class <- function(geno, prob.thres = 0.95) {
   return(z[unique(geno$mrk),])
 }
 
+#' Msg function
+#'
+#' @param void interfunction to be documented
+#' @keywords internal
+#' @export
+#' @importFrom cli rule
+msg <- function(text, line = 1)
+    cli::rule(line = line, right = text) %>%
+  text_col() %>%
+  message()
+
+
+#' @importFrom rstudioapi isAvailable hasFun getThemeInfo
+#' @importFrom crayon white black
+
+text_col <- function(x) {
+  # If RStudio not available, messages already printed in black
+  if (!rstudioapi::isAvailable()) {
+    return(x)
+  }
+  
+  if (!rstudioapi::hasFun("getThemeInfo")) {
+    return(x)
+  }
+  
+  theme <- rstudioapi::getThemeInfo()
+  
+  if (isTRUE(theme$dark)) crayon::white(x) else crayon::black(x)
+  
+}
+
+
 #' Map functions
 #'
 #' @param void interfunction to be documented

@@ -182,20 +182,20 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   ret.map.no.rf.estimation <- FALSE
   if(n.ph == 1 && !reestimate.single.ph.configuration)
     ret.map.no.rf.estimation <- TRUE
-  if (verbose) {
-    cat("\nNumber of linkage phase configurations: ", n.ph)
-    cat("\n---------------------------------------------\n|\n|--->")
-  }
+  #if (verbose) {
+  #  cat("\n    Number of linkage phase configurations: ")
+    #cat("\n---------------------------------------------\n|\n|--->")
+  #}
   maps <- vector("list", n.ph)
   if (verbose){
-    txt<-paste0(n.ph, "phase(s): ")
+    txt<-paste0("       ",n.ph, " phase(s): ")
     cat(txt)
   }
   for (i in 1:n.ph) {
     if (verbose) {
       if((i+1)%%20==0)
         cat("\n", paste0(rep(" ", nchar(txt)), collapse = ""))
-      cat(". ")
+      cat(".")
     }
     if(est.given.0.rf){
       rf.temp <- rep(1e-5, length(input.seq$seq.num) - 1)
@@ -214,6 +214,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
                                    ret.map.no.rf.estimation = ret.map.no.rf.estimation, 
                                    high.prec = high.prec)
   }
+  #cat("\n")
   id<-order(sapply(maps, function(x) x$loglike), decreasing = TRUE)
   maps<-maps[id]
   if (verbose)
@@ -328,7 +329,6 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'      
 #'      
 #'      ############# Autotetraploid example
-#'      
 #'     data(tetra.solcap)
 #'     s1<-make_seq_mappoly(tetra.solcap, 'seq1')
 #'     red.mrk<-elim_redundant(s1)
@@ -342,22 +342,21 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'     unique.gen.ord<-get_genomic_order(s1.unique.mrks)
 #'     
 #'     ## Selecting a subset of 100 markers at the beginning of chromosome 1 
-#'     s1.gen.subset<-make_seq_mappoly(tetra.solcap, rownames(unique.gen.ord)[1:100])
+#'     s1.gen.subset<-make_seq_mappoly(tetra.solcap, rownames(unique.gen.ord)[1:30])
 #'     
-#'     system.time(s1.gen.subset.map <- est_rf_hmm_sequential(input.seq = s1.gen.subset,
-#'                                         start.set = 10,
-#'                                         thres.twopt = 10, 
-#'                                         thres.hmm = 10,
-#'                                         extend.tail = 50,
-#'                                         info.tail = TRUE, 
-#'                                         twopt = s1.pairs,
-#'                                         sub.map.size.diff.limit = 10, 
-#'                                         phase.number.limit = 40,
-#'                                         reestimate.single.ph.configuration = TRUE,
-#'                                         tol = 10e-3,
-#'                                         tol.final = 10e-4))
+#'     s1.gen.subset.map <- est_rf_hmm_sequential(input.seq = s1.gen.subset,
+#'                                                start.set = 10,
+#'                                                thres.twopt = 10, 
+#'                                                thres.hmm = 10,
+#'                                                extend.tail = 50,
+#'                                                info.tail = TRUE, 
+#'                                                twopt = s1.pairs,
+#'                                                sub.map.size.diff.limit = 10, 
+#'                                                phase.number.limit = 40,
+#'                                                reestimate.single.ph.configuration = TRUE,
+#'                                                tol = 10e-3,
+#'                                                tol.final = 10e-5)
 #'      plot(s1.gen.subset.map)
-#'      
 #'    }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -369,6 +368,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'     models, _submited_. \url{https://doi.org/10.1101/415232}
 #'
 #' @importFrom utils head
+#' @importFrom cli rule
 #' @export est_rf_hmm_sequential
 est_rf_hmm_sequential<-function(input.seq,
                                 twopt,
@@ -394,11 +394,10 @@ est_rf_hmm_sequential<-function(input.seq,
          " is not an object of class 'poly.est.two.pts.pairwise'")
   ## Information about the map
   if(verbose) {
-    cat("Number of markers :", length(input.seq$seq.num), "\n")
-    cat("----------------------------------------\n")
+    cli::cat_line("Number of markers: ", length(input.seq$seq.num))
+    msg("Initial sequence", line = 2)
   }
-  if(is.null(extend.tail))
-    extend.tail<-length(input.seq$seq.num)
+  extend.tail<-length(input.seq$seq.num)
   #####
   ## Map in case of two markers
   #####
@@ -417,7 +416,7 @@ est_rf_hmm_sequential<-function(input.seq,
   #####
   if(start.set > length(input.seq$seq.num))
     start.set <- length(input.seq$seq.num)
-  if(verbose) cat("Initial sequence:", start.set, "markers...\n")
+  if(verbose) cat(start.set, " markers...\n", sep = "")
   cte<-0
   rf.temp<-c(Inf, Inf)
   while(any(rf.temp >= sub.map.size.diff.limit))
@@ -427,7 +426,7 @@ est_rf_hmm_sequential<-function(input.seq,
       cat("Impossible build a map using the given thresholds\n")
       stop()
     }
-    if(verbose) cat("Trying sequence:", cte:(start.set+cte-1), "...\n")
+    if(verbose) cat(cli::symbol$bullet, "   Trying sequence:", cte:(start.set+cte-1), "...\n")
     cur.seq <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1), na.omit(input.seq$seq.num[cte:(start.set+cte-1)]), data.name = input.seq$data.name)
     input.ph <- ls_linkage_phases(input.seq = cur.seq,
                                   thres = thres.twopt,
@@ -440,7 +439,8 @@ est_rf_hmm_sequential<-function(input.seq,
     cur.map <- reest_rf(cur.map, tol=tol.final, verbose = FALSE)
     rf.temp<-imf_h(cur.map$maps[[1]]$seq.rf)
   }
-  if(verbose) cat("Done with initial sequence.\n")
+  if(verbose)
+    msg("Done with initial sequence", line = 2)
   if(start.set >= length(input.seq$seq.num)){
     if(verbose) cat("\nDone phasing", cur.map$info$n.mrk, "markers\nReestimating final recombination fractions.")
     return(reest_rf(cur.map, tol=tol.final))
@@ -561,8 +561,9 @@ est_rf_hmm_sequential<-function(input.seq,
   seq.final <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1), 
                                 arg = as.numeric(names(all.ph$config.to.test[[1]]$P)), 
                                 data.name = input.seq$data.name)
-  cat("\n------------------------------------------")
-  if(verbose) cat("\nDone phasing", length(seq.final$seq.num), "markers\nReestimating final recombination fractions.")
+  #msg(paste("Done phasing", length(seq.final$seq.num), "markers"))
+  msg("Reestimating final recombination fractions", line = 2)
+  cat("")
   final.map <- est_rf_hmm(input.seq = seq.final,
                           input.ph = all.ph,
                           twopt = twopt,
@@ -571,11 +572,11 @@ est_rf_hmm_sequential<-function(input.seq,
                           reestimate.single.ph.configuration = TRUE,
                           high.prec = TRUE)
   if(verbose) {
-    cat("\n------------------------------------------")
-    cat("\nMarkers in the initial sequence  : ", length(input.seq$seq.num), sep = "")
-    cat("\nMaped markers                    : ", final.map$info$n.mrk, " (", 
-        round(100*final.map$info$n.mrk/length(input.seq$seq.num),1) ,"%)", sep = "")
-    cat("\n------------------------------------------\n")
+    #cat("\n------------------------------------------")
+    cat("Markers in the initial sequence: ", length(input.seq$seq.num), sep = "")
+    cat("\nMaped markers                  : ", final.map$info$n.mrk, " (", 
+        round(100*final.map$info$n.mrk/length(input.seq$seq.num),1) ,"%)\n", sep = "")
+    msg("", line = 2)
   }
   return(final.map)
 }
