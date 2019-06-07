@@ -39,7 +39,6 @@
 #include <vector>
 #include "combinatorial.h"
 #include "hmm_elements.h"
-#include "pairwise_estimation.h"
 #include <math.h>
 #include <Rmath.h>
 #include <Rcpp.h>
