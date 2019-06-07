@@ -19,7 +19,7 @@
  */
 
 /*
- File: est_map_hmm_given_dose.cpp
+ File: calc_genoprob.h
 
  Description: Set of functions to be used with software R
 

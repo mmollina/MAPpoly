@@ -12,8 +12,9 @@ est_rf_hmm(input.seq, input.ph = NULL, thres = 0.5, twopt = NULL,
 
 \method{print}{mappoly.map}(x, detailed = FALSE, ...)
 
-\method{plot}{mappoly.map}(x, col.P = "#e41a1c", col.Q = "#377eb8",
-  mrk.names = FALSE, cex = 1, config = "best", ...)
+\method{plot}{mappoly.map}(x, phase = TRUE, col.P = "#e41a1c",
+  col.Q = "#377eb8", mrk.names = FALSE, cex = 1, config = "best",
+  ...)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}.}
@@ -47,10 +48,12 @@ long double numbers in the HMM procedure.}
 
 \item{x}{an object of one of the classes \code{mappoly.map}}
 
-\item{detailed}{if TRUE, prints the linkage phase configuration and the marker 
-position for all maps. if FALSE prints a map summary}
+\item{detailed}{logical. if TRUE, prints the linkage phase configuration and the marker 
+position for all maps. if FALSE prints a map summary.}
 
 \item{...}{currently ignored}
+
+\item{phase}{logical. If \code{TRUE} (default) plots the phase configuration for both parents}
 
 \item{mrk.names}{if TRUE, marker names are displayed.}
 
