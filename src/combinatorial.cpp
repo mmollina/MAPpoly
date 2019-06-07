@@ -93,7 +93,7 @@ void allocate_alpha(int n_pos, int n_gen, double ***alpha)
  **********************************************************************/
 void allocate_genoprob_long(int n_pos, int n_gen, int n_ind, long double ****Genoprob)
 {
-  int i, j;
+  int i;
   long double **a;
 
   *Genoprob = (long double ***)R_alloc(n_gen, sizeof(long double **));

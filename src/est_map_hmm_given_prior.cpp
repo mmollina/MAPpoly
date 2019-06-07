@@ -403,7 +403,6 @@ RcppExport SEXP calc_genoprob_prior(SEXP m_R,
 {
   int m = Rcpp::as<int>(m_R);
   int verbose = Rcpp::as<int>(verbose_R);
-  long double loglike = Rcpp::as<long double>(loglike_R);
   std::vector<int> p = Rcpp::as<std::vector<int> >(p_R);
   std::vector<int> dp = Rcpp::as<std::vector<int> >(dp_R);
   std::vector<int> q = Rcpp::as<std::vector<int> >(q_R);
@@ -413,8 +412,7 @@ RcppExport SEXP calc_genoprob_prior(SEXP m_R,
   std::vector<long double> probs = Rcpp::as<std::vector<long double> >(probsR);
   int gam = nChoosek(m, m/2);
   int gam_pow_2 = gam*gam;
-  int  flag, k1, k2, j, it;
-  long double s;
+  int  k1, k2;
   int n_mar = Rcpp::as<int>(n_mar_R);
   int n_ind = Rcpp::as<int>(n_ind_R);
   std::vector<double> rec(gam_pow_2);

@@ -45,9 +45,11 @@
 #' long double numbers in the HMM procedure. 
 #' 
 #' @param x an object of one of the classes \code{mappoly.map}
+#' 
+#' @param detailed logical. if TRUE, prints the linkage phase configuration and the marker 
+#' position for all maps. if FALSE prints a map summary. 
 #'
-#' @param detailed if TRUE, prints the linkage phase configuration and the marker 
-#' position for all maps. if FALSE prints a map summary 
+#' @param phase logical. If \code{TRUE} (default) plots the phase configuration for both parents 
 #'
 #' @param col.cte.P a single value or a vector with size equal to the number of 
 #' markers in the map indicating the color of the allelic variants for parent P. 
@@ -601,67 +603,75 @@ print.mappoly.map <- function(x, detailed = FALSE, ...) {
 #' @importFrom grDevices rgb
 #' @keywords internal
 #' @export
-plot.mappoly.map <- function(x, 
+plot.mappoly.map <- function(x,
+                             phase = TRUE,
                              col.P = "#e41a1c",
                              col.Q = "#377eb8",
-                             mrk.names = FALSE, cex = 1, config = "best", ...) {
-  grid::grid.newpage()
-  m <- x$info$m
-  vp1 <- grid::viewport(x = 0, y = 0.8, width = 1, height = 0.15, just = c("left", "bottom"))
-  vp2 <- grid::viewport(x = 0, y = 0.6, width = 1, height = 0.15, just = c("left", "bottom"))
-  vp3 <- grid::viewport(x = 0.04, y = 0.4, width = 0.92, height = 0.2, just = c("left", "bottom"))
-  grid::pushViewport(vp1)
-  draw_homologous(m, y.pos = 0.1, h.names = letters[1:m], parent = "P1")
-  if (config == "best")
-    config <- which.min(abs(get_LOD(x)))
-  if (!is.numeric(config))
-    stop("config must be numeic")
-  if (length(x$maps) < config) {
-    warning("config should be equal or less than", length(x$maps), "\nplotting the best configuration")
-    config <- which.min(abs(get_LOD(x, sorted = FALSE)))
+                             mrk.names = FALSE, 
+                             cex = 1, 
+                             config = "best", ...) {
+  
+  if(phase){
+    grid::grid.newpage()
+    m <- x$info$m
+    vp1 <- grid::viewport(x = 0, y = 0.8, width = 1, height = 0.15, just = c("left", "bottom"))
+    vp2 <- grid::viewport(x = 0, y = 0.6, width = 1, height = 0.15, just = c("left", "bottom"))
+    vp3 <- grid::viewport(x = 0.04, y = 0.4, width = 0.92, height = 0.2, just = c("left", "bottom"))
+    grid::pushViewport(vp1)
+    draw_homologous(m, y.pos = 0.1, h.names = letters[1:m], parent = "P1")
+    if (config == "best")
+      config <- which.min(abs(get_LOD(x)))
+    if (!is.numeric(config))
+      stop("config must be numeic")
+    if (length(x$maps) < config) {
+      warning("config should be equal or less than", length(x$maps), "\nplotting the best configuration")
+      config <- which.min(abs(get_LOD(x, sorted = FALSE)))
+    }
+    P <- x$maps[[config]]$seq.ph$P
+    if(length(col.P)==1)
+      col.P<-rep(col.P, length(P))
+    y <- seq(from = 0.05, to = 0.95, length.out = length(P))
+    for (i in 1:length(P))
+      draw_alleles(m, y[i], P[[i]], col.cte = col.P[i], y.pos = 0.1)
+    grid::upViewport()
+    grid::pushViewport(vp2)
+    draw_homologous(m, h.names = letters[(m+1):(2*m)], parent = "P2")
+    Q <- x$maps[[config]]$seq.ph$Q
+    if(length(col.Q)==1)
+      col.Q<-rep(col.Q, length(Q))
+    y <- seq(from = 0.05, to = 0.95, length.out = length(Q))
+    for (i in 1:length(Q))
+      draw_alleles(m, y[i], Q[[i]], col.cte = col.Q[i])
+    grid::upViewport()
+    grid::pushViewport(vp3)
+    d <- cumsum(c(0, imf_h(x$maps[[config]]$seq.rf)))
+    x1 <- d/max(d)
+    grid::grid.roundrect(x = -0.01, y = 0.5, width = 1.02, height = 0.07, r = grid::unit(2, "mm"), gp = grid::gpar(fill = "white", col = "black", lwd = 0.7), just = c("left",                                                                                                                                           "center"))
+    x2 <- seq(from = 0.01125, to = 0.99, length.out = length(x1))
+    id<-x$maps[[config]]$seq.num
+    id<-paste0(get(x$info$data.name, pos =1)$mrk.names[id], " - (", id, ")")
+    for (i in 1:length(x1)) {
+      grid::grid.lines(x = x1[i], y = c(0.45, 0.55), gp = grid::gpar(lwd = 1))
+      grid::grid.lines(x = c(x1[i], x2[i]), y = c(0.55, 1.19), gp = grid::gpar(lwd = 0.5, lty = 1, col = "gray"))
+      if(mrk.names){
+        grid::grid.text(label = id[i], x = x2[i], y = 1.22,
+                        rot = 90, just = "right", gp = grid::gpar(cex = cex))      
+      } 
+    }
+    dmax <- max(d)
+    d1<-pretty(seq(0, dmax, length.out = 10), n = 10)
+    if(rev(d1)[1] > dmax) d1<-d1[-length(d1)]
+    x3 <- seq(from = 0, to = max(d1)/dmax, length.out = length(d1))
+    grid::grid.lines(x = c(0, max(x3)), y = c(0.2, 0.2), gp = grid::gpar(lwd = 0.5))
+    for (i in 1:length(x3)) {
+      grid::grid.lines(x = x3[i], y = c(0.2, 0.17), gp = grid::gpar(lwd = 2))
+      grid::grid.text(label = round(d1[i], 1), x = x3[i], y = 0.155, rot = 90, just = "right", gp = grid::gpar(cex = 0.8))
+    }
+    grid::grid.text(label = "centimorgans (cM)", x = 0.5, y = -0.5)
+    upViewport()
+  } else {
+    plot_map_list(x) 
   }
-  P <- x$maps[[config]]$seq.ph$P
-  if(length(col.P)==1)
-    col.P<-rep(col.P, length(P))
-  y <- seq(from = 0.05, to = 0.95, length.out = length(P))
-  for (i in 1:length(P))
-    draw_alleles(m, y[i], P[[i]], col.cte = col.P[i], y.pos = 0.1)
-  grid::upViewport()
-  grid::pushViewport(vp2)
-  draw_homologous(m, h.names = letters[(m+1):(2*m)], parent = "P2")
-  Q <- x$maps[[config]]$seq.ph$Q
-  if(length(col.Q)==1)
-    col.Q<-rep(col.Q, length(Q))
-  y <- seq(from = 0.05, to = 0.95, length.out = length(Q))
-  for (i in 1:length(Q))
-    draw_alleles(m, y[i], Q[[i]], col.cte = col.Q[i])
-  grid::upViewport()
-  grid::pushViewport(vp3)
-  d <- cumsum(c(0, imf_h(x$maps[[config]]$seq.rf)))
-  x1 <- d/max(d)
-  grid::grid.roundrect(x = -0.01, y = 0.5, width = 1.02, height = 0.07, r = grid::unit(2, "mm"), gp = grid::gpar(fill = "white", col = "black", lwd = 0.7), just = c("left",                                                                                                                                           "center"))
-  x2 <- seq(from = 0.01125, to = 0.99, length.out = length(x1))
-  id<-x$maps[[config]]$seq.num
-  id<-paste0(get(x$info$data.name, pos =1)$mrk.names[id], " - (", id, ")")
-  for (i in 1:length(x1)) {
-    grid::grid.lines(x = x1[i], y = c(0.45, 0.55), gp = grid::gpar(lwd = 1))
-    grid::grid.lines(x = c(x1[i], x2[i]), y = c(0.55, 1.19), gp = grid::gpar(lwd = 0.5, lty = 1, col = "gray"))
-    if(mrk.names){
-      grid::grid.text(label = id[i], x = x2[i], y = 1.22,
-                      rot = 90, just = "right", gp = grid::gpar(cex = cex))      
-    } 
-  }
-  dmax <- max(d)
-  d1<-pretty(seq(0, dmax, length.out = 10), n = 10)
-  if(rev(d1)[1] > dmax) d1<-d1[-length(d1)]
-  x3 <- seq(from = 0, to = max(d1)/dmax, length.out = length(d1))
-  grid::grid.lines(x = c(0, max(x3)), y = c(0.2, 0.2), gp = grid::gpar(lwd = 0.5))
-  for (i in 1:length(x3)) {
-    grid::grid.lines(x = x3[i], y = c(0.2, 0.17), gp = grid::gpar(lwd = 2))
-    grid::grid.text(label = round(d1[i], 1), x = x3[i], y = 0.155, rot = 90, just = "right", gp = grid::gpar(cex = 0.8))
-  }
-  grid::grid.text(label = "centimorgans (cM)", x = 0.5, y = -0.5)
-  upViewport()
 }
 
 #' draw homologous
