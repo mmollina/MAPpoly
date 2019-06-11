@@ -193,9 +193,9 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   }
   for (i in 1:n.ph) {
     if (verbose) {
-      if((i+1)%%20==0)
-        cat("\n", paste0(rep(" ", nchar(txt)), collapse = ""))
-      cat(".")
+      if((i+1)%%40==0)
+        cat("\n", paste0(rep(" ", nchar(txt)), collapse = ""), sep="")
+      cat(". ")
     }
     if(est.given.0.rf){
       rf.temp <- rep(1e-5, length(input.seq$seq.num) - 1)
@@ -302,7 +302,6 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'                                   count.cache = counts.web,
 #'                                   n.clusters = 1,
 #'                                   verbose=TRUE)
-#'                                   
 #'     subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
 #'                                         thres.twopt = 5,
 #'                                         thres.hmm = 10,
@@ -311,17 +310,16 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'                                         tol.final = 10e-3,
 #'                                         twopt = subset.pairs,
 #'                                         verbose = TRUE)
-#'                                         
+#'      print(subset.map, detailed = TRUE)
 #'      plot(subset.map)
-#'
+#'      plot(subset.map, phase = FALSE)
+#'      
 #'      ## Retrieving simulated linkage phase
 #'      ph.P <- maps.hexafake[[1]]$maps[[1]]$seq.ph$P
 #'      ph.Q <- maps.hexafake[[1]]$maps[[1]]$seq.ph$Q
-#'      
 #'      ## Estimated linkage phase
 #'      ph.P.est <- subset.map$maps[[1]]$seq.ph$P
 #'      ph.Q.est <- subset.map$maps[[1]]$seq.ph$Q
-#'
 #'      ##Notice that two estimated homologous in parent P are different
 #'      ##from the simulated ones
 #'      compare_haplotypes(m = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
@@ -338,12 +336,9 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'                                   count.cache = counts.web,
 #'                                   n.clusters = 10,
 #'                                   verbose=TRUE)
-#'                                   
 #'     unique.gen.ord<-get_genomic_order(s1.unique.mrks)
-#'     
 #'     ## Selecting a subset of 100 markers at the beginning of chromosome 1 
-#'     s1.gen.subset<-make_seq_mappoly(tetra.solcap, rownames(unique.gen.ord)[1:30])
-#'     
+#'     s1.gen.subset<-make_seq_mappoly(tetra.solcap, rownames(unique.gen.ord)[1:100])
 #'     s1.gen.subset.map <- est_rf_hmm_sequential(input.seq = s1.gen.subset,
 #'                                                start.set = 10,
 #'                                                thres.twopt = 10, 
@@ -351,12 +346,14 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'                                                extend.tail = 50,
 #'                                                info.tail = TRUE, 
 #'                                                twopt = s1.pairs,
-#'                                                sub.map.size.diff.limit = 10, 
+#'                                                sub.map.size.diff.limit = 5, 
 #'                                                phase.number.limit = 40,
 #'                                                reestimate.single.ph.configuration = TRUE,
 #'                                                tol = 10e-3,
 #'                                                tol.final = 10e-5)
+#'      print(s1.gen.subset.map, detailed = TRUE)
 #'      plot(s1.gen.subset.map)
+#'      plot(s1.gen.subset.map, phase = FALSE)
 #'    }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -426,7 +423,7 @@ est_rf_hmm_sequential<-function(input.seq,
       cat("Impossible build a map using the given thresholds\n")
       stop()
     }
-    if(verbose) cat(cli::symbol$bullet, "   Trying sequence:", cte:(start.set+cte-1), "...\n")
+    if(verbose) cat(cli::symbol$bullet, "   Trying sequence:", cte:(start.set+cte-1), ":\n")
     cur.seq <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1), na.omit(input.seq$seq.num[cte:(start.set+cte-1)]), data.name = input.seq$data.name)
     input.ph <- ls_linkage_phases(input.seq = cur.seq,
                                   thres = thres.twopt,
