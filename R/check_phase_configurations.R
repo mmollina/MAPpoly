@@ -297,25 +297,34 @@ get_rf_from_list <- function(twopt, ph.list) {
 #'
 #' @examples
 #'   \dontrun{
-#'     hexa_file<-system.file('extdata', 'hexa_fake', package = 'mappoly')
-#'     hexa_dat<-read_geno(file_in = hexa_file)
-#'     all_mrk<-make_seq_mappoly(hexa_dat, 'all')
-#'     counts_all_mrk_from_web<-cache_counts_twopt(all_mrk,
-#'                                                 get.from.web=TRUE)
-#'     all_pairs<-est_pairwise_rf(all_mrk, counts_all_mrk_from_web,
-#'                                n.clusters=2)
-#'
-#'     seq1<-make_seq_mappoly(hexa_dat, 'seq1')
-#'
-#'     l_seq1_3.0 <- ls_linkage_phases(input.seq = seq1, thres = 3, twopt = all_pairs)
-#'     l_seq1_3.0
-#'     plot(l_seq1_3.0)
-#'     l_seq1_0.5 <- ls_linkage_phases(input.seq = seq1, thres = 0.5, twopt = all_pairs)
-#'     l_seq1_0.5
-#'     plot(l_seq1_0.5)
-#'     l_seq1_0.1 <- ls_linkage_phases(input.seq = seq1, thres = 0.1, twopt = all_pairs)
-#'     l_seq1_0.1
-#'     plot(l_seq1_0.1)
+#'     seq.all.mrk <- make_seq_mappoly(hexafake, 'all')
+#'     id <- get_genomic_order(seq.all.mrk)
+#'     counts <- cache_counts_twopt(seq.all.mrk, get.from.web=TRUE)
+#'     seq10 <- make_seq_mappoly(hexafake, rownames(id)[1:10])
+#'     twopt<-est_pairwise_rf(seq10, counts)
+#'     
+#'     ## Using the first 10 markers 
+#'     l10.seq.3.0 <- ls_linkage_phases(input.seq = seq10, thres = 3, twopt = twopt)
+#'     l10.seq.3.0
+#'     plot(l10.seq.3.0)
+#'     l10.seq.2.0 <- ls_linkage_phases(input.seq = seq10, thres = 2.0, twopt = twopt)
+#'     l10.seq.2.0
+#'     plot(l10.seq.2.0)
+#'     l10.seq.1.0 <- ls_linkage_phases(input.seq = seq10, thres = 1.0, twopt = twopt)
+#'     l10.seq.1.0
+#'     plot(l10.seq.1.0)
+#'     
+#'     ## Using the first 5 markers 
+#'     seq5 <- make_seq_mappoly(hexafake, rownames(id)[1:5])
+#'     l5.seq.5.0 <- ls_linkage_phases(input.seq = seq5, thres = 5, twopt = twopt)
+#'     l5.seq.5.0
+#'     plot(l5.seq.5.0)
+#'     l5.seq.3.0 <- ls_linkage_phases(input.seq = seq5, thres = 3, twopt = twopt)
+#'     l5.seq.3.0
+#'     plot(l5.seq.3.0)
+#'     l5.seq.1.0 <- ls_linkage_phases(input.seq = seq5, thres = 1, twopt = twopt)
+#'     l5.seq.1.0
+#'     plot(l5.seq.1.0)
 #'     }
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
