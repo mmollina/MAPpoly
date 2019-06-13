@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_genoprob_error.R
 \name{calc_genoprob_error}
 \alias{calc_genoprob_error}
-\title{Compute the conditional QTL probabilities using global error}
+\title{Compute genotype conditional probabilities using global error}
 \usage{
 calc_genoprob_error(input.map, phase.config = "best", error = 0.01,
   verbose = TRUE)
@@ -24,7 +24,7 @@ calc_genoprob_error(input.map, phase.config = "best", error = 0.01,
 An object of class 'mappoly.genoprob'
 }
 \description{
-The conditional probabilities are calculeted for each marker.
+Conditional probabilities are calculeted for each marker.
 In this version, the probabilities are not calculated bewtween
 markers.
 }

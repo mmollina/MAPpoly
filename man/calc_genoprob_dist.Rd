@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_genoprob_dist.R
 \name{calc_genoprob_dist}
 \alias{calc_genoprob_dist}
-\title{Compute the conditional QTL probabilities using probability distribution of genotypes}
+\title{Compute genotype conditional probabilities using probability distribution of dosages}
 \usage{
 calc_genoprob_dist(input.map, dat.dist, phase.config = "best",
   verbose = TRUE)
@@ -25,7 +25,7 @@ genotypes.}
 An object of class 'mappoly.genoprob'
 }
 \description{
-The conditional probabilities are calculeted for each marker.
+Conditional probabilities are calculeted for each marker.
 In this version, the probabilities are not calculated bewtween
 markers.
 }

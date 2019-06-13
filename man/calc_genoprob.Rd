@@ -21,7 +21,7 @@ calc_genoprob(input.map, phase.config = "best", verbose = TRUE)
 An object of class 'mappoly.genoprob'
 }
 \description{
-The conditional probabilities are calculeted for each marker.
+Conditional probabilities are calculeted for each marker.
 In this version, the probabilities are not calculated bewtween
 markers (pseudomerkers).
 }
