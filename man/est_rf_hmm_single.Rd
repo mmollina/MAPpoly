@@ -14,4 +14,35 @@ est_rf_hmm_single(input.seq, input.ph.single, rf.temp = NULL, tol,
 \description{
 Multipoint analysis using Hidden Markov Models (single phase)
 }
+\examples{
+  \dontrun{
+    seq.all.mrk <- make_seq_mappoly(hexafake, 'all')
+    id <- get_genomic_order(seq.all.mrk)
+    counts <- cache_counts_twopt(seq.all.mrk, get.from.web=TRUE)
+    seq5 <- make_seq_mappoly(hexafake, rownames(id)[1:5])
+    twopt<-est_pairwise_rf(seq5, counts)
+    
+    ## Using the first 10 markers 
+    l5 <- ls_linkage_phases(input.seq = seq5, thres = 5, twopt = twopt)
+    plot(l5)
+    
+    ## Evaluating 9 linkage phase configurations using HMM
+    maps1 <- vector("list", length(l5$config.to.test))
+    for(i in 1:length(maps1))
+    maps1[[i]] <- est_rf_hmm_single(seq5, l5$config.to.test[[i]], 
+                                   tol = 10e-3, verbose = TRUE, 
+                                   high.prec = FALSE)
+   (best<-which.max(sapply(maps1, function(x) x$loglike)))
+   dist1<-round(cumsum(c(0, imf_h(maps1[[best]]$seq.rf))),2)
+   
+   ## Same thing using automatic search
+   maps2<-est_rf_hmm(input.seq = seq5, twopt = twopt, thres = 5, 
+                     verbose = TRUE, tol = 10e-3, high.prec = FALSE)
+   plot(maps2)
+   dist1
+ }
+}
+\author{
+Marcelo Mollinari, \email{mmollin@ncsu.edu}
+}
 \keyword{internal}

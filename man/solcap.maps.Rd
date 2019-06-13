@@ -11,7 +11,7 @@
 \title{Solcap Maps
 
 Resulting maps from \code{\link[mappoly]{tetra.solcap}} and \code{\link[mappoly]{tetra.solcap.geno.dist}} datasets.}
-\format{All resulting maps have the same format: a list containing 12 objects of class \code{mappoly.map}, each one 
+\format{All maps have the same format: a list containing 12 objects of class \code{mappoly.map}, each one 
 representing one linkage group. 
 \describe{
     \item{solcap.map}{genetic map using genomic order and dosage call}
