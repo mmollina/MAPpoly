@@ -2,4 +2,4 @@ Todo list:
   1. Implement HMM for a single parent
   2. implement faster two-points for simplex and double simplex markers
   3. Implement add/drop markers
-  
+  4. Implement function to filter individuals based on missing data

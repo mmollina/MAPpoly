@@ -448,6 +448,11 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
 #' Filter missing genotypes
 #'
 #' @param input.data an object of class \code{"mappoly.data"} 
+#' @param type one of the following options: \code{marker} (default), 
+#'             filter out markers based on their percentage of missing 
+#'             data; \code{individual}, 
+#'             filter out individuals based on their percentage of missing 
+#'             data;
 #' @param filter.thres maximum percentage of missing data
 #' @param inter if \code{TRUE}, plots markes vs. frequency of genotyped
 #' @keywords internal
@@ -455,7 +460,34 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
 #' @importFrom graphics axis
-filter_missing<-function(input.data, filter.thres = 0.2, inter = TRUE)
+filter_missing<-function(input.data, 
+                             type = c("marker", "individual"), 
+                             filter.thres = 0.2, 
+                             inter = TRUE)
+{
+  type <- match.arg(type)
+  switch(type,
+         marker = filter_missing_mrk(input.data, 
+                            filter.thres = filter.thres, 
+                            inter = inter),
+         individual = filter_missing_ind(input.data, 
+                            filter.thres = filter.thres, 
+                            inter = inter)
+  )
+}
+
+
+#' Filter markers based on missing genotypes
+#'
+#' @param input.data an object of class \code{"mappoly.data"} 
+#' @param filter.thres maximum percentage of missing data
+#' @param inter if \code{TRUE}, plots markes vs. frequency of genotyped
+#' @keywords internal
+#' @export
+#' @importFrom magrittr "%>%"
+#' @importFrom dplyr filter
+#' @importFrom graphics axis
+filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
 {
   ANSWER <- "flag"
   mrk <- NULL
@@ -469,7 +501,7 @@ filter_missing<-function(input.data, filter.thres = 0.2, inter = TRUE)
       plot(sort(perc.na), xlab = "markers", ylab = "frequency of missing data", axes = FALSE);
       axis(1);axis(2)
       lines(x = c(0, input.data$n.mrk), y = rep(filter.thres,2), col = 4, lty = 2)
-      text(x = input.data$n.mrk/2, y = filter.thres + 0.05, labels = paste0("EXcluded mrks: ", sum(perc.na >= filter.thres)), adj = 0, col = "darkred")
+      text(x = input.data$n.mrk/2, y = filter.thres + 0.05, labels = paste0("Excluded mrks: ", sum(perc.na >= filter.thres)), adj = 0, col = "darkred")
       text(x = input.data$n.mrk/2, y = filter.thres - 0.05, labels = paste0("Included mrks: ", sum(perc.na < filter.thres)), adj = 0, col = "darkgreen")
       ANSWER <- readline("Enter 'y' to proceed or update the filter threshold: ")
       if(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
@@ -510,10 +542,91 @@ filter_missing<-function(input.data, filter.thres = 0.2, inter = TRUE)
     if(!is.null(input.data$chisq.pval)) 
       input.data$chisq.pval <- input.data$chisq.pval[-rm.mrks.id]
     input.data$sequence.pos <- input.data$sequence.pos[-rm.mrks.id]
-    par(op)
     return(input.data)
   }
 }
+
+#' Filter individuals based on missing genotypes 
+#'
+#' @param input.data an object of class \code{"mappoly.data"} 
+#' @param filter.thres maximum percentage of missing data
+#' @param inter if \code{TRUE}, plots markes vs. frequency of genotyped
+#' @keywords internal
+#' @export
+#' @importFrom magrittr "%>%"
+#' @importFrom dplyr filter
+#' @importFrom graphics axis
+filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
+{
+  ANSWER <- "flag"
+  mrk <- NULL
+  if(interactive() && inter)
+  {
+    op<-par(bg = "gray", xpd = TRUE)
+    while(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
+    {
+      na.num<-apply(input.data$geno.dose, 2, function(x,m) sum(x==m+1), m = input.data$m)
+      perc.na<-na.num/input.data$n.mrk
+      plot(sort(perc.na), xlab = "individuals", ylab = "frequency of missing data", axes = FALSE);
+      axis(1);axis(2)
+      lines(x = c(0, input.data$n.mrk), y = rep(filter.thres,2), col = 4, lty = 2)
+      text(x = input.data$n.ind/2, y = filter.thres + 0.05, labels = paste0("Excluded individuals: ", sum(perc.na >= filter.thres)), adj = 0, col = "darkred")
+      text(x = input.data$n.ind/2, y = filter.thres - 0.05, labels = paste0("Included individuals: ", sum(perc.na < filter.thres)), adj = 0, col = "darkgreen")
+      ANSWER <- readline("Enter 'y' to proceed or update the filter threshold: ")
+      if(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
+        filter.thres  <- as.numeric(ANSWER)
+    }
+    rm.ind.id<-which(perc.na > filter.thres)
+    if(length(rm.ind.id)==0) return(input.data)
+    rm.ind<-names(rm.ind.id)
+    if(nrow(input.data$geno)!=input.data$n.mrk)
+      input.data$geno <-  input.data$geno %>%
+      dplyr::filter(!ind%in%rm.ind)
+    input.data$geno.dose<-input.data$geno.dose[,-rm.ind.id]
+    input.data$n.ind <- ncol(input.data$geno.dose)
+    ##Computing chi-square p.values
+    if(!is.null(input.data$chisq.pval)){
+      m<-input.data$m
+      Ds <- array(NA, dim = c(m+1, m+1, m+1))
+      for(i in 0:m)
+        for(j in 0:m)
+          Ds[i+1,j+1,] <- segreg_poly(m = m, dP = i, dQ = j)
+      Dpop<-cbind(input.data$dosage.p, input.data$dosage.q)
+      M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
+      dimnames(M)<-list(input.data$mrk.names, c(0:m))
+      M<-cbind(M, input.data$geno.dose)
+      input.data$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
+    }
+    par(op)
+    return(input.data)
+  } else {
+    na.num<-apply(input.data$geno.dose, 2, function(x,m) sum(x==m+1), m = input.data$m)
+    perc.na<-na.num/input.data$n.mrk
+    rm.ind.id<-which(perc.na > filter.thres)
+    if(length(rm.ind.id)==0) return(input.data)
+    rm.ind<-names(rm.ind.id)
+    if(nrow(input.data$geno)!=input.data$n.mrk)
+      input.data$geno <-  input.data$geno %>%
+      dplyr::filter(!ind%in%rm.ind)
+    input.data$geno.dose<-input.data$geno.dose[,-rm.ind.id]
+    input.data$n.ind <- ncol(input.data$geno.dose)
+    ##Computing chi-square p.values
+    if(!is.null(input.data$chisq.pval)){
+      m<-input.data$m
+      Ds <- array(NA, dim = c(m+1, m+1, m+1))
+      for(i in 0:m)
+        for(j in 0:m)
+          Ds[i+1,j+1,] <- segreg_poly(m = m, dP = i, dQ = j)
+        Dpop<-cbind(input.data$dosage.p, input.data$dosage.q)
+        M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
+        dimnames(M)<-list(input.data$mrk.names, c(0:m))
+        M<-cbind(M, input.data$geno.dose)
+        input.data$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
+    }
+    return(input.data)
+  }
+}
+
 
 
 #' Chi-square test
