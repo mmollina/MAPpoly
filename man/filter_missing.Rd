@@ -18,9 +18,8 @@ data;}
 
 \item{filter.thres}{maximum percentage of missing data}
 
-\item{inter}{if \code{TRUE}, plots markes vs. frequency of genotyped}
+\item{inter}{if \code{TRUE}, it plots markes or individuals vs. frequency of missing data}
 }
 \description{
-Filter missing genotypes
+Exclude markers or individuals based on their missing data
 }
-\keyword{internal}

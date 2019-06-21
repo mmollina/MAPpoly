@@ -446,6 +446,8 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
 }
 
 #' Filter missing genotypes
+#' 
+#' Exclude markers or individuals based on their missing data
 #'
 #' @param input.data an object of class \code{"mappoly.data"} 
 #' @param type one of the following options: \code{marker} (default), 
@@ -454,8 +456,7 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
 #'             filter out individuals based on their percentage of missing 
 #'             data;
 #' @param filter.thres maximum percentage of missing data
-#' @param inter if \code{TRUE}, plots markes vs. frequency of genotyped
-#' @keywords internal
+#' @param inter if \code{TRUE}, it plots markes or individuals vs. frequency of missing data
 #' @export
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
