@@ -7,7 +7,11 @@
 filter_missing(input.data, filter.thres = 0.2, inter = TRUE)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{input.data}{an object of class \code{"mappoly.data"}}
+
+\item{filter.thres}{maximum percentage of missing data}
+
+\item{inter}{if \code{TRUE}, plots markes vs. frequency of genotyped}
 }
 \description{
 Filter missing genotypes
