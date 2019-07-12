@@ -584,6 +584,7 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
       input.data$geno <-  input.data$geno %>%
       dplyr::filter(!ind%in%rm.ind)
     input.data$geno.dose<-input.data$geno.dose[,-rm.ind.id]
+    input.data$ind.names<-input.data$ind.names[-rm.ind.id]
     input.data$n.ind <- ncol(input.data$geno.dose)
     ##Computing chi-square p.values
     if(!is.null(input.data$chisq.pval)){
@@ -610,6 +611,7 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
       input.data$geno <-  input.data$geno %>%
       dplyr::filter(!ind%in%rm.ind)
     input.data$geno.dose<-input.data$geno.dose[,-rm.ind.id]
+    input.data$ind.names<-input.data$ind.names[-rm.ind.id]
     input.data$n.ind <- ncol(input.data$geno.dose)
     ##Computing chi-square p.values
     if(!is.null(input.data$chisq.pval)){
