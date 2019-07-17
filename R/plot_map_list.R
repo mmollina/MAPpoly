@@ -1,0 +1,143 @@
+#' Plot a genetic map 
+#'
+#' @param  map.list A list of objects or a single object of class \code{mappoly.map}.
+#'
+#' @param horiz a logical value. If FALSE, the map are drawn vertically with the first map to the left. 
+#'              If TRUE, the maps are drawn horizontally with the first at the bottom.
+#'
+#' @param col a vector of colors for the bars or bar components. By default, light grey is used.
+#'            "ggstyle" produces maps using the default ggplot color palette 
+#'
+#' @return A data frame containing the name of the markers and their genetic position.
+#' 
+#' @examples
+#'  \dontrun{
+#'  ## hexafake map
+#'  plot_map_list(maps.hexafake, horiz = FALSE)
+#'  plot_map_list(maps.hexafake, col = c("#999999", "#E69F00", "#56B4E9"))
+#'  
+#'  ## solcap map
+#'  plot_map_list(solcap.map, col = "ggstyle")
+#'  
+#'  ## Comparing mapping approaches
+#'  
+#'  w<-NULL
+#'  for(i in 1:12)
+#'    w<-c(w, c(solcap.dose.map[i], 
+#'              solcap.prior.map[i],
+#'              solcap.err.map[i]))
+#'              
+#'  names(w) <- apply(expand.grid(c("dose", "prior", "error"), paste0("LG_", 1:12), 
+#'                              stringsAsFactors = FALSE)[,2:1], 1, paste, 
+#'                  collapse = "_")
+#'                  
+#'  op <- par(cex.axis = .7)
+#'  plot_map_list(w, horiz = FALSE, col = rep(gg_color_hue(3), 12))
+#'  par(op)
+#'  legend("bottomright", legend = c("Dosage based", "Prior", "Error"), 
+#'          pch=15, col = rep(gg_color_hue(3)))
+#'  }
+#'  
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
+#'
+#' @references
+#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
+#'     analysis and haplotype phasing in experimental autopolyploid
+#'     populations with high ploidy level using hidden Markov
+#'     models, _submited_. \url{https://doi.org/10.1101/415232}
+#'
+#' @export plot_map_list
+#'
+plot_map_list<-function(map.list, horiz = TRUE, col = "lightgray"){
+  if(class(map.list) == "mappoly.map")  
+    map.list<-list(map.list)
+  if(any(sapply(map.list, class)!="mappoly.map"))
+    stop("All elemnts in 'map.list' should be of class 'mappoly.map'")
+  if(all(col == "ggstyle"))
+    col <-gg_color_hue(length(map.list))
+  if(length(col)==1)
+    col<-rep(col, length(map.list))
+  z<-NULL
+  if(is.null(names(map.list)))
+    names(map.list)<-1:length(map.list)
+  max.dist<-max(sapply(map.list, function(x) sum(imf_h(x$maps[[1]]$seq.rf))))
+  if(horiz){
+    plot(0, 
+         xlim = c(0, max.dist), 
+         ylim = c(0,length(map.list)+1), 
+         type = "n", axes = FALSE, 
+         xlab = "Centimorgans (cM)", 
+         ylab = "Linkage Groups")
+    axis(1)
+    for(i in 1:length(map.list)){
+      d <- extract_map(map.list[[i]])
+      z<-rbind(z, data.frame(mrk = get(map.list[[i]]$info$data.name)$mrk.names[map.list[[i]]$maps[[1]]$seq.num], 
+                             LG = names(map.list)[i], pos = d))
+      plot_one_map(d, i = i, horiz = TRUE, col = col[i])   
+    }
+    axis(2, at = 1:length(map.list), labels = names(map.list), lwd = 0, las = 2)
+  } else{
+    plot(0, 
+         ylim = c(-max.dist, 0), 
+         xlim = c(0,length(map.list)+1), 
+         type = "n", axes = FALSE, 
+         ylab = "Centimorgans (cM)", 
+         xlab = "Linkage Groups")
+    x<-axis(2, labels = FALSE, lwd = 0)
+    axis(2, at = x, labels = abs(x))
+    for(i in 1:length(map.list)){
+      d <- extract_map(map.list[[i]])
+      z<-rbind(z, data.frame(mrk = get(map.list[[i]]$info$data.name)$mrk.names[map.list[[i]]$maps[[1]]$seq.num], 
+                             LG = names(map.list)[i],pos = d))
+      plot_one_map(d, i = i, horiz = FALSE, col = col[i])  
+    }
+    axis(3, at = 1:length(map.list), labels = names(map.list), lwd = 0, las = 2)
+  }
+  invisible(z)
+}
+
+#' extract the distance from an object of class 'mappoly.map'
+#'
+#' @param void interfunction to be documented
+#' @keywords internal
+#' @export
+extract_map<-function(input.map, phase.config = "best")
+{
+  if (!inherits(input.map, "mappoly.map")) {
+    stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
+  }
+  ## choosing the linkage phase configuration
+  LOD.conf <- get_LOD(input.map, sorted = FALSE)
+  if(phase.config == "best") {
+    i.lpc <- which.min(LOD.conf)
+  } else if (phase.config > length(LOD.conf)) {
+    stop("invalid linkage phase configuration")
+  } else i.lpc <- phase.config
+  x<-cumsum(c(0, imf_h(input.map$maps[[i.lpc]]$seq.rf)))
+  x
+}
+
+#' plot a single linkage group with no phase
+#'
+#' @param void interfunction to be documented
+#' @keywords internal
+#' @export
+#' @importFrom berryFunctions roundedRect
+plot_one_map<-function(x, i = 0, horiz = FALSE, col = "lightgray")
+{
+  if(horiz)
+  {
+    berryFunctions::roundedRect(xleft = x[1], ybottom = i-0.25, 
+                                xright = rev(x)[1], ytop = i+0.25,
+                                rounding=0, col = col)
+    for(j in 1:length(x))
+      lines(x = c(x[j], x[j]), y = c(i-0.25, i+0.25), lwd = .5)
+  } else {
+    x <- -rev(x)
+    berryFunctions::roundedRect(xleft = i-0.25, ybottom = x[1], 
+                                xright = i+0.25, ytop = rev(x)[1],
+                                rounding = 0, col = col)
+    for(j in 1:length(x))
+      lines(y = c(x[j], x[j]), x = c(i-0.25, i+0.25), lwd = .5)
+  }
+}

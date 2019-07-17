@@ -82,6 +82,19 @@ containing the probability distribution for each combination of marker and offsp
 represent the marker and the offspring, respectively. The remaining elements represent the probability 
 associated with each one of the possible dosages. \code{NA} represents missing data.'
 }
+\examples{
+\dontrun{
+    solcap.file <- system.file('extdata', 'SolCAP.bz2', package = 'mappoly')
+    dat <- read_geno_dist(file.in  = solcap.file)
+    print(tetra.solcap, detailed = TRUE)
+
+    ## Same data set
+    data("tetra.solcap.geno.dist")
+    
+    identical(tetra.solcap.geno.dist, dat)
+    
+}
+}
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
     analysis and haplotype phasing in experimental autopolyploid

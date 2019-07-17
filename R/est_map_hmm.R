@@ -45,9 +45,11 @@
 #' long double numbers in the HMM procedure. 
 #' 
 #' @param x an object of one of the classes \code{mappoly.map}
+#' 
+#' @param detailed logical. if TRUE, prints the linkage phase configuration and the marker 
+#' position for all maps. if FALSE prints a map summary. 
 #'
-#' @param detailed if TRUE, prints the linkage phase configuration and the marker 
-#' position for all maps. if FALSE prints a map summary 
+#' @param phase logical. If \code{TRUE} (default) plots the phase configuration for both parents 
 #'
 #' @param col.cte.P a single value or a vector with size equal to the number of 
 #' markers in the map indicating the color of the allelic variants for parent P. 
@@ -92,18 +94,16 @@
 #'     ## Re-estimating the map with the most likely configuration
 #'     subset.map1 <- est_rf_hmm_single(input.seq = unique.mrks,
 #'                                     input.ph.single = subset.map$maps[[1]]$seq.ph,
-#'                                     tol = 10e-4,
+#'                                     tol = 10e-3,
 #'                                     verbose = TRUE)
 #'
 #'     subset.map$maps[[1]]$seq.ph <- subset.map1$seq.ph
+#'     
+#'     plot(subset.map)
 #'
 #'      ## Retrieving simulated linkage phase
-#'      sim.ph.P.file <- system.file('doc', 'phase_sim_hexa_P.csv', package = 'mappoly')
-#'      ph.P <- read.csv2(sim.ph.P.file)
-#'      ph.P <- ph_matrix_to_list(ph.P[1:50,-1])
-#'      sim.ph.Q.file <- system.file('doc', 'phase_sim_hexa_Q.csv', package = 'mappoly')
-#'      ph.Q <- read.csv2(sim.ph.Q.file)
-#'      ph.Q <- ph_matrix_to_list(ph.Q[1:50,-1])
+#'      ph.P <- maps.hexafake[[1]]$maps[[1]]$seq.ph$P
+#'      ph.Q <- maps.hexafake[[1]]$maps[[1]]$seq.ph$Q
 #'
 #'      ## Estimated linkage phase
 #'      ph.P.est <- subset.map$maps[[1]]$seq.ph$P
@@ -111,10 +111,6 @@
 #'
 #'      compare_haplotypes(m = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
 #'      compare_haplotypes(m = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
-#'
-#'      try(dev.off(), silent = TRUE)
-#'      plot(subset.map, 1)
-#'
 #'    }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -186,19 +182,19 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   ret.map.no.rf.estimation <- FALSE
   if(n.ph == 1 && !reestimate.single.ph.configuration)
     ret.map.no.rf.estimation <- TRUE
-  if (verbose) {
-    cat("\nNumber of linkage phase configurations: ", n.ph)
-    cat("\n---------------------------------------------\n|\n|--->")
-  }
+  #if (verbose) {
+  #  cat("\n    Number of linkage phase configurations: ")
+    #cat("\n---------------------------------------------\n|\n|--->")
+  #}
   maps <- vector("list", n.ph)
   if (verbose){
-    txt<-paste0(n.ph, "phase(s): ")
+    txt<-paste0("       ",n.ph, " phase(s): ")
     cat(txt)
   }
   for (i in 1:n.ph) {
     if (verbose) {
-      if((i+1)%%20==0)
-        cat("\n", paste0(rep(" ", nchar(txt)), collapse = ""))
+      if((i+1)%%40==0)
+        cat("\n", paste0(rep(" ", nchar(txt)), collapse = ""), sep="")
       cat(". ")
     }
     if(est.given.0.rf){
@@ -218,6 +214,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
                                    ret.map.no.rf.estimation = ret.map.no.rf.estimation, 
                                    high.prec = high.prec)
   }
+  #cat("\n")
   id<-order(sapply(maps, function(x) x$loglike), decreasing = TRUE)
   maps<-maps[id]
   if (verbose)
@@ -297,15 +294,14 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #' @examples
 #'  \dontrun{
 #'     data(hexafake)
-#'     mrk.subset<-make_seq_mappoly(hexafake, 'seq1')
+#'     mrk.subset<-make_seq_mappoly(hexafake, 1:50)
 #'     red.mrk<-elim_redundant(mrk.subset)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'     counts.web<-cache_counts_twopt(unique.mrks, get.from.web = TRUE)
 #'     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
 #'                                   count.cache = counts.web,
-#'                                   n.clusters = 16,
+#'                                   n.clusters = 1,
 #'                                   verbose=TRUE)
-#'     system.time(
 #'     subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
 #'                                         thres.twopt = 5,
 #'                                         thres.hmm = 10,
@@ -313,27 +309,51 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'                                         tol = 0.1,
 #'                                         tol.final = 10e-3,
 #'                                         twopt = subset.pairs,
-#'                                         verbose = TRUE))
-#'
+#'                                         verbose = TRUE)
+#'      print(subset.map, detailed = TRUE)
+#'      plot(subset.map)
+#'      plot(subset.map, phase = FALSE)
+#'      
 #'      ## Retrieving simulated linkage phase
-#'      sim.ph.P.file <- system.file('doc', 'phase_sim_hexa_P.csv', package = 'mappoly')
-#'      ph.P <- read.csv2(sim.ph.P.file)
-#'      ph.P <- ph_matrix_to_list(ph.P[,-1])
-#'      sim.ph.Q.file <- system.file('doc', 'phase_sim_hexa_Q.csv', package = 'mappoly')
-#'      ph.Q <- read.csv2(sim.ph.Q.file)
-#'      ph.Q <- ph_matrix_to_list(ph.Q[,-1])
-#'
+#'      ph.P <- maps.hexafake[[1]]$maps[[1]]$seq.ph$P
+#'      ph.Q <- maps.hexafake[[1]]$maps[[1]]$seq.ph$Q
 #'      ## Estimated linkage phase
 #'      ph.P.est <- subset.map$maps[[1]]$seq.ph$P
 #'      ph.Q.est <- subset.map$maps[[1]]$seq.ph$Q
-#'
 #'      ##Notice that two estimated homologous in parent P are different
 #'      ##from the simulated ones
 #'      compare_haplotypes(m = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
 #'      compare_haplotypes(m = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
-#'
-#'      plot(subset.map, 1)
-#'
+#'      
+#'      
+#'      ############# Autotetraploid example
+#'     data(tetra.solcap)
+#'     s1<-make_seq_mappoly(tetra.solcap, 'seq1')
+#'     red.mrk<-elim_redundant(s1)
+#'     s1.unique.mrks<-make_seq_mappoly(red.mrk)
+#'     counts.web<-cache_counts_twopt(s1.unique.mrks, get.from.web = TRUE)
+#'     s1.pairs<-est_pairwise_rf(input.seq = s1.unique.mrks,
+#'                                   count.cache = counts.web,
+#'                                   n.clusters = 10,
+#'                                   verbose=TRUE)
+#'     unique.gen.ord<-get_genomic_order(s1.unique.mrks)
+#'     ## Selecting a subset of 100 markers at the beginning of chromosome 1 
+#'     s1.gen.subset<-make_seq_mappoly(tetra.solcap, rownames(unique.gen.ord)[1:100])
+#'     s1.gen.subset.map <- est_rf_hmm_sequential(input.seq = s1.gen.subset,
+#'                                                start.set = 10,
+#'                                                thres.twopt = 10, 
+#'                                                thres.hmm = 10,
+#'                                                extend.tail = 50,
+#'                                                info.tail = TRUE, 
+#'                                                twopt = s1.pairs,
+#'                                                sub.map.size.diff.limit = 5, 
+#'                                                phase.number.limit = 40,
+#'                                                reestimate.single.ph.configuration = TRUE,
+#'                                                tol = 10e-3,
+#'                                                tol.final = 10e-5)
+#'      print(s1.gen.subset.map, detailed = TRUE)
+#'      plot(s1.gen.subset.map)
+#'      plot(s1.gen.subset.map, phase = FALSE)
 #'    }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -345,6 +365,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'     models, _submited_. \url{https://doi.org/10.1101/415232}
 #'
 #' @importFrom utils head
+#' @importFrom cli rule
 #' @export est_rf_hmm_sequential
 est_rf_hmm_sequential<-function(input.seq,
                                 twopt,
@@ -370,11 +391,10 @@ est_rf_hmm_sequential<-function(input.seq,
          " is not an object of class 'poly.est.two.pts.pairwise'")
   ## Information about the map
   if(verbose) {
-    cat("Number of markers :", length(input.seq$seq.num), "\n")
-    cat("----------------------------------------\n")
+    cli::cat_line("Number of markers: ", length(input.seq$seq.num))
+    msg("Initial sequence", line = 2)
   }
-  if(is.null(extend.tail))
-    extend.tail<-length(input.seq$seq.num)
+  extend.tail<-length(input.seq$seq.num)
   #####
   ## Map in case of two markers
   #####
@@ -393,7 +413,7 @@ est_rf_hmm_sequential<-function(input.seq,
   #####
   if(start.set > length(input.seq$seq.num))
     start.set <- length(input.seq$seq.num)
-  if(verbose) cat("Initial sequence:", start.set, "markers...\n")
+  if(verbose) cat(start.set, " markers...\n", sep = "")
   cte<-0
   rf.temp<-c(Inf, Inf)
   while(any(rf.temp >= sub.map.size.diff.limit))
@@ -403,7 +423,7 @@ est_rf_hmm_sequential<-function(input.seq,
       cat("Impossible build a map using the given thresholds\n")
       stop()
     }
-    if(verbose) cat("Trying sequence:", cte:(start.set+cte-1), "...\n")
+    if(verbose) cat(cli::symbol$bullet, "   Trying sequence:", cte:(start.set+cte-1), ":\n")
     cur.seq <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1), na.omit(input.seq$seq.num[cte:(start.set+cte-1)]), data.name = input.seq$data.name)
     input.ph <- ls_linkage_phases(input.seq = cur.seq,
                                   thres = thres.twopt,
@@ -416,7 +436,8 @@ est_rf_hmm_sequential<-function(input.seq,
     cur.map <- reest_rf(cur.map, tol=tol.final, verbose = FALSE)
     rf.temp<-imf_h(cur.map$maps[[1]]$seq.rf)
   }
-  if(verbose) cat("Done with initial sequence.\n")
+  if(verbose)
+    msg("Done with initial sequence", line = 2)
   if(start.set >= length(input.seq$seq.num)){
     if(verbose) cat("\nDone phasing", cur.map$info$n.mrk, "markers\nReestimating final recombination fractions.")
     return(reest_rf(cur.map, tol=tol.final))
@@ -537,7 +558,9 @@ est_rf_hmm_sequential<-function(input.seq,
   seq.final <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1), 
                                 arg = as.numeric(names(all.ph$config.to.test[[1]]$P)), 
                                 data.name = input.seq$data.name)
-  if(verbose) cat("\nDone phasing", length(seq.final$seq.num), "markers\nReestimating final recombination fractions.")
+  #msg(paste("Done phasing", length(seq.final$seq.num), "markers"))
+  msg("Reestimating final recombination fractions", line = 2)
+  cat("")
   final.map <- est_rf_hmm(input.seq = seq.final,
                           input.ph = all.ph,
                           twopt = twopt,
@@ -545,6 +568,13 @@ est_rf_hmm_sequential<-function(input.seq,
                           verbose = FALSE,
                           reestimate.single.ph.configuration = TRUE,
                           high.prec = TRUE)
+  if(verbose) {
+    #cat("\n------------------------------------------")
+    cat("Markers in the initial sequence: ", length(input.seq$seq.num), sep = "")
+    cat("\nMaped markers                  : ", final.map$info$n.mrk, " (", 
+        round(100*final.map$info$n.mrk/length(input.seq$seq.num),1) ,"%)\n", sep = "")
+    msg("", line = 2)
+  }
   return(final.map)
 }
 
@@ -601,67 +631,75 @@ print.mappoly.map <- function(x, detailed = FALSE, ...) {
 #' @importFrom grDevices rgb
 #' @keywords internal
 #' @export
-plot.mappoly.map <- function(x, 
+plot.mappoly.map <- function(x,
+                             phase = TRUE,
                              col.P = "#e41a1c",
                              col.Q = "#377eb8",
-                             mrk.names = FALSE, cex = 1, config = "best", ...) {
-  grid::grid.newpage()
-  m <- x$info$m
-  vp1 <- grid::viewport(x = 0, y = 0.8, width = 1, height = 0.15, just = c("left", "bottom"))
-  vp2 <- grid::viewport(x = 0, y = 0.6, width = 1, height = 0.15, just = c("left", "bottom"))
-  vp3 <- grid::viewport(x = 0.04, y = 0.4, width = 0.92, height = 0.2, just = c("left", "bottom"))
-  grid::pushViewport(vp1)
-  draw_homologous(m, y.pos = 0.1, h.names = letters[1:m], parent = "P1")
-  if (config == "best")
-    config <- which.min(abs(get_LOD(x)))
-  if (!is.numeric(config))
-    stop("config must be numeic")
-  if (length(x$maps) < config) {
-    warning("config should be equal or less than", length(x$maps), "\nplotting the best configuration")
-    config <- which.min(abs(get_LOD(x, sorted = FALSE)))
+                             mrk.names = FALSE, 
+                             cex = 1, 
+                             config = "best", ...) {
+  
+  if(phase){
+    grid::grid.newpage()
+    m <- x$info$m
+    vp1 <- grid::viewport(x = 0, y = 0.8, width = 1, height = 0.15, just = c("left", "bottom"))
+    vp2 <- grid::viewport(x = 0, y = 0.6, width = 1, height = 0.15, just = c("left", "bottom"))
+    vp3 <- grid::viewport(x = 0.04, y = 0.4, width = 0.92, height = 0.2, just = c("left", "bottom"))
+    grid::pushViewport(vp1)
+    draw_homologous(m, y.pos = 0.1, h.names = letters[1:m], parent = "P1")
+    if (config == "best")
+      config <- which.min(abs(get_LOD(x)))
+    if (!is.numeric(config))
+      stop("config must be numeic")
+    if (length(x$maps) < config) {
+      warning("config should be equal or less than", length(x$maps), "\nplotting the best configuration")
+      config <- which.min(abs(get_LOD(x, sorted = FALSE)))
+    }
+    P <- x$maps[[config]]$seq.ph$P
+    if(length(col.P)==1)
+      col.P<-rep(col.P, length(P))
+    y <- seq(from = 0.05, to = 0.95, length.out = length(P))
+    for (i in 1:length(P))
+      draw_alleles(m, y[i], P[[i]], col.cte = col.P[i], y.pos = 0.1)
+    grid::upViewport()
+    grid::pushViewport(vp2)
+    draw_homologous(m, h.names = letters[(m+1):(2*m)], parent = "P2")
+    Q <- x$maps[[config]]$seq.ph$Q
+    if(length(col.Q)==1)
+      col.Q<-rep(col.Q, length(Q))
+    y <- seq(from = 0.05, to = 0.95, length.out = length(Q))
+    for (i in 1:length(Q))
+      draw_alleles(m, y[i], Q[[i]], col.cte = col.Q[i])
+    grid::upViewport()
+    grid::pushViewport(vp3)
+    d <- cumsum(c(0, imf_h(x$maps[[config]]$seq.rf)))
+    x1 <- d/max(d)
+    grid::grid.roundrect(x = -0.01, y = 0.5, width = 1.02, height = 0.07, r = grid::unit(2, "mm"), gp = grid::gpar(fill = "white", col = "black", lwd = 0.7), just = c("left",                                                                                                                                           "center"))
+    x2 <- seq(from = 0.01125, to = 0.99, length.out = length(x1))
+    id<-x$maps[[config]]$seq.num
+    id<-paste0(get(x$info$data.name, pos =1)$mrk.names[id], " - (", id, ")")
+    for (i in 1:length(x1)) {
+      grid::grid.lines(x = x1[i], y = c(0.45, 0.55), gp = grid::gpar(lwd = 1))
+      grid::grid.lines(x = c(x1[i], x2[i]), y = c(0.55, 1.19), gp = grid::gpar(lwd = 0.5, lty = 1, col = "gray"))
+      if(mrk.names){
+        grid::grid.text(label = id[i], x = x2[i], y = 1.22,
+                        rot = 90, just = "right", gp = grid::gpar(cex = cex))      
+      } 
+    }
+    dmax <- max(d)
+    d1<-pretty(seq(0, dmax, length.out = 10), n = 10)
+    if(rev(d1)[1] > dmax) d1<-d1[-length(d1)]
+    x3 <- seq(from = 0, to = max(d1)/dmax, length.out = length(d1))
+    grid::grid.lines(x = c(0, max(x3)), y = c(0.2, 0.2), gp = grid::gpar(lwd = 0.5))
+    for (i in 1:length(x3)) {
+      grid::grid.lines(x = x3[i], y = c(0.2, 0.17), gp = grid::gpar(lwd = 2))
+      grid::grid.text(label = round(d1[i], 1), x = x3[i], y = 0.155, rot = 90, just = "right", gp = grid::gpar(cex = 0.8))
+    }
+    grid::grid.text(label = "centimorgans (cM)", x = 0.5, y = -0.5)
+    upViewport()
+  } else {
+    plot_map_list(x) 
   }
-  P <- x$maps[[config]]$seq.ph$P
-  if(length(col.P)==1)
-    col.P<-rep(col.P, length(P))
-  y <- seq(from = 0.05, to = 0.95, length.out = length(P))
-  for (i in 1:length(P))
-    draw_alleles(m, y[i], P[[i]], col.cte = col.P[i], y.pos = 0.1)
-  grid::upViewport()
-  grid::pushViewport(vp2)
-  draw_homologous(m, h.names = letters[(m+1):(2*m)], parent = "P2")
-  Q <- x$maps[[config]]$seq.ph$Q
-  if(length(col.Q)==1)
-    col.Q<-rep(col.Q, length(Q))
-  y <- seq(from = 0.05, to = 0.95, length.out = length(Q))
-  for (i in 1:length(Q))
-    draw_alleles(m, y[i], Q[[i]], col.cte = col.Q[i])
-  grid::upViewport()
-  grid::pushViewport(vp3)
-  d <- cumsum(c(0, imf_h(x$maps[[config]]$seq.rf)))
-  x1 <- d/max(d)
-  grid::grid.roundrect(x = -0.01, y = 0.5, width = 1.02, height = 0.07, r = grid::unit(2, "mm"), gp = grid::gpar(fill = "white", col = "black", lwd = 0.7), just = c("left",                                                                                                                                           "center"))
-  x2 <- seq(from = 0.01125, to = 0.99, length.out = length(x1))
-  id<-x$maps[[config]]$seq.num
-  id<-paste0(get(x$info$data.name, pos =1)$mrk.names[id], " - (", id, ")")
-  for (i in 1:length(x1)) {
-    grid::grid.lines(x = x1[i], y = c(0.45, 0.55), gp = grid::gpar(lwd = 1))
-    grid::grid.lines(x = c(x1[i], x2[i]), y = c(0.55, 1.19), gp = grid::gpar(lwd = 0.5, lty = 1, col = "gray"))
-    if(mrk.names){
-      grid::grid.text(label = id[i], x = x2[i], y = 1.22,
-                      rot = 90, just = "right", gp = grid::gpar(cex = cex))      
-    } 
-  }
-  dmax <- max(d)
-  d1<-pretty(seq(0, dmax, length.out = 10), n = 10)
-  if(rev(d1)[1] > dmax) d1<-d1[-length(d1)]
-  x3 <- seq(from = 0, to = max(d1)/dmax, length.out = length(d1))
-  grid::grid.lines(x = c(0, max(x3)), y = c(0.2, 0.2), gp = grid::gpar(lwd = 0.5))
-  for (i in 1:length(x3)) {
-    grid::grid.lines(x = x3[i], y = c(0.2, 0.17), gp = grid::gpar(lwd = 2))
-    grid::grid.text(label = round(d1[i], 1), x = x3[i], y = 0.155, rot = 90, just = "right", gp = grid::gpar(cex = 0.8))
-  }
-  grid::grid.text(label = "centimorgans (cM)", x = 0.5, y = -0.5)
-  upViewport()
 }
 
 #' draw homologous

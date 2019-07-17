@@ -121,10 +121,14 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL) {
   }
   if (class(input.obj) == "mappoly.unique.seq")
   {
+    if(!is.null(arg))
+      warning("Ignoring argument 'arg' and using the unique sequence instead.")
     return(input.obj$unique.seq)
   }
   if (class(input.obj) == "mappoly.chitest.seq")
   {
+    if(!is.null(arg))
+      warning("Ignoring argument 'arg' and using chi-square filtered markers instead.")
     tmp<-make_seq_mappoly(get(input.obj$data.name, pos = 1), arg = input.obj$keep, data.name = input.obj$data.name)
     tmp$chisq.pval.thres<-input.obj$chisq.pval.thres
     tmp$chisq.pval<-get(input.obj$data.name, pos = 1)$chisq.pval[input.obj$keep]
@@ -147,6 +151,8 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL) {
   }
   if (class(input.obj) == "pcmap" | class(input.obj) == "pcmap3d" )
   {
+    if(!is.null(arg))
+      warning("Ignoring argument 'arg' and using the MDS order instead.")
     return(make_seq_mappoly(get(input.obj$data.name, pos = 1),
                             arg = as.character(input.obj$locimap$locus),
                             data.name = input.obj$data.name))
@@ -231,8 +237,10 @@ plot.mappoly.sequence <- function(x, ...)
   }
   par(mar = c(5,1,0,4))
   pal<-c(RColorBrewer::brewer.pal((x$m+1),"Set1"),1)
-  image(as.matrix(get(x$data.name, pos = 1)$geno.dose[x$seq.mrk.names,]), axes = FALSE,
-        col = pal, useRaster = TRUE)
+  names(pal)<-c(0:m,m+1)
+  M<-as.matrix(get(x$data.name, pos = 1)$geno.dose[x$seq.mrk.names,])
+  image(M, axes = FALSE,
+        col = pal[as.character(sort(unique(as.vector(M))))], useRaster = TRUE)
   mtext(text = "Markers", side = 1)
   mtext(text = "Individuals", side = 2)
   par(mar = c(0,0,0,0))

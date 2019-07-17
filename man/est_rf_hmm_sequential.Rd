@@ -80,15 +80,14 @@ the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
 \examples{
  \dontrun{
     data(hexafake)
-    mrk.subset<-make_seq_mappoly(hexafake, 'seq1')
+    mrk.subset<-make_seq_mappoly(hexafake, 1:50)
     red.mrk<-elim_redundant(mrk.subset)
     unique.mrks<-make_seq_mappoly(red.mrk)
     counts.web<-cache_counts_twopt(unique.mrks, get.from.web = TRUE)
     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
                                   count.cache = counts.web,
-                                  n.clusters = 16,
+                                  n.clusters = 1,
                                   verbose=TRUE)
-    system.time(
     subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
                                         thres.twopt = 5,
                                         thres.hmm = 10,
@@ -96,27 +95,51 @@ the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
                                         tol = 0.1,
                                         tol.final = 10e-3,
                                         twopt = subset.pairs,
-                                        verbose = TRUE))
-
+                                        verbose = TRUE)
+     print(subset.map, detailed = TRUE)
+     plot(subset.map)
+     plot(subset.map, phase = FALSE)
+     
      ## Retrieving simulated linkage phase
-     sim.ph.P.file <- system.file('doc', 'phase_sim_hexa_P.csv', package = 'mappoly')
-     ph.P <- read.csv2(sim.ph.P.file)
-     ph.P <- ph_matrix_to_list(ph.P[,-1])
-     sim.ph.Q.file <- system.file('doc', 'phase_sim_hexa_Q.csv', package = 'mappoly')
-     ph.Q <- read.csv2(sim.ph.Q.file)
-     ph.Q <- ph_matrix_to_list(ph.Q[,-1])
-
+     ph.P <- maps.hexafake[[1]]$maps[[1]]$seq.ph$P
+     ph.Q <- maps.hexafake[[1]]$maps[[1]]$seq.ph$Q
      ## Estimated linkage phase
      ph.P.est <- subset.map$maps[[1]]$seq.ph$P
      ph.Q.est <- subset.map$maps[[1]]$seq.ph$Q
-
      ##Notice that two estimated homologous in parent P are different
      ##from the simulated ones
      compare_haplotypes(m = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
      compare_haplotypes(m = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
-
-     plot(subset.map, 1)
-
+     
+     
+     ############# Autotetraploid example
+    data(tetra.solcap)
+    s1<-make_seq_mappoly(tetra.solcap, 'seq1')
+    red.mrk<-elim_redundant(s1)
+    s1.unique.mrks<-make_seq_mappoly(red.mrk)
+    counts.web<-cache_counts_twopt(s1.unique.mrks, get.from.web = TRUE)
+    s1.pairs<-est_pairwise_rf(input.seq = s1.unique.mrks,
+                                  count.cache = counts.web,
+                                  n.clusters = 10,
+                                  verbose=TRUE)
+    unique.gen.ord<-get_genomic_order(s1.unique.mrks)
+    ## Selecting a subset of 100 markers at the beginning of chromosome 1 
+    s1.gen.subset<-make_seq_mappoly(tetra.solcap, rownames(unique.gen.ord)[1:100])
+    s1.gen.subset.map <- est_rf_hmm_sequential(input.seq = s1.gen.subset,
+                                               start.set = 10,
+                                               thres.twopt = 10, 
+                                               thres.hmm = 10,
+                                               extend.tail = 50,
+                                               info.tail = TRUE, 
+                                               twopt = s1.pairs,
+                                               sub.map.size.diff.limit = 5, 
+                                               phase.number.limit = 40,
+                                               reestimate.single.ph.configuration = TRUE,
+                                               tol = 10e-3,
+                                               tol.final = 10e-5)
+     print(s1.gen.subset.map, detailed = TRUE)
+     plot(s1.gen.subset.map)
+     plot(s1.gen.subset.map, phase = FALSE)
    }
 
 }

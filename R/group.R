@@ -82,7 +82,7 @@
 #' @importFrom stats as.dendrogram as.dist cutree hclust lm predict quantile rect.hclust
 #' @export group_mappoly
 
-group_mappoly <- function(input.mat, input.seq, expected.groups = NULL,
+group_mappoly <- function(input.mat, input.seq = NULL, expected.groups = NULL,
                           inter = TRUE, comp.mat = FALSE, verbose = TRUE)
   {
     ## checking for correct object
@@ -90,6 +90,10 @@ group_mappoly <- function(input.mat, input.seq, expected.groups = NULL,
     if (!inherits(input.mat, input_classes)) {
       stop(deparse(substitute(input.mat)), " is not an object of class 'mappoly.rf.matrix'")
     }
+    if(is.null(input.seq))
+      input.seq<-make_seq_mappoly(input.obj = get(input.mat$data.name, pos=1), 
+                                  arg = rownames(input.mat$rec.mat), 
+                                  data.name = input.mat$data.name)
     if(!setequal(intersect(input.seq$seq.mrk.names,colnames(input.mat$rec.mat)), input.seq$seq.mrk.names)){
       stop(deparse(substitute(input.mat)), " does not contain all markers present in", deparse(substitute(input.seq)))
     }
@@ -127,11 +131,11 @@ group_mappoly <- function(input.mat, input.seq, expected.groups = NULL,
 
     # Distribution of SNPs into linkage groups
     seq.vs.grouped.snp <- NULL
-    if(all(unique(mn) == "NH") && comp.mat)
+    if(all(unique(mn) == "NH") & comp.mat)
     {
       comp.mat <- FALSE
       seq.vs.grouped.snp <- NULL
-      warning("There is no physical reference information to generate a comparison matrix")
+      warning("There is no physical reference to generate a comparison matrix")
     }
     groups.snp  <- cutree(tree = hc.snp, k = expected.groups)
     if(comp.mat){
@@ -142,18 +146,20 @@ group_mappoly <- function(input.mat, input.seq, expected.groups = NULL,
         x<-table(names(which(groups.snp==i)))
         seq.vs.grouped.snp[i,names(x)]<-x
       }
-      idtemp<-apply(seq.vs.grouped.snp, 1, which.max)
-      seq.vs.grouped.snp<-cbind(seq.vs.grouped.snp[,unique(idtemp)], seq.vs.grouped.snp[,"NH"])
-      colnames(seq.vs.grouped.snp)<-c(na.omit(unique(input.seq$sequence)),"NH")
-      grtemp<-idtemp[as.character(groups.snp)]
-      names(grtemp)<-names(groups.snp)
+      idtemp2 <- apply(seq.vs.grouped.snp, 1, which.max)
+      seq.vs.grouped.snp<-cbind(seq.vs.grouped.snp[,unique(idtemp2)], seq.vs.grouped.snp[,"NH"])
+      cnm<-colnames(seq.vs.grouped.snp)
+      cnm[cnm==""]<-"NoChr"
+      colnames(seq.vs.grouped.snp)<-cnm
     } else {
-      grtemp <- groups.snp
       seq.vs.grouped.snp <- NULL
     }
-    names(grtemp)<-input.seq$seq.num
-    structure(list(data.name = input.mat$data.name, hc.snp = hc.snp, expected.groups = expected.groups,
-                   groups.snp = grtemp, seq.vs.grouped.snp = seq.vs.grouped.snp, 
+    names(groups.snp)<-input.seq$seq.num
+    structure(list(data.name = input.mat$data.name, 
+                   hc.snp = hc.snp, 
+                   expected.groups = expected.groups,
+                   groups.snp = groups.snp, 
+                   seq.vs.grouped.snp = seq.vs.grouped.snp, 
                    chisq.pval.thres = input.seq$chisq.pval.thres, 
                    chisq.pval = input.seq$chisq.pval),
                    class = "mappoly.group")

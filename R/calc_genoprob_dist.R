@@ -1,6 +1,6 @@
-#' Compute the conditional QTL probabilities using probability distribution of genotypes 
+#' Compute genotype conditional probabilities using probability distribution of dosages 
 #'
-#' The conditional probabilities are calculeted for each marker.
+#' Conditional probabilities are calculeted for each marker.
 #' In this version, the probabilities are not calculated bewtween
 #' markers.
 #'

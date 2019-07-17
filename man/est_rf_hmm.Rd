@@ -12,8 +12,9 @@ est_rf_hmm(input.seq, input.ph = NULL, thres = 0.5, twopt = NULL,
 
 \method{print}{mappoly.map}(x, detailed = FALSE, ...)
 
-\method{plot}{mappoly.map}(x, col.P = "#e41a1c", col.Q = "#377eb8",
-  mrk.names = FALSE, cex = 1, config = "best", ...)
+\method{plot}{mappoly.map}(x, phase = TRUE, col.P = "#e41a1c",
+  col.Q = "#377eb8", mrk.names = FALSE, cex = 1, config = "best",
+  ...)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}.}
@@ -47,10 +48,12 @@ long double numbers in the HMM procedure.}
 
 \item{x}{an object of one of the classes \code{mappoly.map}}
 
-\item{detailed}{if TRUE, prints the linkage phase configuration and the marker 
-position for all maps. if FALSE prints a map summary}
+\item{detailed}{logical. if TRUE, prints the linkage phase configuration and the marker 
+position for all maps. if FALSE prints a map summary.}
 
 \item{...}{currently ignored}
+
+\item{phase}{logical. If \code{TRUE} (default) plots the phase configuration for both parents}
 
 \item{mrk.names}{if TRUE, marker names are displayed.}
 
@@ -111,18 +114,16 @@ This function first enumerates a set of linkage phase configurations
     ## Re-estimating the map with the most likely configuration
     subset.map1 <- est_rf_hmm_single(input.seq = unique.mrks,
                                     input.ph.single = subset.map$maps[[1]]$seq.ph,
-                                    tol = 10e-4,
+                                    tol = 10e-3,
                                     verbose = TRUE)
 
     subset.map$maps[[1]]$seq.ph <- subset.map1$seq.ph
+    
+    plot(subset.map)
 
      ## Retrieving simulated linkage phase
-     sim.ph.P.file <- system.file('doc', 'phase_sim_hexa_P.csv', package = 'mappoly')
-     ph.P <- read.csv2(sim.ph.P.file)
-     ph.P <- ph_matrix_to_list(ph.P[1:50,-1])
-     sim.ph.Q.file <- system.file('doc', 'phase_sim_hexa_Q.csv', package = 'mappoly')
-     ph.Q <- read.csv2(sim.ph.Q.file)
-     ph.Q <- ph_matrix_to_list(ph.Q[1:50,-1])
+     ph.P <- maps.hexafake[[1]]$maps[[1]]$seq.ph$P
+     ph.Q <- maps.hexafake[[1]]$maps[[1]]$seq.ph$Q
 
      ## Estimated linkage phase
      ph.P.est <- subset.map$maps[[1]]$seq.ph$P
@@ -130,10 +131,6 @@ This function first enumerates a set of linkage phase configurations
 
      compare_haplotypes(m = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
      compare_haplotypes(m = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
-
-     try(dev.off(), silent = TRUE)
-     plot(subset.map, 1)
-
    }
 
 }

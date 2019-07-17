@@ -4,12 +4,22 @@
 \alias{filter_missing}
 \title{Filter missing genotypes}
 \usage{
-filter_missing(input.data, filter.thres = 0.2, inter = TRUE)
+filter_missing(input.data, type = c("marker", "individual"),
+  filter.thres = 0.2, inter = TRUE)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{input.data}{an object of class \code{"mappoly.data"}}
+
+\item{type}{one of the following options: \code{marker} (default), 
+filter out markers based on their percentage of missing 
+data; \code{individual}, 
+filter out individuals based on their percentage of missing 
+data;}
+
+\item{filter.thres}{maximum percentage of missing data}
+
+\item{inter}{if \code{TRUE}, it plots markes or individuals vs. frequency of missing data}
 }
 \description{
-Filter missing genotypes
+Exclude markers or individuals based on their missing data
 }
-\keyword{internal}
