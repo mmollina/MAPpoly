@@ -73,6 +73,11 @@ cache_counts_twopt <- function(input.seq, get.from.web = FALSE, cache.prev = NUL
         stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
     }
     cache.prev = NULL
+    if(input.seq$m==2)
+    {
+      get.from.web <- FALSE
+      cat("INFO: Computing genotype frequencies ...\n")
+    }
     if (get.from.web)
         return(get_cache_two_pts_from_web(input.seq$m))
     temp.count <- NULL
@@ -126,7 +131,7 @@ cache_counts_twopt <- function(input.seq, get.from.web = FALSE, cache.prev = NUL
         end <- proc.time()
     }
     if (verbose) {
-        cat("INFO: Done with", nrow(aux.mat), " configuration phases \n")
+        cat("INFO: Done with", nrow(aux.mat), "phase configurations\n")
         cat("INFO: Calculation took:", round((end - start)[3], digits = 3), "seconds\n")
     }
     names(y) <- dose.names

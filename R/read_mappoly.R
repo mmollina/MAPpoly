@@ -293,8 +293,9 @@ plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
   }
   par(mar = c(5,1,0,2))
   pal<-c(RColorBrewer::brewer.pal((x$m+1),"Set1"),1)
-  image(as.matrix(x$geno.dose), axes = FALSE,
-                     col = pal, useRaster = TRUE)
+  M <- as.matrix(x$geno.dose)
+  image(M, axes = FALSE,
+        col = pal[as.numeric(names(table(M)))+1], useRaster = TRUE)
   mtext(text = "Markers", side = 1)
   mtext(text = "Individuals", side = 2)
   par(mar = c(0,0,0,0))
