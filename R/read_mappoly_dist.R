@@ -199,9 +199,12 @@ read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
         for (i in 1:length(m.na)) geno[i.na[i], -c(1, 2)] <- segreg_poly(m, dp.na[i], dq.na[i])
     }
     ## dosage info
-    geno.dose <- dist_prob_to_class(geno = geno, prob.thres = prob.thres)
-    geno.dose[is.na(geno.dose)] <- m + 1
-   
+    if(filter.non.conforming)
+      geno.dose <- matrix(NA,1,1)
+    else{
+      geno.dose <- dist_prob_to_class(geno = geno, prob.thres = prob.thres)
+      geno.dose[is.na(geno.dose)] <- m + 1
+    }
     ## returning the 'mappoly.data' object
     cat("\n    Done with reading.\n")
     res<-structure(list(m = m,
@@ -224,6 +227,7 @@ read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
     if(filter.non.conforming){
       cat("    Filtering non-conforming markers.\n    ...")
       res<-filter_non_conforming_classes(res)
+      cat("\n    Performing chi-square test.\n    ...")
       ##Computing chi-square p.values
       Ds <- array(NA, dim = c(m+1, m+1, m+1))
       for(i in 0:m)
@@ -234,7 +238,7 @@ read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
       dimnames(M)<-list(res$mrk.names, c(0:m))
       M<-cbind(M, res$geno.dose)
       res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
-      cat("\n    Done with filtering.\n")
+      cat("\n    Done.\n")
       return(res)
     }
    return(res)

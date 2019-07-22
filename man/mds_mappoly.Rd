@@ -4,6 +4,8 @@
 \alias{mds_mappoly}
 \alias{print.pcmap}
 \alias{print.pcmap3d}
+\alias{plot.pcmap}
+\alias{plot.pcmap3d}
 \title{Estimates loci position using Multidimensional Scaling}
 \usage{
 mds_mappoly(input.mat, p = NULL, n = NULL, ndim = 2,
@@ -12,6 +14,12 @@ mds_mappoly(input.mat, p = NULL, n = NULL, ndim = 2,
 \method{print}{pcmap}(x, ...)
 
 \method{print}{pcmap3d}(x, ...)
+
+\method{plot}{pcmap}(x, D1lim = NULL, D2lim = NULL,
+  displaytext = FALSE, ...)
+
+\method{plot}{pcmap3d}(x, D1lim = NULL, D2lim = NULL,
+  displaytext = FALSE, ...)
 }
 \arguments{
 \item{input.mat}{an object of class \code{mappoly.input.matrix}.}

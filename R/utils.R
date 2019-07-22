@@ -426,12 +426,15 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
   ## 1 represents conforming classes/ 0 represents non-conforming classes
   dp<-rep(dp, input.data$n.ind)
   dq<-rep(dq, input.data$n.ind)
-  M<-M[rep(seq_len(nrow(M)), each=input.data$n.ind),]
+  M<-M[rep(seq_len(nrow(M)), input.data$n.ind),]
   R<-input.data$geno[,-c(1:2)] - input.data$geno[,-c(1:2)]*M
   id1<-apply(R, 1, sum) > 0.3 # if the sum of the excluded classes is greater than 0.3, use segreg_poly
-  N<-NULL
-  for(i in which(id1))
-    N<-rbind(N, Ds[dp[i]+1, dq[i]+1, ])
+  N<-matrix(NA, sum(id1), input.data$m+1)
+  ct<-1
+  for(i in which(id1)){
+    N[ct,] <- Ds[dp[i]+1, dq[i]+1, ]
+    ct<-ct+1
+  }
   input.data$geno[id1,-c(1:2)]<-N
   # if the sum of the excluded classes is greater than zero
   # and smaller than 0.3, assign zero to those classes and normalize the vector

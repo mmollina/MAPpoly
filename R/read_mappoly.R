@@ -211,6 +211,7 @@ read_geno <- function(file.in, filter.non.conforming = TRUE) {
   if(filter.non.conforming){
     cat("    Filtering non-conforming markers.\n    ...")
     res<-filter_non_conforming_classes(res)
+    cat("\n    Performing chi-square test.\n    ...")
     ##Computing chi-square p.values
     Ds <- array(NA, dim = c(m+1, m+1, m+1))
     for(i in 0:m)
@@ -221,7 +222,7 @@ read_geno <- function(file.in, filter.non.conforming = TRUE) {
     dimnames(M)<-list(res$mrk.names, c(0:m))
     M<-cbind(M, res$geno.dose)
     res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
-    cat("\n    Done with filtering.\n")
+    cat("\n    Done.\n")
     return(res)
   }
   return(res)
@@ -293,8 +294,9 @@ plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
   }
   par(mar = c(5,1,0,2))
   pal<-c(RColorBrewer::brewer.pal((x$m+1),"Set1"),1)
-  image(as.matrix(x$geno.dose), axes = FALSE,
-                     col = pal, useRaster = TRUE)
+  M <- as.matrix(x$geno.dose)
+  image(M, axes = FALSE,
+        col = pal[as.numeric(names(table(M)))+1], useRaster = TRUE)
   mtext(text = "Markers", side = 1)
   mtext(text = "Individuals", side = 2)
   par(mar = c(0,0,0,0))

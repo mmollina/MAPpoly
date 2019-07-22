@@ -232,3 +232,21 @@ print.pcmap3d<-function(x, ...)
   cat("\nStress: ", x$smacofsym$stress)
   cat("\nMean Nearest Neighbour Fit:", x$meannnfit)
 }
+
+#' @rdname mds_mappoly
+#' @keywords internal
+#' @export
+plot.pcmap<-function(x, D1lim = NULL, D2lim = NULL, displaytext = FALSE,...)
+{
+  fun <- getFromNamespace("plot.pcmap", "MDSMap")
+  fun(x, D1lim = D1lim, D2lim = D2lim, displaytext = displaytext, ...)
+}
+
+#' @rdname mds_mappoly
+#' @keywords internal
+#' @export
+plot.pcmap3d<-function(x, D1lim = NULL, D2lim = NULL, displaytext = FALSE,...)
+{
+  fun <- getFromNamespace("plot.pcmap3d", "MDSMap")
+  fun(x, D1lim = D1lim, D2lim = D2lim, displaytext = displaytext, ...)
+}
