@@ -17,7 +17,7 @@ read_geno(file.in, filter.non.conforming = TRUE)
 be read.}
 
 \item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
-expected genotypes under randam chromosome pairing and no double reduction}
+expected genotypes under random chromosome pairing and no double reduction}
 
 \item{x}{an object of one of the classes \code{mappoly.data}}
 
