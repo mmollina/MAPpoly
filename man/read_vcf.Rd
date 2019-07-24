@@ -9,7 +9,7 @@ read_vcf(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
   output = NULL)
 }
 \arguments{
-\item{file.in}{the name of the input file which contains the data to
+\item{file.in}{name of input file which contains the data to
 be read.}
 
 \item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
@@ -19,13 +19,13 @@ expected genotypes under random chromosome pairing and no double reduction}
 
 \item{parent.2}{name of parent 2}
 
-\item{ploidy}{the species ploidy (default: automatic detection)}
+\item{ploidy}{the species ploidy (optional, it will be automatically detected)}
 
-\item{thresh.line}{position of a threshold line for p values of the segregation test}
+\item{thresh.line}{threshold used for p-values on segregation test}
 
 \item{update.prob}{Logical. Should MAPpoly update genotype probabilities based on HMM? (default = FALSE)}
 
-\item{output}{When \code{update.prob = TRUE}, define the output .vcf file}
+\item{output}{if \code{update.prob = TRUE}, defines the output of the updated .vcf file}
 
 \item{...}{currently ignored}
 }

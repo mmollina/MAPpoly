@@ -5,15 +5,15 @@
 #' This function can handle .vcf files of version 4.0 and higher. The ploidy can be automatically detected, but you
 #' should inform it to check mismatches. All individual and marker names will be kept as they are in the .vcf file.
 #'
-#' @param file.in the name of the input file which contains the data to
+#' @param file.in name of input file which contains the data to
 #'     be read.
 #'
-#' @param ploidy the species ploidy (default: automatic detection)
+#' @param ploidy the species ploidy (optional, it will be automatically detected)
 #'
 #' @param filter.non.conforming if \code{TRUE} (default) exclude samples with non 
 #'     expected genotypes under random chromosome pairing and no double reduction 
 #'     
-#' @param thresh.line position of a threshold line for p values of the segregation test
+#' @param thresh.line threshold used for p-values on segregation test
 #' 
 #' @param parent.1 name of parent 1
 #' 
@@ -21,7 +21,7 @@
 #' 
 #' @param update.prob Logical. Should MAPpoly update genotype probabilities based on HMM? (default = FALSE)
 #' 
-#' @param output When \code{update.prob = TRUE}, define the output .vcf file
+#' @param output if \code{update.prob = TRUE}, defines the output of the updated .vcf file
 #' 
 #' @param ... currently ignored
 #'
@@ -79,6 +79,7 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   sequence = input.data@fix[,1] # Getting chromosome information
   sequence.pos = input.data@fix[,2] # Getting positions
   mrk.names = input.data@fix[,3] # Getting marker names
+  cat("Processing genotypes... (this may take some minutes)\n")
   cname = which(unlist(strsplit(unique(input.data@gt[,1]), ":")) == "GT") # Defining GT position
   geno.dose = matrix(unlist(lapply(strsplit(input.data@gt[,-1], ":"), "[", cname)), nrow = n.mrk, byrow = F) # Selecting genotypes
   file.ploidy = length(unlist(strsplit(unique(geno.dose[,1])[1], "/"))) # Checking ploidy
@@ -119,6 +120,7 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   dq = abs(abs(dosage.q-(m/2))-(m/2))
   id = dp+dq!=0
   
+  cat("Done!\n")
   cat("Read the following data:")
   cat("\n    Ploidy level:", m)
   cat("\n    No. individuals: ", n.ind)
