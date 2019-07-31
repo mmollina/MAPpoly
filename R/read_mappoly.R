@@ -172,13 +172,13 @@ read_geno <- function(file.in, filter.non.conforming = TRUE) {
   
   if (length(sequence) > 1)
     cat("\n    This dataset contains sequence information.")
-  cat("\n    ...")
+  cat("\n    ...\n")
   ## get genotypic info --------------------
   geno.dose <- read.table(file.in , skip = 12 + nphen)
   if(nrow(geno.dose)!=length(mrk.names))
     stop("\n\t\t-------------------------------------
          Number of marker names is different from
-         the number of markeres in the dataset.
+         the number of markers in the dataset.
          Please, check data.
          ------------------------------------------\n")
   if(ncol(geno.dose)!=length(ind.names))
