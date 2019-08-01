@@ -81,7 +81,7 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   mrk.names = input.data@fix[,3] # Getting marker names
   cat("Processing genotypes... (this may take some minutes)\n")
   cname = which(unlist(strsplit(unique(input.data@gt[,1]), ":")) == "GT") # Defining GT position
-  geno.dose = matrix(unlist(lapply(strsplit(input.data@gt[,-1], ":"), "[", cname)), nrow = n.mrk, byrow = F) # Selecting genotypes
+  geno.dose = matrix(unlist(lapply(strsplit(input.data@gt[,-1], ":"), "[", cname)), nrow = n.mrk, byrow = F) # Selecting genotypes (time consuming step)
   file.ploidy = length(unlist(strsplit(unique(geno.dose[,1])[1], "/"))) # Checking ploidy
   if (sum(grepl("\\|", geno.dose)) > 0){ # Checking phased data
     input.phased = TRUE # Treat this in a different way when reading file
@@ -104,7 +104,7 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
       for (i in 1:length(geno.dose)){
           if (geno.dose[i] == lost.data){
             geno.dose[i] = NA
-        } else {geno.dose[i] = length(which(unlist(strsplit(geno.dose[i], "/")) == 0))}
+        } else {geno.dose[i] = length(which(unlist(strsplit(geno.dose[i], "/")) == 0))} # Transforming dosages (time consuming step)
        }
   geno.dose = matrix(as.numeric(geno.dose), nrow = n.mrk, byrow = F)
   colnames(geno.dose) = ind.names
@@ -161,7 +161,7 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
                         sequence = sequence[id],
                         sequence.pos = sequence.pos[id],
                         prob.thres = NULL,
-                        geno.dose = geno.dose,
+                        geno.dose = geno.dose[id,],
                         nphen = 0,
                         phen = NULL,
                         input.file = input.file,
@@ -169,23 +169,22 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
                         ),
                    class = "mappoly.data")
   
-# Not working: fix it  
-  # if(filter.non.conforming){
-  #   cat("    Filtering non-conforming markers.\n    ...")
-  #   res<-filter_non_conforming_classes(res)
-  #   cat("\n    Performing chi-square test.\n    ...")
-  #   ##Computing chi-square p.values
-  #   Ds <- array(NA, dim = c(m+1, m+1, m+1))
-  #   for(i in 0:m)
-  #     for(j in 0:m)
-  #       Ds[i+1,j+1,] <- segreg_poly(m = m, dP = i, dQ = j)
-  #   Dpop<-cbind(res$dosage.p, res$dosage.q)
-  #   M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
-  #   dimnames(M)<-list(res$mrk.names, c(0:m))
-  #   M<-cbind(M, res$geno.dose)
-  #   res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
-  #   cat("\n    Done.\n")
-  #   return(res)
-  # }
+  if(filter.non.conforming){
+    cat("    Filtering non-conforming markers.\n    ...")
+    res<-filter_non_conforming_classes(res)
+    cat("\n    Performing chi-square test.\n    ...")
+    ##Computing chi-square p.values
+    Ds <- array(NA, dim = c(m+1, m+1, m+1))
+    for(i in 0:m)
+      for(j in 0:m)
+        Ds[i+1,j+1,] <- segreg_poly(m = m, dP = i, dQ = j)
+    Dpop<-cbind(res$dosage.p, res$dosage.q)
+    M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
+    dimnames(M)<-list(res$mrk.names, c(0:m))
+    M<-cbind(M, res$geno.dose)
+    res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
+    cat("\n    Done.\n")
+    return(res)
+  }
   return(res)
 }
