@@ -23,3 +23,6 @@ data;}
 \description{
 Exclude markers or individuals based on their missing data
 }
+\author{
+Marcelo Mollinari, \email{mmollin@ncsu.edu}
+}

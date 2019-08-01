@@ -460,6 +460,9 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
 #'             data;
 #' @param filter.thres maximum percentage of missing data
 #' @param inter if \code{TRUE}, it plots markers or individuals vs. frequency of missing data
+#'
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
+#' 
 #' @export
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
@@ -736,4 +739,112 @@ get_genomic_order<-function(input.seq){
     rownames(M)<-input.seq$seq.mrk.names
     return(M[order(M[,1],M[,2]),])
   }
+}
+
+#' Add marker to a sequence
+#' 
+#' This function creates a new sequence by adding markers to an existing sequence. Markers are added to the end of the sequence.
+#'
+#' @param input.seq an object of class \code{"mappoly.sequence"} 
+#' @param mrk markers to be added to the input sequence, identified by its positions on dataset. For multiple markers, please use 'c()'.
+#'
+#' @return An object of class \code{mappoly.sequence}, which is a
+#'     list containing the following components:
+#'     \item{seq.num}{a \code{vector} containing the (ordered) indices
+#'         of markers in the sequence, according to the input file.}
+#'     \item{seq.phases}{a \code{list} with the linkage phases between
+#'         markers in the sequence, in corresponding positions. \code{-1}
+#'         means that there are no defined linkage phases.}
+#'     \item{seq.rf}{a \code{vector} with the recombination
+#'         frequencies between markers in the sequence. \code{-1} means
+#'         that there are no estimated recombination frequencies.}
+#'     \item{loglike}{log-likelihood of the corresponding linkage
+#'         map.}
+#'     \item{data.name}{name of the object of class
+#'         \code{mappoly.data} with the raw data.}
+#'     \item{twopt}{name of the object of class \code{mappoly.twopt}
+#'         with the 2-point analyses. \code{-1} means that the twopt
+#'         estimates were not computed.}
+#' 
+#' @author Gabriel Gesteira and Marcelo Mollinari, \email{gabrielgesteira@usp.br}
+#' 
+#' @examples
+#' \dontrun{
+#' data(hexafake)
+#' seq1.mrk<-make_seq_mappoly(hexafake, 'seq1')
+#'
+#' # Adding marker 800
+#' seq1.p1.mrk<-add_marker(seq1.mrk, mrk = 800)
+#'
+#' # Adding markers 800, 801 and 802
+#' seq1.pm.mrk<-add_marker(seq1.mrk, mrk = c(800,801,802))
+#'}
+#' 
+#' @export
+add_marker<-function(input.seq, mrk)
+{
+    if (!any(class(input.seq) == "mappoly.sequence")){
+        stop(paste0(deparse(substitute(input.seq))," is not an object of class 'mappoly.sequence'."))
+    }
+    if (!is.numeric(mrk)){
+        stop("You should provide numeric marker positions according to the dataset indices.")
+    }
+    seq.num<-c(input.seq$seq.num, mrk)
+    return(make_seq_mappoly(get(input.seq$data.name), seq.num, input.seq$data.name))
+}
+
+#' Remove markers from a sequence
+#' 
+#' This function creates a new sequence by removing markers from an existing sequence.
+#'
+#' @param input.seq an object of class \code{"mappoly.sequence"} 
+#' @param mrk markers to be removed from the input sequence, identified by its positions on dataset. For multiple markers, please use 'c()'.
+#'
+#' @return An object of class \code{mappoly.sequence}, which is a
+#'     list containing the following components:
+#'     \item{seq.num}{a \code{vector} containing the (ordered) indices
+#'         of markers in the sequence, according to the input file.}
+#'     \item{seq.phases}{a \code{list} with the linkage phases between
+#'         markers in the sequence, in corresponding positions. \code{-1}
+#'         means that there are no defined linkage phases.}
+#'     \item{seq.rf}{a \code{vector} with the recombination
+#'         frequencies between markers in the sequence. \code{-1} means
+#'         that there are no estimated recombination frequencies.}
+#'     \item{loglike}{log-likelihood of the corresponding linkage
+#'         map.}
+#'     \item{data.name}{name of the object of class
+#'         \code{mappoly.data} with the raw data.}
+#'     \item{twopt}{name of the object of class \code{mappoly.twopt}
+#'         with the 2-point analyses. \code{-1} means that the twopt
+#'         estimates were not computed.}
+#' 
+#' @author Gabriel Gesteira and Marcelo Mollinari, \email{gabrielgesteira@usp.br}
+#' 
+#' @examples
+#' \dontrun{
+#' data(hexafake)
+#' seq1.mrk<-make_seq_mappoly(hexafake, 'seq1')
+#'
+#' # Removing marker 1
+#' seq1.m1.mrk<-remove_marker(seq1.mrk, mrk = 1)
+#'
+#' # Removing markers 1, 2 and 3
+#' seq1.mm.mrk<-remove_marker(seq1.mrk, mrk = c(1,2,3))
+#'}
+#' 
+#' @export
+remove_marker<-function(input.seq, mrk)
+{
+    if (!any(class(input.seq) == "mappoly.sequence")){
+        stop(paste0(deparse(substitute(input.seq))," is not an object of class 'mappoly.sequence'."))
+    }
+    if (!is.numeric(mrk)){
+        stop("You should provide numeric marker positions according to the dataset indices.")
+    }
+    if (sum(mrk %in% input.seq$seq.num) != length(mrk)){
+        absent = mrk[-which(mrk %in% input.seq$seq.num)]
+        warning(paste0("Some of the informed markers are not present in this sequence ", "(Markers: ", paste(absent, collapse = ", "), ")."))
+    }
+    seq.num<-input.seq$seq.num[-which(input.seq$seq.num %in% mrk)]
+    return(make_seq_mappoly(get(input.seq$data.name), seq.num, input.seq$data.name))
 }
