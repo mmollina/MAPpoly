@@ -171,8 +171,9 @@ read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
     nphen <- na.omit(as.numeric(temp[2]))
     phen <- NULL
     if (nphen > 0) {
-        phen <- read.table(file.in, skip = 11, row.names = 1, col.names = c("mrk", ind.names), colClasses = c("character", rep("numeric", n.ind)), nrows = nphen,
-            comment.char = "")
+      message("Skipping phenotype: information currently ignored")
+      #phen <- read.table(file.in, skip = 11, row.names = 1, col.names = c("mrk", ind.names), colClasses = c("character", rep("numeric", n.ind)), nrows = nphen,
+      #    comment.char = "")
     }
     cat("Reading the following data:")
     cat("\n    Ploidy level:", m)
@@ -198,6 +199,11 @@ read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
         dq.na <- dosage.q[m.na]
         for (i in 1:length(m.na)) geno[i.na[i], -c(1, 2)] <- segreg_poly(m, dp.na[i], dq.na[i])
     }
+    ## ordering data frame by individuals
+    #if(all(unique(geno$ind)!=ind.names)){
+      ind.names<-ind.names[order(ind.names)]
+      geno<-geno[order(geno$ind),]      
+    #}
     ## dosage info
     if(filter.non.conforming)
       geno.dose <- matrix(NA,1,1)

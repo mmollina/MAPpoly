@@ -428,7 +428,7 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
   dq<-rep(dq, input.data$n.ind)
   M<-M[rep(seq_len(nrow(M)), input.data$n.ind),]
   R<-input.data$geno[,-c(1:2)] - input.data$geno[,-c(1:2)]*M
-  id1<-apply(R, 1, sum) > 0.3 # if the sum of the excluded classes is greater than 0.3, use segreg_poly
+  id1<-apply(R, 1, function(x) abs(sum(x))) > 0.3 # if the sum of the excluded classes is greater than 0.3, use segreg_poly
   N<-matrix(NA, sum(id1), input.data$m+1)
   ct<-1
   for(i in which(id1)){

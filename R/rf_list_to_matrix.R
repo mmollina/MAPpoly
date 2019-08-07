@@ -60,7 +60,7 @@
 #'     plot(mat.full)
 #'     plot(mat.full, type = "lod")
 #'
-#'     ## Fintered matrix
+#'     ## Filtered matrix
 #'     mat.filt<-rf_list_to_matrix(input.twopt=all.pairs,
 #'                                 thresh.LOD.ph = 5,
 #'                                 thresh.LOD.rf = 5,
@@ -197,7 +197,9 @@ plot.mappoly.rf.matrix <- function(x, type = c("rf", "lod"), ord = NULL, rem = N
     brks<-NULL
   } else if(type == "lod")
   {
-    w<-log10(x$lod.mat)
+    w<-x$lod.mat
+    w[w < 1e-4]<-1e-4
+    w<-log10(w)
     if(is.null(main.text))
       main.text<-"log(LOD) Score matrix"
     col.range <- na.omit(fields::tim.colors()[1:(ceiling(128 * max(x$lod.mat, na.rm = TRUE)) + 1)])

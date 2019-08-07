@@ -78,7 +78,7 @@ fraction matrix
     plot(mat.full)
     plot(mat.full, type = "lod")
 
-    ## Fintered matrix
+    ## Filtered matrix
     mat.filt<-rf_list_to_matrix(input.twopt=all.pairs,
                                 thresh.LOD.ph = 5,
                                 thresh.LOD.rf = 5,
