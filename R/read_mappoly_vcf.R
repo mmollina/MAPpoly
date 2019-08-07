@@ -77,7 +77,7 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   n.mrk = dim(input.data$gt)[1] # Getting number of markers
   n.ind = length(ind.names) - 2 # Number of individuals excepting two parents
   sequence = input.data$fix[,1] # Getting chromosome information
-  sequence.pos = input.data$fix[,2] # Getting positions
+  sequence.pos = as.numeric(input.data$fix[,2]) # Getting positions
   mrk.names = input.data$fix[,3] # Getting marker names
   if (any(is.na(unique(mrk.names)))){
     cat("No named markers. Using integers instead.\n")
