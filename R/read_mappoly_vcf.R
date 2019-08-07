@@ -72,16 +72,20 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
     warning("Your VCF file is greater than 3 GB. Check for available RAM memory.")
   }
   cat("Reading data...\n")
-  input.data = vcfR::read.vcfR(file.in) # Reading file
-  ind.names = colnames(input.data@gt)[-1]
-  n.mrk = dim(input.data@gt)[1] # Getting number of markers
+  input.data = .read.vcfR(file.in) # Reading file
+  ind.names = colnames(input.data$gt)[-1]
+  n.mrk = dim(input.data$gt)[1] # Getting number of markers
   n.ind = length(ind.names) - 2 # Number of individuals excepting two parents
-  sequence = input.data@fix[,1] # Getting chromosome information
-  sequence.pos = input.data@fix[,2] # Getting positions
-  mrk.names = input.data@fix[,3] # Getting marker names
+  sequence = input.data$fix[,1] # Getting chromosome information
+  sequence.pos = input.data$fix[,2] # Getting positions
+  mrk.names = input.data$fix[,3] # Getting marker names
+  if (is.na(unique(mrk.names))){
+    cat("No named markers. Using integers instead.\n")
+    mrk.names = seq(1, length(input.data$fix[,3]), 1)
+  }
   cat("Processing genotypes... (this may take some minutes)\n")
-  cname = which(unlist(strsplit(unique(input.data@gt[,1]), ":")) == "GT") # Defining GT position
-  geno.dose = matrix(unlist(lapply(strsplit(input.data@gt[,-1], ":"), "[", cname)), nrow = n.mrk, byrow = F) # Selecting genotypes (time consuming step)
+  cname = which(unlist(strsplit(unique(input.data$gt[,1]), ":")) == "GT") # Defining GT position
+  geno.dose = matrix(unlist(lapply(strsplit(input.data$gt[,-1], ":"), "[", cname)), nrow = n.mrk, byrow = F) # Selecting genotypes (time consuming step)
   file.ploidy = length(unlist(strsplit(unique(geno.dose[,1])[1], "/"))) # Checking ploidy
   if (sum(grepl("\\|", geno.dose)) > 0){ # Checking phased data
     input.phased = TRUE # Treat this in a different way when reading file
@@ -119,6 +123,7 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   dp = abs(abs(dosage.p-(m/2))-(m/2))
   dq = abs(abs(dosage.q-(m/2))-(m/2))
   id = dp+dq!=0
+  id[which(is.na(id))] = FALSE
   
   cat("Done!\n")
   cat("Read the following data:")
@@ -187,4 +192,119 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
     return(res)
   }
   return(res)
+}
+
+# Function read.vcfR adapted from package vcfR 
+.read.vcfR = function(file, limit = 1e+07, nrows = -1, skip = 0, cols = NULL, 
+                      convertNA = TRUE, checkFile = TRUE, verbose = TRUE) 
+{
+  if (!is.character(file)) {
+    stop("The parameter file is expected to be a character.")
+  }
+  if (grepl("^http://|^https://|^ftp://|^ftps://", file)) {
+    file_name <- unlist(strsplit(file, split = "/"))
+    file_name <- file_name[[length(file_name)]]
+    if (file.exists(file_name)) {
+      message(paste("Local file", file_name, "found."))
+      message("Using this local copy instead of retrieving a remote copy.")
+    }
+    else {
+      message(paste("Downloading remote file", file))
+      utils::download.file(url = file, destfile = file_name, 
+                           quiet = FALSE)
+      message("File downloaded.")
+      message("It will probably be faster to use this local file in the future instead of re-downloading it.")
+    }
+    file <- file_name
+  }
+  if (grepl("^~", file)) {
+    file <- path.expand(file)
+  }
+  if (file.access(file, mode = 0) != 0) {
+    stop(paste("File:", file, "does not appear to exist!"))
+  }
+  if (file.access(file, mode = 4) != 0) {
+    stop(paste("File:", file, "appears to exist but is not readable!"))
+  }
+  if (checkFile == TRUE) {
+    vcf <- scan(file = file, what = character(), nmax = 1, 
+                sep = "\n", quiet = TRUE, comment.char = "")
+    if (substr(vcf, start = 1, stop = 17) != "##fileformat=VCFv") {
+      msg <- paste("File:", file, "does not appear to be a VCF file.\n")
+      msg <- paste(msg, " First line of file:\n", file)
+      msg <- paste(msg, "\n")
+      msg <- paste(msg, " Should begin with:\n##fileformat=VCFv")
+      msg <- paste(msg, "\n")
+      stop(msg)
+    }
+  }
+  vcf <- list()
+  stats <- .vcf_stats_gz(file, nrows = nrows, skip = skip, 
+                         verbose = as.integer(verbose))
+  if (stats["columns"] > 0 & stats["last_line"] > 0 & stats["columns"] != 
+      stats["last_line"]) {
+    msg <- paste("Your file appears to have", stats["columns"], 
+                 "header elements")
+    msg <- paste(msg, "and", stats["last_line"], "columns in the body.\n")
+    msg <- paste(msg, "This should never happen!")
+    stop(msg)
+  }
+  if (stats["columns"] == 0 & stats["last_line"] > 0) {
+    stats["columns"] <- stats["last_line"]
+  }
+  if (verbose == TRUE) {
+    cat("File attributes:")
+    cat("\n")
+    cat(paste("  meta lines:", stats["meta"]))
+    cat("\n")
+    cat(paste("  header_line:", stats["header_line"]))
+    cat("\n")
+    cat(paste("  variant count:", stats["variants"]))
+    cat("\n")
+    cat(paste("  column count:", stats["columns"]))
+    cat("\n")
+  }
+  utils::flush.console()
+  if (stats["meta"] < 0) {
+    stop(paste("stats['meta'] less than zero:", stats["meta"], 
+               ", this should never happen."))
+  }
+  if (stats["header_line"] < 0) {
+    stop(paste("stats['header_line'] less than zero:", stats["header_line"], 
+               ", this should never happen."))
+  }
+  if (stats["variants"] < 0) {
+    stop(paste("stats['variants'] less than zero:", stats["variants"], 
+               ", this should never happen."))
+  }
+  if (stats["columns"] < 0) {
+    stop(paste("stats['columns'] less than zero:", stats["columns"], 
+               ", this should never happen."))
+  }
+  if (is.null(cols)) {
+    cols <- 1:stats["columns"]
+  }
+  cols <- sort(unique(c(1:8, cols)))
+  ram_est <- memuse::howbig(stats["variants"], stats["columns"])
+  if (ram_est@size > limit) {
+    message(paste("The number of variants in your file is:", 
+                  prettyNum(stats["variants"], big.mark = ",")))
+    message(paste("The number of samples in your file is:", 
+                  prettyNum(stats["columns"] - 1, big.mark = ",")))
+    message(paste("This will result in an object of approximately:", 
+                  ram_est, "in size"))
+    stop("Object size limit exceeded")
+  }
+  vcf$meta <- .read_meta_gz(file, stats, as.numeric(verbose))
+  body <- .read_body_gz(file, stats = stats, nrows = nrows, 
+                        skip = skip, cols = cols, convertNA = as.numeric(convertNA), 
+                        verbose = as.numeric(verbose))
+  vcf$fix <- body[, 1:8, drop = FALSE]
+  if (ncol(body) > 8) {
+    vcf$gt <- body[, -c(1:8), drop = FALSE]
+  }
+  else {
+    vcf$gt <- matrix("a", nrow = 0, ncol = 0)
+  }
+  return(vcf)
 }
