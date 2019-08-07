@@ -236,18 +236,19 @@ plot.mappoly.sequence <- function(x, ...)
     mtext(text = "log10(p.value)", side = 4, line = -1, cex = .7)
   }
   par(mar = c(5,1,0,4))
-  pal<-c(RColorBrewer::brewer.pal((x$m+1),"Set1"),1)
+  pal<-c(1, RColorBrewer::brewer.pal((x$m+1),"Set1"))
   names(pal)<-c(0:m,m+1)
   M<-as.matrix(get(x$data.name, pos = 1)$geno.dose[x$seq.mrk.names,])
+  M[M==x$m+1]<--1
   image(M, axes = FALSE,
-        col = pal[as.character(sort(unique(as.vector(M))))], useRaster = TRUE)
+        col = pal, useRaster = TRUE)
   mtext(text = "Markers", side = 1)
   mtext(text = "Individuals", side = 2)
   par(mar = c(0,0,0,0))
   plot(0:10,0:10, type = "n", axes = FALSE, xlab = "", ylab = "")
   legend(0,10, 
          horiz=FALSE, 
-         legend=c(0:x$m,"missing"),
+         legend=c("missing", 0:x$m),
          pch=22,
          pt.cex = 3,
          pt.bg=pal, pt.lwd = 0,
