@@ -63,6 +63,144 @@ const int nreport = 1000;
 
 // Testing functions
 
+int get_dosage(std::string mystring, int gt_pos){
+  // mystring is a string containing vcf genotypes
+  // gt_pos is the GT position on vcf file
+  //  Rcpp::Rcout << "In strsplit" << std::endl;
+  
+  char split = ':';
+  int flag;
+  std::vector<std::string> vec_o_strings;
+  int start = 0;
+  unsigned int i=0;
+  
+  // Looping through string
+  for(i = 1; i < mystring.size(); i++){
+    if( mystring[i] == split){
+      std::string temp = mystring.substr(start, i - start);
+      vec_o_strings.push_back(temp);
+      start = i+1;
+      i = i+1;
+    }
+  }
+  
+  // Handle the last element
+  std::string temp = mystring.substr(start, i - start);
+  vec_o_strings.push_back(temp);
+  
+  // Testing for correct separation
+  std::string test = vec_o_strings[gt_pos-1];
+  if(test.size() > 2){
+    mystring = vec_o_strings[gt_pos-1];
+  }
+  start = 0;
+  
+  // Checking for NA
+  if(mystring[0] == '.'){
+    return -1;
+  }
+  
+  // Checking other formats
+  if(mystring[0] == '0' || mystring[0] == '1'){flag = 0;} else {flag = 1;}
+  if(flag == 1){
+    Rcpp::Rcout << "Warning: GT field does not have the expected format, please check your file. Returning NA instead.\n";
+    return -1;
+  }
+  
+  // Accounting allele dosages
+  for (i = 0; i < mystring.size(); i++){
+    if(mystring[i] == '1'){
+      start += 1;
+    }
+  }
+  
+  return start;
+}
+
+
+//' @export
+// [[Rcpp::export(name=".vcf_transform_dosage")]]
+Rcpp::NumericMatrix vcf_transform_dosage(Rcpp::StringMatrix& mat, int gt_pos){
+  int rowmat = mat.nrow();
+  int colmat = mat.ncol();
+  int k, l;
+  Rcpp::NumericMatrix results(rowmat,colmat);
+  
+  int get_dosage(std::string mystring, int gt_pos);
+  
+  for (k=0; k < rowmat; k++){
+    for (l=0; l < colmat; l++){
+      results(k,l) = get_dosage(as<std::string>(mat(k,l)), gt_pos);
+    }
+  }
+  return results;
+}
+
+// Rcpp::NumericMatrix vcf_transform_dosage(Rcpp::StringMatrix& mat, int gt_pos){
+//   int rowmat = mat.nrow();
+//   int colmat = mat.ncol();
+//   int k, l;
+//   int res;
+//   char split = ':';
+//   int flag;
+//   std::vector<std::string> vec_o_strings;
+//   int start = 0;
+//   int i=0;
+//   Rcpp::NumericMatrix results(rowmat,colmat);
+//   std::string mystring;
+//   
+//   for (k=0; k < rowmat; k++){
+//     for (l=0; l < colmat; l++){
+//       start = 0;
+//       // Defining mystring
+//       mystring = mat(k,l);
+//       // Rcpp::Rcout << mystring << '\n';
+//       // Looping through string
+//       for(i = 1; i < mystring.size(); i++){
+//         if( mystring[i] == split){
+//           std::string temp = mystring.substr(start, i - start);
+//           vec_o_strings.push_back(temp);
+//           start = i+1;
+//           i = i+1;
+//         }
+//       }
+//       
+//       // Handle the last element
+//       std::string temp = mystring.substr(start, i - start);
+//       vec_o_strings.push_back(temp);
+//       
+//       // Testing for correct separation
+//       std::string test = vec_o_strings[gt_pos-1];
+//       if(test.size() > 2){
+//         mystring = vec_o_strings[gt_pos-1];
+//       }
+//       start = 0;
+//       
+//       // Checking other formats
+//       if(mystring[0] == '0' || mystring[0] == '1'){flag = 0;} else {flag = 1;}
+//       
+//       // Checking for NA
+//       if(mystring[0] == '.'){
+//         start = -1;
+//       } else if(flag == 0){
+//         // Accounting allele dosages
+//         for (i = 0; i < mystring.size(); i++){
+//           if(mystring[i] == '1'){
+//             start += 1;
+//           }
+//         }
+//       }
+//       else if(flag == 1){
+//         Rcpp::Rcout << "Warning: GT field does not have the expected format, please check your file. Returning NA instead.\n";
+//         start = -1;
+//       }
+// 
+//       results(k,l) = start;
+//     }
+//   }
+//   return results;
+// }
+
 void testing_strsplit(std::string& mystring, std::vector<std::string>& vec_o_strings, char& split){
   // mystring is a string to be split on the character 'split'.
   // vec_o_strings is empty and will be pushed on to.
@@ -85,7 +223,6 @@ void testing_strsplit(std::string& mystring, std::vector<std::string>& vec_o_str
   vec_o_strings.push_back(temp);
   
 }
-
 
 void testing_gtsplit(std::string& mystring,
                      std::vector<std::string>& vec_o_strings,

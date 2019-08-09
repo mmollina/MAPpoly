@@ -84,14 +84,17 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
     no_name = sum(is.na(mrk.names))
     mrk.names[which(is.na(mrk.names))] = paste0("no_name_", seq(1, no_name, 1))
   }
-  cat("Processing genotypes... (this may take some minutes)\n")
+  cat("Processing genotypes...")
   cname = which(unlist(strsplit(unique(input.data$gt[,1]), ":")) == "GT") # Defining GT position
-  geno.dose = matrix(unlist(lapply(strsplit(input.data$gt[,-1], ":"), "[", cname)), nrow = n.mrk, byrow = F) # Selecting genotypes (time consuming step)
-  file.ploidy = length(unlist(strsplit(unique(geno.dose[,1])[1], "/"))) # Checking ploidy
-  if (sum(grepl("\\|", geno.dose)) > 0){ # Checking phased data
-    input.phased = TRUE # Treat this in a different way when reading file
-    warning("Phased genotypes detected. Should MAPpoly consider this information?")
-  } else {input.phased = FALSE}
+  file.ploidy = length(unlist(strsplit(unique(input.data$gt[,2])[1], "/"))) # Checking ploidy
+  geno.dose = .vcf_transform_dosage(input.data$gt[,-1], cname) # Isolating genotypes and accounting allele dosages
+  geno.dose[which(geno.dose == -1)] = NA # Filling NA values
+  cat("Done!\n")
+  # geno.dose = matrix(unlist(lapply(strsplit(input.data$gt[,-1], ":"), "[", cname)), nrow = n.mrk, byrow = F) # Selecting genotypes (time consuming step)
+  # if (sum(grepl("\\|", geno.dose)) > 0){ # Checking phased data
+  #   input.phased = TRUE # Treat this in a different way when reading file
+  #   warning("Phased genotypes detected. Should MAPpoly consider this information?")
+  # } else {input.phased = FALSE}
   if ((file.ploidy %% 2) != 0){ # Checking odd ploidy level
     stop("Your VCF file shows an odd ploidy level, but MAPpoly only supports even ploidy levels. Please check your VCF file and try again.")
   }
@@ -105,13 +108,13 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   if (!(parent.1 %in% ind.names) | !(parent.2 %in% ind.names)){
     stop("Provided parents were not found in VCF file. Please check it and try again.")
   }
-  lost.data = paste(c(rep("./", (m-1)), "."), collapse = "")
-      for (i in 1:length(geno.dose)){
-          if (geno.dose[i] == lost.data){
-            geno.dose[i] = NA
-        } else {geno.dose[i] = length(which(unlist(strsplit(geno.dose[i], "/")) == 0))} # Transforming dosages (time consuming step)
-       }
-  geno.dose = matrix(as.numeric(geno.dose), nrow = n.mrk, byrow = F)
+  # lost.data = paste(c(rep("./", (m-1)), "."), collapse = "")
+  #     for (i in 1:length(geno.dose)){
+  #         if (geno.dose[i] == lost.data){
+  #           geno.dose[i] = NA
+  #       } else {geno.dose[i] = length(which(unlist(strsplit(geno.dose[i], "/")) == 0))} # Transforming dosages (time consuming step)
+  #      }
+  # geno.dose = matrix(as.numeric(geno.dose), nrow = n.mrk, byrow = F)
   colnames(geno.dose) = ind.names
   rownames(geno.dose) = mrk.names
   dosage.p = geno.dose[,which(colnames(geno.dose) == parent.1)] # Selecting dosages for parent 1
@@ -142,7 +145,7 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   if(nrow(geno.dose)!=length(mrk.names))
     stop("\n\t\t-------------------------------------
          Number of marker names is different from
-         the number of markeres in the dataset.
+         the number of markers in the dataset.
          Please, check data.
          ------------------------------------------\n")
   if(ncol(geno.dose)!=length(ind.names))
@@ -171,7 +174,7 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
                         nphen = 0,
                         phen = NULL,
                         input.file = input.file,
-                        input.phased = input.phased
+                        input.phased = FALSE
                         ),
                    class = "mappoly.data")
   
