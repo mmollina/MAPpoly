@@ -78,10 +78,11 @@ Performs the two-point pairwise analysis.
    }
 }
 \references{
-Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
+Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     analysis and haplotype phasing in experimental autopolyploid
     populations with high ploidy level using hidden Markov
-    models, _submited_. \url{https://doi.org/10.1101/415232}
+    models, _G3: Genes, Genomes, Genetics_. 
+    \url{https://doi.org/10.1534/g3.119.400378}
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

@@ -36,11 +36,6 @@ get_rf_from_mat <- function(M){
 #' @export
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
-#' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
-#'     analysis and haplotype phasing in experimental autopolyploid
-#'     populations with high ploidy level using hidden Markov
-#'     models, _submited_. \url{https://doi.org/10.1101/415232}
 #'
 rev_map<-function(input.map)
 {
@@ -377,11 +372,6 @@ gg_color_hue <- function(n) {
 #'     
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
-#' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
-#'     analysis and haplotype phasing in experimental autopolyploid
-#'     populations with high ploidy level using hidden Markov
-#'     models, _submited_. \url{https://doi.org/10.1101/415232}
 #'     
 #' @export
 update_missing<-function(input.data, 

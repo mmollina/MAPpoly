@@ -158,7 +158,7 @@ Version 3, at
 \references{
 Preedy, K. F., & Hackett, C. A. (2016). A rapid marker ordering approach for
  high-density genetic linkage maps in experimental autotetraploid populations
- using multidimensional scaling. Theoretical and Applied Genetics, 129(11),
+ using multidimensional scaling. _Theoretical and Applied Genetics_, 129(11),
  2117-2132. \url{http://doi.org/10.1007/s00122-016-2761-8}
 }
 \author{
