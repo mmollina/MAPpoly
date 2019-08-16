@@ -47,7 +47,7 @@ using namespace Rcpp;
 
 /* FUNCTION: emit_poly
 
- Emission distribution (equation 8 on the paper):
+ Emission distribution (equation 8 in the paper):
  Computes the probability of observing a molecular phenotype
  given the multialleleic genotype, i.e. P(Observation|Genotype)
 
@@ -341,7 +341,7 @@ std::vector<double> backward(int m,
 }
 
 
-/* FUNCTION: forward
+/* FUNCTION: forward_highprec
  -----------------------------------------------------
  Classical forward equation presented in Rabiner 1989.
  This is using high precision long double variable.
@@ -365,7 +365,7 @@ std::vector<long double> forward_highprec(int m,
   }
   return(fk1);
 }
-/* FUNCTION: backward
+/* FUNCTION: backward_highprec
  -----------------------------------------------------
  Classical backward equation presented in Rabiner 1989.
  This is using high precision long double variable.
