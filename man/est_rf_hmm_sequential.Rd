@@ -5,7 +5,7 @@
 \title{Multipoint analysis using Hidden Markov Models - Sequential phase elimination}
 \usage{
 est_rf_hmm_sequential(input.seq, twopt, start.set = 4, thres.twopt = 5,
-  thres.hmm = 50, extend.tail = 50, phase.number.limit = Inf,
+  thres.hmm = 50, extend.tail = NULL, phase.number.limit = Inf,
   sub.map.size.diff.limit = Inf, info.tail = TRUE,
   reestimate.single.ph.configuration = FALSE, tol = 0.1,
   tol.final = 0.001, verbose = TRUE, high.prec = FALSE)
@@ -28,7 +28,8 @@ phases compared via hmm analysis should be evaluated in the
 next round of marker inclusion.}
 
 \item{extend.tail}{the length of the tail of the chain that should
-be used to calculate the likelihood of the map. Even if function 
+be used to calculate the likelihood of the map. If \code{NULL} (default), 
+the function uses all markers positioned. Even if function 
 \code{info.tail = TRUE}, it uses at least \code{extend.tail}
 as the tail length.}
 
@@ -58,8 +59,8 @@ where there are only one possible linkage phase configuration.}
 \item{verbose}{If \code{TRUE}, current progress is shown; if
 \code{FALSE}, no output is produced.}
 
-\item{high.prec}{logical. If \code{TRUE} (default) uses high precision 
-long double numbers in the HMM procedure.}
+\item{high.prec}{logical. If \code{TRUE} uses high precision 
+long double numbers in the HMM procedure implemented in C++.}
 }
 \value{
 An object of class 'mappoly.map'
@@ -144,10 +145,11 @@ the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
 
 }
 \references{
-Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
+Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     analysis and haplotype phasing in experimental autopolyploid
     populations with high ploidy level using hidden Markov
-    models, _submited_. \url{https://doi.org/10.1101/415232}
+    models, _G3: Genes, Genomes, Genetics_. 
+    \url{https://doi.org/10.1534/g3.119.400378}
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

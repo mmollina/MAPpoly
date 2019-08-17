@@ -1,4 +1,4 @@
-  #' Simulate mapping population (one parent)
+#' Simulate mapping population (one parent)
 #'
 #' This function simulates a polyploid mapping population
 #' under random chromosome segregation
