@@ -78,6 +78,7 @@
 #'                                       max.inc = 0,
 #'                                       block1.tail = NULL,
 #'                                       tol = 0.01)
+#'    rf_map1_map2$rf.stats                                   
 #'                                
 #'    new.map<-subset.map
 #'    new.map$maps[[1]]$seq.ph <- list(P = c(rf_map1_map2$phM1[[1]]$config.to.test[[1]]$P,

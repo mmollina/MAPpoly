@@ -154,8 +154,8 @@ generate_all_link_phases_elim_equivalent_haplo <-
       for (j in 1:nrow(M$P)) {
         for (k in 1:ncol(M$P)) {
           a1 <- M$P[as.character(M1$seq.num[j]), as.character(M2$seq.num[k])]
-          a2 <-
-            sum((hP1[as.character(M1$seq.num[j]), a[, 1]] + hP2[as.character(M2$seq.num[k]), a[, 2]]) == 2)
+          a2 <- sum((hP1[as.character(M1$seq.num[j]), 
+                         a[, 1]] + hP2[as.character(M2$seq.num[k]), a[, 2]]) == 2)
           if (is.na(a1))
             a1 <- a2
           if (a1 != a2)

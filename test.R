@@ -31,14 +31,28 @@ M<-mat_share(map1,
              count.cache = counts.web,
              thres = 3)
 
-rf_map1_map2<-est_rf_marker_blocks(block1 = map1,
-                                   block2 = map2,
-                                   ph1 = "best",
-                                   ph2 = "best",
-                                   M = M,
-                                   max.inc = 0,
-                                   block1.tail = NULL,
-                                   tol = 0.01)
+system.time(
+bla1<-est_rf_marker_blocks(block1 = map1,
+                           block2 = map2,
+                           ph1 = "best",
+                           ph2 = "best",
+                           M = M,
+                           max.inc = 0,
+                           block1.tail = NULL,
+                           tol = 0.01))
+system.time(
+bla2<-est_rf_marker_blocks(block1 = map1,
+                           block2 = map2,
+                           ph1 = "best",
+                           ph2 = "best",
+                           M = M,
+                           max.inc = 0,
+                           block1.tail = NULL,
+                           tol = 0.01))
+identical(bla1, bla2)
+
+bla<-generate_all_link_phases_elim_equivalent_haplo(map1$maps[[1]], map2$maps[[1]], M, m, max.inc)
+
 
 new.map0<-get_submap(subset.map, match(c(map1$maps[[1]]$seq.num, map2$maps[[1]]$seq.num),  subset.map$maps[[1]]$seq.num))
 new.map<-new.map0                    

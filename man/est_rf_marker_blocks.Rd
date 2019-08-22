@@ -80,14 +80,14 @@ When uThe \code{max.inc} argument
                 count.cache = counts.web,
                 thres = 3)
    M
-   rf_map1_map2<-est_twopt_hap(block1 = map1,
-                               block2 = map2,
-                               ph1 = "best",
-                               ph2 = "best",
-                               M = M,
-                               max.inc = 0,
-                               block1.tail = NULL,
-                               tol = 0.01)
+   rf_map1_map2<-est_rf_marker_blocks(block1 = map1,
+                                      block2 = map2,
+                                      ph1 = "best",
+                                      ph2 = "best",
+                                      M = M,
+                                      max.inc = 0,
+                                      block1.tail = NULL,
+                                      tol = 0.01)
                                
    new.map<-subset.map
    new.map$maps[[1]]$seq.ph <- list(P = c(rf_map1_map2$phM1[[1]]$config.to.test[[1]]$P,
