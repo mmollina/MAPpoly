@@ -199,7 +199,7 @@ RcppExport SEXP est_haplotype_map(SEXP ploidyR,
         for(int j=0; (unsigned)j < alpha[i][n_mar-1].size(); j++)
           temp += alpha[i][n_mar-1][j];
         if(temp > 0)
-          loglike += log(temp);
+          loglike += log10(temp);
       }
       if(verbose)
         Rcpp::Rcout << "\n";
@@ -244,7 +244,7 @@ RcppExport SEXP est_haplotype_map(SEXP ploidyR,
     for(int j=0; (unsigned)j < alpha[i][n_mar-1].size(); j++)
       temp += alpha[i][n_mar-1][j];
     if(temp > 0)
-      loglike += log(temp);
+      loglike += log10(temp);
   }
   if(verbose)
     Rcpp::Rcout << "\n";
