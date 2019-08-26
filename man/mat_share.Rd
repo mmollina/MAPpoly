@@ -50,7 +50,8 @@ marker blocks, represented by two objects of type \code{mappoly.map}
                                       verbose = TRUE,
                                       high.prec = FALSE)
                                       
-  s1 <- make_seq_mappoly(hexafake, unique.mrks$seq.mrk.names[1:25])                                     
+  s1 <- make_seq_mappoly(hexafake, 
+                         unique.mrks$seq.mrk.names[1:25])                                     
   map1 <- est_rf_hmm_sequential(input.seq = s1,
                                 thres.twopt = 5,
                                 thres.hmm = 10,
@@ -61,7 +62,8 @@ marker blocks, represented by two objects of type \code{mappoly.map}
                                 verbose = TRUE,
                                 high.prec = FALSE)
                                 
-  s2 <- make_seq_mappoly(hexafake, unique.mrks$seq.mrk.names[26:47])                                     
+  s2 <- make_seq_mappoly(hexafake, 
+                         unique.mrks$seq.mrk.names[26:47])                                     
   map2 <- est_rf_hmm_sequential(input.seq = s2,
                                 thres.twopt = 5,
                                 thres.hmm = 10,

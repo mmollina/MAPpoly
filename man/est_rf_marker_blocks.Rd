@@ -9,10 +9,10 @@ est_rf_marker_blocks(block1, block2, ph1 = "best", ph2 = "best", M,
 }
 \arguments{
 \item{block1}{a block of phased SNPs contained in a object of
-class\code{\link[mappoly]{mappoly.map}}.}
+class \code{mappoly.map}.}
 
 \item{block2}{a block of phased SNPs contained in a object of
-class\code{\link[mappoly]{mappoly.map}}.}
+class \code{mappoly.map}.}
 
 \item{ph1}{an integer indicating the position of
 the linkage phase configuration for the first marker block.
@@ -26,7 +26,7 @@ If \code{NULL}, it uses the position with maximum likelihood.}
 share alleic variations between the SNPs contained in the phased
 marker blocks. The rows represent SNPs in the first marker block
 and the columns represent SNPs in the second marker block. This
-matrix can be obtained using the function class\code{\link[mappoly]{mat_share}}}
+matrix can be obtained using the function class \code{\link[mappoly]{mat_share}}}
 
 \item{max.inc}{the maximum inconsitency acceptable when filtering the
 linkage phase configuration based on two-point information. 
@@ -34,7 +34,9 @@ Pairs with higher numbers will not be taken in to account in
 the filtering process.}
 
 \item{block1.tail}{the number of SNPs that should be used in the first
-phased marker block. If \code{NULL} (default) uses all SNPs}
+phased marker block. If \code{NULL} (default) uses all SNPs.}
+
+\item{tol}{the desired accuracy.}
 }
 \value{
 an object of class \code{mappoly.mrkblock.est.twopt}
@@ -64,10 +66,11 @@ When uThe \code{max.inc} argument
                                       verbose = TRUE,
                                       high.prec = FALSE)
                                       
-  s1 <- make_seq_mappoly(hexafake, subset.map$maps[[1]]$seq.num[1:5])                                     
+  s1 <- make_seq_mappoly(hexafake, 
+                         subset.map$maps[[1]]$seq.num[1:5])                                     
   map1 <- get_submap(subset.map, 1:5)
-  
-  s2 <- make_seq_mappoly(hexafake, subset.map$maps[[1]]$seq.num[6:10])                                     
+  s2 <- make_seq_mappoly(hexafake, 
+                         subset.map$maps[[1]]$seq.num[6:10])                                     
   map2 <- get_submap(subset.map, 6:10)
   
    twopt.sub <- make_pairs_mappoly(subset.pairs, 
@@ -88,6 +91,7 @@ When uThe \code{max.inc} argument
                                       max.inc = 0,
                                       block1.tail = NULL,
                                       tol = 0.01)
+   rf_map1_map2$rf.stats                                   
                                
    new.map<-subset.map
    new.map$maps[[1]]$seq.ph <- list(P = c(rf_map1_map2$phM1[[1]]$config.to.test[[1]]$P,
@@ -101,9 +105,6 @@ When uThe \code{max.inc} argument
                           hom.allele.q1 = subset.map$maps[[1]]$seq.ph$Q,
                           hom.allele.q2 = new.map$maps[[1]]$seq.ph$Q)
    }
-}
-\references{
-
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

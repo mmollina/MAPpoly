@@ -6,10 +6,10 @@
 #' 
 #'
 #' @param block1 a block of phased SNPs contained in a object of
-#'               class\code{\link[mappoly]{mappoly.map}}.
+#'               class \code{mappoly.map}.
 #'
 #' @param block2 a block of phased SNPs contained in a object of
-#'               class\code{\link[mappoly]{mappoly.map}}.
+#'               class \code{mappoly.map}.
 #'
 #' @param ph1 an integer indicating the position of
 #'        the linkage phase configuration for the first marker block.
@@ -23,7 +23,7 @@
 #'        share alleic variations between the SNPs contained in the phased
 #'        marker blocks. The rows represent SNPs in the first marker block
 #'        and the columns represent SNPs in the second marker block. This
-#'        matrix can be obtained using the function class\code{\link[mappoly]{mat_share}}
+#'        matrix can be obtained using the function class \code{\link[mappoly]{mat_share}}
 #'
 #' @param max.inc the maximum inconsitency acceptable when filtering the
 #'        linkage phase configuration based on two-point information. 
@@ -31,7 +31,9 @@
 #'        the filtering process.
 #'
 #' @param block1.tail the number of SNPs that should be used in the first
-#'        phased marker block. If \code{NULL} (default) uses all SNPs
+#'        phased marker block. If \code{NULL} (default) uses all SNPs.
+#'        
+#' @param tol the desired accuracy.       
 #'
 #' @return an object of class \code{mappoly.mrkblock.est.twopt}
 #'
@@ -54,10 +56,11 @@
 #'                                       verbose = TRUE,
 #'                                       high.prec = FALSE)
 #'                                       
-#'   s1 <- make_seq_mappoly(hexafake, subset.map$maps[[1]]$seq.num[1:5])                                     
+#'   s1 <- make_seq_mappoly(hexafake, 
+#'                          subset.map$maps[[1]]$seq.num[1:5])                                     
 #'   map1 <- get_submap(subset.map, 1:5)
-#'   
-#'   s2 <- make_seq_mappoly(hexafake, subset.map$maps[[1]]$seq.num[6:10])                                     
+#'   s2 <- make_seq_mappoly(hexafake, 
+#'                          subset.map$maps[[1]]$seq.num[6:10])                                     
 #'   map2 <- get_submap(subset.map, 6:10)
 #'   
 #'    twopt.sub <- make_pairs_mappoly(subset.pairs, 
@@ -93,8 +96,6 @@
 #'                           hom.allele.q2 = new.map$maps[[1]]$seq.ph$Q)
 #'    }
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
-#'
-#' @references
 #'
 #' @export est_rf_marker_blocks
 
