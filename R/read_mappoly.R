@@ -294,11 +294,12 @@ plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
     lines(x=c(0, x$n.mrk), y = rep(log10(thresh.line),2), col = 2, lty = 2)
   }
   par(mar = c(5,1,0,2))
-  pal<-c(1, RColorBrewer::brewer.pal((x$m+1),"Set1"))
+  pal<-c("black", RColorBrewer::brewer.pal((x$m+1),"Set1"))
+  names(pal)<-c(-1:x$m)
   M <- as.matrix(x$geno.dose)
   M[M==x$m+1]<--1
   image(M, axes = FALSE,
-        col = pal, useRaster = TRUE)
+        col = pal[as.character(sort(unique(as.vector(M))))], useRaster = TRUE)
   mtext(text = "Markers", side = 1)
   mtext(text = "Individuals", side = 2)
   par(mar = c(0,0,0,0))
