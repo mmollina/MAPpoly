@@ -3,6 +3,7 @@ Type: Package
 Title: Construction of Genetic Linkage Maps in Autopolyploids
 Version: 0.1.0
 Authors@R: c(person("Marcelo", "Mollinari", role = c("aut", "cre"), email = "mmollin@ncsu.edu"),
+             person("Gabriel", "Gesteira", role = c("ctb"), email = "gabrielgesteira@usp.br"),
              person("Guilhereme", "Pereira", role = c("ctb"), email = "gdasilv@ncsu.edu"),
              person("Augusto", "Garcia", role = c("ctb"), email = "augusto.garcia@usp.br"),
              person("Zhao-Bang", "Zeng", role = c("ctb"), email = "zeng@statgen.ncsu.edu"))
