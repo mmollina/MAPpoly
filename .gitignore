@@ -7,3 +7,4 @@ src/*.so
 src/*.dll
 docs/*.rda
 docs/*.rdb
+test.RData

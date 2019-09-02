@@ -29,66 +29,179 @@ twopt.pairs <- est_pairwise_rf(input.seq = seq.ch12.2,
                                n.clusters = 14,
                                count.cache = counts)
 mat<-rf_list_to_matrix(twopt.pairs, n.clusters = 8)
-plot(mat, ord = rownames(get_genomic_order(seq.ch12.2)))
+id<-rownames(get_genomic_order(seq.ch12.2))
+fields::image.plot(mat$rec.mat[id, id], col = rev(viridis::inferno(20)))
 w<-rf_snp_filter(input.twopt = twopt.pairs, 
                  thresh.LOD.ph = 5, 
                  thresh.LOD.rf = 5, 
                  thresh.perc = 0.1)
 plot(w)
 mat1<-make_mat_mappoly(input.mat = mat, input.seq = w)
-plot(mat1, ord = rownames(get_genomic_order(w)))
-
-x1 <- make_seq_mappoly(input.obj = dat.ch12., w$seq.mrk.names[1:10])
+id<-rownames(get_genomic_order(w))
+fields::image.plot(mat1$rec.mat[id, id], col = rev(viridis::inferno(20)))
+x1 <- make_seq_mappoly(input.obj = dat.ch12.2, w$seq.mrk.names[1:400])
+plot(x1$sequence.pos/1e6)
 tpt1 <- make_pairs_mappoly(input.twopt = twopt.pairs, input.seq = x1)
-
-
 subset.map <- est_rf_hmm_sequential(input.seq = x1,
-                                    start.set = 3,
-                                    thres.twopt = 5,
+                                    start.set = 5,
+                                    thres.twopt = 10,
                                     thres.hmm = 10,
                                     extend.tail = 10,
                                     tol = 0.1,
                                     tol.final = 10e-3,
                                     twopt = tpt1,
+                                    phase.number.limit = 20, 
+                                    sub.map.size.diff.limit = 2,
                                     verbose = TRUE,
                                     high.prec = FALSE)
-bla<-est_full_hmm_with_global_error(input.map = subset.map, error = 0.1, tol = 10e-3, th.prob = 0.95)  
+plot(subset.map)
+M1<-est_full_hmm_with_global_error(input.map = subset.map, error = 0.05, tol = 10e-4, th.prob = 0.95, verbose = TRUE)  
+#M1<-est_full_hmm_with_prior_dist(input.map = subset.map, tol = 10e-3, verbose = TRUE)  
+plot(M1)
+save.image("test.RData")
 
-s1 <- make_seq_mappoly(hexafake, subset.map$maps[[1]]$seq.num[1:50])                                     
-map1 <- get_submap(subset.map, 1:50)
+vec <- round(imf_h(M1$maps[[1]]$seq.rf),2)
+res <- rep(1, length(vec) + 1)
+ct <- 1
+threshold <- 0 
+for(i in 1:length(vec)){
+  if(vec[i] > threshold){
+    ct <- ct+1
+    res[i+1] <- ct
+  } else{
+    res[i+1] <- ct
+  }
+}
 
-s2 <- make_seq_mappoly(hexafake, subset.map$maps[[1]]$seq.num[51:100])                                     
-map2 <- get_submap(subset.map, 51:100)
 
-twopt.sub <- make_pairs_mappoly(subset.pairs, 
-                                make_seq_mappoly(hexafake, 
-                                                 c(map1$maps[[1]]$seq.num, 
-                                                   map2$maps[[1]]$seq.num)))           
-M<-mat_share(map1,
-             map2,
-             twopt.sub,
-             count.cache = counts.web,
-             thres = 3)
 
-system.time(
-bla1<-est_rf_marker_blocks(block1 = map1,
-                           block2 = map2,
-                           ph1 = "best",
-                           ph2 = "best",
-                           M = M,
-                           max.inc = 0,
-                           block1.tail = NULL,
-                           tol = 0.01))
-system.time(
-bla2<-est_rf_marker_blocks(block1 = map1,
-                           block2 = map2,
-                           ph1 = "best",
-                           ph2 = "best",
-                           M = M,
-                           max.inc = 0,
-                           block1.tail = NULL,
-                           tol = 0.01))
-identical(bla1, bla2)
+id <- which(table(res) > 4)
+mat.rec <- mat.lod <- matrix(NA, length(id), length(id))
+for(i in 1:(length(id)-1)){
+  for(j in (i+1):length(id)){
+    cat("\nComputing rf between marker blocks", i , "and", j, "...")
+    suppressMessages(map1 <- get_submap(M1, which(res==id[i]), reestimate.rf = FALSE))
+    suppressMessages(map2 <- get_submap(M1, which(res==id[j]), reestimate.rf = FALSE))
+    twopt.sub <- make_pairs_mappoly(tpt1, 
+                                    make_seq_mappoly(dat.ch12.2, 
+                                                     c(map1$maps[[1]]$seq.num, 
+                                                       map2$maps[[1]]$seq.num)))
+    M<-mat_share(map1,
+                 map2,
+                 twopt.sub,
+                 count.cache = counts.web,
+                 thres = 3)
+    rf<-est_rf_marker_blocks(block1 = map1,
+                             block2 = map2,
+                             ph1 = "best",
+                             ph2 = "best",
+                             M = M,
+                             max.inc = 0,
+                             block1.tail = NULL,
+                             tol = 0.01)
+    mat.rec[i,j]<-rf$rf.stats[1,"rf"]
+    mat.lod[i,j]<-rf$rf.stats[1,"rf_LOD"]
+  }
+}
+mat.rec[mat.rec > .1]<-NA
+fields::image.plot(imf_h(mat.rec), col = rev(viridis::inferno(20)))
+
+#### Find Blocks
+##
+x2<-make_seq_mappoly(dat.ch12.2, id)
+blocks_seq<-find_marker_blocks(input.seq = x2,
+                               search.type = 'seq',
+                               ask = TRUE,
+                               seq.limit = 5000,
+                               reconstruct = TRUE,
+                               ph.thres = 5,
+                               n.clusters = 12, 
+                               count.cache = counts,
+                               tol = 10e-2,
+                               tol.final = 10e-3,
+                               error = 0.2)
+blocks_seq$bins<-blocks_seq$bins[!is.na(blocks_seq$bins)]
+plot(blocks_seq)
+blo<-filter_marker_blocks(blocks_seq, mf_h(.1))
+plot(blo)
+x<-blo
+m <- x$bins[[1]]$info$m
+n.bins <- length(x$bins)
+n.mrk <- sapply(x$bins, function(x) x$info$n.mrk)
+tot.n.mrk <- sum(n.mrk)
+hap.len <- table(n.mrk)
+single.bins <- lapply(x$bins, function(x) x$maps[[which.max(sapply(x$maps, function(x) x$loglike))]])
+P.hap <- lapply(single.bins, function(x) ph_list_to_matrix(x$seq.ph$P, m))
+Q.hap <- lapply(single.bins, function(x) ph_list_to_matrix(x$seq.ph$Q, m))
+cod <- numeric(n.bins)
+for (i in 1:n.bins) cod[i] <- length(unique(c(apply(P.hap[[i]], 2, paste, collapse = ""), apply(Q.hap[[i]], 2, paste, collapse = ""))))
+bins.rf <- sapply(single.bins, function(x) x$seq.rf)
+blo$bins<-blo$bins[cod > 2]
+length(blo$bins)
+plot(blo)
+blo
+
+plot(sapply(blo$bins, function(x) mean(dat.ch12.2$sequence.pos[x$maps[[1]]$seq.num])))
+
+(id <- 1:length(blo$bins))
+mat.rec <- mat.lod <- matrix(NA, length(id), length(id))
+rf.list<-vector("list", choose(length(id), 2))
+ct<-1
+for(i in 1:(length(id)-1)){
+  for(j in (i+1):length(id)){
+    cat("\nComputing rf between marker blocks", i , "and", j, "...")
+    map1<-blo$bins[[i]]
+    #plot(map1)
+    map2<-blo$bins[[j]]
+    #plot(map2)
+    twopt.sub <- make_pairs_mappoly(twopt.pairs, 
+                                    make_seq_mappoly(dat.ch12.2, 
+                                                     c(map1$maps[[1]]$seq.num, 
+                                                       map2$maps[[1]]$seq.num)))
+    M<-mat_share(map1,
+                 map2,
+                 twopt.sub,
+                 count.cache = counts.web,
+                 thres = 5)
+    rf<-est_rf_marker_blocks(block1 = map1,
+                             block2 = map2,
+                             ph1 = "best",
+                             ph2 = "best",
+                             M = M,
+                             max.inc = 0,
+                             block1.tail = NULL,
+                             tol = 0.01)
+    rf.list[[ct]] <- rf
+    ct<-ct+1
+    if(all(is.na(rf$rf.stats[1]))) next()
+    mat.rec[j,i]<-mat.rec[i,j]<-rf$rf.stats[1,"rf"]
+    mat.lod[j,i]<-mat.lod[i,j]<-rf$rf.stats[1,"rf_LOD"]
+    fields::image.plot(mat.rec, col = rev(viridis::inferno(20)))
+  }
+}
+### 
+load(file = "~/repos/MAPpoly/test.RData")
+mat.rec <- mat.lod <- matrix(NA, length(id), length(id))
+ct<-0
+for(i in 1:(length(id)-1)){
+  for(j in (i+1):length(id)){
+    ct<-ct+1
+    rf<-rf.list[[ct]]
+    if(all(is.na(rf$rf.stats[1]))) next()
+    mat.rec[j,i]<-mat.rec[i,j]<-rf$rf.stats[1,"rf"]
+    mat.lod[j,i]<-mat.lod[i,j]<-abs(rf$rf.stats[2,"ph_LOD"])
+  }
+}
+load(file = "~/repos/MAPpoly/test.RData")
+mat.rec[mat.lod < 3]<-NA
+mat.rec[mat.rec > .25]<-NA
+fields::image.plot(imf_h(mat.rec), col = rev(viridis::inferno(20)))
+#save.image(file = "~/repos/MAPpoly/test.RData")
+
+
+
+
+
 
 bla<-generate_all_link_phases_elim_equivalent_haplo(map1$maps[[1]], map2$maps[[1]], M, m, max.inc)
 

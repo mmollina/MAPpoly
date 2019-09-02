@@ -128,7 +128,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
                        thres = 0.5, twopt = NULL,
                        verbose = FALSE, 
                        tol = 1e-04,
-                       est.given.0.rf=FALSE,
+                       est.given.0.rf = FALSE,
                        reestimate.single.ph.configuration = TRUE,
                        high.prec = TRUE) {
   ## checking for correct object
