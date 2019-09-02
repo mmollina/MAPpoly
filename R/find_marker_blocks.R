@@ -28,6 +28,8 @@
 #' @param extend.tail trhe length of the tail of the chain that should
 #'     be used to calculate the likelihood of the linakge phases
 #'
+#' @param ord.limit to be documented
+#'
 #' @param n.clusters Number of parallel processes to spawn
 #'
 #' @param ph.thres the threshold used to determine if the linkage
@@ -49,9 +51,6 @@
 #'
 #' @param verbose if \code{FALSE} (default), simplified output is
 #'     displayed.  if \code{TRUE}, detailed output is displayed.
-#'
-#' @param block.estimate logical. If TRUE returns a map forcing all
-#'     recombination fractions equal to 0 (1e-5)
 #'
 #' @param ask if \code{TRUE}, ask if the function should proceed
 #'            with the phasing and recombination fraction estimation
