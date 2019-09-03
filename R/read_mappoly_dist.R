@@ -126,7 +126,7 @@ read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
     ## get dosage in parent P ----------------
     temp <- scan(file.in, what = character(), sep = " ", skip = 5, nlines = 1, quiet = TRUE)
     temp <- temp[!temp == ""]
-    dosage.p <- na.omit(as.numeric(temp[-1]))
+    dosage.p <- na.omit(as.integer(temp[-1]))
     if (length(dosage.p) != n.mrk)
         stop("\n\t\t--------------------------------------------------
                 The number of markers and the length of the dosage
@@ -136,7 +136,7 @@ read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
     ## get dosage in parent Q ----------------
     temp <- scan(file.in, what = character(), sep = " ", skip = 6, nlines = 1, quiet = TRUE)
     temp <- temp[!temp == ""]
-    dosage.q <- na.omit(as.numeric(temp[-1]))
+    dosage.q <- na.omit(as.integer(temp[-1]))
     if (length(dosage.q) != n.mrk)
         stop("\n\t\t--------------------------------------------------
                 The number of markers and the length of the dosage
@@ -156,7 +156,7 @@ read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
                 markers do not match\n.
                 Please, check data.
                 --------------------------------------------------\n")
-    sequence <- as.numeric(temp[-1])
+    sequence <- as.character(temp[-1])
     ## get sequence position info ------------
     temp <- scan(file.in, what = character(), sep = " ", skip = 8, nlines = 1, quiet = TRUE)
     temp <- temp[!temp == ""]
@@ -167,6 +167,7 @@ read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
                 Please, check data.
                 --------------------------------------------------\n")
     sequencepos <- as.numeric(temp[-1])
+    names(sequencepos) <- names(sequence) <- names(dosage.q) <- names(dosage.p) <-  mrk.names
     ## checking for phenotypic info ----------
     temp <- scan(file.in, what = character(), sep = " ", skip = 9, quiet = TRUE)
     nphen <- na.omit(as.numeric(temp[2]))

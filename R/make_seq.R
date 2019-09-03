@@ -237,7 +237,7 @@ plot.mappoly.sequence <- function(x, ...)
     mtext(text = "log10(p.value)", side = 4, line = -1, cex = .7)
   }
   par(mar = c(5,1,0,4))
-  pal<-c("black", RColorBrewer::brewer.pal((x$m+1),"Set1"))
+  pal<-c("black", RColorBrewer::brewer.pal((x$m+1),"RdYlGn"))
   names(pal)<-c(-1:x$m)
   M<-as.matrix(get(x$data.name, pos = 1)$geno.dose[x$seq.mrk.names,])
   M[M==x$m+1]<--1

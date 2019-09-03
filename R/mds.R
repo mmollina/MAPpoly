@@ -235,6 +235,7 @@ print.pcmap3d<-function(x, ...)
 
 #' @rdname mds_mappoly
 #' @keywords internal
+#' @importFrom utils getFromNamespace
 #' @export
 plot.pcmap<-function(x, D1lim = NULL, D2lim = NULL, displaytext = FALSE,...)
 {
