@@ -59,7 +59,6 @@
 #'     models, _G3: Genes, Genomes, Genetics_. 
 #'     \url{https://doi.org/10.1534/g3.119.400378} 
 #'
-#' @importFrom memuse howbig
 #' @export read_vcf
 
 read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, ploidy = NA,
@@ -200,7 +199,11 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   return(res)
 }
 
-# Function read.vcfR adapted from package vcfR 
+#' Function read.vcfR adapted from package vcfR 
+#' @param void interfunction to be documented
+#' @keywords internal
+#' 
+#' @importFrom memuse howbig
 .read.vcfR = function(file, limit = 1e+07, nrows = -1, skip = 0, cols = NULL, 
                       convertNA = TRUE, checkFile = TRUE, verbose = TRUE) 
 {
