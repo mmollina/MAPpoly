@@ -686,23 +686,22 @@ get_genomic_order<-function(input.seq){
       stop("No sequence or sequence position information found.")
     else{
       message("Ordering markers based on sequence information")
-      M<-cbind(input.seq$sequence)
-      rownames(M)<-input.seq$seq.mrk.names
-      return(M[order(M[,1]),, drop = FALSE])
+      M<-data.frame(seq = input.seq$sequence, row.names = input.seq$seq.mrk.names)
+      return(M[order(M[,1]),])
     }
   } else if(all(is.na(input.seq$sequence))){
-    if(all(is.na(input.seq$sequence.pos))) 
+  if(all(is.na(input.seq$sequence.pos))) 
       stop("No sequence or sequence position information found.")
     else{
       message("Ordering markers based on sequence position information")
-      M<-cbind(input.seq$sequence.pos)
-      rownames(M)<-input.seq$seq.mrk.names
-      return(M[order(M[,1]),, drop = FALSE])
+      M<-data.frame(seq.pos = input.seq$sequence.pos, row.names = input.seq$seq.mrk.names)
+      return(M[order(M[,1]),])
     }
   } else{
-    M<-cbind(input.seq$sequence, input.seq$sequence.pos)
-    rownames(M)<-input.seq$seq.mrk.names
-    return(M[order(M[,1],M[,2]),])
+    M<-data.frame(seq = input.seq$sequence, 
+                  seq.pos = input.seq$sequence.pos, 
+                  row.names = input.seq$seq.mrk.names)
+    return(M[order(M[,1], as.numeric(M[,2])),])
   }
 }
 
