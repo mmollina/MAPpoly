@@ -28,6 +28,7 @@ Imports:
     berryFunctions,
     rstudioapi,
     plot3D,
+    memuse,
     dplyr,
     crayon,
     cli,
