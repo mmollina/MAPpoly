@@ -56,8 +56,10 @@
 #'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
-#'     models, _submited_. \url{https://doi.org/10.1101/415232}
+#'     models, _G3: Genes, Genomes, Genetics_. 
+#'     \url{https://doi.org/10.1534/g3.119.400378} 
 #'
+#' @importFrom memuse howbig
 #' @export read_vcf
 
 read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, ploidy = NA,
