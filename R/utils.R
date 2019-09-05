@@ -979,6 +979,3 @@ check_data_dist_sanity <- function(x){
   else
     return(0)
 }
-
-
->>>>>>> 91fa4198a962ff43628e29ca34d4144687a0744e
