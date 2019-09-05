@@ -18,8 +18,11 @@ data;}
 
 \item{filter.thres}{maximum percentage of missing data}
 
-\item{inter}{if \code{TRUE}, it plots markes or individuals vs. frequency of missing data}
+\item{inter}{if \code{TRUE}, it plots markers or individuals vs. frequency of missing data}
 }
 \description{
 Exclude markers or individuals based on their missing data
+}
+\author{
+Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }

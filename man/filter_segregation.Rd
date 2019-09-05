@@ -2,14 +2,40 @@
 % Please edit documentation in R/utils.R
 \name{filter_segregation}
 \alias{filter_segregation}
-\title{marker filter based on chi-square test}
+\title{Filter markers based on chi-square test}
 \usage{
 filter_segregation(input.data, chisq.pval.thres = 1e-04, inter = TRUE)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{input.data}{name of input object (class \code{mappoly.data})}
+
+\item{chisq.pval.thres}{p-value threshold used for chi-square tests}
+
+\item{inter}{if TRUE (default), plots distorted vs. non-distorted markers}
+}
+\value{
+An object of class \code{mappoly.chitest.seq} which contains a list with the following components:
+\item{keep}{markers that follow Mendelian segregation pattern}
+\item{exclude}{markers with distorted segregation}
+\item{chisq.pval.thres}{threshold p-value used for chi-square tests}
+\item{data.name}{input dataset used to perform the chi-square tests}
 }
 \description{
-marker filter based on chi-square test
+This function filter markers based on chi-square test p-values. The chi-square tests assume that markers follow the expected segregation patterns under Mendelian inheritance, only random chromosome bivalent pairing occurs and there is no double reduction.
+}
+\examples{
+\dontrun{
+    mydata <- filter_segregation(mydata, chisq.pval.thres = 0.05/mydata$n.mrk, inter = TRUE)
+    seq.init<-make_seq_mappoly(mrks.chi.filt)
+}
+}
+\references{
+Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
+    analysis and haplotype phasing in experimental autopolyploid
+    populations with high ploidy level using hidden Markov
+    models, _submited_. \url{https://doi.org/10.1101/415232}
+}
+\author{
+Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }
 \keyword{internal}

@@ -102,7 +102,7 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL) {
       if (length(input.obj$sequence.pos) > 2)
         sequence.pos <- input.obj$sequence.pos[seq.num]
     }
-    else if (all(is.character(arg)) && all(arg %in% input.obj$mrk.names))
+    else if (all(is.character(arg)) && (length(arg) == length(arg %in% input.obj$mrk.names)))
     {
       seq.num <- as.integer(match(arg, input.obj$mrk.names))
       sequence <- input.obj$sequence[seq.num]
