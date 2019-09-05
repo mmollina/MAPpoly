@@ -116,10 +116,11 @@
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
+#'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
-#'     models, _submited_. \url{https://doi.org/10.1101/415232}
+#'     models, _G3: Genes, Genomes, Genetics_. 
+#'     https://doi.org/10.1534/g3.119.400378 
 #'
 #' @export est_rf_hmm
 #'
@@ -264,7 +265,8 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'     where there are only one possible linkage phase configuration.
 #' 
 #' @param extend.tail the length of the tail of the chain that should
-#'     be used to calculate the likelihood of the map. Even if function 
+#'     be used to calculate the likelihood of the map. If \code{NULL} (default), 
+#'     the function uses all markers positioned. Even if function 
 #'     \code{info.tail = TRUE}, it uses at least \code{extend.tail}
 #'     as the tail length.
 #'     
@@ -286,8 +288,8 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #' @param verbose If \code{TRUE}, current progress is shown; if
 #'     \code{FALSE}, no output is produced.
 #'     
-#' @param high.prec logical. If \code{TRUE} (default) uses high precision 
-#' long double numbers in the HMM procedure. 
+#' @param high.prec logical. If \code{TRUE} uses high precision 
+#' long double numbers in the HMM procedure implemented in C++. 
 #' 
 #' @return An object of class 'mappoly.map'
 #'
@@ -359,10 +361,11 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
+#'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
-#'     models, _submited_. \url{https://doi.org/10.1101/415232}
+#'     models, _G3: Genes, Genomes, Genetics_. 
+#'     \url{https://doi.org/10.1534/g3.119.400378} 
 #'
 #' @importFrom utils head
 #' @importFrom cli rule
@@ -372,7 +375,7 @@ est_rf_hmm_sequential<-function(input.seq,
                                 start.set = 4,
                                 thres.twopt = 5,
                                 thres.hmm = 50,
-                                extend.tail = 50,
+                                extend.tail = NULL,
                                 phase.number.limit = Inf,
                                 sub.map.size.diff.limit = Inf,
                                 info.tail = TRUE,
@@ -394,7 +397,8 @@ est_rf_hmm_sequential<-function(input.seq,
     cli::cat_line("Number of markers: ", length(input.seq$seq.num))
     msg("Initial sequence", line = 2)
   }
-  extend.tail<-length(input.seq$seq.num)
+  if(is.null(extend.tail))
+    extend.tail<-length(input.seq$seq.num)
   #####
   ## Map in case of two markers
   #####

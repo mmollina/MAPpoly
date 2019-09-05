@@ -73,10 +73,11 @@
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
+#'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
-#'     models, _submited_. \url{https://doi.org/10.1101/415232}
+#'     models, _G3: Genes, Genomes, Genetics_. 
+#'     \url{https://doi.org/10.1534/g3.119.400378}
 #'
 #' @export read_geno
 
@@ -113,7 +114,7 @@ read_geno <- function(file.in, filter.non.conforming = TRUE) {
   ## get dosage in parent P ----------------
   temp <- scan(file.in, what = character(), sep = " ", skip = 5, nlines = 1, quiet = TRUE)
   temp <- temp[!temp == ""]
-  dosage.p <- na.omit(as.numeric(temp[-1]))
+  dosage.p <- na.omit(as.integer(temp[-1]))
   if (length(dosage.p) != n.mrk)
     stop("\n\t\t--------------------------------------------------
          The number of markers and the length of the dosage
@@ -123,7 +124,7 @@ read_geno <- function(file.in, filter.non.conforming = TRUE) {
   ## get dosage in parent Q ----------------
   temp <- scan(file.in, what = character(), sep = " ", skip = 6, nlines = 1, quiet = TRUE)
   temp <- temp[!temp == ""]
-  dosage.q <- na.omit(as.numeric(temp[-1]))
+  dosage.q <- na.omit(as.integer(temp[-1]))
   if (length(dosage.q) != n.mrk)
     stop("\n\t\t--------------------------------------------------
          The number of markers and the length of the dosage
@@ -143,7 +144,7 @@ read_geno <- function(file.in, filter.non.conforming = TRUE) {
          markers do not match.
          Please, check data.
          ------------------------------------------\n")
-  sequence <- as.numeric(temp[-1])
+  sequence <- as.character(temp[-1])
   ## get sequence position info ------------
   temp <- scan(file.in , what = character(), sep = " ", skip = 8, nlines = 1, quiet = TRUE)
   temp <- temp[!temp == ""]
@@ -154,6 +155,7 @@ read_geno <- function(file.in, filter.non.conforming = TRUE) {
          Please, check data.
          --------------------------------------------------\n")
   sequencepos <- as.numeric(temp[-1])
+  names(sequencepos) <- names(sequence) <- names(dosage.q) <- names(dosage.p) <-  mrk.names
   ## checking for phenotypic info ----------
   temp <- scan(file.in , what = character(), sep = " ", skip = 9, quiet = TRUE)
   nphen <- na.omit(as.numeric(temp[2]))
@@ -293,11 +295,12 @@ plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
     lines(x=c(0, x$n.mrk), y = rep(log10(thresh.line),2), col = 2, lty = 2)
   }
   par(mar = c(5,1,0,2))
-  pal<-c(1, RColorBrewer::brewer.pal((x$m+1),"Set1"))
+  pal<-c("black", RColorBrewer::brewer.pal((x$m+1),"RdYlGn"))
+  names(pal)<-c(-1:x$m)
   M <- as.matrix(x$geno.dose)
   M[M==x$m+1]<--1
   image(M, axes = FALSE,
-        col = pal, useRaster = TRUE)
+        col = pal[as.character(sort(unique(as.vector(M))))], useRaster = TRUE)
   mtext(text = "Markers", side = 1)
   mtext(text = "Individuals", side = 2)
   par(mar = c(0,0,0,0))

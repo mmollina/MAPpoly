@@ -5,16 +5,11 @@
 \alias{est_full_hmm_with_prior_dist}
 \title{Reestimate gentic map using dosage prior distribution}
 \usage{
-est_full_hmm_with_prior_dist(input.map, dat.dist = NULL,
-  phase.config = "best", tol = 0.001, verbose = TRUE)
+est_full_hmm_with_prior_dist(input.map, phase.config = "best",
+  tol = 0.001, verbose = TRUE)
 }
 \arguments{
 \item{input.map}{an object of class \code{mappoly.map}.}
-
-\item{dat.dist}{an object of class \code{mappoly.data} containing 
-the probability distribution of the genotypes. If 
-\code{NULL} (default), it uses the original data 
-set used to construct \code{input.map}.}
 
 \item{phase.config}{which phase configuration should be used
 "best" will choose the one with highest likelihood}
@@ -56,10 +51,11 @@ a genetic map using hdden Markov models
 
 }
 \references{
-Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
+Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     analysis and haplotype phasing in experimental autopolyploid
     populations with high ploidy level using hidden Markov
-    models, _submited_. \url{https://doi.org/10.1101/415232}
+    models, _G3: Genes, Genomes, Genetics_. 
+    \url{https://doi.org/10.1534/g3.119.400378}
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

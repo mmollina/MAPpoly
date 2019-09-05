@@ -58,10 +58,11 @@
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
+#'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
-#'     models, _submited_. \url{https://doi.org/10.1101/415232}
+#'     models, _G3: Genes, Genomes, Genetics_. 
+#'     \url{https://doi.org/10.1534/g3.119.400378} 
 #'
 #' @export
 
@@ -236,12 +237,12 @@ plot.mappoly.sequence <- function(x, ...)
     mtext(text = "log10(p.value)", side = 4, line = -1, cex = .7)
   }
   par(mar = c(5,1,0,4))
-  pal<-c(1, RColorBrewer::brewer.pal((x$m+1),"Set1"))
-  names(pal)<-c(0:m,m+1)
+  pal<-c("black", RColorBrewer::brewer.pal((x$m+1),"RdYlGn"))
+  names(pal)<-c(-1:x$m)
   M<-as.matrix(get(x$data.name, pos = 1)$geno.dose[x$seq.mrk.names,])
   M[M==x$m+1]<--1
   image(M, axes = FALSE,
-        col = pal, useRaster = TRUE)
+        col = pal[as.character(sort(unique(as.vector(M))))], useRaster = TRUE)
   mtext(text = "Markers", side = 1)
   mtext(text = "Individuals", side = 2)
   par(mar = c(0,0,0,0))

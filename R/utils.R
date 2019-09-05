@@ -36,11 +36,6 @@ get_rf_from_mat <- function(M){
 #' @export
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
-#' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
-#'     analysis and haplotype phasing in experimental autopolyploid
-#'     populations with high ploidy level using hidden Markov
-#'     models, _submited_. \url{https://doi.org/10.1101/415232}
 #'
 rev_map<-function(input.map)
 {
@@ -377,11 +372,6 @@ gg_color_hue <- function(n) {
 #'     
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
-#' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
-#'     analysis and haplotype phasing in experimental autopolyploid
-#'     populations with high ploidy level using hidden Markov
-#'     models, _submited_. \url{https://doi.org/10.1101/415232}
 #'     
 #' @export
 update_missing<-function(input.data, 
@@ -566,7 +556,7 @@ filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
 filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
 {
   ANSWER <- "flag"
-  mrk <- NULL
+  ind <- NULL
   if(interactive() && inter)
   {
     op<-par(bg = "gray", xpd = TRUE)
@@ -721,23 +711,22 @@ get_genomic_order<-function(input.seq){
       stop("No sequence or sequence position information found.")
     else{
       message("Ordering markers based on sequence information")
-      M<-cbind(input.seq$sequence)
-      rownames(M)<-input.seq$seq.mrk.names
-      return(M[order(M[,1]),, drop = FALSE])
+      M<-data.frame(seq = input.seq$sequence, row.names = input.seq$seq.mrk.names)
+      return(M[order(M[,1]),])
     }
   } else if(all(is.na(input.seq$sequence))){
-    if(all(is.na(input.seq$sequence.pos))) 
+  if(all(is.na(input.seq$sequence.pos))) 
       stop("No sequence or sequence position information found.")
     else{
       message("Ordering markers based on sequence position information")
-      M<-cbind(input.seq$sequence.pos)
-      rownames(M)<-input.seq$seq.mrk.names
-      return(M[order(M[,1]),, drop = FALSE])
+      M<-data.frame(seq.pos = input.seq$sequence.pos, row.names = input.seq$seq.mrk.names)
+      return(M[order(M[,1]),])
     }
   } else{
-    M<-cbind(input.seq$sequence, input.seq$sequence.pos)
-    rownames(M)<-input.seq$seq.mrk.names
-    return(M[order(M[,1],M[,2]),])
+    M<-data.frame(seq = input.seq$sequence, 
+                  seq.pos = input.seq$sequence.pos, 
+                  row.names = input.seq$seq.mrk.names)
+    return(M[order(M[,1], as.numeric(M[,2])),])
   }
 }
 
@@ -848,3 +837,148 @@ remove_marker<-function(input.seq, mrk)
     seq.num<-input.seq$seq.num[-which(input.seq$seq.num %in% mrk)]
     return(make_seq_mappoly(get(input.seq$data.name), seq.num, input.seq$data.name))
 }
+
+
+#' Data sanity check
+#'
+#' Checks the consistency of dataset
+#'
+#' @param x an object of class \code{mappoly.data}
+#' 
+#' @examples
+#' \dontrun{
+#' 
+#'     solcap.dose.file <- system.file('extdata', 'tetra_solcap_geno', package = 'mappoly')
+#'     dat.dose <- read_geno(file.in  = solcap.dose.file)
+#'     check_data_sanity(dat.dose)
+#' 
+#'     solcap.file <- system.file('extdata', 'tetra_solcap_geno_dist.bz2', package = 'mappoly')
+#'     dat.dist <- read_geno_dist(file.in  = solcap.file)
+#'     check_data_sanity(dat.dist)
+#'}
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
+#'
+#' @references
+#'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
+#'     analysis and haplotype phasing in experimental autopolyploid
+#'     populations with high ploidy level using hidden Markov
+#'     models, _G3: Genes, Genomes, Genetics_. 
+#'     \url{https://doi.org/10.1534/g3.119.400378}
+#'     
+#' @keywords internal
+#' @export check_data_sanity
+check_data_sanity<-function(x){
+  if(ncol(x$geno) == x$n.ind)
+    check_data_dose_sanity(x)
+  else if(ncol(x$geno) == x$m + 3)
+    check_data_dist_sanity(x)
+  else
+    stop("Inconsistent genotypic information.")
+}
+
+#' Checks the consistency of dataset (dosage)
+#'
+#' @param void interfunction to be documented
+#' @keywords internal
+check_data_dose_sanity <- function(x){
+  test<-logical(24L)
+  names(test) <- 1:24
+
+  # ploidy
+  test[1] <- x$m%%2 != 0
+  test[2] <- any(sapply(x$dosage.p, function(y) max(y) > x$m | min(y) < 0))
+  test[3] <- any(sapply(x$dosage.q, function(y) max(y) > x$m | min(y) < 0))
+  test[4] <- max(x$geno.dose) > x$m + 1
+  test[5] <- min(x$geno.dose) < 0
+  
+  # number of individuals
+  test[6] <- x$n.ind < 0
+  test[7] <- length(x$ind.names) != x$n.ind
+  test[8] <- ncol(x$geno.dose) != x$n.ind
+  
+  # number of markers
+  test[9] <- x$n.mrk < 0
+  test[10] <- length(x$mrk.names) != x$n.mrk
+  test[11] <- length(x$dosage.p) != x$n.mrk
+  test[12] <- length(x$dosage.q) != x$n.mrk
+  test[13] <- length(x$sequence) != x$n.mrk
+  test[14] <- length(x$sequence.pos) != x$n.mrk
+  test[15] <- nrow(x$geno.dose) != x$n.mrk
+  test[16] <- length(x$chisq.pval) != x$n.mrk
+  
+  # individual names in the probability dataset
+  test[17] <- !is.character(x$ind.names)
+  test[18] <- !identical(colnames(x$geno.dose), x$ind.names)
+  
+  # individual names in the dosage dataset
+  test[19] <- !is.character(x$mrk.names)
+  test[20] <- !identical(rownames(x$geno.dose), x$mrk.names)
+  
+  # dosage in both parents
+  test[21] <- !is.integer(x$dosage.p)
+  test[22] <- !is.integer(x$dosage.q)
+  test[23] <- !identical(names(x$dosage.p), x$mrk.names)
+  test[24] <- !identical(names(x$dosage.q), x$mrk.names)
+  
+  if(any(test))
+    return(test)
+  else
+    return(0)
+}
+
+#' Checks the consistency of dataset (probability distribution)
+#'
+#' @param void interfunction to be documented
+#' @keywords internal
+check_data_dist_sanity <- function(x){
+  test<-logical(29L)
+  names(test) <- 1:29
+  # ploidy
+  test[1] <- x$m%%2 != 0
+  test[2] <- any(sapply(x$dosage.p, function(y) max(y) > x$m | min(y) < 0))
+  test[3] <- any(sapply(x$dosage.q, function(y) max(y) > x$m | min(y) < 0))
+  test[4] <- ncol(x$geno) > x$m + 3
+  test[5] <- max(x$geno.dose) > x$m + 1
+  test[6] <- min(x$geno.dose) < 0
+  
+  # number of individuals
+  test[7] <- x$n.ind < 0
+  test[8] <- length(x$ind.names) != x$n.ind
+  test[9] <- length(unique(x$geno$ind)) != x$n.ind
+  test[10] <- ncol(x$geno.dose) != x$n.ind
+  
+  # number of markers
+  test[11] <- x$n.mrk < 0
+  test[12] <- length(x$mrk.names) != x$n.mrk
+  test[13] <- length(x$dosage.p) != x$n.mrk
+  test[14] <- length(x$dosage.q) != x$n.mrk
+  test[15] <- length(x$sequence) != x$n.mrk
+  test[16] <- length(x$sequence.pos) != x$n.mrk
+  test[17] <- nrow(x$geno)/x$n.ind != x$n.mrk
+  test[18] <- nrow(x$geno.dose) != x$n.mrk
+  test[19] <- length(x$chisq.pval) != x$n.mrk
+  
+  # individual names in the probability dataset
+  test[20] <- !is.character(x$ind.names)
+  test[21] <- !identical(x$geno$ind, rep(x$ind.names, each = x$n.mrk))
+  test[22] <- !identical(colnames(x$geno.dose), x$ind.names)
+  
+  # individual names in the dosage dataset
+  test[23] <- !is.character(x$mrk.names)
+  test[24] <- !identical(x$geno$mrk, rep(x$mrk.names, x$n.ind))
+  test[25] <- !identical(rownames(x$geno.dose), x$mrk.names)
+  
+  # dosage in both parents
+  test[26] <- !is.integer(x$dosage.p)
+  test[27] <- !is.integer(x$dosage.q)
+  test[28] <- !identical(names(x$dosage.p), x$mrk.names)
+  test[29] <- !identical(names(x$dosage.q), x$mrk.names)
+  
+  if(any(test))
+    return(test)
+  else
+    return(0)
+}
+
+
+>>>>>>> 91fa4198a962ff43628e29ca34d4144687a0744e

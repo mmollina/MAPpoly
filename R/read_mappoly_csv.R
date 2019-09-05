@@ -55,10 +55,11 @@
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2018) Linkage
+#'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
-#'     models, _submited_. \url{https://doi.org/10.1101/415232}
+#'     models, _G3: Genes, Genomes, Genetics_. 
+#'     \url{https://doi.org/10.1534/g3.119.400378}
 #'
 #' @export read_geno_csv
 
@@ -74,17 +75,18 @@ read_geno_csv <- function(file.in, ploidy, filter.non.conforming = TRUE) {
   ## get individual names ------------------
   ind.names <- colnames(dat)[-c(1:5)]
   ## get dosage in parent P ----------------
-  dosage.p <- dat[,2]
+  dosage.p <- as.integer(dat[,2])
   ## get dosage in parent Q ----------------
-  dosage.q <- dat[,3]
+  dosage.q <- as.integer(dat[,3])
   ## monomorphic markers
   dp<-abs(abs(dosage.p-(m/2))-(m/2))
   dq<-abs(abs(dosage.q-(m/2))-(m/2))
   id<-dp+dq!=0
   ## get sequence info ---------------------
-  sequence <- dat[,4]
+  sequence <- as.character(dat[,4])
   ## get sequence position info ------------
-  sequencepos <- dat[,5]
+  sequencepos <- as.numeric(dat[,5])
+  names(sequencepos) <- names(sequence) <- names(dosage.q) <- names(dosage.p) <-  mrk.names
   nphen <- 0
   phen <- NULL
   cat("Reading the following data:")
