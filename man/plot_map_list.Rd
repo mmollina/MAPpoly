@@ -4,7 +4,8 @@
 \alias{plot_map_list}
 \title{Plot a genetic map}
 \usage{
-plot_map_list(map.list, horiz = TRUE, col = "lightgray")
+plot_map_list(map.list, horiz = TRUE, col = "lightgray",
+  title = "Linkage Groups")
 }
 \arguments{
 \item{map.list}{A list of objects or a single object of class \code{mappoly.map}.}
@@ -14,6 +15,8 @@ If TRUE, the maps are drawn horizontally with the first at the bottom.}
 
 \item{col}{a vector of colors for the bars or bar components. By default, light grey is used.
 "ggstyle" produces maps using the default ggplot color palette}
+
+\item{title}{a title for the maps.}
 }
 \value{
 A data frame containing the name of the markers and their genetic position.
