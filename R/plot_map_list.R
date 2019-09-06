@@ -7,6 +7,8 @@
 #'
 #' @param col a vector of colors for the bars or bar components. By default, light grey is used.
 #'            "ggstyle" produces maps using the default ggplot color palette 
+#'            
+#' @param title a title for the maps. 
 #'
 #' @return A data frame containing the name of the markers and their genetic position.
 #' 
@@ -49,7 +51,7 @@
 #'
 #' @export plot_map_list
 #'
-plot_map_list<-function(map.list, horiz = TRUE, col = "lightgray"){
+plot_map_list<-function(map.list, horiz = TRUE, col = "lightgray", title = "Linkage Groups"){
   if(class(map.list) == "mappoly.map")  
     map.list<-list(map.list)
   if(any(sapply(map.list, class)!="mappoly.map"))
@@ -68,7 +70,7 @@ plot_map_list<-function(map.list, horiz = TRUE, col = "lightgray"){
          ylim = c(0,length(map.list)+1), 
          type = "n", axes = FALSE, 
          xlab = "Centimorgans (cM)", 
-         ylab = "Linkage Groups")
+         ylab = title)
     axis(1)
     for(i in 1:length(map.list)){
       d <- extract_map(map.list[[i]])
@@ -83,7 +85,7 @@ plot_map_list<-function(map.list, horiz = TRUE, col = "lightgray"){
          xlim = c(0,length(map.list)+1), 
          type = "n", axes = FALSE, 
          ylab = "Centimorgans (cM)", 
-         xlab = "Linkage Groups")
+         xlab = title)
     x<-axis(2, labels = FALSE, lwd = 0)
     axis(2, at = x, labels = abs(x))
     for(i in 1:length(map.list)){
