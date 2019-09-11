@@ -28,7 +28,7 @@ devtools::install_github("mmollina/mappoly")
 
 # Vignettes
 
-* [Building a genetic map in an hexaploid full-sib population using MAPpoly](https://mmollina.github.io/MAPpoly/)
+* [Building a genetic map in an hexaploid full-sib population using MAPpoly](https://mmollina.github.io/tutorials/hexa_fake/haxaploid_map_construction.html)
 * [Building a genetic map using potato genotype data from SolCAP](https://mmollina.github.io/tutorials/solcap/solcap_example.html)
 * Dataset examples
   * [Hexaploid simulation with dosage call in MAPpoly format](https://github.com/mmollina/tutorials/blob/master/datasets/hexafake)
