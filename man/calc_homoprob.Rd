@@ -10,7 +10,8 @@ calc_homoprob(input.probs)
 
 \method{print}{mappoly.homoprob}(x, ...)
 
-\method{plot}{mappoly.homoprob}(x, ind = NULL, use.plotly = TRUE, ...)
+\method{plot}{mappoly.homoprob}(x, stack = FALSE, lg = NULL,
+  ind = NULL, use.plotly = TRUE, ...)
 }
 \arguments{
 \item{input.probs}{an object of class \code{"mappoly.genoprob"}}
@@ -18,6 +19,12 @@ calc_homoprob(input.probs)
 \item{x}{an object of class \code{"mappoly.homoprob"}}
 
 \item{...}{unused argument}
+
+\item{stack}{loagical. If \code{TRUE}, the probabilities are stacked in the 
+plot.}
+
+\item{lg}{indicates which linkage group should be plotted. If \code{NULL} 
+(default), the function plots the first linkage group}
 
 \item{ind}{indicates which individual should be plotted. It can be the 
 position of the individuals in the data set or its name. 
@@ -33,15 +40,17 @@ offspring
 \examples{
 \dontrun{
   ## hexaploid example
-  w<-calc_genoprob(maps.hexafake[[1]])
-  h.prob.ch1<-calc_homoprob(w)
-  print(h.prob.ch1)
-  plot(h.prob.ch1)
+  w <- lapply(maps.hexafake, calc_genoprob)
+  h.prob <- calc_homoprob(w)
+  print(h.prob)
+  plot(h.prob)
+  plot(h.prob, lg = 1, ind = 5, use.plotly = TRUE)
+  
   ## tetraploid solcap example
   #load("~/repos/MAPpoly_vignettes/vignette_1/maps.rda")
-  h.prob.solcap.ch1<-calc_homoprob(genoprob.err[[1]])
-  print(h.prob.solcap.ch1)
-  plot(h.prob.solcap.ch1)
+  h.prob.solcap<-calc_homoprob(genoprob.err)
+  print(h.prob.solcap)
+  plot(h.prob.solcap, stack = TRUE, ind = "ind_10")
 }
 }
 \references{
