@@ -1,35 +1,41 @@
 #' Compute homolog probabilities 
 #' 
 #' Compute homolog probabilities for all individuals in the full-sib
-#' offspring
+#' population
 #'
 #' @param input.probs an object of class \code{"mappoly.genoprob"} 
 #' @param x an object of class \code{"mappoly.homoprob"}
-#' @param stack loagical. If \code{TRUE}, the probabilities are stacked in the 
-#'              plot. 
+#' @param stack loagical. If \code{TRUE}, probability profiles of all homologs
+#'              are stacked in the plot. 
 #' @param lg indicates which linkage group should be plotted. If \code{NULL} 
-#'           (default), the function plots the first linkage group
+#'           (default), the function plots the first linkage group. If 
+#'           \code{"all"}, the function plots all linkage groups.
 #' @param ind indicates which individual should be plotted. It can be the 
 #'            position of the individuals in the data set or its name. 
 #'            If \code{NULL} (default), the function plots the first 
 #'            individual.
 #' @param use.plotly if \code{TRUE}, it uses plotly interactive graphics
-#' @param ... unused argument
+#' @param ... unused arguments
 #' 
 #'@examples
 #' \dontrun{
 #'   ## hexaploid example
-#'   w <- lapply(maps.hexafake, calc_genoprob)
-#'   h.prob <- calc_homoprob(w)
+#'   w1 <- lapply(maps.hexafake, calc_genoprob)
+#'   h.prob <- calc_homoprob(w1)
 #'   print(h.prob)
 #'   plot(h.prob)
-#'   plot(h.prob, lg = 1, ind = 5, use.plotly = TRUE)
+#'   plot(h.prob, lg = 1, ind = 5, use.plotly = FALSE)
+#'   plot(h.prob, lg = c(1,3), ind = 15, use.plotly = FALSE)
+#'   plot(h.prob, lg = "all")
 #'   
 #'   ## tetraploid solcap example
-#'   #load("~/repos/MAPpoly_vignettes/vignette_1/maps.rda")
-#'   h.prob.solcap<-calc_homoprob(genoprob.err)
+#'   w2<-lapply(solcap.dose.map, calc_genoprob)
+#'   h.prob.solcap<-calc_homoprob(w2)
 #'   print(h.prob.solcap)
-#'   plot(h.prob.solcap, stack = TRUE, ind = "ind_10")
+#'   plot(h.prob.solcap, ind = "ind_10")
+#'   print(h.prob.solcap)
+#'   plot(h.prob.solcap, lg = 1, ind = 5, use.plotly = TRUE)
+#'   plot(h.prob.solcap, stack = TRUE, ind = 5)
 #'}
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
@@ -77,14 +83,20 @@ calc_homoprob<-function(input.probs){
 #' @keywords internal
 #' @export
 print.mappoly.homoprob<-function(x, ...){
- head(x$homoprob, 20)
+  head(x$homoprob, 20)
 }
 
 #' @rdname calc_homoprob
 #' @keywords internal
 #' @export
-plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL, ind = NULL, use.plotly = TRUE, ...){
+plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL, 
+                                ind = NULL, use.plotly = TRUE, ...){
   all.ind<-as.character(unique(x$homoprob$individual))
+  #### Individual handling ####
+  if(length(ind) > 1){
+    warning("More than one individual provided: using the first one")
+    ind<-ind[1]
+  }
   if(is.null(ind)){
     ind<-as.character(all.ind[1])
     df.pr1<-subset(x$homoprob, individual == ind)  
@@ -97,17 +109,25 @@ plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL, ind = NULL, use.plo
     if(!ind%in%all.ind)
       stop("Invalid individual name")
   } else stop("Invalid individual name")
-  
+  #### LG handling ####
+  if(lg=="all")
+    lg <- unique(x$homoprob$LG)
   LG<-individual<-map.position<-probability<-homolog<-NULL
+  if(length(lg) > 1 & !stack)
+  {
+    message("Using 'stack = TRUE' to plot multiple linkage groups")
+    stack <- TRUE
+  }
   if(stack){
     ##subset linkage group
     if(!is.null(lg)){
-      df.pr1<-subset(x$homoprob, LG == lg)
-    }
-    df.pr1<-subset(x$homoprob, individual == ind)  
+      df.pr1<-subset(x$homoprob, LG%in%lg)
+      df.pr1<-subset(df.pr1, individual == ind)
+    } else 
+      df.pr1<-subset(x$homoprob, individual == ind)
     p <- ggplot2::ggplot(df.pr1, ggplot2::aes(x = map.position, y = probability, fill = homolog, color  = homolog)) +
       ggplot2::geom_density(stat = "identity", alpha = 0.7, position = "stack") + 
-      ggplot2::ggtitle(paste(ind, "   LG", lg)) + 
+      ggplot2::ggtitle(ind) + 
       ggplot2::facet_grid(rows = ggplot2::vars(LG)) + 
       ggplot2::ylab(label = "Homologs probabilty") +
       ggplot2::xlab(label = "Map position")
@@ -115,8 +135,8 @@ plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL, ind = NULL, use.plo
     ##subset linkage group
     if(is.null(lg)){
       lg<-1
-      df.pr1<-subset(x$homoprob, LG == lg)
-    } else df.pr1<-subset(x$homoprob, LG == lg)
+      df.pr1<-subset(x$homoprob, LG %in% lg)
+    } else df.pr1<-subset(x$homoprob, LG %in% lg)
     df.pr1<-subset(df.pr1, individual == ind)  
     p <- ggplot2::ggplot(df.pr1, ggplot2::aes(x = map.position, y = probability, fill = homolog, color  = homolog)) +
       ggplot2::geom_density(stat = "identity", alpha = 0.7) + 
