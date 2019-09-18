@@ -1,9 +1,6 @@
-m<-4
-ch<-1
-probs<-genoprob.err[[1]]
-
-
-
+#m<-4
+#ch<-1
+#probs<-genoprob.err[[1]]
 
 pref_pair<-function(m, ch, probs)
 {
@@ -66,42 +63,42 @@ pref_pair<-function(m, ch, probs)
   list(P = resfinalP, Q = resfinalQ)
 }
 
-DF2<-DF<-NULL
-for(ch in 1:12)
-{
-  cat("\n~~~~~~~~~ ch: ", ch, "~~~~~~~~~~\n")
-  pp<-pref_pair(m = 4, ch = ch, probs = genoprob.err[[ch]])
-  names(pp)<-c("P1", "P2")
-  tt<-as.data.frame(sapply(pp, function(y) apply(2*154*y, 2, function(x) chisq.test(x)$p.value)))
-  tt$ch<-ch
-  tt$map<-genoprob.err[[ch]]$map
-  temp<-reshape2::melt(pp)
-  head(temp)
-  temp$map<-rep(genoprob.err[[ch]]$map, each = 3)
-  temp$ch <- ch
-  DF<-rbind(DF,temp)
-  DF2<-rbind(DF2,tt)
-}
-
-DF3<-data.table::melt(data = DF2, measure.vars = c("P1", "P2"))
-head(DF); head(DF2); head(DF3)
-
-#DF<-subset(DF, ch == 2)
-require(ggplot2)
-ggplot(DF) + 
-  geom_smooth(aes(map, value, colour = Var1), size = .5, se = FALSE) + 
-  facet_grid(L1~ch, scales = "free_x", space = "free_x") +
-  geom_hline(yintercept = 1/3, linetype="dashed") +
-  ylim(0,1) + 
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  ylab("Probability") + xlab("Distance (cM)") 
-
-ggplot(DF3, aes(map, -log10(value), colour = variable)) +
-  geom_point(alpha = .7, size = 1) +  facet_grid(.~ch, scales = "free_x", space = "free_x") + 
-  geom_hline(yintercept = -log10(0.01), linetype="dashed") +  scale_color_manual(values=c("#E69F00","#56B4E9"), name = "Parents") +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position="none") +
-  ylab("-log_10(P)") + xlab("Distance (cM)") 
-
-
-ggplotly(p)
-
+# DF2<-DF<-NULL
+# for(ch in 1:12)
+# {
+#   cat("\n~~~~~~~~~ ch: ", ch, "~~~~~~~~~~\n")
+#   pp<-pref_pair(m = 4, ch = ch, probs = genoprob.err[[ch]])
+#   names(pp)<-c("P1", "P2")
+#   tt<-as.data.frame(sapply(pp, function(y) apply(2*154*y, 2, function(x) chisq.test(x)$p.value)))
+#   tt$ch<-ch
+#   tt$map<-genoprob.err[[ch]]$map
+#   temp<-reshape2::melt(pp)
+#   head(temp)
+#   temp$map<-rep(genoprob.err[[ch]]$map, each = 3)
+#   temp$ch <- ch
+#   DF<-rbind(DF,temp)
+#   DF2<-rbind(DF2,tt)
+# }
+# 
+# DF3<-data.table::melt(data = DF2, measure.vars = c("P1", "P2"))
+# head(DF); head(DF2); head(DF3)
+# 
+# #DF<-subset(DF, ch == 2)
+# require(ggplot2)
+# ggplot(DF) + 
+#   geom_smooth(aes(map, value, colour = Var1), size = .5, se = FALSE) + 
+#   facet_grid(L1~ch, scales = "free_x", space = "free_x") +
+#   geom_hline(yintercept = 1/3, linetype="dashed") +
+#   ylim(0,1) + 
+#   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+#   ylab("Probability") + xlab("Distance (cM)") 
+# 
+# ggplot(DF3, aes(map, -log10(value), colour = variable)) +
+#   geom_point(alpha = .7, size = 1) +  facet_grid(.~ch, scales = "free_x", space = "free_x") + 
+#   geom_hline(yintercept = -log10(0.01), linetype="dashed") +  scale_color_manual(values=c("#E69F00","#56B4E9"), name = "Parents") +
+#   theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position="none") +
+#   ylab("-log_10(P)") + xlab("Distance (cM)") 
+# 
+# 
+# ggplotly(p)
+# 

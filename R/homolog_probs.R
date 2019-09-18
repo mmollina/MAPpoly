@@ -33,10 +33,14 @@
 #'   h.prob.solcap<-calc_homoprob(w2)
 #'   print(h.prob.solcap)
 #'   plot(h.prob.solcap, ind = "ind_10")
-#'   print(h.prob.solcap)
-#'   plot(h.prob.solcap, lg = 1, ind = 5, use.plotly = TRUE)
 #'   plot(h.prob.solcap, stack = TRUE, ind = 5)
+#'   
+#'   w3<-lapply(solcap.err.map, calc_genoprob_error, error = 0.15)
+#'   h.prob.solcap.err<-calc_homoprob(w3)
+#'   plot(h.prob.solcap, lg = 1, ind = 1, use.plotly = FALSE)
+#'   plot(h.prob.solcap.err, lg = 1, ind = 1, use.plotly = FALSE)
 #'}
+#'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
@@ -110,6 +114,8 @@ plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL,
       stop("Invalid individual name")
   } else stop("Invalid individual name")
   #### LG handling ####
+  if(is.null(lg))
+    lg <- 1
   if(lg=="all")
     lg <- unique(x$homoprob$LG)
   LG<-individual<-map.position<-probability<-homolog<-NULL
