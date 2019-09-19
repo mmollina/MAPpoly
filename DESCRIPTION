@@ -19,6 +19,8 @@ Imports:
     Rcpp (>= 0.12.6),
     parallel,
     RCurl,
+    plotly,
+    gridExtra,
     fields,
     RColorBrewer,
     grid,
