@@ -1,9 +1,9 @@
-#' Compute homolog probabilities 
+#' Homolog probabilities 
 #' 
 #' Compute homolog probabilities for all individuals in the full-sib
 #' population
 #'
-#' @param input.probs an object of class \code{"mappoly.genoprob"} 
+#' @param input.genoprobs an object of class \code{"mappoly.genoprob"} 
 #' @param x an object of class \code{"mappoly.homoprob"}
 #' @param stack loagical. If \code{TRUE}, probability profiles of all homologs
 #'              are stacked in the plot. 
@@ -35,10 +35,10 @@
 #'   plot(h.prob.solcap, ind = "ind_10")
 #'   plot(h.prob.solcap, stack = TRUE, ind = 5)
 #'   
-#'   w3<-lapply(solcap.err.map, calc_genoprob_error, error = 0.15)
+#'   w3<-lapply(solcap.err.map, calc_genoprob_error, error = 0.05)
 #'   h.prob.solcap.err<-calc_homoprob(w3)
-#'   plot(h.prob.solcap, lg = 1, ind = 1, use.plotly = FALSE)
-#'   plot(h.prob.solcap.err, lg = 1, ind = 1, use.plotly = FALSE)
+#'   plot(h.prob.solcap, lg = 1, ind = 100, use.plotly = FALSE)
+#'   plot(h.prob.solcap.err, lg = 1, ind = 100, use.plotly = FALSE)
 #'}
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -52,35 +52,35 @@
 #' @importFrom ggplot2 ggplot geom_density ggtitle facet_grid theme_minimal ylab xlab aes vars
 #' @importFrom plotly ggplotly
 #' 
-calc_homoprob<-function(input.probs){
-  if(class(input.probs) == "mappoly.genoprob")
-    input.probs <- list(input.probs)
-  if(class(input.probs) == "list"){
-    if(!all(sapply(input.probs, class) == "mappoly.genoprob"))
-      stop(deparse(substitute(input.probs)), " is not an object of class 'mappoly.sequence' neither a list.")
+calc_homoprob<-function(input.genoprobs){
+  if(class(input.genoprobs) == "mappoly.genoprob")
+    input.genoprobs <- list(input.genoprobs)
+  if(class(input.genoprobs) == "list"){
+    if(!all(sapply(input.genoprobs, class) == "mappoly.genoprob"))
+      stop(deparse(substitute(input.genoprobs)), " is not an object of class 'mappoly.sequence' neither a list containing 'mappoly.sequence' objects.")
   }
   df.res <- NULL
-  for(j in 1:length(input.probs)){
+  for(j in 1:length(input.genoprobs)){
     cat("\nLinkage group ", j, "...")
-    stt.names<-dimnames(input.probs[[j]]$probs)[[1]] ## state names
-    mrk.names<-dimnames(input.probs[[j]]$probs)[[2]] ## mrk names
-    ind.names<-dimnames(input.probs[[j]]$probs)[[3]] ## individual names
+    stt.names<-dimnames(input.genoprobs[[j]]$probs)[[1]] ## state names
+    mrk.names<-dimnames(input.genoprobs[[j]]$probs)[[2]] ## mrk names
+    ind.names<-dimnames(input.genoprobs[[j]]$probs)[[3]] ## individual names
     v<-c(2,4,6,8,10,12)
     names(v)<-choose(v,v/2)^2
     m<-v[as.character(length(stt.names))]
     hom.prob<-array(NA, dim = c(m*2, length(mrk.names), length(ind.names)))
     dimnames(hom.prob)<-list(letters[1:(2*m)], mrk.names, ind.names)
     for(i in letters[1:(2*m)])
-      hom.prob[i,,] <- apply(input.probs[[j]]$probs[grep(stt.names, pattern = i),,], c(2,3), function(x) round(sum(x, na.rm = TRUE),4))
+      hom.prob[i,,] <- apply(input.genoprobs[[j]]$probs[grep(stt.names, pattern = i),,], c(2,3), function(x) round(sum(x, na.rm = TRUE),4))
     df.hom<-reshape::melt(hom.prob)
-    map<-data.frame(map.position = input.probs[[j]]$map, marker = names(input.probs[[j]]$map))
+    map<-data.frame(map.position = input.genoprobs[[j]]$map, marker = names(input.genoprobs[[j]]$map))
     colnames(df.hom)<-c("homolog", "marker", "individual", "probability")
     df.hom<-merge(df.hom, map, sort = FALSE)
     df.hom$LG <- j
     df.res<-rbind(df.res, df.hom)
   }
   cat("\n")
-  structure(list(homoprob = df.res, co.pos = NULL), class = "mappoly.homoprob")
+  structure(list(info = list(m = m, nind = length(ind.names)) , homoprob = df.res), class = "mappoly.homoprob")
 }
 
 #' @rdname calc_homoprob

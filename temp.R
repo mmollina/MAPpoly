@@ -1,8 +1,5 @@
 load("~/repos/MAPpoly_vignettes/vignette_1/maps.rda")
-
-solcap.file <- system.file('extdata', 'tetra_solcap_geno_dist.bz2', package = 'mappoly')
-tetra.solcap.geno.dist <- read_geno_dist(file.in  = solcap.file, prob.thres = 0.95)
-
+require(mappoly)
 maps1<-MAPs
 for(i in 1:12){
   maps1[[i]]$info$data.name<-"dat.dist.mpl"
@@ -29,14 +26,15 @@ plot(h.prob.solcap.err, ind = "ind_10")
 
 maps3<-vector("list", 12)
 for(i in 1:12)
-maps3[[i]]<-est_full_hmm_with_prior_dist(input.map = maps1[[i]])
+   maps3[[i]]<-est_full_hmm_with_prior_dist(input.map = maps1[[i]])
 
+tetra.solcap.geno.dist <- dat.dist.mpl
+tetra.solcap <- dat.dose.mpl
 
 for(i in 1:12){
   maps1[[i]]$info$data.name<-"tetra.solcap.geno.dist"  
   maps2[[i]]$info$data.name<-"tetra.solcap.geno.dist"
   maps3[[i]]$info$data.name<-"tetra.solcap.geno.dist"
-  
 }
 
 est_full_hmm_with_global_error(maps1[[1]], verbose = TRUE, tol = .01)
@@ -47,6 +45,8 @@ est_full_hmm_with_prior_dist(maps1[[1]], tol = .01)
 solcap.dose.map<-maps1
 solcap.err.map<-maps2
 solcap.prior.map<-maps3  
+
+calc_genoprob(solcap.dose.map[[1]])
 
 
 my.phase.func<-function(X){
@@ -72,17 +72,19 @@ system.time({
   parallel::stopCluster(cl)
 })
 
-maps1<-MAPs
+maps4<-MAPs.mds
 for(i in 1:12){
-  maps1[[i]]$info$data.name<-"tetra.solcap.geno.dist"
+  maps4[[i]]$info$data.name<-"tetra.solcap.geno.dist"
 }
-
-
-solcap.mds.map<-maps1
+solcap.mds.map<-maps4
 plot_map_list(solcap.mds.map)
 
-bla<-calc_genoprob(xdos[[1]], verbose = TRUE)
-
+save(solcap.dose.map, file = "~/repos/MAPpoly/data/solcap_dose_map.rda")
+save(solcap.err.map, file = "~/repos/MAPpoly/data/solcap_error_map.rda")
+save(solcap.prior.map, file = "~/repos/MAPpoly/data/solcap_prior_map.rda")
+save(solcap.mds.map, file = "~/repos/MAPpoly/data/solcap_mds_map.rda")
+save(tetra.solcap, file = "~/repos/MAPpoly/data/tetra.solcap.rda")
+save(tetra.solcap.geno.dist, file = "~/repos/MAPpoly/data/tetra.solcap.geno.dist.rda")
 
 
 

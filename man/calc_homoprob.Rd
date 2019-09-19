@@ -4,9 +4,9 @@
 \alias{calc_homoprob}
 \alias{print.mappoly.homoprob}
 \alias{plot.mappoly.homoprob}
-\title{Compute homolog probabilities}
+\title{Homolog probabilities}
 \usage{
-calc_homoprob(input.probs)
+calc_homoprob(input.genoprobs)
 
 \method{print}{mappoly.homoprob}(x, ...)
 
@@ -14,7 +14,7 @@ calc_homoprob(input.probs)
   ind = NULL, use.plotly = TRUE, ...)
 }
 \arguments{
-\item{input.probs}{an object of class \code{"mappoly.genoprob"}}
+\item{input.genoprobs}{an object of class \code{"mappoly.genoprob"}}
 
 \item{x}{an object of class \code{"mappoly.homoprob"}}
 
@@ -54,10 +54,14 @@ population
   h.prob.solcap<-calc_homoprob(w2)
   print(h.prob.solcap)
   plot(h.prob.solcap, ind = "ind_10")
-  print(h.prob.solcap)
-  plot(h.prob.solcap, lg = 1, ind = 5, use.plotly = TRUE)
   plot(h.prob.solcap, stack = TRUE, ind = 5)
+  
+  w3<-lapply(solcap.err.map, calc_genoprob_error, error = 0.05)
+  h.prob.solcap.err<-calc_homoprob(w3)
+  plot(h.prob.solcap, lg = 1, ind = 100, use.plotly = FALSE)
+  plot(h.prob.solcap.err, lg = 1, ind = 100, use.plotly = FALSE)
 }
+
 }
 \references{
 Mollinari, M. et al. (2019) Unraveling the hexaploid 
