@@ -7,6 +7,11 @@
 }
 
 #' @export
+.vcf_get_ploidy <- function(mat, gt_pos) {
+    .Call('_mappoly_vcf_get_ploidy', PACKAGE = 'mappoly', mat, gt_pos)
+}
+
+#' @export
 .vcf_stats_gz <- function(x, nrows = -1L, skip = 0L, verbose = 1L) {
     .Call('_mappoly_vcf_stats_gz', PACKAGE = 'mappoly', x, nrows, skip, verbose)
 }

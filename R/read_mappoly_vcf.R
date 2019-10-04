@@ -63,6 +63,13 @@
 
 read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, ploidy = NA,
                      thresh.line = 0.05, update.prob = FALSE, output = NULL) {
+
+    ## Debugging:
+    ## file.in = "~/Downloads/MAPpoly/inst/extdata/tetra_example.vcf.gz"
+    ## library(Rcpp)
+    ## sourceCpp("~/Downloads/MAPpoly/src/read_mappoly_vcf.cpp")
+    ## ploidy = 4
+    
   # Checking even ploidy
   if(!is.na(ploidy) && (ploidy %% 2) != 0){
     stop("MAPpoly only supports even ploidy levels. Please check the 'ploidy' parameter and try again.")
@@ -87,7 +94,9 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   }
   cat("Processing genotypes...")
   cname = which(unlist(strsplit(unique(input.data$gt[,1]), ":")) == "GT") # Defining GT position
-  file.ploidy = length(unlist(strsplit(unique(input.data$gt[,2])[1], "/"))) # Checking ploidy
+  ## file.ploidy = length(unlist(strsplit(unique(input.data$gt[,2])[1], "/"))) # Checking ploidy (old)
+  geno.ploidy = .vcf_get_ploidy(input.data$gt[,-1], cname) # Getting all ploidy levels
+  file.ploidy = unique(c(geno.ploidy)) # Getting different ploidy levels
   geno.dose = .vcf_transform_dosage(input.data$gt[,-1], cname) # Isolating genotypes and accounting allele dosages
   geno.dose[which(geno.dose == -1)] = NA # Filling NA values
   cat("Done!\n")
@@ -96,16 +105,21 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   #   input.phased = TRUE # Treat this in a different way when reading file
   #   warning("Phased genotypes detected. Should MAPpoly consider this information?")
   # } else {input.phased = FALSE}
-  if ((file.ploidy %% 2) != 0){ # Checking odd ploidy level
+  if (any((file.ploidy %% 2) != 0)){ # Checking odd ploidy level
     stop("Your VCF file shows an odd ploidy level, but MAPpoly only supports even ploidy levels. Please check your VCF file and try again.")
   }
-  if (!is.na(ploidy) && (file.ploidy != ploidy)){ # Checking informed and file ploidy
-    warning("Informed ploidy doesn't match the detected ploidy. Using detected ploidy instead.")
+  if (!is.na(ploidy) && !(ploidy %in% file.ploidy)){ # Checking informed and file ploidy
+    stop("Informed ploidy doesn't match any detected ploidy level. Detected ploidy level(s): ", paste0(file.ploidy, ' '))
   }
   if (!is.na(ploidy) && (ploidy > 2) && (file.ploidy == 2)){ # Checking absence of dosages
-    stop("Informed ploidy is ",ploidy, ", but detected ploidy is ", file.ploidy, ".\nYou should provide allelic dosages for all individuals. You can estimate allelic dosages using packages such as 'SuperMASSA', 'updog', 'fitTetra' and others. We are working for a integrated function to estimate dosages, which will be available soon.")
-  }
-  m = file.ploidy # Setting ploidy level
+    warning("Informed ploidy is ",ploidy, ", but detected ploidy is ", file.ploidy, ".\nIf your species is polyploid, you should provide allelic dosages for all individuals. You can estimate allelic dosages using packages such as 'SuperMASSA', 'updog', 'fitTetra', 'polyRAD' and others. We are working on a integrated function to estimate dosages, which will be available soon.\nUsing ploidy = 2 instead.")
+  } # Allow option for building genetic maps for diploid species
+    if (!is.na(ploidy)){ # If ploidy is informed and passed previous checks, then use it
+        m = ploidy
+    } else { # Else, use the first ploidy level detected on file
+        m = file.ploidy[1]
+    }
+    cat("Selected ploidy:", m, "\n")
   if (!(parent.1 %in% ind.names) | !(parent.2 %in% ind.names)){
     stop("Provided parents were not found in VCF file. Please check it and try again.")
   }
@@ -116,13 +130,20 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   #       } else {geno.dose[i] = length(which(unlist(strsplit(geno.dose[i], "/")) == 0))} # Transforming dosages (time consuming step)
   #      }
   # geno.dose = matrix(as.numeric(geno.dose), nrow = n.mrk, byrow = F)
-  colnames(geno.dose) = ind.names
-  rownames(geno.dose) = mrk.names
-  dosage.p = geno.dose[,which(colnames(geno.dose) == parent.1)] # Selecting dosages for parent 1
-  dosage.q = geno.dose[,which(colnames(geno.dose) == parent.2)] # Selecting dosages for parent 2
-  geno.dose = geno.dose[, -c(which(colnames(geno.dose) %in% c(parent.1, parent.2)))] # Updating geno.dose matrix
-  ind.names = ind.names[-c(which(ind.names %in% c(parent.1, parent.2)))] # Updating individual names
-  geno.dose = data.frame(geno.dose)
+
+    ## Updating some info based on selected ploidy 
+    geno.dose = geno.dose[which(unique(t(geno.ploidy)) == m),] # Removing markers with different ploidy levels
+    n.mrk = length(which(unique(t(geno.ploidy)) == m))
+    sequence = sequence[which(unique(t(geno.ploidy)) == m)]
+    sequence.pos = sequence.pos[which(unique(t(geno.ploidy)) == m)]
+    mrk.names = mrk.names[which(unique(t(geno.ploidy)) == m)]
+    colnames(geno.dose) = ind.names
+    rownames(geno.dose) = mrk.names
+    dosage.p = geno.dose[,which(colnames(geno.dose) == parent.1)] # Selecting dosages for parent 1
+    dosage.q = geno.dose[,which(colnames(geno.dose) == parent.2)] # Selecting dosages for parent 2
+    geno.dose = geno.dose[, -c(which(colnames(geno.dose) %in% c(parent.1, parent.2)))] # Updating geno.dose matrix
+    ind.names = ind.names[-c(which(ind.names %in% c(parent.1, parent.2)))] # Updating individual names
+    geno.dose = data.frame(geno.dose)
   
   ## monomorphic markers
   dp = abs(abs(dosage.p-(m/2))-(m/2))
