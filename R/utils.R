@@ -28,6 +28,17 @@ get_rf_from_mat <- function(M){
   r
 }
 
+#' Get the number of bivalent configurations
+#'
+#' @param void interfunction to be documented
+#' @keywords internal
+#' @export
+get_w_m <- function(m){
+   if(m%%2 != 0) stop("ploidy level should be an even number") 
+   if(m <= 0) stop("ploidy level should be greater than zero")
+   1/factorial((m/2)) * prod(choose(seq(2, m, 2),2))
+}
+
 #' Reverse map
 #'
 #' Provides a reverse version of a given map.

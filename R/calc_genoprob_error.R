@@ -10,7 +10,14 @@
 #'    "best" will use the one with highest likelihood
 #'    
 #' @param error global error rate
-#'
+#' 
+#' @param th.prob the threshold for using global error or genotype 
+#'     probability distribution contained in the data set  
+#'     
+#' @param restricted if \code{TRUE}, restricts the prior to the 
+#'                   possible classes under mendelian non double-reduced segregation 
+#'                   given dosage of the parents. 
+#'                   
 #' @param verbose if \code{TRUE}, current progress is shown; if
 #'     \code{FALSE}, no output is produced.
 #'
@@ -49,14 +56,28 @@
 #'      s1.gen.subset.map.error<-est_full_hmm_with_global_error(input.map = s1.gen.subset.map, 
 #'                                                                  error = 0.05, 
 #'                                                                  verbose = TRUE)
-#'      plot(s1.gen.subset.map.error)                                                            
-#'                                         
+#'      plot(s1.gen.subset.map.error)
+#'      s1.gen.subset.map.error.no.rest<-est_full_hmm_with_global_error(input.map = s1.gen.subset.map, 
+#'                                                                  error = 0.05, 
+#'                                                                  restricted = FALSE,
+#'                                                                  verbose = TRUE)
+#'      plot_(s1.gen.subset.map.error)
+#'      
+#'      ## Comparin three maps
+#'      plot_map_list(list(s1.gen.subset.map, 
+#'                         s1.gen.subset.map.error.no.rest, 
+#'                         s1.gen.subset.map.error))     
+#'      
 #'      probs<-calc_genoprob(input.map = s1.gen.subset.map.error,
 #'                                 verbose = TRUE)
 #'      probs.error<-calc_genoprob_error(input.map = s1.gen.subset.map.error,
 #'                                 error = 0.05,
 #'                                 verbose = TRUE)
-#'    op<-par(mfrow = c(1:2))
+#'      probs.error.no.rest<-calc_genoprob_error(input.map = s1.gen.subset.map.error.no.rest,
+#'                                 error = 0.05, 
+#'                                 restricted = FALSE,
+#'                                 verbose = TRUE)
+#'    op<-par(mfrow = c(3,1))
 #'    ## Example: individual 11
 #'    ind<-11   
 #'    ## posterior probabilities with no error modeling
@@ -73,7 +94,7 @@
 #'    axis(side = 2, at = seq(0,1,length.out = nrow(pr1)),
 #'         labels = rownames(pr1), las=2, cex.axis=.5)
 #'    
-#'    ## posterior probabilities with error modeling
+#'    ## posterior probabilities with error modeling (restricted)
 #'    pr2<-probs.error$probs[,,ind]
 #'    d2<-probs.error$map
 #'    image(t(pr2),
@@ -81,11 +102,25 @@
 #'          axes=FALSE,
 #'          xlab = "Markers",
 #'          ylab = " ",
-#'          main = paste("LG_1, ind ", ind, " - w/ error "))
+#'          main = paste("LG_1, ind ", ind, " - w/ error - w/ prior restriction"))
 #'    axis(side = 1, at = d2/max(d2),
 #'         labels =rep("", length(d2)), las=2)
 #'    axis(side = 2, at = seq(0,1,length.out = nrow(pr2)),
 #'         labels = rownames(pr2), las=2, cex.axis=.5)
+#'         
+#'    ## posterior probabilities with error modeling
+#'    pr3<-probs.error.no.rest$probs[,,ind]
+#'    d3<-probs.error.no.rest$map
+#'    image(t(pr3),
+#'          col=RColorBrewer::brewer.pal(n=9 , name = "YlOrRd"),
+#'          axes=FALSE,
+#'          xlab = "Markers",
+#'          ylab = " ",
+#'          main = paste("LG_1, ind ", ind, " - w/ error - no prior restriction"))
+#'    axis(side = 1, at = d3/max(d3),
+#'         labels =rep("", length(d3)), las=2)
+#'    axis(side = 2, at = seq(0,1,length.out = nrow(pr3)),
+#'         labels = rownames(pr3), las=2, cex.axis=.5)       
 #'    par(op)
 #'  }
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -99,7 +134,8 @@
 #'
 #' @export calc_genoprob_error
 #'
-calc_genoprob_error<-function(input.map,  phase.config = "best", error = 0.01, verbose = TRUE)
+calc_genoprob_error<-function(input.map,  phase.config = "best", error = 0.01, 
+                              th.prob = 0.95, restricted = TRUE, verbose = TRUE)
 {
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
@@ -123,6 +159,9 @@ calc_genoprob_error<-function(input.map,  phase.config = "best", error = 0.01, v
   dp<-get(input.map$info$data.name, pos=1)$dosage.p[input.map$maps[[1]]$seq.num]
   dq<-get(input.map$info$data.name, pos=1)$dosage.q[input.map$maps[[1]]$seq.num]
   names(dp)<-names(dq)<-mrknames
+  d.pq<-data.frame(dp = dp, 
+                   dq = dq)
+  d.pq$mrk<-rownames(d.pq)
   for(i in names(gen))
   {
     a<-matrix(0, nrow(geno.temp), input.map$info$m+1, dimnames = list(mrknames, 0:input.map$info$m))
@@ -133,9 +172,17 @@ calc_genoprob_error<-function(input.map,  phase.config = "best", error = 0.01, v
         a[j,geno.temp[j,i]+1]<-1          
       }
     }
-    a.temp<-t(a)
+    a<-as.data.frame(a)
+    a$mrk<-rownames(a)
+    a.temp<-t(merge(a, d.pq, sort = FALSE)[,-c(1)])
     if(!is.null(error))
-      a.temp<-apply(a.temp, 2, genotyping_global_error, error=error, th.prob = 0.9)
+      a.temp<-apply(a.temp, 2, genotyping_global_error, 
+                    m = input.map$info$m, error=error, 
+                    th.prob = th.prob, 
+                    restricted = restricted)
+    else
+      a.temp <- a.temp[1:(input.map$info$m+1), ]
+    colnames(a.temp)<-a[,1]
     gen[[i]]<-a.temp
   }
   g <- as.double(unlist(gen))
