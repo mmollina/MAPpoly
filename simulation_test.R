@@ -1,7 +1,7 @@
 require(mappoly)
-h.temp <- sim_homologous(m=6, n.mrk=100, max.d=3, max.ph=3, seed=123)
+h.temp <- sim_homologous(m=4, n.mrk=100, max.d=2, max.ph=2, seed=123)
 rf.vec <- c(rep(c(rep(0,9),0.05),9),rep(0,9))
-dat <- poly_cross_simulate(m = 6, rf.vec = rf.vec, n.mrk=100, n.ind=1000, hom.allele = h.temp, seed = 123)
+dat <- poly_cross_simulate(m = 4, rf.vec = rf.vec, n.mrk=100, n.ind=1000, hom.allele = h.temp, seed = 123)
 plot(dat)
 s <- make_seq_mappoly(dat, "all")
 counts <- cache_counts_twopt(s, get.from.web = TRUE)
@@ -9,6 +9,7 @@ tpt<-est_pairwise_rf(input.seq = s,
                      count.cache = counts,
                      n.clusters = 1,
                      verbose=TRUE)
+plot(rf_list_to_matrix(tpt))
 map <- est_rf_hmm_sequential(input.seq = s,
                                     thres.twopt = 5,
                                     thres.hmm = 10,
@@ -31,7 +32,7 @@ z<-list(get_submap(input.map = map, 1:10, reestimate.rf = FALSE),
         get_submap(input.map = map, 71:80, reestimate.rf = FALSE),
         get_submap(input.map = map, 81:90, reestimate.rf = FALSE),
         get_submap(input.map = map, 91:100, reestimate.rf = FALSE))
-
+print(z[[2]], detailed = TRUE)
 
 mat.rec <- mat.lod <- matrix(NA, length(z), length(z))
 for(i in 1:(length(z)-1)){
@@ -43,6 +44,7 @@ for(i in 1:(length(z)-1)){
                                     make_seq_mappoly(dat, 
                                                      c(map1$maps[[1]]$seq.num, 
                                                        map2$maps[[1]]$seq.num)))
+    #plot(rf_list_to_matrix(twopt.sub))
     M<-mat_share(map1,
                  map2,
                  twopt.sub,
