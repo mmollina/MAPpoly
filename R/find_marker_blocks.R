@@ -158,7 +158,7 @@ find_marker_blocks <- function(input.seq,
 {
   search.type <- match.arg(search.type)
   mrk.names <- input.seq$seq.mrk.names
-  sub.map.size.limit = 10
+  sub.map.size.limit = 2
   ###Constructing marker blocks - rf###################
   ## 
   ## based on recombination fraction
@@ -346,7 +346,7 @@ find_marker_blocks <- function(input.seq,
                                      index.seq,
                                      parallel_hmm_bins,
                                      thres.twopt = ph.thres,
-                                     thres.hmm = 3,
+                                     thres.hmm = 10,
                                      extend.tail = extend.tail,
                                      tol = tol,
                                      tol.final = tol.final,
@@ -363,12 +363,13 @@ find_marker_blocks <- function(input.seq,
     bins <- lapply(index.seq,
                    parallel_hmm_bins,
                    thres.twopt = ph.thres,
-                   thres.hmm = 3,
+                   thres.hmm = 10,
                    extend.tail = extend.tail,
                    tol = tol,
                    tol.final = tol.final,
                    sub.map.size.limit = sub.map.size.limit,
-                   error = error)
+                   error = error,
+                   verbose = FALSE)
   }
   names(bins) <- 1:length(bins)
   if (search.type == "rf")
@@ -386,7 +387,7 @@ find_marker_blocks <- function(input.seq,
 
 #' Wrap function to estimate a map using parallel processing (for find_marker_blocks)
 #'
-#' @param index.seq sequence used as argument in function make_seq_temp
+#' @param id.seq sequence used as argument in function make_seq_temp
 #' @param dat an object of class \code{mappoly.data}
 #' @param thres.twopt the threshold used to determine if the linakge
 #'     phases compared via two-point analysis should be considered
@@ -404,24 +405,24 @@ find_marker_blocks <- function(input.seq,
 #' @return a list of maps
 #' @keywords internal
 #' @export parallel_hmm_bins
-parallel_hmm_bins <- function(index.seq,
-                              thres.twopt = 10,
-                              thres.hmm = 3,
+parallel_hmm_bins <- function(id.seq,
+                              thres.twopt = 5,
+                              thres.hmm = 10,
                               extend.tail = 10,
-                              tol = 10e-3,
-                              tol.final = 10e-4,
-                              sub.map.size.limit = 7,
+                              tol = 10e-2,
+                              tol.final = 10e-3,
+                              sub.map.size.limit = 2,
                               phase.number.limit = 4,
                               error = NULL,
                               verbose = FALSE)
 {
   w<-tryCatch(
-    bla<-est_rf_hmm_sequential(input.seq = index.seq$s,
-                               start.set = 4,
+    bla<-est_rf_hmm_sequential(input.seq = id.seq$s,
+                               start.set = 3,
                                thres.twopt = thres.twopt,
                                thres.hmm = thres.hmm,
                                extend.tail = extend.tail,
-                               twopt = index.seq$twopt,
+                               twopt = id.seq$twopt,
                                verbose = verbose,
                                tol = tol,
                                tol.final = tol,
@@ -448,17 +449,22 @@ parallel_hmm_bins <- function(index.seq,
 #'     bins
 #'
 #' @export filter_marker_blocks
-filter_marker_blocks <- function(input.obj, rf.thres) {
+filter_marker_blocks <- function(input.obj, rf.thres, ph.thresh = 0) {
+  if(ph.thresh <= 0) ph.thresh <- 10e-3
   if (!(class(input.obj) == "mappoly.bins"))
     stop(deparse(substitute(input.obj)), " is not an object of class 'mappoly.bins'")
-  single.bins <- lapply(input.obj$bins, function(x) x$maps[[which.max(sapply(x$maps, function(x) x$loglike))]])
-  elim <- which(sapply(single.bins, function(x) any(x$seq.rf > rf.thres)))
+  input.obj$bins<-lapply(input.obj$bins, function(x,th) filter_map_at_hmm_thres(x, th), th = ph.thresh)
+  #single.bins <- lapply(input.obj$bins, function(x) x$maps[[which.max(sapply(x$maps, function(x) x$loglike))]])
+  elim1 <- which(sapply(input.obj$bins, function(x) any(x$maps[[1]]$seq.rf > rf.thres)))
+  elim2 <- which(sapply(input.obj$bins, function(x) length(x$maps)) > 1)
+  elim <- unique(c(elim1, elim2))
   maps <- input.obj$maps
   if (length(elim) > 0 && !is.null(maps)) {
     warning("Number of bins changed, please reestimate the map.")
     maps <- NULL
   }
-  structure(list(bins = input.obj$bins[-elim], elim.bins = input.obj$bins[elim], snps = input.obj$snps, rf.thres = rf.thres, seq.bins = input.obj$seq.bins,
+  structure(list(bins = input.obj$bins[-elim], elim.bins = input.obj$bins[elim], snps = input.obj$snps, 
+                 rf.thres = rf.thres, seq.bins = input.obj$seq.bins, ph.thresh = ph.thresh,
                  maps = maps), class = "mappoly.bins")
 }
 
@@ -501,6 +507,7 @@ print.mappoly.bins <- function(x, ...) {
 #' @rdname find_marker_blocks
 #' @export
 plot.mappoly.bins <- function(x, rf.thres = NULL, ...) {
+  #x$bins<-x$bins[!sapply(x$bins, function(x) all(is.na(x)))]
   m <- x$bins[[1]]$info$m
   n.bins <- length(x$bins)
   n.mrk <- sapply(x$bins, function(x) x$info$n.mrk)

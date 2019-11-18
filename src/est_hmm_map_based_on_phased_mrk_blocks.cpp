@@ -52,6 +52,7 @@ RcppExport SEXP est_haplotype_map(SEXP ploidyR,
                                   SEXP n_marR,
                                   SEXP n_indR,
                                   SEXP haploR,
+                                  SEXP emitR,
                                   SEXP rfR,
                                   SEXP verboseR,
                                   SEXP tolR,
@@ -62,6 +63,7 @@ RcppExport SEXP est_haplotype_map(SEXP ploidyR,
   int n_mar = Rcpp::as<int>(n_marR);
   int n_ind = Rcpp::as<int>(n_indR);
   Rcpp::List haplo(haploR);
+  Rcpp::List emit(emitR);
   Rcpp::NumericVector rf(rfR);
   int verbose = Rcpp::as<int>(verboseR);
   int ret_H0 = Rcpp::as<int>(ret_H0R);
@@ -80,21 +82,27 @@ RcppExport SEXP est_haplotype_map(SEXP ploidyR,
     Rcpp::Rcout << "\tNumber of markers: " << n_mar << "\n" ;
     Rcpp::Rcout << "\tNumber of individuals: " << n_ind << "\n" ;
   }
-
   //Initializing v: states hmm should visit for each marker
-  //Initializing dP and dQ: doses for each marker in P and Q
+  //Initializing e: emission probabilities associated to the states hmm should visit for each marker
   std::vector<std::vector<std::vector<int> > > v;
-  for(int i=0; i < haplo.size(); i++)
+  std::vector<std::vector<std::vector<double> > > e;
+   for(int i=0; i < haplo.size(); i++) // i: number of markers
   {
-    Rcpp::List haplo_temp(haplo(i));
+    Rcpp::List haplo_temp(haplo(i)); //states hmm should visit for marker i
+    Rcpp::List emit_temp(emit(i)); //emission probs. for states hmm should visit for marker i
     std::vector<std::vector<int> > v1;
-    for(int j=0; j < haplo_temp.size(); j++)
+    std::vector<std::vector<double> > e1;
+   for(int j=0; j < haplo_temp.size(); j++) //iterate for all j individuals
     {
       Rcpp::NumericMatrix M_temp = haplo_temp(j);
+      Rcpp::NumericVector E_temp = emit_temp(j);
       std::vector<int> v2 = Rcpp::as<std::vector<int> >(M_temp);
+      std::vector<double> e2 = Rcpp::as<std::vector<double> >(E_temp);
       v1.push_back(v2);
+      e1.push_back(e2);
     }
     v.push_back(v1);
+    e.push_back(e1);
   }
   //Initializing alpha and beta
   std::vector<std::vector<std::vector<double> > > alpha(n_ind);
@@ -108,6 +116,7 @@ RcppExport SEXP est_haplotype_map(SEXP ploidyR,
       beta[ind].push_back(temp3);
     }
   }
+  
   //Initializing recombination number matrix
   std::vector< std::vector<double> > R;
   R = rec_num(m);
@@ -131,19 +140,23 @@ RcppExport SEXP est_haplotype_map(SEXP ploidyR,
     for(int ind=0; ind < n_ind; ind++)
     {
       R_CheckUserInterrupt();
-      std::fill(alpha[ind][0].begin(), alpha[ind][0].end(), 1.0/(g*g));
+      //std::fill(alpha[ind][0].begin(), alpha[ind][0].end(), 1.0/(g*g));
+      for(int j=0; (unsigned)j < e[0][ind].size(); j++)
+      {
+        alpha[ind][0][j] = e[0][ind][j];
+      }
       std::fill(beta[ind][n_mar-1].begin(), beta[ind][n_mar-1].end(), 1);
       //forward-backward
       for(k=1,k1=n_mar-2; k < n_mar; k++, k1--)
       {
         std::vector<double> temp4 (v[k][ind].size()/2);
-        temp4 = forward(m, alpha[ind][k-1], v[k-1][ind], v[k][ind], T[k-1]);
+        temp4 = forward_emit(m, alpha[ind][k-1], v[k-1][ind], v[k][ind], e[k][ind], T[k-1]);
         for(int j=0; (unsigned)j < temp4.size(); j++)
         {
           alpha[ind][k][j]=temp4[j];
         }
         std::vector<double> temp5 (v[k1][ind].size()/2);
-        temp5=backward(m, beta[ind][k1+1], v[k1][ind], v[k1+1][ind], T[k1]);
+        temp5=backward_emit(m, beta[ind][k1+1], v[k1][ind], v[k1+1][ind], e[k1+1][ind], T[k1]);
         for(int j=0; (unsigned)j < temp5.size(); j++)
         {
           beta[ind][k1][j]=temp5[j];

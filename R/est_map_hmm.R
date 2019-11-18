@@ -149,31 +149,33 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
     stop(deparse(substitute(input.ph)), " is not an object of class 'two.pts.linkage.phases'")
   }
   if(length(input.seq$seq.num) == 2){
-    maps<-vector("list", 1)
+    maps<-vector("list", length(input.ph$config.to.test))
     res.temp <- twopt$pairwise[[paste(sort(input.seq$seq.num), collapse = "-")]]
     dp <- get(twopt$data.name, pos =1)$dosage.p[input.seq$seq.num]
     dq <- get(twopt$data.name, pos =1)$dosage.q[input.seq$seq.num]
-    sh <- as.numeric(unlist(strsplit(rownames(res.temp)[1], split = "-")))
-    res.ph <- list(P = c(list(0),list(0)), Q = c(list(0),list(0)))
-    if(dp[1] != 0)
-      res.ph$P[[1]] <- 1:dp[1]
-    if(dq[1] != 0)
-      res.ph$Q[[1]] <- 1:dq[1]
-    if(dp[2] != 0)
-    {
-      v<-(rev(res.ph$P[[1]])[1]+1):(dp[2]+rev(res.ph$P[[1]])[1])
-      res.ph$P[[2]]<-v-sh[1]
+    for(i in 1:length(maps)){
+      sh <- as.numeric(unlist(strsplit(rownames(res.temp)[i], split = "-")))
+      res.ph <- list(P = c(list(0),list(0)), Q = c(list(0),list(0)))
+      if(dp[1] != 0)
+        res.ph$P[[1]] <- 1:dp[1]
+      if(dq[1] != 0)
+        res.ph$Q[[1]] <- 1:dq[1]
+      if(dp[2] != 0)
+      {
+        v<-(rev(res.ph$P[[1]])[1]+1):(dp[2]+rev(res.ph$P[[1]])[1])
+        res.ph$P[[2]]<-v-sh[1]
+      }
+      if(dq[2] != 0)
+      {
+        v<-(rev(res.ph$Q[[1]])[1]+1):(dq[2]+rev(res.ph$Q[[1]])[1])
+        res.ph$Q[[2]]<-v-sh[2]
+      }
+      names(res.ph$P)<-names(res.ph$Q)<-input.seq$seq.num
+      maps[[i]] <- list(seq.num = input.seq$seq.num,
+                        seq.rf = res.temp[i,"rf"],
+                        seq.ph = res.ph,
+                        loglike = res.temp[i,"LOD_ph"])
     }
-    if(dq[2] != 0)
-    {
-      v<-(rev(res.ph$Q[[1]])[1]+1):(dq[2]+rev(res.ph$Q[[1]])[1])
-      res.ph$Q[[2]]<-v-sh[2]
-    }
-    names(res.ph$P)<-names(res.ph$Q)<-input.seq$seq.num
-    maps[[1]] <- list(seq.num = input.seq$seq.num,
-                      seq.rf = res.temp[1,"rf"],
-                      seq.ph = res.ph,
-                      loglike = 0)
     return(structure(list(info = list(m = input.seq$m, n.mrk = length(input.seq$seq.num),
                                       data.name = input.seq$data.name, ph.thresh = abs(res.temp[2,1])),
                           maps = maps),

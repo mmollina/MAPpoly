@@ -116,48 +116,42 @@ mat_share <-
 #' @keywords internal
 #' @export generate_all_link_phases_elim_equivalent_haplo
 generate_all_link_phases_elim_equivalent_haplo <-
-  function(M1, M2, M, m, max.inc) {
+  function(block1, block2, M, m, max.inc = NULL) {
     ## Parent P
-    hP1 <- ph_list_to_matrix(L = M1$seq.ph$P, m = m)
+    hP1 <- ph_list_to_matrix(L = block1$seq.ph$P, m = m)
     p1 <- apply(hP1, 2, paste, collapse = "")
-    hP2 <- ph_list_to_matrix(L = M2$seq.ph$P, m = m)
+    hP2 <- ph_list_to_matrix(L = block2$seq.ph$P, m = m)
     p2 <- apply(hP2, 2, paste, collapse = "")
-    dimnames(hP1) <- list(M1$seq.num, p1)
-    dimnames(hP2) <- list(M2$seq.num, p2)
+    dimnames(hP1) <- list(block1$seq.num, p1)
+    dimnames(hP2) <- list(block2$seq.num, p2)
     ## Here I am anchoring the linkage phase configuration in block1 and listing all possible permutations in hap2
     p2 <- perm_tot(p2)
     ## Parent Q
-    hQ1 <- ph_list_to_matrix(L = M1$seq.ph$Q, m = m)
+    hQ1 <- ph_list_to_matrix(L = block1$seq.ph$Q, m = m)
     q1 <- apply(hQ1, 2, paste, collapse = "")
-    hQ2 <- ph_list_to_matrix(L = M2$seq.ph$Q, m = m)
+    hQ2 <- ph_list_to_matrix(L = block2$seq.ph$Q, m = m)
     q2 <- apply(hQ2, 2, paste, collapse = "")
-    dimnames(hQ1) <- list(M1$seq.num, q1)
-    dimnames(hQ2) <- list(M2$seq.num, q2)
+    dimnames(hQ1) <- list(block1$seq.num, q1)
+    dimnames(hQ2) <- list(block2$seq.num, q2)
     q2 <- perm_tot(q2)
     wp <- NULL
     for (i in 1:nrow(p2))
       wp <- rbind(wp, paste(p1, p2[i, ], sep = "-"))
     wp.n <- unique(t(apply(unique(wp), 1, sort)))
-    yp <-
-      apply(t(apply(wp, 1, function(x)
-        sort(x))), 1, paste, collapse = "|")
-    yp.n <-
-      apply(wp.n, 1, function(x)
-        paste(sort(x), collapse = "|"))
-    wp <- wp[match(yp.n, yp), ]
-    if (class(wp) == "character")
-      wp <- matrix(wp, nrow = 1)
+    yp <- apply(t(apply(wp, 1, function(x) sort(x))), 1, paste, collapse = "|")
+    yp.n <- apply(wp.n, 1, function(x) paste(sort(x), collapse = "|"))
+    wp <- wp[match(yp.n, yp), , drop = FALSE]
     ct <- numeric(nrow(wp))
     #####################
-    ## Spped up this loop
+    ## Speed up this loop
     #####################
     for (i in 1:nrow(wp)) {
       a <- matrix(unlist(strsplit(wp[i, ], "-")), ncol = 2, byrow = TRUE)
       for (j in 1:nrow(M$P)) {
         for (k in 1:ncol(M$P)) {
-          a1 <- M$P[as.character(M1$seq.num[j]), as.character(M2$seq.num[k])]
-          a2 <- sum((hP1[as.character(M1$seq.num[j]), 
-                         a[, 1]] + hP2[as.character(M2$seq.num[k]), a[, 2]]) == 2)
+          a1 <- M$P[as.character(block1$seq.num[j]), as.character(block2$seq.num[k])]
+          a2 <- sum((hP1[as.character(block1$seq.num[j]), 
+                         a[, 1]] + hP2[as.character(block2$seq.num[k]), a[, 2]]) == 2)
           if (is.na(a1))
             a1 <- a2
           if (a1 != a2)
@@ -165,7 +159,10 @@ generate_all_link_phases_elim_equivalent_haplo <-
         }
       }
     }
-    id <- ct <= max.inc
+    if(is.null(max.inc)){
+      id <- rep(TRUE, length(ct))      
+    } else
+      id <- ct <= max.inc
     #maximum inconsistency
     if (sum(id) == 0)
       id <- which.min(ct)
@@ -181,17 +178,15 @@ generate_all_link_phases_elim_equivalent_haplo <-
     yq.n <-
       apply(wq.n, 1, function(x)
         paste(sort(x), collapse = "|"))
-    wq <- wq[match(yq.n, yq), ]
-    if (class(wq) == "character")
-      wq <- matrix(wq, nrow = 1)
+    wq <- wq[match(yq.n, yq), , drop = FALSE]
     ct <- numeric(nrow(wq))
     for (i in 1:nrow(wq)) {
       a <- matrix(unlist(strsplit(wq[i, ], "-")), ncol = 2, byrow = TRUE)
       for (j in 1:nrow(M$Q)) {
         for (k in 1:ncol(M$Q)) {
-          a1 <- M$Q[as.character(M1$seq.num[j]), as.character(M2$seq.num[k])]
+          a1 <- M$Q[as.character(block1$seq.num[j]), as.character(block2$seq.num[k])]
           a2 <-
-            sum((hQ1[as.character(M1$seq.num[j]), a[, 1]] + hQ2[as.character(M2$seq.num[k]), a[, 2]]) == 2)
+            sum((hQ1[as.character(block1$seq.num[j]), a[, 1]] + hQ2[as.character(block2$seq.num[k]), a[, 2]]) == 2)
           if (is.na(a1))
             a1 <- a2
           if (a1 != a2)
@@ -199,18 +194,26 @@ generate_all_link_phases_elim_equivalent_haplo <-
         }
       }
     }
-    id <- ct <= max.inc
+    if(is.null(max.inc)){
+      id <- rep(TRUE, length(ct))      
+    } else
+      id <- ct <= max.inc
     if (sum(id) == 0)
       id <- which.min(ct)
     wq <- matrix(wq[id, ], ncol = m)
-    list(
-      wp = wp,
-      wq = wq,
-      hP1 = hP1,
-      hP2 = hP2,
-      hQ1 = hQ1,
-      hQ2 = hQ2
-    )
+    ## Re-arraging phases
+    phase.to.test <- vector("list", nrow(wp) * nrow(wq))
+    cte <- 1
+    for(i in 1:nrow(wp)){
+      for(j in 1:nrow(wq)){
+        phase.to.test[[cte]] <- list(P = ph_matrix_to_list(hP2[,sapply(strsplit(wp[i,], split = "-"), function(x) x[2])]),
+                                     Q = ph_matrix_to_list(hQ2[,sapply(strsplit(wq[j,], split = "-"), function(x) x[2])]))
+        cte <- cte + 1
+      }
+    }
+    phase.to.test <- unique(phase.to.test)
+    names(phase.to.test) <- paste0("config.", 1:length(phase.to.test))
+    return(phase.to.test)
   }
 
 #' Generates a list where each element represents one individual. Each
@@ -313,13 +316,26 @@ map_haplo <- function(m, P, Q) {
 #' @keywords internal
 #' @export
 est_haplo_hmm <-
-  function(m, nmar, nind, haplo, rf_vec, verbose, use_H0=FALSE, tol) {
+  function(m, nmar, nind, haplo, emit = NULL, 
+           rf_vec, verbose, use_H0 = FALSE, tol) {
+    ## In case no genotypic probabilities distrubutions are provided
+    if(is.null(emit)){
+      emit <- vector("list", length(haplo))
+      for(i in  1:length(haplo)){
+        tempemit <- vector("list", length(haplo[[i]]))
+        for(j in 1:length(haplo[[i]])){
+          tempemit[[j]] <- rep(1, nrow(haplo[[i]][[j]]))
+        }
+        emit[[i]] <- tempemit
+      }
+    }
     res.temp <-
       .Call("est_haplotype_map",
             m,
             nmar,
             nind,
             haplo,
+            emit,
             rf_vec,
             verbose,
             tol,
