@@ -2,18 +2,18 @@
 % Please edit documentation in R/find_marker_blocks.R
 \name{filter_marker_blocks}
 \alias{filter_marker_blocks}
-\title{Filter bins given a recombination fraction threshold}
+\title{Filter blocks given a recombination fraction threshold}
 \usage{
-filter_marker_blocks(input.obj, rf.thres)
+filter_marker_blocks(input.obj, rf.thres, ph.thresh = 0)
 }
 \arguments{
-\item{input.obj}{an object of class \code{mappoly.bins}}
+\item{input.obj}{an object of class \code{mappoly.blocks}}
 
 \item{rf.thres}{recombination fraction threshold used to eliminate
-bins}
+blocks}
 }
 \description{
-Given a object of class \code{mappoly.bins}, returns a new object
-of class \code{mappoly.bins} eliminating the bins whose
+Given a object of class \code{mappoly.blocks}, returns a new object
+of class \code{mappoly.blocks} eliminating the blocks whose
 recombination fractions exceed a given threshold
 }

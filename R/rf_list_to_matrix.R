@@ -18,7 +18,10 @@
 #'
 #' @param thresh.rf recombination fraction threshold
 #'
-#' @param n.clusters Number of parallel processes to spawn
+#' @param n.clusters number of parallel processes to spawn
+#' 
+#' @param shared.alleles if \code{TRUE}, computes two matrices indicating 
+#'                       the number of homologes that share alleles
 #'
 #' @param verbose if \code{TRUE}, current progress is shown; if
 #'     \code{FALSE}, no output is produced.
@@ -87,6 +90,7 @@ rf_list_to_matrix <-  function(input.twopt,
                                thresh.LOD.rf = 0,
                                thresh.rf = 0.5,
                                n.clusters = 1,
+                               shared.alleles = FALSE,
                                verbose = TRUE) {
   ## checking for correct object
   input_classes <-c("poly.est.two.pts.pairwise",
@@ -95,23 +99,25 @@ rf_list_to_matrix <-  function(input.twopt,
     stop(deparse(substitute(input.twopt)),
          " is not an object of class 'poly.est.two.pts.pairwise'")
   }
-    pair_input <- input.twopt$pairwise
-    marnames <- rownames(get(input.twopt$data.name, pos = 1)$geno.dose)[sort(input.twopt$seq.num)]
-    lod.mat <- rec.mat <- matrix(NA, input.twopt$n.mrk, input.twopt$n.mrk)
-    #### UPDATE: instead of recovering the order from names, provide using the object 'input.twopt'
-    #seq.num.orig<-unique(sapply(strsplit(x = names(input.twopt$pairwise), split = "-"), function(x) as.numeric(x[1])))
-    #seq.num.orig<-c(seq.num.orig, strsplit(tail(names(input.twopt$pairwise), n = 1), "-")[[1]][2])
-    #dimnames(lod.mat) = dimnames(rec.mat) = list(seq.num.orig, seq.num.orig)
+  pair_input <- input.twopt$pairwise
+  marnames <- rownames(get(input.twopt$data.name, pos = 1)$geno.dose)[sort(input.twopt$seq.num)]
+  lod.mat <- rec.mat <- matrix(NA, input.twopt$n.mrk, input.twopt$n.mrk)
+  if(shared.alleles)
+    ShP <- ShQ <- lod.mat
+  #### UPDATE: instead of recovering the order from names, provide using the object 'input.twopt'
+  #seq.num.orig<-unique(sapply(strsplit(x = names(input.twopt$pairwise), split = "-"), function(x) as.numeric(x[1])))
+  #seq.num.orig<-c(seq.num.orig, strsplit(tail(names(input.twopt$pairwise), n = 1), "-")[[1]][2])
+  #dimnames(lod.mat) = dimnames(rec.mat) = list(seq.num.orig, seq.num.orig)
   if (n.clusters > 1) {
     start <- proc.time()
     if (verbose)
       cat("INFO: Using ", n.clusters, " CPUs.\n")
     cl <- parallel::makeCluster(n.clusters)
     parallel::clusterExport(cl,
-                            varlist = c("thresh.LOD.ph", "thresh.LOD.rf", "thresh.rf"),
+                            varlist = c("thresh.LOD.ph", "thresh.LOD.rf", "thresh.rf", "shared.alleles"),
                             envir = environment())
     rf.lod.mat <- parallel::parSapply(cl, pair_input, "select_rf",
-                                      thresh.LOD.ph, thresh.LOD.rf, thresh.rf)
+                                      thresh.LOD.ph, thresh.LOD.rf, thresh.rf, shared.alleles)
     parallel::stopCluster(cl)
     end <- proc.time()
     if (verbose) {
@@ -127,28 +133,51 @@ rf_list_to_matrix <-  function(input.twopt,
     if (verbose) {
       cat("INFO: Going singlemode. Using one CPU.\n")
     }
-    rf.lod.mat <- sapply(pair_input, function(x, thresh.LOD.ph, thresh.LOD.rf, thresh.rf)
+    rf.lod.mat <- sapply(pair_input, function(x, thresh.LOD.ph, thresh.LOD.rf, thresh.rf, shared.alleles)
     {
       if(any(is.na(x)))
-        return(c(NA,NA))
+      {
+        if(shared.alleles){return(c(NA,NA,NA,NA))} else return(c(NA,NA))
+      }
       if((nrow(x) == 1 || abs(x[2 , 1]) >= thresh.LOD.ph) &&
          abs(x[1, 3]) >= thresh.LOD.rf &&
          abs(x[1, 2]) <= thresh.rf)
-        return(x[1,2:3])
-      else return (c(NA,NA))
-    }, thresh.LOD.ph, thresh.LOD.rf, thresh.rf)
+      {
+        if(shared.alleles){
+          y <- strsplit(rownames(x), "-")
+          return(c(x[1,2:3], as.numeric(y[[1]][1]), as.numeric(y[[1]][2])))
+        } else {
+          return(x[1,2:3])          
+        }
+      }
+      else{
+        {
+          if(shared.alleles){return(c(NA,NA,NA,NA))} else return(c(NA,NA))
+        }
+      }
+    }, thresh.LOD.ph, thresh.LOD.rf, thresh.rf, shared.alleles)
   }
   rec.mat[lower.tri(rec.mat)] <- as.numeric(rf.lod.mat[1,])
   rec.mat[upper.tri(rec.mat)] <- t(rec.mat)[upper.tri(rec.mat)]
   lod.mat[lower.tri(lod.mat)] <- as.numeric(rf.lod.mat[2,])
   lod.mat[upper.tri(lod.mat)] <- t(lod.mat)[upper.tri(lod.mat)]
   dimnames(rec.mat)<-dimnames(lod.mat)<-list(marnames, marnames)
+  if(shared.alleles){
+    ShP[lower.tri(ShP)] <- as.numeric(rf.lod.mat[3,])
+    ShP[upper.tri(ShP)] <- t(ShP)[upper.tri(ShP)]
+    ShQ[lower.tri(ShQ)] <- as.numeric(rf.lod.mat[4,])
+    ShQ[upper.tri(ShQ)] <- t(ShQ)[upper.tri(ShQ)]
+    dimnames(ShP)<-dimnames(ShQ)<-list(marnames, marnames)
+  } else{
+    ShP<-ShQ<-NULL
+  }
   structure(list(thresh.LOD.ph = thresh.LOD.ph,
                  thresh.LOD.rf = thresh.LOD.rf,
                  thresh.rf = thresh.rf,
-                 #id = id,
                  rec.mat = rec.mat,
                  lod.mat = abs(lod.mat),
+                 ShP = ShP,
+                 ShQ = ShQ,
                  data.name  = input.twopt$data.name,
                  chisq.pval.thres = input.twopt$chisq.pval.thres,
                  chisq.pval = input.twopt$chisq.pval,
@@ -162,7 +191,7 @@ print.mappoly.rf.matrix <- function(x, ...) {
   ## checking for correct object
   if (!any(class(x) == "mappoly.rf.matrix"))
     stop(deparse(substitute(x)), " is not an object of class 'group'")
-
+  
   cat("  This is an object of class 'mappoly.rf.matrix'\n\n")
   ## criteria
   cat("  Criteria used to filter markers:\n\n")
@@ -217,7 +246,7 @@ plot.mappoly.rf.matrix <- function(x, type = c("rf", "lod"), ord = NULL, rem = N
     o<-which(colnames(x$rec.mat)%in%rem)
     w<-w[-o,-o]
   }
-
+  
   fields::image.plot(
     w,
     col = col.range,
@@ -241,13 +270,26 @@ plot.mappoly.rf.matrix <- function(x, type = c("rf", "lod"), ord = NULL, rem = N
 #' @param void interfunction to be documented
 #' @keywords internal
 #' @export
-select_rf <- function(x, thresh.LOD.ph, thresh.LOD.rf, thresh.rf)
+select_rf <- function(x, thresh.LOD.ph, thresh.LOD.rf, thresh.rf, shared.alleles = FALSE)
 {
   if(any(is.na(x)))
-    return(c(NA,NA))
+  {
+    if(shared.alleles){return(c(NA,NA,NA,NA))} else return(c(NA,NA))
+  }
   if((nrow(x) == 1 || abs(x[2 , 1]) >= thresh.LOD.ph) &&
      abs(x[1, 3]) >= thresh.LOD.rf &&
      abs(x[1, 2]) <= thresh.rf)
-    return(x[1,2:3])
-  else return (c(NA,NA))
+  {
+    if(shared.alleles){
+      y <- strsplit(rownames(x), "-")
+      return(c(x[1,2:3], as.numeric(y[[1]][1]), as.numeric(y[[1]][2])))
+    } else {
+      return(x[1,2:3])          
+    }
+  }
+  else{
+    {
+      if(shared.alleles){return(c(NA,NA,NA,NA))} else return(c(NA,NA))
+    }
+  }
 }

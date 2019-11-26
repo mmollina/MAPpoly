@@ -4,7 +4,8 @@
 \alias{est_haplo_hmm}
 \title{Estimate a genetic map given a sequence of block markers}
 \usage{
-est_haplo_hmm(m, nmar, nind, haplo, rf_vec, verbose, use_H0 = FALSE, tol)
+est_haplo_hmm(m, nmar, nind, haplo, emit = NULL, rf_vec, verbose,
+  use_H0 = FALSE, tol)
 }
 \arguments{
 \item{void}{interfunction to be documented}

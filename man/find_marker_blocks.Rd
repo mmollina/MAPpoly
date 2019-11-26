@@ -2,36 +2,36 @@
 % Please edit documentation in R/find_marker_blocks.R
 \name{find_marker_blocks}
 \alias{find_marker_blocks}
-\alias{print.mappoly.bins}
-\alias{plot.mappoly.bins}
+\alias{print.mappoly.blocks}
+\alias{plot.mappoly.blocks}
 \title{Allocate markers into blocks}
 \usage{
 find_marker_blocks(input.seq, search.type = c("rf", "seq", "orig.ord"),
-  rf.limit = 1e-04, seq.limit = 1000, ord.limit = 10,
+  cut.lim = 1e-04, seq.limit = 1000, ord.limit = 10,
   reconstruct = FALSE, extend.tail = 10, n.clusters = 1,
-  ph.thres = 3, rf.mat = NULL, tol = 0.001, tol.final = 1e-04,
-  error = NULL, verbose = TRUE, count.cache, ask = FALSE)
+  ph.thres = 3, rf.mat = NULL, tol = 0.01, tol.final = 0.001,
+  error = NULL, verbose = TRUE, count.cache, sub.map.size.limit = 2,
+  block.size.lim = 2, ask = FALSE)
 
-\method{print}{mappoly.bins}(x, ...)
+\method{print}{mappoly.blocks}(x, ...)
 
-\method{plot}{mappoly.bins}(x, rf.thres = NULL, ...)
+\method{plot}{mappoly.blocks}(x, rf.thres = NULL, ...)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}.}
 
 \item{search.type}{one of \code{'rf'} or \code{'seq'}. If
-\code{'rf'}, the search for bins is performed using the
+\code{'rf'}, the search for blocks is performed using the
 recombination fraction estimates at a certain level given by
 the argument \code{rf.limit}. If \code{'seq'}, the search for
-bins is performed using the sequence information contained in
+blocks is performed using the sequence information contained in
 the input file. It uses as threshold to assume the markers are
 at the same bin the argument \code{seq.limit}}
 
-\item{rf.limit}{the maximum value to consider linked markers in
-case of \code{'search.type=rf'}}
-
 \item{seq.limit}{the distance limit to be considered when allocating
-markers into bins in case of \code{'search.type=seq'}}
+markers into blocks in case of \code{'search.type=seq'}}
+
+\item{ord.limit}{to be documented}
 
 \item{reconstruct}{if \code{TRUE}, reconstructs the genetic map in
 each bin. If \code{FALSE}, assume all recombination fractions
@@ -68,22 +68,22 @@ pre-computed genotype frequencies, obtained with
 with the phasing and recombination fraction estimation
 (if \code{reconstruct == TRUE}) after find marker blocks.}
 
-\item{x}{an object of class \code{mappoly.bins}}
+\item{x}{an object of class \code{mappoly.blocks}}
 
 \item{...}{curentlly ignored}
 
 \item{rf.thres}{recombination fraction threshold for plot. If \code{NULL},
 all recombination fractions are plotted.}
 
-\item{block.estimate}{logical. If TRUE returns a map forcing all
-recombination fractions equal to 0 (1e-5)}
+\item{rf.limit}{the maximum value to consider linked markers in
+case of \code{'search.type=rf'}}
 }
 \value{
-an object of class \code{mappoly.bins}
+an object of class \code{mappoly.blocks}
 }
 \description{
 Function to allocate markers located in the same genomic region or
-linkage disequilibrium blocks into bins.
+linkage disequilibrium blocks into blocks.
 }
 \examples{
   \dontrun{

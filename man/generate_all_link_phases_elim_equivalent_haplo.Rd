@@ -6,7 +6,8 @@
 eliminating evivalent configurations, i.e., configurations with the
 same likelihood}
 \usage{
-generate_all_link_phases_elim_equivalent_haplo(M1, M2, M, m, max.inc)
+generate_all_link_phases_elim_equivalent_haplo(block1, block2, M, m,
+  max.inc = NULL)
 }
 \arguments{
 \item{void}{interfunction to be documented}

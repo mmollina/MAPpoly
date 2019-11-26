@@ -6,23 +6,24 @@ require(mappoly)
 
 map<-maps.final[[12]]
 #plot(map)
-s <- make_seq_mappoly(BT.trifida.triloba.298, map$maps[[1]]$seq.num)
+s <- make_seq_mappoly(BT.trifida.triloba.298, map$maps[[1]]$seq.num[1:100])
 counts <- get_cache_two_pts_from_web(m = s$m)
-#tpt<-est_pairwise_rf(input.seq = s,
-#                     count.cache = counts,
-#                     n.clusters = 16,
-#                     verbose=TRUE)
-#mat<-rf_list_to_matrix(tpt)
-#plot(mat)
+tpt<-est_pairwise_rf(input.seq = s,
+                     count.cache = counts,
+                     n.clusters = 16,
+                     verbose=TRUE)
+mat<-rf_list_to_matrix(tpt)
+plot(mat)
 init.block.size <- 3
-blocks<-find_marker_blocks(input.seq = s,
+
+system.time(blocks<-find_marker_blocks(input.seq = s,
                            search.type = "orig.ord",
                            rf.limit = 1e-04,
                            seq.limit = 50000,
                            ord.limit = init.block.size,
                            reconstruct = TRUE,
                            extend.tail = 10,
-                           n.clusters = 1,
+                           n.clusters = 16,
                            ph.thres = 5,
                            rf.mat = mat,
                            tol = 1e-02,
@@ -30,12 +31,7 @@ blocks<-find_marker_blocks(input.seq = s,
                            error = NULL,
                            verbose = TRUE,
                            count.cache = counts,
-                           ask = TRUE)
-
-
-
-
-
+                           ask = TRUE))
 
 
 blocks$bins<-blocks$bins[!sapply(blocks$bins, function(x) all(is.na(x)))]
@@ -47,14 +43,16 @@ i1<-as.numeric(sapply(blocks.filt$bins, function(x) x$maps[[1]]$seq.num))
 plot(x = 1:length(s$seq.num), y = rep(10, length(s$seq.num)), 
      cex = 1, col = "darkorchid", pch = 1, ylim = c(0,10))
 
-
 length(blocks.filt$bins)
-match(blocks.filt$bins[[581]]$maps[[1]]$seq.num, s$seq.num)
-
-
 
 next.id.new<-c(1:length(s$seq.num))
+
+
+
 next.id.new<-matrix(next.id.new, nrow = init.block.size)
+
+
+
 next.id.new<-next.id.new[,-ncol(next.id.new)]
 next.id.col<-is.na(match(s$seq.num, i1))
 next.id.col<-matrix(next.id.col, nrow = init.block.size)
