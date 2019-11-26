@@ -101,6 +101,7 @@ rf_list_to_matrix <-  function(input.twopt,
   }
   pair_input <- input.twopt$pairwise
   marnames <- rownames(get(input.twopt$data.name, pos = 1)$geno.dose)[sort(input.twopt$seq.num)]
+  marindex <- sort(input.twopt$seq.num)
   lod.mat <- rec.mat <- matrix(NA, input.twopt$n.mrk, input.twopt$n.mrk)
   if(shared.alleles)
     ShP <- ShQ <- lod.mat
@@ -167,7 +168,7 @@ rf_list_to_matrix <-  function(input.twopt,
     ShP[upper.tri(ShP)] <- t(ShP)[upper.tri(ShP)]
     ShQ[lower.tri(ShQ)] <- as.numeric(rf.lod.mat[4,])
     ShQ[upper.tri(ShQ)] <- t(ShQ)[upper.tri(ShQ)]
-    dimnames(ShP)<-dimnames(ShQ)<-list(marnames, marnames)
+    dimnames(ShP)<-dimnames(ShQ)<-list(marindex, marindex)
   } else{
     ShP<-ShQ<-NULL
   }
