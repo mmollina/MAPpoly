@@ -3,7 +3,7 @@
 #' same likelihood
 #'
 #' @param block1 submap with markers of the first block
-#' @param block2 submap with markers of the second block
+#' @param block2 submap with markers of the second block, or just a single marker identified by its position in the \code{mappoly.data} object
 #' @param rf.matrix matrix obtained with the function \code{rf_list_to_matrix}
 #' using the parameter \code{shared.alleles = TRUE}
 #' @param m ploidy level (i.e. 4, 6 and so on)
@@ -13,6 +13,13 @@
 #' @export generate_all_link_phases_elim_equivalent_haplo
 generate_all_link_phases_elim_equivalent_haplo <-
     function(block1, block2, rf.matrix, m, max.inc = NULL) {
+        ## Check block2 class (block or single marker)
+        if (is.integer(block2)){
+            seq.ph = list(P = get(rf.matrix$data.name)$dosage.p[block2],
+                          Q = get(rf.matrix$data.name)$dosage.q[block2])
+            block2 = list(seq.num = block2, seq.ph = seq.ph)
+        }
+        
         ## Getting M matrix
         M = list(P = rf.matrix$ShP[as.character(block1$seq.num),as.character(block2$seq.num)], Q = rf.matrix$ShQ[as.character(block1$seq.num),as.character(block2$seq.num)])
         
@@ -45,7 +52,7 @@ generate_all_link_phases_elim_equivalent_haplo <-
         ct <- numeric(nrow(wp))
         for (i in 1:nrow(wp)){
             a = matrix(unlist(strsplit(wp[i, ], "-")), ncol = 2, byrow = TRUE)
-            sharedP = hP1[,a[,1]]%*%t(hP2[,a[,2]])
+            sharedP = tcrossprod(hP1[,a[,1]], t(hP2[,a[,2]]))            
             ct[i] = sum((M$P != sharedP), na.rm = T)
         }
         ## Checking inconsistency
@@ -69,7 +76,7 @@ generate_all_link_phases_elim_equivalent_haplo <-
         ct <- numeric(nrow(wq))
         for (i in 1:nrow(wq)){
             a = matrix(unlist(strsplit(wq[i, ], "-")), ncol = 2, byrow = TRUE)
-            sharedQ = hQ1[,a[,1]]%*%t(hQ2[,a[,2]])
+            sharedQ = tcrossprod(hQ1[,a[,1]], t(hQ2[,a[,2]]))
             ct[i] = sum((M$Q != sharedQ), na.rm = T)
         }
         ## Checking inconsistency
