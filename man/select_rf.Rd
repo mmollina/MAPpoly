@@ -4,7 +4,8 @@
 \alias{select_rf}
 \title{Select rf adn lod based on thresholds}
 \usage{
-select_rf(x, thresh.LOD.ph, thresh.LOD.rf, thresh.rf)
+select_rf(x, thresh.LOD.ph, thresh.LOD.rf, thresh.rf,
+  shared.alleles = FALSE)
 }
 \arguments{
 \item{void}{interfunction to be documented}

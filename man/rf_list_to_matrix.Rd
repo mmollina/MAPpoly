@@ -7,7 +7,8 @@
 \title{Recombination fraction list to matrix}
 \usage{
 rf_list_to_matrix(input.twopt, thresh.LOD.ph = 0, thresh.LOD.rf = 0,
-  thresh.rf = 0.5, n.clusters = 1, verbose = TRUE)
+  thresh.rf = 0.5, n.clusters = 1, shared.alleles = FALSE,
+  verbose = TRUE)
 
 \method{print}{mappoly.rf.matrix}(x, ...)
 
@@ -24,7 +25,10 @@ configuration.}
 
 \item{thresh.rf}{recombination fraction threshold}
 
-\item{n.clusters}{Number of parallel processes to spawn}
+\item{n.clusters}{number of parallel processes to spawn}
+
+\item{shared.alleles}{if \code{TRUE}, computes two matrices indicating 
+the number of homologes that share alleles}
 
 \item{verbose}{if \code{TRUE}, current progress is shown; if
 \code{FALSE}, no output is produced.}
