@@ -5,7 +5,7 @@
 \title{Reestimate gentic map given a global genotyping error}
 \usage{
 est_full_hmm_with_global_error(input.map, error = NULL, tol = 0.001,
-  th.prob = 0.95, verbose = FALSE)
+  restricted = TRUE, th.prob = 0.95, verbose = FALSE)
 }
 \arguments{
 \item{input.map}{an object of class \code{mappoly.map}.}
@@ -13,6 +13,10 @@ est_full_hmm_with_global_error(input.map, error = NULL, tol = 0.001,
 \item{error}{global error rate}
 
 \item{tol}{the desired accuracy.}
+
+\item{restricted}{if \code{TRUE}, restricts the prior to the 
+possible classes under mendelian non double-reduced segregation 
+given dosage of the parents.}
 
 \item{th.prob}{the threshold for using global error or genotype 
 probability distribution contained in the data set}
@@ -29,9 +33,7 @@ a genetic map using hdden Markov models
 }
 \examples{
   \dontrun{
-    hexa.file<-system.file('extdata', 'hexafake', package = 'mappoly')
-    hexa.dat<-read_geno(file.in = hexa.file)
-    seq1.20<-make_seq_mappoly(hexa.dat, 1:20)
+    seq1.20<-make_seq_mappoly(hexafake, 1:20)
     counts<-cache_counts_twopt(seq1.20,
                                get.from.web=TRUE)
     subset.pairs<-est_pairwise_rf(seq1.20, counts,
@@ -45,8 +47,7 @@ a genetic map using hdden Markov models
                                         twopt = subset.pairs,
                                         verbose = TRUE)
     subset.map
-    plot(subset.map)
-     
+    plot(subset.map)      
     subset.map.reest<-est_full_hmm_with_global_error(subset.map, 
                                                      error=0.01, 
                                                      tol=10e-4, 

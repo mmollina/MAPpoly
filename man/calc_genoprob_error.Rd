@@ -5,7 +5,7 @@
 \title{Compute genotype conditional probabilities using global error}
 \usage{
 calc_genoprob_error(input.map, phase.config = "best", error = 0.01,
-  verbose = TRUE)
+  th.prob = 0.95, restricted = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}
@@ -14,6 +14,13 @@ calc_genoprob_error(input.map, phase.config = "best", error = 0.01,
 "best" will use the one with highest likelihood}
 
 \item{error}{global error rate}
+
+\item{th.prob}{the threshold for using global error or genotype 
+probability distribution contained in the data set}
+
+\item{restricted}{if \code{TRUE}, restricts the prior to the 
+possible classes under mendelian non double-reduced segregation 
+given dosage of the parents.}
 
 \item{verbose}{if \code{TRUE}, current progress is shown; if
 \code{FALSE}, no output is produced.}
@@ -60,14 +67,28 @@ markers.
      s1.gen.subset.map.error<-est_full_hmm_with_global_error(input.map = s1.gen.subset.map, 
                                                                  error = 0.05, 
                                                                  verbose = TRUE)
-     plot(s1.gen.subset.map.error)                                                            
-                                        
+     plot(s1.gen.subset.map.error)
+     s1.gen.subset.map.error.no.rest<-est_full_hmm_with_global_error(input.map = s1.gen.subset.map, 
+                                                                 error = 0.05, 
+                                                                 restricted = FALSE,
+                                                                 verbose = TRUE)
+     plot_(s1.gen.subset.map.error)
+     
+     ## Comparin three maps
+     plot_map_list(list(s1.gen.subset.map, 
+                        s1.gen.subset.map.error.no.rest, 
+                        s1.gen.subset.map.error))     
+     
      probs<-calc_genoprob(input.map = s1.gen.subset.map.error,
                                 verbose = TRUE)
      probs.error<-calc_genoprob_error(input.map = s1.gen.subset.map.error,
                                 error = 0.05,
                                 verbose = TRUE)
-   op<-par(mfrow = c(1:2))
+     probs.error.no.rest<-calc_genoprob_error(input.map = s1.gen.subset.map.error.no.rest,
+                                error = 0.05, 
+                                restricted = FALSE,
+                                verbose = TRUE)
+   op<-par(mfrow = c(3,1))
    ## Example: individual 11
    ind<-11   
    ## posterior probabilities with no error modeling
@@ -84,7 +105,7 @@ markers.
    axis(side = 2, at = seq(0,1,length.out = nrow(pr1)),
         labels = rownames(pr1), las=2, cex.axis=.5)
    
-   ## posterior probabilities with error modeling
+   ## posterior probabilities with error modeling (restricted)
    pr2<-probs.error$probs[,,ind]
    d2<-probs.error$map
    image(t(pr2),
@@ -92,11 +113,25 @@ markers.
          axes=FALSE,
          xlab = "Markers",
          ylab = " ",
-         main = paste("LG_1, ind ", ind, " - w/ error "))
+         main = paste("LG_1, ind ", ind, " - w/ error - w/ prior restriction"))
    axis(side = 1, at = d2/max(d2),
         labels =rep("", length(d2)), las=2)
    axis(side = 2, at = seq(0,1,length.out = nrow(pr2)),
         labels = rownames(pr2), las=2, cex.axis=.5)
+        
+   ## posterior probabilities with error modeling
+   pr3<-probs.error.no.rest$probs[,,ind]
+   d3<-probs.error.no.rest$map
+   image(t(pr3),
+         col=RColorBrewer::brewer.pal(n=9 , name = "YlOrRd"),
+         axes=FALSE,
+         xlab = "Markers",
+         ylab = " ",
+         main = paste("LG_1, ind ", ind, " - w/ error - no prior restriction"))
+   axis(side = 1, at = d3/max(d3),
+        labels =rep("", length(d3)), las=2)
+   axis(side = 2, at = seq(0,1,length.out = nrow(pr3)),
+        labels = rownames(pr3), las=2, cex.axis=.5)       
    par(op)
  }
 }

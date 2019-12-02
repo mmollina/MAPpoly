@@ -1,19 +1,39 @@
 #' Introduces genotyping error into a full informative vector
 #'
+#' If \code{restricted = TRUE}, it restricts the prior to the 
+#' possible classes under mendelian non double-reduced segregation 
+#' given dosage of the parents
+#'
 #' @param void interfunction to be documented
 #' @keywords internal
 #'
 #' @export genotyping_global_error
 #'
-genotyping_global_error<-function(x, error=0.01, th.prob=0.999)
+genotyping_global_error<-function(x, m, restricted = TRUE,  error=0.01, th.prob=0.95)
 {
-  if(sum(x > th.prob)==1){
-    o<-which.max(x)
-    x[o]<-1-error
-    x[-o]<-error/(length(x)-1)
-    return(x)
+  if(restricted){
+    x1 <- x[1:(m+1)]
+    if(sum(x1 > th.prob) == 1){
+      x2 <- x[m + 2:3]
+      id<-segreg_poly(m, dP = x2[1], dQ = x2[2]) > 0
+      x3 <- x1[id]
+      o<-which.max(x3)
+      x3[o]<-1-error
+      x3[-o]<-error/(sum(id)-1)
+      x1[match(names(x3), names(x1))] <- x3
+      return(x1)
+    }
+    return(x1)
+  } else {
+    x1 <- x[1:(m+1)]
+    if(sum(x1 > th.prob)==1){
+      o<-which.max(x1)
+      x1[o]<-1-error
+      x1[-o]<-error/(length(x1)-1)
+      return(x1)
+    }
+    return(x1)
   }
-  return(x)
 }
 
 #' Reestimate gentic map given a global genotyping error
@@ -24,6 +44,9 @@ genotyping_global_error<-function(x, error=0.01, th.prob=0.999)
 #' @param input.map an object of class \code{mappoly.map}.
 #' @param error global error rate
 #' @param tol the desired accuracy.
+#' @param restricted if \code{TRUE}, restricts the prior to the 
+#'                   possible classes under mendelian non double-reduced segregation 
+#'                   given dosage of the parents. 
 #' @param th.prob the threshold for using global error or genotype 
 #'     probability distribution contained in the data set 
 #' @param verbose if \code{TRUE}, current progress is shown; if
@@ -33,9 +56,7 @@ genotyping_global_error<-function(x, error=0.01, th.prob=0.999)
 #'
 #' @examples
 #'   \dontrun{
-#'     hexa.file<-system.file('extdata', 'hexafake', package = 'mappoly')
-#'     hexa.dat<-read_geno(file.in = hexa.file)
-#'     seq1.20<-make_seq_mappoly(hexa.dat, 1:20)
+#'     seq1.20<-make_seq_mappoly(hexafake, 1:20)
 #'     counts<-cache_counts_twopt(seq1.20,
 #'                                get.from.web=TRUE)
 #'     subset.pairs<-est_pairwise_rf(seq1.20, counts,
@@ -49,8 +70,7 @@ genotyping_global_error<-function(x, error=0.01, th.prob=0.999)
 #'                                         twopt = subset.pairs,
 #'                                         verbose = TRUE)
 #'     subset.map
-#'     plot(subset.map)
-#'      
+#'     plot(subset.map)      
 #'     subset.map.reest<-est_full_hmm_with_global_error(subset.map, 
 #'                                                      error=0.01, 
 #'                                                      tol=10e-4, 
@@ -71,6 +91,7 @@ genotyping_global_error<-function(x, error=0.01, th.prob=0.999)
 #' @export est_full_hmm_with_global_error
 #'
 est_full_hmm_with_global_error <- function(input.map, error=NULL, tol=10e-4, 
+                                           restricted = TRUE, 
                                            th.prob=0.95, verbose = FALSE)
 {
   if (!inherits(input.map, "mappoly.map")) {
@@ -88,6 +109,9 @@ est_full_hmm_with_global_error <- function(input.map, error=NULL, tol=10e-4,
     dp<-get(input.map$info$data.name, pos=1)$dosage.p[input.map$maps[[1]]$seq.num]
     dq<-get(input.map$info$data.name, pos=1)$dosage.q[input.map$maps[[1]]$seq.num]
     names(dp)<-names(dq)<-mrknames
+    d.pq<-data.frame(dp = dp, 
+                     dq = dq)
+    d.pq$mrk<-mrknames
     for(i in names(gen))
     {
       a<-matrix(0, nrow(geno.temp), input.map$info$m+1, dimnames = list(mrknames, 0:input.map$info$m))
@@ -98,9 +122,15 @@ est_full_hmm_with_global_error <- function(input.map, error=NULL, tol=10e-4,
           a[j,geno.temp[j,i]+1]<-1          
         }
       }
-      a.temp<-t(a)
+      a<-as.data.frame(a)
+      a$mrk<-rownames(a)
+      a.temp<-t(merge(a, d.pq, sort = FALSE)[,-c(1)])
       if(!is.null(error))
-        a.temp<-apply(a.temp, 2, genotyping_global_error, error=error, th.prob = 0.9)
+        a.temp<-apply(a.temp, 2, genotyping_global_error, m = input.map$info$m, 
+                      restricted = restricted, error=error, th.prob = th.prob)
+      else
+        a.temp <- a.temp[1:(input.map$info$m+1), ]
+      colnames(a.temp)<-a[,1]
       gen[[i]]<-a.temp
     }
   } 
@@ -110,13 +140,19 @@ est_full_hmm_with_global_error <- function(input.map, error=NULL, tol=10e-4,
     gen<-vector("list", length(indnames))
     names(gen)<-indnames
     mrk<-ind<-NULL
+    d.pq<-data.frame(dp = get(input.map$info$data.name, pos=1)$dosage.p[input.map$maps[[1]]$seq.num], 
+                     dq = get(input.map$info$data.name, pos=1)$dosage.q[input.map$maps[[1]]$seq.num])
+    d.pq$mrk<-mrknames
     for(i in names(gen))
     {
       a<-subset(geno.temp, ind%in%i)
       a<-a[match(mrknames, a$mrk),]
-      a.temp<-t(a[,-c(1:2)])
+      a.temp<-t(merge(a, d.pq, sort = FALSE)[,-c(1:2)])
       if(!is.null(error))
-        a.temp<-apply(a.temp, 2, genotyping_global_error, error=error, th.prob = th.prob)
+        a.temp<-apply(a.temp, 2, genotyping_global_error, m = input.map$info$m, 
+                      restricted = restricted, error=error, th.prob = th.prob)
+      else
+        a.temp <- a.temp[1:(input.map$info$m+1), ]
       colnames(a.temp)<-a[,1]
       gen[[i]]<-a.temp
     }
