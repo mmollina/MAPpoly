@@ -339,6 +339,55 @@ std::vector<double> backward(int m,
   }
   return(fk);
 }
+/* FUNCTION: forward
+ -----------------------------------------------------
+ Classical forward equation presented in Rabiner 1989.
+ */
+std::vector<double> forward_emit(int m,
+                                 std::vector<double>& fk,
+                                 std::vector<int>& ik,
+                                 std::vector<int>& ik1,
+                                 std::vector<double>& emit,
+                                 std::vector<std::vector<double> >& T)
+{
+  int ngenk = ik.size()/2;
+  int ngenk1 = ik1.size()/2;
+  std::vector<double> fk1(ngenk1);
+  std::fill(fk1.begin(), fk1.end(), 0.0);
+  for(int k1 = 0; k1 < ngenk1; k1++ )
+  {
+    for(int k = 0; k < ngenk; k++ )
+    {
+      fk1[k1] = fk1[k1] + fk[k] * T[ik[k]][ik1[k1]] * T[ik[k+ngenk]][ik1[k1+ngenk1]];
+    }
+    fk1[k1] = fk1[k1] * emit[k1];
+  }
+  return(fk1);
+}
+/* FUNCTION: backward
+-----------------------------------------------------
+Classical backward equation presented in Rabiner 1989.
+*/
+std::vector<double> backward_emit(int m,
+                                  std::vector<double>& fk1,
+                                  std::vector<int>& ik,
+                                  std::vector<int>& ik1,
+                                  std::vector<double>& emit,
+                                  std::vector<std::vector<double> >& T)
+{
+  int ngenk = ik.size()/2;
+  int ngenk1 = ik1.size()/2;
+  std::vector<double> fk(ngenk);
+  std::fill(fk.begin(), fk.end(), 0.0);
+  for(int k = 0; k < ngenk; k++ )
+  {
+    for(int k1 = 0; k1 < ngenk1; k1++ )
+    {
+      fk[k] =  fk[k] + fk1[k1] * T[ik[k]][ik1[k1]] * T[ik[k+ngenk]][ik1[k1+ngenk1]] * emit[k1]; 
+    }
+  }
+  return(fk);
+}
 
 
 /* FUNCTION: forward

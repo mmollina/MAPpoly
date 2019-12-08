@@ -81,7 +81,7 @@ calc_genoprob<-function(input.map,  phase.config = "best", verbose = TRUE)
                   as.numeric(rep(0, choose(m, m/2)^2 * n.mrk * n.ind)),
                   verbose=verbose,
                   PACKAGE = "mappoly")
-  cat("\n")
+  if(verbose) cat("\n")
   dim(res.temp[[1]])<-c(choose(m,m/2)^2,n.mrk,n.ind)
   dimnames(res.temp[[1]])<-list(kronecker(apply(combn(letters[1:m],m/2),2, paste, collapse=""),
                                           apply(combn(letters[(m+1):(2*m)],m/2),2, paste, collapse=""), paste, sep=":"),
@@ -116,6 +116,11 @@ create_map<-function(input.map, step = Inf,
     stop("invalid linkage phase configuration")
   } else i.lpc <- phase.config
   mrknames <- get(input.map$info$data.name, pos=1)$mrk.names[input.map$maps[[i.lpc]]$seq.num]
+  if(length(unique(input.map$maps[[1]]$seq.num)) == 1){
+    a<-rep(0,input.map$info$n.mrk)
+    names(a)<-mrknames
+    return(a)
+  }
   map <- c(0, cumsum(imf_h(input.map$maps[[i.lpc]]$seq.rf)))
   names(map)<-mrknames
   if(is.null(step))
