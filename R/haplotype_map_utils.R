@@ -115,7 +115,7 @@ generate_all_link_phases_elim_equivalent_haplo <-
 #' @keywords internal
 #' @export
 est_haplo_hmm <-
-  function(m, nmar, nind, haplo, emit = NULL, 
+  function(m, n.mrk, n.ind, haplo, emit = NULL, 
            rf_vec, verbose, use_H0 = FALSE, tol) {
     ## In case no genotypic probabilities distrubutions are provided
     if(is.null(emit)){
@@ -131,8 +131,8 @@ est_haplo_hmm <-
     res.temp <-
       .Call("est_haplotype_map",
             m,
-            nmar,
-            nind,
+            n.mrk,
+            n.ind,
             haplo,
             emit,
             rf_vec,
@@ -142,3 +142,44 @@ est_haplo_hmm <-
             PACKAGE = "mappoly")
     res.temp
   }
+
+#' Estimate a genetic map given a sequence of block markers
+#'
+#' @param void interfunction to be documented
+#' @keywords internal
+#' @export
+calc_genoprob_haplo <-
+  function(m, n.mrk, n.ind, haplo, emit = NULL, 
+           rf_vec, indnames, verbose=TRUE) {
+    ## In case no genotypic probabilities distrubutions are provided
+    if(is.null(emit)){
+      emit <- vector("list", length(haplo))
+      for(i in  1:length(haplo)){
+        tempemit <- vector("list", length(haplo[[i]]))
+        for(j in 1:length(haplo[[i]])){
+          tempemit[[j]] <- rep(1, nrow(haplo[[i]][[j]]))
+        }
+        emit[[i]] <- tempemit
+      }
+    }
+    mrknames<-names(haplo)
+    res.temp <- .Call("calc_genprob_haplo",
+            m,
+            n.mrk,
+            n.ind,
+            haplo,
+            emit,
+            rf_vec,
+            as.numeric(rep(0, choose(m, m/2)^2 * n.mrk * n.ind)),
+            verbose,
+            PACKAGE = "mappoly")
+    if(verbose) cat("\n")
+    dim(res.temp[[1]])<-c(choose(m,m/2)^2,n.mrk,n.ind)
+    dimnames(res.temp[[1]])<-list(kronecker(apply(combn(letters[1:m],m/2),2, paste, collapse=""),
+                                            apply(combn(letters[(m+1):(2*m)],m/2),2, paste, collapse=""), paste, sep=":"),
+                                  mrknames, indnames)
+    structure(list(probs = res.temp[[1]], map = rf_vec), class="mappoly.genoprob")
+  }
+
+
+
