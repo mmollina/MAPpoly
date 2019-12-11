@@ -142,6 +142,7 @@
 #' @importFrom princurve principal.curve
 #' @importFrom stats runif 
 #' @importFrom utils read.csv write.csv
+#' @importFrom MDSMap calc.nnfit
 #' @export mds_mappoly
 mds_mappoly<-function(input.mat,
                       p = NULL,
@@ -168,7 +169,7 @@ mds_mappoly<-function(input.mat,
     r<-lodrf$rf
     lod<-lodrf$lod
   }
-  M<-MDSMap::dmap(r,"haldane")
+  M<-dmap(r,"haldane")
   nloci=length(confplotno)
   smacofsym<-smacof::smacofSym(M,ndim=ndim,weightmat=lod,itmax=100000)
   pc1<-princurve::principal_curve(smacofsym$conf,maxit=150,spar=p,smoother="smooth_spline")
@@ -188,7 +189,7 @@ mds_mappoly<-function(input.mat,
   } else {
     locikey<-data.frame(locus=lodrf$locinames,confplotno=confplotno)
   }
-  nnfit<-MDSMap::calc.nnfit(distmap,lodmap,estpos)
+  nnfit<-calc.nnfit(distmap,lodmap,estpos)
   locimap<-data.frame(confplotno=confplotno[maporder],locus=locikey$locus[maporder],position=estpos,nnfit=nnfit$pointfits,row.names=1:nloci)
   if(!is.null(n)) {
     removedloci<-data.frame(n,lodrf$locinames[n],row.names=NULL)
