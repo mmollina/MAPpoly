@@ -26,13 +26,9 @@ keep the marker. A \code{thresh.perc = 0.05} means that, at least
 keep the marker.}
 
 \item{remove.fp}{numeric value from 0.0 to 0.5 (default = NULL). When defined,
-this parameter identifies and removes markers that presented more than 99%
-of its pairwise recombination fractions below \code{remove.fp} value. 
-
-logical. Should the function remove markers that
-presented high evidence of being a false positive? (default = TRUE)
-NOTE: here, false positives are markers that presented more than 99% of its
-pairwise recombination fractions below 10cM.}
+this parameter identifies and removes markers that presented more than 90\%
+of its pairwise recombination fractions below \code{remove.fp} value throughout
+the linkage group.}
 
 \item{n.clusters}{number of parallel processes to spawn.}
 }

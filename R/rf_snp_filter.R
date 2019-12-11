@@ -30,13 +30,9 @@
 #' @param n.clusters number of parallel processes to spawn.
 #'
 #' @param remove.fp numeric value from 0.0 to 0.5 (default = NULL). When defined,
-#' this parameter identifies and removes markers that presented more than 99%
-#' of its pairwise recombination fractions below \code{remove.fp} value. 
-#'
-#' logical. Should the function remove markers that
-#' presented high evidence of being a false positive? (default = TRUE)
-#' NOTE: here, false positives are markers that presented more than 99% of its
-#' pairwise recombination fractions below 10cM.
+#' this parameter identifies and removes markers that presented more than 90\%
+#' of its pairwise recombination fractions below \code{remove.fp} value throughout
+#' the linkage group. 
 #'
 #' @return A filtered object of class \code{mappoly.sequence}
 #' @examples
@@ -137,7 +133,7 @@ rf_snp_filter<-function(input.twopt,
             stop("'remove.fp' value should be defined between 0.0 and 0.5.")
         rf_mat_fp = rf_list_to_matrix(input.twopt = input.twopt, n.clusters = n.clusters, verbose = FALSE)
         xo = apply(rf_mat_fp$rec.mat, 2, function(x) sum(x < remove.fp, na.rm = T))
-        o2 = names(which(xo > quantile(xo, probs = .99)))
+        o2 = names(which(xo > 0.90*(length(xo))))
         o1 = !(names(xo) %in% o2)
     }
 
@@ -158,12 +154,13 @@ rf_snp_filter<-function(input.twopt,
     ## Checking for remaining markers with rfs below threshold
     rem = names(x)[!(names(x) %in% o)]
     remaining = rf_mat$rec.mat[rem,rem]
-    ev.mrks = rownames(remaining[which(remaining[,ncol(remaining)] < 0.01),])
-    if (!is.null(remove.fp))
-        warning('The following markers presented more than 99% of recombination fractions below ', remove.fp, ' and were removed: ', paste0(o2, ' '), '\n')
-    warning('The following markers were removed, but presented one or more recombination fractions below 0.01: ', paste0(ev.mrks, ' '), '\n')
+    ev.mrks = rownames(remaining[which(remaining[,ncol(remaining)] < thresh.rf),])
+    if (!is.null(remove.fp) && length(o2) > 0)
+        cat('The following markers presented more than 90% of recombination fractions below', remove.fp, 'and were removed:', paste0(o2), '\n')
+    if (length(ev.mrks) > 0)
+        cat('The following markers were also removed, but presented one or more recombination fractions below', thresh.rf,':', paste0(ev.mrks), '\n')
 
-    ## Returing sequence object
+    ## Returning sequence object
     ch_filt<-make_seq_mappoly(input.obj = get(input.twopt$data.name), arg = o, data.name = input.twopt$data.name)
     ch_filt
 }
