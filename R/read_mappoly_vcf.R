@@ -105,7 +105,7 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   #   input.phased = TRUE # Treat this in a different way when reading file
   #   warning("Phased genotypes detected. Should MAPpoly consider this information?")
   # } else {input.phased = FALSE}
-  if (any((file.ploidy %% 2) != 0)){ # Checking odd ploidy level
+  if (any((file.ploidy[-which(file.ploidy == -1)] %% 2) != 0)){ # Checking odd ploidy level
     stop("Your VCF file shows an odd ploidy level, but MAPpoly only supports even ploidy levels. Please check your VCF file and try again.")
   }
   if (!is.na(ploidy) && !(ploidy %in% file.ploidy)){ # Checking informed and file ploidy
@@ -131,12 +131,12 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   #      }
   # geno.dose = matrix(as.numeric(geno.dose), nrow = n.mrk, byrow = F)
 
-    ## Updating some info based on selected ploidy 
-    geno.dose = geno.dose[which(unique(t(geno.ploidy)) == m),] # Removing markers with different ploidy levels
-    n.mrk = length(which(unique(t(geno.ploidy)) == m))
-    sequence = sequence[which(unique(t(geno.ploidy)) == m)]
-    sequence.pos = sequence.pos[which(unique(t(geno.ploidy)) == m)]
-    mrk.names = mrk.names[which(unique(t(geno.ploidy)) == m)]
+    ## Updating some info based on selected ploidy
+    geno.dose = geno.dose[which(rowSums(geno.ploidy == m) == (n.ind+2)),] # Removing markers with different ploidy levels
+    n.mrk = length(which(rowSums(geno.ploidy == m) == (n.ind+2))) #old: which(unique(t(geno.ploidy)) == m)
+    sequence = sequence[which(rowSums(geno.ploidy == m) == (n.ind+2))]
+    sequence.pos = sequence.pos[which(rowSums(geno.ploidy == m) == (n.ind+2))]
+    mrk.names = mrk.names[which(rowSums(geno.ploidy == m) == (n.ind+2))]
     colnames(geno.dose) = ind.names
     rownames(geno.dose) = mrk.names
     dosage.p = geno.dose[,which(colnames(geno.dose) == parent.1)] # Selecting dosages for parent 1
