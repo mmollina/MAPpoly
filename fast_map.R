@@ -47,7 +47,7 @@ ble<-system.time(
     cat(i, ": ")
     res<-my_map_func_test(hap1 = map.cur, 
                           hap2 = as.integer(s12$seq.num[i]), 
-                          probs.hap1 = probs.hap1,
+                          probs.hap1 = probs.cur,
                           thresh.cut.path = 1/400, 
                           thresh.twopt = 5, 
                           tol = 10e-2,
