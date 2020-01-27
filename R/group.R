@@ -109,7 +109,7 @@ group_mappoly <- function(input.mat, input.seq = NULL, expected.groups = NULL,
     if(interactive() && inter)
     {
       dend.snp <- as.dendrogram(hc.snp)
-      while(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
+      while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
       {
         dend1 <- dendextend::color_branches(dend.snp, k = expected.groups)
         plot(dend1, leaflab = "none")
@@ -122,8 +122,8 @@ group_mappoly <- function(input.mat, input.seq = NULL, expected.groups = NULL,
         yt<-.1
         points(x = xt, y = rep(yt, length(xt)), cex = 6, pch = 20, col = "lightgray")
         text(x = xt, y = yt, labels = match(xy, table(groups.snp, useNA = "ifany")), adj = .5)
-        ANSWER <- readline("Enter 'y' to proceed or update the number of expected groups: ")
-        if(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
+        ANSWER <- readline("Enter 'Y/n' to proceed or update the number of expected groups: ")
+        if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
           expected.groups <- as.numeric(ANSWER)
       }
     }
