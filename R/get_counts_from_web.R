@@ -1,4 +1,4 @@
-#' Access a remote server to get Counts for recombinat classes
+#' Access a remote server to get Counts for recombinant classes
 #'
 #' @param void interfunction to be documented
 #' @keywords internal
@@ -19,9 +19,9 @@ get_cache_two_pts_from_web <- function(m, url.address = NULL, joint.prob = TRUE)
         url.address.joint = paste("http://152.1.45.19/prev.joint.cache.", pl, "ploid.counts.RData", sep = "")
     }
     prev.joint.cache.from.web <- prev.cache.from.web <- NULL
-    ## checking internet conectivety
+    ## checking internet connectivity
     if (try(url.exists(url.address.cond)) & try(url.exists(url.address.joint))) {
-        cat("Internet conectivety ok.\nLoading genotype counts from web\n")
+        cat("Internet connectivity ok.\nLoading genotype counts from web\n")
         load(url(url.address.cond, method = "libcurl"))
         if (!class(prev.cache.from.web) == "cache.info")
             stop(deparse(substitute(prev.cache.from.web)), " is not an object of class 'cache.info'\nTry to use function 'cache.two.pts'")
