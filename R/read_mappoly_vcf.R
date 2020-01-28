@@ -86,6 +86,8 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   n.ind = length(ind.names) - 2 # Number of individuals excepting two parents
   sequence = input.data$fix[,1] # Getting chromosome information
   sequence.pos = as.numeric(input.data$fix[,2]) # Getting positions
+  seq.ref = input.data$fix[,4] # Getting reference alleles
+  seq.alt = input.data$fix[,5] # Getting alternative alleles
   mrk.names = input.data$fix[,3] # Getting marker names
   if (any(is.na(unique(mrk.names)))){
     cat("No named markers. Using integers instead.\n")
@@ -136,6 +138,8 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
     n.mrk = length(which(rowSums(geno.ploidy == m) == (n.ind+2))) #old: which(unique(t(geno.ploidy)) == m)
     sequence = sequence[which(rowSums(geno.ploidy == m) == (n.ind+2))]
     sequence.pos = sequence.pos[which(rowSums(geno.ploidy == m) == (n.ind+2))]
+    seq.ref = seq.ref[which(rowSums(geno.ploidy == m) == (n.ind+2))]
+    seq.alt = seq.alt[which(rowSums(geno.ploidy == m) == (n.ind+2))]
     mrk.names = mrk.names[which(rowSums(geno.ploidy == m) == (n.ind+2))]
     colnames(geno.dose) = ind.names
     rownames(geno.dose) = mrk.names
@@ -191,6 +195,8 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
                         dosage.q = dosage.q[id],
                         sequence = sequence[id],
                         sequence.pos = sequence.pos[id],
+                        seq.ref = seq.ref[id],
+                        seq.alt = seq.alt[id],
                         prob.thres = NULL,
                         geno.dose = geno.dose[id,],
                         nphen = 0,
