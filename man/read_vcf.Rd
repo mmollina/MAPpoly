@@ -5,12 +5,11 @@
 \title{Data Input VCF}
 \usage{
 read_vcf(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
-  ploidy = NA, thresh.line = 0.05, update.prob = FALSE,
-  output = NULL)
+  ploidy = NA, thresh.line = 0.05, min.gt.depth = 0,
+  min.av.depth = 0, max.missing = 1, use.prob = FALSE)
 }
 \arguments{
-\item{file.in}{name of input file which contains the data to
-be read.}
+\item{file.in}{path to the input file which contains the data (VCF format)}
 
 \item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
 expected genotypes under random chromosome pairing and no double reduction}
@@ -21,11 +20,15 @@ expected genotypes under random chromosome pairing and no double reduction}
 
 \item{ploidy}{the species ploidy (optional, it will be automatically detected)}
 
-\item{thresh.line}{threshold used for p-values on segregation test}
+\item{thresh.line}{threshold used for p-values on segregation test (default = 0.05)}
 
-\item{update.prob}{Logical. Should MAPpoly update genotype probabilities based on HMM? (default = FALSE)}
+\item{min.gt.depth}{Minimum genotype depth to keep information. If the genotype depth is below \code{min.gt.depth}, then it will (default = 0)}
 
-\item{output}{if \code{update.prob = TRUE}, defines the output of the updated .vcf file}
+\item{min.av.depth}{Minimum average depth to keep markers (default = 0)}
+
+\item{max.missing}{Maximum proportion of missing data to keep markers (range = 0-1; default = 1)}
+
+\item{use.prob}{Logical. Should MAPpoly use the genotype probabilities from VCF file (PL field)? (default = FALSE)}
 
 \item{...}{currently ignored}
 }

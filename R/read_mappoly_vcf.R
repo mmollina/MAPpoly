@@ -86,7 +86,7 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
   sequence.pos = as.numeric(input.data$fix[,2]) # Getting positions
   seq.ref = input.data$fix[,4] # Getting reference alleles
   seq.alt = input.data$fix[,5] # Getting alternative alleles
-  mrk.names = input.data$fix[,3] # Getting marker names
+  mrk.names = mrk.names.all = input.data$fix[,3] # Getting marker names
   if (any(is.na(unique(mrk.names)))){
     cat("No named markers. Using integers instead.\n")
     no_name = sum(is.na(mrk.names))
@@ -135,7 +135,8 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
 
     ## Updating some info
     dif_ploidy = which(rowSums(geno.ploidy == m) == (n.ind+2)) # Markers with different ploidy levels
-    av_depth = which(rowMeans(geno.depth) >= min.av.depth) # Markers with average depths below threshold
+    all_mrk_depth = rowMeans(geno.depth)
+    av_depth = which(all_mrk_depth >= min.av.depth) # Markers with average depths below threshold
     max_miss = which(rowSums(is.na(geno.dose))/dim(geno.dose)[2] <= max.missing) # Markers with missing data above the threshold
     selected_markers = intersect(intersect(dif_ploidy,av_depth),max_miss) # Selecting markers that passed all thresholds
     geno.dose = geno.dose[selected_markers,] # Selecting markers
@@ -215,7 +216,9 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
                         nphen = 0,
                         phen = NULL,
                         input.file = input.file,
-                        input.phased = FALSE
+                        input.phased = FALSE,
+                        all.mrk.depth = all.mrk.depth,
+                        selected.mrk = mrk.names.all %in% mrk.names
                         ),
                    class = "mappoly.data")
   

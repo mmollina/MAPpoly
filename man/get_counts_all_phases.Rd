@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_counts.R
 \name{get_counts_all_phases}
 \alias{get_counts_all_phases}
-\title{Counts for recombinat classes}
+\title{Counts for recombinant classes}
 \usage{
 get_counts_all_phases(x, m, verbose = FALSE, make.names = FALSE,
   joint.prob = FALSE)
@@ -12,10 +12,10 @@ get_counts_all_phases(x, m, verbose = FALSE, make.names = FALSE,
 }
 \description{
 return the counts of each recombinant class (for two loci) in
-polyploid cross #the results of this function contains several
+polyploid cross. The results of this function contains several
 matrices each one corresponding to one possible linkage phase. The
-associated names in the matrices indicates #the number of shared
-homologous chromosomes. The row names indicates the dosage #in loci
+associated names in the matrices indicates the number of shared
+homologous chromosomes. The row names indicates the dosage in loci
 k and k+1 respectively
 }
 \keyword{internal}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_counts.R
 \name{get_counts_one_parent}
 \alias{get_counts_one_parent}
-\title{Counts for recombinat classes in a polyploid parent.}
+\title{Counts for recombinant classes in a polyploid parent.}
 \usage{
 get_counts_one_parent(ploidy, gen.par.mk1, gen.par.mk2, gen.prog.mk1,
   gen.prog.mk2)
