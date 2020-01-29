@@ -44,10 +44,22 @@
 #'       sequence.}
 #'     \item{sequence.pos}{Physical position of the markers into the
 #'       sequence}
+#'     \item{seq.ref}{Reference base used for each marker (i.e. A, T, C, G)}
+#'     \item{seq.alt}{Alternative base used for each marker (i.e. A, T, C, G)}
+#'     \item{prob.thres}{(unused field)}
+#'     \item{min.gt.depth}{Minimum depth used to keep genotype information}
+#'     \item{min.av.depth}{Minimum average depth used to keep a marker}
+#'     \item{max.missing}{Maximum proportion of missing genotypes (range: 0-1)}
 #'     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
 #'       for each individual (columns). Missing data are represented by 
 #'       \code{ploidy_level + 1}.}
+#'     \item{nphen}{(unused field)}
+#'     \item{phen}{(unused field)}
 #'     \item{input.file}{Full path to input file, used when \code{update.prob = TRUE}}
+#'     \item{input.phased}{Logical field indicating whether data is already phased on VCF file}
+#'     \item{all.mrk.depth}{DP information for all markers on VCF file}
+#'     \item{selected.mrk}{Markers kept in the final dataset}
+#' 
 #' @examples
 #' \dontrun{
 #'     mydata <- read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2")
@@ -197,30 +209,30 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
   ## returning the 'mappoly.data' object
   cat("\n    Done with reading.\n")
     
-  res = structure(list(m = m,
-                        n.ind = n.ind,
-                        n.mrk = sum(id),
-                        ind.names = ind.names,
-                        mrk.names = mrk.names[id],
-                        dosage.p = dosage.p[id],
-                        dosage.q = dosage.q[id],
-                        sequence = sequence[id],
-                        sequence.pos = sequence.pos[id],
-                        seq.ref = seq.ref[id],
-                        seq.alt = seq.alt[id],
-                        prob.thres = NULL,
-                        min.gt.depth = min.gt.depth,
-                        min.av.depth = min.av.depth,
-                        max.missing = max.missing,
-                        geno.dose = geno.dose[id,],
-                        nphen = 0,
-                        phen = NULL,
-                        input.file = input.file,
-                        input.phased = FALSE,
-                        all.mrk.depth = all.mrk.depth,
-                        selected.mrk = mrk.names.all %in% mrk.names
-                        ),
-                   class = "mappoly.data")
+    res = structure(list(m = m,
+                         n.ind = n.ind,
+                         n.mrk = sum(id),
+                         ind.names = ind.names,
+                         mrk.names = mrk.names[id],
+                         dosage.p = dosage.p[id],
+                         dosage.q = dosage.q[id],
+                         sequence = sequence[id],
+                         sequence.pos = sequence.pos[id],
+                         seq.ref = seq.ref[id],
+                         seq.alt = seq.alt[id],
+                         prob.thres = NULL,
+                         min.gt.depth = min.gt.depth,
+                         min.av.depth = min.av.depth,
+                         max.missing = max.missing,
+                         geno.dose = geno.dose[id,],
+                         nphen = 0,
+                         phen = NULL,
+                         input.file = input.file,
+                         input.phased = FALSE,
+                         all.mrk.depth = all_mrk_depth,
+                         selected.mrk = mrk.names.all %in% mrk.names
+                         ),
+                    class = "mappoly.data")
   
   if(filter.non.conforming){
     cat("    Filtering non-conforming markers.\n    ...")
