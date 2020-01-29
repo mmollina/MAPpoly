@@ -111,7 +111,7 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   if (!is.na(ploidy) && !(ploidy %in% file.ploidy)){ # Checking informed and file ploidy
     stop("Informed ploidy doesn't match any detected ploidy level. Detected ploidy level(s): ", paste0(file.ploidy, ' '))
   }
-  if (!is.na(ploidy) && (ploidy > 2) && (file.ploidy == 2)){ # Checking absence of dosages
+  if (!is.na(ploidy) && (ploidy > 2) && all(file.ploidy == 2)){ # Checking absence of dosages
     warning("Informed ploidy is ",ploidy, ", but detected ploidy is ", file.ploidy, ".\nIf your species is polyploid, you should provide allelic dosages for all individuals. You can estimate allelic dosages using packages such as 'SuperMASSA', 'updog', 'fitTetra', 'polyRAD' and others. We are working on a integrated function to estimate dosages, which will be available soon.\nUsing ploidy = 2 instead.")
   } # Allow option for building genetic maps for diploid species
     if (!is.na(ploidy)){ # If ploidy is informed and passed previous checks, then use it
