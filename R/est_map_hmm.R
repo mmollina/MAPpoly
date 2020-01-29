@@ -151,8 +151,8 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   if(length(input.seq$seq.num) == 2){
     maps<-vector("list", 1)
     res.temp <- twopt$pairwise[[paste(sort(input.seq$seq.num), collapse = "-")]]
-    dp <- get(twopt$data.name, pos =1)$dosage.p[input.seq$seq.num]
-    dq <- get(twopt$data.name, pos =1)$dosage.q[input.seq$seq.num]
+    dp <- get(input.seq$data.name, pos =1)$dosage.p[input.seq$seq.num]
+    dq <- get(input.seq$data.name, pos =1)$dosage.q[input.seq$seq.num]
     sh <- as.numeric(unlist(strsplit(rownames(res.temp)[1], split = "-")))
     res.ph <- list(P = c(list(0),list(0)), Q = c(list(0),list(0)))
     if(dp[1] != 0)
@@ -174,8 +174,11 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
                       seq.rf = res.temp[1,"rf"],
                       seq.ph = res.ph,
                       loglike = 0)
-    return(structure(list(info = list(m = input.seq$m, n.mrk = length(input.seq$seq.num),
-                                      data.name = input.seq$data.name, ph.thresh = abs(res.temp[2,1])),
+    return(structure(list(info = list(m = input.seq$m, 
+                                      n.mrk = length(input.seq$seq.num),
+                                      mrk.names = get(input.seq$data.name, pos =1)$mrk.names[input.seq$seq.num],
+                                      data.name = input.seq$data.name,
+                                      ph.thresh = abs(res.temp[2,1])),
                           maps = maps),
                      class = "mappoly.map"))
   }
@@ -220,7 +223,9 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   maps<-maps[id]
   if (verbose)
     cat("\n")
-  structure(list(info = list(m = input.seq$m, n.mrk = length(input.seq$seq.num),
+  structure(list(info = list(m = input.seq$m, 
+                             n.mrk = length(input.seq$seq.num),
+                             mrk.names = get(input.seq$data.name, pos =1)$mrk.names[input.seq$seq.num],
                              data.name = input.seq$data.name, ph.thresh = input.ph$thres),
                  maps = maps),
             class = "mappoly.map")

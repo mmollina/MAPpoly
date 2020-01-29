@@ -76,6 +76,8 @@ END_RCPP
 
 RcppExport SEXP calc_genoprob(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP calc_genoprob_prior(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP calc_genprob_haplo(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP est_haplotype_map(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP est_map_hmm(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP est_map_hmm_highprec(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP get_counts_one_parent_cpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
@@ -90,6 +92,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mappoly_read_body_gz", (DL_FUNC) &_mappoly_read_body_gz, 7},
     {"calc_genoprob",             (DL_FUNC) &calc_genoprob,              7},
     {"calc_genoprob_prior",       (DL_FUNC) &calc_genoprob_prior,       12},
+    {"calc_genprob_haplo",        (DL_FUNC) &calc_genprob_haplo,         8},
+    {"est_haplotype_map",         (DL_FUNC) &est_haplotype_map,          9},
     {"est_map_hmm",               (DL_FUNC) &est_map_hmm,                8},
     {"est_map_hmm_highprec",      (DL_FUNC) &est_map_hmm_highprec,       8},
     {"get_counts_one_parent_cpp", (DL_FUNC) &get_counts_one_parent_cpp,  6},

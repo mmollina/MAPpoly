@@ -15,9 +15,8 @@ reest_rf(input.map, input.mat = NULL, tol = 0.01,
 
 \item{tol}{tolerance for determining convergence.}
 
-\item{phase.config}{should be a string \code{'best'} or the position of the
-configuration to be plotted. If \code{'best'}, plot the configuration
-with the highest likelihood.}
+\item{phase.config}{which phase configuration should be used. "best" (default) 
+will choose the maximum likelihood configuration.}
 
 \item{method}{indicates whether to use Hidden Markov Models or Ordinary
 Least Squares to reestimate the recombination fraction}
