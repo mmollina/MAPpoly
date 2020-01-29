@@ -11,8 +11,8 @@ est_full_hmm_with_prior_dist(input.map, phase.config = "best",
 \arguments{
 \item{input.map}{an object of class \code{mappoly.map}.}
 
-\item{phase.config}{which phase configuration should be used
-"best" will choose the one with highest likelihood}
+\item{phase.config}{which phase configuration should be used. "best" (default) 
+will choose the maximum likelihood configuration.}
 
 \item{tol}{the desired accuracy.}
 

@@ -13,8 +13,8 @@ calc_genoprob_dist(input.map, dat.dist, phase.config = "best",
 \item{dat.dist}{data set contaning the probability distribution of the 
 genotypes.}
 
-\item{phase.config}{which phase configuration should be used.
-"best" will use the one with highest likelihood}
+\item{phase.config}{which phase configuration should be used. "best" (default) 
+will choose the maximum likelihood configuration.}
 
 \item{verbose}{if \code{TRUE}, current progress is shown; if
 \code{FALSE}, no output is produced.}

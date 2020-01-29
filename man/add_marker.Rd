@@ -2,50 +2,51 @@
 % Please edit documentation in R/utils.R
 \name{add_marker}
 \alias{add_marker}
-\title{Add marker to a sequence}
+\title{Add a single marker to a map}
 \usage{
-add_marker(input.seq, mrk)
+add_marker(input.map, mrk, pos, rf.matrix, genoprob = NULL,
+  phase.config = "best", tol = 0.001)
 }
 \arguments{
-\item{input.seq}{an object of class \code{"mappoly.sequence"}}
+\item{input.map}{an object of class \code{"mappoly.map"}}
 
-\item{mrk}{markers to be added to the input sequence, identified by its positions on dataset. For multiple markers, please use 'c()'.}
+\item{mrk}{the name of the marker to be inserted}
+
+\item{pos}{the name of the marker after which the new marker should be added.
+One also can inform the numeric position (between markers) were the 
+new marker should be added. To insert a marker at the beginning of a 
+map, one should use \code{pos = 0}.}
+
+\item{rf.matrix}{an object of class \code{"mappoly.rf.matrix"}}
+
+\item{genoprob}{an object of class \code{"mappoly.genoprob"}}
+
+\item{phase.config}{which phase configuration should be used. "best" (default) 
+will choose the maximum likelihood configuration.}
+
+\item{tol}{the desired accuracy.}
 }
 \value{
-An object of class \code{mappoly.sequence}, which is a
-    list containing the following components:
-    \item{seq.num}{a \code{vector} containing the (ordered) indices
-        of markers in the sequence, according to the input file.}
-    \item{seq.phases}{a \code{list} with the linkage phases between
-        markers in the sequence, in corresponding positions. \code{-1}
-        means that there are no defined linkage phases.}
-    \item{seq.rf}{a \code{vector} with the recombination
-        frequencies between markers in the sequence. \code{-1} means
-        that there are no estimated recombination frequencies.}
-    \item{loglike}{log-likelihood of the corresponding linkage
-        map.}
-    \item{data.name}{name of the object of class
-        \code{mappoly.data} with the raw data.}
-    \item{twopt}{name of the object of class \code{mappoly.twopt}
-        with the 2-point analyses. \code{-1} means that the twopt
-        estimates were not computed.}
+An object of class 'mappoly.map'
 }
 \description{
-This function creates a new sequence by adding markers to an existing sequence. Markers are added to the end of the sequence.
+Creates a new map by adding a marker in a given position in a pre-built map.
+}
+\details{
+\code{add_marker} splits the input map in two submaps to the left and to the right 
+of the given position, and using the genotype probabilities, computes the log-likelihhod
+of all possible linkage phases under a two-point threshold.
 }
 \examples{
 \dontrun{
-data(hexafake)
-seq1.mrk<-make_seq_mappoly(hexafake, 'seq1')
-
-# Adding marker 800
-seq1.p1.mrk<-add_marker(seq1.mrk, mrk = 800)
-
-# Adding markers 800, 801 and 802
-seq1.pm.mrk<-add_marker(seq1.mrk, mrk = c(800,801,802))
+input.map <- maps.hexafake[[1]]
+mrk <- c(4, 9, 23)
+mrk <- c("M_85", "M_152")
+output.map <- drop_marker(input.map, mrk)
+plot(output.map, mrk.names = TRUE, cex = .5)
 }
 
 }
 \author{
-Gabriel Gesteira and Marcelo Mollinari, \email{gabrielgesteira@usp.br}
+Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }

@@ -6,8 +6,8 @@
 #'
 #' @param input.map An object of class \code{mappoly.map}
 #'
-#' @param phase.config indicates which phase configuration should be used.
-#'    "best" will use the maximum likelihood configuration
+#' @param phase.config which phase configuration should be used. "best" (default) 
+#'                     will choose the maximum likelihood configuration.
 #'
 #' @param verbose if \code{TRUE}, current progress is shown; if
 #'     \code{FALSE}, no output is produced.

@@ -15,8 +15,8 @@ get_submap(input.map, mrk.pos, phase.config = "best",
 \item{mrk.pos}{positions of the markers that should be considered in the new map. 
 This can be in any order.}
 
-\item{phase.config}{which phase configuration should be used
-"best" will choose the one with highest likelihood}
+\item{phase.config}{which phase configuration should be used. "best" (default) 
+will choose the maximum likelihood configuration.}
 
 \item{reestimate.rf}{logical. If \code{TRUE} (default) the recombination fractions between markers are reestimated.}
 

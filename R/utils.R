@@ -741,114 +741,347 @@ get_genomic_order<-function(input.seq){
   }
 }
 
-#' Add marker to a sequence
+
+#' Remove markers from a map
 #' 
-#' This function creates a new sequence by adding markers to an existing sequence. Markers are added to the end of the sequence.
+#' This function creates a new map by removing markers from an existing one.
 #'
-#' @param input.seq an object of class \code{"mappoly.sequence"} 
-#' @param mrk markers to be added to the input sequence, identified by its positions on dataset. For multiple markers, please use 'c()'.
+#' @param input.map an object of class \code{"mappoly.map"} 
+#' @param mrk a vector containing markers to be removed from the input map, identified by their names or positions in the map.
 #'
-#' @return An object of class \code{mappoly.sequence}, which is a
-#'     list containing the following components:
-#'     \item{seq.num}{a \code{vector} containing the (ordered) indices
-#'         of markers in the sequence, according to the input file.}
-#'     \item{seq.phases}{a \code{list} with the linkage phases between
-#'         markers in the sequence, in corresponding positions. \code{-1}
-#'         means that there are no defined linkage phases.}
-#'     \item{seq.rf}{a \code{vector} with the recombination
-#'         frequencies between markers in the sequence. \code{-1} means
-#'         that there are no estimated recombination frequencies.}
-#'     \item{loglike}{log-likelihood of the corresponding linkage
-#'         map.}
-#'     \item{data.name}{name of the object of class
-#'         \code{mappoly.data} with the raw data.}
-#'     \item{twopt}{name of the object of class \code{mappoly.twopt}
-#'         with the 2-point analyses. \code{-1} means that the twopt
-#'         estimates were not computed.}
+##' @return An object of class 'mappoly.map'
 #' 
-#' @author Gabriel Gesteira and Marcelo Mollinari, \email{gabrielgesteira@usp.br}
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' 
 #' @examples
 #' \dontrun{
-#' data(hexafake)
-#' seq1.mrk<-make_seq_mappoly(hexafake, 'seq1')
-#'
-#' # Adding marker 800
-#' seq1.p1.mrk<-add_marker(seq1.mrk, mrk = 800)
-#'
-#' # Adding markers 800, 801 and 802
-#' seq1.pm.mrk<-add_marker(seq1.mrk, mrk = c(800,801,802))
+#' input.map <- maps.hexafake[[1]]
+#' mrk <- c(4, 9, 23)
+#' mrk <- c("M_85", "M_152")
+#' output.map <- drop_marker(input.map, mrk)
+#' plot(output.map, mrk.names = TRUE, cex = .5)
 #'}
 #' 
 #' @export
-add_marker<-function(input.seq, mrk)
+drop_marker<-function(input.map, mrk)
 {
-    if (!any(class(input.seq) == "mappoly.sequence")){
-        stop(paste0(deparse(substitute(input.seq))," is not an object of class 'mappoly.sequence'."))
+  ## Checking class of arguments
+  if (!inherits(input.map, "mappoly.map")) {
+    stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
+  }
+  ## Checking markers to be removed
+  if(is.numeric(mrk) & all(mrk >= 0)){
+    if(any(mrk > input.map$info$n.mrk))
+      stop("At least one marker position is not contained in the map.")
+  } else if(is.character(mrk)){
+    if(any(!mrk%in%input.map$info$mrk.names)){
+      stop("At least one marker position is not contained in the map.")
+    } else {
+      mrk <- which(input.map$info$mrk.names%in%mrk)
     }
-    if (!is.numeric(mrk)){
-        stop("You should provide numeric marker positions according to the dataset indices.")
+  }
+  ## Getting new map
+  suppressMessages(output.map<-get_submap(input.map = input.map,
+                                          mrk.pos = c(1:input.map$info$n.mrk)[-mrk], 
+                                          phase.config = 1, 
+                                          reestimate.rf = FALSE))
+  if(length(input.map$maps) > 1){
+    for(i in 2:length(input.map$maps)){
+      suppressMessages(temp.map<-get_submap(input.map = input.map,
+                                            mrk.pos = c(1:input.map$info$n.mrk)[-mrk], 
+                                            phase.config = 1, 
+                                            reestimate.rf = FALSE))
+      output.map$maps[[i]] <- temp.map$maps[[1]]
     }
-    seq.num<-c(input.seq$seq.num, mrk)
-    return(make_seq_mappoly(get(input.seq$data.name), seq.num, input.seq$data.name))
+  }
+  message("
+    INFO:
+    -----------------------------------------
+    The recombination fractions provided were
+    obtained using the marker positions in the 
+    input map; For accurate values, plese 
+    reestimate the map using functions 'reest_rf', 
+    'est_full_hmm_with_global_error' or 
+    'est_full_hmm_with_prior_dist'")
+  return(output.map)
 }
 
-#' Remove markers from a sequence
+#' Add a single marker to a map
 #' 
-#' This function creates a new sequence by removing markers from an existing sequence.
+#' Creates a new map by adding a marker in a given position in a pre-built map. 
 #'
-#' @param input.seq an object of class \code{"mappoly.sequence"} 
-#' @param mrk markers to be removed from the input sequence, identified by its positions on dataset. For multiple markers, please use 'c()'.
+#' \code{add_marker} splits the input map in two submaps to the left and to the right 
+#' of the given position, and using the genotype probabilities, computes the log-likelihhod
+#' of all possible linkage phases under a two-point threshold. 
 #'
-#' @return An object of class \code{mappoly.sequence}, which is a
-#'     list containing the following components:
-#'     \item{seq.num}{a \code{vector} containing the (ordered) indices
-#'         of markers in the sequence, according to the input file.}
-#'     \item{seq.phases}{a \code{list} with the linkage phases between
-#'         markers in the sequence, in corresponding positions. \code{-1}
-#'         means that there are no defined linkage phases.}
-#'     \item{seq.rf}{a \code{vector} with the recombination
-#'         frequencies between markers in the sequence. \code{-1} means
-#'         that there are no estimated recombination frequencies.}
-#'     \item{loglike}{log-likelihood of the corresponding linkage
-#'         map.}
-#'     \item{data.name}{name of the object of class
-#'         \code{mappoly.data} with the raw data.}
-#'     \item{twopt}{name of the object of class \code{mappoly.twopt}
-#'         with the 2-point analyses. \code{-1} means that the twopt
-#'         estimates were not computed.}
+#' @param input.map an object of class \code{"mappoly.map"} 
+#' @param mrk the name of the marker to be inserted
+#' @param pos the name of the marker after which the new marker should be added.
+#'            One also can inform the numeric position (between markers) were the 
+#'            new marker should be added. To insert a marker at the beginning of a 
+#'            map, one should use \code{pos = 0}.
+#' @param rf.matrix an object of class \code{"mappoly.rf.matrix"}
+#' @param genoprob an object of class \code{"mappoly.genoprob"}
+#' @param phase.config which phase configuration should be used. "best" (default) 
+#'                     will choose the maximum likelihood configuration.
+#' @param tol the desired accuracy.
+#'                     
+##' @return An object of class 'mappoly.map'
 #' 
-#' @author Gabriel Gesteira and Marcelo Mollinari, \email{gabrielgesteira@usp.br}
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' 
 #' @examples
 #' \dontrun{
-#' data(hexafake)
-#' seq1.mrk<-make_seq_mappoly(hexafake, 'seq1')
-#'
-#' # Removing marker 1
-#' seq1.m1.mrk<-remove_marker(seq1.mrk, mrk = 1)
-#'
-#' # Removing markers 1, 2 and 3
-#' seq1.mm.mrk<-remove_marker(seq1.mrk, mrk = c(1,2,3))
+#' input.map <- maps.hexafake[[1]]
+#' mrk <- c(4, 9, 23)
+#' mrk <- c("M_85", "M_152")
+#' output.map <- drop_marker(input.map, mrk)
+#' plot(output.map, mrk.names = TRUE, cex = .5)
 #'}
 #' 
 #' @export
-remove_marker<-function(input.seq, mrk)
-{
-    if (!any(class(input.seq) == "mappoly.sequence")){
-        stop(paste0(deparse(substitute(input.seq))," is not an object of class 'mappoly.sequence'."))
-    }
-    if (!is.numeric(mrk)){
-        stop("You should provide numeric marker positions according to the dataset indices.")
-    }
-    if (sum(mrk %in% input.seq$seq.num) != length(mrk)){
-        absent = mrk[-which(mrk %in% input.seq$seq.num)]
-        warning(paste0("Some of the informed markers are not present in this sequence ", "(Markers: ", paste(absent, collapse = ", "), ")."))
-    }
-    seq.num<-input.seq$seq.num[-which(input.seq$seq.num %in% mrk)]
-    return(make_seq_mappoly(get(input.seq$data.name), seq.num, input.seq$data.name))
-}
+add_marker <- function(input.map, 
+                       mrk,
+                       pos,
+                       rf.matrix, 
+                       genoprob = NULL,
+                       phase.config = "best",
+                       tol = 10e-4){
+  ## Checking class of arguments
+  if(!inherits(input.map, "mappoly.map")) {
+    stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
+  }
+  if(!inherits(mrk, "character")) {
+    stop("Please, provide the marker name")
+  }
+  if(!inherits(rf.matrix, "mappoly.rf.matrix")) {
+    stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.rf.matrix'")
+  }
+  if(is.null(genoprob)){
+    message("Calculating genoprob.")
+    genoprob <- calc_genoprob(input.map)
+  }
+  if(!inherits(genoprob, "mappoly.genoprob")) {
+    stop(deparse(substitute(genoprob)), " is not an object of class 'mappoly.genoprob'")
+  }
+  if(any(names(genoprob$map)!=input.map$info$mrk.names)){
+    warning(deparse(substitute(genoprob)), "is inconsistent with 'input.map'.\nRecalculating genoprob.")
+    genoprob <- calc_genoprob(input.map)
+  }
+  ## ploidy
+  m <- input.map$info$m
+  ## Number of genotypes in the offspring
+  ngen <- dim(genoprob$probs)[1]
+  ## number of markers
+  nmrk <- dim(genoprob$probs)[2]
+  ## number of individuals
+  nind <- dim(genoprob$probs)[3]
+  ## number of genotipic states
+  ngam <- choose(m, m/2)
+  ## the threshold for visiting states: 1/ngen
+  thresh.cut.path <- 1/ngen
 
+  ## Indexing position were the marker should be inserted
+  if(is.numeric(pos)){
+    if(!(pos >=0 & pos <= (nmrk+1))){
+      stop(deparse(substitute(pos)), " out of bounds.")
+    } 
+  } else if(is.character(pos)){
+    if(!pos%in%input.map$info$mrk.names){
+      stop("The reference marker is not contained in the map.")
+    } else {
+      pos <- which(input.map$info$mrk.names%in%pos)
+    }
+  }
+  
+  ## Hash table: homolog combination --> states to visit in both parents
+  A<-as.matrix(expand.grid(c(1:ngam) - 1, c(1:ngam) - 1)[,2:1])
+  rownames(A) <- dimnames(genoprob$probs)[[1]]
+  
+  ## Indexing marker to be inserted
+  if(!mrk%in%colnames(rf.matrix$rec.mat)){
+    stop(deparse(substitute(mrk)), " is not in 'rf.matrix'")
+  }
+  mrk.id <- as.numeric(colnames(rf.matrix$ShP)[match(mrk, colnames(rf.matrix$rec.mat))])
+  
+  ## choosing the linkage phase configuration
+  LOD.conf <- get_LOD(input.map, sorted = FALSE)
+  if(phase.config == "best") {
+    i.lpc <- which.min(LOD.conf)
+  }  else if (phase.config > length(LOD.conf)) {
+    stop("invalid linkage phase configuration")
+  } else i.lpc <- phase.config
+  
+  ## Adding marker: beginning of sequence
+  if(pos == 0){
+    ## h: states to visit in both parents
+    ## e: probability distribution (ignored in this version) 
+    e.right <- h.right <- vector("list", nind)
+    for(i in 1:nind){
+      a.right <-  genoprob$probs[,pos+1,i]
+      e.right[[i]] <- a.right[a.right > thresh.cut.path]
+      h.right[[i]] <- A[names(e.right[[i]]), , drop = FALSE]
+    }
+    r.test<-generate_all_link_phases_elim_equivalent_haplo(block1 = input.map$maps[[i.lpc]], 
+                                                           block2 = mrk.id, 
+                                                           rf.matrix = rf.matrix, 
+                                                           m = m, max.inc = 0)
+  } else if(pos > 0 & pos < nmrk){   ## Adding marker: middle positions
+    ## h: states to visit in both parents
+    ## e: probability distribution (ignored in this version) 
+    e.left <- h.left <- e.right <- h.right <- vector("list", nind)
+    for(i in 1:nind){
+      a.left <- genoprob$probs[,pos,i]  
+      a.right <-  genoprob$probs[,pos+1,i]
+      e.left[[i]] <- a.left[a.left > thresh.cut.path]
+      h.left[[i]] <- A[names(e.left[[i]]), , drop = FALSE]
+      e.right[[i]] <- a.right[a.right > thresh.cut.path]
+      h.right[[i]] <- A[names(e.right[[i]]), , drop = FALSE]
+    }
+    ## Info to the left
+    suppressMessages(map.left <- get_submap(input.map = input.map,
+                                            mrk.pos = 1:pos,
+                                            phase.config = i.lpc, 
+                                            reestimate.rf = FALSE))
+    r.left <- generate_all_link_phases_elim_equivalent_haplo(block1 = map.left$maps[[i.lpc]], 
+                                                             block2 = mrk.id, 
+                                                             rf.matrix = rf.matrix, 
+                                                             m = m, max.inc = 0)
+    ## Info to the right
+    suppressMessages(map.right <- get_submap(input.map = input.map,
+                                             mrk.pos = (pos+1):input.map$info$n.mrk,
+                                             phase.config = i.lpc, 
+                                             reestimate.rf = FALSE))
+    r.right <- generate_all_link_phases_elim_equivalent_haplo(block1 = map.right$maps[[i.lpc]], 
+                                                              block2 = mrk.id, 
+                                                              rf.matrix = rf.matrix, 
+                                                              m = m, max.inc = 0)
+    ## Using both information sources, left and right 
+    r.test <- unique(r.left, r.right)
+  } else if(pos == nmrk){
+    ## h: states to visit in both parents
+    ## e: probability distribution (ignored in this version) 
+    e.left <- h.left <- vector("list", nind)
+    for(i in 1:nind){
+      a.left <- genoprob$probs[,pos,i]  
+      e.left[[i]] <- a.left[a.left > thresh.cut.path]
+      h.left[[i]] <- A[names(e.left[[i]]), , drop = FALSE]
+    }
+    r.test<-generate_all_link_phases_elim_equivalent_haplo(block1 = input.map$maps[[i.lpc]], 
+                                                           block2 = mrk.id, 
+                                                           rf.matrix = rf.matrix, 
+                                                           m = m, max.inc = 0)
+  } else stop("should not get here!")
+  ## gathering maps to test and conditional probabilities
+  test.maps <- mrk.genoprobs <- vector("list", length(r.test))
+  for(i in 1:length(test.maps))
+  {
+    suppressMessages(hap.temp <- get_submap(input.map, 
+                                            c(1,1), 
+                                            reestimate.rf = FALSE))
+    hap.temp$maps[[1]]$seq.num<-rep(mrk.id, 2)
+    hap.temp$maps[[1]]$seq.ph <- list(P = c(r.test[[i]]$P, r.test[[i]]$P),
+                                      Q = c(r.test[[i]]$Q, r.test[[i]]$Q))
+    hap.temp$maps[[1]]$seq.rf <- 10e-6
+    test.maps[[i]] <- hap.temp
+    ## States to visit for inserted biallelic SNP 
+    mrk.genoprobs[[i]] <- calc_genoprob(test.maps[[i]], verbose = FALSE)
+  }
+  ## Inserted marker  
+  ## h: states to visit in both parents
+  ## e: probability distribution 
+  h <- e <- vector("list", length(r.test))
+  for(j in 1:length(r.test)){
+    etemp<-htemp<-vector("list", nind)
+    for(i in 1:nind){
+      a <- mrk.genoprobs[[j]]$probs[,1,i]  
+      etemp[[i]] <- a[a > thresh.cut.path]
+      htemp[[i]] <- A[names(etemp[[i]]), , drop = FALSE]
+    }
+    h[[j]] <- htemp
+    e[[j]] <- etemp
+  }
+  configs<-vector("list", length(test.maps))
+  names(configs) <- paste0("Phase_config.", 1:length(test.maps))
+  res<-matrix(NA, nrow = length(h), ncol = 3, dimnames = list(names(configs), c("log_like", "rf1", "rf2")))
+  ## Computing three-point multiallelic map using HMM
+  for(i in 1:length(h)){
+    cat(".")
+    if(pos == 0){
+      h.test<-c(h[i], list(h.right))
+      names(h.test) <- c("hap1", "hap2")
+      e.test<-c(e[i], list(e.right))
+      restemp<-est_haplo_hmm(m = m, 
+                             n.mrk = length(h.test), 
+                             n.ind = nind, 
+                             haplo = h.test, 
+                             #emit = e.test, 
+                             rf_vec = rep(0.01, length(h.test)-1), 
+                             verbose = FALSE, 
+                             use_H0 = FALSE, 
+                             tol = tol) 
+      temp<-unlist(restemp)
+      res[i,1:length(temp)] <- temp
+      P<-c(test.maps[[i]]$maps[[1]]$seq.ph$P[1],
+           input.map$maps[[1]]$seq.ph$P)
+      Q<-c(test.maps[[i]]$maps[[1]]$seq.ph$Q[1], 
+           input.map$maps[[1]]$seq.ph$Q)
+      names(P)<-names(Q)<-c(test.maps[[i]]$maps[[1]]$seq.num[1], 
+                            input.map$maps[[1]]$seq.num)
+      configs[[i]]<-list(P = P, Q = Q)
+    } else if(pos > 0 & pos < nmrk){
+      h.test<-c(list(h.left), h[i], list(h.right))
+      names(h.test) <- c("hap1", "hap2", "hap3")
+      e.test<-c(list(e.left), e[i], list(e.right))
+      restemp<-est_haplo_hmm(m = m, 
+                             n.mrk = length(h.test), 
+                             n.ind = nind, 
+                             haplo = h.test, 
+                             #emit = e.test, 
+                             rf_vec = rep(0.01, length(h.test)-1), 
+                             verbose = FALSE, 
+                             use_H0 = FALSE, 
+                             tol = tol) 
+      temp<-unlist(restemp)
+      res[i,1:length(temp)] <- temp
+      P<-c(map.left$maps[[1]]$seq.ph$P, 
+           test.maps[[i]]$maps[[1]]$seq.ph$P[1],
+           map.right$maps[[1]]$seq.ph$P)
+      Q<-c(map.left$maps[[1]]$seq.ph$Q, 
+           test.maps[[i]]$maps[[1]]$seq.ph$Q[1], 
+           map.right$maps[[1]]$seq.ph$Q)
+      names(P)<-names(Q)<-c(map.left$maps[[1]]$seq.num, 
+                            test.maps[[i]]$maps[[1]]$seq.num[1], 
+                            map.right$maps[[1]]$seq.num)
+      configs[[i]]<-list(P = P, Q = Q)
+    } else if(pos == nmrk){
+      h.test<-c(list(h.left), h[i])
+      names(h.test) <- c("hap1", "hap2")
+      e.test<-c(list(e.left), e[i])
+      restemp<-est_haplo_hmm(m = m, 
+                             n.mrk = length(h.test), 
+                             n.ind = nind, 
+                             haplo = h.test, 
+                             #emit = e.test, 
+                             rf_vec = rep(0.01, length(h.test)-1), 
+                             verbose = FALSE, 
+                             use_H0 = FALSE, 
+                             tol = tol) 
+      temp<-unlist(restemp)
+      res[i,1:length(temp)] <- temp
+      P<-c(input.map$maps[[1]]$seq.ph$P, 
+           test.maps[[i]]$maps[[1]]$seq.ph$P[1])
+      Q<-c(input.map$maps[[1]]$seq.ph$Q, 
+           test.maps[[i]]$maps[[1]]$seq.ph$Q[1])
+      names(P)<-names(Q)<-c(input.map$maps[[1]]$seq.num, 
+                            test.maps[[i]]$maps[[1]]$seq.num[1])
+      configs[[i]]<-list(P = P, Q = Q)
+    }
+  }
+  cat("\n")
+  res<-res[order(res[,"log_like"], decreasing = TRUE),,drop = FALSE]
+  return(list(stats = res, phase.config  = configs))  
+}
 
 #' Data sanity check
 #'

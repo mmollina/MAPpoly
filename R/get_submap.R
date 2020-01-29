@@ -5,8 +5,8 @@
 #' @param input.map An object of class \code{mappoly.map}
 #' @param mrk.pos positions of the markers that should be considered in the new map. 
 #' This can be in any order.
-#' @param phase.config which phase configuration should be used
-#'    "best" will choose the one with highest likelihood
+#' @param phase.config which phase configuration should be used. "best" (default) 
+#'                     will choose the maximum likelihood configuration.
 #' @param reestimate.rf logical. If \code{TRUE} (default) the recombination fractions between markers are reestimated.
 #' @param reestimate.phase logical. If \code{TRUE}, the linkage phase configuration is reestimated. The default is \code{FALSE}
 #' @param thres.twopt the threshold used to determine if the linkage
@@ -103,8 +103,9 @@ get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf =
                            verbose = verbose, rf.temp = rf.temp,
                            high.prec = high.prec)
     output.map<-input.map
-    output.map$maps[[i.lpc]]<-res
-    output.map$info$n.mrk<-length(mrk.pos)
+    output.map$maps[[i.lpc]] <- res
+    output.map$info$n.mrk <- length(mrk.pos)
+    output.map$info$mrk.names <- input.map$info$mrk.names[mrk.pos]
     return(output.map)
   }
   else if(reestimate.phase)
@@ -155,6 +156,7 @@ get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf =
   output.map$maps[[i.lpc]]$seq.ph$P <- input.map$maps[[i.lpc]]$seq.ph$P[mrk.pos]
   output.map$maps[[i.lpc]]$seq.ph$Q <- input.map$maps[[i.lpc]]$seq.ph$Q[mrk.pos]
   output.map$maps[[i.lpc]]$loglike <- 0
-  output.map$info$n.mrk<-length(mrk.pos)
+  output.map$info$n.mrk <- length(mrk.pos)
+  output.map$info$mrk.names <- input.map$info$mrk.names[mrk.pos]
   return(output.map)
 }
