@@ -5,23 +5,26 @@
 #' This function can handle .vcf files of version 4.0 and higher. The ploidy can be automatically detected, but you
 #' should inform it to check mismatches. All individual and marker names will be kept as they are in the .vcf file.
 #'
-#' @param file.in name of input file which contains the data to
-#'     be read.
+#' @param file.in path to the input file which contains the data (VCF format)
 #'
 #' @param ploidy the species ploidy (optional, it will be automatically detected)
 #'
 #' @param filter.non.conforming if \code{TRUE} (default) exclude samples with non 
 #'     expected genotypes under random chromosome pairing and no double reduction 
 #'     
-#' @param thresh.line threshold used for p-values on segregation test
+#' @param thresh.line threshold used for p-values on segregation test (default = 0.05)
 #' 
 #' @param parent.1 name of parent 1
 #' 
 #' @param parent.2 name of parent 2
+#'
+#' @param min.gt.depth Minimum genotype depth to keep information. If the genotype depth is below \code{min.gt.depth}, then it will (default = 0)
+#'
+#' @param min.av.depth Minimum average depth to keep markers (default = 0)
+#'
+#' @param max.missing Maximum proportion of missing data to keep markers (range = 0-1; default = 1)
 #' 
-#' @param update.prob Logical. Should MAPpoly update genotype probabilities based on HMM? (default = FALSE)
-#' 
-#' @param output if \code{update.prob = TRUE}, defines the output of the updated .vcf file
+#' @param use.prob Logical. Should MAPpoly use the genotype probabilities from VCF file (PL field)? (default = FALSE)
 #' 
 #' @param ... currently ignored
 #'
@@ -61,14 +64,9 @@
 #'
 #' @export read_vcf
 
-read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, ploidy = NA,
-                     thresh.line = 0.05, update.prob = FALSE, output = NULL) {
-
-    ## Debugging:
-    ## file.in = "~/Downloads/MAPpoly/inst/extdata/tetra_example.vcf.gz"
-    ## library(Rcpp)
-    ## sourceCpp("~/Downloads/MAPpoly/src/read_mappoly_vcf.cpp")
-    ## ploidy = 4
+read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
+                     ploidy = NA, thresh.line = 0.05, min.gt.depth = 0, min.av.depth = 0,
+                     max.missing = 1, use.prob = FALSE) {
     
   # Checking even ploidy
   if(!is.na(ploidy) && (ploidy %% 2) != 0){
@@ -96,10 +94,12 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   }
   cat("Processing genotypes...")
   cname = which(unlist(strsplit(unique(input.data$gt[,1]), ":")) == "GT") # Defining GT position
+  dname = which(unlist(strsplit(unique(input.data$gt[,1]), ":")) == "DP") # Defining DP position
   ## file.ploidy = length(unlist(strsplit(unique(input.data$gt[,2])[1], "/"))) # Checking ploidy (old)
   geno.ploidy = .vcf_get_ploidy(input.data$gt[,-1], cname) # Getting all ploidy levels
+  geno.depth = .vcf_get_depth(input.data$gt[,-1], dname) # Getting all depths
   file.ploidy = unique(c(geno.ploidy)) # Getting different ploidy levels
-  geno.dose = .vcf_transform_dosage(input.data$gt[,-1], cname) # Isolating genotypes and accounting allele dosages
+  geno.dose = .vcf_transform_dosage(input.data$gt[,-1], cname) # Accounting for allele dosages
   geno.dose[which(geno.dose == -1)] = NA # Filling NA values
   cat("Done!\n")
   # geno.dose = matrix(unlist(lapply(strsplit(input.data$gt[,-1], ":"), "[", cname)), nrow = n.mrk, byrow = F) # Selecting genotypes (time consuming step)
@@ -114,7 +114,7 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
     stop("Informed ploidy doesn't match any detected ploidy level. Detected ploidy level(s): ", paste0(file.ploidy, ' '))
   }
   if (!is.na(ploidy) && (ploidy > 2) && all(file.ploidy == 2)){ # Checking absence of dosages
-    warning("Informed ploidy is ",ploidy, ", but detected ploidy is ", file.ploidy, ".\nIf your species is polyploid, you should provide allelic dosages for all individuals. You can estimate allelic dosages using packages such as 'SuperMASSA', 'updog', 'fitTetra', 'polyRAD' and others. We are working on a integrated function to estimate dosages, which will be available soon.\nUsing ploidy = 2 instead.")
+    warning("Informed ploidy is ",ploidy, ", but detected ploidy is ", file.ploidy, ".\nIf your species is polyploid, you should provide allelic dosages for all individuals. You can estimate allelic dosages using packages such as 'SuperMASSA', 'updog', 'fitTetra', 'polyRAD' and others. We are working on an integrated function to estimate dosages, which will be available soon.\nUsing ploidy = 2 instead.")
   } # Allow option for building genetic maps for diploid species
     if (!is.na(ploidy)){ # If ploidy is informed and passed previous checks, then use it
         m = ploidy
@@ -133,14 +133,25 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   #      }
   # geno.dose = matrix(as.numeric(geno.dose), nrow = n.mrk, byrow = F)
 
-    ## Updating some info based on selected ploidy
-    geno.dose = geno.dose[which(rowSums(geno.ploidy == m) == (n.ind+2)),] # Removing markers with different ploidy levels
-    n.mrk = length(which(rowSums(geno.ploidy == m) == (n.ind+2))) #old: which(unique(t(geno.ploidy)) == m)
-    sequence = sequence[which(rowSums(geno.ploidy == m) == (n.ind+2))]
-    sequence.pos = sequence.pos[which(rowSums(geno.ploidy == m) == (n.ind+2))]
-    seq.ref = seq.ref[which(rowSums(geno.ploidy == m) == (n.ind+2))]
-    seq.alt = seq.alt[which(rowSums(geno.ploidy == m) == (n.ind+2))]
-    mrk.names = mrk.names[which(rowSums(geno.ploidy == m) == (n.ind+2))]
+    ## Updating some info
+    dif_ploidy = which(rowSums(geno.ploidy == m) == (n.ind+2)) # Markers with different ploidy levels
+    av_depth = which(rowMeans(geno.depth) >= min.av.depth) # Markers with average depths below threshold
+    max_miss = which(rowSums(is.na(geno.dose))/dim(geno.dose)[2] <= max.missing) # Markers with missing data above the threshold
+    selected_markers = intersect(intersect(dif_ploidy,av_depth),max_miss) # Selecting markers that passed all thresholds
+    geno.dose = geno.dose[selected_markers,] # Selecting markers
+    geno.dose[which(geno.dose < min.gt.depth)] = NA # removing genotypes with depths below the threshold
+    
+    n.mrk = nrow(geno.dose)
+    sequence = sequence[selected_markers]
+    sequence.pos = sequence.pos[selected_markers]
+    seq.ref = seq.ref[selected_markers]
+    seq.alt = seq.alt[selected_markers]
+    mrk.names = mrk.names[selected_markers]
+    ## sequence = sequence[which(rowSums(geno.ploidy == m) == (n.ind+2))]
+    ## sequence.pos = sequence.pos[which(rowSums(geno.ploidy == m) == (n.ind+2))]
+    ## seq.ref = seq.ref[which(rowSums(geno.ploidy == m) == (n.ind+2))]
+    ## seq.alt = seq.alt[which(rowSums(geno.ploidy == m) == (n.ind+2))]
+    ## mrk.names = mrk.names[which(rowSums(geno.ploidy == m) == (n.ind+2))]
     colnames(geno.dose) = ind.names
     rownames(geno.dose) = mrk.names
     dosage.p = geno.dose[,which(colnames(geno.dose) == parent.1)] # Selecting dosages for parent 1
@@ -184,8 +195,7 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
   geno.dose[is.na(geno.dose)] <- m + 1
   ## returning the 'mappoly.data' object
   cat("\n    Done with reading.\n")
-  
-  
+    
   res = structure(list(m = m,
                         n.ind = n.ind,
                         n.mrk = sum(id),
@@ -198,6 +208,9 @@ read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2, 
                         seq.ref = seq.ref[id],
                         seq.alt = seq.alt[id],
                         prob.thres = NULL,
+                        min.gt.depth = min.gt.depth,
+                        min.av.depth = min.av.depth,
+                        max.missing = max.missing,
                         geno.dose = geno.dose[id,],
                         nphen = 0,
                         phen = NULL,

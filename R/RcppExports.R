@@ -12,6 +12,11 @@
 }
 
 #' @export
+.vcf_get_depth <- function(mat, dp_pos) {
+    .Call('_mappoly_vcf_get_depth', PACKAGE = 'mappoly', mat, dp_pos)
+}
+
+#' @export
 .vcf_stats_gz <- function(x, nrows = -1L, skip = 0L, verbose = 1L) {
     .Call('_mappoly_vcf_stats_gz', PACKAGE = 'mappoly', x, nrows, skip, verbose)
 }
