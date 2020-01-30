@@ -1080,7 +1080,28 @@ add_marker <- function(input.map,
   }
   cat("\n")
   res<-res[order(res[,"log_like"], decreasing = TRUE),,drop = FALSE]
-  return(list(stats = res, phase.config  = configs))  
+  ## Updateing map
+  seq.num<-as.numeric(names(configs[[1]]$P))
+  input.map$info$mrk.names <- colnames(rf.matrix$rec.mat)[seq.num]
+  input.map$info$n.mrk <- length(input.map$info$mrk.names)
+  for(i in 1:nrow(res))
+  {
+    ## Updating recombination fractions (aproximated)
+    if(pos == 0){
+      seq.rf <- c(res[i, "rf1"], input.map$maps[[i.lpc]]$seq.rf)
+    } else if(pos > 0 & pos < nmrk){
+      seq.rf <- c(input.map$maps[[i.lpc]]$seq.rf[1:pos],
+                  res[i, c("rf1", "rf2")], 
+                  input.map$maps[[i.lpc]]$seq.rf[(pos+1):input.map$info$n.mrk])
+    } else if(pos == nmrk){
+      seq.rf <- c(input.map$maps[[i.lpc]]$seq.rf, res[i, "rf1"])
+    }
+    input.map$maps[[i]] <- list(seq.num = seq.num, 
+                                seq.rf = seq.rf, 
+                                seq.ph = configs[[rownames(res)[i]]],
+                                loglike = res[i, "log_like"])
+  }
+  return(input.map)
 }
 
 #' Data sanity check
