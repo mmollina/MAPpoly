@@ -41,8 +41,6 @@ Imports:
     smacof,
     princurve,
     dendextend,
-    BiocManager,
-    pcaMethods,
     polyRAD
 LinkingTo: Rcpp
 RoxygenNote: 6.1.1
