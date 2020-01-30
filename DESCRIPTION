@@ -40,8 +40,7 @@ Imports:
     MDSMap, 
     smacof,
     princurve,
-    dendextend,
-    polyRAD
+    dendextend
 LinkingTo: Rcpp
 RoxygenNote: 6.1.1
 SystemRequirements: C++11

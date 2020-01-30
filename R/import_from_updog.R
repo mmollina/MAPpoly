@@ -1,12 +1,11 @@
 #' Data Import
 #'
 #' Read objects with information related to genotype calling in polyploids.
-#' Currently this function supports output objects created using 
-#' \code{updog} (output of \code{multidog} function) and \code{polyRAD} 
-#' (output of \code{PipelineMapping2Parents} function) packages.
+#' Currently this function supports output objects created using the
+#' \code{updog} (output of \code{multidog} function) package.
 #' This fucntion creates an object of class \code{mappoly.data}
 #'
-#' @param object the name of the objects of class \code{multidog} or \code{RADdata}
+#' @param object the name of the object of class \code{multidog}
 #'     
 #' @param prob.thres probability threshold to associate a marker call to a 
 #'     dosage. Markers with maximum genotype probability smaller than 'prob.thres' 
@@ -52,15 +51,6 @@
 #'     test of mendelian segregation performed for all markers}
 #' @examples
 #' \dontrun{
-#' # Using polyRAD
-#' library(polyRAD)
-#' data(exampleRAD_mapping)
-#' exampleRAD_mapping = SetDonorParent(exampleRAD_mapping, "parent1")
-#' exampleRAD_mapping = SetRecurrentParent(exampleRAD_mapping, "parent2")
-#' exampleRAD_mapping = PipelineMapping2Parents(exampleRAD_mapping)
-#' mydata = import_from(exampleRAD_mapping)
-#' 
-#' # Using updog
 #' library("updog")
 #' data("uitdewilligen")
 #' mout = multidog(refmat = t(uitdewilligen$refmat), 
@@ -82,9 +72,9 @@
 #'     models, _G3: Genes, Genomes, Genetics_. 
 #'     \url{https://doi.org/10.1534/g3.119.400378}
 #'     
-#' @export import_from
+#' @export import_from_updog
 #' 
-import_from = function(object, filter.non.conforming = FALSE, prob.thres = NULL){
+import_from_updog = function(object, filter.non.conforming = FALSE, prob.thres = NULL){
   # Case 1: updog
   if (class(object) == "multidog"){
     m = object$snpdf$ploidy[1]
@@ -152,13 +142,12 @@ import_from = function(object, filter.non.conforming = FALSE, prob.thres = NULL)
     }
     return(res)
   }
-  
-  # Case 2: polyRAD
-  else if (class(object) == 'RADdata'){
-    outfile = paste0(getwd(), '/import_temp')
-    polyRAD::Export_MAPpoly(object, file = outfile)
-    res = read_geno_dist(outfile)
-    return(res)
-  }
-  else stop("You must provide an object of class 'multidog'(from package 'updog') or 'RADdata' (from package 'polyRAD') in order to continue importing data. Please read the documentation and try again.")
+  # # Case 2: polyRAD
+  # else if (class(object) == 'RADdata'){
+  #   outfile = paste0(getwd(), '/import_temp')
+  #   polyRAD::Export_MAPpoly(object, file = outfile)
+  #   res = read_geno_dist(outfile)
+  #   return(res)
+  # }
+  else stop("You must provide an object of class 'multidog'(from package 'updog') in order to continue importing data. Please read the documentation and try again.")
 }
