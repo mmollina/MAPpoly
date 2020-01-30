@@ -54,6 +54,8 @@ An object of class \code{mappoly.data} which contains a
     \item{phen}{a matrix containing the phenotypic data. The rows
                 corespond to the trais and the columns correspond
                 to the individuals}
+    \item{chisq.pval}{a vector containing p-values related to the chi-squared 
+    test of mendelian segregation performed for all markers}
 }
 \description{
 Reads an external data file. The format of the file is described in \code{details}

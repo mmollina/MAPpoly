@@ -29,8 +29,6 @@ expected genotypes under random chromosome pairing and no double reduction}
 \item{max.missing}{Maximum proportion of missing data to keep markers (range = 0-1; default = 1)}
 
 \item{use.prob}{Logical. Should MAPpoly use the genotype probabilities from VCF file (PL field)? (default = FALSE)}
-
-\item{...}{currently ignored}
 }
 \value{
 An object of class \code{mappoly.data} which contains a
@@ -64,17 +62,19 @@ An object of class \code{mappoly.data} which contains a
     \item{input.phased}{Logical field indicating whether data is already phased on VCF file}
     \item{all.mrk.depth}{DP information for all markers on VCF file}
     \item{selected.mrk}{Markers kept in the final dataset}
+    \item{chisq.pval}{a vector containing p-values related to the chi-squared 
+    test of mendelian segregation performed for all markers}
 }
 \description{
 Reads an external VCF file. This function accepts version 4.0 and higher, and creates an object of class \code{mappoly.data}
 }
 \details{
-This function can handle .vcf files of version 4.0 and higher. The ploidy can be automatically detected, but you
-should inform it to check mismatches. All individual and marker names will be kept as they are in the .vcf file.
+This function can handle .vcf files of version 4.0 and higher. The ploidy can be automatically detected, but it is highly
+recommended that you inform it to check for mismatches. All individual and marker names will be kept as they are in the .vcf file.
 }
 \examples{
 \dontrun{
-    mydata <- read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2")
+    mydata = read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2")
     print(mydata, detailed = TRUE)
 }
 }

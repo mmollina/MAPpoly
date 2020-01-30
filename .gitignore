@@ -9,3 +9,4 @@ docs/*.rda
 docs/*.rdb
 inst/extdata/hexatoy.vcf.gz
 test.R
+new_functions.R

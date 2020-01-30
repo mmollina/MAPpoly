@@ -2,8 +2,8 @@
 #'
 #' Reads an external VCF file. This function accepts version 4.0 and higher, and creates an object of class \code{mappoly.data}
 #' 
-#' This function can handle .vcf files of version 4.0 and higher. The ploidy can be automatically detected, but you
-#' should inform it to check mismatches. All individual and marker names will be kept as they are in the .vcf file.
+#' This function can handle .vcf files of version 4.0 and higher. The ploidy can be automatically detected, but it is highly
+#' recommended that you inform it to check for mismatches. All individual and marker names will be kept as they are in the .vcf file.
 #'
 #' @param file.in path to the input file which contains the data (VCF format)
 #'
@@ -25,8 +25,6 @@
 #' @param max.missing Maximum proportion of missing data to keep markers (range = 0-1; default = 1)
 #' 
 #' @param use.prob Logical. Should MAPpoly use the genotype probabilities from VCF file (PL field)? (default = FALSE)
-#' 
-#' @param ... currently ignored
 #'
 #' @return An object of class \code{mappoly.data} which contains a
 #'     list with the following components:
@@ -59,10 +57,11 @@
 #'     \item{input.phased}{Logical field indicating whether data is already phased on VCF file}
 #'     \item{all.mrk.depth}{DP information for all markers on VCF file}
 #'     \item{selected.mrk}{Markers kept in the final dataset}
-#' 
+#'     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
+#'     test of mendelian segregation performed for all markers}
 #' @examples
 #' \dontrun{
-#'     mydata <- read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2")
+#'     mydata = read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2")
 #'     print(mydata, detailed = TRUE)
 #'}
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
@@ -75,8 +74,8 @@
 #'     \url{https://doi.org/10.1534/g3.119.400378} 
 #'
 #' @export read_vcf
-
-read_vcf <- function(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
+#' 
+read_vcf = function(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
                      ploidy = NA, thresh.line = 0.05, min.gt.depth = 0, min.av.depth = 0,
                      max.missing = 1, use.prob = FALSE) {
     

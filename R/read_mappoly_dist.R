@@ -70,6 +70,8 @@
 #'     \item{phen}{a matrix containing the phenotypic data. The rows
 #'                 corespond to the trais and the columns correspond
 #'                 to the individuals}
+#'     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
+#'     test of mendelian segregation performed for all markers}
 #' @examples
 #' \dontrun{
 #'     solcap.file <- system.file('extdata', 'SolCAP.bz2', package = 'mappoly')
