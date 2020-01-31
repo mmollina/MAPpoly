@@ -54,7 +54,7 @@ double twopt_likelihood_dosage(double rf, int m, int n_ind,
 			       Rcpp::NumericVector dk1,
 			       Rcpp::NumericVector gen_1,
 			       Rcpp::NumericVector gen_2,
-			       Rcpp::NumericMatrix count_mat)
+			       Rcpp::NumericMatrix& count_mat)
 {
   int count, count2=0;
   double temp=0.0;
