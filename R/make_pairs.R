@@ -77,10 +77,10 @@ make_pairs_mappoly<-function(input.twopt, input.seq){
   if(!all(input.seq$seq.num%in%input.twopt$seq.num))
     stop(deparse(substitute(input.twopt)), " does not contain (some) markers present in ", deparse(substitute(input.seq)))
 
-  w<-combn(input.seq$seq.num, 2)
+  w<-combn(sort(input.seq$seq.num), 2)
   idx<-apply(w, 2, function(x) paste(sort(x), collapse="-"))
   input.twopt$n.mrk <- length(input.seq$seq.num)
-  input.twopt$seq.num <- input.seq$seq.num
+  input.twopt$seq.num <- sort(input.seq$seq.num)
   input.twopt$pairwise<-input.twopt$pairwise[idx]
   input.twopt
 }

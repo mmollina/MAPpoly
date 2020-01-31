@@ -39,11 +39,56 @@ of all possible linkage phases under a two-point threshold.
 }
 \examples{
 \dontrun{
-input.map <- maps.hexafake[[1]]
-mrk <- c(4, 9, 23)
-mrk <- c("M_85", "M_152")
-output.map <- drop_marker(input.map, mrk)
-plot(output.map, mrk.names = TRUE, cex = .5)
+sub.map<-get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
+s<-make_seq_mappoly(hexafake, sub.map$info$mrk.names)
+counts<-cache_counts_twopt(input.seq = s, get.from.web = TRUE)
+tpt <- est_pairwise_rf(input.seq = s, count.cache = counts)
+rf.matrix <- rf_list_to_matrix(input.twopt = tpt,
+                               thresh.LOD.ph = 3, 
+                               thresh.LOD.rf = 3,
+                               shared.alleles = TRUE)
+image(rf.matrix$ShP)
+###### Removing marker "M_1" (first) #######
+mrk.to.remove <- "M_1"
+input.map <- drop_marker(sub.map, mrk.to.remove)
+plot(input.map, mrk.names = TRUE)
+# Computing conditional probabilities using the resulting map
+genoprob <- calc_genoprob(input.map)
+res.add.M_1<-add_marker(input.map = input.map,
+                        mrk = "M_1",
+                        pos = 0,
+                        rf.matrix = rf.matrix,
+                        genoprob = genoprob,
+                        tol = 10e-4)  
+ plot(res.add.M_1, mrk.names = TRUE)                       
+ best.phase <- res.add.M_1$maps[[1]]$seq.ph
+ names.id<-names(best.phase$P)
+ plot_compare_haplotypes(m = 6,
+                         hom.allele.p1 = best.phase$P[names.id],
+                         hom.allele.q1 = best.phase$Q[names.id],
+                         hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
+                         hom.allele.q2 = sub.map$maps[[1]]$seq.ph$Q[names.id])
+                         
+###### Removing marker "M_20" (first) #######
+mrk.to.remove <- "M_20"
+input.map <- drop_marker(sub.map, mrk.to.remove)
+plot(input.map, mrk.names = TRUE)
+# Computing conditional probabilities using the resulting map
+genoprob <- calc_genoprob(input.map)
+res.add.M_20<-add_marker(input.map = input.map,
+                        mrk = "M_20",
+                        pos = "M_19",
+                        rf.matrix = rf.matrix,
+                        genoprob = genoprob,
+                        tol = 10e-4)  
+ plot(res.add.M_20, mrk.names = TRUE)                       
+ best.phase <- res.add.M_20$maps[[1]]$seq.ph
+ names.id<-names(best.phase$P)
+ plot_compare_haplotypes(m = 6,
+                         hom.allele.p1 = best.phase$P[names.id],
+                         hom.allele.q1 = best.phase$Q[names.id],
+                         hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
+                         hom.allele.q2 = sub.map$maps[[1]]$seq.ph$Q[names.id])                
 }
 
 }

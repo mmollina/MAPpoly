@@ -19,11 +19,11 @@ This function creates a new map by removing markers from an existing one.
 }
 \examples{
 \dontrun{
-input.map <- maps.hexafake[[1]]
-mrk <- c(4, 9, 23)
-mrk <- c("M_85", "M_152")
-output.map <- drop_marker(input.map, mrk)
-plot(output.map, mrk.names = TRUE, cex = .5)
+sub.map<-get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
+plot(sub.map, mrk.names = TRUE)
+mrk.to.remove <- c("M_1", "M_23", "M_34")
+red.map <- drop_marker(sub.map, mrk.to.remove)
+plot(red.map, mrk.names = TRUE)
 }
 
 }
