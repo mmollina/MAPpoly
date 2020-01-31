@@ -51,6 +51,7 @@ get_w_m <- function(m){
 rev_map<-function(input.map)
 {
   output.map<-input.map
+  output.map$info$mrk.names <- rev(input.map$info$mrk.names)
   for(i in 1:length(output.map$maps))
   {
     output.map$maps[[i]]$seq.num <- rev(input.map$maps[[i]]$seq.num)
@@ -396,249 +397,6 @@ update_missing<-function(input.data,
   return(input.data)
 }
 
-#' Filter non-conforming classes in F1 segregation
-#'
-#' @param void interfunction to be documented
-#' @keywords internal
-#' @export
-filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
-  {
-  m<-input.data$m
-  dp<-input.data$dosage.p
-  dq<-input.data$dosage.q
-  Ds<-array(NA, dim = c(m+1, m+1, m+1))
-  for(i in 0:m)
-    for(j in 0:m)
-      Ds[i+1,j+1,] <- segreg_poly(m = m, dP = i, dQ = j)
-  Dpop<-cbind(dp,dq)
-  #Gathering segregation probabilities given parental dosages
-  M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
-  M[M!=0]<-1
-  dimnames(M)<-list(input.data$mrk.names, 0:m)
-  ##if no prior probabilities
-  if(nrow(input.data$geno)==input.data$n.mrk){
-    for(i in 1:nrow(M)){
-      id0<-!as.numeric(input.data$geno.dose[i,])%in%(which(M[i,]==1)-1)
-      if(any(id0))
-        input.data$geno.dose[i,id0]<-(m+1)     
-    }
-  return(input.data)
-  }
-  ## 1 represents conforming classes/ 0 represents non-conforming classes
-  dp<-rep(dp, input.data$n.ind)
-  dq<-rep(dq, input.data$n.ind)
-  M<-M[rep(seq_len(nrow(M)), input.data$n.ind),]
-  R<-input.data$geno[,-c(1:2)] - input.data$geno[,-c(1:2)]*M
-  id1<-apply(R, 1, function(x) abs(sum(x))) > 0.3 # if the sum of the excluded classes is greater than 0.3, use segreg_poly
-  N<-matrix(NA, sum(id1), input.data$m+1)
-  ct<-1
-  for(i in which(id1)){
-    N[ct,] <- Ds[dp[i]+1, dq[i]+1, ]
-    ct<-ct+1
-  }
-  input.data$geno[id1,-c(1:2)]<-N
-  # if the sum of the excluded classes is greater than zero
-  # and smaller than 0.3, assign zero to those classes and normalize the vector
-  input.data$geno[,-c(1:2)][R > 0]<-0
-  input.data$geno[,-c(1:2)]<-sweep(input.data$geno[,-c(1:2)], 1, rowSums(input.data$geno[,-c(1:2)]), FUN="/")
-  if(is.null(prob.thres))
-    prob.thres<-input.data$prob.thres
-  geno.dose <- dist_prob_to_class(input.data$geno, prob.thres)
-  geno.dose[is.na(geno.dose)] <- m + 1
-  input.data$geno.dose<-geno.dose
-  input.data
-}
-
-#' Filter missing genotypes
-#' 
-#' Exclude markers or individuals based on their missing data
-#'
-#' @param input.data an object of class \code{"mappoly.data"} 
-#' @param type one of the following options: \code{marker} (default), 
-#'             filter out markers based on their percentage of missing 
-#'             data; \code{individual}, 
-#'             filter out individuals based on their percentage of missing 
-#'             data;
-#' @param filter.thres maximum percentage of missing data
-#' @param inter if \code{TRUE}, it plots markers or individuals vs. frequency of missing data
-#'
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
-#' 
-#' @export
-#' @importFrom magrittr "%>%"
-#' @importFrom dplyr filter
-#' @importFrom graphics axis
-filter_missing<-function(input.data, 
-                             type = c("marker", "individual"), 
-                             filter.thres = 0.2, 
-                             inter = TRUE)
-{
-  type <- match.arg(type)
-  switch(type,
-         marker = filter_missing_mrk(input.data, 
-                            filter.thres = filter.thres, 
-                            inter = inter),
-         individual = filter_missing_ind(input.data, 
-                            filter.thres = filter.thres, 
-                            inter = inter)
-  )
-}
-
-
-#' Filter markers based on missing genotypes
-#'
-#' @param input.data an object of class \code{"mappoly.data"} 
-#' @param filter.thres maximum percentage of missing data
-#' @param inter if \code{TRUE}, plots markers vs. frequency of genotyped individuals
-#' @keywords internal
-#' @export
-#' @importFrom magrittr "%>%"
-#' @importFrom dplyr filter
-#' @importFrom graphics axis
-filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
-{
-  ANSWER <- "flag"
-  mrk <- NULL
-  if(interactive() && inter)
-  {
-    op<-par(bg = "gray", xpd = TRUE)
-    while(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
-    {
-      na.num<-apply(input.data$geno.dose, 1, function(x,m) sum(x==m+1), m = input.data$m)
-      perc.na<-na.num/input.data$n.ind
-      plot(sort(perc.na), xlab = "markers", ylab = "frequency of missing data", axes = FALSE);
-      axis(1);axis(2)
-      lines(x = c(0, input.data$n.mrk), y = rep(filter.thres,2), col = 4, lty = 2)
-      text(x = input.data$n.mrk/2, y = filter.thres + 0.05, labels = paste0("Excluded mrks: ", sum(perc.na >= filter.thres)), adj = 0, col = "darkred")
-      text(x = input.data$n.mrk/2, y = filter.thres - 0.05, labels = paste0("Included mrks: ", sum(perc.na < filter.thres)), adj = 0, col = "darkgreen")
-      ANSWER <- readline("Enter 'y' to proceed or update the filter threshold: ")
-      if(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
-      filter.thres  <- as.numeric(ANSWER)
-    }
-    rm.mrks.id<-which(perc.na > filter.thres)
-      if(length(rm.mrks.id)==0) return(input.data)
-    rm.mrks<-names(rm.mrks.id)
-    if(nrow(input.data$geno)!=input.data$n.mrk)
-      input.data$geno <-  input.data$geno %>%
-      dplyr::filter(!mrk%in%rm.mrks)
-    input.data$geno.dose<-input.data$geno.dose[-rm.mrks.id,]
-    input.data$n.mrk <- nrow(input.data$geno.dose)
-    input.data$mrk.names <- input.data$mrk.names[-rm.mrks.id]
-    input.data$dosage.p <- input.data$dosage.p[-rm.mrks.id]
-    input.data$dosage.q <- input.data$dosage.q[-rm.mrks.id]
-    input.data$sequence <- input.data$sequence[-rm.mrks.id]
-    if(!is.null(input.data$chisq.pval)) 
-      input.data$chisq.pval <- input.data$chisq.pval[-rm.mrks.id]
-    input.data$sequence.pos <- input.data$sequence.pos[-rm.mrks.id]
-    par(op)
-    return(input.data)
-  } else {
-    na.num<-apply(input.data$geno.dose, 1, function(x,m) sum(x==m+1), m = input.data$m)
-    perc.na<-na.num/input.data$n.ind
-    rm.mrks.id<-which(perc.na > filter.thres)
-    if(length(rm.mrks.id)==0) return(input.data)
-    rm.mrks<-names(rm.mrks.id)
-    if(nrow(input.data$geno)!=input.data$n.mrk)
-      input.data$geno <-  input.data$geno %>%
-      dplyr::filter(!mrk%in%rm.mrks)
-    input.data$geno.dose<-input.data$geno.dose[-rm.mrks.id,]
-    input.data$n.mrk <- nrow(input.data$geno.dose)
-    input.data$mrk.names <- input.data$mrk.names[-rm.mrks.id]
-    input.data$dosage.p <- input.data$dosage.p[-rm.mrks.id]
-    input.data$dosage.q <- input.data$dosage.q[-rm.mrks.id]
-    input.data$sequence <- input.data$sequence[-rm.mrks.id]
-    if(!is.null(input.data$chisq.pval)) 
-      input.data$chisq.pval <- input.data$chisq.pval[-rm.mrks.id]
-    input.data$sequence.pos <- input.data$sequence.pos[-rm.mrks.id]
-    return(input.data)
-  }
-}
-
-#' Filter individuals based on missing genotypes 
-#'
-#' @param input.data an object of class \code{"mappoly.data"} 
-#' @param filter.thres maximum percentage of missing data
-#' @param inter if \code{TRUE}, plots markers vs. frequency of genotyped individuals
-#' @keywords internal
-#' @export
-#' @importFrom magrittr "%>%"
-#' @importFrom dplyr filter
-#' @importFrom graphics axis
-filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
-{
-  ANSWER <- "flag"
-  ind <- NULL
-  if(interactive() && inter)
-  {
-    op<-par(bg = "gray", xpd = TRUE)
-    while(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
-    {
-      na.num<-apply(input.data$geno.dose, 2, function(x,m) sum(x==m+1), m = input.data$m)
-      perc.na<-na.num/input.data$n.mrk
-      plot(sort(perc.na), xlab = "individuals", ylab = "frequency of missing data", axes = FALSE);
-      axis(1);axis(2)
-      lines(x = c(0, input.data$n.mrk), y = rep(filter.thres,2), col = 4, lty = 2)
-      text(x = input.data$n.ind/2, y = filter.thres + 0.05, labels = paste0("Excluded individuals: ", sum(perc.na >= filter.thres)), adj = 0, col = "darkred")
-      text(x = input.data$n.ind/2, y = filter.thres - 0.05, labels = paste0("Included individuals: ", sum(perc.na < filter.thres)), adj = 0, col = "darkgreen")
-      ANSWER <- readline("Enter 'y' to proceed or update the filter threshold: ")
-      if(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
-        filter.thres  <- as.numeric(ANSWER)
-    }
-    rm.ind.id<-which(perc.na > filter.thres)
-    if(length(rm.ind.id)==0) return(input.data)
-    rm.ind<-names(rm.ind.id)
-    if(nrow(input.data$geno)!=input.data$n.mrk)
-      input.data$geno <-  input.data$geno %>%
-      dplyr::filter(!ind%in%rm.ind)
-    input.data$geno.dose<-input.data$geno.dose[,-rm.ind.id]
-    input.data$ind.names<-input.data$ind.names[-rm.ind.id]
-    input.data$n.ind <- ncol(input.data$geno.dose)
-    ##Computing chi-square p.values
-    if(!is.null(input.data$chisq.pval)){
-      m<-input.data$m
-      Ds <- array(NA, dim = c(m+1, m+1, m+1))
-      for(i in 0:m)
-        for(j in 0:m)
-          Ds[i+1,j+1,] <- segreg_poly(m = m, dP = i, dQ = j)
-      Dpop<-cbind(input.data$dosage.p, input.data$dosage.q)
-      M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
-      dimnames(M)<-list(input.data$mrk.names, c(0:m))
-      M<-cbind(M, input.data$geno.dose)
-      input.data$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
-    }
-    par(op)
-    return(input.data)
-  } else {
-    na.num<-apply(input.data$geno.dose, 2, function(x,m) sum(x==m+1), m = input.data$m)
-    perc.na<-na.num/input.data$n.mrk
-    rm.ind.id<-which(perc.na > filter.thres)
-    if(length(rm.ind.id)==0) return(input.data)
-    rm.ind<-names(rm.ind.id)
-    if(nrow(input.data$geno)!=input.data$n.mrk)
-      input.data$geno <-  input.data$geno %>%
-      dplyr::filter(!ind%in%rm.ind)
-    input.data$geno.dose<-input.data$geno.dose[,-rm.ind.id]
-    input.data$ind.names<-input.data$ind.names[-rm.ind.id]
-    input.data$n.ind <- ncol(input.data$geno.dose)
-    ##Computing chi-square p.values
-    if(!is.null(input.data$chisq.pval)){
-      m<-input.data$m
-      Ds <- array(NA, dim = c(m+1, m+1, m+1))
-      for(i in 0:m)
-        for(j in 0:m)
-          Ds[i+1,j+1,] <- segreg_poly(m = m, dP = i, dQ = j)
-        Dpop<-cbind(input.data$dosage.p, input.data$dosage.q)
-        M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
-        dimnames(M)<-list(input.data$mrk.names, c(0:m))
-        M<-cbind(M, input.data$geno.dose)
-        input.data$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
-    }
-    return(input.data)
-  }
-}
-
-
-
 #' Chi-square test
 #'
 #' @param void interfunction to be documented
@@ -655,58 +413,6 @@ mrk_chisq_test<-function(x, m){
   seg.obs[names(y)[-length(y)]]<-y[-length(y)]
   pval <- suppressWarnings(stats::chisq.test(x = seg.obs, p = seg.exp[names(seg.obs)])$p.value)
   pval
-}
-
-
-#' Filter markers based on chi-square test
-#'
-#' This function filter markers based on chi-square test p-values. The chi-square tests assume that markers follow the expected segregation patterns under Mendelian inheritance, only random chromosome bivalent pairing occurs and there is no double reduction.
-#'
-#' @param input.data name of input object (class \code{mappoly.data})
-#' @param chisq.pval.thres p-value threshold used for chi-square tests
-#' @param inter if TRUE (default), plots distorted vs. non-distorted markers 
-#'
-#' @return An object of class \code{mappoly.chitest.seq} which contains a list with the following components:
-#' \item{keep}{markers that follow Mendelian segregation pattern}
-#' \item{exclude}{markers with distorted segregation}
-#' \item{chisq.pval.thres}{threshold p-value used for chi-square tests}
-#' \item{data.name}{input dataset used to perform the chi-square tests}
-#'@examples
-#' \dontrun{
-#'     mydata <- filter_segregation(mydata, chisq.pval.thres = 0.05/mydata$n.mrk, inter = TRUE)
-#'     seq.init<-make_seq_mappoly(mrks.chi.filt)
-#'}
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
-#'
-#' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
-#'     analysis and haplotype phasing in experimental autopolyploid
-#'     populations with high ploidy level using hidden Markov
-#'     models, _submited_. \url{https://doi.org/10.1101/415232}
-#' @keywords internal
-#' @importFrom graphics axis
-#' @export
-filter_segregation<-function(input.data, chisq.pval.thres = 10e-5, inter = TRUE){
-  ANSWER <- "flag"
-  op<-par(bg = "gray", xpd = TRUE)
-  if(interactive() && inter)
-  {
-    while(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
-    {
-      plot(log10(sort(input.data$chisq.pval, decreasing = TRUE)), xlab = "markers", ylab = "log10(p.val)", axes=F)
-      axis(1); axis(2)
-      lines(x = c(0, input.data$n.mrk), y = rep(log10(chisq.pval.thres),2), col = 4, lty = 2)
-      text(x = input.data$n.mrk/2, y = 5, labels = paste0("Included mrks: ", sum(input.data$chisq.pval >= chisq.pval.thres)), adj = .5, col = "darkgreen")
-      text(x = input.data$n.mrk/2, y = log10(chisq.pval.thres) - 5, labels = paste0("Excluded mrks: ", sum(input.data$chisq.pval < chisq.pval.thres)), adj = .5, col = "darkred")
-      ANSWER <- readline("Enter 'y' to proceed or update the p value threshold: ")
-      if(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
-        chisq.pval.thres  <- as.numeric(ANSWER)
-    }
-  }
-  keep<-names(which(input.data$chisq.pval >= chisq.pval.thres))
-  exclude<-names(which(input.data$chisq.pval < chisq.pval.thres))
-  par(op)
-  structure(list(keep = keep, exclude = exclude, chisq.pval.thres = chisq.pval.thres, data.name = as.character(sys.call())[2]), class = "mappoly.chitest.seq")
 }
 
 #' get genomic order of the markers
@@ -755,11 +461,11 @@ get_genomic_order<-function(input.seq){
 #' 
 #' @examples
 #' \dontrun{
-#' input.map <- maps.hexafake[[1]]
-#' mrk <- c(4, 9, 23)
-#' mrk <- c("M_85", "M_152")
-#' output.map <- drop_marker(input.map, mrk)
-#' plot(output.map, mrk.names = TRUE, cex = .5)
+#' sub.map<-get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
+#' plot(sub.map, mrk.names = TRUE)
+#' mrk.to.remove <- c("M_1", "M_23", "M_34")
+#' red.map <- drop_marker(sub.map, mrk.to.remove)
+#' plot(red.map, mrk.names = TRUE)
 #'}
 #' 
 #' @export
@@ -832,11 +538,56 @@ drop_marker<-function(input.map, mrk)
 #' 
 #' @examples
 #' \dontrun{
-#' input.map <- maps.hexafake[[1]]
-#' mrk <- c(4, 9, 23)
-#' mrk <- c("M_85", "M_152")
-#' output.map <- drop_marker(input.map, mrk)
-#' plot(output.map, mrk.names = TRUE, cex = .5)
+#' sub.map<-get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
+#' s<-make_seq_mappoly(hexafake, sub.map$info$mrk.names)
+#' counts<-cache_counts_twopt(input.seq = s, get.from.web = TRUE)
+#' tpt <- est_pairwise_rf(input.seq = s, count.cache = counts)
+#' rf.matrix <- rf_list_to_matrix(input.twopt = tpt,
+#'                                thresh.LOD.ph = 3, 
+#'                                thresh.LOD.rf = 3,
+#'                                shared.alleles = TRUE)
+#' image(rf.matrix$ShP)
+#' ###### Removing marker "M_1" (first) #######
+#' mrk.to.remove <- "M_1"
+#' input.map <- drop_marker(sub.map, mrk.to.remove)
+#' plot(input.map, mrk.names = TRUE)
+#' # Computing conditional probabilities using the resulting map
+#' genoprob <- calc_genoprob(input.map)
+#' res.add.M_1<-add_marker(input.map = input.map,
+#'                         mrk = "M_1",
+#'                         pos = 0,
+#'                         rf.matrix = rf.matrix,
+#'                         genoprob = genoprob,
+#'                         tol = 10e-4)  
+#'  plot(res.add.M_1, mrk.names = TRUE)                       
+#'  best.phase <- res.add.M_1$maps[[1]]$seq.ph
+#'  names.id<-names(best.phase$P)
+#'  plot_compare_haplotypes(m = 6,
+#'                          hom.allele.p1 = best.phase$P[names.id],
+#'                          hom.allele.q1 = best.phase$Q[names.id],
+#'                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
+#'                          hom.allele.q2 = sub.map$maps[[1]]$seq.ph$Q[names.id])
+#'                          
+#' ###### Removing marker "M_20" (first) #######
+#' mrk.to.remove <- "M_20"
+#' input.map <- drop_marker(sub.map, mrk.to.remove)
+#' plot(input.map, mrk.names = TRUE)
+#' # Computing conditional probabilities using the resulting map
+#' genoprob <- calc_genoprob(input.map)
+#' res.add.M_20<-add_marker(input.map = input.map,
+#'                         mrk = "M_20",
+#'                         pos = "M_19",
+#'                         rf.matrix = rf.matrix,
+#'                         genoprob = genoprob,
+#'                         tol = 10e-4)  
+#'  plot(res.add.M_20, mrk.names = TRUE)                       
+#'  best.phase <- res.add.M_20$maps[[1]]$seq.ph
+#'  names.id<-names(best.phase$P)
+#'  plot_compare_haplotypes(m = 6,
+#'                          hom.allele.p1 = best.phase$P[names.id],
+#'                          hom.allele.q1 = best.phase$Q[names.id],
+#'                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
+#'                          hom.allele.q2 = sub.map$maps[[1]]$seq.ph$Q[names.id])                
 #'}
 #' 
 #' @export
@@ -855,17 +606,20 @@ add_marker <- function(input.map,
     stop("Please, provide the marker name")
   }
   if(!inherits(rf.matrix, "mappoly.rf.matrix")) {
-    stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.rf.matrix'")
+    stop(deparse(substitute(rf.matrix)), " is not an object of class 'mappoly.rf.matrix'")
+  }
+  if(!all(c(input.map$info$mrk.names, mrk)%in%colnames(rf.matrix$rec.mat))){
+    stop(deparse(substitute(rf.matrix)), " does not contain all necessary information about 'input.map' and 'mrk'.")
   }
   if(is.null(genoprob)){
     message("Calculating genoprob.")
     genoprob <- calc_genoprob(input.map)
   }
   if(!inherits(genoprob, "mappoly.genoprob")) {
-    stop(deparse(substitute(genoprob)), " is not an object of class 'mappoly.genoprob'")
+    stop("'", deparse(substitute(genoprob)), "' is not an object of class 'mappoly.genoprob'")
   }
-  if(any(names(genoprob$map)!=input.map$info$mrk.names)){
-    warning(deparse(substitute(genoprob)), "is inconsistent with 'input.map'.\nRecalculating genoprob.")
+  if(!identical(names(genoprob$map), input.map$info$mrk.names)){
+    warning("'", deparse(substitute(genoprob)), "' is inconsistent with 'input.map'.\n  Recalculating genoprob.")
     genoprob <- calc_genoprob(input.map)
   }
   ## ploidy
@@ -1080,9 +834,9 @@ add_marker <- function(input.map,
   }
   cat("\n")
   res<-res[order(res[,"log_like"], decreasing = TRUE),,drop = FALSE]
-  ## Updateing map
+  ## Updating map
   seq.num<-as.numeric(names(configs[[1]]$P))
-  input.map$info$mrk.names <- colnames(rf.matrix$rec.mat)[seq.num]
+  input.map$info$mrk.names <- colnames(rf.matrix$rec.mat)[match(seq.num, colnames(rf.matrix$ShP))]
   input.map$info$n.mrk <- length(input.map$info$mrk.names)
   for(i in 1:nrow(res))
   {
@@ -1090,9 +844,9 @@ add_marker <- function(input.map,
     if(pos == 0){
       seq.rf <- c(res[i, "rf1"], input.map$maps[[i.lpc]]$seq.rf)
     } else if(pos > 0 & pos < nmrk){
-      seq.rf <- c(input.map$maps[[i.lpc]]$seq.rf[1:pos],
+      seq.rf <- c(head(input.map$maps[[i.lpc]]$seq.rf, n = pos-1),
                   res[i, c("rf1", "rf2")], 
-                  input.map$maps[[i.lpc]]$seq.rf[(pos+1):input.map$info$n.mrk])
+                  tail(input.map$maps[[i.lpc]]$seq.rf, n = pos+1))
     } else if(pos == nmrk){
       seq.rf <- c(input.map$maps[[i.lpc]]$seq.rf, res[i, "rf1"])
     }
