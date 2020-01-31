@@ -55,7 +55,7 @@ generate_all_link_phases_elim_equivalent_haplo <-
     ct <- numeric(nrow(wp))
     for (i in 1:nrow(wp)){
       a = matrix(unlist(strsplit(wp[i, ], "-")), ncol = 2, byrow = TRUE)
-      sharedP = tcrossprod(hP1[,a[,1]], t(hP2[,a[,2]]))            
+      sharedP = tcrossprod(hP1[,a[,1], drop = FALSE], hP2[,a[,2], drop = FALSE])            
       ct[i] = sum((M$P != sharedP), na.rm = T)
     }
     ## Checking inconsistency
@@ -79,7 +79,7 @@ generate_all_link_phases_elim_equivalent_haplo <-
     ct <- numeric(nrow(wq))
     for (i in 1:nrow(wq)){
       a = matrix(unlist(strsplit(wq[i, ], "-")), ncol = 2, byrow = TRUE)
-      sharedQ = tcrossprod(hQ1[,a[,1]], t(hQ2[,a[,2]]))
+      sharedQ = tcrossprod(hQ1[,a[,1], drop = FALSE], hQ2[,a[,2], drop = FALSE])
       ct[i] = sum((M$Q != sharedQ), na.rm = T)
     }
     ## Checking inconsistency
