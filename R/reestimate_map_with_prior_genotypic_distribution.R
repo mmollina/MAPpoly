@@ -4,8 +4,8 @@
 #' a genetic map using hdden Markov models
 #'
 #' @param input.map an object of class \code{mappoly.map}.
-#' @param phase.config which phase configuration should be used
-#'    "best" will choose the one with highest likelihood
+#' @param phase.config which phase configuration should be used. "best" (default) 
+#'                     will choose the maximum likelihood configuration.
 #' @param tol the desired accuracy.
 #' @param verbose if \code{TRUE}, current progress is shown; if
 #'     \code{FALSE}, no output is produced.

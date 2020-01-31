@@ -9,8 +9,8 @@ calc_genoprob(input.map, phase.config = "best", verbose = TRUE)
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}
 
-\item{phase.config}{indicates which phase configuration should be used.
-"best" will use the maximum likelihood configuration}
+\item{phase.config}{which phase configuration should be used. "best" (default) 
+will choose the maximum likelihood configuration.}
 
 \item{verbose}{if \code{TRUE}, current progress is shown; if
 \code{FALSE}, no output is produced.}

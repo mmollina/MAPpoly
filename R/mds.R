@@ -142,6 +142,7 @@
 #' @importFrom princurve principal.curve
 #' @importFrom stats runif 
 #' @importFrom utils read.csv write.csv
+#' @importFrom MDSMap calc.nnfit
 #' @export mds_mappoly
 mds_mappoly<-function(input.mat,
                       p = NULL,
@@ -168,7 +169,8 @@ mds_mappoly<-function(input.mat,
     r<-lodrf$rf
     lod<-lodrf$lod
   }
-  M<-MDSMap::dmap(r,"haldane")
+  #M <- MDSMap::dmap(r,"haldane")
+  M <- imf_h(r)
   nloci=length(confplotno)
   smacofsym<-smacof::smacofSym(M,ndim=ndim,weightmat=lod,itmax=100000)
   pc1<-princurve::principal_curve(smacofsym$conf,maxit=150,spar=p,smoother="smooth_spline")

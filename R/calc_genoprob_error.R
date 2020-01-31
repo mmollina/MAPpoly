@@ -6,8 +6,8 @@
 #'
 #' @param input.map An object of class \code{mappoly.map}
 #'
-#' @param phase.config which phase configuration should be used.
-#'    "best" will use the one with highest likelihood
+#' @param phase.config which phase configuration should be used. "best" (default) 
+#'                     will choose the maximum likelihood configuration.
 #'    
 #' @param error global error rate
 #' 

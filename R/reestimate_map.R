@@ -3,9 +3,8 @@
 #' @param input.map An object of class \code{mappoly.map}
 #' @param input.mat An object of class \code{mappoly.rf.matrix}
 #' @param tol tolerance for determining convergence.
-#' @param phase.config should be a string \code{'best'} or the position of the
-#'     configuration to be plotted. If \code{'best'}, plot the configuration
-#'     with the highest likelihood.
+#' @param phase.config which phase configuration should be used. "best" (default) 
+#'                     will choose the maximum likelihood configuration.
 #' @param method indicates whether to use Hidden Markov Models or Ordinary
 #'     Least Squares to reestimate the recombination fraction
 #' @param weight if \code{TRUE}, it uses the LOD scores to perform a weighted
