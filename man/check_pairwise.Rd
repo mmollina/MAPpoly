@@ -3,7 +3,7 @@
 \name{check_pairwise}
 \alias{check_pairwise}
 \title{Check if all pairwise combinations of elements of \code{input.seq}
-are cointained in \code{twopt}}
+are contained in \code{twopt}}
 \usage{
 check_pairwise(input.seq, twopt)
 }
@@ -19,6 +19,6 @@ If all pairwise combinations of elements of
 }
 \description{
 Check if all pairwise combinations of elements of \code{input.seq}
-are cointained in \code{twopt}
+are contained in \code{twopt}
 }
 \keyword{internal}

@@ -173,6 +173,38 @@ int get_ploidy(std::string mystring, int gt_pos){
   return start;
 }
 
+// Getting depth information
+int get_depth(std::string mystring, int dp_pos){
+  // mystring is a string containing vcf information for each marker-ind
+  // dp_pos is the DP position on vcf file
+  //  Rcpp::Rcout << "In strsplit" << std::endl;
+  
+  char split = ':';
+  int flag;
+  std::vector<std::string> vec_o_strings;
+  int start = 0;
+  unsigned int i=0;
+  
+  // Looping through string
+  for(i = 1; i < mystring.size(); i++){
+    if( mystring[i] == split){
+      std::string temp = mystring.substr(start, i - start);
+      vec_o_strings.push_back(temp);
+      start = i+1;
+      i = i+1;
+    }
+  }
+  
+  // Handle the last element
+  std::string temp = mystring.substr(start, i - start);
+  vec_o_strings.push_back(temp);
+  
+  // Returning DP
+  start = stoi(vec_o_strings[dp_pos-1]);
+  return start;
+}
+
+
 // Getting dosages for all markers and all individuals
 //' @export
 // [[Rcpp::export(name=".vcf_transform_dosage")]]
@@ -211,6 +243,24 @@ Rcpp::NumericMatrix vcf_get_ploidy(Rcpp::StringMatrix& mat, int gt_pos){
   return results;
 }
 
+// Getting depth for all markers and all individuals
+//' @export
+// [[Rcpp::export(name=".vcf_get_depth")]]
+Rcpp::NumericMatrix vcf_get_depth(Rcpp::StringMatrix& mat, int dp_pos){
+  int rowmat = mat.nrow();
+  int colmat = mat.ncol();
+  int k, l;
+  Rcpp::NumericMatrix results(rowmat,colmat);
+  
+  int get_dosage(std::string mystring, int gt_pos);
+  
+  for (k=0; k < rowmat; k++){
+    for (l=0; l < colmat; l++){
+      results(k,l) = get_depth(as<std::string>(mat(k,l)), dp_pos);
+    }
+  }
+  return results;
+}
 
 // Rcpp::NumericMatrix vcf_transform_dosage(Rcpp::StringMatrix& mat, int gt_pos){
 //   int rowmat = mat.nrow();

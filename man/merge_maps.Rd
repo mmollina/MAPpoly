@@ -9,44 +9,52 @@ merge_maps(input.map1, input.map2, twopt, thres.twopt = 3,
   phase.config.map2 = "best", tol = 0.001)
 }
 \arguments{
-\item{input.map1}{an object of class \code{"mappoly.map"}. First map to be merged.}
+\item{input.map1}{an object of class \code{mappoly.map}, which comprehends the first map to be merged}
 
-\item{input.map2}{an object of class \code{"mappoly.map"}. Second map to be merged.}
+\item{input.map2}{an object of class \code{mappoly.map}, which comprehends the second map to be merged}
 
 \item{twopt}{an object of class \code{poly.est.two.pts.pairwise}
-containing two-point information.}
+containing the two-point information}
 
 \item{thres.twopt}{the threshold used to determine if the linkage
 phases compared via two-point analysis should be considered 
-for the search space reduction.}
+for the search space reduction (default = 3)}
 
 \item{thres.hmm}{the threshold used to determine which linkage 
-phase configurations should be retuned}
+phase configurations should be retuned (default = 10)}
 
-\item{genoprob.map1}{an object of class \code{"mappoly.genoprob"} for the first map}
+\item{genoprob.map1}{an object of class \code{mappoly.genoprob} containing the 
+genotype probabilities for the first map}
 
-\item{phase.config.map1}{which phase configuration should be used for 'input.map1' . "best" (default) 
-will choose the maximum likelihood configuration.}
+\item{phase.config.map1}{which phase configuration should be used for \code{input.map1}. "best" (default) 
+will choose the configuration associated with the maximum likelihood}
 
-\item{phase.config.map2}{which phase configuration should be used for 'input.map2' . "best" (default) 
-will choose the maximum likelihood configuration.}
+\item{phase.config.map2}{which phase configuration should be used for \code{input.map2}. "best" (default) 
+will choose the configuration associated with the maximum likelihood}
 
-\item{tol}{the desired accuracy.}
+\item{tol}{the desired accuracy (default = 10e-04)}
 }
 \value{
-An object of class 'mappoly.map'
+An object of class 'mappoly.map' with the following structure:
+\item{m}{the ploidy level}
+\item{mrk.names}{the names of markers present in the sequence}
+\item{data.name}{name of the dataset of class \code{mappoly.data}}
+\item{ph.thres}{the LOD threshold used to define the linkage phase configurations to test}
+\item{maps}{a list containing the sequence of markers, their recombination fractions,
+the linkage phase configuration for all markers in both parents P and Q and the 
+map's joint likelihood}
 }
 \description{
-Estimates the linakge phase between to pre-built maps and creates a new map by merging them.
+Estimates the linkage phase and recombination fraction between two pre-built maps 
+and creates a new map by merging them.
 }
 \details{
 \code{merge_maps} uses two-point information, under a given LOD threshold, to reduce the 
-linkage phase serach space. The remaining linkage phasaes are tested using the genotype 
-probabilities.
+linkage phase search space. The remaining linkage phases are tested using the genotype 
+probabilities
 }
 \examples{
 \dontrun{
-
 #### Tetraploid example #####
 map1<-get_submap(solcap.dose.map[[1]], 1:5)
 map2<-get_submap(solcap.dose.map[[1]], 6:15)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/cache_twopts.R
 \name{cache_counts_twopt}
 \alias{cache_counts_twopt}
-\title{Frequency of genotypes for two-point recombination fractions estimation}
+\title{Frequency of genotypes for two-point recombination fraction estimation}
 \usage{
 cache_counts_twopt(input.seq, get.from.web = FALSE, cache.prev = NULL,
   n.clusters = 1, verbose = TRUE, joint.prob = FALSE)
@@ -11,46 +11,43 @@ cache_counts_twopt(input.seq, get.from.web = FALSE, cache.prev = NULL,
 \item{input.seq}{an object of class \code{mappoly.sequence}}
 
 \item{get.from.web}{If \code{TRUE}, access the counts for all
-linkage phase configurations in a remote server}
+linkage phase configurations in a remote server (default = FALSE)}
 
 \item{cache.prev}{an object of class \code{cache.info} containing
 pre-computed genotype frequencies, obtained with
-\code{\link[mappoly]{cache_counts_twopt}} (not used in this version)}
+\code{\link[mappoly]{cache_counts_twopt}} (optional, default = NULL)}
 
-\item{n.clusters}{Number of parallel processes to spawn}
+\item{n.clusters}{Number of parallel processes to spawn (default = 1)}
 
-\item{verbose}{If \code{TRUE}, print the linkage phase
+\item{verbose}{If \code{TRUE} (default), print the linkage phase
 confgurations. If \code{get.from.web = TRUE}, nothing is
 printed, since all linkage phase configurations will be cached.}
 
-\item{joint.prob}{If \code{FALSE}, returns the frequency of
-   genotypes for transition probabilities (conditional
-   probabilities). If \code{TRUE} returns the frequency for joint
-   probabilities.
-   
-@param x an object of one of the classes \code{mappoly.map}}
-
-\item{...}{currently ignored}
+\item{joint.prob}{If \code{FALSE} (default), returns the frequency of
+genotypes for transition probabilities (conditional
+probabilities). If \code{TRUE} returns the frequency for joint
+probabilities.}
 }
 \value{
-An object of class \code{cache.info} which contains a list
-    for all pairs of dosages contained in the dataset. The names in
-    this list are of the form 'A-B-C-D', where A represents the
-    dosage in parent 1, marker k, B represents the dosage in parent
-    1, marker k+1, C represents the dosage in parent 2, marker k
+An object of class \code{cache.info} which contains one (conditional probabilities)
+    or two (both conditional and joint probabilities) lists. Each list
+    contains all pairs of dosages between parents for all markers
+    in the sequence. The names in each list are of the form 'A-B-C-D', where: A
+    represents the dosage in parent 1, marker k; B represents the dosage in parent
+    1, marker k+1; C represents the dosage in parent 2, marker k;
     and D represents the dosage in parent 2, marker k+1.  For each
     list, the frequencies were computed for all possible linkage
     phase configurations. The frequencies for each linkage phase
     configuration are distributed in matrices whose names
     represents the number of homologous chromosomes that share
-    alleles. The rows on these matrices represents the dosages in k
-    and k+1 in an individual in the offspring. See Table 3 of
-    S3 Appendix in Mollinari and Garcia (2018) for an example.
+    alleles. The rows on these matrices represents the dosages in markers k
+    and k+1 for an individual in the offspring. See Table 3 of
+    S3 Appendix in Mollinari and Garcia (2019) for an example.
 }
 \description{
 Returns the frequency of each genotype for two-point reduction
 of dimensionality. The frequency is calculated for all pairwise
-combination and for all possible linkage phase configurations.
+combinations and for all possible linkage phase configurations.
 }
 \examples{
   \dontrun{

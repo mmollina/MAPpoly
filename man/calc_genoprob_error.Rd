@@ -11,29 +11,31 @@ calc_genoprob_error(input.map, phase.config = "best", error = 0.01,
 \item{input.map}{An object of class \code{mappoly.map}}
 
 \item{phase.config}{which phase configuration should be used. "best" (default) 
-will choose the maximum likelihood configuration.}
+will choose the maximum likelihood configuration}
 
-\item{error}{global error rate}
+\item{error}{the assumed global error rate (default = 0.01)}
 
 \item{th.prob}{the threshold for using global error or genotype 
-probability distribution contained in the data set}
+probability distribution contained in the data set (default = 0.95)}
 
-\item{restricted}{if \code{TRUE}, restricts the prior to the 
+\item{restricted}{if \code{TRUE} (default), restricts the prior to the 
 possible classes under mendelian non double-reduced segregation 
-given dosage of the parents.}
+given the parental dosages}
 
-\item{verbose}{if \code{TRUE}, current progress is shown; if
-\code{FALSE}, no output is produced.}
+\item{verbose}{if \code{TRUE} (default), current progress is shown; if
+\code{FALSE}, no output is produced}
 
 \item{...}{currently ignored}
 }
 \value{
-An object of class 'mappoly.genoprob'
+An object of class 'mappoly.genoprob' which has two elements: a tridimensional
+array containing the probabilities of all possible genotypes for each individual
+in each marker position; and the marker sequence with it's recombination frequencies
 }
 \description{
-Conditional probabilities are calculeted for each marker.
-In this version, the probabilities are not calculated bewtween
-markers.
+Conditional genotype probabilities are calculated for each marker
+position and each individual given a map. In this version,
+the probabilities are not calculated between markers.
 }
 \examples{
  \dontrun{
@@ -134,6 +136,7 @@ markers.
         labels = rownames(pr3), las=2, cex.axis=.5)       
    par(op)
  }
+
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

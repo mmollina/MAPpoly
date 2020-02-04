@@ -14,22 +14,22 @@ calc_prefpair_profiles(input.genoprobs)
   "hom.pairs"), min.y.prof = 0, max.y.prof = 1, thresh = 0.01, ...)
 }
 \arguments{
-\item{input.genoprobs}{an object of class \code{"mappoly.genoprob"}}
+\item{input.genoprobs}{an object of class \code{mappoly.genoprob}}
 
-\item{x}{an object of class \code{"mappoly.prefpair.profiles"}}
+\item{x}{an object of class \code{mappoly.prefpair.profiles}}
 
 \item{...}{unused arguments}
 
-\item{type}{a character string indicating which type of graphic is ploted. 
-One of "pair.configs" (default: plots the preferential pairing 
-profile for the pairing confugurations) or "hom.pairs" (plots 
-the preferential pairing profile for the homolog pairs).}
+\item{type}{a character string indicating which type of graphic is ploted:
+\code{"pair.configs"} (default: plots the preferential pairing 
+profile for the pairing configurations) or \code{"hom.pairs"} (plots 
+the preferential pairing profile for the homolog pairs)}
 
-\item{min.y.prof}{lower bound for y axis on the probability profile graphic.}
+\item{min.y.prof}{lower bound for y axis on the probability profile graphic (default = 0)}
 
-\item{max.y.prof}{upper bound for y axis on the probability profile graphic.}
+\item{max.y.prof}{upper bound for y axis on the probability profile graphic (default = 1)}
 
-\item{thresh}{line for chi-square test}
+\item{thresh}{threshold for chi-square test (default = 0.01)}
 }
 \description{
 Compute the probability profiles for all pairing configurations in both parents.
@@ -53,7 +53,7 @@ Compute the probability profiles for all pairing configurations in both parents.
 \references{
 Mollinari, M. et al. (2019) Unraveling the hexaploid 
     sweetpotato inheritance using ultra-dense multilocus mapping, 
-    _submited_. \url{https://doi.org/10.1101/689638}
+    _G3: Genes, Genomes, Genetics_. \url{http://dx.doi.org/10.1534/g3.119.400620}
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

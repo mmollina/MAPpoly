@@ -29,6 +29,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// vcf_get_depth
+Rcpp::NumericMatrix vcf_get_depth(Rcpp::StringMatrix& mat, int dp_pos);
+RcppExport SEXP _mappoly_vcf_get_depth(SEXP matSEXP, SEXP dp_posSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::StringMatrix& >::type mat(matSEXP);
+    Rcpp::traits::input_parameter< int >::type dp_pos(dp_posSEXP);
+    rcpp_result_gen = Rcpp::wrap(vcf_get_depth(mat, dp_pos));
+    return rcpp_result_gen;
+END_RCPP
+}
 // vcf_stats_gz
 Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows, int skip, int verbose);
 RcppExport SEXP _mappoly_vcf_stats_gz(SEXP xSEXP, SEXP nrowsSEXP, SEXP skipSEXP, SEXP verboseSEXP) {
@@ -87,6 +99,7 @@ RcppExport SEXP poly_hmm_est_CPP(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP,
 static const R_CallMethodDef CallEntries[] = {
     {"_mappoly_vcf_transform_dosage", (DL_FUNC) &_mappoly_vcf_transform_dosage, 2},
     {"_mappoly_vcf_get_ploidy", (DL_FUNC) &_mappoly_vcf_get_ploidy, 2},
+    {"_mappoly_vcf_get_depth", (DL_FUNC) &_mappoly_vcf_get_depth, 2},
     {"_mappoly_vcf_stats_gz", (DL_FUNC) &_mappoly_vcf_stats_gz, 4},
     {"_mappoly_read_meta_gz", (DL_FUNC) &_mappoly_read_meta_gz, 3},
     {"_mappoly_read_body_gz", (DL_FUNC) &_mappoly_read_body_gz, 7},

@@ -7,20 +7,20 @@
 elim_redundant(input.seq)
 }
 \arguments{
-\item{input.seq}{an object of class \code{'mappoly.sequence'}}
+\item{input.seq}{an object of class \code{mappoly.sequence}}
 
 \item{...}{currently ignored}
 }
 \value{
-An object of class \code{'mappoly.unique.seq'} which
+An object of class \code{mappoly.unique.seq} which
     is a list  containing the following components:
-    \item{unique.seq}{an object of class \code{'mappoly.sequence'}
+    \item{unique.seq}{an object of class \code{mappoly.sequence}
           with the redundant markers removed}
-    \item{kept}{a vector containing the name of the kept markers}
-    \item{eliminated}{a vector containing the name of the eliminated markers}
+    \item{kept}{a vector containing the name of the informative markers}
+    \item{eliminated}{a vector containing the name of the non-informative (eliminated) markers}
 }
 \description{
-Eliminate markers with identical dosage infomation.
+Eliminate markers with identical dosage infomation throughout individuals.
 }
 \examples{
   \dontrun{
@@ -30,6 +30,7 @@ Eliminate markers with identical dosage infomation.
     plot(red.mrk)
     unique.mrks<-make_seq_mappoly(red.mrk)
    }
+   
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

@@ -1,34 +1,42 @@
 #'  Remove markers that do not meet a LOD criteria
 #'
 #'  Remove markers that do not meet a LOD and recombination fraction
-#'  criteria for at least a percentage of the pairwise markers
-#'  combinations.
+#'  criteria for at least a percentage of the pairwise marker
+#'  combinations. It also removes markers with strong evidence of
+#' linkage across the whole linkage group (false positive).
 #'
-#' \code{thresh_LOD_ph} should be set in order to only selects
-#'     recombination fractions which have LOD scores associated to the
-#'     linkage phase configuration bigger than \code{thresh_LOD_ph}
-#'     for the second most likely linkage phase configuration.
-#'     Notice that eliminated markers are usually unlinked to the
+#' \code{thresh.LOD.ph} should be set in order to only select
+#'     recombination fractions that have LOD scores associated to the
+#'     linkage phase configuration higher than \code{thresh_LOD_ph}
+#'     when compared to the second most likely linkage phase configuration.
+#'     Please notice that eliminated markers are usually unlinked to the
 #'     set of markers analyzed.
 #'
 #' @param input.twopt an object of class \code{poly.est.two.pts.pairwise}
 #'
 #' @param thresh.LOD.ph LOD score threshold for linkage phase
-#'     configuration.
+#'     configuration (default = 5)
 #'
-#' @param thresh.LOD.rf LOD score threshold for recombination phase
+#' @param thresh.LOD.rf LOD score threshold for recombination fraction (default = 5)
 #'
-#' @param thresh.rf recombination fraction threshold
-#'
-#' @param n.clusters number of parallel processes to spawn
-#'
-#' @param thresh.perc threshold for the percentage of the pairwise markers
+#' @param thresh.rf threshold for recombination fractions (default = 0.15) 
+#'#'
+#' @param thresh.perc threshold for the percentage of the pairwise marker
 #'  combinations that should be considered in order to
-#'  kept the marker. A \code{thresh.perc = 0.05} means that, at least
+#'  keep the marker. A \code{thresh.perc = 0.05} means that, at least
 #'  5\% of the pairwise combinations should be present in order to
-#'  kept the marker.
+#'  keep the marker (default = 0.05)
 #'
-#' @return A filtered object of class \code{mappoly.sequence}
+#' @param remove.fp numeric value from 0.0 to 0.5 (default = NULL). When defined,
+#' this parameter identifies and removes markers that presented more than 90\%
+#' of its pairwise recombination fractions below \code{remove.fp} value throughout
+#' the linkage group
+#' 
+#' @param n.clusters number of parallel processes (i.e. cores) to spawn (default = 1)
+#'
+#' @return A filtered object of class \code{mappoly.sequence}. 
+#' See \code{\link[mappoly]{make_seq_mappoly}} for details
+#' 
 #' @examples
 #'  \dontrun{
 #'     data(hexafake)
@@ -95,7 +103,8 @@
 #'     plot(m3.filt, main.text = "LG3.filt")
 #'     par(op)
 #'    }
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
+#'    
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} with updates by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'
 #' @references
 #'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
@@ -111,21 +120,50 @@ rf_snp_filter<-function(input.twopt,
                         thresh.LOD.rf = 5,
                         thresh.rf = 0.15,
                         thresh.perc = 0.05,
+                        remove.fp = NULL,
                         n.clusters = 1)
 {
-  ## checking for correct object
-  input_classes <-c("poly.est.two.pts.pairwise")
-  if (!inherits(input.twopt, input_classes)) {
-    stop(deparse(substitute(input.twopt)),
-         " is not an object of class 'poly.est.two.pts.pairwise'")
-  }
-  thresh.missing<-1-thresh.perc
-  rf_mat<- rf_list_to_matrix(input.twopt = input.twopt, thresh.LOD.ph = thresh.LOD.ph,
-                             thresh.LOD.rf = thresh.LOD.rf, thresh.rf = thresh.rf,
-                             n.clusters = n.clusters, verbose = FALSE)
-  ## Removing markers that have too many large recombination fractions
-  x <- apply(rf_mat$rec.mat, 1, function(x) sum(is.na(x)))
-  o <- names(which(x < quantile(x, probs = thresh.missing)))
-  ch_filt<-make_seq_mappoly(input.obj = get(input.twopt$data.name), arg = o, data.name = input.twopt$data.name)
-  ch_filt
+    ## checking for correct object
+    input_classes <-c("poly.est.two.pts.pairwise")
+    if (!inherits(input.twopt, input_classes)) {
+        stop(deparse(substitute(input.twopt)),
+             " is not an object of class 'poly.est.two.pts.pairwise'")
+    }
+
+    ## Identifying false positives
+    if (!is.null(remove.fp)){
+        if (remove.fp < 0.0 || remove.fp > 0.5)
+            stop("'remove.fp' value should be defined between 0.0 and 0.5.")
+        rf_mat_fp = rf_list_to_matrix(input.twopt = input.twopt, n.clusters = n.clusters, verbose = FALSE)
+        xo = apply(rf_mat_fp$rec.mat, 2, function(x) sum(x < remove.fp, na.rm = T))
+        o2 = names(which(xo > 0.90*(length(xo))))
+        o1 = !(names(xo) %in% o2)
+    }
+
+    ## Getting filtered rf matrix
+    thresh.missing<-1-thresh.perc
+    rf_mat<- rf_list_to_matrix(input.twopt = input.twopt, thresh.LOD.ph = thresh.LOD.ph,
+                               thresh.LOD.rf = thresh.LOD.rf, thresh.rf = thresh.rf,
+                               n.clusters = n.clusters, verbose = FALSE)
+
+    ## Removing false positives
+    if (!is.null(remove.fp))
+        rf_mat$rec.mat = rf_mat$rec.mat[o1,o1]
+
+    ## Removing markers that presented too many values above threshold 
+    x <- apply(rf_mat$rec.mat, 1, function(x) sum(is.na(x)))
+    o <- names(which(x < quantile(x, probs = thresh.missing)))
+
+    ## Checking for remaining markers with rfs below threshold
+    rem = names(x)[!(names(x) %in% o)]
+    remaining = rf_mat$rec.mat[rem,rem]
+    ev.mrks = rownames(remaining[which(remaining[,ncol(remaining)] < thresh.rf),])
+    if (!is.null(remove.fp) && length(o2) > 0)
+        cat('The following markers presented more than 90% of recombination fractions below', remove.fp, 'and were removed:', paste0(o2), '\n')
+    if (length(ev.mrks) > 0)
+        cat('The following markers were also removed, but presented one or more recombination fractions below', thresh.rf,':', paste0(ev.mrks), '\n')
+
+    ## Returning sequence object
+    ch_filt<-make_seq_mappoly(input.obj = get(input.twopt$data.name), arg = o, data.name = input.twopt$data.name)
+    ch_filt
 }

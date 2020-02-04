@@ -5,29 +5,29 @@
 \title{Data Input VCF}
 \usage{
 read_vcf(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
-  ploidy = NA, thresh.line = 0.05, update.prob = FALSE,
-  output = NULL)
+  ploidy = NA, thresh.line = 0.05, min.gt.depth = 0,
+  min.av.depth = 0, max.missing = 1)
 }
 \arguments{
-\item{file.in}{name of input file which contains the data to
-be read.}
+\item{file.in}{a character string with the name of (or full path to) the input file which contains the data (VCF format)}
 
 \item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
 expected genotypes under random chromosome pairing and no double reduction}
 
-\item{parent.1}{name of parent 1}
+\item{parent.1}{a character string containing the name of parent 1}
 
-\item{parent.2}{name of parent 2}
+\item{parent.2}{a character string containing the name of parent 2}
 
 \item{ploidy}{the species ploidy (optional, it will be automatically detected)}
 
-\item{thresh.line}{threshold used for p-values on segregation test}
+\item{thresh.line}{threshold used for p-values on segregation test (default = 0.05)}
 
-\item{update.prob}{Logical. Should MAPpoly update genotype probabilities based on HMM? (default = FALSE)}
+\item{min.gt.depth}{minimum genotype depth to keep information. If the genotype depth is below \code{min.gt.depth},
+it will be replaced with NA (default = 0)}
 
-\item{output}{if \code{update.prob = TRUE}, defines the output of the updated .vcf file}
+\item{min.av.depth}{minimum average depth to keep markers (default = 0)}
 
-\item{...}{currently ignored}
+\item{max.missing}{maximum proportion of missing data to keep markers (range = 0-1; default = 1)}
 }
 \value{
 An object of class \code{mappoly.data} which contains a
@@ -43,24 +43,37 @@ An object of class \code{mappoly.data} which contains a
       parent Q for all \code{n.mrk} markers}
     \item{sequence}{a vector indicating which sequence each marker
       belongs. Zero indicates that the marker was not assigned to any
-      sequence.}
+      sequence}
     \item{sequence.pos}{Physical position of the markers into the
       sequence}
+    \item{seq.ref}{Reference base used for each marker (i.e. A, T, C, G)}
+    \item{seq.alt}{Alternative base used for each marker (i.e. A, T, C, G)}
+    \item{prob.thres}{(unused field)}
+    \item{min.gt.depth}{Minimum depth used to keep genotype information}
+    \item{min.av.depth}{Minimum average depth used to keep a marker}
+    \item{max.missing}{Maximum proportion of missing genotypes (range: 0-1)}
     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
       for each individual (columns). Missing data are represented by 
-      \code{ploidy_level + 1}.}
+      \code{ploidy_level + 1}}
+    \item{nphen}{(unused field)}
+    \item{phen}{(unused field)}
     \item{input.file}{Full path to input file, used when \code{update.prob = TRUE}}
+    \item{input.phased}{Logical field indicating whether data is already phased on VCF file}
+    \item{all.mrk.depth}{DP information for all markers on VCF file}
+    \item{selected.mrk}{Markers kept in the final dataset}
+    \item{chisq.pval}{a vector containing p-values related to the chi-squared 
+    test of mendelian segregation performed for all markers}
 }
 \description{
 Reads an external VCF file. This function accepts version 4.0 and higher, and creates an object of class \code{mappoly.data}
 }
 \details{
-This function can handle .vcf files of version 4.0 and higher. The ploidy can be automatically detected, but you
-should inform it to check mismatches. All individual and marker names will be kept as they are in the .vcf file.
+This function can handle .vcf files of version 4.0 and higher. The ploidy can be automatically detected, but it is highly
+recommended that you inform it to check for mismatches. All individual and marker names will be kept as they are in the .vcf file.
 }
 \examples{
 \dontrun{
-    mydata <- read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2")
+    mydata = read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2")
     print(mydata, detailed = TRUE)
 }
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_phase_configurations.R
 \name{get_rf_from_list}
 \alias{get_rf_from_list}
-\title{Get the recombination fraction for a sewquence of markers given an
+\title{Get the recombination fraction for a sequence of markers given an
 object of class \code{poly.est.two.pts.pairwise} and a list
 containing the linkage phase configuration. This list can be found
 in any object of class \code{two.pts.linkage.phases}, in
@@ -26,7 +26,7 @@ a vector with the recombination fraction between markers
     present in ph.list, for that spacific order.
 }
 \description{
-Get the recombination fraction for a sewquence of markers given an
+Get the recombination fraction for a sequence of markers given an
 object of class \code{poly.est.two.pts.pairwise} and a list
 containing the linkage phase configuration. This list can be found
 in any object of class \code{two.pts.linkage.phases}, in

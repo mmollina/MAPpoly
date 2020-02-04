@@ -4,43 +4,51 @@
 #' informative parents under random chromosome segregation.
 #'
 #' \code{hom.allele.p} and \code{hom.allele.q} are lists of vectors
-#'  containing linkage phase configuration. Each vector contains the
+#'  containing linkage phase configurations. Each vector contains the
 #'  numbers of the homologous chromosomes in which the alleles are
 #'  located. For instance, a vector containing \eqn{(1,3,4)} means that
 #'  the marker has three doses located in the chromosomes 1, 3 and 4. For
 #'  zero doses, use 0.
 #'
-#' @param m ploidy level. Must be an even number.
+#' @param m ploidy level. Must be an even number
+#' 
 #' @param rf.vec vector containing the recombination fractions between
 #'     adjacent markers. If a single recombination fraction is
 #'     provided, it is repeated \eqn{n.mrk-1} times
-#' @param n.mrk number of markers.
-#' @param n.ind number of individuals in the offspring.
-#' @param hom.allele a list containing the linkage phase infromation.
+#'     
+#' @param n.mrk number of markers
+#' 
+#' @param n.ind number of individuals in the offspring
+#' 
+#' @param hom.allele a list containing the linkage phase information for both parents
+#' 
 #' @param draw if \code{TRUE}, draws a graphical representation of the
 #'     parental map, including the linkage phase configuration, in a
-#'     pdf output.
+#'     pdf output (default = FALSE)
+#'     
 #' @param file name of the output file. It is ignored if
-#'     \code{draw==TRUE}
-#' @param seed random number generator see
+#'     \code{draw = TRUE}
+#'     
+#' @param seed random number generator seed (default = NULL)
 #'
-#' @param width the width of the graphics region in inches.
+#' @param width the width of the graphics region in inches (default = 12)
 #'
-#' @param height the height of the graphics region in inches.
+#' @param height the height of the graphics region in inches (default = 6)
 #'
 #' @param prob.P a vector indicating the proportion of preferential
-#'     pairing in parent P. (currently ignored)
+#'     pairing in parent P (currently ignored)
 #'
 #' @param prob.Q a vector indicating the proportion of preferential
-#'     pairing in parent Q. (currently ignored)
+#'     pairing in parent Q (currently ignored)
 #'
-#' @return S3 An object of class \code{mappoly.data}. See
+#' @return an object of class \code{mappoly.data}. See
 #'     \code{\link[mappoly]{read_geno}} for more information
 #'
 #' @examples
 #'     h.temp<-sim_homologous(m=6, n.mrk=20, max.d=3, max.ph=3, seed=123)
 #'     fake.poly.dat<-poly_cross_simulate(m=6, rf.vec=.05, n.mrk=20,
 #'                                   n.ind=200, h.temp, seed=123)
+#'                                   
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references

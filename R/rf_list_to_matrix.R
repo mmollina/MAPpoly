@@ -4,41 +4,40 @@
 #' of class \code{poly.est.two.pts.pairwise} into a recombination
 #' fraction matrix
 #'
-#' \code{thresh_LOD_ph} should be set in order to only selects
-#'     recombination fractions which have LOD scores associated to the
-#'     linkage phase configuration bigger than \code{thresh_LOD_ph}
-#'     for the second most likely linkage phase configuration.
+#' \code{thresh_LOD_ph} should be set in order to only select
+#'     recombination fractions that have LOD scores associated to the
+#'     linkage phase configuration higher than \code{thresh_LOD_ph}
+#'     when compared to the second most likely linkage phase configuration.
 #'
 #' @param input.twopt an object of class \code{poly.est.two.pts.pairwise}
 #'
-#' @param thresh.LOD.ph LOD score threshold for linkage phase
-#'     configuration.
+#' @param thresh.LOD.ph LOD score threshold for linkage phase configurations (default = 0)
 #'
-#' @param thresh.LOD.rf LOD score threshold for recombination phase
+#' @param thresh.LOD.rf LOD score threshold for recombination fractions (default = 0)
 #'
-#' @param thresh.rf recombination fraction threshold
+#' @param thresh.rf the threshold used for recombination fraction filtering (default = 0.5)
 #'
-#' @param n.clusters number of parallel processes to spawn
+#' @param n.clusters number of parallel processes (i.e. cores) to spawn (default = 1)
 #' 
-#' @param shared.alleles if \code{TRUE}, computes two matrices indicating 
-#'                       the number of homologes that share alleles
+#' @param shared.alleles if \code{TRUE}, computes two matrices (for both parents) indicating 
+#'                       the number of homologues that share alleles (default = FALSE) 
 #'
-#' @param verbose if \code{TRUE}, current progress is shown; if
-#'     \code{FALSE}, no output is produced.
+#' @param verbose if \code{TRUE} (default), current progress is shown; if
+#'     \code{FALSE}, no output is produced
 #'
-#' @param x an object of class mappoly.rf.matrix
+#' @param x an object of class \code{mappoly.rf.matrix}
 #'
 #' @param type type of matrix that shuold be printed. Can be one of the
 #'        following: \code{"rf"}, for recombination fraction or \code{"lod"}
 #'        for LOD Score
 #'
-#' @param ord the order in which the markes should be ploted
+#' @param ord the order in which the markes should be ploted (default = NULL)
 #'
-#' @param rem which markers should be removed from the heatmap
+#' @param rem which markers should be removed from the heatmap (default = NULL)
 #'
-#' @param main.text title of the heatmap
+#' @param main.text a character string as the title of the heatmap (default = NULL)
 #'
-#' @param index should the numbers corresponding to the markers be printed in the diagonal of the heatmap?
+#' @param index logical. should the numbers corresponding to the markers be printed in the diagonal of the heatmap? (default = TRUE)
 #'
 #' @param ... currently ignored
 #'
@@ -73,6 +72,7 @@
 #'     plot(mat.filt)
 #'     plot(mat.filt, type = "lod")
 #'  }
+#'  
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
@@ -85,13 +85,13 @@
 #' @import fields
 #' @export rf_list_to_matrix
 
-rf_list_to_matrix <-  function(input.twopt,
-                               thresh.LOD.ph = 0,
-                               thresh.LOD.rf = 0,
-                               thresh.rf = 0.5,
-                               n.clusters = 1,
-                               shared.alleles = FALSE,
-                               verbose = TRUE) {
+rf_list_to_matrix <- function(input.twopt,
+                              thresh.LOD.ph = 0,
+                              thresh.LOD.rf = 0,
+                              thresh.rf = 0.5,
+                              n.clusters = 1,
+                              shared.alleles = FALSE,
+                              verbose = TRUE) {
   ## checking for correct object
   input_classes <-c("poly.est.two.pts.pairwise",
                     "poly.haplo.est.two.pts.pairwise")
@@ -185,6 +185,7 @@ rf_list_to_matrix <-  function(input.twopt,
                  cl = class(input.twopt)),
             class = "mappoly.rf.matrix")
 }
+
 #' @rdname rf_list_to_matrix
 #' @keywords internal 
 #' @export

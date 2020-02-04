@@ -1,17 +1,30 @@
-#' Generates all possible linkage phases between two blocks of markers,
-#' eliminating equivalent configurations, i.e., configurations with the
-#' same likelihood
+#' Eliminate equivalent linkage phases
+#' 
+#' Generates all possible linkage phases between two blocks of markers
+#' (or a block and a marker), eliminating equivalent configurations, 
+#' i.e. configurations with the same likelihood and also considering
+#' the two-point information (shared alleles)
 #'
 #' @param block1 submap with markers of the first block
-#' @param block2 submap with markers of the second block, or just a single marker identified by its position in the \code{mappoly.data} object
+#' 
+#' @param block2 submap with markers of the second block, 
+#' or just a single marker identified by its position on
+#'  the \code{mappoly.data} object
+#'  
 #' @param rf.matrix matrix obtained with the function \code{rf_list_to_matrix}
 #' using the parameter \code{shared.alleles = TRUE}
+#' 
 #' @param m ploidy level (i.e. 4, 6 and so on)
-#' @param max.inc maximum number of allowed inconsistencies
+#' 
+#' @param max.inc maximum number of allowed inconsistencies (default = NULL: don't check inconsistencies)
+#' 
 #' @keywords internal
+#' 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} and Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' 
 #' @export generate_all_link_phases_elim_equivalent_haplo
-generate_all_link_phases_elim_equivalent_haplo <-
+#' 
+generate_all_link_phases_elim_equivalent_haplo <- 
   function(block1, block2, rf.matrix, m, max.inc = NULL) {
     ## Check block2 class (block or single marker)
     if (is.numeric(block2)){
@@ -148,38 +161,34 @@ est_haplo_hmm <-
 #' @param void interfunction to be documented
 #' @keywords internal
 #' @export
-calc_genoprob_haplo <-
-  function(m, n.mrk, n.ind, haplo, emit = NULL, 
-           rf_vec, indnames, verbose=TRUE) {
-    ## In case no genotypic probabilities distrubutions are provided
-    if(is.null(emit)){
-      emit <- vector("list", length(haplo))
-      for(i in  1:length(haplo)){
-        tempemit <- vector("list", length(haplo[[i]]))
-        for(j in 1:length(haplo[[i]])){
-          tempemit[[j]] <- rep(1, nrow(haplo[[i]][[j]]))
-        }
-        emit[[i]] <- tempemit
+calc_genoprob_haplo <- function(m, n.mrk, n.ind, haplo, emit = NULL, 
+                                rf_vec, indnames, verbose=TRUE) {
+  ## In case no genotypic probabilities distrubutions are provided
+  if(is.null(emit)){
+    emit <- vector("list", length(haplo))
+    for(i in  1:length(haplo)){
+      tempemit <- vector("list", length(haplo[[i]]))
+      for(j in 1:length(haplo[[i]])){
+        tempemit[[j]] <- rep(1, nrow(haplo[[i]][[j]]))
       }
+      emit[[i]] <- tempemit
     }
-    mrknames<-names(haplo)
-    res.temp <- .Call("calc_genprob_haplo",
-            m,
-            n.mrk,
-            n.ind,
-            haplo,
-            emit,
-            rf_vec,
-            as.numeric(rep(0, choose(m, m/2)^2 * n.mrk * n.ind)),
-            verbose,
-            PACKAGE = "mappoly")
-    if(verbose) cat("\n")
-    dim(res.temp[[1]])<-c(choose(m,m/2)^2,n.mrk,n.ind)
-    dimnames(res.temp[[1]])<-list(kronecker(apply(combn(letters[1:m],m/2),2, paste, collapse=""),
-                                            apply(combn(letters[(m+1):(2*m)],m/2),2, paste, collapse=""), paste, sep=":"),
-                                  mrknames, indnames)
-    structure(list(probs = res.temp[[1]], map = rf_vec), class="mappoly.genoprob")
   }
-
-
-
+  mrknames<-names(haplo)
+  res.temp <- .Call("calc_genprob_haplo",
+                    m,
+                    n.mrk,
+                    n.ind,
+                    haplo,
+                    emit,
+                    rf_vec,
+                    as.numeric(rep(0, choose(m, m/2)^2 * n.mrk * n.ind)),
+                    verbose,
+                    PACKAGE = "mappoly")
+  if(verbose) cat("\n")
+  dim(res.temp[[1]])<-c(choose(m,m/2)^2,n.mrk,n.ind)
+  dimnames(res.temp[[1]])<-list(kronecker(apply(combn(letters[1:m],m/2),2, paste, collapse=""),
+                                          apply(combn(letters[(m+1):(2*m)],m/2),2, paste, collapse=""), paste, sep=":"),
+                                mrknames, indnames)
+  structure(list(probs = res.temp[[1]], map = rf_vec), class="mappoly.genoprob")
+}

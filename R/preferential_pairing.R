@@ -2,15 +2,21 @@
 #'
 #' Compute the probability profiles for all pairing configurations in both parents.
 #'
-#' @param input.genoprobs an object of class \code{"mappoly.genoprob"} 
-#' @param x an object of class \code{"mappoly.prefpair.profiles"}
-#' @param type a character string indicating which type of graphic is ploted. 
-#'             One of "pair.configs" (default: plots the preferential pairing 
-#'             profile for the pairing confugurations) or "hom.pairs" (plots 
-#'             the preferential pairing profile for the homolog pairs). 
-#' @param min.y.prof lower bound for y axis on the probability profile graphic.
-#' @param max.y.prof upper bound for y axis on the probability profile graphic.
-#' @param thresh line for chi-square test
+#' @param input.genoprobs an object of class \code{mappoly.genoprob}
+#' 
+#' @param type a character string indicating which type of graphic is ploted:
+#'             \code{"pair.configs"} (default: plots the preferential pairing 
+#'             profile for the pairing configurations) or \code{"hom.pairs"} (plots 
+#'             the preferential pairing profile for the homolog pairs)
+#'             
+#' @param min.y.prof lower bound for y axis on the probability profile graphic (default = 0)
+#' 
+#' @param max.y.prof upper bound for y axis on the probability profile graphic (default = 1)
+#' 
+#' @param thresh threshold for chi-square test (default = 0.01)
+#' 
+#' @param x an object of class \code{mappoly.prefpair.profiles}
+#' 
 #' @param ... unused arguments
 #' 
 #'@examples
@@ -33,7 +39,7 @@
 #' @references
 #'     Mollinari, M. et al. (2019) Unraveling the hexaploid 
 #'     sweetpotato inheritance using ultra-dense multilocus mapping, 
-#'     _submited_. \url{https://doi.org/10.1101/689638}
+#'     _G3: Genes, Genomes, Genetics_. \url{http://dx.doi.org/10.1534/g3.119.400620}
 #'     
 #' @export
 #' @importFrom ggplot2 ggplot geom_hline theme geom_smooth ggtitle facet_grid theme_minimal ylab xlab aes vars scale_color_manual

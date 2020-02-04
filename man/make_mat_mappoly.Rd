@@ -7,17 +7,18 @@
 make_mat_mappoly(input.mat, input.seq)
 }
 \arguments{
-\item{input.mat}{an object of class \code{mappoly.rf.matrix}.}
+\item{input.mat}{an object of class \code{mappoly.rf.matrix}}
 
-\item{input.seq}{an object of class \code{mappoly.sequence}.
-It must be contained in 'input.mat'}
+\item{input.seq}{an object of class \code{mappoly.sequence}, with 
+a sequence of markers contained in \code{input.mat}}
 }
 \value{
-a subset of \code{'input.mat'}. This object is also
-    of class \code{mappoly.rf.matrix}.
+an object of class \code{mappoly.rf.matrix},
+which is a subset of \code{'input.mat'}. 
+See \code{\link[mappoly]{rf_list_to_matrix}} for details
 }
 \description{
-Get a subset of an object of class \code{'mappoly.rf.matrix'}, i.e.,
+Get a subset of an object of class \code{mappoly.rf.matrix}, i.e.
  recombination fraction and LOD score matrices based in a
  sequence of markers.
 }
@@ -39,6 +40,7 @@ Get a subset of an object of class \code{'mappoly.rf.matrix'}, i.e.,
     mat.sub<-make_mat_mappoly(mat, id)
     plot(mat.sub)
    }
+   
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

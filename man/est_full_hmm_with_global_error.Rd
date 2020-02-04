@@ -2,34 +2,41 @@
 % Please edit documentation in R/reestimate_map_with_global_genotypic_error.R
 \name{est_full_hmm_with_global_error}
 \alias{est_full_hmm_with_global_error}
-\title{Reestimate gentic map given a global genotyping error}
+\title{Reestimate genetic map given a global genotyping error}
 \usage{
 est_full_hmm_with_global_error(input.map, error = NULL, tol = 0.001,
   restricted = TRUE, th.prob = 0.95, verbose = FALSE)
 }
 \arguments{
-\item{input.map}{an object of class \code{mappoly.map}.}
+\item{input.map}{an object of class \code{mappoly.map}}
 
-\item{error}{global error rate}
+\item{error}{the assumed global error rate (default = NULL)}
 
-\item{tol}{the desired accuracy.}
+\item{tol}{the desired accuracy (default = 10e-04)}
 
-\item{restricted}{if \code{TRUE}, restricts the prior to the 
+\item{restricted}{if \code{TRUE} (default), restricts the prior to the 
 possible classes under mendelian non double-reduced segregation 
-given dosage of the parents.}
+given dosage of the parents}
 
 \item{th.prob}{the threshold for using global error or genotype 
-probability distribution contained in the data set}
+probability distribution contained in the data set (default = 0.95)}
 
 \item{verbose}{if \code{TRUE}, current progress is shown; if
-\code{FALSE}, no output is produced.}
+\code{FALSE} (default), no output is produced}
 }
 \value{
-An object of class 'mappoly.map'
+An object of class 'mappoly.map' with the following structure:
+\item{m}{the ploidy level}
+\item{mrk.names}{the names of markers present in the sequence}
+\item{data.name}{name of the dataset of class \code{mappoly.data}}
+\item{ph.thres}{the LOD threshold used to define the linkage phase configurations to test}
+\item{maps}{a list containing the sequence of markers, their recombination fractions,
+the linkage phase configuration for all markers in both parents P and Q and the 
+map's joint likelihood}
 }
 \description{
 This function considers a global error when reestimating
-a genetic map using hdden Markov models
+a genetic map using Hidden Markov models
 }
 \examples{
   \dontrun{

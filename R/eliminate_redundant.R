@@ -1,17 +1,17 @@
 #' Eliminate redundant markers
 #'
-#' Eliminate markers with identical dosage infomation.
+#' Eliminate markers with identical dosage infomation throughout individuals.
 #'
-#' @param input.seq an object of class \code{'mappoly.sequence'}
-#'
+#' @param input.seq an object of class \code{mappoly.sequence}
+#' 
 #' @param ... currently ignored
 #'
-#' @return An object of class \code{'mappoly.unique.seq'} which
+#' @return An object of class \code{mappoly.unique.seq} which
 #'     is a list  containing the following components:
-#'     \item{unique.seq}{an object of class \code{'mappoly.sequence'}
+#'     \item{unique.seq}{an object of class \code{mappoly.sequence}
 #'           with the redundant markers removed}
-#'     \item{kept}{a vector containing the name of the kept markers}
-#'     \item{eliminated}{a vector containing the name of the eliminated markers}
+#'     \item{kept}{a vector containing the name of the informative markers}
+#'     \item{eliminated}{a vector containing the name of the non-informative (eliminated) markers}
 #'
 #' @examples
 #'   \dontrun{
@@ -21,6 +21,7 @@
 #'     plot(red.mrk)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'    }
+#'    
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references

@@ -5,40 +5,49 @@
 \title{Remove markers that do not meet a LOD criteria}
 \usage{
 rf_snp_filter(input.twopt, thresh.LOD.ph = 5, thresh.LOD.rf = 5,
-  thresh.rf = 0.15, thresh.perc = 0.05, n.clusters = 1)
+  thresh.rf = 0.15, thresh.perc = 0.05, remove.fp = NULL,
+  n.clusters = 1)
 }
 \arguments{
 \item{input.twopt}{an object of class \code{poly.est.two.pts.pairwise}}
 
 \item{thresh.LOD.ph}{LOD score threshold for linkage phase
-configuration.}
+configuration (default = 5)}
 
-\item{thresh.LOD.rf}{LOD score threshold for recombination phase}
+\item{thresh.LOD.rf}{LOD score threshold for recombination fraction (default = 5)}
 
-\item{thresh.rf}{recombination fraction threshold}
+\item{thresh.rf}{threshold for recombination fractions (default = 0.15) 
+#'}
 
-\item{thresh.perc}{threshold for the percentage of the pairwise markers
+\item{thresh.perc}{threshold for the percentage of the pairwise marker
 combinations that should be considered in order to
-kept the marker. A \code{thresh.perc = 0.05} means that, at least
+keep the marker. A \code{thresh.perc = 0.05} means that, at least
 5\% of the pairwise combinations should be present in order to
-kept the marker.}
+keep the marker (default = 0.05)}
 
-\item{n.clusters}{number of parallel processes to spawn}
+\item{remove.fp}{numeric value from 0.0 to 0.5 (default = NULL). When defined,
+this parameter identifies and removes markers that presented more than 90\%
+of its pairwise recombination fractions below \code{remove.fp} value throughout
+the linkage group}
+
+\item{n.clusters}{number of parallel processes (i.e. cores) to spawn (default = 1)}
 }
 \value{
-A filtered object of class \code{mappoly.sequence}
+A filtered object of class \code{mappoly.sequence}. 
+See \code{\link[mappoly]{make_seq_mappoly}} for details
 }
 \description{
 Remove markers that do not meet a LOD and recombination fraction
- criteria for at least a percentage of the pairwise markers
- combinations.
+ criteria for at least a percentage of the pairwise marker
+ combinations. It also removes markers with strong evidence of
+linkage across the whole linkage group (false positive).
 }
 \details{
-\code{thresh_LOD_ph} should be set in order to only selects
-    recombination fractions which have LOD scores associated to the
-    linkage phase configuration bigger than \code{thresh_LOD_ph}
-    for the second most likely linkage phase configuration.
-    Notice that eliminated markers are usually unlinked to the
+\code{thresh.LOD.ph} should be set in order to only select
+    recombination fractions that have LOD scores associated to the
+    linkage phase configuration higher than \code{thresh_LOD_ph}
+    when compared to the second most likely linkage phase configuration.
+    Please notice that eliminated markers are usually unlinked to the
     set of markers analyzed.
 }
 \examples{
@@ -107,6 +116,7 @@ Remove markers that do not meet a LOD and recombination fraction
     plot(m3.filt, main.text = "LG3.filt")
     par(op)
    }
+   
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
@@ -116,5 +126,5 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     \url{https://doi.org/10.1534/g3.119.400378}
 }
 \author{
-Marcelo Mollinari, \email{mmollin@ncsu.edu}
+Marcelo Mollinari, \email{mmollin@ncsu.edu} with updates by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 }

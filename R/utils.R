@@ -41,12 +41,13 @@ get_w_m <- function(m){
 
 #' Reverse map
 #'
-#' Provides a reverse version of a given map.
+#' Provides the reverse version of a given map.
 #'
-#' @param input.map An object of class \code{mappoly.map}
-#' @export
+#' @param input.map an object of class \code{mappoly.map}
+#'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
+#'@export
 #'
 rev_map<-function(input.map)
 {
@@ -254,9 +255,13 @@ plot_compare_haplotypes <- function(m, hom.allele.p1, hom.allele.q1, hom.allele.
 
 
 #' Summary of a set of markers
+#' 
+#' Returns information related to a given set of markers
 #'
 #' @param input.data an object \code{'mappoly.data'}
-#' @param mrks marker sequence index
+#' 
+#' @param mrks marker sequence index (integer vector)
+#' 
 #' @export
 print_mrk<-function(input.data, mrks)
 {
@@ -382,8 +387,15 @@ gg_color_hue <- function(n) {
 #'     dosage. Markers with maximum genotype probability smaller than 'prob.thres' 
 #'     are considered as missing data for the dosage calling purposes
 #'     
+#' @examples
+#' \dontrun{
+#' data = data(hexafake.dist.geno)
+#' data.updated = update_missing(data, prob.thres = 0.5)
+#' print(data)
+#' print(data.updated)
+#' }
+#'     
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
-#'
 #'     
 #' @export
 update_missing<-function(input.data, 
@@ -414,6 +426,7 @@ mrk_chisq_test<-function(x, m){
   pval <- suppressWarnings(stats::chisq.test(x = seg.obs, p = seg.exp[names(seg.obs)])$p.value)
   pval
 }
+
 
 #' get genomic order of the markers
 #'
@@ -452,10 +465,11 @@ get_genomic_order<-function(input.seq){
 #' 
 #' This function creates a new map by removing markers from an existing one.
 #'
-#' @param input.map an object of class \code{"mappoly.map"} 
-#' @param mrk a vector containing markers to be removed from the input map, identified by their names or positions in the map.
-#'
-##' @return An object of class 'mappoly.map'
+#' @param input.map an object of class \code{mappoly.map}
+#'  
+#' @param mrk a vector containing markers to be removed from the input map, identified by their names or positions on the map
+#' 
+#' @return An object of class \code{mappoly.map}
 #' 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' 
@@ -517,22 +531,37 @@ drop_marker<-function(input.map, mrk)
 #' Creates a new map by adding a marker in a given position in a pre-built map. 
 #'
 #' \code{add_marker} splits the input map in two submaps to the left and to the right 
-#' of the given position, and using the genotype probabilities, computes the log-likelihhod
+#' of the given position, and using the genotype probabilities, computes the log-likelihood
 #' of all possible linkage phases under a two-point threshold. 
 #'
-#' @param input.map an object of class \code{"mappoly.map"} 
+#' @param input.map an object of class \code{mappoly.map}
+#'  
 #' @param mrk the name of the marker to be inserted
+#' 
 #' @param pos the name of the marker after which the new marker should be added.
 #'            One also can inform the numeric position (between markers) were the 
 #'            new marker should be added. To insert a marker at the beginning of a 
-#'            map, one should use \code{pos = 0}.
-#' @param rf.matrix an object of class \code{"mappoly.rf.matrix"}
-#' @param genoprob an object of class \code{"mappoly.genoprob"}
+#'            map, one should use \code{pos = 0}
+#'            
+#' @param rf.matrix an object of class \code{mappoly.rf.matrix} containing all recombination
+#' fractions between markers on \code{input.map}
+#' 
+#' @param genoprob an object of class \code{mappoly.genoprob} containing the genotype probabilities
+#' for all marker positions on \code{input.map}
+#' 
 #' @param phase.config which phase configuration should be used. "best" (default) 
-#'                     will choose the maximum likelihood configuration.
-#' @param tol the desired accuracy.
+#'                     will choose the maximum likelihood configuration
 #'                     
-##' @return An object of class 'mappoly.map'
+#' @param tol the desired accuracy (default = 10e-04)
+#'                     
+#' @return An object of class \code{mappoly.map} with the following structure:
+#' \item{m}{the ploidy level}
+#' \item{mrk.names}{the names of markers present in the sequence}
+#' \item{data.name}{name of the dataset of class \code{mappoly.data}}
+#' \item{ph.thres}{the LOD threshold used to define the linkage phase configurations to test}
+#' \item{maps}{a list containing the sequence of markers, their recombination fractions,
+#' the linkage phase configuration for all markers in both parents P and Q and the 
+#' map's joint likelihood}
 #' 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' 
@@ -860,7 +889,7 @@ add_marker <- function(input.map,
 
 #' Data sanity check
 #'
-#' Checks the consistency of dataset
+#' Checks the consistency of a dataset
 #'
 #' @param x an object of class \code{mappoly.data}
 #' 

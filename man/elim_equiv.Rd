@@ -2,8 +2,7 @@
 % Please edit documentation in R/check_phase_configurations.R
 \name{elim_equiv}
 \alias{elim_equiv}
-\title{Drop equivalent linkage phase configurations, i.e. the ones which
-have permuted homologous chromosomes}
+\title{Eliminates equivalent linkage phase configurations}
 \usage{
 elim_equiv(Z)
 }
@@ -17,5 +16,8 @@ a unique list of matrices
 \description{
 Drop equivalent linkage phase configurations, i.e. the ones which
 have permuted homologous chromosomes
+}
+\author{
+Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }
 \keyword{internal}

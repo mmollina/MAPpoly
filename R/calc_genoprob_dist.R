@@ -1,23 +1,27 @@
 #' Compute genotype conditional probabilities using probability distribution of dosages 
 #'
-#' Conditional probabilities are calculeted for each marker.
-#' In this version, the probabilities are not calculated bewtween
-#' markers.
+#' Conditional genotype probabilities are calculated for each marker
+#' position and each individual given a map. In this version,
+#' the probabilities are not calculated between markers.
 #'
 #' @param input.map An object of class \code{mappoly.map}
 #'
+#' @param dat.dist an object of class \code{mappoly.data} containing the
+#'                 probability distribution of the genotypes
+#' 
 #' @param phase.config which phase configuration should be used. "best" (default) 
-#'                     will choose the maximum likelihood configuration.
-#'    
-#' @param dat.dist data set contaning the probability distribution of the 
-#'    genotypes. 
+#'                     will choose the phase configuration associated with the
+#'                     maximum likelihood
 #'
-#' @param verbose if \code{TRUE}, current progress is shown; if
-#'     \code{FALSE}, no output is produced.
-#'
+#' @param verbose if \code{TRUE} (default), the current progress is shown; if
+#'     \code{FALSE}, no output is produced
+#'     
 #' @param ... currently ignored
 #'
-#' @return An object of class 'mappoly.genoprob'
+#' @return An object of class 'mappoly.genoprob' which has two elements: a tridimensional
+#' array containing the probabilities of all possible genotypes for each individual
+#' in each marker position; and the marker sequence with it's recombination frequencies
+#' 
 #' @examples
 #'  \dontrun{
 #'     data(hexafake.geno.dist)
@@ -45,6 +49,7 @@
 #'    probs                          
 #'    image(t(probs$probs[,,1]), col = rev(heat.colors(100)))
 #'  }
+#' 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
@@ -56,7 +61,7 @@
 #'
 #' @export calc_genoprob_dist
 #'
-calc_genoprob_dist<-function(input.map, dat.dist,  phase.config = "best", verbose = TRUE)
+calc_genoprob_dist<-function(input.map, dat.dist, phase.config = "best", verbose = TRUE)
 {
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")

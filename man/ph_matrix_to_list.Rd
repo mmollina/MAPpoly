@@ -2,8 +2,7 @@
 % Please edit documentation in R/check_phase_configurations.R
 \name{ph_matrix_to_list}
 \alias{ph_matrix_to_list}
-\title{This function converts linkage phase configurations from matrix
-form to list}
+\title{MAPpoly object conversion: phase configurations (matrix to list)}
 \usage{
 ph_matrix_to_list(M)
 }

@@ -7,19 +7,20 @@
 make_pairs_mappoly(input.twopt, input.seq)
 }
 \arguments{
-\item{input.twopt}{an object of class \code{poly.est.two.pts.pairwise}.}
+\item{input.twopt}{an object of class \code{poly.est.two.pts.pairwise}}
 
-\item{input.seq}{an object of class \code{mappoly.sequence}.
-It must be contained in 'input.twopt'}
+\item{input.seq}{an object of class \code{mappoly.sequence}, with 
+a sequence of markers contained in \code{input.twopt}}
 }
 \value{
-a subset of \code{'input.twopt'}. This object is also
-    of class \code{poly.est.two.pts.pairwise}.
+an object of class \code{poly.est.two.pts.pairwise} which is a
+ subset of \code{input.twopt}. 
+ See \code{\link[mappoly]{est_pairwise_rf}} for details
 }
 \description{
-Get a subset of an object of class \code{'poly.est.two.pts.pairwise'}, i.e.,
- recombination fraction and LOD score statistics for all possible linkage
- phase combinations based in a sequence of markers.
+Get a subset of an object of class \code{poly.est.two.pts.pairwise} (i.e.
+ recombination fraction) and LOD score statistics for all possible linkage
+ phase combinations based on a sequence of markers.
 }
 \examples{
  \dontrun{
@@ -62,6 +63,7 @@ Get a subset of an object of class \code{'poly.est.two.pts.pairwise'}, i.e.,
     plot(m3, main.text = "LG3")
     par(op)
    }
+   
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

@@ -1,36 +1,41 @@
 #' Assign markers to linkage groups
 #'
-#' Identifies linkage groups of markers, using results from two-point
+#' Identifies linkage groups of markers using the results of two-point
 #' (pairwise) analysis.
 #'
-#' @param input.mat an object of class \code{mappoly.rf.matrix}.
+#' @param input.mat an object of class \code{mappoly.rf.matrix}
 #'
-#' @param input.seq an object of class \code{mappoly.sequence}.
-#'     It must be contained in 'input.mat'
+#' @param expected.groups when available, inform the number of expected 
+#' linkage groups (i.e. chromosomes) for the species
 #'
-#' @param expected.groups the number of expected groups for the species (if any)
+#' @param inter if \code{TRUE} (default), plots a dendrogram highlighting the
+#'    expected groups before continue
 #'
-#' @param inter if \code{TRUE}, plots a dendrogram with highlighting the
-#'    expected groups before continue.
-#'
-#' @param comp.mat if \code{TRUE}, show a comparison between the reference
+#' @param comp.mat if \code{TRUE}, shows a comparison between the reference
 #'     based and the linkage based grouping, if the sequence information is
-#'     present
+#'     available (default = FALSE)
 #'
-#' @param verbose logical. If \code{TRUE}, current progress is shown;
-#'     if \code{FALSE}, no output is produced.
+#' @param verbose logical. If \code{TRUE} (default), current progress is shown;
+#'     if \code{FALSE}, no output is produced
+#'     
+#' @param x an object of class \code{onemap.segreg.test}
 #'
-#' @param x an object of class onemap.segreg.test
+#' @param detailed logical. If \code{TRUE} (default) the markers in each
+#'     linkage group are printed 
 #'
 #' @param ... currently ignored
-#' 
-#' @param detailed logical. If \code{TRUE} the markers in each
-#'     linkage group are printed.
 #'
 #' @return Returns an object of class \code{mappoly.group}, which is a list
 #'     containing the following components:
-#'     \item{i}{...}
-#'     \item{ii}{...}
+#'     \item{data.name}{the referred dataset name}
+#'     \item{hc.snp}{a list containing information related to 
+#'     the UPGMA grouping method}
+#'     \item{expected.groups}{the number of expected linkage groups}
+#'     \item{groups.snp}{the groups to which each of the markers belong}
+#'     \item{seq.vs.grouped.snp}{comparison between the genomic group information
+#'     (when available) and the groups provided by \code{group_mappoly}}
+#'     \item{chisq.pval.thres}{the threshold used on the segregation test when reading the dataset}
+#'     \item{chisq.pval}{the p-values associated with the segregation test for all markers in the sequence}
 #'
 #' @examples
 #'  \dontrun{
@@ -70,6 +75,7 @@
 #'     plot(m3, main.text = "LG3")
 #'     par(op)
 #'    }
+#'    
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
@@ -83,7 +89,7 @@
 #' @importFrom stats as.dendrogram as.dist cutree hclust lm predict quantile rect.hclust
 #' @export group_mappoly
 
-group_mappoly <- function(input.mat, input.seq = NULL, expected.groups = NULL,
+group_mappoly <- function(input.mat, expected.groups = NULL,
                           inter = TRUE, comp.mat = FALSE, verbose = TRUE)
   {
     ## checking for correct object
@@ -91,7 +97,7 @@ group_mappoly <- function(input.mat, input.seq = NULL, expected.groups = NULL,
     if (!inherits(input.mat, input_classes)) {
       stop(deparse(substitute(input.mat)), " is not an object of class 'mappoly.rf.matrix'")
     }
-    if(is.null(input.seq))
+    # if(is.null(input.seq))
       input.seq<-make_seq_mappoly(input.obj = get(input.mat$data.name, pos=1), 
                                   arg = rownames(input.mat$rec.mat), 
                                   data.name = input.mat$data.name)
@@ -109,7 +115,7 @@ group_mappoly <- function(input.mat, input.seq = NULL, expected.groups = NULL,
     if(interactive() && inter)
     {
       dend.snp <- as.dendrogram(hc.snp)
-      while(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
+      while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
       {
         dend1 <- dendextend::color_branches(dend.snp, k = expected.groups)
         plot(dend1, leaflab = "none")
@@ -122,8 +128,8 @@ group_mappoly <- function(input.mat, input.seq = NULL, expected.groups = NULL,
         yt<-.1
         points(x = xt, y = rep(yt, length(xt)), cex = 6, pch = 20, col = "lightgray")
         text(x = xt, y = yt, labels = match(xy, table(groups.snp, useNA = "ifany")), adj = .5)
-        ANSWER <- readline("Enter 'y' to proceed or update the number of expected groups: ")
-        if(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
+        ANSWER <- readline("Enter 'Y/n' to proceed or update the number of expected groups: ")
+        if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
           expected.groups <- as.numeric(ANSWER)
       }
     }

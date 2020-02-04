@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_counts.R
 \name{get_counts_two_parents}
 \alias{get_counts_two_parents}
-\title{Counts for recombinat classes}
+\title{Counts for recombinant classes}
 \usage{
 get_counts_two_parents(x = c(2, 2), ploidy, p.k, p.k1, q.k, q.k1,
   verbose = FALSE, joint.prob = FALSE)
@@ -11,6 +11,6 @@ get_counts_two_parents(x = c(2, 2), ploidy, p.k, p.k1, q.k, q.k1,
 \item{void}{interfunction to be documented}
 }
 \description{
-Counts for recombinat classes
+Counts for recombinant classes
 }
 \keyword{internal}

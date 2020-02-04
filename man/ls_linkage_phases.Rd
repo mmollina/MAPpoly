@@ -14,34 +14,41 @@ ls_linkage_phases(input.seq, thres, twopt, mrk.to.add = NULL,
 \method{plot}{two.pts.linkage.phases}(x, ...)
 }
 \arguments{
-\item{input.seq}{an object of class \code{mappoly.sequence}.}
+\item{input.seq}{an object of class \code{mappoly.sequence}}
 
-\item{thres}{the threshold used to determine if the linkage phases
+\item{thres}{the LOD threshold used to determine whether linkage phases
 compared via two-point analysis should be considered}
 
 \item{twopt}{an object of class \code{poly.est.two.pts.pairwise}
 containing the two-point information}
 
-\item{mrk.to.add}{marker to be added at the end of the linkage
-group. If \code{NULL} add all markers contained in
-\code{mrk.seq}. Mostly for internal usage.}
+\item{mrk.to.add}{marker to be added to the end of the linkage
+group. If \code{NULL} (default) adds all markers contained in
+\code{input.seq}. Mostly for internal usage}
 
-\item{prev.info}{an object of class \code{two.pts.linkage.phases}
+\item{prev.info}{(optional) an object of class \code{two.pts.linkage.phases}
 containing the previous info about linkage phase configuration.
-Mostly for internal usage.}
+Mostly for internal usage}
 
-\item{x}{an object of one of the classes \code{two.pts.linkage.phases}}
+\item{x}{an object of the class \code{two.pts.linkage.phases}}
 
 \item{...}{currently ignored}
 }
 \value{
 An object of class \code{two.pts.linkage.phases} which
-    contains a list of all possible linkage phase configuration in
-    matrix form for both parents, P and Q.
+    contains the following structure: 
+    \item{config.to.test}{a matrix with all possible linkage phase configurations
+     for both parents, P and Q} 
+    \item{rec.frac}{a matrix with all recombination fractions}
+    \item{m}{the ploidy level}
+    \item{seq.num}{the sequence of markers}
+    \item{thres}{the LOD threshold}
+    \item{data.name}{the dataset name}
 }
 \description{
-Retunrs a list of possible linkage phase configurations using
-mappoly.rf.matrix as a eliminations criteria
+Returns a list of possible linkage phase configurations using
+the two-point information contained in the object \code{poly.est.two.pts.pairwise}
+as elimination criteria
 }
 \examples{
   \dontrun{
@@ -74,6 +81,7 @@ mappoly.rf.matrix as a eliminations criteria
     l5.seq.1.0
     plot(l5.seq.1.0)
     }
+    
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

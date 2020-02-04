@@ -1,10 +1,17 @@
+#' Eliminates equivalent linkage phase configurations
+#' 
 #' Drop equivalent linkage phase configurations, i.e. the ones which
 #' have permuted homologous chromosomes
 #'
 #' @param Z a list of matrices whose columns represent homologous
 #'     chromosomes and the rows represent markers
+#' 
 #' @return a unique list of matrices
+#'
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
+#'
 #' @keywords internal
+#'
 #' @export elim_equiv
 elim_equiv <- function(Z) {
     a <- sapply(Z, function(x) paste(sort(apply(x, 2, paste, collapse = "")), collapse = ""))
@@ -20,13 +27,18 @@ elim_equiv <- function(Z) {
 get_ij <- function(w) as.numeric(unlist(strsplit(w, split = "-")))
 
 
+#' MAPpoly object conversion: phase configurations (matrix to list)
+#' 
 #' This function converts linkage phase configurations from matrix
 #' form to list
 #'
 #' @param M matrix whose columns represent homologous chromosomes and
 #'     the rows represent markers
+#' 
 #' @return a list of configuration phases
+#' 
 #' @keywords internal
+#' 
 #' @export
 ph_matrix_to_list <- function(M) {
     w <- lapply(split(M, seq(NROW(M))), function(x, M) which(x == 1))
@@ -34,14 +46,20 @@ ph_matrix_to_list <- function(M) {
     w
 }
 
-#' This function converts linkage phase configurations from list form
-#' to matrix
+#' MAPpoly object conversion: phase configurations (list to matrix)
+#' 
+#' This function converts linkage phase configurations from list
+#' to matrix form
 #'
 #' @param L a list of configuration phases
+#' 
 #' @param m ploidy level
+#' 
 #' @return a matrix whose columns represent homologous chromosomes and
 #'     the rows represent markers
+#' 
 #' @keywords internal
+#' 
 #' @export
 ph_list_to_matrix <- function(L, m) {
     M <- matrix(0, nrow = length(L), ncol = m)
@@ -68,7 +86,6 @@ get_indices_from_selected_phases <- function(x, thres) {
     y <- matrix(as.numeric(unlist(strsplit(y, split = "-"))), ncol = 2, byrow = TRUE)
     list(P = sort(unique(y[, 1])), Q = sort(unique(y[, 2])))
 }
-
 
 #' Generate all possible linkage phases in matrix form given the dose
 #' and the number of shared alleles between a inserted marker and a
@@ -101,18 +118,28 @@ generate_all_link_phase_elim_equivalent <- function(X, d, sh, m, k1, k2) {
     elim_equiv(Y[ct])
 }
 
-#' Insert a new marker at the end of the sequence taking into account
+#' Concatenate new marker
+#' 
+#' Inserts a new marker at the end of the sequence, taking into account
 #' the two-point information
 #'
 #' @param X a list of matrices whose columns represent homologous
 #'     chromosomes and the rows represent markers
+#' 
 #' @param d the dosage of the inserted marker
+#' 
 #' @param sh a list of shared alleles between all markers in the sequence
+#' 
 #' @param seq.num a vector of integers containing the number of each marker in the raw data file
+#' 
 #' @param m the ploidy level
+#' 
 #' @param mrk the marker to be inserted
+#' 
 #' @return a unique list of matrices representing linkage phases
+#'
 #' @keywords internal
+#' 
 #' @export
 concatenate_new_marker <- function(X = NULL, d, sh = NULL, seq.num = NULL, m, mrk = 1) {
     if (is.null(X) & is.null(sh) & mrk == 1 & is.null(seq.num)) {
@@ -147,14 +174,22 @@ concatenate_new_marker <- function(X = NULL, d, sh = NULL, seq.num = NULL, m, mr
     Y.final
 }
 
-#' Eliminate unlikely configuration phases given the two-point information
+#' Eliminate configurations using two-point information
+#' 
+#' Drops unlikely configuration phases given the two-point information
+#' and a LOD threshold
 #'
 #' @param input.seq an object of class \code{mappoly.sequence}.
+#'
 #' @param twopt an object of class \code{poly.est.two.pts.pairwise}
+#'
 #' @param thres threshold from which the linkage phases can be
 #'     discarded (if abs(ph_LOD) > thres)
+#'
 #' @return a unique list of matrices representing linkage phases
+#'
 #' @keywords internal
+#'
 #' @export
 elim_conf_using_two_pts <- function(input.seq, twopt, thres) {
     if (!class(input.seq) == "mappoly.sequence")
@@ -217,7 +252,7 @@ get_ph_conf_ret_sh <- function(M) {
 }
 
 #' Check if all pairwise combinations of elements of \code{input.seq}
-#' are cointained in \code{twopt}
+#' are contained in \code{twopt}
 #'
 #' @param input.seq An object of class \code{mappoly.sequence}
 #' @param twopt An object of class \code{poly.est.two.pts.pairwise}
@@ -244,7 +279,7 @@ check_pairwise <- function(input.seq, twopt) {
     return(0)
 }
 
-#' Get the recombination fraction for a sewquence of markers given an
+#' Get the recombination fraction for a sequence of markers given an
 #' object of class \code{poly.est.two.pts.pairwise} and a list
 #' containing the linkage phase configuration. This list can be found
 #' in any object of class \code{two.pts.linkage.phases}, in
@@ -278,25 +313,39 @@ get_rf_from_list <- function(twopt, ph.list) {
 
 #' List of linkage phases
 #'
-#' Retunrs a list of possible linkage phase configurations using
-#' mappoly.rf.matrix as a eliminations criteria
+#' Returns a list of possible linkage phase configurations using
+#' the two-point information contained in the object \code{poly.est.two.pts.pairwise}
+#' as elimination criteria
 #'
-#' @param input.seq an object of class \code{mappoly.sequence}.
-#' @param thres the threshold used to determine if the linkage phases
+#' @param input.seq an object of class \code{mappoly.sequence}
+#' 
+#' @param thres the LOD threshold used to determine whether linkage phases
 #'     compared via two-point analysis should be considered
+#'     
 #' @param twopt an object of class \code{poly.est.two.pts.pairwise}
 #'     containing the two-point information
-#' @param mrk.to.add marker to be added at the end of the linkage
-#'     group. If \code{NULL} add all markers contained in
-#'     \code{mrk.seq}. Mostly for internal usage.
-#' @param prev.info an object of class \code{two.pts.linkage.phases}
+#'     
+#' @param mrk.to.add marker to be added to the end of the linkage
+#'     group. If \code{NULL} (default) adds all markers contained in
+#'     \code{input.seq}. Mostly for internal usage
+#'     
+#' @param prev.info (optional) an object of class \code{two.pts.linkage.phases}
 #'     containing the previous info about linkage phase configuration.
-#'     Mostly for internal usage.
-#' @param x an object of one of the classes \code{two.pts.linkage.phases}
+#'     Mostly for internal usage
+#'     
+#' @param x an object of the class \code{two.pts.linkage.phases}
+#' 
 #' @param ... currently ignored
+#' 
 #' @return An object of class \code{two.pts.linkage.phases} which
-#'     contains a list of all possible linkage phase configuration in
-#'     matrix form for both parents, P and Q.
+#'     contains the following structure: 
+#'     \item{config.to.test}{a matrix with all possible linkage phase configurations
+#'      for both parents, P and Q} 
+#'     \item{rec.frac}{a matrix with all recombination fractions}
+#'     \item{m}{the ploidy level}
+#'     \item{seq.num}{the sequence of markers}
+#'     \item{thres}{the LOD threshold}
+#'     \item{data.name}{the dataset name}
 #'
 #' @examples
 #'   \dontrun{
@@ -329,6 +378,7 @@ get_rf_from_list <- function(twopt, ph.list) {
 #'     l5.seq.1.0
 #'     plot(l5.seq.1.0)
 #'     }
+#'     
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references

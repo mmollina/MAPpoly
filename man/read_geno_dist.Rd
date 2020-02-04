@@ -8,20 +8,20 @@ read_geno_dist(file.in, prob.thres = 0.95,
   filter.non.conforming = TRUE)
 }
 \arguments{
-\item{file.in}{the name of the input file which contains the data to
-be read.}
+\item{file.in}{a character string with the name of (or full path to) the input file which contains the data to
+be read}
 
 \item{prob.thres}{probability threshold to associate a marker call to a 
-dosage. Markers with maximum genotype probability smaller than 'prob.thres' 
-are considered as missing data for the dosage calling purposes}
+dosage. Markers with maximum genotype probability smaller than \code{prob.thres} 
+are considered as missing data for the dosage calling purposes (default = 0.95)}
 
 \item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
-expected genotypes under randam chromosome pairing and no double reduction}
+expected genotypes under random chromosome pairing and no double reduction}
 
-\item{...}{curentlly ignored}
+\item{...}{currently ignored}
 }
 \value{
-An object of class \code{mappoly.data} which contains a
+an object of class \code{mappoly.data} which contains a
     list with the following components:
     \item{m}{ploidy level}
     \item{n.ind}{number individuals}
@@ -34,7 +34,7 @@ An object of class \code{mappoly.data} which contains a
       parent Q for all \code{n.mrk} markers}
     \item{sequence}{a vector indicating which sequence each marker
       belongs. Zero indicates that the marker was not assigned to any
-      sequence.}
+      sequence}
     \item{sequence.pos}{physical position of the markers into the
       sequence}
     \item{prob.thres}{probability threshold to associate a marker call to a 
@@ -42,22 +42,24 @@ An object of class \code{mappoly.data} which contains a
     were considered as missing data in the 'geno.dose' matrix}
     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
       for each individual (columns). Missing data are represented by 
-      \code{ploidy_level + 1}.}
+      \code{ploidy_level + 1}}
     \item{geno}{a data.frame 
       containing the probability distribution for each combination of
       marker and offspring. The first two columns represent the marker
       and the offspring, respectively. The remaining elements represent
       the probability associated to each one of the possible
-      dosages. Missing data are converted from \code{NA} to the expected
+      dosages. Missing data are converted from NA to the expected
       segregation ratio using function \code{\link[mappoly]{segreg_poly}}}
     \item{n.phen}{number of phenotypic traits}
     \item{phen}{a matrix containing the phenotypic data. The rows
                 corespond to the trais and the columns correspond
                 to the individuals}
+    \item{chisq.pval}{a vector containing p-values related to the chi-squared 
+    test of mendelian segregation performed for all markers}
 }
 \description{
-Reads an external data file. The format of the file is described in \code{details}
-section. This fucntion creates an object of class \code{mappoly.data}
+Reads an external data file. The format of the file is described in the \code{Details}
+section. This function creates an object of class \code{mappoly.data}
 }
 \details{
 The first line of the input file contains the string \code{ploidy} followed by the ploidy level of the parents.
@@ -80,7 +82,7 @@ followed by the phenotypic values. The number of lines should be the same number
 \code{NA} represents missing values. The line number 12 + \code{nphen} is skipped. Finally, the last element is a table 
 containing the probability distribution for each combination of marker and offspring. The first two columns 
 represent the marker and the offspring, respectively. The remaining elements represent the probability 
-associated with each one of the possible dosages. \code{NA} represents missing data.'
+associated with each one of the possible dosages. \code{NA} represents missing data.
 }
 \examples{
 \dontrun{
@@ -94,6 +96,7 @@ associated with each one of the possible dosages. \code{NA} represents missing d
     identical(tetra.solcap.geno.dist, dat)
     
 }
+
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

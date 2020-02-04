@@ -1,49 +1,44 @@
 #' Pairwise two-point analysis
 #'
-#' Performs the two-point pairwise analysis.
+#' Performs the two-point pairwise analysis, accounting for the recombination fractions
+#' between all pairwise markers given one or more linkage phase configurations.
 #'
-#' @param input.seq an object of class \code{mappoly.sequence}.
+#' @param input.seq an object of class \code{mappoly.sequence}
 #'
 #' @param count.cache an object of class \code{cache.info} containing
 #'     pre-computed genotype frequencies, obtained with
-#'     \code{\link[mappoly]{cache_counts_twopt}}.
+#'     \code{\link[mappoly]{cache_counts_twopt}}
 #'
-#' @param n.clusters Number of parallel processes to spawn
+#' @param n.clusters Number of parallel processes (cores) to spawn (default = 1)
 #'
-#' @param tol the desired accuracy. See \code{optimize()} for details.
+#' @param tol the desired accuracy. See \code{optimize()} for details
 #'
-#' @param mrk.pairs a matrix of dimensions $2 x n$, containing $n$
-#'    pairs of markers to be analyzed. If \code{NULL}, all pairs are
+#' @param mrk.pairs a matrix of dimensions 2*N, containing N
+#'    pairs of markers to be analyzed. If \code{NULL} (default), all pairs are
 #'    considered
 #'
 #' @param batch.size The number of pairs that shold be analyzed in parallel.
-#'    If \code{NULL}, all pairs are analyized.
+#'    If \code{NULL} (default), all pairs are analyized
 #'
-#' @param verbose If \code{TRUE}, current progress is shown; if
-#'     \code{FALSE}, no output is produced.
+#' @param verbose If \code{TRUE} (default), current progress is shown; if
+#'     \code{FALSE}, no output is produced
 #'
-#' @param x an object of one of the classes \code{poly.est.two.pts.pairwise}
-#'
-#' @param first.mrk index indicating the position of the first marker
-#'
-#' @param second.mrk index indicating the position of the second marker
-#'
-#' @param ... currently ignored
-#'
-#' @return An object of class \code{poly.est.two.pts.dosage.pairwise} which
+#' @return An object of class \code{poly.est.two.pts.pairwise} which
 #'     is a list  containing the following components:
 #'     \item{data.name}{name of the object of class
-#'         \code{mappoly.data} with the raw data.}
+#'         \code{mappoly.data} with the raw data}
 #'     \item{n.mrk}{number of markers in the sequence}
 #'     \item{seq.num}{a \code{vector} containing the (ordered) indices
-#'         of markers inthe sequence, according to the input file.}
-#'     \item{pairwise}{which is a list of size}
-#'     \code{choose(length(input.seq$seq.num), 2)} containing a matrix
+#'         of markers inthe sequence, according to the input file}
+#'     \item{pairwise}{a list of size
+#'     \code{choose(length(input.seq$seq.num), 2)}, each of them containing: a matrix
 #'     with the linkage phase configuration i.e. the number of
-#'     homologous that share alelels, the LOD Score relative to eacho
-#'     oneof these configurations, the recombination fraction
-#'     estimated for each confoguration and their associated LOD
-#'     score.
+#'     homologous that share alelels; the LOD Score relative to each
+#'     one of these configurations; the recombination fraction
+#'     estimated for each configuration; and their associated LOD
+#'     score}
+#'     \code{chisq.pval.thres}{threshold used to perform the segregation tests}
+#'     \code{chisq.pval}{p-values associated with the performed segregation tests}
 #'
 #' @examples
 #'   \dontrun{
@@ -59,6 +54,7 @@
 #'    all.pairs
 #'    plot(all.pairs, 90, 91)
 #'    }
+#'    
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
@@ -90,6 +86,15 @@ est_pairwise_rf <- function(input.seq, count.cache,
     mrk.pairs <- combn(sort(input.seq$seq.num), 2) - 1
     # mrk.pairs<-mrk.pairs[,order(mrk.pairs[1,],mrk.pairs[2,])]
   }
+  # Memory warning
+  ANSWER = "flag"
+  if (length(input.seq$seq.num) > 2000 && interactive()){
+    while (substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !=""){
+      ANSWER <- readline("The sequence presents more than 2000 markers, which requires high performance computing resources.\nDo you want to proceed? (Y/n): ")
+      if (substr(ANSWER, 1, 1) == "n" || substr(ANSWER, 1, 1) == "no") stop("You decided to stop 'est_pairwise_rf'. Please make sure you have a high performance computing system.")
+    }
+  } else if (length(input.seq$seq.num) > 2000) warning("The sequence presents more than 2000 markers, which requires high performance computing resources. Please make sure you meet this requirement, or else you may experience crashs.")
+  
   if (is.null(batch.size)) {
     ## splitting pairs in chunks
     if (length(input.seq$seq.num) < 10)

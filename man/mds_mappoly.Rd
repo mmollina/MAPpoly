@@ -22,26 +22,26 @@ mappoly.plot.pcmap3d(x, D1lim = NULL, D2lim = NULL,
   displaytext = FALSE, ...)
 }
 \arguments{
-\item{input.mat}{an object of class \code{mappoly.input.matrix}.}
+\item{input.mat}{an object of class \code{mappoly.input.matrix}}
 
 \item{p}{integer. The smoothing parameter for the principal curve.
-If \code{NULL} this will be done using leave one out cross validation.}
+If \code{NULL} (default) this will be done using the leave-one-out cross validation}
 
 \item{n}{vector of integers or strings containing loci to be omitted from the analysis}
 
-\item{ndim}{number of dimensions to be considered in the multidimensional scaling procedure}
+\item{ndim}{number of dimensions to be considered in the multidimensional scaling procedure (default = 2)}
 
 \item{weight.exponent}{the exponent that should be used in the LOD score values to weight the
-MDS procedure.}
+MDS procedure (default = 2)}
 
-\item{verbose}{if \code{TRUE},  display information about the analysis}
+\item{verbose}{if \code{TRUE} (default), display information about the analysis}
 
 \item{x}{an object of class \code{mappoly.mds}}
 
 \item{...}{currently ignored}
 
 \item{displaytext}{logical. If \code{TRUE}, display the name of the markers in the
-diagnostic plot.}
+diagnostic plot}
 }
 \value{
 A list containing:
@@ -62,8 +62,8 @@ with each number on the MDS configuration plots}
 }
 \description{
 Estimates loci position using Multidimensional Scaling proposed by
-Preedy and Hackett (2016). The code is an adaptation from
-TetraploidSNPMap code, available under GNU GENERAL PUBLIC LICENSE,
+\cite{Preedy and Hackett (2016)}. The code is an adaptation from
+the package \code{TetraploidSNPMap}, available under GNU GENERAL PUBLIC LICENSE,
 Version 3, at
 \url{https://github.com/BiomathematicsAndStatisticsScotland/TetraploidSNPMap}
 }

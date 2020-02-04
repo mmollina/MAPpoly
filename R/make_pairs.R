@@ -1,16 +1,17 @@
 #'  Subset pairwise recombination fractions
 #'
-#'  Get a subset of an object of class \code{'poly.est.two.pts.pairwise'}, i.e.,
-#'  recombination fraction and LOD score statistics for all possible linkage
-#'  phase combinations based in a sequence of markers.
+#'  Get a subset of an object of class \code{poly.est.two.pts.pairwise} (i.e.
+#'  recombination fraction) and LOD score statistics for all possible linkage
+#'  phase combinations based on a sequence of markers.
 #'
-#' @param input.twopt an object of class \code{poly.est.two.pts.pairwise}.
+#' @param input.twopt an object of class \code{poly.est.two.pts.pairwise}
 #'
-#' @param input.seq an object of class \code{mappoly.sequence}.
-#'     It must be contained in 'input.twopt'
+#' @param input.seq an object of class \code{mappoly.sequence}, with 
+#' a sequence of markers contained in \code{input.twopt}
 #'
-#' @return a subset of \code{'input.twopt'}. This object is also
-#'     of class \code{poly.est.two.pts.pairwise}.
+#' @return an object of class \code{poly.est.two.pts.pairwise} which is a
+#'  subset of \code{input.twopt}. 
+#'  See \code{\link[mappoly]{est_pairwise_rf}} for details
 #'
 #' @examples
 #'  \dontrun{
@@ -53,6 +54,7 @@
 #'     plot(m3, main.text = "LG3")
 #'     par(op)
 #'    }
+#'    
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references

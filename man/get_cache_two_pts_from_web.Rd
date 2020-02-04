@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_counts_from_web.R
 \name{get_cache_two_pts_from_web}
 \alias{get_cache_two_pts_from_web}
-\title{Access a remote server to get Counts for recombinat classes}
+\title{Access a remote server to get Counts for recombinant classes}
 \usage{
 get_cache_two_pts_from_web(m, url.address = NULL, joint.prob = TRUE)
 }
@@ -10,6 +10,6 @@ get_cache_two_pts_from_web(m, url.address = NULL, joint.prob = TRUE)
 \item{void}{interfunction to be documented}
 }
 \description{
-Access a remote server to get Counts for recombinat classes
+Access a remote server to get Counts for recombinant classes
 }
 \keyword{internal}

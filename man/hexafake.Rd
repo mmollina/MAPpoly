@@ -18,12 +18,12 @@
       parent Q for all \code{n.mrk} markers}
     \item{sequence}{a vector indicating the sequence each marker
       belongs. Zero indicates that the marker was not assigned to any
-      sequence.}
+      sequence}
     \item{sequence.pos}{Physical position of the markers into the
       sequence}
     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
       for each individual (columns). Missing data are represented by 
-      \code{ploidy_level + 1 = 7}.}
+      \code{ploidy_level + 1 = 7}}
     \item{n.phen}{There are no phenotypes in this simulation}
     \item{phen}{There are no phenotypes in this simulation}
     \item{chisq.pval}{vector containing p-values for all markers associated to 

@@ -10,24 +10,27 @@ calc_genoprob_dist(input.map, dat.dist, phase.config = "best",
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}
 
-\item{dat.dist}{data set contaning the probability distribution of the 
-genotypes.}
+\item{dat.dist}{an object of class \code{mappoly.data} containing the
+probability distribution of the genotypes}
 
 \item{phase.config}{which phase configuration should be used. "best" (default) 
-will choose the maximum likelihood configuration.}
+will choose the phase configuration associated with the
+maximum likelihood}
 
-\item{verbose}{if \code{TRUE}, current progress is shown; if
-\code{FALSE}, no output is produced.}
+\item{verbose}{if \code{TRUE} (default), the current progress is shown; if
+\code{FALSE}, no output is produced}
 
 \item{...}{currently ignored}
 }
 \value{
-An object of class 'mappoly.genoprob'
+An object of class 'mappoly.genoprob' which has two elements: a tridimensional
+array containing the probabilities of all possible genotypes for each individual
+in each marker position; and the marker sequence with it's recombination frequencies
 }
 \description{
-Conditional probabilities are calculeted for each marker.
-In this version, the probabilities are not calculated bewtween
-markers.
+Conditional genotype probabilities are calculated for each marker
+position and each individual given a map. In this version,
+the probabilities are not calculated between markers.
 }
 \examples{
  \dontrun{
@@ -56,6 +59,7 @@ markers.
    probs                          
    image(t(probs$probs[,,1]), col = rev(heat.colors(100)))
  }
+
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

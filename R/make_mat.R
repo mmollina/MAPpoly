@@ -1,16 +1,18 @@
 #'  Subset recombination fraction matrices
 #'
-#'  Get a subset of an object of class \code{'mappoly.rf.matrix'}, i.e.,
+#'  Get a subset of an object of class \code{mappoly.rf.matrix}, i.e.
 #'  recombination fraction and LOD score matrices based in a
 #'  sequence of markers.
 #'
-#' @param input.mat an object of class \code{mappoly.rf.matrix}.
+#' @param input.mat an object of class \code{mappoly.rf.matrix}
 #'
-#' @param input.seq an object of class \code{mappoly.sequence}.
-#'     It must be contained in 'input.mat'
+#' @param input.seq an object of class \code{mappoly.sequence}, with 
+#' a sequence of markers contained in \code{input.mat}
 #'
-#' @return a subset of \code{'input.mat'}. This object is also
-#'     of class \code{mappoly.rf.matrix}.
+#' @return an object of class \code{mappoly.rf.matrix},
+#' which is a subset of \code{'input.mat'}. 
+#' See \code{\link[mappoly]{rf_list_to_matrix}} for details
+#'     
 #' @examples
 #'  \dontrun{
 #'     data(hexafake)
@@ -29,6 +31,7 @@
 #'     mat.sub<-make_mat_mappoly(mat, id)
 #'     plot(mat.sub)
 #'    }
+#'    
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
@@ -39,7 +42,7 @@
 #'     \url{https://doi.org/10.1534/g3.119.400378} 
 #'
 #' @export
-
+#' 
 make_mat_mappoly<-function(input.mat, input.seq){
   ## checking for correct object
   input_classes1 <- c("mappoly.sequence")

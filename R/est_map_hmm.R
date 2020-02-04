@@ -1,75 +1,83 @@
 #' Multipoint analysis using Hidden Markov Models in autopolyploids
 #'
 #' Performs the multipoint analysis proposed by \cite{Mollinari and
-  #'  Garcia  (2018)} in a sequence of markers
+#' Garcia (2019)} in a sequence of markers
 #'
 #'  This function first enumerates a set of linkage phase configurations
 #'  based on two-point recombination fraction information using a threshold
-#'  provided by the user (argument \code{'thresh'}). After that, for each
+#'  provided by the user (argument \code{thresh}). After that, for each
 #'  configuration, it reconstructs the genetic map using the
-#'  HMM approach described in (Mollinari and Garcia, 2018). As result, it returns 
+#'  HMM approach described in Mollinari and Garcia (2019). As result, it returns 
 #'  the multipoint likelihood for each configuration in form of LOD Score comparing 
-#'  each configuration to the most likely one. It is recommended to use a small number of markers (e.g. 50 markers
-#'  for hexaploids) since the possible linkage phase combinations bounded only
-#'  by the two-point information can be huge. Also, it can be quite sensible
-#'  to small changes in \code{'thresh'}. For higher number of markers, please see  
-#'  \code{\link[mappoly]{est_rf_hmm_sequential}}.
+#'  each configuration to the most likely one. It is recommended to use a small number 
+#'  of markers (e.g. 50 markers for hexaploids) since the possible linkage 
+#'  phase combinations bounded only by the two-point information can be huge. 
+#'  Also, it can be quite sensible to small changes in \code{'thresh'}. 
+#'  For higher number of markers, please see \code{\link[mappoly]{est_rf_hmm_sequential}}.
 #
-#' @param input.seq an object of class \code{mappoly.sequence}.
+#' @param input.seq an object of class \code{mappoly.sequence}
 #'
 #' @param input.ph an object of class \code{two.pts.linkage.phases}. 
-#' If it is not available (\code{NULL}), it will be computed.
+#' If not available (default = NULL), it will be computed
 #'
-#' @param thres the threshold used to determine if the linkage phases
+#' @param thres the LOD threshold used to determine if the linkage phases
 #'     compared via two-point analysis should be considered. Smaller 
 #'     values will result in smaller number of linkage phase 
-#'     configurations.
+#'     configurations
 #'
 #' @param twopt an object of class \code{poly.est.two.pts.pairwise}
-#'     containing two-point information.
+#'     containing two-point information
 #'
 #' @param verbose if \code{TRUE}, current progress is shown; if
-#'     \code{FALSE}, no output is produced.
+#'     \code{FALSE} (default), no output is produced
 #'
-#' @param tol the desired accuracy.
+#' @param tol the desired accuracy (default = 1e-04)
 #'
 #' @param est.given.0.rf logical. If TRUE returns a map forcing all
-#'     recombination fractions equals to 0 (1e-5, for internal use only)
+#' recombination fractions equals to 0 (1e-5, for internal use only. Default = FALSE)
 #'
 #' @param reestimate.single.ph.configuration logical. If \code{TRUE}
 #' returns a map without reestimating the map parameters for cases
 #' where there is only one possible linkage phase configuration. 
-#' This argument is intended to be used in a sequential map contruction.
+#' This argument is intended to be used in a sequential map contruction
 #' 
 #' @param high.prec logical. If \code{TRUE} (default) uses high precision 
-#' long double numbers in the HMM procedure. 
+#' long double numbers in the HMM procedure
 #' 
-#' @param x an object of one of the classes \code{mappoly.map}
+#' @param x an object of the class \code{mappoly.map}
 #' 
 #' @param detailed logical. if TRUE, prints the linkage phase configuration and the marker 
-#' position for all maps. if FALSE prints a map summary. 
+#' position for all maps. if FALSE (default), prints a map summary 
 #'
-#' @param phase logical. If \code{TRUE} (default) plots the phase configuration for both parents 
+#' @param phase logical. If \code{TRUE} (default) plots the phase configuration
+#'  for both parents 
 #'
-#' @param col.cte.P a single value or a vector with size equal to the number of 
-#' markers in the map indicating the color of the allelic variants for parent P. 
-#' The default is \code{red}
+#' @param col.cte.P a single character string or a vector of strings with size 
+#' equal to the number of markers in the map indicating the color of the allelic
+#'  variants for parent P (default = 'red')
 #' 
-#' @param col.cte.Q a single value or a vector with size equal to the number of 
-#' markers in the map indicating the color of the allelic variants for parent Q. 
-#' The default is \code{blue}
+#' @param col.cte.Q a single character string or a vector of strings with size 
+#' equal to the number of markers in the map indicating the color of the allelic
+#'  variants for parent Q (default = 'blue')
 #' 
-#' @param mrk.names if TRUE, marker names are displayed.
+#' @param mrk.names if TRUE, marker names are displayed (default = FALSE)
 #' 
-#' @param cex The magnification to be used for marker names.
+#' @param cex The magnification to be used for marker names
 #' 
 #' @param config should be \code{'best'} or the position of the
 #'     configuration to be plotted. If \code{'best'}, plot the configuration
-#'     with the highest likelihood.
+#'     with the highest likelihood
 #'
 #' @param ... currently ignored
 #'
-#' @return An object of class 'mappoly.map'
+#' @return An object of class \code{mappoly.map} with the following structure:
+#' \item{m}{the ploidy level}
+#' \item{mrk.names}{the names of markers present in the sequence}
+#' \item{data.name}{name of the dataset of class \code{mappoly.data}}
+#' \item{ph.thres}{the LOD threshold used to define the linkage phase configurations to test}
+#' \item{maps}{a list containing the sequence of markers, their recombination fractions,
+#' the linkage phase configuration for all markers in both parents P and Q and the 
+#' map's joint likelihood}
 #'
 #' @examples
 #'  \dontrun{
@@ -232,71 +240,78 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 }
 
 
-#' Multipoint analysis using Hidden Markov Models - Sequential phase elimination
+#' Multipoint analysis using Hidden Markov Models: Sequential phase elimination
 #'
 #' Performs the multipoint analysis proposed by \cite{Mollinari and
-  #'  Garcia (2018)} in a sequence of markers removing unlikely phases
-#' using sequential multipoint information
+#'  Garcia (2019)} in a sequence of markers removing unlikely phases
+#' using sequential multipoint information.
 #'
 #' This function sequentially includes markers into a map given an
 #' ordered sequence. It uses two-point information to eliminate
 #' unlikely linkage phase configurations given \code{thres.twopt}. The
 #' search is made within a window of size \code{extend.tail}. For the
-#' remaining configurations the HMM-based likelihood is computed and
+#' remaining configurations, the HMM-based likelihood is computed and
 #' the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
 #'
-#' @param input.seq an object of class \code{mappoly.sequence}.
+#' @param input.seq an object of class \code{mappoly.sequence}
 #' 
 #' @param twopt an object of class \code{poly.est.two.pts.pairwise}
 #'     containing the two-point information
 #'  
-#' @param start.set number of markers to start the phasing procedure.      
+#' @param start.set number of markers to start the phasing procedure (default = 4)      
 #'     
-#' @param thres.twopt the threshold used to determine if the linkage
+#' @param thres.twopt the LOD threshold used to determine if the linkage
 #'     phases compared via two-point analysis should be considered 
-#'     for the search space reduction. (A.K.A. \eqn{\eta} in 
-#'     \cite{Mollinari and Garcia (2018)}). 
+#'     for the search space reduction (A.K.A. \eqn{\eta} in 
+#'     \cite{Mollinari and Garcia (2019)}, default = 5)
 #'     
 #' @param thres.hmm the threshold used to determine if the linkage
 #'     phases compared via hmm analysis should be evaluated in the 
-#'     next round of marker inclusion.   
-#'
-#' @param info.tail if \code{TRUE} uses the complete informative tail
-#'     of the chain (i.e. number of markers where \eqn{ploidy x 2} 
-#'     homologous can be distinguished) to calculate the map likelihood 
+#'     next round of marker inclusion (default = 50)
 #'     
-#'@param reestimate.single.ph.configuration logical. If \code{FALSE}
-#'     returns a map without reestimating the map parameters in cases
-#'     where there are only one possible linkage phase configuration.
-#' 
-#' @param extend.tail the length of the tail of the chain that should
+#' @param extend.tail the length of the chain's tail that should
 #'     be used to calculate the likelihood of the map. If \code{NULL} (default), 
-#'     the function uses all markers positioned. Even if function 
-#'     \code{info.tail = TRUE}, it uses at least \code{extend.tail}
-#'     as the tail length.
+#'     the function uses all markers positioned. Even if \code{info.tail = TRUE}, 
+#'     it uses at least \code{extend.tail} as the tail length
 #'     
 #' @param phase.number.limit the maximum number of linkage phases of the sub-maps defined 
 #'     by arguments \code{info.tail} and \code{extend.tail}. If the
-#'     size exceeds the limit, the marker will not be inserted. If
-#'     \code{NULL}, the it will insert all markers.
+#'     size exceeds this limit, the marker will not be inserted. If
+#'     \code{NULL}, then it will insert all markers (default = Inf)
 #'     
 #' @param sub.map.size.diff.limit the maximum accepted length
 #'     difference between the current and the previous sub-map defined 
 #'     by arguments \code{info.tail} and \code{extend.tail}. If the
-#'     size exceeds the limit, the marker will not be inserted. If
-#'     \code{NULL}, the it will insert all markers.    
+#'     size exceeds this limit, the marker will not be inserted. If
+#'     \code{NULL}, then it will insert all markers (default = Inf)
+#'     
+#' @param info.tail if \code{TRUE} (default), it uses the complete informative tail
+#'     of the chain (i.e. number of markers where all homologous 
+#'     (\eqn{ploidy x 2}) can be distinguished) to calculate the map likelihood 
+#'     
+#'@param reestimate.single.ph.configuration logical. If \code{FALSE} (default)
+#'     returns a map without reestimating the map parameters in cases
+#'     where there are only one possible linkage phase configuration
 #'      
-#' @param tol the desired accuracy during the sequential phase. 
+#' @param tol the desired accuracy during the sequential phase (default = 10e-02)
 #'     
-#' @param tol.final the desired accuracy for the final map.
+#' @param tol.final the desired accuracy for the final map (default = 10e-04)
 #'     
-#' @param verbose If \code{TRUE}, current progress is shown; if
-#'     \code{FALSE}, no output is produced.
+#' @param verbose If \code{TRUE} (default), current progress is shown; if
+#'     \code{FALSE}, no output is produced
 #'     
 #' @param high.prec logical. If \code{TRUE} uses high precision 
-#' long double numbers in the HMM procedure implemented in C++. 
+#' (long double) numbers in the HMM procedure implemented in C++,
+#' which can take a long time to perform (default = FALSE)
 #' 
-#' @return An object of class 'mappoly.map'
+#' @return An object of class \code{mappoly.map} with the following structure:
+#' \item{m}{the ploidy level}
+#' \item{mrk.names}{the names of markers present in the sequence}
+#' \item{data.name}{name of the dataset of class \code{mappoly.data}}
+#' \item{ph.thres}{the LOD threshold used to define the linkage phase configurations to test}
+#' \item{maps}{a list containing the sequence of markers, their recombination fractions,
+#' the linkage phase configuration for all markers in both parents P and Q and the 
+#' map's joint likelihood}
 #'
 #' @examples
 #'  \dontrun{

@@ -18,22 +18,21 @@ rf_list_to_matrix(input.twopt, thresh.LOD.ph = 0, thresh.LOD.rf = 0,
 \arguments{
 \item{input.twopt}{an object of class \code{poly.est.two.pts.pairwise}}
 
-\item{thresh.LOD.ph}{LOD score threshold for linkage phase
-configuration.}
+\item{thresh.LOD.ph}{LOD score threshold for linkage phase configurations (default = 0)}
 
-\item{thresh.LOD.rf}{LOD score threshold for recombination phase}
+\item{thresh.LOD.rf}{LOD score threshold for recombination fractions (default = 0)}
 
-\item{thresh.rf}{recombination fraction threshold}
+\item{thresh.rf}{the threshold used for recombination fraction filtering (default = 0.5)}
 
-\item{n.clusters}{number of parallel processes to spawn}
+\item{n.clusters}{number of parallel processes (i.e. cores) to spawn (default = 1)}
 
-\item{shared.alleles}{if \code{TRUE}, computes two matrices indicating 
-the number of homologes that share alleles}
+\item{shared.alleles}{if \code{TRUE}, computes two matrices (for both parents) indicating 
+the number of homologues that share alleles (default = FALSE)}
 
-\item{verbose}{if \code{TRUE}, current progress is shown; if
-\code{FALSE}, no output is produced.}
+\item{verbose}{if \code{TRUE} (default), current progress is shown; if
+\code{FALSE}, no output is produced}
 
-\item{x}{an object of class mappoly.rf.matrix}
+\item{x}{an object of class \code{mappoly.rf.matrix}}
 
 \item{...}{currently ignored}
 
@@ -41,13 +40,13 @@ the number of homologes that share alleles}
 following: \code{"rf"}, for recombination fraction or \code{"lod"}
 for LOD Score}
 
-\item{ord}{the order in which the markes should be ploted}
+\item{ord}{the order in which the markes should be ploted (default = NULL)}
 
-\item{rem}{which markers should be removed from the heatmap}
+\item{rem}{which markers should be removed from the heatmap (default = NULL)}
 
-\item{main.text}{title of the heatmap}
+\item{main.text}{a character string as the title of the heatmap (default = NULL)}
 
-\item{index}{should the numbers corresponding to the markers be printed in the diagonal of the heatmap?}
+\item{index}{logical. should the numbers corresponding to the markers be printed in the diagonal of the heatmap? (default = TRUE)}
 }
 \value{
 A list containing two matrices. The first one contains the
@@ -60,10 +59,10 @@ of class \code{poly.est.two.pts.pairwise} into a recombination
 fraction matrix
 }
 \details{
-\code{thresh_LOD_ph} should be set in order to only selects
-    recombination fractions which have LOD scores associated to the
-    linkage phase configuration bigger than \code{thresh_LOD_ph}
-    for the second most likely linkage phase configuration.
+\code{thresh_LOD_ph} should be set in order to only select
+    recombination fractions that have LOD scores associated to the
+    linkage phase configuration higher than \code{thresh_LOD_ph}
+    when compared to the second most likely linkage phase configuration.
 }
 \examples{
   \dontrun{
@@ -92,6 +91,7 @@ fraction matrix
     plot(mat.filt)
     plot(mat.filt, type = "lod")
  }
+ 
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

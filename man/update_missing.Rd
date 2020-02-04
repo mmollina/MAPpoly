@@ -17,6 +17,15 @@ are considered as missing data for the dosage calling purposes}
 Updates the missing data in the dosage matrix of an object of class 
 \code{mappoly.data} given a new probability threshold
 }
+\examples{
+\dontrun{
+data = data(hexafake.dist.geno)
+data.updated = update_missing(data, prob.thres = 0.5)
+print(data)
+print(data.updated)
+}
+    
+}
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }

@@ -15,52 +15,47 @@ est_pairwise_rf(input.seq, count.cache, n.clusters = 1,
 \method{plot}{poly.est.two.pts.pairwise}(x, first.mrk, second.mrk, ...)
 }
 \arguments{
-\item{input.seq}{an object of class \code{mappoly.sequence}.}
+\item{input.seq}{an object of class \code{mappoly.sequence}}
 
 \item{count.cache}{an object of class \code{cache.info} containing
 pre-computed genotype frequencies, obtained with
-\code{\link[mappoly]{cache_counts_twopt}}.}
+\code{\link[mappoly]{cache_counts_twopt}}}
 
-\item{n.clusters}{Number of parallel processes to spawn}
+\item{n.clusters}{Number of parallel processes (cores) to spawn (default = 1)}
 
-\item{tol}{the desired accuracy. See \code{optimize()} for details.}
+\item{tol}{the desired accuracy. See \code{optimize()} for details}
 
-\item{mrk.pairs}{a matrix of dimensions $2 x n$, containing $n$
-pairs of markers to be analyzed. If \code{NULL}, all pairs are
+\item{mrk.pairs}{a matrix of dimensions 2*N, containing N
+pairs of markers to be analyzed. If \code{NULL} (default), all pairs are
 considered}
 
 \item{batch.size}{The number of pairs that shold be analyzed in parallel.
-If \code{NULL}, all pairs are analyized.}
+If \code{NULL} (default), all pairs are analyized}
 
-\item{verbose}{If \code{TRUE}, current progress is shown; if
-\code{FALSE}, no output is produced.}
-
-\item{x}{an object of one of the classes \code{poly.est.two.pts.pairwise}}
-
-\item{...}{currently ignored}
-
-\item{first.mrk}{index indicating the position of the first marker}
-
-\item{second.mrk}{index indicating the position of the second marker}
+\item{verbose}{If \code{TRUE} (default), current progress is shown; if
+\code{FALSE}, no output is produced}
 }
 \value{
-An object of class \code{poly.est.two.pts.dosage.pairwise} which
+An object of class \code{poly.est.two.pts.pairwise} which
     is a list  containing the following components:
     \item{data.name}{name of the object of class
-        \code{mappoly.data} with the raw data.}
+        \code{mappoly.data} with the raw data}
     \item{n.mrk}{number of markers in the sequence}
     \item{seq.num}{a \code{vector} containing the (ordered) indices
-        of markers inthe sequence, according to the input file.}
-    \item{pairwise}{which is a list of size}
-    \code{choose(length(input.seq$seq.num), 2)} containing a matrix
+        of markers inthe sequence, according to the input file}
+    \item{pairwise}{a list of size
+    \code{choose(length(input.seq$seq.num), 2)}, each of them containing: a matrix
     with the linkage phase configuration i.e. the number of
-    homologous that share alelels, the LOD Score relative to eacho
-    oneof these configurations, the recombination fraction
-    estimated for each confoguration and their associated LOD
-    score.
+    homologous that share alelels; the LOD Score relative to each
+    one of these configurations; the recombination fraction
+    estimated for each configuration; and their associated LOD
+    score}
+    \code{chisq.pval.thres}{threshold used to perform the segregation tests}
+    \code{chisq.pval}{p-values associated with the performed segregation tests}
 }
 \description{
-Performs the two-point pairwise analysis.
+Performs the two-point pairwise analysis, accounting for the recombination fractions
+between all pairwise markers given one or more linkage phase configurations.
 }
 \examples{
   \dontrun{
@@ -76,6 +71,7 @@ Performs the two-point pairwise analysis.
    all.pairs
    plot(all.pairs, 90, 91)
    }
+   
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

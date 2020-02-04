@@ -1,4 +1,4 @@
-#' Counts for recombinat classes in a polyploid parent.
+#' Counts for recombinant classes in a polyploid parent.
 #'
 #' The conditional probability of a genotype at locus \eqn{k+1} given the genotype at locus
 #' \eqn{k} is ...
@@ -23,7 +23,7 @@ get_counts_one_parent <- function(ploidy, gen.par.mk1, gen.par.mk2, gen.prog.mk1
     return(res[[6]])
 }
 
-#' Counts for recombinat classes
+#' Counts for recombinant classes
 #'
 #' @param void interfunction to be documented
 #' @keywords internal
@@ -77,7 +77,7 @@ get_counts_two_parents <- function(x = c(2, 2), ploidy, p.k, p.k1, q.k, q.k1, ve
     res
 }
 
-#' Counts for recombinat classes
+#' Counts for recombinant classes
 #'
 #' @param void interfunction to be documented
 #' @keywords internal
@@ -129,13 +129,13 @@ get_counts <- function(m, P.k = NULL, P.k1 = NULL, Q.k = NULL, Q.k1 = NULL, verb
     return(counts)
 }
 
-#' Counts for recombinat classes
+#' Counts for recombinant classes
 #'
 #' return the counts of each recombinant class (for two loci) in
-#' polyploid cross #the results of this function contains several
+#' polyploid cross. The results of this function contains several
 #' matrices each one corresponding to one possible linkage phase. The
-#' associated names in the matrices indicates #the number of shared
-#' homologous chromosomes. The row names indicates the dosage #in loci
+#' associated names in the matrices indicates the number of shared
+#' homologous chromosomes. The row names indicates the dosage in loci
 #' k and k+1 respectively
 #'
 #' @param void interfunction to be documented

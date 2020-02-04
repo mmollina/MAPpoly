@@ -3,17 +3,16 @@
 #' Computes the polysomic segregation frequency given a ploidy level
 #' and the dosage of the locus in both parents.
 #'
-#' @param m ploidy level
+#' @param m the ploidy level
 #'
-#' @param dP dosage in parent P
+#' @param dP the allelic dosage in parent P
 #'
-#' @param dQ dosage in parent Q
+#' @param dQ the allelic dosage in parent Q
 #'
 #' @return a vector containing the expected segregation frequency for
 #'     all possible genotypic classes.
 #'
 #' @examples
-#'
 #' #auto-octaploid with two and three doses in parents P and Q,
 #' #respectively
 #' (seg<-segreg_poly(m=8, dP=2, dQ=3))

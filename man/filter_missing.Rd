@@ -8,20 +8,21 @@ filter_missing(input.data, type = c("marker", "individual"),
   filter.thres = 0.2, inter = TRUE)
 }
 \arguments{
-\item{input.data}{an object of class \code{"mappoly.data"}}
+\item{input.data}{an object of class \code{mappoly.data}}
 
-\item{type}{one of the following options: \code{marker} (default), 
-filter out markers based on their percentage of missing 
-data; \code{individual}, 
-filter out individuals based on their percentage of missing 
-data;}
+\item{type}{one of the following options: 
+\code{'marker'}{filter out markers based on their percentage of missing data (default)}
+\code{'individual'}{filter out individuals based on their percentage of missing data}
+Please notice that removing individuals with certain amount of data can change some marker parameters
+(such as depth), and can also change the estimated genotypes for other idividuals.
+So be careful when removing individuals.}
 
-\item{filter.thres}{maximum percentage of missing data}
+\item{filter.thres}{maximum percentage of missing data (default = 0.2)}
 
-\item{inter}{if \code{TRUE}, it plots markers or individuals vs. frequency of missing data}
+\item{inter}{if \code{TRUE} (default), it plots markers or individuals vs. frequency of missing data}
 }
 \description{
-Exclude markers or individuals based on their missing data
+Excludes markers or individuals based on their proportion of missing data
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

@@ -7,13 +7,13 @@
 read_geno_csv(file.in, ploidy, filter.non.conforming = TRUE)
 }
 \arguments{
-\item{file.in}{the name of the input file which contains the data to
-be read.}
+\item{file.in}{a character string with the name of (or full path to) the input file which contains the data to
+be read}
 
-\item{ploidy}{ploidy level}
+\item{ploidy}{the ploidy level}
 
 \item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
-expected genotypes under randam chromosome pairing and no double reduction}
+expected genotypes under random chromosome pairing and no double reduction}
 }
 \value{
 An object of class \code{mappoly.data} which contains a
@@ -29,12 +29,12 @@ An object of class \code{mappoly.data} which contains a
       parent Q for all \code{n.mrk} markers}
     \item{sequence}{a vector indicating which sequence each marker
       belongs. Zero indicates that the marker was not assigned to any
-      sequence.}
+      sequence}
     \item{sequence.pos}{Physical position of the markers into the
       sequence}
     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
       for each individual (columns). Missing data are represented by 
-      \code{ploidy_level + 1}.}
+      \code{ploidy_level + 1}}
     \item{n.phen}{number of phenotypic traits}
     \item{phen}{a matrix containing the phenotypic data. The rows
                 corespond to the trais and the columns correspond
@@ -42,7 +42,7 @@ An object of class \code{mappoly.data} which contains a
 }
 \description{
 Reads an external comma-separated values (CSV) data file. The format of the file is described in the \code{Details}
-section. This function creates an object of class \code{mappoly.data}
+section. This function creates an object of class \code{mappoly.data}.
 }
 \details{
 This is an alternative and a somewhat more straightforward version of the function 
@@ -51,7 +51,7 @@ This is an alternative and a somewhat more straightforward version of the functi
  The first five columns contain the marker names, the dosage in parents 1 and 2, 
  the sequence information (i.e. chromosome,  scaffold, contig, etc) and the 
  position of the marker within the sequence. The remaining columns contain 
- the dosage of the full-sib population. A tetraploid example of such a file 
+ the dosage of the full-sib population. A tetraploid example of such file 
  can be found in \code{ins/extdata/tetra_solcap.csv}
 }
 \examples{

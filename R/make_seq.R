@@ -1,8 +1,8 @@
 #' Create a sequence of markers
 #'
-#' Makes a sequence of markers based on an object of another type.
+#' Makes a sequence of markers based on an object of another class.
 #'
-#' @param input.obj an object of one of the classes
+#' @param input.obj an object of one of the following classes:
 #'     \code{mappoly.data}, \code{mappoly.group}, \code{mappoly.unique.seq},
 #'     \code{pcmap} or \code{pcmap3d}
 #'
@@ -12,33 +12,33 @@
 #'     is the sequence (\code{x=0} indicates unassigned markers); iii) a
 #'     \code{vector} of integers specifying which markers comprise the
 #'     sequence; iv) an integer representing linkage group if 
-#'     \code{class(input.object)=='mappoly.group'} or v) NULL if 
-#'     \code{class(input.object)=='pcmap'}, \code{class(input.object)=='pcmap3d'} or 
-#'     \code{class(input.object)=='mappoly.unique.seq'}
+#'     \code{input.object} has class \code{mappoly.group}; or v) NULL if 
+#'     \code{input.object} has class \code{pcmap}, \code{pcmap3d} or 
+#'     \code{mappoly.unique.seq}
 #'
 #' @param data.name name of the object of class \code{mappoly.data}
 #'
-#' @param x an object of one of the classes \code{mappoly.sequence}
+#' @param x an object of the class \code{mappoly.sequence}
 #'
 #' @param ... currently ignored
 #'
 #' @return An object of class \code{mappoly.sequence}, which is a
 #'     list containing the following components:
 #'     \item{seq.num}{a \code{vector} containing the (ordered) indices
-#'         of markers in the sequence, according to the input file.}
+#'         of markers in the sequence, according to the input file}
 #'     \item{seq.phases}{a \code{list} with the linkage phases between
 #'         markers in the sequence, in corresponding positions. \code{-1}
-#'         means that there are no defined linkage phases.}
+#'         means that there are no defined linkage phases}
 #'     \item{seq.rf}{a \code{vector} with the recombination
 #'         frequencies between markers in the sequence. \code{-1} means
-#'         that there are no estimated recombination frequencies.}
+#'         that there are no estimated recombination frequencies}
 #'     \item{loglike}{log-likelihood of the corresponding linkage
-#'         map.}
+#'         map}
 #'     \item{data.name}{name of the object of class
-#'         \code{mappoly.data} with the raw data.}
+#'         \code{mappoly.data} with the raw data}
 #'     \item{twopt}{name of the object of class \code{mappoly.twopt}
 #'         with the 2-point analyses. \code{-1} means that the twopt
-#'         estimates were not computed.}
+#'         estimates were not computed}
 #'
 #' @examples
 #'     data(hexafake)

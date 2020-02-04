@@ -2,8 +2,7 @@
 % Please edit documentation in R/check_phase_configurations.R
 \name{concatenate_new_marker}
 \alias{concatenate_new_marker}
-\title{Insert a new marker at the end of the sequence taking into account
-the two-point information}
+\title{Concatenate new marker}
 \usage{
 concatenate_new_marker(X = NULL, d, sh = NULL, seq.num = NULL, m,
   mrk = 1)
@@ -26,7 +25,7 @@ chromosomes and the rows represent markers}
 a unique list of matrices representing linkage phases
 }
 \description{
-Insert a new marker at the end of the sequence taking into account
+Inserts a new marker at the end of the sequence, taking into account
 the two-point information
 }
 \keyword{internal}

@@ -6,46 +6,51 @@
 \alias{plot.mappoly.group}
 \title{Assign markers to linkage groups}
 \usage{
-group_mappoly(input.mat, input.seq = NULL, expected.groups = NULL,
-  inter = TRUE, comp.mat = FALSE, verbose = TRUE)
+group_mappoly(input.mat, expected.groups = NULL, inter = TRUE,
+  comp.mat = FALSE, verbose = TRUE)
 
 \method{print}{mappoly.group}(x, detailed = TRUE, ...)
 
 \method{plot}{mappoly.group}(x, ...)
 }
 \arguments{
-\item{input.mat}{an object of class \code{mappoly.rf.matrix}.}
+\item{input.mat}{an object of class \code{mappoly.rf.matrix}}
 
-\item{input.seq}{an object of class \code{mappoly.sequence}.
-It must be contained in 'input.mat'}
+\item{expected.groups}{when available, inform the number of expected 
+linkage groups (i.e. chromosomes) for the species}
 
-\item{expected.groups}{the number of expected groups for the species (if any)}
+\item{inter}{if \code{TRUE} (default), plots a dendrogram highlighting the
+expected groups before continue}
 
-\item{inter}{if \code{TRUE}, plots a dendrogram with highlighting the
-expected groups before continue.}
-
-\item{comp.mat}{if \code{TRUE}, show a comparison between the reference
+\item{comp.mat}{if \code{TRUE}, shows a comparison between the reference
 based and the linkage based grouping, if the sequence information is
-present}
+available (default = FALSE)}
 
-\item{verbose}{logical. If \code{TRUE}, current progress is shown;
-if \code{FALSE}, no output is produced.}
+\item{verbose}{logical. If \code{TRUE} (default), current progress is shown;
+if \code{FALSE}, no output is produced}
 
-\item{x}{an object of class onemap.segreg.test}
+\item{x}{an object of class \code{onemap.segreg.test}}
 
-\item{detailed}{logical. If \code{TRUE} the markers in each
-linkage group are printed.}
+\item{detailed}{logical. If \code{TRUE} (default) the markers in each
+linkage group are printed}
 
 \item{...}{currently ignored}
 }
 \value{
 Returns an object of class \code{mappoly.group}, which is a list
     containing the following components:
-    \item{i}{...}
-    \item{ii}{...}
+    \item{data.name}{the referred dataset name}
+    \item{hc.snp}{a list containing information related to 
+    the UPGMA grouping method}
+    \item{expected.groups}{the number of expected linkage groups}
+    \item{groups.snp}{the groups to which each of the markers belong}
+    \item{seq.vs.grouped.snp}{comparison between the genomic group information
+    (when available) and the groups provided by \code{group_mappoly}}
+    \item{chisq.pval.thres}{the threshold used on the segregation test when reading the dataset}
+    \item{chisq.pval}{the p-values associated with the segregation test for all markers in the sequence}
 }
 \description{
-Identifies linkage groups of markers, using results from two-point
+Identifies linkage groups of markers using the results of two-point
 (pairwise) analysis.
 }
 \examples{
@@ -86,6 +91,7 @@ Identifies linkage groups of markers, using results from two-point
     plot(m3, main.text = "LG3")
     par(op)
    }
+   
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
