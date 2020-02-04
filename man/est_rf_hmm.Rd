@@ -41,10 +41,36 @@ recombination fractions equals to 0 (1e-5, for internal use only. Default = FALS
 \item{reestimate.single.ph.configuration}{logical. If \code{TRUE}
 returns a map without reestimating the map parameters for cases
 where there is only one possible linkage phase configuration. 
-This argument is intended to be used in a sequential map contruction.}
+This argument is intended to be used in a sequential map contruction}
 
 \item{high.prec}{logical. If \code{TRUE} (default) uses high precision 
-long double numbers in the HMM procedure.}
+long double numbers in the HMM procedure}
+
+\item{x}{an object of the class \code{mappoly.map}}
+
+\item{detailed}{logical. if TRUE, prints the linkage phase configuration and the marker 
+position for all maps. if FALSE (default), prints a map summary}
+
+\item{...}{currently ignored}
+
+\item{phase}{logical. If \code{TRUE} (default) plots the phase configuration
+for both parents}
+
+\item{mrk.names}{if TRUE, marker names are displayed (default = FALSE)}
+
+\item{cex}{The magnification to be used for marker names}
+
+\item{config}{should be \code{'best'} or the position of the
+configuration to be plotted. If \code{'best'}, plot the configuration
+with the highest likelihood}
+
+\item{col.cte.P}{a single character string or a vector of strings with size 
+equal to the number of markers in the map indicating the color of the allelic
+ variants for parent P (default = 'red')}
+
+\item{col.cte.Q}{a single character string or a vector of strings with size 
+equal to the number of markers in the map indicating the color of the allelic
+ variants for parent Q (default = 'blue')}
 }
 \value{
 An object of class \code{mappoly.map} with the following structure:

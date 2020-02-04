@@ -28,6 +28,13 @@ available (default = FALSE)}
 
 \item{verbose}{logical. If \code{TRUE} (default), current progress is shown;
 if \code{FALSE}, no output is produced}
+
+\item{x}{an object of class \code{onemap.segreg.test}}
+
+\item{detailed}{logical. If \code{TRUE} (default) the markers in each
+linkage group are printed}
+
+\item{...}{currently ignored}
 }
 \value{
 Returns an object of class \code{mappoly.group}, which is a list

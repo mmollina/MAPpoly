@@ -29,6 +29,10 @@ group. If \code{NULL} (default) adds all markers contained in
 \item{prev.info}{(optional) an object of class \code{two.pts.linkage.phases}
 containing the previous info about linkage phase configuration.
 Mostly for internal usage}
+
+\item{x}{an object of the class \code{two.pts.linkage.phases}}
+
+\item{...}{currently ignored}
 }
 \value{
 An object of class \code{two.pts.linkage.phases} which

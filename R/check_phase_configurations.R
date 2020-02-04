@@ -332,6 +332,10 @@ get_rf_from_list <- function(twopt, ph.list) {
 #' @param prev.info (optional) an object of class \code{two.pts.linkage.phases}
 #'     containing the previous info about linkage phase configuration.
 #'     Mostly for internal usage
+#'     
+#' @param x an object of the class \code{two.pts.linkage.phases}
+#' 
+#' @param ... currently ignored
 #' 
 #' @return An object of class \code{two.pts.linkage.phases} which
 #'     contains the following structure: 

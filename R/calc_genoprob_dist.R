@@ -15,6 +15,8 @@
 #'
 #' @param verbose if \code{TRUE} (default), the current progress is shown; if
 #'     \code{FALSE}, no output is produced
+#'     
+#' @param ... currently ignored
 #'
 #' @return An object of class 'mappoly.genoprob' which has two elements: a tridimensional
 #' array containing the probabilities of all possible genotypes for each individual

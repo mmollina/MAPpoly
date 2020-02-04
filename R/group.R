@@ -17,6 +17,13 @@
 #'
 #' @param verbose logical. If \code{TRUE} (default), current progress is shown;
 #'     if \code{FALSE}, no output is produced
+#'     
+#' @param x an object of class \code{onemap.segreg.test}
+#'
+#' @param detailed logical. If \code{TRUE} (default) the markers in each
+#'     linkage group are printed 
+#'
+#' @param ... currently ignored
 #'
 #' @return Returns an object of class \code{mappoly.group}, which is a list
 #'     containing the following components:

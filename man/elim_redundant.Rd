@@ -8,6 +8,8 @@ elim_redundant(input.seq)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}}
+
+\item{...}{currently ignored}
 }
 \value{
 An object of class \code{mappoly.unique.seq} which
@@ -18,7 +20,7 @@ An object of class \code{mappoly.unique.seq} which
     \item{eliminated}{a vector containing the name of the non-informative (eliminated) markers}
 }
 \description{
-Eliminate markers with identical dosage infomation along individuals.
+Eliminate markers with identical dosage infomation throughout individuals.
 }
 \examples{
   \dontrun{

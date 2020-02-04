@@ -24,7 +24,8 @@
 #'     probabilities). If \code{TRUE} returns the frequency for joint
 #'     probabilities.
 #'
-#' @return An object of class \code{cache.info} which contains one (conditional probabilities) or two (both conditional and joint probabilities) lists. Each list
+#' @return An object of class \code{cache.info} which contains one (conditional probabilities)
+#'     or two (both conditional and joint probabilities) lists. Each list
 #'     contains all pairs of dosages between parents for all markers
 #'     in the sequence. The names in each list are of the form 'A-B-C-D', where: A
 #'     represents the dosage in parent 1, marker k; B represents the dosage in parent

@@ -39,10 +39,36 @@
 #' @param reestimate.single.ph.configuration logical. If \code{TRUE}
 #' returns a map without reestimating the map parameters for cases
 #' where there is only one possible linkage phase configuration. 
-#' This argument is intended to be used in a sequential map contruction.
+#' This argument is intended to be used in a sequential map contruction
 #' 
 #' @param high.prec logical. If \code{TRUE} (default) uses high precision 
-#' long double numbers in the HMM procedure. 
+#' long double numbers in the HMM procedure
+#' 
+#' @param x an object of the class \code{mappoly.map}
+#' 
+#' @param detailed logical. if TRUE, prints the linkage phase configuration and the marker 
+#' position for all maps. if FALSE (default), prints a map summary 
+#'
+#' @param phase logical. If \code{TRUE} (default) plots the phase configuration
+#'  for both parents 
+#'
+#' @param col.cte.P a single character string or a vector of strings with size 
+#' equal to the number of markers in the map indicating the color of the allelic
+#'  variants for parent P (default = 'red')
+#' 
+#' @param col.cte.Q a single character string or a vector of strings with size 
+#' equal to the number of markers in the map indicating the color of the allelic
+#'  variants for parent Q (default = 'blue')
+#' 
+#' @param mrk.names if TRUE, marker names are displayed (default = FALSE)
+#' 
+#' @param cex The magnification to be used for marker names
+#' 
+#' @param config should be \code{'best'} or the position of the
+#'     configuration to be plotted. If \code{'best'}, plot the configuration
+#'     with the highest likelihood
+#'
+#' @param ... currently ignored
 #'
 #' @return An object of class \code{mappoly.map} with the following structure:
 #' \item{m}{the ploidy level}

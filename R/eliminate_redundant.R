@@ -1,8 +1,10 @@
 #' Eliminate redundant markers
 #'
-#' Eliminate markers with identical dosage infomation along individuals.
+#' Eliminate markers with identical dosage infomation throughout individuals.
 #'
 #' @param input.seq an object of class \code{mappoly.sequence}
+#' 
+#' @param ... currently ignored
 #'
 #' @return An object of class \code{mappoly.unique.seq} which
 #'     is a list  containing the following components:
