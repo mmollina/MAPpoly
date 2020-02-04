@@ -205,16 +205,16 @@ mds_mappoly<-function(input.mat,
   }
   map$data.name<-input.mat$data.name
   if(ndim == 2) {
-    return(structure(map, class="pcmap"))
+    return(structure(map, class="mappoly.pcmap"))
   } else {
-    return(structure(map, class="pcmap3d"))
+    return(structure(map, class="mappoly.pcmap3d"))
   }
 }
 
 #' @rdname mds_mappoly
 #' @keywords internal
 #' @export
-print.pcmap<-function(x, ...)
+mappoly.print.pcmap<-function(x, ...)
 {
   cat("\nThis is an object of class 'mappoly.mds'")
   cat("\nNumber of markers: ", nrow(x$locimap))
@@ -226,7 +226,7 @@ print.pcmap<-function(x, ...)
 #' @rdname mds_mappoly
 #' @keywords internal
 #' @export
-print.pcmap3d<-function(x, ...)
+mappoly.print.pcmap3d<-function(x, ...)
 {
   cat("\nThis is an object of class 'mappoly.mds'")
   cat("\nNumber of markers: ", nrow(x$locimap))
@@ -239,7 +239,7 @@ print.pcmap3d<-function(x, ...)
 #' @keywords internal
 #' @importFrom utils getFromNamespace
 #' @export
-plot.pcmap<-function(x, D1lim = NULL, D2lim = NULL, displaytext = FALSE,...)
+mappoly.plot.pcmap<-function(x, D1lim = NULL, D2lim = NULL, displaytext = FALSE,...)
 {
   fun <- getFromNamespace("plot.pcmap", "MDSMap")
   fun(x, D1lim = D1lim, D2lim = D2lim, displaytext = displaytext, ...)
@@ -248,7 +248,7 @@ plot.pcmap<-function(x, D1lim = NULL, D2lim = NULL, displaytext = FALSE,...)
 #' @rdname mds_mappoly
 #' @keywords internal
 #' @export
-plot.pcmap3d<-function(x, D1lim = NULL, D2lim = NULL, displaytext = FALSE,...)
+mappoly.plot.pcmap3d<-function(x, D1lim = NULL, D2lim = NULL, displaytext = FALSE,...)
 {
   fun <- getFromNamespace("plot.pcmap3d", "MDSMap")
   fun(x, D1lim = D1lim, D2lim = D2lim, displaytext = displaytext, ...)
