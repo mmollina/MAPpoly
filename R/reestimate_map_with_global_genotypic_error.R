@@ -36,23 +36,35 @@ genotyping_global_error<-function(x, m, restricted = TRUE,  error=0.01, th.prob=
   }
 }
 
-#' Reestimate gentic map given a global genotyping error
+#' Reestimate genetic map given a global genotyping error
 #'
 #' This function considers a global error when reestimating
-#' a genetic map using hdden Markov models
+#' a genetic map using Hidden Markov models
 #'
-#' @param input.map an object of class \code{mappoly.map}.
-#' @param error global error rate
-#' @param tol the desired accuracy.
-#' @param restricted if \code{TRUE}, restricts the prior to the 
+#' @param input.map an object of class \code{mappoly.map}
+#' 
+#' @param error the assumed global error rate (default = NULL)
+#' 
+#' @param tol the desired accuracy (default = 10e-04)
+#' 
+#' @param restricted if \code{TRUE} (default), restricts the prior to the 
 #'                   possible classes under mendelian non double-reduced segregation 
-#'                   given dosage of the parents. 
+#'                   given dosage of the parents
+#'                    
 #' @param th.prob the threshold for using global error or genotype 
-#'     probability distribution contained in the data set 
+#'     probability distribution contained in the data set (default = 0.95)
+#'      
 #' @param verbose if \code{TRUE}, current progress is shown; if
-#'     \code{FALSE}, no output is produced.
+#'     \code{FALSE} (default), no output is produced
 #'
-#' @return An object of class 'mappoly.map'
+#' @return An object of class 'mappoly.map' with the following structure:
+#' \item{m}{the ploidy level}
+#' \item{mrk.names}{the names of markers present in the sequence}
+#' \item{data.name}{name of the dataset of class \code{mappoly.data}}
+#' \item{ph.thres}{the LOD threshold used to define the linkage phase configurations to test}
+#' \item{maps}{a list containing the sequence of markers, their recombination fractions,
+#' the linkage phase configuration for all markers in both parents P and Q and the 
+#' map's joint likelihood}
 #'
 #' @examples
 #'   \dontrun{

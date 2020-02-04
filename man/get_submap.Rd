@@ -7,49 +7,54 @@
 get_submap(input.map, mrk.pos, phase.config = "best",
   reestimate.rf = TRUE, reestimate.phase = FALSE, thres.twopt = 5,
   thres.hmm = 3, extend.tail = 50, count.cache = NULL, tol = 0.1,
-  tol.final = 0.001, use.high.precision = FALSE, verbose = TRUE)
+  tol.final = 0.001, high.prec = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}
 
 \item{mrk.pos}{positions of the markers that should be considered in the new map. 
-This can be in any order.}
+This can be in any order}
 
 \item{phase.config}{which phase configuration should be used. "best" (default) 
-will choose the maximum likelihood configuration.}
+will choose the configuration associated with the maximum 
+likelihood}
 
-\item{reestimate.rf}{logical. If \code{TRUE} (default) the recombination fractions between markers are reestimated.}
+\item{reestimate.rf}{logical. If \code{TRUE} (default) the recombination fractions 
+between markers are reestimated}
 
-\item{reestimate.phase}{logical. If \code{TRUE}, the linkage phase configuration is reestimated. The default is \code{FALSE}}
+\item{reestimate.phase}{logical. If \code{TRUE}, the linkage phase configurations are 
+reestimated (default = FALSE)}
 
-\item{thres.twopt}{the threshold used to determine if the linkage
-phases compared via two-point analysis should be considered}
+\item{thres.twopt}{the LOD threshold used to determine if the linkage
+phases compared via two-point analysis should be considered (default = 5)}
 
 \item{thres.hmm}{the threshold used to determine if the linkage
-phases compared via hmm analysis should be considered}
+phases compared via hmm analysis should be considered (default = 3)}
 
 \item{extend.tail}{the length of the tail of the chain that should
 be used to calculate the likelihood of the linkage phases. If
 \code{info.tail = TRUE}, the function uses at least \code{extend.tail}
-as the lengthof the tail.}
+as the length of the tail (default = 50)}
 
 \item{count.cache}{an object of class \code{cache.info} containing
 pre-computed genotype frequencies, obtained with
-\code{\link[mappoly]{cache_counts_twopt}}.}
+\code{\link[mappoly]{cache_counts_twopt}}}
 
-\item{tol}{the desired accuracy during the sequential phase.}
+\item{tol}{the desired accuracy during the sequential phase (default = 0.1)}
 
-\item{tol.final}{the desired accuracy for the final map.}
+\item{tol.final}{the desired accuracy for the final map (default = 10e-04)}
 
-\item{use.high.precision}{If \code{TRUE}, uses a high precision double
-variable in C++ routine. This is advised for maps with a large number
-of markers.}
+\item{high.prec}{logical. If \code{TRUE} uses high precision 
+(long double) numbers in the HMM procedure implemented in C++,
+which can take a long time to perform (default = FALSE)}
 
-\item{verbose}{If \code{TRUE}, current progress is shown; if
-\code{FALSE}, no output is produced.}
+\item{verbose}{If \code{TRUE} (default), current progress is shown; if
+\code{FALSE}, no output is produced}
 }
 \description{
-Given a pre-constructed map, it extracts a sub-map for a sequence of marker positions.
+Given a pre-constructed map, it extracts a sub-map for a provided 
+sequence of marker positions and can optionally update it's linkage phase
+configurations and respective recombination fractions.
 }
 \examples{
  \dontrun{

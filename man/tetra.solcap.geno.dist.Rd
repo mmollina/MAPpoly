@@ -18,7 +18,7 @@
       parent Q for all \code{n.mrk} markers}
     \item{sequence}{a vector indicating which sequence each marker
       belongs. Zero indicates that the marker was not assigned to any
-      sequence.}
+      sequence}
     \item{sequence.pos}{Physical position of the markers into the
       sequence}
     \item{prob.thres = 0.95}{probability threshold to associate a marker 
@@ -30,10 +30,10 @@
       marker and offspring. The first two columns represent the marker
       and the offspring, respectively. The remaining elements represent
       the probability associated to each one of the possible
-      dosages.}
+      dosages}
       \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
       for each individual (columns). Missing data are represented by 
-      \code{ploidy_level + 1 = 5}.}
+      \code{ploidy_level + 1 = 5}}
     \item{n.phen}{There are no phenotypes in this simulation}
     \item{phen}{There are no phenotypes in this simulation}
 }}
@@ -41,14 +41,14 @@
 tetra.solcap.geno.dist
 }
 \description{
-A data set of the B2721 population which derived from is a cross between 
+A data set of the B2721 population which derived from a cross between 
 two tetraploid potato varieties: Atlantic × B1829-5. The population comprises 160 
 offsprings genotyped with the SolCAP Infinium 8303 potato array. The original data 
 set can be found in [The Solanaceae Coordinated Agricultural Project (SolCAP) webpage](http://solcap.msu.edu/potato_infinium.shtml) 
 The data set also contains the genomic order of the SNPs from the Solanum 
-tuberosum genome version 4.03. The genotype calling was performed using 
-fitTetra R package. Although this data set contains the
+tuberosum genome version 4.03. The genotype calling was performed using the
+fitPoly R package. Although this data set contains the
 probability distribution of the genotypes, 
-but is essentialy the same data set found in \code{\link[mappoly]{tetra.solcap}}
+it is essentialy the same data set found in \code{\link[mappoly]{tetra.solcap}}
 }
 \keyword{datasets}

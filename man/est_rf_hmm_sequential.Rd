@@ -2,7 +2,7 @@
 % Please edit documentation in R/est_map_hmm.R
 \name{est_rf_hmm_sequential}
 \alias{est_rf_hmm_sequential}
-\title{Multipoint analysis using Hidden Markov Models - Sequential phase elimination}
+\title{Multipoint analysis using Hidden Markov Models: Sequential phase elimination}
 \usage{
 est_rf_hmm_sequential(input.seq, twopt, start.set = 4, thres.twopt = 5,
   thres.hmm = 50, extend.tail = NULL, phase.number.limit = Inf,
@@ -11,71 +11,78 @@ est_rf_hmm_sequential(input.seq, twopt, start.set = 4, thres.twopt = 5,
   tol.final = 0.001, verbose = TRUE, high.prec = FALSE)
 }
 \arguments{
-\item{input.seq}{an object of class \code{mappoly.sequence}.}
+\item{input.seq}{an object of class \code{mappoly.sequence}}
 
 \item{twopt}{an object of class \code{poly.est.two.pts.pairwise}
 containing the two-point information}
 
-\item{start.set}{number of markers to start the phasing procedure.}
+\item{start.set}{number of markers to start the phasing procedure (default = 4)}
 
-\item{thres.twopt}{the threshold used to determine if the linkage
+\item{thres.twopt}{the LOD threshold used to determine if the linkage
 phases compared via two-point analysis should be considered 
-for the search space reduction. (A.K.A. \eqn{\eta} in 
-\cite{Mollinari and Garcia (2018)}).}
+for the search space reduction (A.K.A. \eqn{\eta} in 
+\cite{Mollinari and Garcia (2019)}, default = 5)}
 
 \item{thres.hmm}{the threshold used to determine if the linkage
 phases compared via hmm analysis should be evaluated in the 
-next round of marker inclusion.}
+next round of marker inclusion (default = 50)}
 
-\item{extend.tail}{the length of the tail of the chain that should
+\item{extend.tail}{the length of the chain's tail that should
 be used to calculate the likelihood of the map. If \code{NULL} (default), 
-the function uses all markers positioned. Even if function 
-\code{info.tail = TRUE}, it uses at least \code{extend.tail}
-as the tail length.}
+the function uses all markers positioned. Even if \code{info.tail = TRUE}, 
+it uses at least \code{extend.tail} as the tail length}
 
 \item{phase.number.limit}{the maximum number of linkage phases of the sub-maps defined 
 by arguments \code{info.tail} and \code{extend.tail}. If the
-size exceeds the limit, the marker will not be inserted. If
-\code{NULL}, the it will insert all markers.}
+size exceeds this limit, the marker will not be inserted. If
+\code{NULL}, then it will insert all markers (default = Inf)}
 
 \item{sub.map.size.diff.limit}{the maximum accepted length
 difference between the current and the previous sub-map defined 
 by arguments \code{info.tail} and \code{extend.tail}. If the
-size exceeds the limit, the marker will not be inserted. If
-\code{NULL}, the it will insert all markers.}
+size exceeds this limit, the marker will not be inserted. If
+\code{NULL}, then it will insert all markers (default = Inf)}
 
-\item{info.tail}{if \code{TRUE} uses the complete informative tail
-of the chain (i.e. number of markers where \eqn{ploidy x 2} 
-homologous can be distinguished) to calculate the map likelihood}
+\item{info.tail}{if \code{TRUE} (default), it uses the complete informative tail
+of the chain (i.e. number of markers where all homologous 
+(\eqn{ploidy x 2}) can be distinguished) to calculate the map likelihood}
 
-\item{reestimate.single.ph.configuration}{logical. If \code{FALSE}
+\item{reestimate.single.ph.configuration}{logical. If \code{FALSE} (default)
 returns a map without reestimating the map parameters in cases
-where there are only one possible linkage phase configuration.}
+where there are only one possible linkage phase configuration}
 
-\item{tol}{the desired accuracy during the sequential phase.}
+\item{tol}{the desired accuracy during the sequential phase (default = 10e-02)}
 
-\item{tol.final}{the desired accuracy for the final map.}
+\item{tol.final}{the desired accuracy for the final map (default = 10e-04)}
 
-\item{verbose}{If \code{TRUE}, current progress is shown; if
-\code{FALSE}, no output is produced.}
+\item{verbose}{If \code{TRUE} (default), current progress is shown; if
+\code{FALSE}, no output is produced}
 
 \item{high.prec}{logical. If \code{TRUE} uses high precision 
-long double numbers in the HMM procedure implemented in C++.}
+(long double) numbers in the HMM procedure implemented in C++,
+which can take a long time to perform (default = FALSE)}
 }
 \value{
-An object of class 'mappoly.map'
+An object of class \code{mappoly.map} with the following structure:
+\item{m}{the ploidy level}
+\item{mrk.names}{the names of markers present in the sequence}
+\item{data.name}{name of the dataset of class \code{mappoly.data}}
+\item{ph.thres}{the LOD threshold used to define the linkage phase configurations to test}
+\item{maps}{a list containing the sequence of markers, their recombination fractions,
+the linkage phase configuration for all markers in both parents P and Q and the 
+map's joint likelihood}
 }
 \description{
 Performs the multipoint analysis proposed by \cite{Mollinari and
- Garcia (2018)} in a sequence of markers removing unlikely phases
-using sequential multipoint information
+ Garcia (2019)} in a sequence of markers removing unlikely phases
+using sequential multipoint information.
 }
 \details{
 This function sequentially includes markers into a map given an
 ordered sequence. It uses two-point information to eliminate
 unlikely linkage phase configurations given \code{thres.twopt}. The
 search is made within a window of size \code{extend.tail}. For the
-remaining configurations the HMM-based likelihood is computed and
+remaining configurations, the HMM-based likelihood is computed and
 the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
 }
 \examples{

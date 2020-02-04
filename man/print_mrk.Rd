@@ -9,8 +9,8 @@ print_mrk(input.data, mrks)
 \arguments{
 \item{input.data}{an object \code{'mappoly.data'}}
 
-\item{mrks}{marker sequence index}
+\item{mrks}{marker sequence index (integer vector)}
 }
 \description{
-Summary of a set of markers
+Returns information related to a given set of markers
 }

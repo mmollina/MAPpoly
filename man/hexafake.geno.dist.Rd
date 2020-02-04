@@ -18,7 +18,7 @@
       parent Q for all \code{n.mrk} markers}
     \item{sequence}{a vector indicating which sequence each marker
       belongs. Zero indicates that the marker was not assigned to any
-      sequence.}
+      sequence}
     \item{sequence.pos}{Physical position of the markers into the
       sequence}
     \item{prob.thres = 0.95}{probability threshold to associate a marker 
@@ -30,10 +30,10 @@
       marker and offspring. The first two columns represent the marker
       and the offspring, respectively. The remaining elements represent
       the probability associated to each one of the possible
-      dosages.}
+      dosages}
       \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
       for each individual (columns). Missing data are represented by 
-      \code{ploidy_level + 1 = 7}.}
+      \code{ploidy_level + 1 = 7}}
     \item{n.phen}{There are no phenotypes in this simulation}
     \item{phen}{There are no phenotypes in this simulation}
 }}

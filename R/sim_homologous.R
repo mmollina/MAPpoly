@@ -7,32 +7,38 @@
 #' configurations which are impossible to estimate via two point
 #' methods
 #'
-#' @param m ploidy level. Must be an even number.
-#' @param n.mrk number of markers.
-#' @param min.d minimum dosage to be simulated
-#' @param max.d maximum dosage to be simulated
+#' @param m ploidy level. Must be an even number
+#' 
+#' @param n.mrk number of markers
+#' 
+#' @param min.d minimum dosage to be simulated (default = 0)
+#' 
+#' @param max.d maximum dosage to be simulated (default = m + 1)
+#' 
 #' @param prob.dose a vector indicating the proportion of markers for
-#'    different dosage to be simulated. 
-#' @param max.ph maximum phase difference. 
-#' @param restriction if TRUE, avoid cases where it is impossible to
+#'    different dosage to be simulated (default = NULL)
+#'    
+#' @param max.ph maximum phase difference
+#'  
+#' @param restriction if TRUE (default), avoid cases where it is impossible to
 #'     estmate recombination fraction and/or linkage phases via
-#'     two-point analysis.
+#'     two-point analysis
+#'     
 #' @param seed random number generator seed
 #'
-#' @return S3
-#' A list which is a list containing the following components:
-#'   \item{hom.allele.p}{ a \code{list} of vectors
-#'    containing linkage phase configuration. Each vector contains the
+#' @return a list containing the following components:
+#'   \item{hom.allele.p}{ a list of vectors
+#'    containing linkage phase configurations. Each vector contains the
 #'    numbers of the homologous chromosomes in which the alleles are
 #'    located. For instance, a vector containing \eqn{(1,3,4)} means that
 #'    the marker has three doses located in the chromosomes 1, 3 and 4. For
-#'    zero doses, use 0.}
+#'    zero doses, use 0}
 #'   \item{p}{contains the indices of the starting positions of the
 #'     dosages, considering that the vectors contained in \code{p} are
 #'     concatenated. Markers with no doses (zero doses are also
-#'     considered).}
-#'   \item{hom.allele.q}{Analogously to hom.allele.p}
-#'   \item{q}{Analogously to p}
+#'     considered)}
+#'   \item{hom.allele.q}{Analogously to \code{hom.allele.p}}
+#'   \item{q}{Analogously to \code{p}}
 #'
 #' @examples
 #'     h.temp<-sim_homologous(m=6, n.mrk=20, max.d=3, max.ph=3,
@@ -49,7 +55,7 @@
 #'
 #' @export
 sim_homologous<-function(m, n.mrk, min.d = 0, 
-                         max.d, prob.dose = NULL,
+                         max.d = m+1, prob.dose = NULL,
                          max.ph, restriction=TRUE, 
                          seed=NULL)
 {

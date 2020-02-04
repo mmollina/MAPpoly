@@ -1,29 +1,29 @@
 #' Estimates loci position using Multidimensional Scaling
 #'
 #' Estimates loci position using Multidimensional Scaling proposed by
-#' Preedy and Hackett (2016). The code is an adaptation from
-#' TetraploidSNPMap code, available under GNU GENERAL PUBLIC LICENSE,
+#' \cite{Preedy and Hackett (2016)}. The code is an adaptation from
+#' the package \code{TetraploidSNPMap}, available under GNU GENERAL PUBLIC LICENSE,
 #' Version 3, at
 #' \url{https://github.com/BiomathematicsAndStatisticsScotland/TetraploidSNPMap}
 #'
-#' @param input.mat an object of class \code{mappoly.input.matrix}.
+#' @param input.mat an object of class \code{mappoly.input.matrix}
 #'
 #' @param p integer. The smoothing parameter for the principal curve.
-#'   If \code{NULL} this will be done using leave one out cross validation.
+#'   If \code{NULL} (default) this will be done using the leave-one-out cross validation
 #'
 #' @param n vector of integers or strings containing loci to be omitted from the analysis
 #'
-#' @param ndim number of dimensions to be considered in the multidimensional scaling procedure
-#'
-#' @param x an object of class \code{mappoly.mds}
+#' @param ndim number of dimensions to be considered in the multidimensional scaling procedure (default = 2)
 #'
 #' @param weight.exponent the exponent that should be used in the LOD score values to weight the
-#'        MDS procedure.
+#'        MDS procedure (default = 2)
 #'
-#' @param verbose if \code{TRUE},  display information about the analysis
+#' @param verbose if \code{TRUE} (default), display information about the analysis
 #'
 #' @param displaytext logical. If \code{TRUE}, display the name of the markers in the
-#'   diagnostic plot.
+#'   diagnostic plot
+#'   
+#' @param x an object of class \code{mappoly.mds}
 #'
 #' @param ... currently ignored
 #'

@@ -1,6 +1,6 @@
 #' Plot marker information
 #'
-#' Plot summary statistics for a given marker
+#' Plots summary statistics for a given marker
 #' 
 #' @param input.data an object of class \code{mappoly.data}
 #' 

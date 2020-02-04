@@ -6,29 +6,28 @@
 \usage{
 read_vcf(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
   ploidy = NA, thresh.line = 0.05, min.gt.depth = 0,
-  min.av.depth = 0, max.missing = 1, use.prob = FALSE)
+  min.av.depth = 0, max.missing = 1)
 }
 \arguments{
-\item{file.in}{path to the input file which contains the data (VCF format)}
+\item{file.in}{a character string with the name of (or full path to) the input file which contains the data (VCF format)}
 
 \item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
 expected genotypes under random chromosome pairing and no double reduction}
 
-\item{parent.1}{name of parent 1}
+\item{parent.1}{a character string containing the name of parent 1}
 
-\item{parent.2}{name of parent 2}
+\item{parent.2}{a character string containing the name of parent 2}
 
 \item{ploidy}{the species ploidy (optional, it will be automatically detected)}
 
 \item{thresh.line}{threshold used for p-values on segregation test (default = 0.05)}
 
-\item{min.gt.depth}{Minimum genotype depth to keep information. If the genotype depth is below \code{min.gt.depth}, then it will (default = 0)}
+\item{min.gt.depth}{minimum genotype depth to keep information. If the genotype depth is below \code{min.gt.depth},
+it will be replaced with NA (default = 0)}
 
-\item{min.av.depth}{Minimum average depth to keep markers (default = 0)}
+\item{min.av.depth}{minimum average depth to keep markers (default = 0)}
 
-\item{max.missing}{Maximum proportion of missing data to keep markers (range = 0-1; default = 1)}
-
-\item{use.prob}{Logical. Should MAPpoly use the genotype probabilities from VCF file (PL field)? (default = FALSE)}
+\item{max.missing}{maximum proportion of missing data to keep markers (range = 0-1; default = 1)}
 }
 \value{
 An object of class \code{mappoly.data} which contains a
@@ -44,7 +43,7 @@ An object of class \code{mappoly.data} which contains a
       parent Q for all \code{n.mrk} markers}
     \item{sequence}{a vector indicating which sequence each marker
       belongs. Zero indicates that the marker was not assigned to any
-      sequence.}
+      sequence}
     \item{sequence.pos}{Physical position of the markers into the
       sequence}
     \item{seq.ref}{Reference base used for each marker (i.e. A, T, C, G)}
@@ -55,7 +54,7 @@ An object of class \code{mappoly.data} which contains a
     \item{max.missing}{Maximum proportion of missing genotypes (range: 0-1)}
     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
       for each individual (columns). Missing data are represented by 
-      \code{ploidy_level + 1}.}
+      \code{ploidy_level + 1}}
     \item{nphen}{(unused field)}
     \item{phen}{(unused field)}
     \item{input.file}{Full path to input file, used when \code{update.prob = TRUE}}

@@ -2,20 +2,20 @@
 % Please edit documentation in R/import_from_updog.R
 \name{import_from_updog}
 \alias{import_from_updog}
-\title{Data Import}
+\title{Import from updog}
 \usage{
-import_from_updog(object, filter.non.conforming = FALSE,
-  prob.thres = NULL)
+import_from_updog(object, prob.thres = NULL,
+  filter.non.conforming = FALSE)
 }
 \arguments{
 \item{object}{the name of the object of class \code{multidog}}
 
-\item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
-expected genotypes under randam chromosome pairing and no double reduction}
-
 \item{prob.thres}{probability threshold to associate a marker call to a 
 dosage. Markers with maximum genotype probability smaller than 'prob.thres' 
 are considered as missing data for the dosage calling purposes}
+
+\item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
+expected genotypes under random chromosome pairing and no double reduction}
 }
 \value{
 An object of class \code{mappoly.data} which contains a
@@ -31,7 +31,7 @@ An object of class \code{mappoly.data} which contains a
       parent Q for all \code{n.mrk} markers}
     \item{sequence}{a vector indicating which sequence each marker
       belongs. Zero indicates that the marker was not assigned to any
-      sequence.}
+      sequence}
     \item{sequence.pos}{physical position of the markers into the
       sequence}
     \item{prob.thres}{probability threshold to associate a marker call to a 
@@ -39,7 +39,7 @@ An object of class \code{mappoly.data} which contains a
     were considered as missing data in the 'geno.dose' matrix}
     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
       for each individual (columns). Missing data are represented by 
-      \code{ploidy_level + 1}.}
+      \code{ploidy_level + 1}}
     \item{geno}{a data.frame 
       containing the probability distribution for each combination of
       marker and offspring. The first two columns represent the marker
@@ -56,9 +56,9 @@ An object of class \code{mappoly.data} which contains a
 }
 \description{
 Read objects with information related to genotype calling in polyploids.
-Currently this function supports output objects created using the
+Currently this function supports output objects created with the
 \code{updog} (output of \code{multidog} function) package.
-This fucntion creates an object of class \code{mappoly.data}
+This function creates an object of class \code{mappoly.data}
 }
 \examples{
 \dontrun{

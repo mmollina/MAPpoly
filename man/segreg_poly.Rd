@@ -7,11 +7,11 @@
 segreg_poly(m, dP, dQ)
 }
 \arguments{
-\item{m}{ploidy level}
+\item{m}{the ploidy level}
 
-\item{dP}{dosage in parent P}
+\item{dP}{the allelic dosage in parent P}
 
-\item{dQ}{dosage in parent Q}
+\item{dQ}{the allelic dosage in parent Q}
 }
 \value{
 a vector containing the expected segregation frequency for
@@ -22,7 +22,6 @@ Computes the polysomic segregation frequency given a ploidy level
 and the dosage of the locus in both parents.
 }
 \examples{
-
 #auto-octaploid with two and three doses in parents P and Q,
 #respectively
 (seg<-segreg_poly(m=8, dP=2, dQ=3))

@@ -8,33 +8,42 @@ add_marker(input.map, mrk, pos, rf.matrix, genoprob = NULL,
   phase.config = "best", tol = 0.001)
 }
 \arguments{
-\item{input.map}{an object of class \code{"mappoly.map"}}
+\item{input.map}{an object of class \code{mappoly.map}}
 
 \item{mrk}{the name of the marker to be inserted}
 
 \item{pos}{the name of the marker after which the new marker should be added.
 One also can inform the numeric position (between markers) were the 
 new marker should be added. To insert a marker at the beginning of a 
-map, one should use \code{pos = 0}.}
+map, one should use \code{pos = 0}}
 
-\item{rf.matrix}{an object of class \code{"mappoly.rf.matrix"}}
+\item{rf.matrix}{an object of class \code{mappoly.rf.matrix} containing all recombination
+fractions between markers on \code{input.map}}
 
-\item{genoprob}{an object of class \code{"mappoly.genoprob"}}
+\item{genoprob}{an object of class \code{mappoly.genoprob} containing the genotype probabilities
+for all marker positions on \code{input.map}}
 
 \item{phase.config}{which phase configuration should be used. "best" (default) 
-will choose the maximum likelihood configuration.}
+will choose the maximum likelihood configuration}
 
-\item{tol}{the desired accuracy.}
+\item{tol}{the desired accuracy (default = 10e-04)}
 }
 \value{
-An object of class 'mappoly.map'
+An object of class \code{mappoly.map} with the following structure:
+\item{m}{the ploidy level}
+\item{mrk.names}{the names of markers present in the sequence}
+\item{data.name}{name of the dataset of class \code{mappoly.data}}
+\item{ph.thres}{the LOD threshold used to define the linkage phase configurations to test}
+\item{maps}{a list containing the sequence of markers, their recombination fractions,
+the linkage phase configuration for all markers in both parents P and Q and the 
+map's joint likelihood}
 }
 \description{
 Creates a new map by adding a marker in a given position in a pre-built map.
 }
 \details{
 \code{add_marker} splits the input map in two submaps to the left and to the right 
-of the given position, and using the genotype probabilities, computes the log-likelihhod
+of the given position, and using the genotype probabilities, computes the log-likelihood
 of all possible linkage phases under a two-point threshold.
 }
 \examples{

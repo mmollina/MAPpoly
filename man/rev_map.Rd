@@ -7,10 +7,10 @@
 rev_map(input.map)
 }
 \arguments{
-\item{input.map}{An object of class \code{mappoly.map}}
+\item{input.map}{an object of class \code{mappoly.map}}
 }
 \description{
-Provides a reverse version of a given map.
+Provides the reverse version of a given map.
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

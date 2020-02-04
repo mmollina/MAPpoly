@@ -5,7 +5,7 @@
 #' This function can handle .vcf files of version 4.0 and higher. The ploidy can be automatically detected, but it is highly
 #' recommended that you inform it to check for mismatches. All individual and marker names will be kept as they are in the .vcf file.
 #'
-#' @param file.in path to the input file which contains the data (VCF format)
+#' @param file.in a character string with the name of (or full path to) the input file which contains the data (VCF format)
 #'
 #' @param ploidy the species ploidy (optional, it will be automatically detected)
 #'
@@ -14,17 +14,16 @@
 #'     
 #' @param thresh.line threshold used for p-values on segregation test (default = 0.05)
 #' 
-#' @param parent.1 name of parent 1
+#' @param parent.1 a character string containing the name of parent 1
 #' 
-#' @param parent.2 name of parent 2
+#' @param parent.2 a character string containing the name of parent 2
 #'
-#' @param min.gt.depth Minimum genotype depth to keep information. If the genotype depth is below \code{min.gt.depth}, then it will (default = 0)
+#' @param min.gt.depth minimum genotype depth to keep information. If the genotype depth is below \code{min.gt.depth},
+#'  it will be replaced with NA (default = 0)
 #'
-#' @param min.av.depth Minimum average depth to keep markers (default = 0)
+#' @param min.av.depth minimum average depth to keep markers (default = 0)
 #'
-#' @param max.missing Maximum proportion of missing data to keep markers (range = 0-1; default = 1)
-#' 
-#' @param use.prob Logical. Should MAPpoly use the genotype probabilities from VCF file (PL field)? (default = FALSE)
+#' @param max.missing maximum proportion of missing data to keep markers (range = 0-1; default = 1)
 #'
 #' @return An object of class \code{mappoly.data} which contains a
 #'     list with the following components:
@@ -39,7 +38,7 @@
 #'       parent Q for all \code{n.mrk} markers}
 #'     \item{sequence}{a vector indicating which sequence each marker
 #'       belongs. Zero indicates that the marker was not assigned to any
-#'       sequence.}
+#'       sequence}
 #'     \item{sequence.pos}{Physical position of the markers into the
 #'       sequence}
 #'     \item{seq.ref}{Reference base used for each marker (i.e. A, T, C, G)}
@@ -50,7 +49,7 @@
 #'     \item{max.missing}{Maximum proportion of missing genotypes (range: 0-1)}
 #'     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
 #'       for each individual (columns). Missing data are represented by 
-#'       \code{ploidy_level + 1}.}
+#'       \code{ploidy_level + 1}}
 #'     \item{nphen}{(unused field)}
 #'     \item{phen}{(unused field)}
 #'     \item{input.file}{Full path to input file, used when \code{update.prob = TRUE}}
@@ -77,7 +76,7 @@
 #' 
 read_vcf = function(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
                      ploidy = NA, thresh.line = 0.05, min.gt.depth = 0, min.av.depth = 0,
-                     max.missing = 1, use.prob = FALSE) {
+                     max.missing = 1) {
     
   # Checking even ploidy
   if(!is.na(ploidy) && (ploidy %% 2) != 0){

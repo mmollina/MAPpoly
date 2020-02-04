@@ -10,7 +10,7 @@ check_data_sanity(x)
 \item{x}{an object of class \code{mappoly.data}}
 }
 \description{
-Checks the consistency of dataset
+Checks the consistency of a dataset
 }
 \examples{
 \dontrun{

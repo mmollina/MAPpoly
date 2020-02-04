@@ -12,7 +12,7 @@ plot_mrk_info(input.data, mrk)
 \item{mrk}{marker name or position in the dataset}
 }
 \description{
-Plot summary statistics for a given marker
+Plots summary statistics for a given marker
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

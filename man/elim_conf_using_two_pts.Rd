@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_phase_configurations.R
 \name{elim_conf_using_two_pts}
 \alias{elim_conf_using_two_pts}
-\title{Eliminate unlikely configuration phases given the two-point information}
+\title{Eliminate configurations using two-point information}
 \usage{
 elim_conf_using_two_pts(input.seq, twopt, thres)
 }
@@ -18,6 +18,7 @@ discarded (if abs(ph_LOD) > thres)}
 a unique list of matrices representing linkage phases
 }
 \description{
-Eliminate unlikely configuration phases given the two-point information
+Drops unlikely configuration phases given the two-point information
+and a LOD threshold
 }
 \keyword{internal}

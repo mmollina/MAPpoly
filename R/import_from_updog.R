@@ -1,9 +1,9 @@
-#' Data Import
+#' Import from updog
 #'
 #' Read objects with information related to genotype calling in polyploids.
-#' Currently this function supports output objects created using the
+#' Currently this function supports output objects created with the
 #' \code{updog} (output of \code{multidog} function) package.
-#' This fucntion creates an object of class \code{mappoly.data}
+#' This function creates an object of class \code{mappoly.data}
 #'
 #' @param object the name of the object of class \code{multidog}
 #'     
@@ -12,7 +12,7 @@
 #'     are considered as missing data for the dosage calling purposes
 #'     
 #' @param filter.non.conforming if \code{TRUE} (default) exclude samples with non 
-#'     expected genotypes under randam chromosome pairing and no double reduction 
+#'     expected genotypes under random chromosome pairing and no double reduction 
 #'
 #' @return An object of class \code{mappoly.data} which contains a
 #'     list with the following components:
@@ -27,7 +27,7 @@
 #'       parent Q for all \code{n.mrk} markers}
 #'     \item{sequence}{a vector indicating which sequence each marker
 #'       belongs. Zero indicates that the marker was not assigned to any
-#'       sequence.}
+#'       sequence}
 #'     \item{sequence.pos}{physical position of the markers into the
 #'       sequence}
 #'     \item{prob.thres}{probability threshold to associate a marker call to a 
@@ -35,7 +35,7 @@
 #'     were considered as missing data in the 'geno.dose' matrix}
 #'     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
 #'       for each individual (columns). Missing data are represented by 
-#'       \code{ploidy_level + 1}.}
+#'       \code{ploidy_level + 1}}
 #'     \item{geno}{a data.frame 
 #'       containing the probability distribution for each combination of
 #'       marker and offspring. The first two columns represent the marker
@@ -49,6 +49,7 @@
 #'                 to the individuals}
 #'     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
 #'     test of mendelian segregation performed for all markers}
+#'     
 #' @examples
 #' \dontrun{
 #' library("updog")
@@ -74,7 +75,7 @@
 #'     
 #' @export import_from_updog
 #' 
-import_from_updog = function(object, filter.non.conforming = FALSE, prob.thres = NULL){
+import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = FALSE){
   # Case 1: updog
   if (class(object) == "multidog"){
     m = object$snpdf$ploidy[1]

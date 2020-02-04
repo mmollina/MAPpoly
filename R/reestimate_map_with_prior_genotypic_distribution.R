@@ -1,16 +1,26 @@
-#' Reestimate gentic map using dosage prior distribution
+#' Reestimate genetic map using dosage prior distribution
 #'
 #' This function considers dosage prior distribution when reestimating
-#' a genetic map using hdden Markov models
+#' a genetic map using Hidden Markov models
 #'
-#' @param input.map an object of class \code{mappoly.map}.
+#' @param input.map an object of class \code{mappoly.map}
+#' 
 #' @param phase.config which phase configuration should be used. "best" (default) 
-#'                     will choose the maximum likelihood configuration.
-#' @param tol the desired accuracy.
+#'                     will choose the maximum likelihood configuration
+#'                     
+#' @param tol the desired accuracy (default = 10e-04)
+#' 
 #' @param verbose if \code{TRUE}, current progress is shown; if
-#'     \code{FALSE}, no output is produced.
+#'     \code{FALSE} (default), no output is produced
 #'
-#' @return An object of class 'mappoly.map'
+#' @return An object of class 'mappoly.map' with the following structure:
+#' \item{m}{the ploidy level}
+#' \item{mrk.names}{the names of markers present in the sequence}
+#' \item{data.name}{name of the dataset of class \code{mappoly.data}}
+#' \item{ph.thres}{the LOD threshold used to define the linkage phase configurations to test}
+#' \item{maps}{a list containing the sequence of markers, their recombination fractions,
+#' the linkage phase configuration for all markers in both parents P and Q and the 
+#' map's joint likelihood}
 #'
 #' @examples
 #'   \dontrun{

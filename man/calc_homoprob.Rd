@@ -14,25 +14,25 @@ calc_homoprob(input.genoprobs)
   ind = NULL, use.plotly = TRUE, ...)
 }
 \arguments{
-\item{input.genoprobs}{an object of class \code{"mappoly.genoprob"}}
+\item{input.genoprobs}{an object of class \code{mappoly.genoprob}}
 
-\item{x}{an object of class \code{"mappoly.homoprob"}}
+\item{x}{an object of class \code{mappoly.homoprob}}
 
 \item{...}{unused arguments}
 
-\item{stack}{loagical. If \code{TRUE}, probability profiles of all homologs
-are stacked in the plot.}
+\item{stack}{logical. If \code{TRUE}, probability profiles of all homologs
+are stacked in the plot (default = FALSE)}
 
 \item{lg}{indicates which linkage group should be plotted. If \code{NULL} 
 (default), the function plots the first linkage group. If 
-\code{"all"}, the function plots all linkage groups.}
+\code{"all"}, the function plots all linkage groups}
 
-\item{ind}{indicates which individual should be plotted. It can be the 
-position of the individuals in the data set or its name. 
+\item{ind}{indicates which individuals should be plotted. It can be the 
+position of the individuals in the data set or it's name. 
 If \code{NULL} (default), the function plots the first 
-individual.}
+individual}
 
-\item{use.plotly}{if \code{TRUE}, it uses plotly interactive graphics}
+\item{use.plotly}{if \code{TRUE} (default), it uses plotly interactive graphics}
 }
 \description{
 Compute homolog probabilities for all individuals in the full-sib
@@ -65,8 +65,8 @@ population
 }
 \references{
 Mollinari, M. et al. (2019) Unraveling the hexaploid 
-    sweetpotato inheritance using ultra-dense multilocus mapping, 
-    _submited_. \url{https://doi.org/10.1101/689638}
+    sweetpotato inheritance using ultra-dense multilocus mapping. 
+    _G3: Genes, Genomes, Genetics_. \url{http://dx.doi.org/10.1534/g3.119.400620}
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

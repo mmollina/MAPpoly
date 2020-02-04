@@ -4,44 +4,43 @@
 \alias{sim_homologous}
 \title{Simulate homology groups}
 \usage{
-sim_homologous(m, n.mrk, min.d = 0, max.d, prob.dose = NULL, max.ph,
-  restriction = TRUE, seed = NULL)
+sim_homologous(m, n.mrk, min.d = 0, max.d = m + 1, prob.dose = NULL,
+  max.ph, restriction = TRUE, seed = NULL)
 }
 \arguments{
-\item{m}{ploidy level. Must be an even number.}
+\item{m}{ploidy level. Must be an even number}
 
-\item{n.mrk}{number of markers.}
+\item{n.mrk}{number of markers}
 
-\item{min.d}{minimum dosage to be simulated}
+\item{min.d}{minimum dosage to be simulated (default = 0)}
 
-\item{max.d}{maximum dosage to be simulated}
+\item{max.d}{maximum dosage to be simulated (default = m + 1)}
 
 \item{prob.dose}{a vector indicating the proportion of markers for
-different dosage to be simulated.}
+different dosage to be simulated (default = NULL)}
 
-\item{max.ph}{maximum phase difference.}
+\item{max.ph}{maximum phase difference}
 
-\item{restriction}{if TRUE, avoid cases where it is impossible to
+\item{restriction}{if TRUE (default), avoid cases where it is impossible to
 estmate recombination fraction and/or linkage phases via
-two-point analysis.}
+two-point analysis}
 
 \item{seed}{random number generator seed}
 }
 \value{
-S3
-A list which is a list containing the following components:
-  \item{hom.allele.p}{ a \code{list} of vectors
-   containing linkage phase configuration. Each vector contains the
+a list containing the following components:
+  \item{hom.allele.p}{ a list of vectors
+   containing linkage phase configurations. Each vector contains the
    numbers of the homologous chromosomes in which the alleles are
    located. For instance, a vector containing \eqn{(1,3,4)} means that
    the marker has three doses located in the chromosomes 1, 3 and 4. For
-   zero doses, use 0.}
+   zero doses, use 0}
   \item{p}{contains the indices of the starting positions of the
     dosages, considering that the vectors contained in \code{p} are
     concatenated. Markers with no doses (zero doses are also
-    considered).}
-  \item{hom.allele.q}{Analogously to hom.allele.p}
-  \item{q}{Analogously to p}
+    considered)}
+  \item{hom.allele.q}{Analogously to \code{hom.allele.p}}
+  \item{q}{Analogously to \code{p}}
 }
 \description{
 Simulate two homology groups (one for each parent) and their

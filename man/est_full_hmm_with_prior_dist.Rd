@@ -3,28 +3,35 @@
 %   R/reestimate_map_with_prior_genotypic_distribution.R
 \name{est_full_hmm_with_prior_dist}
 \alias{est_full_hmm_with_prior_dist}
-\title{Reestimate gentic map using dosage prior distribution}
+\title{Reestimate genetic map using dosage prior distribution}
 \usage{
 est_full_hmm_with_prior_dist(input.map, phase.config = "best",
   tol = 0.001, verbose = TRUE)
 }
 \arguments{
-\item{input.map}{an object of class \code{mappoly.map}.}
+\item{input.map}{an object of class \code{mappoly.map}}
 
 \item{phase.config}{which phase configuration should be used. "best" (default) 
-will choose the maximum likelihood configuration.}
+will choose the maximum likelihood configuration}
 
-\item{tol}{the desired accuracy.}
+\item{tol}{the desired accuracy (default = 10e-04)}
 
 \item{verbose}{if \code{TRUE}, current progress is shown; if
-\code{FALSE}, no output is produced.}
+\code{FALSE} (default), no output is produced}
 }
 \value{
-An object of class 'mappoly.map'
+An object of class 'mappoly.map' with the following structure:
+\item{m}{the ploidy level}
+\item{mrk.names}{the names of markers present in the sequence}
+\item{data.name}{name of the dataset of class \code{mappoly.data}}
+\item{ph.thres}{the LOD threshold used to define the linkage phase configurations to test}
+\item{maps}{a list containing the sequence of markers, their recombination fractions,
+the linkage phase configuration for all markers in both parents P and Q and the 
+map's joint likelihood}
 }
 \description{
 This function considers dosage prior distribution when reestimating
-a genetic map using hdden Markov models
+a genetic map using Hidden Markov models
 }
 \examples{
   \dontrun{

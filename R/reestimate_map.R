@@ -1,20 +1,30 @@
 #' Reestimate the recombination fractions in a genetic map
+#' 
+#' This function reestimates the recombination fractions between all markers in a given map.
 #'
 #' @param input.map An object of class \code{mappoly.map}
+#' 
 #' @param input.mat An object of class \code{mappoly.rf.matrix}
-#' @param tol tolerance for determining convergence.
+#' 
+#' @param tol tolerance for determining convergence (default = 10e-03)
+#' 
 #' @param phase.config which phase configuration should be used. "best" (default) 
-#'                     will choose the maximum likelihood configuration.
-#' @param method indicates whether to use Hidden Markov Models or Ordinary
-#'     Least Squares to reestimate the recombination fraction
-#' @param weight if \code{TRUE}, it uses the LOD scores to perform a weighted
+#'                     will choose the maximum likelihood configuration
+#'                     
+#' @param method indicates whether to use \code{'hmm'} (Hidden Markov Models) 
+#' or \code{'ols'} (Ordinary Least Squares) to reestimate the recombination fractions
+#'     
+#' @param weight if \code{TRUE} (default), it uses the LOD scores to perform a weighted
 #'    regression when the Ordinary Least Saquares is chosen
-#' @param verbose if \code{TRUE}, current progress is shown; if
-#'     \code{FALSE}, no output is produced.
+#'    
+#' @param verbose if \code{TRUE} (default), current progress is shown; if
+#'     \code{FALSE}, no output is produced
+#'     
 #' @return a numeric vector of size \code{m} indicating which
 #'     homologous in h2 represents the homologous in h1. If there is
 #'     no correspondence, i.e. different homologous, it returns NA for
-#'     that homologous.
+#'     that homologous
+#'     
 #' @references
 #'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid

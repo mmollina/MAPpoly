@@ -13,19 +13,19 @@ read_geno(file.in, filter.non.conforming = TRUE)
 \method{plot}{mappoly.data}(x, thresh.line = 1e-05, ...)
 }
 \arguments{
-\item{file.in}{the name of the input file which contains the data to
-be read.}
+\item{file.in}{a character string with the name of (or full path to) the input file
+which contains the data to be read}
 
 \item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
 expected genotypes under random chromosome pairing and no double reduction}
 
-\item{x}{an object of one of the classes \code{mappoly.data}}
+\item{x}{an object of class \code{mappoly.data}}
 
-\item{detailed}{if available, print the number of markers per sequence}
+\item{detailed}{if available, print the number of markers per sequence (default = FALSE)}
 
 \item{...}{currently ignored}
 
-\item{thresh.line}{position of a threshold line for p values of the segregation test}
+\item{thresh.line}{position of a threshold line for p values of the segregation test (default = 10e-06)}
 }
 \value{
 An object of class \code{mappoly.data} which contains a
@@ -41,12 +41,12 @@ An object of class \code{mappoly.data} which contains a
       parent Q for all \code{n.mrk} markers}
     \item{sequence}{a vector indicating which sequence each marker
       belongs. Zero indicates that the marker was not assigned to any
-      sequence.}
+      sequence}
     \item{sequence.pos}{Physical position of the markers into the
       sequence}
     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
       for each individual (columns). Missing data are represented by 
-      \code{ploidy_level + 1}.}
+      \code{ploidy_level + 1}}
     \item{n.phen}{number of phenotypic traits}
     \item{phen}{a matrix containing the phenotypic data. The rows
                 corespond to the trais and the columns correspond
@@ -59,7 +59,7 @@ section. This function creates an object of class \code{mappoly.data}
 \details{
 The first line of the input file contains the string \code{ploidy} followed by the ploidy level of the parents.
 The second and third lines contain the strings \code{nind} and \code{nmrk} followed by the number of individuals in 
-the dataset and the total number of markers, respectively. Lines number 4 and 5 contain the string 
+the dataset and the total number of markers, respectively. Lines number 4 and 5 contain the strings
 \code{mrknames} and \code{indnames} followed by a sequence of the names of the markers and the name of the individuals, 
 respectively. Lines 6 and 7 contain the strings \code{dosageP} and \code{dosageQ} followed by a sequence of numbers 
 containing the dosage of all markers in parent \code{P} and \code{Q}. Line 8, contains the string seq followed by 
@@ -74,9 +74,8 @@ able to make decisions based on these values, such as the occurrence of crossing
 should contain the string \code{nphen} followed by the number of phenotypic traits. Line number 11 is skipped 
 (Usually used as a spacer). The next elements are strings containing the name of the phenotypic trait with no space characters
 followed by the phenotypic values. The number of lines should be the same number of phenotypic traits. 
-\code{NA} represents missing values. The line number 12 + \code{nphen} is skipped. Finally, Finally, the last element is a table
-containing the dosage for each marker (rows) for each individual
-(columns). \code{NA} represents missing values.
+\code{NA} represents missing values. The line number 12 + \code{nphen} is skipped. Finally, the last element is a table
+containing the dosage for each marker (rows) for each individual (columns). \code{NA} represents missing values.
 }
 \examples{
 \dontrun{

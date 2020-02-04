@@ -2,8 +2,7 @@
 % Please edit documentation in R/check_phase_configurations.R
 \name{ph_list_to_matrix}
 \alias{ph_list_to_matrix}
-\title{This function converts linkage phase configurations from list form
-to matrix}
+\title{MAPpoly object conversion: phase configurations (list to matrix)}
 \usage{
 ph_list_to_matrix(L, m)
 }
@@ -17,7 +16,7 @@ a matrix whose columns represent homologous chromosomes and
     the rows represent markers
 }
 \description{
-This function converts linkage phase configurations from list form
-to matrix
+This function converts linkage phase configurations from list
+to matrix form
 }
 \keyword{internal}
