@@ -7,7 +7,7 @@
 get_submap(input.map, mrk.pos, phase.config = "best",
   reestimate.rf = TRUE, reestimate.phase = FALSE, thres.twopt = 5,
   thres.hmm = 3, extend.tail = 50, count.cache = NULL, tol = 0.1,
-  tol.final = 0.001, high.prec = FALSE, verbose = TRUE)
+  tol.final = 0.001, use.high.precision = FALSE, verbose = TRUE)
 }
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}
@@ -44,7 +44,7 @@ pre-computed genotype frequencies, obtained with
 
 \item{tol.final}{the desired accuracy for the final map (default = 10e-04)}
 
-\item{high.prec}{logical. If \code{TRUE} uses high precision 
+\item{use.high.precision}{logical. If \code{TRUE} uses high precision 
 (long double) numbers in the HMM procedure implemented in C++,
 which can take a long time to perform (default = FALSE)}
 
