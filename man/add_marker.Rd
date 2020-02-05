@@ -5,7 +5,7 @@
 \title{Add a single marker to a map}
 \usage{
 add_marker(input.map, mrk, pos, rf.matrix, genoprob = NULL,
-  phase.config = "best", tol = 0.001)
+  phase.config = "best", tol = 0.001, r.test = NULL)
 }
 \arguments{
 \item{input.map}{an object of class \code{mappoly.map}}
@@ -27,6 +27,8 @@ for all marker positions on \code{input.map}}
 will choose the maximum likelihood configuration}
 
 \item{tol}{the desired accuracy (default = 10e-04)}
+
+\item{r.test}{for internal use only}
 }
 \value{
 An object of class \code{mappoly.map} with the following structure:

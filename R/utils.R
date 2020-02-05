@@ -553,7 +553,9 @@ drop_marker<-function(input.map, mrk)
 #'                     will choose the maximum likelihood configuration
 #'                     
 #' @param tol the desired accuracy (default = 10e-04)
-#'                     
+#' 
+#' @param r.test for internal use only
+#' 
 #' @return An object of class \code{mappoly.map} with the following structure:
 #' \item{m}{the ploidy level}
 #' \item{mrk.names}{the names of markers present in the sequence}
@@ -626,7 +628,8 @@ add_marker <- function(input.map,
                        rf.matrix, 
                        genoprob = NULL,
                        phase.config = "best",
-                       tol = 10e-4){
+                       tol = 10e-4,
+                       r.test = NULL){
   ## Checking class of arguments
   if(!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
@@ -705,10 +708,13 @@ add_marker <- function(input.map,
       e.right[[i]] <- a.right[a.right > thresh.cut.path]
       h.right[[i]] <- A[names(e.right[[i]]), , drop = FALSE]
     }
-    r.test<-generate_all_link_phases_elim_equivalent_haplo(block1 = input.map$maps[[i.lpc]], 
-                                                           block2 = mrk.id, 
-                                                           rf.matrix = rf.matrix, 
-                                                           m = m, max.inc = 0)
+    if(is.null(r.test)){
+      r.test<-generate_all_link_phases_elim_equivalent_haplo(block1 = input.map$maps[[i.lpc]], 
+                                                             block2 = mrk.id, 
+                                                             rf.matrix = rf.matrix, 
+                                                             m = m, max.inc = 0)
+      
+    }
   } else if(pos > 0 & pos < nmrk){   ## Adding marker: middle positions
     ## h: states to visit in both parents
     ## e: probability distribution (ignored in this version) 
