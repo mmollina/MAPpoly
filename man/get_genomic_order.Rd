@@ -2,14 +2,17 @@
 % Please edit documentation in R/utils.R
 \name{get_genomic_order}
 \alias{get_genomic_order}
-\title{get genomic order of the markers}
+\title{Get genomic order of the markers}
 \usage{
 get_genomic_order(input.seq)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{input.seq}{a sequence object of class \code{mappoly.sequence}}
 }
 \description{
-get genomic order of the markers
+This functions gets the genomic order of the markers, if provided.
 }
-\keyword{internal}
+\author{
+Marcelo Mollinari, \email{mmollin@ncsu.edu}
+}
+\keyword{genomic}

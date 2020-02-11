@@ -428,10 +428,15 @@ mrk_chisq_test<-function(x, m){
 }
 
 
-#' get genomic order of the markers
+#' Get genomic order of the markers
 #'
-#' @param void interfunction to be documented
-#' @keywords internal
+#' This functions gets the genomic order of the markers, if provided.
+#'
+#' @param input.seq a sequence object of class \code{mappoly.sequence} 
+#' 
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
+#' 
+#' @keywords genomic
 #' @export
 get_genomic_order<-function(input.seq){
   if (!class(input.seq) == "mappoly.sequence")

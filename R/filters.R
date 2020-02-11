@@ -108,7 +108,7 @@ filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
   if(interactive() && inter)
   {
     op<-par(bg = "gray", xpd = TRUE)
-    while(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
+    while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
     {
       na.num<-apply(input.data$geno.dose, 1, function(x,m) sum(x==m+1), m = input.data$m)
       perc.na<-na.num/input.data$n.ind
@@ -117,8 +117,8 @@ filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
       lines(x = c(0, input.data$n.mrk), y = rep(filter.thres,2), col = 4, lty = 2)
       text(x = input.data$n.mrk/2, y = filter.thres + 0.05, labels = paste0("Excluded mrks: ", sum(perc.na >= filter.thres)), adj = 0, col = "darkred")
       text(x = input.data$n.mrk/2, y = filter.thres - 0.05, labels = paste0("Included mrks: ", sum(perc.na < filter.thres)), adj = 0, col = "darkgreen")
-      ANSWER <- readline("Enter 'y' to proceed or update the filter threshold: ")
-      if(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
+      ANSWER <- readline("Enter 'Y/n' to proceed or update the filter threshold: ")
+      if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
         filter.thres  <- as.numeric(ANSWER)
     }
     rm.mrks.id<-which(perc.na > filter.thres)
@@ -177,7 +177,7 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
   if(interactive() && inter)
   {
     op<-par(bg = "gray", xpd = TRUE)
-    while(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
+    while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
     {
       na.num<-apply(input.data$geno.dose, 2, function(x,m) sum(x==m+1), m = input.data$m)
       perc.na<-na.num/input.data$n.mrk
@@ -186,8 +186,8 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
       lines(x = c(0, input.data$n.mrk), y = rep(filter.thres,2), col = 4, lty = 2)
       text(x = input.data$n.ind/2, y = filter.thres + 0.05, labels = paste0("Excluded individuals: ", sum(perc.na >= filter.thres)), adj = 0, col = "darkred")
       text(x = input.data$n.ind/2, y = filter.thres - 0.05, labels = paste0("Included individuals: ", sum(perc.na < filter.thres)), adj = 0, col = "darkgreen")
-      ANSWER <- readline("Enter 'y' to proceed or update the filter threshold: ")
-      if(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
+      ANSWER <- readline("Enter 'Y/n' to proceed or update the filter threshold: ")
+      if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
         filter.thres  <- as.numeric(ANSWER)
     }
     rm.ind.id<-which(perc.na > filter.thres)
