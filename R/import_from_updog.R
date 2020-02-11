@@ -61,7 +61,7 @@
 #'                 p1_id = colnames(t(uitdewilligen$sizemat))[1],
 #'                 p2_id = colnames(t(uitdewilligen$sizemat))[2],
 #'                 nc = 4)
-#' mydata = import_from(mout)
+#' mydata = import_from_updog(mout)
 #'}
 #'
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}

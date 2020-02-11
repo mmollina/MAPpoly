@@ -60,7 +60,7 @@
 #'     test of mendelian segregation performed for all markers}
 #' @examples
 #' \dontrun{
-#'     mydata = read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2")
+#'     mydata = read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2", ploidy = 6)
 #'     print(mydata, detailed = TRUE)
 #'}
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}

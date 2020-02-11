@@ -73,7 +73,7 @@ recommended that you inform it to check for mismatches. All individual and marke
 }
 \examples{
 \dontrun{
-    mydata = read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2")
+    mydata = read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2", ploidy = 6)
     print(mydata, detailed = TRUE)
 }
 }
