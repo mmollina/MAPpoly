@@ -553,7 +553,9 @@ drop_marker<-function(input.map, mrk)
 #'                     will choose the maximum likelihood configuration
 #'                     
 #' @param tol the desired accuracy (default = 10e-04)
-#'                     
+#' 
+#' @param r.test for internal use only
+#' 
 #' @return An object of class \code{mappoly.map} with the following structure:
 #' \item{m}{the ploidy level}
 #' \item{mrk.names}{the names of markers present in the sequence}
@@ -626,7 +628,8 @@ add_marker <- function(input.map,
                        rf.matrix, 
                        genoprob = NULL,
                        phase.config = "best",
-                       tol = 10e-4){
+                       tol = 10e-4,
+                       r.test = NULL){
   ## Checking class of arguments
   if(!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
@@ -640,16 +643,25 @@ add_marker <- function(input.map,
   if(!all(c(input.map$info$mrk.names, mrk)%in%colnames(rf.matrix$rec.mat))){
     stop(deparse(substitute(rf.matrix)), " does not contain all necessary information about 'input.map' and 'mrk'.")
   }
+  ## choosing the linkage phase configuration
+  LOD.conf <- get_LOD(input.map, sorted = FALSE)
+  if(phase.config == "best") {
+    i.lpc <- which.min(LOD.conf)
+  }  else if (phase.config > length(LOD.conf)) {
+    stop("invalid linkage phase configuration")
+  } else i.lpc <- phase.config
+  
+  ## Checking genoprob
   if(is.null(genoprob)){
     message("Calculating genoprob.")
-    genoprob <- calc_genoprob(input.map)
+    genoprob <- calc_genoprob(input.map, phase.config = i.lpc)
   }
   if(!inherits(genoprob, "mappoly.genoprob")) {
     stop("'", deparse(substitute(genoprob)), "' is not an object of class 'mappoly.genoprob'")
   }
   if(!identical(names(genoprob$map), input.map$info$mrk.names)){
     warning("'", deparse(substitute(genoprob)), "' is inconsistent with 'input.map'.\n  Recalculating genoprob.")
-    genoprob <- calc_genoprob(input.map)
+    genoprob <- calc_genoprob(input.map, phase.config = i.lpc)
   }
   ## ploidy
   m <- input.map$info$m
@@ -663,7 +675,6 @@ add_marker <- function(input.map,
   ngam <- choose(m, m/2)
   ## the threshold for visiting states: 1/ngen
   thresh.cut.path <- 1/ngen
-
   ## Indexing position were the marker should be inserted
   if(is.numeric(pos)){
     if(!(pos >=0 & pos <= (nmrk+1))){
@@ -687,14 +698,6 @@ add_marker <- function(input.map,
   }
   mrk.id <- as.numeric(colnames(rf.matrix$ShP)[match(mrk, colnames(rf.matrix$rec.mat))])
   
-  ## choosing the linkage phase configuration
-  LOD.conf <- get_LOD(input.map, sorted = FALSE)
-  if(phase.config == "best") {
-    i.lpc <- which.min(LOD.conf)
-  }  else if (phase.config > length(LOD.conf)) {
-    stop("invalid linkage phase configuration")
-  } else i.lpc <- phase.config
-  
   ## Adding marker: beginning of sequence
   if(pos == 0){
     ## h: states to visit in both parents
@@ -705,10 +708,13 @@ add_marker <- function(input.map,
       e.right[[i]] <- a.right[a.right > thresh.cut.path]
       h.right[[i]] <- A[names(e.right[[i]]), , drop = FALSE]
     }
-    r.test<-generate_all_link_phases_elim_equivalent_haplo(block1 = input.map$maps[[i.lpc]], 
-                                                           block2 = mrk.id, 
-                                                           rf.matrix = rf.matrix, 
-                                                           m = m, max.inc = 0)
+    if(is.null(r.test)){
+      r.test<-generate_all_link_phases_elim_equivalent_haplo(block1 = input.map$maps[[i.lpc]], 
+                                                             block2 = mrk.id, 
+                                                             rf.matrix = rf.matrix, 
+                                                             m = m, max.inc = 0)
+      
+    }
   } else if(pos > 0 & pos < nmrk){   ## Adding marker: middle positions
     ## h: states to visit in both parents
     ## e: probability distribution (ignored in this version) 
@@ -863,10 +869,14 @@ add_marker <- function(input.map,
   }
   cat("\n")
   res<-res[order(res[,"log_like"], decreasing = TRUE),,drop = FALSE]
+  
+  
   ## Updating map
+  output.map <- input.map
   seq.num<-as.numeric(names(configs[[1]]$P))
-  input.map$info$mrk.names <- colnames(rf.matrix$rec.mat)[match(seq.num, colnames(rf.matrix$ShP))]
-  input.map$info$n.mrk <- length(input.map$info$mrk.names)
+  output.map$info$mrk.names <- colnames(rf.matrix$rec.mat)[match(seq.num, colnames(rf.matrix$ShP))]
+  output.map$info$n.mrk <- length(output.map$info$mrk.names)
+  output.map$maps <- vector("list", nrow(res))
   for(i in 1:nrow(res))
   {
     ## Updating recombination fractions (aproximated)
@@ -879,12 +889,12 @@ add_marker <- function(input.map,
     } else if(pos == nmrk){
       seq.rf <- c(input.map$maps[[i.lpc]]$seq.rf, res[i, "rf1"])
     }
-    input.map$maps[[i]] <- list(seq.num = seq.num, 
+    output.map$maps[[i]] <- list(seq.num = seq.num, 
                                 seq.rf = seq.rf, 
                                 seq.ph = configs[[rownames(res)[i]]],
                                 loglike = res[i, "log_like"])
   }
-  return(input.map)
+  return(output.map)
 }
 
 #' Data sanity check
