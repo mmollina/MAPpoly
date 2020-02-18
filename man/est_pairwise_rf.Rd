@@ -7,8 +7,8 @@
 \title{Pairwise two-point analysis}
 \usage{
 est_pairwise_rf(input.seq, count.cache, n.clusters = 1,
-  tol = .Machine$double.eps^0.25, mrk.pairs = NULL,
-  batch.size = NULL, verbose = TRUE)
+  platform = "auto", tol = .Machine$double.eps^0.25,
+  mrk.pairs = NULL, batch.size = NULL, verbose = TRUE)
 
 \method{print}{poly.est.two.pts.pairwise}(x, ...)
 

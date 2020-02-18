@@ -4,14 +4,14 @@
 \alias{cache_counts_twopt}
 \title{Frequency of genotypes for two-point recombination fraction estimation}
 \usage{
-cache_counts_twopt(input.seq, get.from.web = FALSE, cache.prev = NULL,
+cache_counts_twopt(input.seq, cached = FALSE, cache.prev = NULL,
   n.clusters = 1, verbose = TRUE, joint.prob = FALSE)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}}
 
-\item{get.from.web}{If \code{TRUE}, access the counts for all
-linkage phase configurations in a remote server (default = FALSE)}
+\item{cached}{If \code{TRUE}, access the counts for all
+linkage phase configurations in a internal file (default = FALSE)}
 
 \item{cache.prev}{an object of class \code{cache.info} containing
 pre-computed genotype frequencies, obtained with
@@ -20,7 +20,7 @@ pre-computed genotype frequencies, obtained with
 \item{n.clusters}{Number of parallel processes to spawn (default = 1)}
 
 \item{verbose}{If \code{TRUE} (default), print the linkage phase
-confgurations. If \code{get.from.web = TRUE}, nothing is
+confgurations. If \code{cached = TRUE}, nothing is
 printed, since all linkage phase configurations will be cached.}
 
 \item{joint.prob}{If \code{FALSE} (default), returns the frequency of
@@ -55,8 +55,8 @@ combinations and for all possible linkage phase configurations.
     all.mrk<-make_seq_mappoly(hexafake, 'all')
     ## local computation
     counts<-cache_counts_twopt(all.mrk, n.clusters = 8)
-    ## download from web (specially important for high ploidy levels)
-    counts.web<-cache_counts_twopt(all.mrk, get.from.web = TRUE)
+    ## load from internal file (specially important for high ploidy levels)
+    counts.cached<-cache_counts_twopt(all.mrk, cached = TRUE)
     }
 
 }
@@ -68,5 +68,5 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     \url{https://doi.org/10.1534/g3.119.400378}
 }
 \author{
-Marcelo Mollinari, \email{mmollin@ncsu.edu}
+Marcelo Mollinari, \email{mmollin@ncsu.edu} with changes by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 }

@@ -6,8 +6,8 @@
 #'
 #' @param input.seq an object of class \code{mappoly.sequence}
 #'
-#' @param get.from.web If \code{TRUE}, access the counts for all
-#'     linkage phase configurations in a remote server (default = FALSE)
+#' @param cached If \code{TRUE}, access the counts for all
+#'     linkage phase configurations in a internal file (default = FALSE)
 #'
 #' @param cache.prev an object of class \code{cache.info} containing
 #'     pre-computed genotype frequencies, obtained with
@@ -16,7 +16,7 @@
 #' @param n.clusters Number of parallel processes to spawn (default = 1)
 #'
 #' @param verbose If \code{TRUE} (default), print the linkage phase
-#'     confgurations. If \code{get.from.web = TRUE}, nothing is
+#'     confgurations. If \code{cached = TRUE}, nothing is
 #'     printed, since all linkage phase configurations will be cached.
 #'
 #' @param joint.prob If \code{FALSE} (default), returns the frequency of
@@ -45,11 +45,11 @@
 #'     all.mrk<-make_seq_mappoly(hexafake, 'all')
 #'     ## local computation
 #'     counts<-cache_counts_twopt(all.mrk, n.clusters = 8)
-#'     ## download from web (specially important for high ploidy levels)
-#'     counts.web<-cache_counts_twopt(all.mrk, get.from.web = TRUE)
+#'     ## load from internal file (specially important for high ploidy levels)
+#'     counts.cached<-cache_counts_twopt(all.mrk, cached = TRUE)
 #'     }
 #'
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} with changes by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'
 #' @references
 #'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
@@ -63,7 +63,7 @@
 #' @importFrom stats na.omit
 #' @importFrom utils combn read.table
 #'
-cache_counts_twopt <- function(input.seq, get.from.web = FALSE, cache.prev = NULL, n.clusters = 1, verbose = TRUE, joint.prob = FALSE) {
+cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL, n.clusters = 1, verbose = TRUE, joint.prob = FALSE) {
     ## checking for correct object
     start <- proc.time()
     input_classes <- c("mappoly.sequence")
@@ -73,18 +73,24 @@ cache_counts_twopt <- function(input.seq, get.from.web = FALSE, cache.prev = NUL
     cache.prev = NULL
     if(input.seq$m==2)
     {
-      get.from.web <- FALSE
+      cached <- FALSE
       cat("INFO: Computing genotype frequencies ...\n")
     }
-    if (get.from.web)
-        return(get_cache_two_pts_from_web(input.seq$m))
+    if (cached){
+      if (input.seq$m == 2) ploidy = 'diploid'
+      else if (input.seq$m == 4) ploidy = 'tetraploid'
+      else if (input.seq$m == 6) ploidy = 'hexaploid'
+      else if (input.seq$m == 8) ploidy = 'octaploid'
+      else return(get_cache_two_pts_from_web(input.seq$m))
+      return(full_counts[[ploidy]])
+    }
     temp.count <- NULL
     if (joint.prob) {
-        temp.count <- cache_counts_twopt(input.seq, get.from.web = FALSE, cache.prev = cache.prev, n.clusters = n.clusters, verbose = verbose, joint.prob = FALSE)$cond
+        temp.count <- cache_counts_twopt(input.seq, cached = FALSE, cache.prev = cache.prev, n.clusters = n.clusters, verbose = verbose, joint.prob = FALSE)$cond
     }
     if (input.seq$m >= 8)
         message("\nploidy level ", input.seq$m, ": this operation could take a very long time.
-                 \ntry to use function 'get_cache_two_pts.from.web' instead.\n")
+                 \ntry to use the option 'cached' instead.\n")
     dose.names <- sort(unique(apply(rbind(combn(input.seq$seq.dose.p, 2), combn(input.seq$seq.dose.q, 2)), 2, paste, collapse = "-")))
     if (!is.null(cache.prev)) {
         if (!inherits(cache.prev, "cache.info")) {

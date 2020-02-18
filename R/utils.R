@@ -1042,3 +1042,105 @@ check_data_dist_sanity <- function(x){
   else
     return(0)
 }
+
+#' Merge datasets
+#'
+#' This function merges two datasets of class \code{mappoly.data}. This can be useful
+#' when individuals of a population were genotyped using two or more techniques
+#' and have datasets in different files or formats. Please notice that the datasets
+#' should contain the same number of individuals, which must be represented identically
+#' in both datasets (e.g. \code{Ind_1} in both datasets, not \code{Ind_1}
+#' in one dataset and \code{ind_1} or \code{Ind.1} in the other).
+#'
+#' Please notice that if any of these datasets were generated using \code{read_vcf}
+#' or \code{read_geno_dist} functions, the final dataset may not contain
+#' some information, such as reference and alternative alleles,
+#' marker depths and the probability distribution of genotypes. 
+#'
+#' @param dataset.1 the first dataset of class \code{mappoly.data} to be merged
+#'
+#' @param dataset.2 the second dataset of class \code{mappoly.data} to be merged
+#'
+#' @return An object of class \code{mappoly.data} which contains all markers
+#' from both datasets. It will be a list with the following components:
+#'     \item{m}{ploidy level}
+#'     \item{n.ind}{number individuals}
+#'     \item{n.mrk}{total number of markers}
+#'     \item{ind.names}{the names of the individuals}
+#'     \item{mrk.names}{the names of the markers}
+#'     \item{dosage.p}{a vector containing the dosage in
+#'       parent P for all \code{n.mrk} markers}
+#'     \item{dosage.q}{a vector containing the dosage in
+#'       parent Q for all \code{n.mrk} markers}
+#'     \item{sequence}{a vector indicating which sequence each marker
+#'       belongs. Zero indicates that the marker was not assigned to any
+#'       sequence}
+#'     \item{sequence.pos}{Physical position of the markers into the
+#'       sequence}
+#'     \item{prob.thres}{(unused field)}
+#'     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
+#'       for each individual (columns). Missing data are represented by 
+#'       \code{ploidy_level + 1}}
+#'     \item{nphen}{(unused field)}
+#'     \item{phen}{(unused field)}
+#'     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
+#'     test of mendelian segregation performed for all markers}
+#' 
+#' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#'
+#' @references
+#'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
+#'     analysis and haplotype phasing in experimental autopolyploid
+#'     populations with high ploidy level using hidden Markov
+#'     models, _G3: Genes, Genomes, Genetics_. 
+#'     \url{https://doi.org/10.1534/g3.119.400378} 
+#'
+#' @export merge_datasets
+#' 
+merge_datasets = function(dataset.1, dataset.2){
+  ## Check objects class
+  if (class(dataset.1) != 'mappoly.data'){
+    stop("The first dataset does not belong to class 'mappoly.data'.")
+  }
+  if (class(dataset.2) != 'mappoly.data'){
+    stop("The second dataset does not belong to class 'mappoly.data'.")
+  }
+  
+  ## Check ploidy
+  if (dataset.1$m != dataset.2$m){
+    stop("The ploidy level in the datasets doesn't match. Please check your files and try again.")
+  }
+  
+  ## Check individuals
+  if (dataset.1$n.ind != dataset.2$n.ind){
+    stop("The datasets have different number of individuals. Please check your files and try again.")
+  }
+  
+  ## Check individual names
+  if (!all(dataset.1$ind.names %in% dataset.2$ind.names)){
+    nmi.1 = dataset.1$ind.names[!(dataset.1$ind.names %in% dataset.2$ind.names)]
+    nmi.2 = dataset.2$ind.names[!(dataset.2$ind.names %in% dataset.1$ind.names)]
+    cat("Some individual's names doesn't match:\n")
+    cat("Dataset 1\tDataset 2\n")
+    for (i in 1:length(nmi.1)) cat(nmi.1[i], "\t\t", nmi.2[i], "\n")
+    stop("Your datasets have the same number of individuals, but some of them are not the same. Please check the list above, fix your files and try again.")
+  }
+  
+  ## Checking (and fixing) individuals order in geno.dose
+  if (!all(colnames(dataset.1$geno.dose) == colnames(dataset.2$geno.dose))){
+    dataset.2$geno.dose = dataset.2$geno.dose[,colnames(dataset.1$geno.dose)]
+  }
+  
+  ## Merging all items
+  dataset.1$geno.dose = rbind(dataset.1$geno.dose, dataset.2$geno.dose)
+  dataset.1$dosage.p = c(dataset.1$dosage.p, dataset.2$dosage.p)
+  dataset.1$dosage.q = c(dataset.1$dosage.q, dataset.2$dosage.q)
+  dataset.1$mrk.names = c(dataset.1$mrk.names, dataset.2$mrk.names)
+  dataset.1$chisq.pval = c(dataset.1$chisq.pval, dataset.2$chisq.pval)
+  dataset.1$n.mrk = dataset.1$n.mrk + dataset.2$n.mrk
+  dataset.1$sequence = c(dataset.1$sequence, dataset.2$sequence)
+  dataset.1$sequence.pos = c(dataset.1$sequence.pos, dataset.2$sequence.pos)
+  
+  ## Returning merged dataset
+  return(dataset.1)
+}
