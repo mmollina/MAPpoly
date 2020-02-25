@@ -19,6 +19,10 @@
 #'    
 #' @param verbose if \code{TRUE} (default), current progress is shown; if
 #'     \code{FALSE}, no output is produced
+#' @param high.prec logical. If \code{TRUE} uses high precision 
+#' (long double) numbers in the HMM procedure implemented in C++,
+#' which can take a long time to perform (default = FALSE)     
+#' @param max.rf.to.break.EM for internal use only.   
 #'     
 #' @return a numeric vector of size \code{m} indicating which
 #'     homologous in h2 represents the homologous in h1. If there is
@@ -35,7 +39,8 @@
 #' @export reest_rf
 #' 
 reest_rf<-function(input.map, input.mat = NULL, tol = 10e-3,  phase.config = "all",
-                    method = c("hmm", "ols"), weight = TRUE, verbose = TRUE)
+                    method = c("hmm", "ols"), weight = TRUE, verbose = TRUE, 
+                   high.prec = FALSE, max.rf.to.break.EM = 0.5)
 {
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
@@ -84,7 +89,9 @@ reest_rf<-function(input.map, input.mat = NULL, tol = 10e-3,  phase.config = "al
     mtemp<-est_rf_hmm_single(input.seq = s,
                              input.ph.single = input.map$maps[[j]]$seq.ph,
                              rf.temp = input.map$maps[[j]]$seq.rf,
-                             tol = tol, verbose = verbose)
+                             tol = tol, verbose = verbose, 
+                             high.prec = high.prec,
+                             max.rf.to.break.EM = max.rf.to.break.EM)
     output.map$maps[[j]]<-mtemp
     }
   }

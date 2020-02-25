@@ -37,7 +37,8 @@ est_rf_hmm_single<-function(input.seq,
                             tol,
                             verbose = FALSE,
                             ret.map.no.rf.estimation = FALSE,
-                            high.prec = TRUE)
+                            high.prec = TRUE,
+                            max.rf.to.break.EM = 0.5)
 {
   input_classes <- c("mappoly.sequence")
   if (!inherits(input.seq, input_classes[1])) {
@@ -64,7 +65,7 @@ est_rf_hmm_single<-function(input.seq,
                       lapply(input.ph.single$Q, function(x) x-1),
                       rf.temp,
                       verbose=verbose,
-                      0.5,
+                      max.rf.to.break.EM,
                       tol,
                       PACKAGE = "mappoly")
     } else{
@@ -75,7 +76,7 @@ est_rf_hmm_single<-function(input.seq,
                       lapply(input.ph.single$Q, function(x) x-1),
                       rf.temp,
                       verbose=verbose,
-                      0.5,
+                      max.rf.to.break.EM,
                       tol,
                       PACKAGE = "mappoly")
     }

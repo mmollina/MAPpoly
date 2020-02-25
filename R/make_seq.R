@@ -4,7 +4,7 @@
 #'
 #' @param input.obj an object of one of the following classes:
 #'     \code{mappoly.data}, \code{mappoly.group}, \code{mappoly.unique.seq},
-#'     \code{pcmap} or \code{pcmap3d}
+#'     \code{mappoly.pcmap} or \code{mappoly.pcmap3d}
 #'
 #' @param arg can be one of the following objects: i) a string 'all',
 #'     resulting in a sequence with all markers in the raw data; ii) a
@@ -13,7 +13,7 @@
 #'     \code{vector} of integers specifying which markers comprise the
 #'     sequence; iv) an integer representing linkage group if 
 #'     \code{input.object} has class \code{mappoly.group}; or v) NULL if 
-#'     \code{input.object} has class \code{pcmap}, \code{pcmap3d} or 
+#'     \code{input.object} has class \code{mappoly.pcmap}, \code{mappoly.pcmap3d} or 
 #'     \code{mappoly.unique.seq}
 #'
 #' @param data.name name of the object of class \code{mappoly.data}
@@ -68,13 +68,13 @@
 
 make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL) {
   ## checking for correct object
-  input_classes <- c("mappoly.data", "mappoly.unique.seq", "pcmap", "pcmap3d", "mappoly.group", "mappoly.chitest.seq")
+  input_classes <- c("mappoly.data", "mappoly.unique.seq", "mappoly.pcmap", "mappoly.pcmap3d", "mappoly.group", "mappoly.chitest.seq")
   if (!inherits(input.obj, input_classes)) {
     stop(deparse(substitute(input.obj)), " is not an object of class 'mappoly.data',
-               'mappoly.chitest.seq', 'mappoly.unique.seq', 'pcmap', 'pcmap3d', or 'mappoly.group'")
+               'mappoly.chitest.seq', 'mappoly.unique.seq', 'mappoly.pcmap', 'mappoly.pcmap3d', or 'mappoly.group'")
   }
   ## checking for argument to make a sequence
-  if (is.null(arg) && class(input.obj) != "mappoly.chitest.seq" && class(input.obj) != "mappoly.unique.seq" && class(input.obj) != "pcmap"&& class(input.obj) != "pcmap3d") {
+  if (is.null(arg) && class(input.obj) != "mappoly.chitest.seq" && class(input.obj) != "mappoly.unique.seq" && class(input.obj) != "mappoly.pcmap"&& class(input.obj) != "mappoly.pcmap3d") {
     stop("argument 'arg' expected.")
   }
   if (class(input.obj) == "mappoly.data")
@@ -150,7 +150,7 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL) {
     else
       sequence <- sequence.pos <- NULL
   }
-  if (class(input.obj) == "pcmap" | class(input.obj) == "pcmap3d" )
+  if (class(input.obj) == "mappoly.pcmap" | class(input.obj) == "mappoly.pcmap3d" )
   {
     if(!is.null(arg))
       warning("Ignoring argument 'arg' and using the MDS order instead.")

@@ -15,7 +15,7 @@ make_seq_mappoly(input.obj, arg = NULL, data.name = NULL)
 \arguments{
 \item{input.obj}{an object of one of the following classes:
 \code{mappoly.data}, \code{mappoly.group}, \code{mappoly.unique.seq},
-\code{pcmap} or \code{pcmap3d}}
+\code{mappoly.pcmap} or \code{mappoly.pcmap3d}}
 
 \item{arg}{can be one of the following objects: i) a string 'all',
 resulting in a sequence with all markers in the raw data; ii) a
@@ -24,7 +24,7 @@ is the sequence (\code{x=0} indicates unassigned markers); iii) a
 \code{vector} of integers specifying which markers comprise the
 sequence; iv) an integer representing linkage group if 
 \code{input.object} has class \code{mappoly.group}; or v) NULL if 
-\code{input.object} has class \code{pcmap}, \code{pcmap3d} or 
+\code{input.object} has class \code{mappoly.pcmap}, \code{mappoly.pcmap3d} or 
 \code{mappoly.unique.seq}}
 
 \item{data.name}{name of the object of class \code{mappoly.data}}
