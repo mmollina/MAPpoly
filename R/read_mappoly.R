@@ -27,7 +27,10 @@
 #'  which contains the data to be read
 #'
 #' @param filter.non.conforming if \code{TRUE} (default) exclude samples with non 
-#'     expected genotypes under random chromosome pairing and no double reduction 
+#'     expected genotypes under random chromosome pairing and no double reduction
+#'
+#' @param elim.redundant logical. If \code{TRUE} (default), removes redundant markers
+#' during map construction, keeping them annotated to export to the final map.
 #'     
 #' @param x an object of class \code{mappoly.data}
 #'
@@ -80,7 +83,7 @@
 #'
 #' @export read_geno
 
-read_geno <- function(file.in, filter.non.conforming = TRUE) {
+read_geno <- function(file.in, filter.non.conforming = TRUE, elim.redundant = TRUE) {
   ## get ploidy level ----------------------
   temp <- scan(file.in , what = character(), sep = " ", nlines = 1, quiet = TRUE)
   m <- na.omit(as.numeric(temp[2]))
@@ -224,7 +227,12 @@ read_geno <- function(file.in, filter.non.conforming = TRUE) {
     M<-cbind(M, res$geno.dose)
     res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
     cat("\n    Done.\n")
-    return(res)
+  }
+      if (elim.redundant){
+      redun = elim_redundant(make_seq_mappoly(res, arg = 'all', data.name = 'res'))
+      res$unique.seq = redun$unique.seq
+      res$kept = redun$kept
+      res$elim.correspondence = redun$elim.correspondence
   }
   return(res)
 }
@@ -239,11 +247,17 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
   cat("    No. individuals:                        ", x$n.ind, "\n")
   cat("    No. markers:                            ", x$n.mrk, "\n")
   miss<-round(100*sum(x$geno.dose==x$m+1)/length(as.matrix(x$geno.dose)),2)
+  if(!is.null(x$unique.seq)){
+      redundant = round(100*((length(x$sequence) - length(x$unique.seq$sequence))/length(x$sequence)),2)
+  }
   ##if no prior probabilities
   if(nrow(x$geno)==x$n.mrk){
   cat("    Missing data:                            ", miss, "%\n", sep = "")  
   } else {
     cat("    Missing data under ", x$prob.thres, " prob. threshold: ", miss, "%\n", sep = "")    
+  }
+  if(!is.null(x$unique.seq)){
+        cat("    Redundant markers:                            ", redundant, "%\n", sep = "")  
   }
   w <- table(x$sequence)
   if (length(x$sequence) <= 1)
@@ -278,10 +292,10 @@ plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
   names(mrk.dist)<-apply(d.temp, 1 , paste, collapse = "-")
   pal<-colorRampPalette(RColorBrewer::brewer.pal(9,"Greys"))(length(type.names))
   op <- par(mar = c(5,4,1,2))
-  layout(matrix(c(1,1,2,3,2,4), 2, 3), widths = c(1.2,3,.5), heights = c(1,2))
+  layout(matrix(c(1,1,1,2,3,3,2,4,5), 3, 3), widths = c(1.2,3,.5), heights = c(1,1,3))
   barplot(mrk.dist, las = 2, col = pal[match(type, type.names)], 
-          xlab = "dosage combination", 
-          ylab = "number of markers", horiz = TRUE)
+          xlab = "Number of markers", 
+          ylab = "Dosage combination", horiz = TRUE)
   if(is.null(x$chisq.pval))
   {
     plot(0, 0, axes = FALSE, xlab = "", ylab="", type = "n")
@@ -300,8 +314,8 @@ plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
   M[M==x$m+1]<--1
   image(M, axes = FALSE,
         col = pal[as.character(sort(unique(as.vector(M))))], useRaster = TRUE)
-  mtext(text = "Markers", side = 1)
-  mtext(text = "Individuals", side = 2)
+  mtext(text = "Markers", side = 1, line = .4)
+  mtext(text = "Individuals", side = 2, line = .2)
   par(mar = c(0,0,0,0))
   plot(0:10,0:10, type = "n", axes = FALSE, xlab = "", ylab = "")
   legend(0,10, 
@@ -311,6 +325,13 @@ plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
          pt.cex = 3,
          pt.bg=pal, pt.lwd = 0,
          bty = "n", xpd=TRUE)
+  if(!is.null(x$unique.seq)){
+    par(mar = c(5,2,2,2))
+      red = round(100*(length(x$sequence)-length(x$unique.seq$sequence))/length(x$sequence),2)
+      barplot(rbind(red), ylim = c(0,100), xlab = '', col = rgb(red=0.2, green=0.2, blue=1.0, alpha=0.2))
+      text(x = .5, y = red+2, labels = paste0(red,'%'))
+      mtext(text = "Redundant\n(%)", side = 1, line = 2, cex = .8)
+  } else plot.new()
   par(op)
   par(mfrow=c(1,1))
 }

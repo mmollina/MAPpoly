@@ -79,6 +79,9 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL) {
   }
   if (class(input.obj) == "mappoly.data")
   {
+      if (!is.null(input.obj$unique.seq)){
+          input.obj = input.obj$unique.seq
+      }
     chisq.pval<-input.obj$chisq.pval
     chisq.pval.thres<-NULL
     ## gathering sequence data
