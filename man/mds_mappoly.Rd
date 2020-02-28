@@ -2,23 +2,23 @@
 % Please edit documentation in R/mds.R
 \name{mds_mappoly}
 \alias{mds_mappoly}
-\alias{mappoly.print.pcmap}
-\alias{mappoly.print.pcmap3d}
-\alias{mappoly.plot.pcmap}
-\alias{mappoly.plot.pcmap3d}
+\alias{print.mappoly.pcmap}
+\alias{print.mappoly.pcmap3d}
+\alias{plot.mappoly.pcmap}
+\alias{plot.mappoly.pcmap3d}
 \title{Estimates loci position using Multidimensional Scaling}
 \usage{
 mds_mappoly(input.mat, p = NULL, n = NULL, ndim = 2,
   weight.exponent = 2, verbose = TRUE)
 
-mappoly.print.pcmap(x, ...)
+\method{print}{mappoly.pcmap}(x, ...)
 
-mappoly.print.pcmap3d(x, ...)
+\method{print}{mappoly.pcmap3d}(x, ...)
 
-mappoly.plot.pcmap(x, D1lim = NULL, D2lim = NULL,
+\method{plot}{mappoly.pcmap}(x, D1lim = NULL, D2lim = NULL,
   displaytext = FALSE, ...)
 
-mappoly.plot.pcmap3d(x, D1lim = NULL, D2lim = NULL,
+\method{plot}{mappoly.pcmap3d}(x, D1lim = NULL, D2lim = NULL,
   displaytext = FALSE, ...)
 }
 \arguments{

@@ -6,7 +6,7 @@
 \usage{
 reest_rf(input.map, input.mat = NULL, tol = 0.01,
   phase.config = "all", method = c("hmm", "ols"), weight = TRUE,
-  verbose = TRUE)
+  verbose = TRUE, high.prec = FALSE, max.rf.to.break.EM = 0.5)
 }
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}
@@ -26,6 +26,12 @@ regression when the Ordinary Least Saquares is chosen}
 
 \item{verbose}{if \code{TRUE} (default), current progress is shown; if
 \code{FALSE}, no output is produced}
+
+\item{high.prec}{logical. If \code{TRUE} uses high precision 
+(long double) numbers in the HMM procedure implemented in C++,
+which can take a long time to perform (default = FALSE)}
+
+\item{max.rf.to.break.EM}{for internal use only.}
 }
 \value{
 a numeric vector of size \code{m} indicating which
