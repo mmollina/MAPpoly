@@ -197,40 +197,40 @@ func.merge = function(x,tpt,thres.twopt2,thres.hmm2,tol){
 ##' 
 ##' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 ##'
-check_gaps = function(map, tpt, max.gap = 0.1, window = 10){
-    gaps = which(map$maps[[1]]$seq.rf >= max.gap)
-    if (length(gaps) >= 1){
-        mat.rf = rf_list_to_matrix(tpt)
-        mrk.to.rem = vector()
-        for (i in 1:length(gaps)){
-            keep = 1
-            mrk.up.pos = gaps[i] - round(window/2,0)
-            mrk.low.pos = gaps[i] + round(window/2,0)
-            range = map$info$mrk.names[mrk.up.pos:mrk.low.pos]
-            cat('\nA gap of ',map$maps[[1]]$seq.rf[gaps[i]],' was found between markers ', map$info$mrk.names[gaps[i]], ' and ', map$info$mrk.names[gaps[i]+1], '\nPlease look at the plot and choose a marker to remove.\n')
-            plot(mat.rf, ord = range, index = TRUE)
-            while (keep == 1){
-                rm.mrk = readline('Enter the name of the marker to be removed (press ENTER to skip): ')
-                if (rm.mrk == '') keep = 0
-                else if (!rm.mrk %in% map$info$mrk.names){
-                    keep = 1
-                    cat('Please inform a valid marker name, or press ENTER to skip.\n')
-                } else {
-                    keep = 0
-                    mrk.to.rem = c(mrk.to.rem, rm.mrk)
-                    rm.mrk = ''
-                }
-            }
-        }
-        if (length(mrk.to.rem) >= 1){
-            cat('Removing selected markers: ', mrk.to.rem, '\n')
-            posits = which(!map$info$mrk.names %in% mrk.to.rem)
-            updated_map = get_submap(input.map = map,
-                                     mrk.pos = posits)
-            return(updated_map)
-        } else cat('\nNo markers were removed from the map.\n')
-    } else cat('\nNo gaps were found considering the informed value.\n')
-}
+## check_gaps = function(map, tpt, max.gap = 0.1, window = 10){
+##     gaps = which(map$maps[[1]]$seq.rf >= max.gap)
+##     if (length(gaps) >= 1){
+##         mat.rf = rf_list_to_matrix(tpt)
+##         mrk.to.rem = vector()
+##         for (i in 1:length(gaps)){
+##             keep = 1
+##             mrk.up.pos = gaps[i] - round(window/2,0)
+##             mrk.low.pos = gaps[i] + round(window/2,0)
+##             range = map$info$mrk.names[mrk.up.pos:mrk.low.pos]
+##             cat('\nA gap of ',map$maps[[1]]$seq.rf[gaps[i]],' was found between markers ', map$info$mrk.names[gaps[i]], ' and ', map$info$mrk.names[gaps[i]+1], '\nPlease look at the plot and choose a marker to remove.\n')
+##             plot(mat.rf, ord = range, index = TRUE)
+##             while (keep == 1){
+##                 rm.mrk = readline('Enter the name of the marker to be removed (press ENTER to skip): ')
+##                 if (rm.mrk == '') keep = 0
+##                 else if (!rm.mrk %in% map$info$mrk.names){
+##                     keep = 1
+##                     cat('Please inform a valid marker name, or press ENTER to skip.\n')
+##                 } else {
+##                     keep = 0
+##                     mrk.to.rem = c(mrk.to.rem, rm.mrk)
+##                     rm.mrk = ''
+##                 }
+##             }
+##         }
+##         if (length(mrk.to.rem) >= 1){
+##             cat('Removing selected markers: ', mrk.to.rem, '\n')
+##             posits = which(!map$info$mrk.names %in% mrk.to.rem)
+##             updated_map = get_submap(input.map = map,
+##                                      mrk.pos = posits)
+##             return(updated_map)
+##         } else cat('\nNo markers were removed from the map.\n')
+##     } else cat('\nNo gaps were found considering the informed value.\n')
+## }
 
 
 ##' Check phase conformity
@@ -243,45 +243,45 @@ check_gaps = function(map, tpt, max.gap = 0.1, window = 10){
 ##'
 ##' @author Gabriel Gesteira
 ##' 
-check_phases = function(map1, map2, verbose = TRUE){
-    ## Defining arguments
-    ploidy = map1$info$m
-    mrks.1 = map1$info$mrk.names
-    mrks.2 = map2$info$mrk.names
-    common.mrk = intersect(mrks.1,mrks.2)
-    pos.mrk.1 = which(mrks.1 %in% common.mrk)
-    pos.mrk.2 = which(mrks.2 %in% common.mrk)
-        if (verbose) {
-        cat('\nMap 1 has ', length(mrks.1), ' markers.\n')
-        cat('Map 2 has ', length(mrks.2), ' markers.\n')
-        cat('There are ', length(common.mrk), 'common markers.\n')
-        cat('The following markers from Map 1 were discarded: ', mrks.1[which(!mrks.1 %in% common.mrk)], '\n')
-        cat('The following markers from Map 2 were discarded: ', mrks.2[which(!mrks.2 %in% common.mrk)], '\n')
-    }
-    ## Subsetting phases
-    phases.1.P = map1$maps[[1]]$seq.ph$P[pos.mrk.1]
-    phases.2.P = map2$maps[[1]]$seq.ph$P[pos.mrk.2]
-    phases.1.Q = map1$maps[[1]]$seq.ph$Q[pos.mrk.1]
-    phases.2.Q = map2$maps[[1]]$seq.ph$Q[pos.mrk.2]
+## check_phases = function(map1, map2, verbose = TRUE){
+##     ## Defining arguments
+##     ploidy = map1$info$m
+##     mrks.1 = map1$info$mrk.names
+##     mrks.2 = map2$info$mrk.names
+##     common.mrk = intersect(mrks.1,mrks.2)
+##     pos.mrk.1 = which(mrks.1 %in% common.mrk)
+##     pos.mrk.2 = which(mrks.2 %in% common.mrk)
+##         if (verbose) {
+##         cat('\nMap 1 has ', length(mrks.1), ' markers.\n')
+##         cat('Map 2 has ', length(mrks.2), ' markers.\n')
+##         cat('There are ', length(common.mrk), 'common markers.\n')
+##         cat('The following markers from Map 1 were discarded: ', mrks.1[which(!mrks.1 %in% common.mrk)], '\n')
+##         cat('The following markers from Map 2 were discarded: ', mrks.2[which(!mrks.2 %in% common.mrk)], '\n')
+##     }
+##     ## Subsetting phases
+##     phases.1.P = map1$maps[[1]]$seq.ph$P[pos.mrk.1]
+##     phases.2.P = map2$maps[[1]]$seq.ph$P[pos.mrk.2]
+##     phases.1.Q = map1$maps[[1]]$seq.ph$Q[pos.mrk.1]
+##     phases.2.Q = map2$maps[[1]]$seq.ph$Q[pos.mrk.2]
 
-    ## Creating matrices to handle homologues
-    phases.1.P.hom = phases.2.P.hom = phases.1.Q.hom = phases.2.Q.hom = matrix(NA, length(common.mrk), ploidy)
+##     ## Creating matrices to handle homologues
+##     phases.1.P.hom = phases.2.P.hom = phases.1.Q.hom = phases.2.Q.hom = matrix(NA, length(common.mrk), ploidy)
 
-    ## Filling matrices
-    for (i in 1:length(common.mrk)){
-        phases.1.P.hom[i,phases.1.P[[i]]] = 1
-        phases.1.Q.hom[i,phases.1.Q[[i]]] = 1
-        phases.2.P.hom[i,phases.2.P[[i]]] = 1
-        phases.2.Q.hom[i,phases.2.Q[[i]]] = 1
-    }
-    phases.1.P.hom[which(is.na(phases.1.P.hom))] = 0
-    phases.1.Q.hom[which(is.na(phases.1.Q.hom))] = 0
-    phases.2.P.hom[which(is.na(phases.2.P.hom))] = 0
-    phases.2.Q.hom[which(is.na(phases.2.Q.hom))] = 0
+##     ## Filling matrices
+##     for (i in 1:length(common.mrk)){
+##         phases.1.P.hom[i,phases.1.P[[i]]] = 1
+##         phases.1.Q.hom[i,phases.1.Q[[i]]] = 1
+##         phases.2.P.hom[i,phases.2.P[[i]]] = 1
+##         phases.2.Q.hom[i,phases.2.Q[[i]]] = 1
+##     }
+##     phases.1.P.hom[which(is.na(phases.1.P.hom))] = 0
+##     phases.1.Q.hom[which(is.na(phases.1.Q.hom))] = 0
+##     phases.2.P.hom[which(is.na(phases.2.P.hom))] = 0
+##     phases.2.Q.hom[which(is.na(phases.2.Q.hom))] = 0
 
-    ## Checking if homologues match
-    P = apply(phases.1.P.hom == phases.2.P.hom, 2, any)
-    Q = apply(phases.1.Q.hom == phases.2.Q.hom, 2, any)
+##     ## Checking if homologues match
+##     P = apply(phases.1.P.hom == phases.2.P.hom, 2, any)
+##     Q = apply(phases.1.Q.hom == phases.2.Q.hom, 2, any)
 
-    return(rbind(P,Q))
-}
+##     return(rbind(P,Q))
+## }

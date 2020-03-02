@@ -331,7 +331,7 @@ plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
       barplot(rbind(red), ylim = c(0,100), xlab = '', col = rgb(red=0.2, green=0.2, blue=1.0, alpha=0.2))
       text(x = .5, y = red+2, labels = paste0(red,'%'))
       mtext(text = "Redundant\n(%)", side = 1, line = 2, cex = .8)
-  } else plot.new()
+  }
   par(op)
   par(mfrow=c(1,1))
 }
