@@ -6,8 +6,7 @@
 \alias{plot.two.pts.linkage.phases}
 \title{List of linkage phases}
 \usage{
-ls_linkage_phases(input.seq, thres, twopt, mrk.to.add = NULL,
-  prev.info = NULL)
+ls_linkage_phases(input.seq, thres, twopt, mrk.to.add = NULL, prev.info = NULL)
 
 \method{print}{two.pts.linkage.phases}(x, ...)
 

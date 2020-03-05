@@ -4,8 +4,16 @@
 \alias{calc_genoprob_haplo}
 \title{Estimate a genetic map given a sequence of block markers}
 \usage{
-calc_genoprob_haplo(m, n.mrk, n.ind, haplo, emit = NULL, rf_vec,
-  indnames, verbose = TRUE)
+calc_genoprob_haplo(
+  m,
+  n.mrk,
+  n.ind,
+  haplo,
+  emit = NULL,
+  rf_vec,
+  indnames,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{void}{interfunction to be documented}

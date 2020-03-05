@@ -35,27 +35,29 @@ est_map_parallel = function(data, markers, partial_tpt, n.batches = 4, n.cores =
     submaps = list()
     for (i in 1:length(size_batches)){
         submaps[[i]] = list()
-        submaps[[i]][['seq']] = make_seq_mappoly(data, arg = markers[(sum(cumsum(size_batches)[i-1])+1):cumsum(size_batches)[i]])
-        submaps[[i]][['tpt']] = make_pairs_mappoly(partial_tpt, input.seq = submaps[[i]][['seq']])
+        submaps[[i]][[1]] = make_seq_mappoly(data, arg = markers[(sum(cumsum(size_batches)[i-1])+1):cumsum(size_batches)[i]], data.name = partial_tpt$data.name)
+        submaps[[i]][[2]] = make_pairs_mappoly(partial_tpt, input.seq = submaps[[i]][[1]])
     }
     ## Running hmm_sequential for each submap
     if (platform == 'windows') cl = parallel::makeCluster(n.cores)
     else cl = parallel::makeCluster(n.cores, type = 'FORK')
-    parallel::clusterEvalQ(cl, require(mappoly))
-    submaps2 = parallel::parLapply(cl,submaps,function(x,start.set2,thres.twopt2,thres.hmm2,submap.size.diff2,phase.n.lim2,tol2){
-    y = est_rf_hmm_sequential(input.seq = x$seq,
-                              start.set = start.set2,
-                              thres.twopt = thres.twopt2,
-                              thres.hmm = thres.hmm2,
+    #parallel::clusterEvalQ(cl, require(mappoly))
+    parallel::clusterExport(cl, varlist = c('est_rf_hmm_sequential'))
+    #start.set2,thres.twopt2,thres.hmm2,submap.size.diff2,phase.n.lim2,tol2 / 'start.set','thres.twopt','thres.hmm','submap.size.diff','phase.n.lim','tol'
+    submaps2 = parallel::parLapply(cl,submaps,function(x){
+    y = est_rf_hmm_sequential(input.seq = x[[1]],
+                              start.set = start.set,
+                              thres.twopt = thres.twopt,
+                              thres.hmm = thres.hmm,
                               info.tail = TRUE,
-                              twopt = x$tpt,
-                              sub.map.size.diff.limit = submap.size.diff2,
-                              phase.number.limit = phase.n.lim2,
+                              twopt = x[[2]],
+                              sub.map.size.diff.limit = submap.size.diff,
+                              phase.number.limit = phase.n.lim,
                               reestimate.single.ph.configuration = TRUE,
-                              tol = tol2,
-                              tol.final = tol2/10)
+                              tol = tol,
+                              tol.final = tol/10)
     return(y)
-}, start.set2=start.set,thres.twopt2=thres.twopt,thres.hmm2=thres.hmm,submap.size.diff2=submap.size.diff,phase.n.lim2=phase.n.lim,tol2=tol)
+})
     parallel::stopCluster(cl)
     ## Running iteratively until one submap is left
     submaps_merged = submaps2

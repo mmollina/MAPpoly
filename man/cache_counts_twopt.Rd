@@ -4,8 +4,14 @@
 \alias{cache_counts_twopt}
 \title{Frequency of genotypes for two-point recombination fraction estimation}
 \usage{
-cache_counts_twopt(input.seq, cached = FALSE, cache.prev = NULL,
-  n.clusters = 1, verbose = TRUE, joint.prob = FALSE)
+cache_counts_twopt(
+  input.seq,
+  cached = FALSE,
+  cache.prev = NULL,
+  n.clusters = 1,
+  verbose = TRUE,
+  joint.prob = FALSE
+)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}}

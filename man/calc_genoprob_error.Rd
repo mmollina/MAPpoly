@@ -4,8 +4,14 @@
 \alias{calc_genoprob_error}
 \title{Compute genotype conditional probabilities using global error}
 \usage{
-calc_genoprob_error(input.map, phase.config = "best", error = 0.01,
-  th.prob = 0.95, restricted = TRUE, verbose = TRUE)
+calc_genoprob_error(
+  input.map,
+  phase.config = "best",
+  error = 0.01,
+  th.prob = 0.95,
+  restricted = TRUE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}

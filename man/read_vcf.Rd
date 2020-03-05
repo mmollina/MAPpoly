@@ -4,9 +4,18 @@
 \alias{read_vcf}
 \title{Data Input VCF}
 \usage{
-read_vcf(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
-  ploidy = NA, thresh.line = 0.05, min.gt.depth = 0,
-  min.av.depth = 0, max.missing = 1, elim.redundant = TRUE)
+read_vcf(
+  file.in,
+  filter.non.conforming = TRUE,
+  parent.1,
+  parent.2,
+  ploidy = NA,
+  thresh.line = 0.05,
+  min.gt.depth = 0,
+  min.av.depth = 0,
+  max.missing = 1,
+  elim.redundant = TRUE
+)
 }
 \arguments{
 \item{file.in}{a character string with the name of (or full path to) the input file which contains the data (VCF format)}

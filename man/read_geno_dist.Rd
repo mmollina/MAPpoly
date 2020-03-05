@@ -4,8 +4,12 @@
 \alias{read_geno_dist}
 \title{Data Input}
 \usage{
-read_geno_dist(file.in, prob.thres = 0.95,
-  filter.non.conforming = TRUE, elim.redundant = TRUE)
+read_geno_dist(
+  file.in,
+  prob.thres = 0.95,
+  filter.non.conforming = TRUE,
+  elim.redundant = TRUE
+)
 }
 \arguments{
 \item{file.in}{a character string with the name of (or full path to) the input file which contains the data to

@@ -4,8 +4,15 @@
 \alias{func.sequential}
 \title{Wrapper for function est_rf_hmm_sequential}
 \usage{
-func.sequential(x, start.set, thres.twopt, thres.hmm, submap.size.diff,
-  phase.n.lim, tol)
+func.sequential(
+  x,
+  start.set,
+  thres.twopt,
+  thres.hmm,
+  submap.size.diff,
+  phase.n.lim,
+  tol
+)
 }
 \arguments{
 \item{void}{}

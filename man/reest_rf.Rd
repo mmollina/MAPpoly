@@ -4,9 +4,17 @@
 \alias{reest_rf}
 \title{Reestimate the recombination fractions in a genetic map}
 \usage{
-reest_rf(input.map, input.mat = NULL, tol = 0.01,
-  phase.config = "all", method = c("hmm", "ols"), weight = TRUE,
-  verbose = TRUE, high.prec = FALSE, max.rf.to.break.EM = 0.5)
+reest_rf(
+  input.map,
+  input.mat = NULL,
+  tol = 0.01,
+  phase.config = "all",
+  method = c("hmm", "ols"),
+  weight = TRUE,
+  verbose = TRUE,
+  high.prec = FALSE,
+  max.rf.to.break.EM = 0.5
+)
 }
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}

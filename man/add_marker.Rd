@@ -4,8 +4,16 @@
 \alias{add_marker}
 \title{Add a single marker to a map}
 \usage{
-add_marker(input.map, mrk, pos, rf.matrix, genoprob = NULL,
-  phase.config = "best", tol = 0.001, r.test = NULL)
+add_marker(
+  input.map,
+  mrk,
+  pos,
+  rf.matrix,
+  genoprob = NULL,
+  phase.config = "best",
+  tol = 0.001,
+  r.test = NULL
+)
 }
 \arguments{
 \item{input.map}{an object of class \code{mappoly.map}}

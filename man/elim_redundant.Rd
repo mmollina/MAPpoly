@@ -4,7 +4,7 @@
 \alias{elim_redundant}
 \title{Eliminate redundant markers}
 \usage{
-elim_redundant(input.seq)
+elim_redundant(input.seq, data = NULL)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}}

@@ -4,10 +4,21 @@
 \alias{get_submap}
 \title{Extract sub-map from map}
 \usage{
-get_submap(input.map, mrk.pos, phase.config = "best",
-  reestimate.rf = TRUE, reestimate.phase = FALSE, thres.twopt = 5,
-  thres.hmm = 3, extend.tail = 50, count.cache = NULL, tol = 0.1,
-  tol.final = 0.001, use.high.precision = FALSE, verbose = TRUE)
+get_submap(
+  input.map,
+  mrk.pos,
+  phase.config = "best",
+  reestimate.rf = TRUE,
+  reestimate.phase = FALSE,
+  thres.twopt = 5,
+  thres.hmm = 3,
+  extend.tail = 50,
+  count.cache = NULL,
+  tol = 0.1,
+  tol.final = 0.001,
+  use.high.precision = FALSE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}

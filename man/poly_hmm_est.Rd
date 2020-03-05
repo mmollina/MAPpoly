@@ -5,8 +5,7 @@
 \title{Estimate genetic map using as input the probability distribution of
 genotypes}
 \usage{
-poly_hmm_est(m, n.mrk, n.ind, p, dp, q, dq, g, rf, verbose = TRUE,
-  tol = 0.001)
+poly_hmm_est(m, n.mrk, n.ind, p, dp, q, dq, g, rf, verbose = TRUE, tol = 0.001)
 }
 \arguments{
 \item{void}{intern function to be documented}

@@ -4,8 +4,7 @@
 \alias{submap_merge}
 \title{Function to merge submaps two-by-two}
 \usage{
-submap_merge(submaps, tpt, n.cores, platform, thres.twopt2, thres.hmm2,
-  tol)
+submap_merge(submaps, tpt, n.cores, platform, thres.twopt2, thres.hmm2, tol)
 }
 \arguments{
 \item{submaps}{a list of \code{mappoly.map} objects}

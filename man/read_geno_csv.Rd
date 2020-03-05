@@ -4,8 +4,12 @@
 \alias{read_geno_csv}
 \title{Data Input in CSV format}
 \usage{
-read_geno_csv(file.in, ploidy, filter.non.conforming = TRUE,
-  elim.redundant = TRUE)
+read_geno_csv(
+  file.in,
+  ploidy,
+  filter.non.conforming = TRUE,
+  elim.redundant = TRUE
+)
 }
 \arguments{
 \item{file.in}{a character string with the name of (or full path to) the input file which contains the data to

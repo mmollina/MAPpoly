@@ -79,35 +79,38 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL) {
   }
   if (class(input.obj) == "mappoly.data")
   {
-      if (!is.null(input.obj$unique.seq)){
-          input.obj = input.obj$unique.seq
-      }
-    chisq.pval<-input.obj$chisq.pval
+    if (!is.null(input.obj$unique.seq)){
+      posselect = which(input.obj$mrk.names %in% input.obj$kept)
+    } else posselect = which(input.obj$mrk.names %in% input.obj$mrk.names)
+    chisq.pval<-input.obj$chisq.pval[posselect]
     chisq.pval.thres<-NULL
     ## gathering sequence data
     sequence <- sequence.pos <- NULL
     if (any(!is.na(input.obj$sequence)))
-      sequence <- input.obj$sequence
+      sequence <- input.obj$sequence[posselect]
     if (any(!is.na(input.obj$sequence.pos)))
-      sequence.pos <- input.obj$sequence.pos
+      sequence.pos <- input.obj$sequence.pos[posselect]
     
     ## make sequence with all markers
     if (length(arg) == 1 && arg == "all")
     {
       seq.num <- as.integer(1:input.obj$n.mrk)
+      seq.num = seq.num[posselect]
     }
     else if (all(is.character(arg)) && length(grep("seq", arg)) == length(arg))
     {
       if (length(input.obj$sequence) == 1 && input.obj$sequence == 0)
         stop("There is no sequence information in ", deparse(substitute(input.obj)))
-      seq.num <- as.integer(which(!is.na(match(input.obj$sequence, gsub("[^0-9]", "", arg)))))
+      seq.num <- as.integer(which(!is.na(match(input.obj$sequence[posselect], gsub("[^0-9]", "", arg)))))
       sequence <- input.obj$sequence[seq.num]
       if (length(input.obj$sequence.pos) > 2)
         sequence.pos <- input.obj$sequence.pos[seq.num]
     }
-    else if (all(is.character(arg)) && (length(arg) == length(arg %in% input.obj$mrk.names)))
+    else if (all(is.character(arg)) && (length(arg) == length(arg %in% input.obj$mrk.names[posselect])))
     {
-      seq.num <- as.integer(match(arg, input.obj$mrk.names))
+      #seq.num <- as.integer(match(arg, input.obj$mrk.names[posselect]))
+      seq.num1 = which(input.obj$mrk.names %in% arg)
+      seq.num = seq.num1[seq.num1 %in% posselect]
       sequence <- input.obj$sequence[seq.num]
       if (length(input.obj$sequence.pos) > 2)
         sequence.pos <- input.obj$sequence.pos[seq.num]

@@ -6,15 +6,30 @@
 \alias{plot.mappoly.map}
 \title{Multipoint analysis using Hidden Markov Models in autopolyploids}
 \usage{
-est_rf_hmm(input.seq, input.ph = NULL, thres = 0.5, twopt = NULL,
-  verbose = FALSE, tol = 1e-04, est.given.0.rf = FALSE,
-  reestimate.single.ph.configuration = TRUE, high.prec = TRUE)
+est_rf_hmm(
+  input.seq,
+  input.ph = NULL,
+  thres = 0.5,
+  twopt = NULL,
+  verbose = FALSE,
+  tol = 1e-04,
+  est.given.0.rf = FALSE,
+  reestimate.single.ph.configuration = TRUE,
+  high.prec = TRUE
+)
 
 \method{print}{mappoly.map}(x, detailed = FALSE, ...)
 
-\method{plot}{mappoly.map}(x, phase = TRUE, col.P = "#e41a1c",
-  col.Q = "#377eb8", mrk.names = FALSE, cex = 1, config = "best",
-  ...)
+\method{plot}{mappoly.map}(
+  x,
+  phase = TRUE,
+  col.P = "#e41a1c",
+  col.Q = "#377eb8",
+  mrk.names = FALSE,
+  cex = 1,
+  config = "best",
+  ...
+)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}}

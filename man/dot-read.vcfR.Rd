@@ -4,8 +4,16 @@
 \alias{.read.vcfR}
 \title{Function read.vcfR adapted from package vcfR}
 \usage{
-.read.vcfR(file, limit = 1e+07, nrows = -1, skip = 0, cols = NULL,
-  convertNA = TRUE, checkFile = TRUE, verbose = TRUE)
+.read.vcfR(
+  file,
+  limit = 1e+07,
+  nrows = -1,
+  skip = 0,
+  cols = NULL,
+  convertNA = TRUE,
+  checkFile = TRUE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{void}{interfunction to be documented}

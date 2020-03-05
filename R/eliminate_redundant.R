@@ -33,14 +33,17 @@
 #'
 #' @export elim_redundant
 #'
-elim_redundant<-function(input.seq)
+elim_redundant<-function(input.seq, data = NULL)
 {
-  x<-get(input.seq$data.name, pos = 1)$geno.dose[input.seq$seq.num, ]
+  if (is.null(data)) x<-get(input.seq$data.name, pos = 1)$geno.dose[input.seq$seq.num, ]
+  else x = data$geno.dose[input.seq$seq.num, ]
     dat_temp <- unique(x, dimnames = TRUE)
-  output.seq <- make_seq_mappoly(get(input.seq$data.name, pos = 1), rownames(dat_temp), data.name = input.seq$data.name)
+    if (is.null(data)) output.seq <- make_seq_mappoly(get(input.seq$data.name, pos = 1), rownames(dat_temp), data.name = input.seq$data.name)
+    else output.seq <- make_seq_mappoly(data, rownames(dat_temp), data.name = data)
   output.seq$chisq.pval.thres <-input.seq$chisq.pval.thres
   output.seq$chisq.pval <-input.seq$chisq.pval
-  mrknames <- get(input.seq$data.name, pos = 1)$mrk.names
+  if (is.null(data)) mrknames <- get(input.seq$data.name, pos = 1)$mrk.names
+  else mrknames <- data$mrk.names
   elim<-setdiff(input.seq$seq.num,output.seq$seq.num)
   n1<-apply(dat_temp, 1, paste, collapse="")
   n2<-apply(x[mrknames[elim],], 1, paste, collapse="")

@@ -4,8 +4,7 @@
 \alias{calc_genoprob_dist}
 \title{Compute genotype conditional probabilities using probability distribution of dosages}
 \usage{
-calc_genoprob_dist(input.map, dat.dist, phase.config = "best",
-  verbose = TRUE)
+calc_genoprob_dist(input.map, dat.dist, phase.config = "best", verbose = TRUE)
 }
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}

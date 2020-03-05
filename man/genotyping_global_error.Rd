@@ -4,8 +4,7 @@
 \alias{genotyping_global_error}
 \title{Introduces genotyping error into a full informative vector}
 \usage{
-genotyping_global_error(x, m, restricted = TRUE, error = 0.01,
-  th.prob = 0.95)
+genotyping_global_error(x, m, restricted = TRUE, error = 0.01, th.prob = 0.95)
 }
 \arguments{
 \item{void}{interfunction to be documented}

@@ -4,10 +4,22 @@
 \alias{est_map_parallel}
 \title{Function to build a map in parallel with submaps}
 \usage{
-est_map_parallel(data, markers, partial_tpt, n.batches = 4,
-  n.cores = 4, platform = "auto", start.set = 5, thres.twopt = 10,
-  thres.hmm = 10, submap.size.diff = 3, thres.twopt2 = 3,
-  thres.hmm2 = 10, phase.n.lim = 20, tol = 0.001)
+est_map_parallel(
+  data,
+  markers,
+  partial_tpt,
+  n.batches = 4,
+  n.cores = 4,
+  platform = "auto",
+  start.set = 5,
+  thres.twopt = 10,
+  thres.hmm = 10,
+  submap.size.diff = 3,
+  thres.twopt2 = 3,
+  thres.hmm2 = 10,
+  phase.n.lim = 20,
+  tol = 0.001
+)
 }
 \arguments{
 \item{void}{}

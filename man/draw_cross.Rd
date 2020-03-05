@@ -4,8 +4,15 @@
 \alias{draw_cross}
 \title{Draw simple parental linkage phase configurations}
 \usage{
-draw_cross(m, rf.vec = NULL, hom.allele.p, hom.allele.q, file = NULL,
-  width = 12, height = 6)
+draw_cross(
+  m,
+  rf.vec = NULL,
+  hom.allele.p,
+  hom.allele.q,
+  file = NULL,
+  width = 12,
+  height = 6
+)
 }
 \arguments{
 \item{void}{interfunction to be documented}

@@ -4,8 +4,16 @@
 \alias{sim_homologous}
 \title{Simulate homology groups}
 \usage{
-sim_homologous(m, n.mrk, min.d = 0, max.d = m + 1, prob.dose = NULL,
-  max.ph, restriction = TRUE, seed = NULL)
+sim_homologous(
+  m,
+  n.mrk,
+  min.d = 0,
+  max.d = m + 1,
+  prob.dose = NULL,
+  max.ph,
+  restriction = TRUE,
+  seed = NULL
+)
 }
 \arguments{
 \item{m}{ploidy level. Must be an even number}

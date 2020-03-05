@@ -4,8 +4,7 @@
 \alias{concatenate_new_marker}
 \title{Concatenate new marker}
 \usage{
-concatenate_new_marker(X = NULL, d, sh = NULL, seq.num = NULL, m,
-  mrk = 1)
+concatenate_new_marker(X = NULL, d, sh = NULL, seq.num = NULL, m, mrk = 1)
 }
 \arguments{
 \item{X}{a list of matrices whose columns represent homologous

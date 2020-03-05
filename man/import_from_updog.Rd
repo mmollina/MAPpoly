@@ -4,8 +4,7 @@
 \alias{import_from_updog}
 \title{Import from updog}
 \usage{
-import_from_updog(object, prob.thres = NULL,
-  filter.non.conforming = FALSE)
+import_from_updog(object, prob.thres = NULL, filter.non.conforming = FALSE)
 }
 \arguments{
 \item{object}{the name of the object of class \code{multidog}}
