@@ -3,6 +3,8 @@
 #' Eliminate markers with identical dosage infomation throughout individuals.
 #'
 #' @param input.seq an object of class \code{mappoly.sequence}
+#'
+#' @param data name of the dataset that contains sequence markers (optional, default = NULL)
 #' 
 #' @param ... currently ignored
 #'
@@ -22,7 +24,7 @@
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'    }
 #'    
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}, with minor modifications by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'
 #' @references
 #'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
