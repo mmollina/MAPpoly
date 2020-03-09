@@ -4,7 +4,7 @@
 \alias{create_map}
 \title{Create a marker with pseudomarkers}
 \usage{
-create_map(input.map, step = Inf, phase.config = "best")
+create_map(input.map, step = 0, phase.config = "best")
 }
 \arguments{
 \item{void}{interfunction to be documented}

@@ -5,7 +5,12 @@
 #' the probabilities are not calculated between markers.
 #'
 #' @param input.map An object of class \code{mappoly.map}
-#'
+#' 
+#' @param step 	Maximum distance (in cM) between positions at which 
+#'              the genotype probabilities are calculated, though for 
+#'              step = 0, probabilities are calculated only at the 
+#'              marker locations.
+#' 
 #' @param phase.config which phase configuration should be used. "best" (default) 
 #'                     will choose the phase configuration associated with the
 #'                     maximum likelihood
@@ -55,7 +60,7 @@
 #'
 #' @export calc_genoprob
 #'
-calc_genoprob<-function(input.map,  phase.config = "best", verbose = TRUE)
+calc_genoprob<-function(input.map, step = 0,  phase.config = "best", verbose = TRUE)
 {
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
@@ -69,20 +74,38 @@ calc_genoprob<-function(input.map,  phase.config = "best", verbose = TRUE)
   } else i.lpc <- phase.config
   m<-input.map$info$m
   n.ind<-get(input.map$info$data.name, pos=1)$n.ind
-  n.mrk<-input.map$info$n.mrk
-  D<-get(input.map$info$data.name, pos=1)$geno.dose[input.map$maps[[1]]$seq.num,]
-  mrknames<-rownames(D)
-  indnames<-colnames(D)
-  dp <- get(input.map$info$data.name)$dosage.p[input.map$maps[[i.lpc]]$seq.num]
-  dq <- get(input.map$info$data.name)$dosage.q[input.map$maps[[i.lpc]]$seq.num]
+  Dtemp<-get(input.map$info$data.name, pos=1)$geno.dose[input.map$maps[[1]]$seq.num,]
+  map.pseudo <- create_map(input.map, step, phase.config = i.lpc)
+  mrknames<-names(map.pseudo)
+  n.mrk<-length(map.pseudo)
+  indnames<-colnames(Dtemp)
+  D<-matrix(m+1, nrow = length(map.pseudo), ncol = ncol(Dtemp), 
+            dimnames = list(mrknames, indnames))
+  D[rownames(Dtemp), ] <- as.matrix(Dtemp)
+  dptemp <- get(input.map$info$data.name)$dosage.p[input.map$maps[[i.lpc]]$seq.num]
+  dqtemp <- get(input.map$info$data.name)$dosage.q[input.map$maps[[i.lpc]]$seq.num]
+  dq<-dp<-rep(m/2, length(mrknames))
+  names(dp)<-names(dq)<-mrknames
+  dp[names(dptemp)]<-dptemp
+  dq[names(dqtemp)]<-dqtemp
+  phPtemp <- lapply(input.map$maps[[i.lpc]]$seq.ph$P, function(x) x-1)
+  phQtemp <- lapply(input.map$maps[[i.lpc]]$seq.ph$Q, function(x) x-1)
+  phP <- phQ <- vector("list", n.mrk)
+  for(i in 1:length(phP)){
+    phP[[i]] <- phQ[[i]] <- c(0:(m/2 - 1))
+  }
+  names(phP) <- names(phQ) <- mrknames
+  phP[rownames(Dtemp)] <- phPtemp
+  phQ[rownames(Dtemp)] <- phQtemp
+  seq.rf.pseudo <- mf_h(diff(map.pseudo))
   for (j in 1:nrow(D))
     D[j, D[j, ] == input.map$info$m + 1] <- dp[j] + dq[j] + 1 + as.numeric(dp[j]==0 || dq[j]==0)
   res.temp<-.Call("calc_genoprob",
                   m,
                   t(D),
-                  lapply(input.map$maps[[i.lpc]]$seq.ph$P, function(x) x-1),
-                  lapply(input.map$maps[[i.lpc]]$seq.ph$Q, function(x) x-1),
-                  input.map$maps[[i.lpc]]$seq.rf,
+                  phP,
+                  phQ,
+                  seq.rf.pseudo,
                   as.numeric(rep(0, choose(m, m/2)^2 * n.mrk * n.ind)),
                   verbose=verbose,
                   PACKAGE = "mappoly")
@@ -91,7 +114,7 @@ calc_genoprob<-function(input.map,  phase.config = "best", verbose = TRUE)
   dimnames(res.temp[[1]])<-list(kronecker(apply(combn(letters[1:m],m/2),2, paste, collapse=""),
                                           apply(combn(letters[(m+1):(2*m)],m/2),2, paste, collapse=""), paste, sep=":"),
                                   mrknames, indnames)
-  structure(list(probs = res.temp[[1]], map = create_map(input.map)), class="mappoly.genoprob")
+  structure(list(probs = res.temp[[1]], map = map.pseudo), class="mappoly.genoprob")
 }
 
 #' @export
@@ -110,7 +133,7 @@ cat("\n  No. genotypic classes:                    ", dim(x$probs)[1], "\n")
 #' @param void interfunction to be documented
 #' @keywords internal
 #' @export
-create_map<-function(input.map, step = Inf,
+create_map<-function(input.map, step = 0,
                      phase.config = "best")
 {
   ## choosing the linkage phase configuration
@@ -128,7 +151,7 @@ create_map<-function(input.map, step = Inf,
   }
   map <- c(0, cumsum(imf_h(input.map$maps[[i.lpc]]$seq.rf)))
   names(map)<-mrknames
-  if(is.null(step))
+  if(round(step, 1) == 0)
     return(map)
   minloc <- min(map)
   map <- map-minloc

@@ -4,11 +4,16 @@
 \alias{calc_genoprob_error}
 \title{Compute genotype conditional probabilities using global error}
 \usage{
-calc_genoprob_error(input.map, phase.config = "best", error = 0.01,
-  th.prob = 0.95, restricted = TRUE, verbose = TRUE)
+calc_genoprob_error(input.map, step = 0, phase.config = "best",
+  error = 0.01, th.prob = 0.95, restricted = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}
+
+\item{step}{Maximum distance (in cM) between positions at which 
+the genotype probabilities are calculated, though for 
+step = 0, probabilities are calculated only at the 
+marker locations.}
 
 \item{phase.config}{which phase configuration should be used. "best" (default) 
 will choose the maximum likelihood configuration}

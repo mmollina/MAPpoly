@@ -5,7 +5,11 @@
 #' the probabilities are not calculated between markers.
 #'
 #' @param input.map An object of class \code{mappoly.map}
-#'
+#' 
+#' @param step 	Maximum distance (in cM) between positions at which 
+#'              the genotype probabilities are calculated, though for 
+#'              step = 0, probabilities are calculated only at the 
+#'              marker locations.
 #' @param phase.config which phase configuration should be used. "best" (default) 
 #'                     will choose the maximum likelihood configuration
 #'    
@@ -138,7 +142,7 @@
 #'
 #' @export calc_genoprob_error
 #'
-calc_genoprob_error<-function(input.map,  phase.config = "best", error = 0.01, 
+calc_genoprob_error<-function(input.map,  step = 0, phase.config = "best", error = 0.01, 
                               th.prob = 0.95, restricted = TRUE, verbose = TRUE)
 {
   if (!inherits(input.map, "mappoly.map")) {
@@ -151,29 +155,45 @@ calc_genoprob_error<-function(input.map,  phase.config = "best", error = 0.01,
   } else if (phase.config > length(LOD.conf)) {
     stop("invalid linkage phase configuration")
   } else i.lpc <- phase.config
+  m<-input.map$info$m
+  n.ind<-get(input.map$info$data.name, pos=1)$n.ind
+  Dtemp<-get(input.map$info$data.name, pos=1)$geno.dose[input.map$maps[[1]]$seq.num,]
+  map.pseudo <- create_map(input.map, step, phase.config = i.lpc)
+  mrknames<-names(map.pseudo)
+  n.mrk<-length(map.pseudo)
+  indnames<-colnames(Dtemp)
+  D<-matrix(m+1, nrow = length(map.pseudo), ncol = ncol(Dtemp), 
+            dimnames = list(mrknames, indnames))
+  D[rownames(Dtemp), ] <- as.matrix(Dtemp)
+  dptemp <- get(input.map$info$data.name)$dosage.p[input.map$maps[[i.lpc]]$seq.num]
+  dqtemp <- get(input.map$info$data.name)$dosage.q[input.map$maps[[i.lpc]]$seq.num]
+  dq<-dp<-rep(m/2, length(mrknames))
+  names(dp)<-names(dq)<-mrknames
+  dp[names(dptemp)]<-dptemp
+  dq[names(dqtemp)]<-dqtemp
  
-  output.seq<-input.map
-  mrknames<-get(input.map$info$data.name, pos=1)$mrk.names[input.map$maps[[1]]$seq.num]
-  ## 
-  geno.temp<-get(input.map$info$data.name, pos=1)$geno.dose[mrknames,]
-  indnames<-get(input.map$info$data.name, pos=1)$ind.names
+  phP <- phQ <- vector("list", n.mrk)
+  for(i in 1:length(phP)){
+    phP[[i]] <- phQ[[i]] <- c(0:(m/2 - 1))
+  }
+  names(phP) <- names(phQ) <- mrknames
+  phP[rownames(Dtemp)] <- input.map$maps[[i.lpc]]$seq.ph$P
+  phQ[rownames(Dtemp)] <- input.map$maps[[i.lpc]]$seq.ph$Q
+
+  ## Including error  
   gen<-vector("list", length(indnames))
   names(gen)<-indnames
-  mrk<-ind<-NULL
-  dp<-get(input.map$info$data.name, pos=1)$dosage.p[input.map$maps[[1]]$seq.num]
-  dq<-get(input.map$info$data.name, pos=1)$dosage.q[input.map$maps[[1]]$seq.num]
-  names(dp)<-names(dq)<-mrknames
   d.pq<-data.frame(dp = dp, 
                    dq = dq)
   d.pq$mrk<-rownames(d.pq)
   for(i in names(gen))
   {
-    a<-matrix(0, nrow(geno.temp), input.map$info$m+1, dimnames = list(mrknames, 0:input.map$info$m))
+    a<-matrix(0, nrow(D), input.map$info$m+1, dimnames = list(mrknames, 0:input.map$info$m))
     for(j in rownames(a)){
-      if(geno.temp[j,i] == input.map$info$m+1){
+      if(D[j,i] == input.map$info$m+1){
         a[j,]<-segreg_poly(m = input.map$info$m, dP = dp[j], dQ = dq[j])
       } else {
-        a[j,geno.temp[j,i]+1]<-1          
+        a[j,D[j,i]+1]<-1          
       }
     }
     a<-as.data.frame(a)
@@ -189,15 +209,12 @@ calc_genoprob_error<-function(input.map,  phase.config = "best", error = 0.01,
     colnames(a.temp)<-a[,1]
     gen[[i]]<-a.temp
   }
-  g <- as.double(unlist(gen))
-  m = as.numeric(input.map$info$m)
-  n.mrk = as.numeric(input.map$info$n.mrk)
-  n.ind = as.numeric(length(gen))
-  p = as.numeric(unlist(input.map$maps[[i.lpc]]$seq.ph$P))
-  dp = as.numeric(cumsum(c(0, sapply(input.map$maps[[1]]$seq.ph$P, function(x) sum(length(x))))))
-  q = as.numeric(unlist(input.map$maps[[1]]$seq.ph$Q))
-  dq = as.numeric(cumsum(c(0, sapply(input.map$maps[[1]]$seq.ph$Q, function(x) sum(length(x))))))
-  rf = as.double(input.map$maps[[i.lpc]]$seq.rf)
+  g = as.double(unlist(gen))
+  p = as.numeric(unlist(phP))
+  dp = as.numeric(cumsum(c(0, sapply(phP, function(x) sum(length(x))))))
+  q = as.numeric(unlist(phQ))
+  dq = as.numeric(cumsum(c(0, sapply(phQ, function(x) sum(length(x))))))
+  rf = as.double(mf_h(diff(map.pseudo)))
   res.temp <-
     .Call(
       "calc_genoprob_prior",
@@ -220,5 +237,5 @@ calc_genoprob_error<-function(input.map,  phase.config = "best", error = 0.01,
   dimnames(res.temp[[1]])<-list(kronecker(apply(combn(letters[1:m],m/2),2, paste, collapse=""),
                                           apply(combn(letters[(m+1):(2*m)],m/2),2, paste, collapse=""), paste, sep=":"),
                                 mrknames, indnames)
-  structure(list(probs = res.temp[[1]], map = create_map(input.map)), class="mappoly.genoprob")
+  structure(list(probs = res.temp[[1]], map = map.pseudo), class="mappoly.genoprob")
 }
