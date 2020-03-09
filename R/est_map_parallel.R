@@ -9,7 +9,7 @@
 #'
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' @export
-est_map_parallel = function(data, markers, partial_tpt, n.batches = 4, n.cores = 4, platform = 'auto', start.set = 5, thres.twopt = 10, thres.hmm = 10, submap.size.diff = 3, thres.twopt2 = 3, thres.hmm2 = 10, phase.n.lim = 20, tol = 1e-3) {
+est_map_parallel = function(data, markers, partial_tpt, n.batches = 4, n.cores = 4, platform = 'auto', start.set = 5, thres.twopt = 10, thres.hmm = 10, info.tail = TRUE, submap.size.diff = 3, thres.twopt2 = 3, thres.hmm2 = 10, phase.n.lim = 20, tol = 1e-3) {
     ## Getting and checking platform
     if (platform == 'auto'){
         platform = .Platform$OS.type
@@ -49,7 +49,7 @@ est_map_parallel = function(data, markers, partial_tpt, n.batches = 4, n.cores =
                               start.set = start.set,
                               thres.twopt = thres.twopt,
                               thres.hmm = thres.hmm,
-                              info.tail = TRUE,
+                              info.tail = info.tail,
                               twopt = x[[2]],
                               sub.map.size.diff.limit = submap.size.diff,
                               phase.number.limit = phase.n.lim,
@@ -245,45 +245,41 @@ func.merge = function(x,tpt,thres.twopt2,thres.hmm2,tol){
 ##'
 ##' @author Gabriel Gesteira
 ##' 
-## check_phases = function(map1, map2, verbose = TRUE){
-##     ## Defining arguments
-##     ploidy = map1$info$m
-##     mrks.1 = map1$info$mrk.names
-##     mrks.2 = map2$info$mrk.names
-##     common.mrk = intersect(mrks.1,mrks.2)
-##     pos.mrk.1 = which(mrks.1 %in% common.mrk)
-##     pos.mrk.2 = which(mrks.2 %in% common.mrk)
-##         if (verbose) {
-##         cat('\nMap 1 has ', length(mrks.1), ' markers.\n')
-##         cat('Map 2 has ', length(mrks.2), ' markers.\n')
-##         cat('There are ', length(common.mrk), 'common markers.\n')
-##         cat('The following markers from Map 1 were discarded: ', mrks.1[which(!mrks.1 %in% common.mrk)], '\n')
-##         cat('The following markers from Map 2 were discarded: ', mrks.2[which(!mrks.2 %in% common.mrk)], '\n')
-##     }
-##     ## Subsetting phases
-##     phases.1.P = map1$maps[[1]]$seq.ph$P[pos.mrk.1]
-##     phases.2.P = map2$maps[[1]]$seq.ph$P[pos.mrk.2]
-##     phases.1.Q = map1$maps[[1]]$seq.ph$Q[pos.mrk.1]
-##     phases.2.Q = map2$maps[[1]]$seq.ph$Q[pos.mrk.2]
-
-##     ## Creating matrices to handle homologues
-##     phases.1.P.hom = phases.2.P.hom = phases.1.Q.hom = phases.2.Q.hom = matrix(NA, length(common.mrk), ploidy)
-
-##     ## Filling matrices
-##     for (i in 1:length(common.mrk)){
-##         phases.1.P.hom[i,phases.1.P[[i]]] = 1
-##         phases.1.Q.hom[i,phases.1.Q[[i]]] = 1
-##         phases.2.P.hom[i,phases.2.P[[i]]] = 1
-##         phases.2.Q.hom[i,phases.2.Q[[i]]] = 1
-##     }
-##     phases.1.P.hom[which(is.na(phases.1.P.hom))] = 0
-##     phases.1.Q.hom[which(is.na(phases.1.Q.hom))] = 0
-##     phases.2.P.hom[which(is.na(phases.2.P.hom))] = 0
-##     phases.2.Q.hom[which(is.na(phases.2.Q.hom))] = 0
-
-##     ## Checking if homologues match
-##     P = apply(phases.1.P.hom == phases.2.P.hom, 2, any)
-##     Q = apply(phases.1.Q.hom == phases.2.Q.hom, 2, any)
-
-##     return(rbind(P,Q))
-## }
+# check_phases = function(map1, map2, verbose = TRUE){
+#     ## Defining arguments
+#     ploidy = map1$info$m
+#     mrks.1 = map1$info$mrk.names
+#     mrks.2 = map2$info$mrk.names
+#     common.mrk = intersect(mrks.1,mrks.2)
+#     pos.mrk.1 = which(mrks.1 %in% common.mrk)
+#     pos.mrk.2 = which(mrks.2 %in% common.mrk)
+#         if (verbose) {
+#         cat('\nMap 1 has ', length(mrks.1), ' markers.\n')
+#         cat('Map 2 has ', length(mrks.2), ' markers.\n')
+#         cat('There are ', length(common.mrk), 'common markers.\n')
+#         cat('The following markers from Map 1 were discarded: ', mrks.1[which(!mrks.1 %in% common.mrk)], '\n')
+#         cat('The following markers from Map 2 were discarded: ', mrks.2[which(!mrks.2 %in% common.mrk)], '\n')
+#     }
+#     ## Subsetting phases
+#     phases.1.P = map1$maps[[1]]$seq.ph$P[pos.mrk.1]
+#     phases.2.P = map2$maps[[1]]$seq.ph$P[pos.mrk.2]
+#     phases.1.Q = map1$maps[[1]]$seq.ph$Q[pos.mrk.1]
+#     phases.2.Q = map2$maps[[1]]$seq.ph$Q[pos.mrk.2]
+#     ## Creating matrices to handle homologues
+#     phases.1.P.hom = phases.2.P.hom = phases.1.Q.hom = phases.2.Q.hom = matrix(NA, length(common.mrk), ploidy)
+#     ## Filling matrices
+#     for (i in 1:length(common.mrk)){
+#         phases.1.P.hom[i,phases.1.P[[i]]] = 1
+#         phases.1.Q.hom[i,phases.1.Q[[i]]] = 1
+#         phases.2.P.hom[i,phases.2.P[[i]]] = 1
+#         phases.2.Q.hom[i,phases.2.Q[[i]]] = 1
+#     }
+#     phases.1.P.hom[which(is.na(phases.1.P.hom))] = 0
+#     phases.1.Q.hom[which(is.na(phases.1.Q.hom))] = 0
+#     phases.2.P.hom[which(is.na(phases.2.P.hom))] = 0
+#     phases.2.Q.hom[which(is.na(phases.2.Q.hom))] = 0
+#     ## Checking if homologues match
+#     P = apply(phases.1.P.hom == phases.2.P.hom, 2, any)
+#     Q = apply(phases.1.Q.hom == phases.2.Q.hom, 2, any)
+#     return(rbind(P,Q))
+# }

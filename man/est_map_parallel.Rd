@@ -14,6 +14,7 @@ est_map_parallel(
   start.set = 5,
   thres.twopt = 10,
   thres.hmm = 10,
+  info.tail = TRUE,
   submap.size.diff = 3,
   thres.twopt2 = 3,
   thres.hmm2 = 10,

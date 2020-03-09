@@ -38,7 +38,9 @@ the preferential pairing profile for the homolog pairs)}
 \item{thresh}{threshold for chi-square test (default = 0.01)}
 }
 \description{
-Compute the probability profiles for all pairing configurations in both parents.
+Given the genotype conditional probabilities for a map, this function
+computes the probability profiles for all possible pairing configurations 
+in both parents.
 }
 \examples{
 \dontrun{

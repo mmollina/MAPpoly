@@ -239,7 +239,6 @@ read_geno <- function(file.in, filter.non.conforming = TRUE, elim.redundant = TR
 }
 
 #' @rdname read_geno
-#' @rdname read_geno_dist
 #' @keywords internal
 #' @export
 print.mappoly.data <- function(x, detailed = FALSE, ...) {
@@ -277,7 +276,6 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
 }
 
 #' @rdname read_geno
-#' @rdname read_geno_dist
 #' @export
 #' @keywords internal
 #' @importFrom graphics barplot layout mtext image legend 
