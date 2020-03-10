@@ -51,6 +51,7 @@
 #'         estimates were not computed}
 #'
 #' @examples
+#' \dontrun{
 #'     data(hexafake)
 #'     all.mrk<-make_seq_mappoly(hexafake, 'all')
 #'     seq1.mrk<-make_seq_mappoly(hexafake, 'seq1')
@@ -68,7 +69,7 @@
 #'     ## Making a sequence using the intersection between groups and genomic information
 #'     solcap.geno.file <- system.file('extdata', 'tetra_solcap_geno', package = 'mappoly')
 #'     dat.dose.mpl <- read_geno(file.in  = solcap.geno.file)
-#'     seq.init <- make_seq_mappoly(mrks.chi.filt, data.name = dat.dose.mpl)
+#'     seq.init <- make_seq_mappoly(dat.dose.mpl, 'all')
 #'     counts <- cache_counts_twopt(input.seq = seq.init, cached = TRUE)
 #'     all.rf.pairwise <- est_pairwise_rf(input.seq = seq.init, 
 #'                                        count.cache = counts, 
@@ -79,6 +80,7 @@
 #'                         comp.mat = TRUE, 
 #'                         inter = TRUE)
 #'    seq1 = make_seq_mappoly(grs, arg = 1, genomic.info = 1)
+#' }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}, with modifications by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'

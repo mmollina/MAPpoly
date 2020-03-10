@@ -53,7 +53,7 @@ est_map_parallel = function(data, markers, partial_tpt, n.batches = 4, n.cores =
                               twopt = x[[2]],
                               sub.map.size.diff.limit = submap.size.diff,
                               phase.number.limit = phase.n.lim,
-                              reestimate.single.ph.configuration = TRUE,
+                              reestimate.single.ph.configuration = FALSE,
                               tol = tol,
                               tol.final = tol/10)
     return(y)
