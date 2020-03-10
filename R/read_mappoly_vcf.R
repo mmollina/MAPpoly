@@ -25,6 +25,9 @@
 #'
 #' @param max.missing maximum proportion of missing data to keep markers (range = 0-1; default = 1)
 #'
+#' @param elim.redundant logical. If \code{TRUE} (default), removes redundant markers
+#' during map construction, keeping them annotated to export to the final map.
+#'
 #' @return An object of class \code{mappoly.data} which contains a
 #'     list with the following components:
 #'     \item{m}{ploidy level}
@@ -60,7 +63,7 @@
 #'     test of mendelian segregation performed for all markers}
 #' @examples
 #' \dontrun{
-#'     mydata = read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2")
+#'     mydata = read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2", ploidy = 6)
 #'     print(mydata, detailed = TRUE)
 #'}
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
@@ -76,7 +79,7 @@
 #' 
 read_vcf = function(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
                      ploidy = NA, thresh.line = 0.05, min.gt.depth = 0, min.av.depth = 0,
-                     max.missing = 1) {
+                     max.missing = 1, elim.redundant = TRUE) {
     
   # Checking even ploidy
   if(!is.na(ploidy) && (ploidy %% 2) != 0){
@@ -247,7 +250,13 @@ read_vcf = function(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
     M<-cbind(M, res$geno.dose)
     res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
     cat("\n    Done.\n")
-    return(res)
+  }
+      if (elim.redundant){
+        seqred = make_seq_mappoly(res, arg = 'all', data.name = 'res')
+        redun = elim_redundant(seqred)
+      res$unique.seq = redun$unique.seq
+      res$kept = redun$kept
+      res$elim.correspondence = redun$elim.correspondence
   }
   return(res)
 }

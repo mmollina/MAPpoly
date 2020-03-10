@@ -4,9 +4,18 @@
 \alias{read_vcf}
 \title{Data Input VCF}
 \usage{
-read_vcf(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
-  ploidy = NA, thresh.line = 0.05, min.gt.depth = 0,
-  min.av.depth = 0, max.missing = 1)
+read_vcf(
+  file.in,
+  filter.non.conforming = TRUE,
+  parent.1,
+  parent.2,
+  ploidy = NA,
+  thresh.line = 0.05,
+  min.gt.depth = 0,
+  min.av.depth = 0,
+  max.missing = 1,
+  elim.redundant = TRUE
+)
 }
 \arguments{
 \item{file.in}{a character string with the name of (or full path to) the input file which contains the data (VCF format)}
@@ -28,6 +37,9 @@ it will be replaced with NA (default = 0)}
 \item{min.av.depth}{minimum average depth to keep markers (default = 0)}
 
 \item{max.missing}{maximum proportion of missing data to keep markers (range = 0-1; default = 1)}
+
+\item{elim.redundant}{logical. If \code{TRUE} (default), removes redundant markers
+during map construction, keeping them annotated to export to the final map.}
 }
 \value{
 An object of class \code{mappoly.data} which contains a
@@ -73,7 +85,7 @@ recommended that you inform it to check for mismatches. All individual and marke
 }
 \examples{
 \dontrun{
-    mydata = read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2")
+    mydata = read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2", ploidy = 6)
     print(mydata, detailed = TRUE)
 }
 }

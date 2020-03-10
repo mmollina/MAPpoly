@@ -4,8 +4,7 @@
 \alias{import_from_updog}
 \title{Import from updog}
 \usage{
-import_from_updog(object, prob.thres = NULL,
-  filter.non.conforming = FALSE)
+import_from_updog(object, prob.thres = NULL, filter.non.conforming = FALSE)
 }
 \arguments{
 \item{object}{the name of the object of class \code{multidog}}
@@ -71,7 +70,7 @@ mout = multidog(refmat = t(uitdewilligen$refmat),
                 p1_id = colnames(t(uitdewilligen$sizemat))[1],
                 p2_id = colnames(t(uitdewilligen$sizemat))[2],
                 nc = 4)
-mydata = import_from(mout)
+mydata = import_from_updog(mout)
 }
 
 }

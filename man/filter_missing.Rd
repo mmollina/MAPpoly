@@ -4,8 +4,12 @@
 \alias{filter_missing}
 \title{Filter missing genotypes}
 \usage{
-filter_missing(input.data, type = c("marker", "individual"),
-  filter.thres = 0.2, inter = TRUE)
+filter_missing(
+  input.data,
+  type = c("marker", "individual"),
+  filter.thres = 0.2,
+  inter = TRUE
+)
 }
 \arguments{
 \item{input.data}{an object of class \code{mappoly.data}}

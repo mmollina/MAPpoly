@@ -1,7 +1,7 @@
 #' Homolog probabilities 
 #' 
 #' Compute homolog probabilities for all individuals in the full-sib
-#' population
+#' population given a map with the final genotype probabilities. 
 #'
 #' @param input.genoprobs an object of class \code{mappoly.genoprob}
 #' 

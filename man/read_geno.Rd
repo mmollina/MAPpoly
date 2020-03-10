@@ -6,7 +6,7 @@
 \alias{plot.mappoly.data}
 \title{Data Input}
 \usage{
-read_geno(file.in, filter.non.conforming = TRUE)
+read_geno(file.in, filter.non.conforming = TRUE, elim.redundant = TRUE)
 
 \method{print}{mappoly.data}(x, detailed = FALSE, ...)
 
@@ -18,6 +18,9 @@ which contains the data to be read}
 
 \item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
 expected genotypes under random chromosome pairing and no double reduction}
+
+\item{elim.redundant}{logical. If \code{TRUE} (default), removes redundant markers
+during map construction, keeping them annotated to export to the final map.}
 
 \item{x}{an object of class \code{mappoly.data}}
 

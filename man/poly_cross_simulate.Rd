@@ -4,9 +4,20 @@
 \alias{poly_cross_simulate}
 \title{Simulate an autopolyploid full-sib population}
 \usage{
-poly_cross_simulate(m, rf.vec, n.mrk, n.ind, hom.allele, draw = FALSE,
-  file = "output.pdf", seed = NULL, width = 12, height = 6,
-  prob.P = NULL, prob.Q = NULL)
+poly_cross_simulate(
+  m,
+  rf.vec,
+  n.mrk,
+  n.ind,
+  hom.allele,
+  draw = FALSE,
+  file = "output.pdf",
+  seed = NULL,
+  width = 12,
+  height = 6,
+  prob.P = NULL,
+  prob.Q = NULL
+)
 }
 \arguments{
 \item{m}{ploidy level. Must be an even number}

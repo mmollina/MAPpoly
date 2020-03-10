@@ -4,8 +4,16 @@
 \alias{get_counts}
 \title{Counts for recombinant classes}
 \usage{
-get_counts(m, P.k = NULL, P.k1 = NULL, Q.k = NULL, Q.k1 = NULL,
-  verbose = FALSE, make.names = FALSE, joint.prob = FALSE)
+get_counts(
+  m,
+  P.k = NULL,
+  P.k1 = NULL,
+  Q.k = NULL,
+  Q.k1 = NULL,
+  verbose = FALSE,
+  make.names = FALSE,
+  joint.prob = FALSE
+)
 }
 \arguments{
 \item{void}{interfunction to be documented}

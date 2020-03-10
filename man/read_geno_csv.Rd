@@ -4,7 +4,12 @@
 \alias{read_geno_csv}
 \title{Data Input in CSV format}
 \usage{
-read_geno_csv(file.in, ploidy, filter.non.conforming = TRUE)
+read_geno_csv(
+  file.in,
+  ploidy,
+  filter.non.conforming = TRUE,
+  elim.redundant = TRUE
+)
 }
 \arguments{
 \item{file.in}{a character string with the name of (or full path to) the input file which contains the data to
@@ -14,6 +19,9 @@ be read}
 
 \item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
 expected genotypes under random chromosome pairing and no double reduction}
+
+\item{elim.redundant}{logical. If \code{TRUE} (default), removes redundant markers
+during map construction, keeping them annotated to export to the final map.}
 }
 \value{
 An object of class \code{mappoly.data} which contains a

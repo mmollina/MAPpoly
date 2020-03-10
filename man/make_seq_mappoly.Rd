@@ -6,7 +6,7 @@
 \alias{plot.mappoly.sequence}
 \title{Create a sequence of markers}
 \usage{
-make_seq_mappoly(input.obj, arg = NULL, data.name = NULL)
+make_seq_mappoly(input.obj, arg = NULL, genomic.info = NULL, data.name = NULL)
 
 \method{print}{mappoly.sequence}(x, ...)
 
@@ -25,7 +25,17 @@ is the sequence (\code{x=0} indicates unassigned markers); iii) a
 sequence; iv) an integer representing linkage group if 
 \code{input.object} has class \code{mappoly.group}; or v) NULL if 
 \code{input.object} has class \code{mappoly.pcmap}, \code{mappoly.pcmap3d} or 
-\code{mappoly.unique.seq}}
+\code{mappoly.unique.seq}
+
+@param genomic.info optional argument applied for \code{mappoly.group} objects only. This argument can be \code{NULL},
+or can hold the numeric combination of sequences from genomic information to be used when making the sequences.
+When \code{genomic.info = NULL} (default), the function returns a sequence containing all markers defined 
+by the grouping function. When \code{genomic.info = 1}, the function returns a sequence with markers
+that matched the intersection between grouping function and genomic information, considering the sequence
+from genomic information that holds the maximum number of markers matching the group;
+when \code{genomic.info = c(1,2)}, the function returns a sequence with markers
+that matched the intersection between grouping function and genomic information, considering two sequences
+from genomic information that presented the maximum number of markers matching the group; and so on.}
 
 \item{data.name}{name of the object of class \code{mappoly.data}}
 
@@ -56,6 +66,7 @@ An object of class \code{mappoly.sequence}, which is a
 Makes a sequence of markers based on an object of another class.
 }
 \examples{
+\dontrun{
     data(hexafake)
     all.mrk<-make_seq_mappoly(hexafake, 'all')
     seq1.mrk<-make_seq_mappoly(hexafake, 'seq1')
@@ -69,6 +80,22 @@ Makes a sequence of markers based on an object of another class.
     ## Removing redundant markers and makeing a new sequence
     red.mrk<-elim_redundant(all.mrk)
     unique.mrks<-make_seq_mappoly(red.mrk)
+    
+    ## Making a sequence using the intersection between groups and genomic information
+    solcap.geno.file <- system.file('extdata', 'tetra_solcap_geno', package = 'mappoly')
+    dat.dose.mpl <- read_geno(file.in  = solcap.geno.file)
+    seq.init <- make_seq_mappoly(dat.dose.mpl, 'all')
+    counts <- cache_counts_twopt(input.seq = seq.init, cached = TRUE)
+    all.rf.pairwise <- est_pairwise_rf(input.seq = seq.init, 
+                                       count.cache = counts, 
+                                       n.clusters = 12)
+   mat <- rf_list_to_matrix(input.twopt = all.rf.pairwise)
+   grs <- group_mappoly(input.mat = mat,
+                        expected.groups = 12,
+                        comp.mat = TRUE, 
+                        inter = TRUE)
+   seq1 = make_seq_mappoly(grs, arg = 1, genomic.info = 1)
+}
 
 }
 \references{
@@ -79,6 +106,6 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     \url{https://doi.org/10.1534/g3.119.400378}
 }
 \author{
-Marcelo Mollinari, \email{mmollin@ncsu.edu}
+Marcelo Mollinari, \email{mmollin@ncsu.edu}, with modifications by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 }
 \keyword{internal}

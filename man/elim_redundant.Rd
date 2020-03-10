@@ -4,10 +4,12 @@
 \alias{elim_redundant}
 \title{Eliminate redundant markers}
 \usage{
-elim_redundant(input.seq)
+elim_redundant(input.seq, data = NULL)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}}
+
+\item{data}{name of the dataset that contains sequence markers (optional, default = NULL)}
 
 \item{...}{currently ignored}
 }
@@ -40,5 +42,5 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     \url{https://doi.org/10.1534/g3.119.400378}
 }
 \author{
-Marcelo Mollinari, \email{mmollin@ncsu.edu}
+Marcelo Mollinari, \email{mmollin@ncsu.edu}, with minor modifications by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 }

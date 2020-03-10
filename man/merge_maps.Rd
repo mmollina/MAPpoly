@@ -4,9 +4,17 @@
 \alias{merge_maps}
 \title{Merge two maps}
 \usage{
-merge_maps(input.map1, input.map2, twopt, thres.twopt = 3,
-  thres.hmm = 10, genoprob.map1 = NULL, phase.config.map1 = "best",
-  phase.config.map2 = "best", tol = 0.001)
+merge_maps(
+  input.map1,
+  input.map2,
+  twopt,
+  thres.twopt = 3,
+  thres.hmm = 10,
+  genoprob.map1 = NULL,
+  phase.config.map1 = "best",
+  phase.config.map2 = "best",
+  tol = 0.001
+)
 }
 \arguments{
 \item{input.map1}{an object of class \code{mappoly.map}, which comprehends the first map to be merged}

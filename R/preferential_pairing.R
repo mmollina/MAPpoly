@@ -1,6 +1,8 @@
 #' Preferential pairing profiles
 #'
-#' Compute the probability profiles for all pairing configurations in both parents.
+#' Given the genotype conditional probabilities for a map, this function
+#' computes the probability profiles for all possible pairing configurations 
+#' in both parents.
 #'
 #' @param input.genoprobs an object of class \code{mappoly.genoprob}
 #' 

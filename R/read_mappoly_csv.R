@@ -18,7 +18,10 @@
 #' @param ploidy the ploidy level
 #'     
 #' @param filter.non.conforming if \code{TRUE} (default) exclude samples with non 
-#'     expected genotypes under random chromosome pairing and no double reduction 
+#'     expected genotypes under random chromosome pairing and no double reduction
+#'
+#' @param elim.redundant logical. If \code{TRUE} (default), removes redundant markers
+#' during map construction, keeping them annotated to export to the final map.
 #'
 #' @return An object of class \code{mappoly.data} which contains a
 #'     list with the following components:
@@ -63,7 +66,7 @@
 #'
 #' @export read_geno_csv
 
-read_geno_csv <- function(file.in, ploidy, filter.non.conforming = TRUE) {
+read_geno_csv <- function(file.in, ploidy, filter.non.conforming = TRUE, elim.redundant = TRUE) {
   m <- ploidy
   dat<-read.csv(file = file.in, header = TRUE, stringsAsFactors = FALSE)
   ## get number of individuals -------------
@@ -136,7 +139,13 @@ read_geno_csv <- function(file.in, ploidy, filter.non.conforming = TRUE) {
     M<-cbind(M, res$geno.dose)
     res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
     cat("\n    Done with filtering.\n")
-    return(res)
+  }
+  if (elim.redundant){
+    seqred = make_seq_mappoly(res, arg = 'all', data.name = 'res')
+    redun = elim_redundant(seqred)
+      res$unique.seq = redun$unique.seq
+      res$kept = redun$kept
+      res$elim.correspondence = redun$elim.correspondence
   }
   return(res)
 }

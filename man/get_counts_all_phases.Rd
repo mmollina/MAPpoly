@@ -4,8 +4,13 @@
 \alias{get_counts_all_phases}
 \title{Counts for recombinant classes}
 \usage{
-get_counts_all_phases(x, m, verbose = FALSE, make.names = FALSE,
-  joint.prob = FALSE)
+get_counts_all_phases(
+  x,
+  m,
+  verbose = FALSE,
+  make.names = FALSE,
+  joint.prob = FALSE
+)
 }
 \arguments{
 \item{void}{interfunction to be documented}

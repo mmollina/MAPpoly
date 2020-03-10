@@ -10,8 +10,7 @@ calc_homoprob(input.genoprobs)
 
 \method{print}{mappoly.homoprob}(x, ...)
 
-\method{plot}{mappoly.homoprob}(x, stack = FALSE, lg = NULL,
-  ind = NULL, use.plotly = TRUE, ...)
+\method{plot}{mappoly.homoprob}(x, stack = FALSE, lg = NULL, ind = NULL, use.plotly = TRUE, ...)
 }
 \arguments{
 \item{input.genoprobs}{an object of class \code{mappoly.genoprob}}
@@ -36,7 +35,7 @@ individual}
 }
 \description{
 Compute homolog probabilities for all individuals in the full-sib
-population
+population given a map with the final genotype probabilities.
 }
 \examples{
 \dontrun{

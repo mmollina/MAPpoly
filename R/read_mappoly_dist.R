@@ -33,7 +33,10 @@
 #'     are considered as missing data for the dosage calling purposes (default = 0.95)
 #'     
 #' @param filter.non.conforming if \code{TRUE} (default) exclude samples with non 
-#'     expected genotypes under random chromosome pairing and no double reduction 
+#'     expected genotypes under random chromosome pairing and no double reduction
+#'
+#' @param elim.redundant logical. If \code{TRUE} (default), removes redundant markers
+#' during map construction, keeping them annotated to export to the final map.
 #'
 #' @param ... currently ignored
 #'
@@ -97,7 +100,7 @@
 #'     
 #' @export read_geno_dist
 
-read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = TRUE) {
+read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = TRUE, elim.redundant = TRUE) {
     ## get ploidy level ----------------------
     temp <- scan(file.in, what = character(), sep = " ", nlines = 1, quiet = TRUE)
     m <- na.omit(as.numeric(temp[2]))
@@ -251,7 +254,13 @@ read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
       M<-cbind(M, res$geno.dose)
       res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
       cat("\n    Done.\n")
-      return(res)
     }
+      if (elim.redundant){
+        seqred = make_seq_mappoly(res, arg = 'all', data.name = 'res')
+        redun = elim_redundant(seqred)
+      res$unique.seq = redun$unique.seq
+      res$kept = redun$kept
+      res$elim.correspondence = redun$elim.correspondence
+  }
    return(res)
 }

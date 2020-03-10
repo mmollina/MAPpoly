@@ -4,8 +4,13 @@
 \alias{plot_compare_haplotypes}
 \title{Plot two overlapped haplotypes}
 \usage{
-plot_compare_haplotypes(m, hom.allele.p1, hom.allele.q1,
-  hom.allele.p2 = NULL, hom.allele.q2 = NULL)
+plot_compare_haplotypes(
+  m,
+  hom.allele.p1,
+  hom.allele.q1,
+  hom.allele.p2 = NULL,
+  hom.allele.q2 = NULL
+)
 }
 \arguments{
 \item{void}{interfunction to be documented}

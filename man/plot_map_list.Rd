@@ -4,8 +4,12 @@
 \alias{plot_map_list}
 \title{Plot a genetic map}
 \usage{
-plot_map_list(map.list, horiz = TRUE, col = "lightgray",
-  title = "Linkage Groups")
+plot_map_list(
+  map.list,
+  horiz = TRUE,
+  col = "lightgray",
+  title = "Linkage Groups"
+)
 }
 \arguments{
 \item{map.list}{A list of objects or a single object of class \code{mappoly.map}}

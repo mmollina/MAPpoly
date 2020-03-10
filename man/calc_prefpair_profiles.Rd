@@ -10,8 +10,14 @@ calc_prefpair_profiles(input.genoprobs)
 
 \method{print}{mappoly.prefpair.profiles}(x, ...)
 
-\method{plot}{mappoly.prefpair.profiles}(x, type = c("pair.configs",
-  "hom.pairs"), min.y.prof = 0, max.y.prof = 1, thresh = 0.01, ...)
+\method{plot}{mappoly.prefpair.profiles}(
+  x,
+  type = c("pair.configs", "hom.pairs"),
+  min.y.prof = 0,
+  max.y.prof = 1,
+  thresh = 0.01,
+  ...
+)
 }
 \arguments{
 \item{input.genoprobs}{an object of class \code{mappoly.genoprob}}
@@ -32,7 +38,9 @@ the preferential pairing profile for the homolog pairs)}
 \item{thresh}{threshold for chi-square test (default = 0.01)}
 }
 \description{
-Compute the probability profiles for all pairing configurations in both parents.
+Given the genotype conditional probabilities for a map, this function
+computes the probability profiles for all possible pairing configurations 
+in both parents.
 }
 \examples{
 \dontrun{

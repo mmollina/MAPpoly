@@ -4,8 +4,15 @@
 \alias{paralell_pairwise}
 \title{Wrapper function to pairwise two-point estimation in C++}
 \usage{
-paralell_pairwise(mrk.pairs, input.seq, geno, dP, dQ, count.cache,
-  tol = .Machine$double.eps^0.25)
+paralell_pairwise(
+  mrk.pairs,
+  input.seq,
+  geno,
+  dP,
+  dQ,
+  count.cache,
+  tol = .Machine$double.eps^0.25
+)
 }
 \arguments{
 \item{void}{interfunction to be documented}

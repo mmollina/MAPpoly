@@ -4,8 +4,14 @@
 \alias{est_full_hmm_with_global_error}
 \title{Reestimate genetic map given a global genotyping error}
 \usage{
-est_full_hmm_with_global_error(input.map, error = NULL, tol = 0.001,
-  restricted = TRUE, th.prob = 0.95, verbose = FALSE)
+est_full_hmm_with_global_error(
+  input.map,
+  error = NULL,
+  tol = 0.001,
+  restricted = TRUE,
+  th.prob = 0.95,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{input.map}{an object of class \code{mappoly.map}}

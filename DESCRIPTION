@@ -42,6 +42,6 @@ Imports:
     princurve,
     dendextend
 LinkingTo: Rcpp
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.2
 SystemRequirements: C++11
 Encoding: UTF-8

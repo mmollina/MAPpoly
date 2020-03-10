@@ -4,8 +4,13 @@
 \alias{get_counts_one_parent}
 \title{Counts for recombinant classes in a polyploid parent.}
 \usage{
-get_counts_one_parent(ploidy, gen.par.mk1, gen.par.mk2, gen.prog.mk1,
-  gen.prog.mk2)
+get_counts_one_parent(
+  ploidy,
+  gen.par.mk1,
+  gen.par.mk2,
+  gen.prog.mk1,
+  gen.prog.mk2
+)
 }
 \arguments{
 \item{ploidy}{Ploidy level}

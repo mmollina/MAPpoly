@@ -6,8 +6,13 @@
 \alias{plot.mappoly.group}
 \title{Assign markers to linkage groups}
 \usage{
-group_mappoly(input.mat, expected.groups = NULL, inter = TRUE,
-  comp.mat = FALSE, verbose = TRUE)
+group_mappoly(
+  input.mat,
+  expected.groups = NULL,
+  inter = TRUE,
+  comp.mat = FALSE,
+  verbose = TRUE
+)
 
 \method{print}{mappoly.group}(x, detailed = TRUE, ...)
 

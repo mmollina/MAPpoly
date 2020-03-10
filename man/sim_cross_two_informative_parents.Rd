@@ -4,8 +4,17 @@
 \alias{sim_cross_two_informative_parents}
 \title{Simulate mapping population (tow parents)}
 \usage{
-sim_cross_two_informative_parents(m, n.mrk, rf.vec, n.ind, hom.allele.p,
-  hom.allele.q, prob.P = NULL, prob.Q = NULL, seed = NULL)
+sim_cross_two_informative_parents(
+  m,
+  n.mrk,
+  rf.vec,
+  n.ind,
+  hom.allele.p,
+  hom.allele.q,
+  prob.P = NULL,
+  prob.Q = NULL,
+  seed = NULL
+)
 }
 \arguments{
 \item{void}{interfunction to be documented}

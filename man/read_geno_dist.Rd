@@ -4,8 +4,12 @@
 \alias{read_geno_dist}
 \title{Data Input}
 \usage{
-read_geno_dist(file.in, prob.thres = 0.95,
-  filter.non.conforming = TRUE)
+read_geno_dist(
+  file.in,
+  prob.thres = 0.95,
+  filter.non.conforming = TRUE,
+  elim.redundant = TRUE
+)
 }
 \arguments{
 \item{file.in}{a character string with the name of (or full path to) the input file which contains the data to
@@ -17,6 +21,9 @@ are considered as missing data for the dosage calling purposes (default = 0.95)}
 
 \item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
 expected genotypes under random chromosome pairing and no double reduction}
+
+\item{elim.redundant}{logical. If \code{TRUE} (default), removes redundant markers
+during map construction, keeping them annotated to export to the final map.}
 
 \item{...}{currently ignored}
 }

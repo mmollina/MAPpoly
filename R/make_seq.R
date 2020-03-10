@@ -15,6 +15,16 @@
 #'     \code{input.object} has class \code{mappoly.group}; or v) NULL if 
 #'     \code{input.object} has class \code{mappoly.pcmap}, \code{mappoly.pcmap3d} or 
 #'     \code{mappoly.unique.seq}
+#'     
+#'     @param genomic.info optional argument applied for \code{mappoly.group} objects only. This argument can be \code{NULL},
+#'     or can hold the numeric combination of sequences from genomic information to be used when making the sequences.
+#'     When \code{genomic.info = NULL} (default), the function returns a sequence containing all markers defined 
+#'     by the grouping function. When \code{genomic.info = 1}, the function returns a sequence with markers
+#'     that matched the intersection between grouping function and genomic information, considering the sequence
+#'     from genomic information that holds the maximum number of markers matching the group;
+#'     when \code{genomic.info = c(1,2)}, the function returns a sequence with markers
+#'     that matched the intersection between grouping function and genomic information, considering two sequences
+#'     from genomic information that presented the maximum number of markers matching the group; and so on.
 #'
 #' @param data.name name of the object of class \code{mappoly.data}
 #'
@@ -41,6 +51,7 @@
 #'         estimates were not computed}
 #'
 #' @examples
+#' \dontrun{
 #'     data(hexafake)
 #'     all.mrk<-make_seq_mappoly(hexafake, 'all')
 #'     seq1.mrk<-make_seq_mappoly(hexafake, 'seq1')
@@ -54,8 +65,24 @@
 #'     ## Removing redundant markers and makeing a new sequence
 #'     red.mrk<-elim_redundant(all.mrk)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
+#'     
+#'     ## Making a sequence using the intersection between groups and genomic information
+#'     solcap.geno.file <- system.file('extdata', 'tetra_solcap_geno', package = 'mappoly')
+#'     dat.dose.mpl <- read_geno(file.in  = solcap.geno.file)
+#'     seq.init <- make_seq_mappoly(dat.dose.mpl, 'all')
+#'     counts <- cache_counts_twopt(input.seq = seq.init, cached = TRUE)
+#'     all.rf.pairwise <- est_pairwise_rf(input.seq = seq.init, 
+#'                                        count.cache = counts, 
+#'                                        n.clusters = 12)
+#'    mat <- rf_list_to_matrix(input.twopt = all.rf.pairwise)
+#'    grs <- group_mappoly(input.mat = mat,
+#'                         expected.groups = 12,
+#'                         comp.mat = TRUE, 
+#'                         inter = TRUE)
+#'    seq1 = make_seq_mappoly(grs, arg = 1, genomic.info = 1)
+#' }
 #'
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}, with modifications by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'
 #' @references
 #'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
@@ -66,7 +93,7 @@
 #'
 #' @export
 
-make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL) {
+make_seq_mappoly <- function(input.obj, arg = NULL, genomic.info = NULL, data.name = NULL) {
   ## checking for correct object
   input_classes <- c("mappoly.data", "mappoly.unique.seq", "mappoly.pcmap", "mappoly.pcmap3d", "mappoly.group", "mappoly.chitest.seq")
   if (!inherits(input.obj, input_classes)) {
@@ -79,32 +106,38 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL) {
   }
   if (class(input.obj) == "mappoly.data")
   {
-    chisq.pval<-input.obj$chisq.pval
+    if (!is.null(input.obj$unique.seq)){
+      posselect = which(input.obj$mrk.names %in% input.obj$kept)
+    } else posselect = which(input.obj$mrk.names %in% input.obj$mrk.names)
+    chisq.pval<-input.obj$chisq.pval[posselect]
     chisq.pval.thres<-NULL
     ## gathering sequence data
     sequence <- sequence.pos <- NULL
     if (any(!is.na(input.obj$sequence)))
-      sequence <- input.obj$sequence
+      sequence <- input.obj$sequence[posselect]
     if (any(!is.na(input.obj$sequence.pos)))
-      sequence.pos <- input.obj$sequence.pos
+      sequence.pos <- input.obj$sequence.pos[posselect]
     
     ## make sequence with all markers
     if (length(arg) == 1 && arg == "all")
     {
       seq.num <- as.integer(1:input.obj$n.mrk)
+      seq.num = seq.num[posselect]
     }
     else if (all(is.character(arg)) && length(grep("seq", arg)) == length(arg))
     {
       if (length(input.obj$sequence) == 1 && input.obj$sequence == 0)
         stop("There is no sequence information in ", deparse(substitute(input.obj)))
-      seq.num <- as.integer(which(!is.na(match(input.obj$sequence, gsub("[^0-9]", "", arg)))))
+      seq.num <- as.integer(which(!is.na(match(input.obj$sequence[posselect], gsub("[^0-9]", "", arg)))))
       sequence <- input.obj$sequence[seq.num]
       if (length(input.obj$sequence.pos) > 2)
         sequence.pos <- input.obj$sequence.pos[seq.num]
     }
-    else if (all(is.character(arg)) && (length(arg) == length(arg %in% input.obj$mrk.names)))
+    else if (all(is.character(arg)) && (length(arg) == length(arg %in% input.obj$mrk.names[posselect])))
     {
-      seq.num <- as.integer(match(arg, input.obj$mrk.names))
+      #seq.num <- as.integer(match(arg, input.obj$mrk.names[posselect]))
+      seq.num1 = which(input.obj$mrk.names %in% arg)
+      seq.num = seq.num1[seq.num1 %in% posselect]
       sequence <- input.obj$sequence[seq.num]
       if (length(input.obj$sequence.pos) > 2)
         sequence.pos <- input.obj$sequence.pos[seq.num]
@@ -139,9 +172,18 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL) {
   {
     chisq.pval<-input.obj$chisq.pval
     chisq.pval.thres<-input.obj$chisq.pval.thres
-    seq.num <- as.numeric(names(which(input.obj$groups.snp == arg)))
+    if (!is.null(genomic.info)){
+      seq.num.group = as.numeric(names(which(input.obj$groups.snp == arg)))
+      seqs = names(sort(input.obj$seq.vs.grouped.snp[arg,-c(ncol(input.obj$seq.vs.grouped.snp))], decreasing = T))[genomic.info]
+    } else {
+      seq.num <- as.numeric(names(which(input.obj$groups.snp == arg)))
+    }
     data.name <- input.obj$data.name
     input.obj <- get(data.name, pos = 1)
+    if (!is.null(genomic.info)){
+      seq.num.seq = which(input.obj$mrk.names %in% input.obj$mrk.names[which(input.obj$sequence %in% seqs)])
+      seq.num = intersect(seq.num.group, seq.num.seq)
+    }
     if(!all(is.na(input.obj$sequence)) && !all(is.na(input.obj$sequence.pos)))
     {
       sequence <- input.obj$sequence[seq.num]

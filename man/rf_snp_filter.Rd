@@ -4,9 +4,15 @@
 \alias{rf_snp_filter}
 \title{Remove markers that do not meet a LOD criteria}
 \usage{
-rf_snp_filter(input.twopt, thresh.LOD.ph = 5, thresh.LOD.rf = 5,
-  thresh.rf = 0.15, thresh.perc = 0.05, remove.fp = NULL,
-  n.clusters = 1)
+rf_snp_filter(
+  input.twopt,
+  thresh.LOD.ph = 5,
+  thresh.LOD.rf = 5,
+  thresh.rf = 0.15,
+  thresh.perc = 0.05,
+  remove.fp = NULL,
+  n.clusters = 1
+)
 }
 \arguments{
 \item{input.twopt}{an object of class \code{poly.est.two.pts.pairwise}}

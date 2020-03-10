@@ -4,8 +4,15 @@
 \alias{sim_cross_one_informative_parent}
 \title{Simulate mapping population (one parent)}
 \usage{
-sim_cross_one_informative_parent(m, n.mrk, rf.vec, hom.allele, n.ind,
-  seed = NULL, prob = NULL)
+sim_cross_one_informative_parent(
+  m,
+  n.mrk,
+  rf.vec,
+  hom.allele,
+  n.ind,
+  seed = NULL,
+  prob = NULL
+)
 }
 \arguments{
 \item{void}{interfunction to be documented}

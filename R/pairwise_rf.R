@@ -68,11 +68,19 @@
 
 est_pairwise_rf <- function(input.seq, count.cache,
                             n.clusters = 1,
+                            platform = 'auto',
                             tol = .Machine$double.eps^0.25,
                             mrk.pairs = NULL,
                             batch.size = NULL,
                             verbose = TRUE)
 {
+    ## Getting and checking platform
+    if (platform == 'auto'){
+        platform = .Platform$OS.type
+    }
+    if (!any(platform %in% c('unix','windows'))){
+        stop("This function is not supported in your platform. Current supported platforms are Unix and Windows.")
+    }
   ## checking for correct object
   if (!class(input.seq) == "mappoly.sequence")
     stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
@@ -107,19 +115,20 @@ est_pairwise_rf <- function(input.seq, count.cache,
       start <- proc.time()
       if (verbose)
         cat("INFO: Using ", n.clusters, " CPUs for calculation.\n")
-      cl <- makeCluster(n.clusters)
-      clusterEvalQ(cl, require(mappoly))
-      on.exit(stopCluster(cl))
-      res <- parLapply(cl,
-                       input.list,
-                       paralell_pairwise,
-                       input.seq = input.seq,
-                       geno = geno,
-                       dP = get(input.seq$data.name)$dosage.p,
-                       dQ = get(input.seq$data.name)$dosage.q,
-                       count.cache = count.cache,
-                       tol = tol)
-      end <- proc.time()
+      if (platform == 'windows') {cl <- makeCluster(n.clusters)}
+      else {cl = makeCluster(n.clusters, type = 'FORK')}
+        clusterEvalQ(cl, require(mappoly))
+        on.exit(stopCluster(cl))
+        res <- parLapply(cl,
+                         input.list,
+                         paralell_pairwise,
+                         input.seq = input.seq,
+                         geno = geno,
+                         dP = get(input.seq$data.name)$dosage.p,
+                         dQ = get(input.seq$data.name)$dosage.q,
+                         count.cache = count.cache,
+                         tol = tol)
+        end <- proc.time()
       if (verbose) {
         cat("INFO: Done with",
             ncol(mrk.pairs),

@@ -4,8 +4,13 @@
 \alias{generate_all_link_phases_elim_equivalent_haplo}
 \title{Eliminate equivalent linkage phases}
 \usage{
-generate_all_link_phases_elim_equivalent_haplo(block1, block2, rf.matrix,
-  m, max.inc = NULL)
+generate_all_link_phases_elim_equivalent_haplo(
+  block1,
+  block2,
+  rf.matrix,
+  m,
+  max.inc = NULL
+)
 }
 \arguments{
 \item{block1}{submap with markers of the first block}
