@@ -4,8 +4,7 @@
 \alias{calc_genoprob}
 \title{Compute genotype conditional probabilities}
 \usage{
-calc_genoprob(input.map, step = 0, phase.config = "best",
-  verbose = TRUE)
+calc_genoprob(input.map, step = 0, phase.config = "best", verbose = TRUE)
 }
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}
