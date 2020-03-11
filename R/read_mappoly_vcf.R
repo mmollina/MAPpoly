@@ -252,11 +252,11 @@ read_vcf = function(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
     cat("\n    Done.\n")
   }
       if (elim.redundant){
-        seqred = make_seq_mappoly(res, arg = 'all', data.name = 'res')
-        redun = elim_redundant(seqred)
-      res$unique.seq = redun$unique.seq
-      res$kept = redun$kept
-      res$elim.correspondence = redun$elim.correspondence
+        seqred = make_seq_mappoly(res, arg = 'all', data.name = res)
+        redun = elim_redundant(seqred, data = res)
+        res$unique.seq = redun$unique.seq
+        res$kept = redun$kept
+        res$elim.correspondence = redun$elim.correspondence
   }
   return(res)
 }

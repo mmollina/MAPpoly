@@ -104,47 +104,54 @@ make_seq_mappoly <- function(input.obj, arg = NULL, genomic.info = NULL, data.na
   if (is.null(arg) && class(input.obj) != "mappoly.chitest.seq" && class(input.obj) != "mappoly.unique.seq" && class(input.obj) != "mappoly.pcmap"&& class(input.obj) != "mappoly.pcmap3d") {
     stop("argument 'arg' expected.")
   }
+  realkeep = FALSE
+  if ((!is.null(input.obj$kept))){
+    tokeep = input.obj$kept
+    realkeep = TRUE
+    seq.num = match(tokeep,input.obj$mrk.names)
+  }
   if (class(input.obj) == "mappoly.data")
   {
-    if (!is.null(input.obj$unique.seq)){
-      posselect = which(input.obj$mrk.names %in% input.obj$kept)
-    } else posselect = which(input.obj$mrk.names %in% input.obj$mrk.names)
-    chisq.pval<-input.obj$chisq.pval[posselect]
+    chisq.pval<-input.obj$chisq.pval
     chisq.pval.thres<-NULL
     ## gathering sequence data
     sequence <- sequence.pos <- NULL
     if (any(!is.na(input.obj$sequence)))
-      sequence <- input.obj$sequence[posselect]
+      sequence <- input.obj$sequence
     if (any(!is.na(input.obj$sequence.pos)))
-      sequence.pos <- input.obj$sequence.pos[posselect]
+      sequence.pos <- input.obj$sequence.pos
     
     ## make sequence with all markers
     if (length(arg) == 1 && arg == "all")
     {
-      seq.num <- as.integer(1:input.obj$n.mrk)
-      seq.num = seq.num[posselect]
+      if (realkeep) seq.num = match(tokeep,input.obj$mrk.names)
+      else seq.num = as.integer(1:input.obj$n.mrk)
     }
     else if (all(is.character(arg)) && length(grep("seq", arg)) == length(arg))
     {
       if (length(input.obj$sequence) == 1 && input.obj$sequence == 0)
         stop("There is no sequence information in ", deparse(substitute(input.obj)))
-      seq.num <- as.integer(which(!is.na(match(input.obj$sequence[posselect], gsub("[^0-9]", "", arg)))))
+      seq.num1 <- as.integer(which(!is.na(match(input.obj$sequence, gsub("[^0-9]", "", arg)))))
+      if(realkeep) seq.num = intersect(seq.num1, seq.num)
+      else seq.num = seq.num1
       sequence <- input.obj$sequence[seq.num]
       if (length(input.obj$sequence.pos) > 2)
         sequence.pos <- input.obj$sequence.pos[seq.num]
     }
-    else if (all(is.character(arg)) && (length(arg) == length(arg %in% input.obj$mrk.names[posselect])))
+    else if (all(is.character(arg)) && (length(arg) == length(arg %in% input.obj$mrk.names)))
     {
-      #seq.num <- as.integer(match(arg, input.obj$mrk.names[posselect]))
-      seq.num1 = which(input.obj$mrk.names %in% arg)
-      seq.num = seq.num1[seq.num1 %in% posselect]
+      seq.num1 <- as.integer(match(arg, input.obj$mrk.names))
+      if(realkeep) seq.num = intersect(seq.num1, seq.num)
+      else seq.num = seq.num1
       sequence <- input.obj$sequence[seq.num]
       if (length(input.obj$sequence.pos) > 2)
         sequence.pos <- input.obj$sequence.pos[seq.num]
     }
     else if (is.vector(arg) && all(is.numeric(arg)))
     {
-      seq.num <- as.integer(arg)
+      seq.num1 <- as.integer(arg)
+      if(realkeep) seq.num = intersect(seq.num1, seq.num)
+      else seq.num = seq.num1
       sequence <- input.obj$sequence[seq.num]
       if (length(input.obj$sequence.pos) > 2)
         sequence.pos <- input.obj$sequence.pos[seq.num]
@@ -172,17 +179,21 @@ make_seq_mappoly <- function(input.obj, arg = NULL, genomic.info = NULL, data.na
   {
     chisq.pval<-input.obj$chisq.pval
     chisq.pval.thres<-input.obj$chisq.pval.thres
-    if (!is.null(genomic.info)){
+    if (!is.null(genomic.info) && is.numeric(genomic.info)){
       seq.num.group = as.numeric(names(which(input.obj$groups.snp == arg)))
       seqs = names(sort(input.obj$seq.vs.grouped.snp[arg,-c(ncol(input.obj$seq.vs.grouped.snp))], decreasing = T))[genomic.info]
     } else {
-      seq.num <- as.numeric(names(which(input.obj$groups.snp == arg)))
+      seq.num1 <- as.numeric(names(which(input.obj$groups.snp == arg)))
+      if(realkeep) seq.num = intersect(seq.num1, seq.num)
+      else seq.num = seq.num1
     }
     data.name <- input.obj$data.name
     input.obj <- get(data.name, pos = 1)
     if (!is.null(genomic.info)){
-      seq.num.seq = which(input.obj$mrk.names %in% input.obj$mrk.names[which(input.obj$sequence %in% seqs)])
-      seq.num = intersect(seq.num.group, seq.num.seq)
+      seq.num.seq = match(input.obj$mrk.names, input.obj$mrk.names[match(seqs, input.obj$sequence)])
+      seq.num1 = intersect(seq.num.group, seq.num.seq)
+      if(realkeep) seq.num = intersect(seq.num1, seq.num)
+      else seq.num = seq.num1
     }
     if(!all(is.na(input.obj$sequence)) && !all(is.na(input.obj$sequence.pos)))
     {
