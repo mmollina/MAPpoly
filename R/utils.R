@@ -1155,7 +1155,7 @@ merge_datasets = function(dataset.1, dataset.2){
 #' 
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'
-#' @export
+#' @export summary_maps
 #' 
 summary_maps = function(map.object){
   ## Check data
@@ -1191,7 +1191,7 @@ summary_maps = function(map.object){
 #' 
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' 
-#' @export
+#' @export update_map
 #' 
 update_map = function(map){
   ## Checking object
