@@ -1157,7 +1157,7 @@ merge_datasets = function(dataset.1, dataset.2){
 #'
 #' @export
 #' 
-summary_map = function(map.object){
+summary_maps = function(map.object){
   ## Check data
   if (!all(unlist(lapply(map.object, function(x) class(x))) == 'mappoly.map')) stop('The indicated map object is not of class "mappoly.map".')
   
@@ -1173,7 +1173,7 @@ summary_map = function(map.object){
                        check.names = FALSE, stringsAsFactors = F)
   results = rbind(results, c('Total', NA, sum(as.numeric(results$`Map size (cM)`)), round(mean(as.numeric(results$`Markers/cM`)),2), sum(as.numeric(results$Simplex)), sum(as.numeric(results$`Double-simplex`)), sum(as.numeric(results$Multiplex)), sum(as.numeric(results$Total)), mean(as.numeric(results$`Max gap`))))
   if (!is.null(get(map.object[[1]]$info$data.name, pos = 1)$elim.correspondence)){
-    cat("\nYour dataset contains removed (redundant) markers. Once finished the map, remember to add the redundant ones with the function XXX.\n")
+    cat("\nYour dataset contains removed (redundant) markers. Once finished the map, remember to add the redundant ones with the function 'update_map'.\n")
   }
   return(results)
 }
