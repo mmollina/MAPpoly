@@ -1140,6 +1140,8 @@ merge_datasets = function(dataset.1, dataset.2){
   dataset.1$n.mrk = dataset.1$n.mrk + dataset.2$n.mrk
   dataset.1$sequence = c(dataset.1$sequence, dataset.2$sequence)
   dataset.1$sequence.pos = c(dataset.1$sequence.pos, dataset.2$sequence.pos)
+  if (!is.null(dataset.1$kept)) dataset.1$kept = c(dataset.1$kept,dataset.2$kept)
+  if (!is.null(dataset.1$elim.correspondence)) dataset.1$elim.correspondence = c(dataset.1$elim.correspondence,dataset.2$elim.correspondence)
   
   ## Returning merged dataset
   return(dataset.1)
