@@ -55,13 +55,12 @@
 #'     \item{all.mrk.depth}{DP information for all markers on VCF file}
 #'     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
 #'     test of mendelian segregation performed for all markers}
-#'     \item{unique.seq}{if elim.redundant=TRUE, holds the object of class 'mappoly.unique.seq'}
 #'     \item{kept}{if elim.redundant=TRUE, holds all non-redundant markers}
 #'     \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
 #' its equivalence to the redundant ones}
 #' @examples
 #' \dontrun{
-#' download.file("https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/sweetpotato_aligned_trifida_chr1.vcf.gz", destfile = 'chr1.vcf.gz')
+#' download.file("https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/sweetpotato_chr1.vcf.gz", destfile = 'chr1.vcf.gz')
 #' dat.dose.vcf = read_vcf(file = 'chr1.vcf.gz', parent.1 = "PARENT1", parent.2 = "PARENT2")
 #'}
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
@@ -248,7 +247,6 @@ read_vcf = function(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
       if (elim.redundant){
         seqred = make_seq_mappoly(res, arg = 'all', data.name = res)
         redun = elim_redundant(seqred, data = res)
-        res$unique.seq = redun$unique.seq
         res$kept = redun$kept
         res$elim.correspondence = redun$elim.correspondence
   }
