@@ -1052,14 +1052,10 @@ check_data_dist_sanity <- function(x){
 #' in both datasets (e.g. \code{Ind_1} in both datasets, not \code{Ind_1}
 #' in one dataset and \code{ind_1} or \code{Ind.1} in the other).
 #'
-#' Please notice that if any of these datasets were generated using \code{read_vcf}
-#' or \code{read_geno_dist} functions, the final dataset may not contain
-#' some information, such as reference and alternative alleles,
-#' marker depths and the probability distribution of genotypes. 
-#'
 #' @param dataset.1 the first dataset of class \code{mappoly.data} to be merged
 #'
-#' @param dataset.2 the second dataset of class \code{mappoly.data} to be merged
+#' @param dataset.2 the second dataset of class \code{mappoly.data} to be merged (default = NULL);
+#' if \code{dataset.2 = NULL}, the function returns \code{dataset.1} only
 #'
 #' @return An object of class \code{mappoly.data} which contains all markers
 #' from both datasets. It will be a list with the following components:
@@ -1077,14 +1073,25 @@ check_data_dist_sanity <- function(x){
 #'       sequence}
 #'     \item{sequence.pos}{Physical position of the markers into the
 #'       sequence}
+#'     \item{seq.ref}{if one or both datasets originated from read_vcf, it keeps
+#' reference alleles from sequencing platform, otherwise is NULL}
+#'     \item{seq.alt}{if one or both datasets originated from read_vcf, it keeps
+#' alternative alleles from sequencing platform, otherwise is NULL}
+#'     \item{all.mrk.depth}{if one or both datasets originated from read_vcf, it keeps
+#' marker read depths from sequencing, otherwise is NULL}
 #'     \item{prob.thres}{(unused field)}
 #'     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
 #'       for each individual (columns). Missing data are represented by 
 #'       \code{ploidy_level + 1}}
-#'     \item{nphen}{(unused field)}
-#'     \item{phen}{(unused field)}
+#'     \item{geno}{if both datasets contain genotype distribution information,
+#' the final object will contain 'geno'. This is set to NULL otherwise}
+#'     \item{nphen}{(0)}
+#'     \item{phen}{(NULL)}
 #'     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
-#'     test of mendelian segregation performed for all markers}
+#'     test of mendelian segregation performed for all markers in both datasets}
+#'     \item{kept}{if elim.redundant=TRUE when reading any dataset, holds all non-redundant markers}
+#'     \item{elim.correspondence}{if elim.redundant=TRUE when reading any dataset,
+#' holds all non-redundant markers and its equivalence to the redundant ones}
 #' 
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'
@@ -1097,25 +1104,23 @@ check_data_dist_sanity <- function(x){
 #'
 #' @export merge_datasets
 #' 
-merge_datasets = function(dataset.1, dataset.2){
+merge_datasets = function(dataset.1, dataset.2 = NULL){
   ## Check objects class
   if (class(dataset.1) != 'mappoly.data'){
     stop("The first dataset does not belong to class 'mappoly.data'.")
   }
+  if (is.null(dataset.2)) return(dataset.1)
   if (class(dataset.2) != 'mappoly.data'){
     stop("The second dataset does not belong to class 'mappoly.data'.")
   }
-  
   ## Check ploidy
   if (dataset.1$m != dataset.2$m){
     stop("The ploidy level in the datasets doesn't match. Please check your files and try again.")
   }
-  
   ## Check individuals
   if (dataset.1$n.ind != dataset.2$n.ind){
     stop("The datasets have different number of individuals. Please check your files and try again.")
   }
-  
   ## Check individual names
   if (!all(dataset.1$ind.names %in% dataset.2$ind.names)){
     nmi.1 = dataset.1$ind.names[!(dataset.1$ind.names %in% dataset.2$ind.names)]
@@ -1125,12 +1130,10 @@ merge_datasets = function(dataset.1, dataset.2){
     for (i in 1:length(nmi.1)) cat(nmi.1[i], "\t\t", nmi.2[i], "\n")
     stop("Your datasets have the same number of individuals, but some of them are not the same. Please check the list above, fix your files and try again.")
   }
-  
   ## Checking (and fixing) individuals order in geno.dose
   if (!all(colnames(dataset.1$geno.dose) == colnames(dataset.2$geno.dose))){
     dataset.2$geno.dose = dataset.2$geno.dose[,colnames(dataset.1$geno.dose)]
   }
-  
   ## Merging all items
   dataset.1$geno.dose = rbind(dataset.1$geno.dose, dataset.2$geno.dose)
   dataset.1$dosage.p = c(dataset.1$dosage.p, dataset.2$dosage.p)
@@ -1140,7 +1143,67 @@ merge_datasets = function(dataset.1, dataset.2){
   dataset.1$n.mrk = dataset.1$n.mrk + dataset.2$n.mrk
   dataset.1$sequence = c(dataset.1$sequence, dataset.2$sequence)
   dataset.1$sequence.pos = c(dataset.1$sequence.pos, dataset.2$sequence.pos)
-  
+  # VCF info
+  ## seq.ref and seq.alt
+  if (!is.null(dataset.1$seq.ref) && !is.null(dataset.2$seq.ref)){
+    dataset.1$seq.ref = c(dataset.1$seq.ref,dataset.2$seq.ref)
+    dataset.1$seq.alt = c(dataset.1$seq.alt,dataset.2$seq.alt)  
+  }  else if (is.null(dataset.1$seq.ref) && is.null(dataset.2$seq.ref)){
+    dataset.1$seq.ref = dataset.1$seq.alt = NULL
+  }  else if (!is.null(dataset.1$seq.ref) && is.null(dataset.2$seq.ref)){
+    dataset.1$seq.ref = c(dataset.1$seq.ref,rep(NA,length(dataset.2$n.mrk)))
+    dataset.1$seq.alt = c(dataset.1$seq.alt,rep(NA,length(dataset.2$n.mrk)))
+  } else if (is.null(dataset.1$seq.ref) && !is.null(dataset.2$seq.ref)){
+    dataset.1$seq.ref = c(rep(NA,length(dataset.1$n.mrk)),dataset.2$seq.ref)
+    dataset.1$seq.alt = c(rep(NA,length(dataset.1$n.mrk)),dataset.2$seq.alt)
+  }
+  ## all.mrk.depth
+  if (!is.null(dataset.1$all.mrk.depth) && !is.null(dataset.2$all.mrk.depth)){
+    dataset.1$all.mrk.depth = c(dataset.1$all.mrk.depth,dataset.2$all.mrk.depth)
+  }  else if (is.null(dataset.1$all.mrk.depth) && is.null(dataset.2$all.mrk.depth)){
+    dataset.1$all.mrk.depth = NULL
+  }  else if (!is.null(dataset.1$all.mrk.depth) && is.null(dataset.2$all.mrk.depth)){
+    dataset.1$all.mrk.depth = c(dataset.1$all.mrk.depth,rep(NA,length(dataset.2$n.mrk)))
+  } else if (is.null(dataset.1$all.mrk.depth) && !is.null(dataset.2$all.mrk.depth)){
+    dataset.1$all.mrk.depth = c(rep(NA,length(dataset.1$n.mrk)),dataset.2$all.mrk.depth)
+  }
+  # Chisq info
+  if (!is.null(dataset.1$chisq.pval) && !is.null(dataset.2$chisq.pval)){
+    dataset.1$chisq.pval = c(dataset.1$chisq.pval,dataset.2$chisq.pval)
+  }  else if (is.null(dataset.1$chisq.pval) && is.null(dataset.2$chisq.pval)){
+    dataset.1$chisq.pval = NULL
+  }  else if (!is.null(dataset.1$chisq.pval) && is.null(dataset.2$chisq.pval)){
+    dataset.1$chisq.pval = c(dataset.1$chisq.pval,rep(NA,length(dataset.2$n.mrk)))
+  } else if (is.null(dataset.1$chisq.pval) && !is.null(dataset.2$chisq.pval)){
+    dataset.1$chisq.pval = c(rep(NA,length(dataset.1$n.mrk)),dataset.2$chisq.pval)
+  }
+  # Redundant info
+  ## Kept info
+  if (!is.null(dataset.1$kept) && !is.null(dataset.2$kept)){
+    dataset.1$kept = c(dataset.1$kept,dataset.2$kept)
+  }  else if (is.null(dataset.1$kept) && is.null(dataset.2$kept)){
+    dataset.1$kept = NULL
+  }  else if (!is.null(dataset.1$kept) && is.null(dataset.2$kept)){
+    dataset.1$kept = c(dataset.1$kept,dataset,2$mrk.names)
+  } else if (is.null(dataset.1$kept) && !is.null(dataset.2$kept)){
+    dataset.1$kept = c(dataset.1$mrk.names,dataset.2$kept)
+  }  
+  ## elim.correspondence info
+  if (!is.null(dataset.1$elim.correspondence) && !is.null(dataset.2$elim.correspondence)){
+    dataset.1$elim.correspondence = rbind(dataset.1$elim.correspondence,dataset.2$elim.correspondence)
+  }  else if (is.null(dataset.1$elim.correspondence) && is.null(dataset.2$elim.correspondence)){
+    dataset.1$elim.correspondence = NULL
+  }  else if (!is.null(dataset.1$elim.correspondence) && is.null(dataset.2$elim.correspondence)){
+    dataset.1$elim.correspondence = dataset.1$elim.correspondence
+  } else if (is.null(dataset.1$elim.correspondence) && !is.null(dataset.2$elim.correspondence)){
+    dataset.1$elim.correspondence = dataset.2$elim.correspondence
+  }  
+
+  ## geno dist info (just keep if both datasets contain this information)
+  if (exists('geno', where = dataset.1) && exists('geno', where = dataset.2)){
+    dataset.1$geno = rbind(dataset.1$geno,dataset.2$geno)
+  } else dataset.1$geno = NULL
+          
   ## Returning merged dataset
   return(dataset.1)
 }
@@ -1155,9 +1218,9 @@ merge_datasets = function(dataset.1, dataset.2){
 #' 
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'
-#' @export
+#' @export summary_maps
 #' 
-summary_map = function(map.object){
+summary_maps = function(map.object){
   ## Check data
   if (!all(unlist(lapply(map.object, function(x) class(x))) == 'mappoly.map')) stop('The indicated map object is not of class "mappoly.map".')
   
@@ -1173,7 +1236,7 @@ summary_map = function(map.object){
                        check.names = FALSE, stringsAsFactors = F)
   results = rbind(results, c('Total', NA, sum(as.numeric(results$`Map size (cM)`)), round(mean(as.numeric(results$`Markers/cM`)),2), sum(as.numeric(results$Simplex)), sum(as.numeric(results$`Double-simplex`)), sum(as.numeric(results$Multiplex)), sum(as.numeric(results$Total)), mean(as.numeric(results$`Max gap`))))
   if (!is.null(get(map.object[[1]]$info$data.name, pos = 1)$elim.correspondence)){
-    cat("\nYour dataset contains removed (redundant) markers. Once finished the map, remember to add the redundant ones with the function XXX.\n")
+    cat("\nYour dataset contains removed (redundant) markers. Once finished the map, remember to add the redundant ones with the function 'update_map'.\n")
   }
   return(results)
 }
@@ -1191,7 +1254,7 @@ summary_map = function(map.object){
 #' 
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' 
-#' @export
+#' @export update_map
 #' 
 update_map = function(map){
   ## Checking object

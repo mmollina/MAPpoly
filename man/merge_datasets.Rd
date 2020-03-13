@@ -4,12 +4,13 @@
 \alias{merge_datasets}
 \title{Merge datasets}
 \usage{
-merge_datasets(dataset.1, dataset.2)
+merge_datasets(dataset.1, dataset.2 = NULL)
 }
 \arguments{
 \item{dataset.1}{the first dataset of class \code{mappoly.data} to be merged}
 
-\item{dataset.2}{the second dataset of class \code{mappoly.data} to be merged}
+\item{dataset.2}{the second dataset of class \code{mappoly.data} to be merged (default = NULL);
+if \code{dataset.2 = NULL}, the function returns \code{dataset.1} only}
 }
 \value{
 An object of class \code{mappoly.data} which contains all markers
@@ -28,14 +29,25 @@ from both datasets. It will be a list with the following components:
       sequence}
     \item{sequence.pos}{Physical position of the markers into the
       sequence}
+    \item{seq.ref}{if one or both datasets originated from read_vcf, it keeps
+reference alleles from sequencing platform, otherwise is NULL}
+    \item{seq.alt}{if one or both datasets originated from read_vcf, it keeps
+alternative alleles from sequencing platform, otherwise is NULL}
+    \item{all.mrk.depth}{if one or both datasets originated from read_vcf, it keeps
+marker read depths from sequencing, otherwise is NULL}
     \item{prob.thres}{(unused field)}
     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
       for each individual (columns). Missing data are represented by 
       \code{ploidy_level + 1}}
-    \item{nphen}{(unused field)}
-    \item{phen}{(unused field)}
+    \item{geno}{if both datasets contain genotype distribution information,
+the final object will contain 'geno'. This is set to NULL otherwise}
+    \item{nphen}{(0)}
+    \item{phen}{(NULL)}
     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
-    test of mendelian segregation performed for all markers}
+    test of mendelian segregation performed for all markers in both datasets}
+    \item{kept}{if elim.redundant=TRUE when reading any dataset, holds all non-redundant markers}
+    \item{elim.correspondence}{if elim.redundant=TRUE when reading any dataset,
+holds all non-redundant markers and its equivalence to the redundant ones}
 }
 \description{
 This function merges two datasets of class \code{mappoly.data}. This can be useful
@@ -44,12 +56,6 @@ and have datasets in different files or formats. Please notice that the datasets
 should contain the same number of individuals, which must be represented identically
 in both datasets (e.g. \code{Ind_1} in both datasets, not \code{Ind_1}
 in one dataset and \code{ind_1} or \code{Ind.1} in the other).
-}
-\details{
-Please notice that if any of these datasets were generated using \code{read_vcf}
-or \code{read_geno_dist} functions, the final dataset may not contain
-some information, such as reference and alternative alleles,
-marker depths and the probability distribution of genotypes.
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

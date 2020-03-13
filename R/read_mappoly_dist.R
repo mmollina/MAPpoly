@@ -56,6 +56,9 @@
 #'       sequence}
 #'     \item{sequence.pos}{physical position of the markers into the
 #'       sequence}
+#'     \item{seq.ref}{NULL (unused in this type of data)}
+#'     \item{seq.alt}{NULL (unused in this type of data)}
+#'     \item{all.mrk.depth}{NULL (unused in this type of data)}
 #'     \item{prob.thres}{probability threshold to associate a marker call to a 
 #'     dosage. Markers with maximum genotype probability smaller than 'prob.thres' 
 #'     were considered as missing data in the 'geno.dose' matrix}
@@ -75,6 +78,10 @@
 #'                 to the individuals}
 #'     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
 #'     test of mendelian segregation performed for all markers}
+#'     \item{unique.seq}{if elim.redundant=TRUE, holds the object of class 'mappoly.unique.seq'}
+#'     \item{kept}{if elim.redundant=TRUE, holds all non-redundant markers}
+#'     \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
+#' its equivalence to the redundant ones}
 #'     
 #' @examples
 #' \dontrun{
@@ -223,21 +230,26 @@ read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
     ## returning the 'mappoly.data' object
     cat("\n    Done with reading.\n")
     res<-structure(list(m = m,
-                   n.ind = n.ind,
-                   n.mrk = sum(id),
-                   ind.names = ind.names,
-                   mrk.names = mrk.names[id],
-                   dosage.p = dosage.p[id],
-                   dosage.q = dosage.q[id],
-                   sequence = sequence[id],
-                   sequence.pos = sequencepos[id],
-                   prob.thres = prob.thres,
-                   geno = geno,
-                   geno.dose = geno.dose,
-                   nphen = nphen,
-                   phen = phen,
-                   chisq.pval = NULL),
-              class = "mappoly.data")
+                        n.ind = n.ind,
+                        n.mrk = sum(id),
+                        ind.names = ind.names,
+                        mrk.names = mrk.names[id],
+                        dosage.p = dosage.p[id],
+                        dosage.q = dosage.q[id],
+                        sequence = sequence[id],
+                        sequence.pos = sequencepos[id],
+                        seq.ref = NULL,
+                        seq.alt = NULL,
+                        all.mrk.depth = NULL,
+                        prob.thres = prob.thres,
+                        geno = geno,
+                        geno.dose = geno.dose,
+                        nphen = nphen,
+                        phen = phen,
+                        chisq.pval = NULL,
+                        kept = NULL,
+                        elim.correspondence = NULL),
+                   class = "mappoly.data")
     
     if(filter.non.conforming){
       cat("    Filtering non-conforming markers.\n    ...")
