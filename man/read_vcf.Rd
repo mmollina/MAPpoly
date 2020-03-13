@@ -61,20 +61,18 @@ An object of class \code{mappoly.data} which contains a
     \item{seq.ref}{Reference base used for each marker (i.e. A, T, C, G)}
     \item{seq.alt}{Alternative base used for each marker (i.e. A, T, C, G)}
     \item{prob.thres}{(unused field)}
-    \item{min.gt.depth}{Minimum depth used to keep genotype information}
-    \item{min.av.depth}{Minimum average depth used to keep a marker}
-    \item{max.missing}{Maximum proportion of missing genotypes (range: 0-1)}
     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
       for each individual (columns). Missing data are represented by 
       \code{ploidy_level + 1}}
     \item{nphen}{(unused field)}
     \item{phen}{(unused field)}
-    \item{input.file}{Full path to input file, used when \code{update.prob = TRUE}}
-    \item{input.phased}{Logical field indicating whether data is already phased on VCF file}
     \item{all.mrk.depth}{DP information for all markers on VCF file}
-    \item{selected.mrk}{Markers kept in the final dataset}
     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
     test of mendelian segregation performed for all markers}
+    \item{unique.seq}{if elim.redundant=TRUE, holds the object of class 'mappoly.unique.seq'}
+    \item{kept}{if elim.redundant=TRUE, holds all non-redundant markers}
+    \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
+its equivalence to the redundant ones}
 }
 \description{
 Reads an external VCF file. This function accepts version 4.0 and higher, and creates an object of class \code{mappoly.data}
@@ -85,8 +83,8 @@ recommended that you inform it to check for mismatches. All individual and marke
 }
 \examples{
 \dontrun{
-    mydata = read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2", ploidy = 6)
-    print(mydata, detailed = TRUE)
+download.file("https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/sweetpotato_aligned_trifida_chr1.vcf.gz", destfile = 'chr1.vcf.gz')
+dat.dose.vcf = read_vcf(file = 'chr1.vcf.gz', parent.1 = "PARENT1", parent.2 = "PARENT2")
 }
 }
 \references{

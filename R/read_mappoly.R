@@ -56,6 +56,9 @@
 #'       sequence}
 #'     \item{sequence.pos}{Physical position of the markers into the
 #'       sequence}
+#'     \item{seq.ref}{NULL (unused in this type of data)}
+#'     \item{seq.alt}{NULL (unused in this type of data)}
+#'     \item{all.mrk.depth}{NULL (unused in this type of data)}
 #'     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
 #'       for each individual (columns). Missing data are represented by 
 #'       \code{ploidy_level + 1}}
@@ -63,6 +66,10 @@
 #'     \item{phen}{a matrix containing the phenotypic data. The rows
 #'                 corespond to the trais and the columns correspond
 #'                 to the individuals}
+#'     \item{unique.seq}{if elim.redundant=TRUE, holds the object of class 'mappoly.unique.seq'}
+#'     \item{kept}{if elim.redundant=TRUE, holds all non-redundant markers}
+#'     \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
+#' its equivalence to the redundant ones}
 #' @examples
 #' \dontrun{
 #'     hexa.file<-system.file('extdata', 'hexafake', package = 'mappoly')
@@ -206,10 +213,15 @@ read_geno <- function(file.in, filter.non.conforming = TRUE, elim.redundant = TR
                  dosage.q = dosage.q[id],
                  sequence = sequence[id],
                  sequence.pos = sequencepos[id],
+                 seq.ref = NULL,
+                 seq.alt = NULL,
+                 all.mrk.depth = NULL,
                  prob.thres = NULL,
                  geno.dose = geno.dose,
                  nphen = nphen,
-                 phen = phen),
+                 phen = phen,
+                 kept = NULL,
+                 elim.correspondence = NULL),
             class = "mappoly.data")
   
   if(filter.non.conforming){
@@ -248,7 +260,7 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
   cat("    No. markers:                            ", x$n.mrk, "\n")
   miss<-round(100*sum(x$geno.dose==x$m+1)/length(as.matrix(x$geno.dose)),2)
   if(!is.null(x$unique.seq)){
-      redundant = round(100*((length(x$sequence) - length(x$unique.seq$sequence))/length(x$sequence)),2)
+      redundant = round(100*((x$n.mrk - length(x$kept))/x$n.mrk),2)
   }
   ##if no prior probabilities
   if(nrow(x$geno)==x$n.mrk){
@@ -257,7 +269,7 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
     cat("    Missing data under ", x$prob.thres, " prob. threshold: ", miss, "%\n", sep = "")    
   }
   if(!is.null(x$unique.seq)){
-        cat("    Redundant markers:                            ", redundant, "%\n", sep = "")  
+        cat("    Redundant markers:                       ", redundant, "%\n", sep = "")  
   }
   w <- table(x$sequence)
   if (length(x$sequence) <= 1)
