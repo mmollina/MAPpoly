@@ -24,8 +24,6 @@ expected genotypes under random chromosome pairing and no double reduction}
 
 \item{elim.redundant}{logical. If \code{TRUE} (default), removes redundant markers
 during map construction, keeping them annotated to export to the final map.}
-
-\item{...}{currently ignored}
 }
 \value{
 an object of class \code{mappoly.data} which contains a

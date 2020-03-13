@@ -38,8 +38,6 @@
 #' @param elim.redundant logical. If \code{TRUE} (default), removes redundant markers
 #' during map construction, keeping them annotated to export to the final map.
 #'
-#' @param ... currently ignored
-#'
 #' @return an object of class \code{mappoly.data} which contains a
 #'     list with the following components:
 #'     \item{m}{ploidy level}

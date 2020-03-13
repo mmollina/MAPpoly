@@ -34,7 +34,6 @@
 #'     \url{https://doi.org/10.1534/g3.119.400378} 
 #'
 #' @export elim_redundant
-#'
 elim_redundant<-function(input.seq, data = NULL)
 {
   if (is.null(data)) x<-get(input.seq$data.name, pos = 1)$geno.dose[input.seq$seq.num, ]
@@ -55,6 +54,8 @@ elim_redundant<-function(input.seq, data = NULL)
             class = "mappoly.unique.seq")
 }
 
+#' @rdname elim_redundant
+#' @keywords internal
 #' @export
 plot.mappoly.unique.seq<-function(x, ...)
 {
@@ -66,6 +67,8 @@ plot.mappoly.unique.seq<-function(x, ...)
   pie(slc, labels = lbls)
 }
 
+#' @rdname elim_redundant
+#' @keywords internal
 #' @export
 print.mappoly.unique.seq<-function(x, ...)
 {

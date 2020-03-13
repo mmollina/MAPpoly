@@ -419,9 +419,7 @@ est_rf_hmm_sequential<-function(input.seq,
   }
   if(is.null(extend.tail))
     extend.tail<-length(input.seq$seq.num)
-  #####
-  ## Map in case of two markers
-  #####
+  ##### Map in case of two markers #####
   if(length(input.seq$seq.num) == 2)
   {
     cur.map <- est_rf_hmm(input.seq = input.seq, thres = thres.twopt, 
@@ -430,11 +428,10 @@ est_rf_hmm_sequential<-function(input.seq,
                           reestimate.single.ph.configuration = reestimate.single.ph.configuration)
     return(filter_map_at_hmm_thres(cur.map, thres.hmm))
   } 
-  #####
+  ##### More than 3 markers ####
   ##Starting sequential algorithm for maps with more than 3 markers
   ## Fisrt step: test all possible phase configurations under 
   ## a 'thres.twopt' threshold for a sequence of size 'start.set'
-  #####
   if(start.set > length(input.seq$seq.num))
     start.set <- length(input.seq$seq.num)
   if(verbose) cat(start.set, " markers...\n", sep = "")
@@ -466,10 +463,9 @@ est_rf_hmm_sequential<-function(input.seq,
     if(verbose) cat("\nDone phasing", cur.map$info$n.mrk, "markers\nReestimating final recombination fractions.")
     return(reest_rf(cur.map, tol=tol.final))
   }
-  #####
+  ##### More than 'start.set' markers #####
   ## For maps with more markers than 'start.set', include
   ## next makres in a sequential fashion
-  #####
   ct <- start.set+cte
   all.ph <- update_ph_list_at_hmm_thres(cur.map, thres.hmm)
   if(sub.map.size.diff.limit!=Inf & !reestimate.single.ph.configuration){
@@ -576,9 +572,8 @@ est_rf_hmm_sequential<-function(input.seq,
     all.ph <- add_mrk_at_tail_ph_list(all.ph, all.ph.temp, M[selected.map,,drop=FALSE])
     ct <- ct + 1
   }
-  #####
+  ##### Reestimating final map ####
   ## Reestimating final map with higher tolerance
-  #####
   seq.final <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1), 
                                 arg = as.numeric(names(all.ph$config.to.test[[1]]$P)), 
                                 data.name = input.seq$data.name)
