@@ -8,7 +8,6 @@ src/*.so
 src/*.dll
 docs/*.rda
 docs/*.rdb
-inst/extdata/hexatoy.vcf.gz
 test.R
 testa.R
 new_functions.R
