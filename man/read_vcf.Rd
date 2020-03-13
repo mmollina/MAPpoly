@@ -83,8 +83,8 @@ recommended that you inform it to check for mismatches. All individual and marke
 }
 \examples{
 \dontrun{
-    mydata = read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2", ploidy = 6)
-    print(mydata, detailed = TRUE)
+download.file("https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/sweetpotato_aligned_trifida_chr1.vcf.gz", destfile = 'chr1.vcf.gz')
+dat.dose.vcf = read_vcf(file = 'chr1.vcf.gz', parent.1 = "PARENT1", parent.2 = "PARENT2")
 }
 }
 \references{
