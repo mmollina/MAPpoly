@@ -39,6 +39,9 @@
 #'       sequence}
 #'     \item{sequence.pos}{Physical position of the markers into the
 #'       sequence}
+#'     \item{seq.ref}{NULL (unused in this type of data)}
+#'     \item{seq.alt}{NULL (unused in this type of data)}
+#'     \item{all.mrk.depth}{NULL (unused in this type of data)}
 #'     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
 #'       for each individual (columns). Missing data are represented by 
 #'       \code{ploidy_level + 1}}
@@ -46,6 +49,10 @@
 #'     \item{phen}{a matrix containing the phenotypic data. The rows
 #'                 corespond to the trais and the columns correspond
 #'                 to the individuals}
+#'     \item{unique.seq}{if elim.redundant=TRUE, holds the object of class 'mappoly.unique.seq'}
+#'     \item{kept}{if elim.redundant=TRUE, holds all non-redundant markers}
+#'     \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
+#' its equivalence to the redundant ones}
 #' @examples
 #' \dontrun{
 #'     solcap.file <- system.file('extdata', 'tetra_solcap.csv', package = 'mappoly')
@@ -111,19 +118,24 @@ read_geno_csv <- function(file.in, ploidy, filter.non.conforming = TRUE, elim.re
   cat("\n    Done with reading.\n")
   geno.dose<-geno.dose[id,]
   res <- structure(list(m = m,
-                 n.ind = n.ind,
-                 n.mrk = sum(id),
-                 ind.names = ind.names,
-                 mrk.names = mrk.names[id],
-                 dosage.p = dosage.p[id],
-                 dosage.q = dosage.q[id],
-                 sequence = sequence[id],
-                 sequence.pos = sequencepos[id],
-                 prob.thres = NULL,
-                 geno.dose = geno.dose,
-                 nphen = nphen,
-                 phen = phen),
-            class = "mappoly.data")
+                        n.ind = n.ind,
+                        n.mrk = sum(id),
+                        ind.names = ind.names,
+                        mrk.names = mrk.names[id],
+                        dosage.p = dosage.p[id],
+                        dosage.q = dosage.q[id],
+                        sequence = sequence[id],
+                        sequence.pos = sequencepos[id],
+                        seq.ref = NULL,
+                        seq.alt = NULL,
+                        all.mrk.depth = NULL,
+                        prob.thres = NULL,
+                        geno.dose = geno.dose,
+                        nphen = nphen,
+                        phen = phen,
+                        kept = NULL,
+                        elim.correspondence = NULL),
+                   class = "mappoly.data")
   
   if(filter.non.conforming){
     cat("    Filtering non-conforming markers.\n    ...")

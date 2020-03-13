@@ -47,20 +47,18 @@
 #'     \item{seq.ref}{Reference base used for each marker (i.e. A, T, C, G)}
 #'     \item{seq.alt}{Alternative base used for each marker (i.e. A, T, C, G)}
 #'     \item{prob.thres}{(unused field)}
-#'     \item{min.gt.depth}{Minimum depth used to keep genotype information}
-#'     \item{min.av.depth}{Minimum average depth used to keep a marker}
-#'     \item{max.missing}{Maximum proportion of missing genotypes (range: 0-1)}
 #'     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
 #'       for each individual (columns). Missing data are represented by 
 #'       \code{ploidy_level + 1}}
 #'     \item{nphen}{(unused field)}
 #'     \item{phen}{(unused field)}
-#'     \item{input.file}{Full path to input file, used when \code{update.prob = TRUE}}
-#'     \item{input.phased}{Logical field indicating whether data is already phased on VCF file}
 #'     \item{all.mrk.depth}{DP information for all markers on VCF file}
-#'     \item{selected.mrk}{Markers kept in the final dataset}
 #'     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
 #'     test of mendelian segregation performed for all markers}
+#'     \item{unique.seq}{if elim.redundant=TRUE, holds the object of class 'mappoly.unique.seq'}
+#'     \item{kept}{if elim.redundant=TRUE, holds all non-redundant markers}
+#'     \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
+#' its equivalence to the redundant ones}
 #' @examples
 #' \dontrun{
 #'     mydata = read_vcf(hexasubset, parent.1 = "P1", parent.2 = "P2", ploidy = 6)
@@ -154,7 +152,7 @@ read_vcf = function(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
     selected_markers = intersect(intersect(dif_ploidy,av_depth),max_miss) # Selecting markers that passed all thresholds
     geno.dose = geno.dose[selected_markers,] # Selecting markers
     geno.dose[which(geno.dose < min.gt.depth)] = NA # removing genotypes with depths below the threshold
-    
+    all_mrk_depth = all_mrk_depth[selected_markers]
     n.mrk = nrow(geno.dose)
     sequence = sequence[selected_markers]
     sequence.pos = sequence.pos[selected_markers]
@@ -222,16 +220,12 @@ read_vcf = function(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
                          seq.ref = seq.ref[id],
                          seq.alt = seq.alt[id],
                          prob.thres = NULL,
-                         min.gt.depth = min.gt.depth,
-                         min.av.depth = min.av.depth,
-                         max.missing = max.missing,
                          geno.dose = geno.dose[id,],
                          nphen = 0,
                          phen = NULL,
-                         input.file = input.file,
-                         input.phased = FALSE,
-                         all.mrk.depth = all_mrk_depth,
-                         selected.mrk = mrk.names.all %in% mrk.names
+                         all.mrk.depth = all_mrk_depth[id],
+                         kept = NULL,
+                         elim.correspondence = NULL
                          ),
                     class = "mappoly.data")
   

@@ -40,6 +40,9 @@ An object of class \code{mappoly.data} which contains a
       sequence}
     \item{sequence.pos}{Physical position of the markers into the
       sequence}
+    \item{seq.ref}{NULL (unused in this type of data)}
+    \item{seq.alt}{NULL (unused in this type of data)}
+    \item{all.mrk.depth}{NULL (unused in this type of data)}
     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
       for each individual (columns). Missing data are represented by 
       \code{ploidy_level + 1}}
@@ -47,6 +50,10 @@ An object of class \code{mappoly.data} which contains a
     \item{phen}{a matrix containing the phenotypic data. The rows
                 corespond to the trais and the columns correspond
                 to the individuals}
+    \item{unique.seq}{if elim.redundant=TRUE, holds the object of class 'mappoly.unique.seq'}
+    \item{kept}{if elim.redundant=TRUE, holds all non-redundant markers}
+    \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
+its equivalence to the redundant ones}
 }
 \description{
 Reads an external comma-separated values (CSV) data file. The format of the file is described in the \code{Details}
