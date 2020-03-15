@@ -37,8 +37,9 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
 # Vignettes
 
 * [Building a genetic map in an hexaploid full-sib population using MAPpoly](https://mmollina.github.io/tutorials/hexa_fake/haxaploid_map_construction.html)
-* [Building a genetic map using potato genotype data from SolCAP](https://mmollina.github.io/tutorials/solcap/solcap_example.html)
+* [Building a genetic map using potato genotype data from SolCAP](https://mmollina.github.io/MAPpoly_vignettes/vignette_tetraploid/vignette_tetraploid.html)
 * Dataset examples
+  * [Hexaploid sweetpotato VCF dataset (Beauregard  x Tanzania) obtained using SM2VCF](https://github.com/mmollina/MAPpoly_vignettes/tree/master/data/BT)
   * [Hexaploid simulation with dosage call in MAPpoly format](https://github.com/mmollina/tutorials/blob/master/datasets/hexafake)
   * [Hexaploid simulation with dosage probabilities in MAPpoly format](https://github.com/mmollina/tutorials/blob/master/datasets/hexafake_geno_dist)
   * [Tetraploid potato with dosage call in MAPpoly format](https://github.com/mmollina/tutorials/blob/master/datasets/SolCAP_dosage)

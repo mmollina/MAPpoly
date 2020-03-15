@@ -4,13 +4,13 @@
 \alias{merge_datasets}
 \title{Merge datasets}
 \usage{
-merge_datasets(dataset.1, dataset.2 = NULL)
+merge_datasets(dat.1 = NULL, dat.2 = NULL)
 }
 \arguments{
-\item{dataset.1}{the first dataset of class \code{mappoly.data} to be merged}
+\item{dat.1}{the first dataset of class \code{mappoly.data} to be merged}
 
-\item{dataset.2}{the second dataset of class \code{mappoly.data} to be merged (default = NULL);
-if \code{dataset.2 = NULL}, the function returns \code{dataset.1} only}
+\item{dat.2}{the second dataset of class \code{mappoly.data} to be merged (default = NULL);
+if \code{dat.2 = NULL}, the function returns \code{dat.1} only}
 }
 \value{
 An object of class \code{mappoly.data} which contains all markers

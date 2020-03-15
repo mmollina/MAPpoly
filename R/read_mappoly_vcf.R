@@ -61,8 +61,11 @@
 #' its equivalence to the redundant ones}
 #' @examples
 #' \dontrun{
-#' download.file("https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/sweetpotato_aligned_trifida_chr1.vcf.gz", destfile = 'chr1.vcf.gz')
-#' dat.dose.vcf = read_vcf(file = 'chr1.vcf.gz', parent.1 = "PARENT1", parent.2 = "PARENT2")
+#' fl = "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr1.vcf.gz"
+#' tempfl <- tempfile(pattern = 'chr1_', fileext = '.vcf.gz')
+#' download.file(fl, destfile = tempfl)
+#' dat.dose.vcf = read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2")
+#' plot(dat.dose.vcf)
 #'}
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'
@@ -93,16 +96,20 @@ read_vcf = function(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
   ind.names = colnames(input.data$gt)[-1]
   n.mrk = dim(input.data$gt)[1] # Getting number of markers
   n.ind = length(ind.names) - 2 # Number of individuals excepting two parents
-  sequence = input.data$fix[,1] # Getting chromosome information
-  sequence.pos = as.numeric(input.data$fix[,2]) # Getting positions
-  seq.ref = input.data$fix[,4] # Getting reference alleles
-  seq.alt = input.data$fix[,5] # Getting alternative alleles
   mrk.names = mrk.names.all = input.data$fix[,3] # Getting marker names
   if (any(is.na(unique(mrk.names)))){
     cat("No named markers. Using integers instead.\n")
     no_name = sum(is.na(mrk.names))
     mrk.names[which(is.na(mrk.names))] = paste0("no_name_", seq(1, no_name, 1))
   }
+  sequence = input.data$fix[,1] # Getting chromosome information
+  names(sequence)  = mrk.names
+  sequence.pos = as.numeric(input.data$fix[,2]) # Getting positions
+  names(sequence.pos)  = mrk.names
+  seq.ref = input.data$fix[,4] # Getting reference alleles
+  names(seq.ref)  = mrk.names
+  seq.alt = input.data$fix[,5] # Getting alternative alleles
+  names(seq.alt)  = mrk.names
   cat("Processing genotypes...")
   cname = which(unlist(strsplit(unique(input.data$gt[,1]), ":")) == "GT") # Defining GT position
   dname = which(unlist(strsplit(unique(input.data$gt[,1]), ":")) == "DP") # Defining DP position

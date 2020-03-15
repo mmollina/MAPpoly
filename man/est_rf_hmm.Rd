@@ -22,9 +22,9 @@ est_rf_hmm(
 
 \method{plot}{mappoly.map}(
   x,
+  left.lim = 0,
+  right.lim = Inf,
   phase = TRUE,
-  col.P = "#e41a1c",
-  col.Q = "#377eb8",
   mrk.names = FALSE,
   cex = 1,
   config = "best",
@@ -68,6 +68,11 @@ position for all maps. if FALSE (default), prints a map summary}
 
 \item{...}{currently ignored}
 
+\item{left.lim}{the left limit of the plot (in cM, default = 0).}
+
+\item{right.lim}{the right limit of the plot (in cM, default = Inf, i.e., 
+will print the intire map)}
+
 \item{phase}{logical. If \code{TRUE} (default) plots the phase configuration
 for both parents}
 
@@ -78,14 +83,6 @@ for both parents}
 \item{config}{should be \code{'best'} or the position of the
 configuration to be plotted. If \code{'best'}, plot the configuration
 with the highest likelihood}
-
-\item{col.cte.P}{a single character string or a vector of strings with size 
-equal to the number of markers in the map indicating the color of the allelic
- variants for parent P (default = 'red')}
-
-\item{col.cte.Q}{a single character string or a vector of strings with size 
-equal to the number of markers in the map indicating the color of the allelic
- variants for parent Q (default = 'blue')}
 }
 \value{
 An object of class \code{mappoly.map} with the following structure:

@@ -23,7 +23,6 @@ Imports:
     gridExtra,
     fields,
     RColorBrewer,
-    grid,
     bitops,
     spam,
     maps,

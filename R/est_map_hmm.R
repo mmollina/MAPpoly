@@ -48,17 +48,14 @@
 #' 
 #' @param detailed logical. if TRUE, prints the linkage phase configuration and the marker 
 #' position for all maps. if FALSE (default), prints a map summary 
-#'
+#' 
+#' @param left.lim the left limit of the plot (in cM, default = 0). 
+#' 
+#' @param right.lim the right limit of the plot (in cM, default = Inf, i.e., 
+#'                  will print the intire map)
+#' 
 #' @param phase logical. If \code{TRUE} (default) plots the phase configuration
 #'  for both parents 
-#'
-#' @param col.cte.P a single character string or a vector of strings with size 
-#' equal to the number of markers in the map indicating the color of the allelic
-#'  variants for parent P (default = 'red')
-#' 
-#' @param col.cte.Q a single character string or a vector of strings with size 
-#' equal to the number of markers in the map indicating the color of the allelic
-#'  variants for parent Q (default = 'blue')
 #' 
 #' @param mrk.names if TRUE, marker names are displayed (default = FALSE)
 #' 
@@ -646,110 +643,186 @@ print.mappoly.map <- function(x, detailed = FALSE, ...) {
 }
 
 #' @rdname est_rf_hmm
-#' @importFrom grid grid.roundrect  grid.rect grid.newpage grid.lines viewport pushViewport upViewport grid.text gpar unit
 #' @importFrom grDevices rgb
+#' @importFrom graphics rect
 #' @keywords internal
 #' @export
 plot.mappoly.map <- function(x,
+                             left.lim = 0, 
+                             right.lim = Inf,
                              phase = TRUE,
-                             col.P = "#e41a1c",
-                             col.Q = "#377eb8",
                              mrk.names = FALSE, 
                              cex = 1, 
                              config = "best", ...) {
-  
   if(phase){
-    grid::grid.newpage()
-    m <- x$info$m
-    vp1 <- grid::viewport(x = 0, y = 0.8, width = 1, height = 0.15, just = c("left", "bottom"))
-    vp2 <- grid::viewport(x = 0, y = 0.6, width = 1, height = 0.15, just = c("left", "bottom"))
-    vp3 <- grid::viewport(x = 0.04, y = 0.4, width = 0.92, height = 0.2, just = c("left", "bottom"))
-    grid::pushViewport(vp1)
-    draw_homologous(m, y.pos = 0.1, h.names = letters[1:m], parent = "P1")
-    if (config == "best")
-      config <- which.min(abs(get_LOD(x)))
-    if (!is.numeric(config))
-      stop("config must be numeic")
-    if (length(x$maps) < config) {
-      warning("config should be equal or less than", length(x$maps), "\nplotting the best configuration")
-      config <- which.min(abs(get_LOD(x, sorted = FALSE)))
+    map.info <- prepare_map(x, config)
+    if(any(map.info$ph.p=="B")){
+      var.col <- c("black", "darkgray")
+      var.col <- var.col[1:2]
+      names(var.col) <- c("A", "B")
+    } else {
+      var.col <- RColorBrewer::brewer.pal(n = 4, name = "Set1")
+      names(var.col) <- c("A", "T", "C", "G")
     }
-    P <- x$maps[[config]]$seq.ph$P
-    if(length(col.P)==1)
-      col.P<-rep(col.P, length(P))
-    y <- seq(from = 0.05, to = 0.95, length.out = length(P))
-    for (i in 1:length(P))
-      draw_alleles(m, y[i], P[[i]], col.cte = col.P[i], y.pos = 0.1)
-    grid::upViewport()
-    grid::pushViewport(vp2)
-    draw_homologous(m, h.names = letters[(m+1):(2*m)], parent = "P2")
-    Q <- x$maps[[config]]$seq.ph$Q
-    if(length(col.Q)==1)
-      col.Q<-rep(col.Q, length(Q))
-    y <- seq(from = 0.05, to = 0.95, length.out = length(Q))
-    for (i in 1:length(Q))
-      draw_alleles(m, y[i], Q[[i]], col.cte = col.Q[i])
-    grid::upViewport()
-    grid::pushViewport(vp3)
-    d <- cumsum(c(0, imf_h(x$maps[[config]]$seq.rf)))
-    x1 <- d/max(d)
-    grid::grid.roundrect(x = -0.01, y = 0.5, width = 1.02, height = 0.07, r = grid::unit(2, "mm"), gp = grid::gpar(fill = "white", col = "black", lwd = 0.7), just = c("left",                                                                                                                                           "center"))
-    x2 <- seq(from = 0.01125, to = 0.99, length.out = length(x1))
-    id<-x$maps[[config]]$seq.num
-    id<-paste0(get(x$info$data.name, pos =1)$mrk.names[id], " - (", id, ")")
-    for (i in 1:length(x1)) {
-      grid::grid.lines(x = x1[i], y = c(0.45, 0.55), gp = grid::gpar(lwd = 1))
-      grid::grid.lines(x = c(x1[i], x2[i]), y = c(0.55, 1.19), gp = grid::gpar(lwd = 0.5, lty = 1, col = "gray"))
-      if(mrk.names){
-        grid::grid.text(label = id[i], x = x2[i], y = 1.22,
-                        rot = 90, just = "right", gp = grid::gpar(cex = cex))      
-      } 
+    d.col<-c(NA, RColorBrewer::brewer.pal(n = map.info$m, name = "Dark2"))
+    names(d.col) <- 0:map.info$m
+    d.col[1]<-NA
+    x <- map.info$map
+    lab <- names(x)
+    zy <- seq(0, 0.5, length.out = map.info$m) + 1.5
+    pp <- map.info$ph.p
+    pq <- map.info$ph.q
+    dp <- map.info$dp
+    dq <- map.info$dq
+    x1<-abs(left.lim - x)
+    x2<-abs(right.lim - x)
+    id.left<-which(x1==min(x1))[1]
+    id.right<-rev(which(x2==min(x2)))[1]
+    op<-par(mai = c(1,0.15,0,0), mar=c(4.5,0,1,1))
+    curx<-x[id.left:id.right]
+    layout(mat =matrix(c(4,2,3, 1), ncol = 2), heights = c(2, 10), widths = c(1, 10))
+    plot(x = curx,
+         y = rep(.5,length(curx)),
+         type = "n" , 
+         ylim = c(.25, 4.5), 
+         axes = FALSE, 
+         xlab = "Distance (cM)", 
+         ylab = "")
+    lines(c(x[id.left], x[id.right]), c(.5, .5), lwd=15, col = "gray")
+    points(x = curx,
+           y = rep(.5,length(curx)),
+           xlab = "", ylab = "", 
+           pch = "|", cex=1.5, 
+           ylim = c(0,2))
+    axis(side = 1)
+    #Parent 2
+    x1 <- seq(x[id.left], x[id.right], length.out = length(curx))
+    x.control <- diff(x1[1:2])/2
+    if(length(x1) < 150)
+      x.control <- x.control * .8
+    if(length(x1) < 100)
+      x.control <- x.control * .8
+    if(length(x1) < 75)
+      x.control <- x.control * .8
+    if(length(x1) < 50)
+      x.control <- x.control * .8
+    if(length(x1) < 25)
+      x.control <- x.control * .8
+    for(i in 1:map.info$m)
+    {
+      lines(range(x1), c(zy[i], zy[i]), lwd=8, col = "lightgray")
+      y1 <- rep(zy[i], length(curx))
+      pal <- var.col[pq[id.left:id.right,i]]
+      rect(xleft = x1 - x.control, ybottom = y1 -.05, xright = x1 + x.control, ytop = y1 +.05, col = pal, border = NA)
     }
-    dmax <- max(d)
-    d1<-pretty(seq(0, dmax, length.out = 10), n = 10)
-    if(rev(d1)[1] > dmax) d1<-d1[-length(d1)]
-    x3 <- seq(from = 0, to = max(d1)/dmax, length.out = length(d1))
-    grid::grid.lines(x = c(0, max(x3)), y = c(0.2, 0.2), gp = grid::gpar(lwd = 0.5))
-    for (i in 1:length(x3)) {
-      grid::grid.lines(x = x3[i], y = c(0.2, 0.17), gp = grid::gpar(lwd = 2))
-      grid::grid.text(label = round(d1[i], 1), x = x3[i], y = 0.155, rot = 90, just = "right", gp = grid::gpar(cex = 0.8))
+    #connecting allelic variants to markers 
+    for(i in 1:length(x1))
+      lines(c(curx[i], x1[i]), c(0.575, zy[1]-.05), lwd=0.2)
+    points(x = x1,
+           y = zy[map.info$m]+0.05+dq[id.left:id.right]/20,
+           col = d.col[as.character(dq[id.left:id.right])],
+           pch = 19, cex = .7)
+    #Parent 1
+    zy<-zy + 1.1
+    for(i in 1:map.info$m)
+    {
+      lines(range(x1), c(zy[i], zy[i]), lwd=8, col = "gray")
+      y1 <- rep(zy[i], length(curx))
+      pal <- var.col[pp[id.left:id.right,i]]
+      rect(xleft = x1 - x.control, ybottom = y1 -.05, xright = x1 + x.control, ytop = y1 +.05, col = pal, border = NA)
     }
-    grid::grid.text(label = "centimorgans (cM)", x = 0.5, y = -0.5)
-    upViewport()
+    points(x = x1,
+           y = zy[map.info$m]+0.05+dp[id.left:id.right]/20,
+           col = d.col[as.character(dp[id.left:id.right])],
+           pch = 19, cex = .7)
+   
+    if(mrk.names)
+      text(x = x1,
+           y = rep(zy[map.info$m]+0.05+.3, length(curx)),
+           labels = names(curx),
+           srt=90, adj = 0, cex = cex)
+    par(op)
+    par(mar = c(4.5,1,1,0), xpd = TRUE) 
+    plot(x = 0,
+         y = 0,
+         type = "n" ,
+         axes = FALSE, 
+         ylab = "",
+         xlab = "",
+         ylim = c(.25, 4.5))
+    zy <- zy - 1.1
+    mtext(text = "Parent 2", side = 4, at = mean(zy), line = -1, font = 4)
+    for(i in 1:map.info$m)
+      mtext(letters[(2*map.info$m):(map.info$m+1)][i], line = 0, at = zy[i], side = 4)
+    zy <- zy + 1.1
+    mtext(text = "Parent 1", side = 4, at = mean(zy), line = -1, font = 4)
+    for(i in 1:map.info$m)
+      mtext(letters[map.info$m:1][i],  line = 0, at = zy[i], side = 4)
+    par(op)
+    op <- par(mar = c(0,1,2,4), xpd=FALSE)
+    plot(x = curx,
+         y = rep(.5,length(curx)),
+         type = "n" , 
+         axes = FALSE, 
+         xlab = "", 
+         ylab = "")
+    if(any(map.info$ph.p=="B")){
+      legend("bottomleft", legend=c("A", "B"), 
+             fill =c(var.col), title = "Variants",
+             box.lty=0, bg="transparent", ncol = 2)
+    } else {    
+      legend("bottomleft", legend=c("A", "T", "C", "G", "-"), 
+             fill =c(var.col, "white"), title = "Nucleotides",
+             box.lty=0, bg="transparent", ncol = 4)
+    }
+    legend("bottomright", legend=names(d.col)[-1], title = "Doses" ,
+           col = d.col[-1], ncol = map.info$m/2, pch = 19,
+           box.lty=0)
+    par(op)
   } else {
     plot_map_list(x) 
   }
 }
 
-#' draw homologous
+#' prepare maps for plot 
 #' @param void interfunction to be documented
 #' @keywords internal
-draw_homologous <- function(m, y.pos = 0.5, h.names = letters[1:m], parent = "P") {
-  st <- y.pos - m/40
-  s <- seq(from = st, by = 0.1, length.out = m)
-  ct<-1
-  for (i in s){
-    grid::grid.roundrect(x = 0.04, y = i, width = 0.92, height = 0.09, r = grid::unit(1, "mm"), gp = grid::gpar(fill = "gray", col = "darkgray", lwd = 0.1),
-                         just = c("left", "center"))
-    grid::grid.text(label = h.names[ct], x = 0.03, y = i,
-                    just = "right", gp = grid::gpar(cex =.7))  
-    ct<-ct+1
-  } 
-  grid::grid.text(label = parent, x = 0.055, y = i+0.2,
-                  just = "right", gp = grid::gpar(cex = 1))  
-}
-
-#' draw alleles
-#' @param void interfunction to be documented
-#' @keywords internal
-draw_alleles <- function(m, x, v, col.cte = 2, y.pos = 0.5) {
-  st <- y.pos - m/40
-  s <- seq(from = st, by = 0.1, length.out = m)
-  u <- is.na(match(1:m, v)) + 1
-  gp <- list(grid::gpar(fill = col.cte, col = col.cte, lineend = "square", linejoin = 	"mitre"),
-             grid::gpar(fill = "white", col = "white", lineend = "square", linejoin = 	"mitre"),
-             just = c("center", "center"))
-  for (i in 1:length(s)) grid::grid.rect(x = x, y = s[i], width = 0.006, height = 0.075, gp = gp[[u[i]]])
+prepare_map<-function(input.map, config = "best"){
+  if (!inherits(input.map, "mappoly.map")) {
+    stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
+  }
+  ## Choosing the liinkage phase configuration
+  LOD.conf <- get_LOD(input.map, sorted = FALSE)
+  if(config == "best") {
+    i.lpc <- which.min(LOD.conf)
+  } else if(config == "all"){
+    i.lpc <- seq_along(LOD.conf) } else if (config > length(LOD.conf)) {
+      stop("invalid linkage phase configuration")
+    } else i.lpc <- config
+  ## Gathering marker positions
+  map <- cumsum(imf_h(c(0, input.map$maps[[i.lpc]]$seq.rf)))
+  names(map) <- input.map$info$mrk.names
+  ## 
+  ph.p <- ph_list_to_matrix(input.map$maps[[i.lpc]]$seq.ph$P, input.map$info$m)
+  ph.q <- ph_list_to_matrix(input.map$maps[[i.lpc]]$seq.ph$Q, input.map$info$m)
+  dimnames(ph.p) <- list(names(map), letters[1:input.map$info$m])
+  dimnames(ph.q) <- list(names(map), letters[(1+input.map$info$m):(2*input.map$info$m)])
+  dat<-get(input.map$info$data.name, pos = 1)
+  if(is.null(dat$seq.ref))
+  {
+    ph.p[ph.p==1] <- ph.q[ph.q==1] <- "A"
+    ph.p[ph.p==0] <- ph.q[ph.q==0] <- "B"  
+  } else {
+    for(i in input.map$info$mrk.names){
+      ph.p[i, ph.p[i,]==1] <- dat$seq.alt[i]
+      ph.p[i, ph.p[i,]==0] <- dat$seq.ref[i]
+      ph.q[i, ph.q[i,]==1] <- dat$seq.alt[i]
+      ph.q[i, ph.q[i,]==0] <- dat$seq.ref[i]
+    }
+  }
+  dp <- dat$dosage.p[input.map$info$mrk.names]
+  dq <- dat$dosage.q[input.map$info$mrk.names]
+  list(m = input.map$info$m, map = map, ph.p = ph.p, ph.q = ph.q, dp = dp, dq = dq)
 }
 
 #' Get the tail of a marker sequence up to the point where the markers
@@ -799,6 +872,7 @@ filter_map_at_hmm_thres <- function(map, thres.hmm){
   map$maps<-map$maps[get_LOD(map, sorted = FALSE) < thres.hmm]
   map
 }
+
 #' makes a phase list from map, selecting only 
 #' configurations under a certain threshold
 #' @param void interfunction to be documented
@@ -815,6 +889,7 @@ update_ph_list_at_hmm_thres <- function(map, thres.hmm){
                  thres.hmm = thres.hmm),
             class = "two.pts.linkage.phases")
 }
+
 #' subset of a linkage phase list
 #' @param void interfunction to be documented
 #' @keywords internal
@@ -829,6 +904,7 @@ get_ph_list_subset<-function(ph.list, seq.num, conf){
                  thres.hmm = ph.list$thres.hmm),
             class = "two.pts.linkage.phases")
 }
+
 #' concatenate two linkage phase lists
 #' @param void interfunction to be documented
 #' @keywords internal
@@ -845,6 +921,7 @@ concatenate_ph_list<-function(ph.list.1, ph.list.2){
                  thres.hmm = ph.list.1$thres.hmm),
             class = "two.pts.linkage.phases")
 }
+
 #' add a single marker at the tail of a linkage phase list
 #' @param void interfunction to be documented
 #' @keywords internal

@@ -9,7 +9,10 @@
 #'
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' @export
-est_map_parallel = function(data, markers, partial_tpt, n.batches = 4, n.cores = 4, platform = 'auto', start.set = 5, thres.twopt = 10, thres.hmm = 10, info.tail = TRUE, submap.size.diff = 3, thres.twopt2 = 3, thres.hmm2 = 10, phase.n.lim = 20, tol = 1e-3) {
+est_map_parallel = function(data, markers, partial_tpt, n.batches = 4, n.cores = 4, platform = 'auto', 
+                            start.set = 5, thres.twopt = 10, thres.hmm = 10, info.tail = TRUE, 
+                            submap.size.diff = 3, thres.twopt2 = 3, thres.hmm2 = 10, phase.n.lim = 20,
+                            tol = 1e-3) {
     ## Getting and checking platform
     if (platform == 'auto'){
         platform = .Platform$OS.type
@@ -35,7 +38,8 @@ est_map_parallel = function(data, markers, partial_tpt, n.batches = 4, n.cores =
     submaps = list()
     for (i in 1:length(size_batches)){
         submaps[[i]] = list()
-        submaps[[i]][[1]] = make_seq_mappoly(data, arg = markers[(sum(cumsum(size_batches)[i-1])+1):cumsum(size_batches)[i]], data.name = partial_tpt$data.name)
+        submaps[[i]][[1]] = make_seq_mappoly(data, arg = markers[(sum(cumsum(size_batches)[i-1])+1):cumsum(size_batches)[i]], 
+                                             data.name = partial_tpt$data.name)
         submaps[[i]][[2]] = make_pairs_mappoly(partial_tpt, input.seq = submaps[[i]][[1]])
     }
     ## Running hmm_sequential for each submap
