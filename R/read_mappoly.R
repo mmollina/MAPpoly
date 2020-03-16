@@ -204,24 +204,24 @@ read_geno <- function(file.in, filter.non.conforming = TRUE, elim.redundant = TR
   geno.dose<-geno.dose[id,]
   
   res <- structure(list(m = m,
-                 n.ind = n.ind,
-                 n.mrk = sum(id),
-                 ind.names = ind.names,
-                 mrk.names = mrk.names[id],
-                 dosage.p = dosage.p[id],
-                 dosage.q = dosage.q[id],
-                 sequence = sequence[id],
-                 sequence.pos = sequencepos[id],
-                 seq.ref = NULL,
-                 seq.alt = NULL,
-                 all.mrk.depth = NULL,
-                 prob.thres = NULL,
-                 geno.dose = geno.dose,
-                 nphen = nphen,
-                 phen = phen,
-                 kept = NULL,
-                 elim.correspondence = NULL),
-            class = "mappoly.data")
+                        n.ind = n.ind,
+                        n.mrk = sum(id),
+                        ind.names = ind.names,
+                        mrk.names = mrk.names[id],
+                        dosage.p = dosage.p[id],
+                        dosage.q = dosage.q[id],
+                        sequence = sequence[id],
+                        sequence.pos = sequencepos[id],
+                        seq.ref = NULL,
+                        seq.alt = NULL,
+                        all.mrk.depth = NULL,
+                        prob.thres = NULL,
+                        geno.dose = geno.dose,
+                        nphen = nphen,
+                        phen = phen,
+                        kept = NULL,
+                        elim.correspondence = NULL),
+                   class = "mappoly.data")
   
   if(filter.non.conforming){
     cat("    Filtering non-conforming markers.\n    ...")
@@ -239,11 +239,11 @@ read_geno <- function(file.in, filter.non.conforming = TRUE, elim.redundant = TR
     res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
     cat("\n    Done.\n")
   }
-      if (elim.redundant){
-      seqred = make_seq_mappoly(res, arg = 'all', data.name = res)
-      redun = elim_redundant(seqred, data = res)
-      res$kept = redun$kept
-      res$elim.correspondence = redun$elim.correspondence
+  if (elim.redundant){
+    seqred = make_seq_mappoly(res, arg = 'all', data.name = res)
+    redun = elim_redundant(seqred, data = res)
+    res$kept = redun$kept
+    res$elim.correspondence = redun$elim.correspondence
   }
   return(res)
 }
@@ -258,16 +258,16 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
   cat("    No. markers:                            ", x$n.mrk, "\n")
   miss<-round(100*sum(x$geno.dose==x$m+1)/length(as.matrix(x$geno.dose)),2)
   if(!is.null(x$unique.seq)){
-      redundant = round(100*((x$n.mrk - length(x$kept))/x$n.mrk),2)
+    redundant = round(100*((x$n.mrk - length(x$kept))/x$n.mrk),2)
   }
   ##if no prior probabilities
   if(nrow(x$geno)==x$n.mrk){
-  cat("    Missing data:                            ", miss, "%\n", sep = "")  
+    cat("    Missing data:                            ", miss, "%\n", sep = "")  
   } else {
     cat("    Missing data under ", x$prob.thres, " prob. threshold: ", miss, "%\n", sep = "")    
   }
   if(!is.null(x$unique.seq)){
-        cat("    Redundant markers:                       ", redundant, "%\n", sep = "")  
+    cat("    Redundant markers:                       ", redundant, "%\n", sep = "")  
   }
   w <- table(x$sequence)
   if (length(x$sequence) <= 1)
@@ -291,6 +291,7 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
 #' @importFrom graphics barplot layout mtext image legend 
 #' @importFrom RColorBrewer brewer.pal
 #' @importFrom grDevices colorRampPalette
+#' @importFrom grDevices blues9
 plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
 {
   freq <- table(paste(x$dosage.p, x$dosage.q, sep = "-"))
@@ -301,7 +302,7 @@ plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
   names(mrk.dist)<-apply(d.temp, 1 , paste, collapse = "-")
   pal<-colorRampPalette(RColorBrewer::brewer.pal(9,"Greys"))(length(type.names))
   op <- par(mar = c(5,4,1,2))
-  layout(matrix(c(1,1,1,2,3,3,2,4,5), 3, 3), widths = c(1.2,3,.5), heights = c(1,1,3))
+  layout(matrix(c(1,1,1,2,3,3,6,4,5), 3, 3), widths = c(1.2,3,.5), heights = c(1.5,2,3))
   barplot(mrk.dist, las = 2, col = pal[match(type, type.names)], 
           xlab = "Number of markers", 
           ylab = "Dosage combination", horiz = TRUE)
@@ -310,18 +311,20 @@ plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
     plot(0, 0, axes = FALSE, xlab = "", ylab="", type = "n")
     text(x=0, y=0, labels = "No segregation test", cex = 2)
   } else{
-    par(mar = c(1,1,1,3))
-    plot(log10(x$chisq.pval), axes = FALSE, xlab = "", ylab="", pch = 16, col = rgb(red=0.2, green=0.2, blue=1.0, alpha=0.2))
-    axis(4)
-    mtext(text = "log10(p.value)", side = 4, line = -1, cex = .7)
+    par(mar=c(1,1,1,2))
+    par(xaxs="i")
+    plot(log10(x$chisq.pval), axes = FALSE, xlab = "", ylab="", pch = 16, 
+         col = rgb(red=0.2, green=0.2, blue=1.0, alpha=0.2))
+    axis(4, line = 1)
+    mtext(text = bquote(log[10](P)), side = 4, line = 4, cex = .7)
     lines(x=c(0, x$n.mrk), y = rep(log10(thresh.line),2), col = 2, lty = 2)
   }
-  par(mar = c(5,1,0,2))
+  par(mar=c(5,1,0,2))
   pal<-c("black", RColorBrewer::brewer.pal((x$m+1),"RdYlGn"))
   names(pal)<-c(-1:x$m)
   M <- as.matrix(x$geno.dose)
   M[M==x$m+1]<--1
-  image(M, axes = FALSE,
+  image(x = 1:nrow(M), z = M, axes = FALSE, xlab = "",
         col = pal[as.character(sort(unique(as.vector(M))))], useRaster = TRUE)
   mtext(text = "Markers", side = 1, line = .4)
   mtext(text = "Individuals", side = 2, line = .2)
@@ -335,11 +338,15 @@ plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
          pt.bg=pal, pt.lwd = 0,
          bty = "n", xpd=TRUE)
   if(!is.null(x$unique.seq)){
-    par(mar = c(5,2,2,2))
-      red = round(100*(length(x$sequence)-length(x$unique.seq$sequence))/length(x$sequence),2)
-      barplot(rbind(red), ylim = c(0,100), xlab = '', col = rgb(red=0.2, green=0.2, blue=1.0, alpha=0.2))
-      text(x = .5, y = red+2, labels = paste0(red,'%'))
-      mtext(text = "Redundant\n(%)", side = 1, line = 2, cex = .8)
+    par(mar = c(5,0,2,2))
+    red = round(100*(length(x$sequence)-length(x$unique.seq$sequence))/length(x$sequence),1)
+    mat = matrix(c(100-red, red), ncol = 1)
+    w = barplot(mat, main="",
+                xlab="", col=c(blues9[3],blues9[6]),
+                axes = F, width = .5, border = NA, xlim = c(0,1)) 
+    
+    text(w, c((100-red)/2,   100 - red/2),  c(paste0(100 - red, " %"), paste0(red, " %")))
+    mtext(text = "Unique vs. Redundant", line = -1, side = 4, cex = .8)
   }
   par(op)
   par(mfrow=c(1,1))

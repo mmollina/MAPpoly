@@ -1052,10 +1052,10 @@ check_data_dist_sanity <- function(x){
 #' in both datasets (e.g. \code{Ind_1} in both datasets, not \code{Ind_1}
 #' in one dataset and \code{ind_1} or \code{Ind.1} in the other).
 #'
-#' @param dataset.1 the first dataset of class \code{mappoly.data} to be merged
+#' @param dat.1 the first dataset of class \code{mappoly.data} to be merged
 #'
-#' @param dataset.2 the second dataset of class \code{mappoly.data} to be merged (default = NULL);
-#' if \code{dataset.2 = NULL}, the function returns \code{dataset.1} only
+#' @param dat.2 the second dataset of class \code{mappoly.data} to be merged (default = NULL);
+#' if \code{dat.2 = NULL}, the function returns \code{dat.1} only
 #'
 #' @return An object of class \code{mappoly.data} which contains all markers
 #' from both datasets. It will be a list with the following components:
@@ -1104,108 +1104,116 @@ check_data_dist_sanity <- function(x){
 #'
 #' @export merge_datasets
 #' 
-merge_datasets = function(dataset.1, dataset.2 = NULL){
+merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
   ## Check objects class
-  if (class(dataset.1) != 'mappoly.data'){
-    stop("The first dataset does not belong to class 'mappoly.data'.")
+  if (is.null(dat.1)){
+    if (is.null(dat.2)) return(dat.1)
+    if (class(dat.2) != 'mappoly.data'){
+      stop("The second dataset is not of class 'mappoly.data'.")
+    } else {
+      return(dat.2)
+    }
+  } 
+  if (class(dat.1) != 'mappoly.data'){
+    stop("The first dataset is not of class 'mappoly.data'.")
   }
-  if (is.null(dataset.2)) return(dataset.1)
-  if (class(dataset.2) != 'mappoly.data'){
-    stop("The second dataset does not belong to class 'mappoly.data'.")
+  if (is.null(dat.2)) return(dat.1)
+  if (class(dat.2) != 'mappoly.data'){
+    stop("The second dataset is not of class 'mappoly.data'.")
   }
   ## Check ploidy
-  if (dataset.1$m != dataset.2$m){
-    stop("The ploidy level in the datasets doesn't match. Please check your files and try again.")
+  if (dat.1$m != dat.2$m){
+    stop("The ploidy levels in the datasets do not match. Please check your files and try again.")
   }
   ## Check individuals
-  if (dataset.1$n.ind != dataset.2$n.ind){
+  if (dat.1$n.ind != dat.2$n.ind){
     stop("The datasets have different number of individuals. Please check your files and try again.")
   }
   ## Check individual names
-  if (!all(dataset.1$ind.names %in% dataset.2$ind.names)){
-    nmi.1 = dataset.1$ind.names[!(dataset.1$ind.names %in% dataset.2$ind.names)]
-    nmi.2 = dataset.2$ind.names[!(dataset.2$ind.names %in% dataset.1$ind.names)]
+  if (!all(dat.1$ind.names %in% dat.2$ind.names)){
+    nmi.1 = dat.1$ind.names[!(dat.1$ind.names %in% dat.2$ind.names)]
+    nmi.2 = dat.2$ind.names[!(dat.2$ind.names %in% dat.1$ind.names)]
     cat("Some individual's names doesn't match:\n")
     cat("Dataset 1\tDataset 2\n")
     for (i in 1:length(nmi.1)) cat(nmi.1[i], "\t\t", nmi.2[i], "\n")
     stop("Your datasets have the same number of individuals, but some of them are not the same. Please check the list above, fix your files and try again.")
   }
   ## Checking (and fixing) individuals order in geno.dose
-  if (!all(colnames(dataset.1$geno.dose) == colnames(dataset.2$geno.dose))){
-    dataset.2$geno.dose = dataset.2$geno.dose[,colnames(dataset.1$geno.dose)]
+  if (!all(colnames(dat.1$geno.dose) == colnames(dat.2$geno.dose))){
+    dat.2$geno.dose = dat.2$geno.dose[,colnames(dat.1$geno.dose)]
   }
   ## Merging all items
-  dataset.1$geno.dose = rbind(dataset.1$geno.dose, dataset.2$geno.dose)
-  dataset.1$dosage.p = c(dataset.1$dosage.p, dataset.2$dosage.p)
-  dataset.1$dosage.q = c(dataset.1$dosage.q, dataset.2$dosage.q)
-  dataset.1$mrk.names = c(dataset.1$mrk.names, dataset.2$mrk.names)
-  dataset.1$chisq.pval = c(dataset.1$chisq.pval, dataset.2$chisq.pval)
-  dataset.1$n.mrk = dataset.1$n.mrk + dataset.2$n.mrk
-  dataset.1$sequence = c(dataset.1$sequence, dataset.2$sequence)
-  dataset.1$sequence.pos = c(dataset.1$sequence.pos, dataset.2$sequence.pos)
+  dat.1$geno.dose = rbind(dat.1$geno.dose, dat.2$geno.dose)
+  dat.1$dosage.p = c(dat.1$dosage.p, dat.2$dosage.p)
+  dat.1$dosage.q = c(dat.1$dosage.q, dat.2$dosage.q)
+  dat.1$mrk.names = c(dat.1$mrk.names, dat.2$mrk.names)
+  dat.1$chisq.pval = c(dat.1$chisq.pval, dat.2$chisq.pval)
+  dat.1$n.mrk = dat.1$n.mrk + dat.2$n.mrk
+  dat.1$sequence = c(dat.1$sequence, dat.2$sequence)
+  dat.1$sequence.pos = c(dat.1$sequence.pos, dat.2$sequence.pos)
   # VCF info
   ## seq.ref and seq.alt
-  if (!is.null(dataset.1$seq.ref) && !is.null(dataset.2$seq.ref)){
-    dataset.1$seq.ref = c(dataset.1$seq.ref,dataset.2$seq.ref)
-    dataset.1$seq.alt = c(dataset.1$seq.alt,dataset.2$seq.alt)  
-  }  else if (is.null(dataset.1$seq.ref) && is.null(dataset.2$seq.ref)){
-    dataset.1$seq.ref = dataset.1$seq.alt = NULL
-  }  else if (!is.null(dataset.1$seq.ref) && is.null(dataset.2$seq.ref)){
-    dataset.1$seq.ref = c(dataset.1$seq.ref,rep(NA,length(dataset.2$n.mrk)))
-    dataset.1$seq.alt = c(dataset.1$seq.alt,rep(NA,length(dataset.2$n.mrk)))
-  } else if (is.null(dataset.1$seq.ref) && !is.null(dataset.2$seq.ref)){
-    dataset.1$seq.ref = c(rep(NA,length(dataset.1$n.mrk)),dataset.2$seq.ref)
-    dataset.1$seq.alt = c(rep(NA,length(dataset.1$n.mrk)),dataset.2$seq.alt)
+  if (!is.null(dat.1$seq.ref) && !is.null(dat.2$seq.ref)){
+    dat.1$seq.ref = c(dat.1$seq.ref,dat.2$seq.ref)
+    dat.1$seq.alt = c(dat.1$seq.alt,dat.2$seq.alt)  
+  }  else if (is.null(dat.1$seq.ref) && is.null(dat.2$seq.ref)){
+    dat.1$seq.ref = dat.1$seq.alt = NULL
+  }  else if (!is.null(dat.1$seq.ref) && is.null(dat.2$seq.ref)){
+    dat.1$seq.ref = c(dat.1$seq.ref,rep(NA,length(dat.2$n.mrk)))
+    dat.1$seq.alt = c(dat.1$seq.alt,rep(NA,length(dat.2$n.mrk)))
+  } else if (is.null(dat.1$seq.ref) && !is.null(dat.2$seq.ref)){
+    dat.1$seq.ref = c(rep(NA,length(dat.1$n.mrk)),dat.2$seq.ref)
+    dat.1$seq.alt = c(rep(NA,length(dat.1$n.mrk)),dat.2$seq.alt)
   }
   ## all.mrk.depth
-  if (!is.null(dataset.1$all.mrk.depth) && !is.null(dataset.2$all.mrk.depth)){
-    dataset.1$all.mrk.depth = c(dataset.1$all.mrk.depth,dataset.2$all.mrk.depth)
-  }  else if (is.null(dataset.1$all.mrk.depth) && is.null(dataset.2$all.mrk.depth)){
-    dataset.1$all.mrk.depth = NULL
-  }  else if (!is.null(dataset.1$all.mrk.depth) && is.null(dataset.2$all.mrk.depth)){
-    dataset.1$all.mrk.depth = c(dataset.1$all.mrk.depth,rep(NA,length(dataset.2$n.mrk)))
-  } else if (is.null(dataset.1$all.mrk.depth) && !is.null(dataset.2$all.mrk.depth)){
-    dataset.1$all.mrk.depth = c(rep(NA,length(dataset.1$n.mrk)),dataset.2$all.mrk.depth)
+  if (!is.null(dat.1$all.mrk.depth) && !is.null(dat.2$all.mrk.depth)){
+    dat.1$all.mrk.depth = c(dat.1$all.mrk.depth,dat.2$all.mrk.depth)
+  }  else if (is.null(dat.1$all.mrk.depth) && is.null(dat.2$all.mrk.depth)){
+    dat.1$all.mrk.depth = NULL
+  }  else if (!is.null(dat.1$all.mrk.depth) && is.null(dat.2$all.mrk.depth)){
+    dat.1$all.mrk.depth = c(dat.1$all.mrk.depth,rep(NA,length(dat.2$n.mrk)))
+  } else if (is.null(dat.1$all.mrk.depth) && !is.null(dat.2$all.mrk.depth)){
+    dat.1$all.mrk.depth = c(rep(NA,length(dat.1$n.mrk)),dat.2$all.mrk.depth)
   }
   # Chisq info
-  if (!is.null(dataset.1$chisq.pval) && !is.null(dataset.2$chisq.pval)){
-    dataset.1$chisq.pval = c(dataset.1$chisq.pval,dataset.2$chisq.pval)
-  }  else if (is.null(dataset.1$chisq.pval) && is.null(dataset.2$chisq.pval)){
-    dataset.1$chisq.pval = NULL
-  }  else if (!is.null(dataset.1$chisq.pval) && is.null(dataset.2$chisq.pval)){
-    dataset.1$chisq.pval = c(dataset.1$chisq.pval,rep(NA,length(dataset.2$n.mrk)))
-  } else if (is.null(dataset.1$chisq.pval) && !is.null(dataset.2$chisq.pval)){
-    dataset.1$chisq.pval = c(rep(NA,length(dataset.1$n.mrk)),dataset.2$chisq.pval)
+  if (!is.null(dat.1$chisq.pval) && !is.null(dat.2$chisq.pval)){
+    dat.1$chisq.pval = c(dat.1$chisq.pval,dat.2$chisq.pval)
+  }  else if (is.null(dat.1$chisq.pval) && is.null(dat.2$chisq.pval)){
+    dat.1$chisq.pval = NULL
+  }  else if (!is.null(dat.1$chisq.pval) && is.null(dat.2$chisq.pval)){
+    dat.1$chisq.pval = c(dat.1$chisq.pval,rep(NA,length(dat.2$n.mrk)))
+  } else if (is.null(dat.1$chisq.pval) && !is.null(dat.2$chisq.pval)){
+    dat.1$chisq.pval = c(rep(NA,length(dat.1$n.mrk)),dat.2$chisq.pval)
   }
   # Redundant info
   ## Kept info
-  if (!is.null(dataset.1$kept) && !is.null(dataset.2$kept)){
-    dataset.1$kept = c(dataset.1$kept,dataset.2$kept)
-  }  else if (is.null(dataset.1$kept) && is.null(dataset.2$kept)){
-    dataset.1$kept = NULL
-  }  else if (!is.null(dataset.1$kept) && is.null(dataset.2$kept)){
-    dataset.1$kept = c(dataset.1$kept,dataset,2$mrk.names)
-  } else if (is.null(dataset.1$kept) && !is.null(dataset.2$kept)){
-    dataset.1$kept = c(dataset.1$mrk.names,dataset.2$kept)
+  if (!is.null(dat.1$kept) && !is.null(dat.2$kept)){
+    dat.1$kept = c(dat.1$kept,dat.2$kept)
+  }  else if (is.null(dat.1$kept) && is.null(dat.2$kept)){
+    dat.1$kept = NULL
+  }  else if (!is.null(dat.1$kept) && is.null(dat.2$kept)){
+    dat.1$kept = c(dat.1$kept, dat.2$mrk.names)
+  } else if (is.null(dat.1$kept) && !is.null(dat.2$kept)){
+    dat.1$kept = c(dat.1$mrk.names,dat.2$kept)
   }  
   ## elim.correspondence info
-  if (!is.null(dataset.1$elim.correspondence) && !is.null(dataset.2$elim.correspondence)){
-    dataset.1$elim.correspondence = rbind(dataset.1$elim.correspondence,dataset.2$elim.correspondence)
-  }  else if (is.null(dataset.1$elim.correspondence) && is.null(dataset.2$elim.correspondence)){
-    dataset.1$elim.correspondence = NULL
-  }  else if (!is.null(dataset.1$elim.correspondence) && is.null(dataset.2$elim.correspondence)){
-    dataset.1$elim.correspondence = dataset.1$elim.correspondence
-  } else if (is.null(dataset.1$elim.correspondence) && !is.null(dataset.2$elim.correspondence)){
-    dataset.1$elim.correspondence = dataset.2$elim.correspondence
+  if (!is.null(dat.1$elim.correspondence) && !is.null(dat.2$elim.correspondence)){
+    dat.1$elim.correspondence = rbind(dat.1$elim.correspondence,dat.2$elim.correspondence)
+  }  else if (is.null(dat.1$elim.correspondence) && is.null(dat.2$elim.correspondence)){
+    dat.1$elim.correspondence = NULL
+  }  else if (!is.null(dat.1$elim.correspondence) && is.null(dat.2$elim.correspondence)){
+    dat.1$elim.correspondence = dat.1$elim.correspondence
+  } else if (is.null(dat.1$elim.correspondence) && !is.null(dat.2$elim.correspondence)){
+    dat.1$elim.correspondence = dat.2$elim.correspondence
   }  
 
   ## geno dist info (just keep if both datasets contain this information)
-  if (exists('geno', where = dataset.1) && exists('geno', where = dataset.2)){
-    dataset.1$geno = rbind(dataset.1$geno,dataset.2$geno)
-  } else dataset.1$geno = NULL
+  if (exists('geno', where = dat.1) && exists('geno', where = dat.2)){
+    dat.1$geno = rbind(dat.1$geno,dat.2$geno)
+  } else dat.1$geno = NULL
           
   ## Returning merged dataset
-  return(dataset.1)
+  return(dat.1)
 }
 
 #' Summary map

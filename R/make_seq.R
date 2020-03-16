@@ -257,7 +257,6 @@ print.mappoly.sequence <- function(x, ...) {
   }
 }
 
-
 #' @rdname make_seq_mappoly
 #' @export
 #' @keywords internal
@@ -274,7 +273,7 @@ plot.mappoly.sequence <- function(x, ...)
   names(mrk.dist)<-apply(d.temp, 1 , paste, collapse = "-")
   pal<-colorRampPalette(RColorBrewer::brewer.pal(9,"Greys"))(length(type.names))
   op <- par(mar = c(5,4,1,2))
-  layout(matrix(c(1,1,2,3,2,4), 2, 3), widths = c(1.2,3,.5), heights = c(1,2))
+  layout(matrix(c(1,1,1,2,3,3,6,4,5), 3, 3), widths = c(1.2,3,.5), heights = c(1.5,4.5,.5))
   barplot(mrk.dist, las = 2, col = pal[match(type, type.names)], 
           xlab = "dosage combination", 
           ylab = "number of markers", horiz = TRUE)
@@ -282,22 +281,24 @@ plot.mappoly.sequence <- function(x, ...)
   if(is.null(x$chisq.pval))
   {
     plot(0, 0, axes = FALSE, xlab = "", ylab="", type = "n")
-    text(x=0, y=0, labels = "No p values in the input object", cex = 2)
+    text(x=0, y=0, labels = "No segregation test", cex = 2)
   } else{
-    par(mar = c(1,1,1,3))
-    plot(log10(pval), axes = FALSE, xlab = "", ylab="", pch = 16, col = rgb(red=0.2, green=0.2, blue=1.0, alpha=0.2))
-    axis(4)
-    mtext(text = "log10(p.value)", side = 4, line = -1, cex = .7)
+    par(mar=c(1,1,1,2))
+    par(xaxs="i")
+    plot(log10(pval), axes = FALSE, xlab = "", ylab="", pch = 16, 
+         col = rgb(red=0.2, green=0.2, blue=1.0, alpha=0.2))
+    axis(4, line = 1)
+    mtext(text = bquote(log[10](P)), side = 4, line = 4, cex = .7)
   }
-  par(mar = c(5,1,0,4))
+  par(mar=c(5,1,0,2))
   pal<-c("black", RColorBrewer::brewer.pal((x$m+1),"RdYlGn"))
   names(pal)<-c(-1:x$m)
   M<-as.matrix(get(x$data.name, pos = 1)$geno.dose[x$seq.mrk.names,])
   M[M==x$m+1]<--1
-  image(M, axes = FALSE,
+  image(x = 1:nrow(M), z = M, axes = FALSE, xlab = "",
         col = pal[as.character(sort(unique(as.vector(M))))], useRaster = TRUE)
-  mtext(text = "Markers", side = 1)
-  mtext(text = "Individuals", side = 2)
+  mtext(text = "Markers", side = 1, line = .4)
+  mtext(text = "Individuals", side = 2, line = .2)
   par(mar = c(0,0,0,0))
   plot(0:10,0:10, type = "n", axes = FALSE, xlab = "", ylab = "")
   legend(0,10, 

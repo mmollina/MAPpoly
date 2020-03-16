@@ -18,8 +18,6 @@ maximum likelihood}
 
 \item{verbose}{if \code{TRUE} (default), the current progress is shown; if
 \code{FALSE}, no output is produced}
-
-\item{...}{currently ignored}
 }
 \value{
 An object of class 'mappoly.genoprob' which has two elements: a tridimensional

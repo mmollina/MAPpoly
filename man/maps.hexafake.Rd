@@ -4,8 +4,10 @@
 \name{maps.hexafake}
 \alias{maps.hexafake}
 \title{Resulting maps from \code{\link[mappoly]{hexafake}}}
-\format{A list containing three objects of class \code{mappoly.map}, each one 
-representing one linkage group in the simulated data.}
+\format{
+A list containing three objects of class \code{mappoly.map}, each one 
+representing one linkage group in the simulated data.
+}
 \usage{
 maps.hexafake
 }
