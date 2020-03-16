@@ -11,6 +11,10 @@
 #'
 #' @param n.clusters Number of parallel processes (cores) to spawn (default = 1)
 #'
+#' @param platform if \code{'windows'} (default), function uses PSOCK as a basis
+#' for parallel computing. if \code{'unix'}, function uses FORK as a basis for
+#' parallel computing. If \code{'auto'}, function automatically detects your operating system
+#'
 #' @param tol the desired accuracy. See \code{optimize()} for details
 #'
 #' @param mrk.pairs a matrix of dimensions 2*N, containing N
@@ -68,7 +72,7 @@
 
 est_pairwise_rf <- function(input.seq, count.cache,
                             n.clusters = 1,
-                            platform = 'auto',
+                            platform = 'windows',
                             tol = .Machine$double.eps^0.25,
                             mrk.pairs = NULL,
                             batch.size = NULL,
