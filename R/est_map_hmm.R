@@ -179,9 +179,17 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
                       seq.rf = res.temp[1,"rf"],
                       seq.ph = res.ph,
                       loglike = 0)
-    return(structure(list(info = list(m = input.seq$m, 
+    return(structure(list(info = list(m = input.seq$m,
                                       n.mrk = length(input.seq$seq.num),
-                                      mrk.names = get(input.seq$data.name, pos =1)$mrk.names[input.seq$seq.num],
+                                      seq.num = input.seq$seq.num,
+                                      mrk.names = input.seq$seq.mrk.names,
+                                      seq.dose.p = get(input.seq$data.name, pos =1)$dosage.p[input.seq$seq.mrk.names],
+                                      seq.dose.q = get(input.seq$data.name, pos =1)$dosage.q[input.seq$seq.mrk.names],
+                                      sequence = get(input.seq$data.name, pos =1)$sequence[input.seq$seq.mrk.names],
+                                      sequence.pos = get(input.seq$data.name, pos =1)$sequence.pos[input.seq$seq.mrk.names],
+                                      seq.ref = get(input.seq$data.name, pos =1)$seq.ref[input.seq$seq.mrk.names],
+                                      seq.alt = get(input.seq$data.name, pos =1)$seq.alt[input.seq$seq.mrk.names],
+                                      chisq.pval = get(input.seq$data.name, pos =1)$chisq.pval[input.seq$seq.mrk.names],
                                       data.name = input.seq$data.name,
                                       ph.thresh = abs(res.temp[2,1])),
                           maps = maps),
@@ -228,9 +236,17 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   maps<-maps[id]
   if (verbose)
     cat("\n")
-  structure(list(info = list(m = input.seq$m, 
+  structure(list(info = list(m = input.seq$m,
                              n.mrk = length(input.seq$seq.num),
-                             mrk.names = get(input.seq$data.name, pos =1)$mrk.names[input.seq$seq.num],
+                             seq.num = input.seq$seq.num,
+                             mrk.names = input.seq$seq.mrk.names,
+                             seq.dose.p = get(input.seq$data.name, pos =1)$dosage.p[input.seq$seq.mrk.names],
+                             seq.dose.q = get(input.seq$data.name, pos =1)$dosage.q[input.seq$seq.mrk.names],
+                             sequence = get(input.seq$data.name, pos =1)$sequence[input.seq$seq.mrk.names],
+                             sequence.pos = get(input.seq$data.name, pos =1)$sequence.pos[input.seq$seq.mrk.names],
+                             seq.ref = get(input.seq$data.name, pos =1)$seq.ref[input.seq$seq.mrk.names],
+                             seq.alt = get(input.seq$data.name, pos =1)$seq.alt[input.seq$seq.mrk.names],
+                             chisq.pval = get(input.seq$data.name, pos =1)$chisq.pval[input.seq$seq.mrk.names],
                              data.name = input.seq$data.name, ph.thresh = input.ph$thres),
                  maps = maps),
             class = "mappoly.map")
@@ -647,13 +663,9 @@ print.mappoly.map <- function(x, detailed = FALSE, ...) {
 #' @importFrom graphics rect
 #' @keywords internal
 #' @export
-plot.mappoly.map <- function(x,
-                             left.lim = 0, 
-                             right.lim = Inf,
-                             phase = TRUE,
-                             mrk.names = FALSE, 
-                             cex = 1, 
-                             config = "best", ...) {
+plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
+                             phase = TRUE, mrk.names = FALSE, 
+                             cex = 1, config = "best", ...) {
   if(phase){
     map.info <- prepare_map(x, config)
     if(any(map.info$ph.p=="B")){
@@ -678,7 +690,7 @@ plot.mappoly.map <- function(x,
     x2<-abs(right.lim - x)
     id.left<-which(x1==min(x1))[1]
     id.right<-rev(which(x2==min(x2)))[1]
-    op<-par(mai = c(1,0.15,0,0), mar=c(4.5,0,1,1))
+    op<-par(mai = c(1,0.15,0,0), mar=c(4.5,2,1,2))
     curx<-x[id.left:id.right]
     layout(mat =matrix(c(4,2,3, 1), ncol = 2), heights = c(2, 10), widths = c(1, 10))
     plot(x = curx,
@@ -742,7 +754,7 @@ plot.mappoly.map <- function(x,
            labels = names(curx),
            srt=90, adj = 0, cex = cex)
     par(op)
-    par(mar = c(4.5,1,1,0), xpd = TRUE) 
+    op<-par(mar = c(4.5,1,1,0), xpd = TRUE) 
     plot(x = 0,
          y = 0,
          type = "n" ,
@@ -779,6 +791,7 @@ plot.mappoly.map <- function(x,
            col = d.col[-1], ncol = map.info$m/2, pch = 19,
            box.lty=0)
     par(op)
+    par(mfrow = c(1,1))
   } else {
     plot_map_list(x) 
   }

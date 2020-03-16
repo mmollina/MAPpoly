@@ -71,7 +71,7 @@
 #' its equivalence to the redundant ones}
 #' @examples
 #' \dontrun{
-#'     hexa.file<-system.file('extdata', 'hexafake', package = 'mappoly')
+#'     hexa.file<-system.file('extdata', 'hexafake_geno', package = 'mappoly')
 #'     hexafake<-read_geno(file.in  = hexa.file)
 #'     print(hexafake, detailed = TRUE)
 #'
@@ -337,9 +337,9 @@ plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
          pt.cex = 3,
          pt.bg=pal, pt.lwd = 0,
          bty = "n", xpd=TRUE)
-  if(!is.null(x$unique.seq)){
+  if(!is.null(x$elim.correspondence)){
     par(mar = c(5,0,2,2))
-    red = round(100*(length(x$sequence)-length(x$unique.seq$sequence))/length(x$sequence),1)
+    red = round(100*nrow(x$elim.correspondence)/length(x$sequence),1)
     mat = matrix(c(100-red, red), ncol = 1)
     w = barplot(mat, main="",
                 xlab="", col=c(blues9[3],blues9[6]),
