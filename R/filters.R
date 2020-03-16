@@ -90,7 +90,6 @@ filter_missing<-function(input.data,
   )
 }
 
-
 #' Filter markers based on missing genotypes
 #'
 #' @param input.data an object of class \code{"mappoly.data"} 
@@ -153,9 +152,15 @@ filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
     input.data$dosage.p <- input.data$dosage.p[-rm.mrks.id]
     input.data$dosage.q <- input.data$dosage.q[-rm.mrks.id]
     input.data$sequence <- input.data$sequence[-rm.mrks.id]
-    if(!is.null(input.data$chisq.pval)) 
-      input.data$chisq.pval <- input.data$chisq.pval[-rm.mrks.id]
     input.data$sequence.pos <- input.data$sequence.pos[-rm.mrks.id]
+    input.data$seq.ref <- input.data$seq.ref[-rm.mrks.id]
+    input.data$seq.alt <- input.data$seq.alt[-rm.mrks.id]
+    input.data$all.mrk.depth <- input.data$all.mrk.depth[-rm.mrks.id]
+    input.data$kept <- intersect(input.data$mrk.names, input.data$kept)
+    input.data$elim.correspondence <- input.data$elim.correspondence[input.data$elim.correspondence$kept%in%input.data$mrk.names,]
+    input.data$chisq.pval <- input.data$chisq.pval[names(input.data$chisq.pval)%in%input.data$mrk.names]
+    if(!is.null(input.data$chisq.pval)) 
+      input.data$chisq.pval <- input.data$chisq.pval[names(input.data$chisq.pval)%in%input.data$mrk.names]
     return(input.data)
   }
 }

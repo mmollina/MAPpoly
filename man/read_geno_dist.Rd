@@ -64,7 +64,6 @@ an object of class \code{mappoly.data} which contains a
                 to the individuals}
     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
     test of mendelian segregation performed for all markers}
-    \item{unique.seq}{if elim.redundant=TRUE, holds the object of class 'mappoly.unique.seq'}
     \item{kept}{if elim.redundant=TRUE, holds all non-redundant markers}
     \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
 its equivalence to the redundant ones}

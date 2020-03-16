@@ -50,7 +50,6 @@ An object of class \code{mappoly.data} which contains a
     \item{phen}{a matrix containing the phenotypic data. The rows
                 corespond to the trais and the columns correspond
                 to the individuals}
-    \item{unique.seq}{if elim.redundant=TRUE, holds the object of class 'mappoly.unique.seq'}
     \item{kept}{if elim.redundant=TRUE, holds all non-redundant markers}
     \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
 its equivalence to the redundant ones}
