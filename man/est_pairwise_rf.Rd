@@ -10,7 +10,7 @@ est_pairwise_rf(
   input.seq,
   count.cache,
   n.clusters = 1,
-  platform = "auto",
+  platform = "windows",
   tol = .Machine$double.eps^0.25,
   mrk.pairs = NULL,
   batch.size = NULL,
@@ -29,6 +29,10 @@ pre-computed genotype frequencies, obtained with
 \code{\link[mappoly]{cache_counts_twopt}}}
 
 \item{n.clusters}{Number of parallel processes (cores) to spawn (default = 1)}
+
+\item{platform}{if \code{'windows'} (default), function uses PSOCK as a basis
+for parallel computing. if \code{'unix'}, function uses FORK as a basis for
+parallel computing. If \code{'auto'}, function automatically detects your operating system}
 
 \item{tol}{the desired accuracy. See \code{optimize()} for details}
 
