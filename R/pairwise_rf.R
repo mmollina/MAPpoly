@@ -92,21 +92,29 @@ est_pairwise_rf <- function(input.seq, count.cache,
   ## checking for duplicated markers
   if (any(dpl))
     stop("There are duplicated markers in the sequence:\n Check markers: ", unique(input.seq$seq.num[dpl]), " at position(s) ", which(dpl))
+  # Memory warning
+  ANSWER = "flag"
+  if (length(input.seq$seq.num) > 2000 && interactive()){
+    while (substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !=""){
+      ANSWER <- readline("The sequence presents more than 2000 markers, 
+                         which requires high performance computing resources.
+                         \nDo you want to proceed? (Y/n): ")
+      if (substr(ANSWER, 1, 1) == "n" || substr(ANSWER, 1, 1) == "no") 
+        stop("You decided to stop 'est_pairwise_rf'. 
+             Please make sure you have a high performance 
+             computing system.")
+    }
+  } else if (length(input.seq$seq.num) > 2000) 
+    warning("The sequence presents more than 2000 markers, 
+            which requires high performance computing resources. 
+            Please make sure you meet this requirement, 
+            or else you may experience crashs.")
   geno <- get(input.seq$data.name, pos=1)$geno.dose
   ## all possible pairs
   if (is.null(mrk.pairs)) {
     mrk.pairs <- combn(sort(input.seq$seq.num), 2) - 1
     # mrk.pairs<-mrk.pairs[,order(mrk.pairs[1,],mrk.pairs[2,])]
   }
-  # Memory warning
-  ANSWER = "flag"
-  if (length(input.seq$seq.num) > 2000 && interactive()){
-    while (substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !=""){
-      ANSWER <- readline("The sequence presents more than 2000 markers, which requires high performance computing resources.\nDo you want to proceed? (Y/n): ")
-      if (substr(ANSWER, 1, 1) == "n" || substr(ANSWER, 1, 1) == "no") stop("You decided to stop 'est_pairwise_rf'. Please make sure you have a high performance computing system.")
-    }
-  } else if (length(input.seq$seq.num) > 2000) warning("The sequence presents more than 2000 markers, which requires high performance computing resources. Please make sure you meet this requirement, or else you may experience crashs.")
-  
   if (is.null(batch.size)) {
     ## splitting pairs in chunks
     if (length(input.seq$seq.num) < 10)
