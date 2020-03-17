@@ -96,19 +96,20 @@ est_pairwise_rf <- function(input.seq, count.cache,
   ANSWER = "flag"
   if (length(input.seq$seq.num) > 2000 && interactive()){
     while (substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !=""){
-      ANSWER <- readline("The sequence presents more than 2000 markers, 
-                         which requires high performance computing resources.
-                         \nDo you want to proceed? (Y/n): ")
+      message("
+  The sequence contains more than 2000 markers. 
+  This requires high-performance computing resources.
+  Do you want to proceed? (Y/n): ")
+      ANSWER <- readline("")
       if (substr(ANSWER, 1, 1) == "n" || substr(ANSWER, 1, 1) == "no") 
-        stop("You decided to stop 'est_pairwise_rf'. 
-             Please make sure you have a high performance 
-             computing system.")
+        stop("  You decided to stop 'est_pairwise_rf'.")
     }
   } else if (length(input.seq$seq.num) > 2000) 
-    warning("The sequence presents more than 2000 markers, 
-            which requires high performance computing resources. 
-            Please make sure you meet this requirement, 
-            or else you may experience crashs.")
+    warning("
+  The sequence contains more than 2000 markers. 
+  This requires high-performance computing resources. 
+  Please make sure you meet this requirement, 
+  or you may experience crashs.")
   geno <- get(input.seq$data.name, pos=1)$geno.dose
   ## all possible pairs
   if (is.null(mrk.pairs)) {
