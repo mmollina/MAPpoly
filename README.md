@@ -14,7 +14,7 @@ In its current version, MAPpoly can handle three different types of datasets:
 2. MAPpoly files
   - Dosage based
   - Probability based
-3. VCF files (beta)
+3. VCF files
 
 The derivation of the HMM used in MAPpoly can be found in [Mollinari and Garcia, 2019](https://doi.org/10.1534/g3.119.400378). Recently, we used MAPpoly to built an ultra-dense multilocus integrated genetic map containing ~30k SNPs and characterized the inheritance system in a sweetpotato full-sib family ([Mollinari et al., 2020](https://doi.org/10.1534/g3.119.400620)). See the resulting map [here](https://gt4sp-genetic-map.shinyapps.io/bt_map/) and the haplotype composition of all individuals in the full-sib population [here](https://gt4sp-genetic-map.shinyapps.io/offspring_haplotype_BT_population/).
 
@@ -39,12 +39,12 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
 * [Building a genetic map in an hexaploid full-sib population using MAPpoly](https://mmollina.github.io/tutorials/hexa_fake/haxaploid_map_construction.html)
 * [Building a genetic map using potato genotype data from SolCAP](https://mmollina.github.io/MAPpoly_vignettes/vignette_tetraploid/vignette_tetraploid.html)
 * Dataset examples
-  * [Hexaploid sweetpotato VCF dataset (Beauregard  x Tanzania) obtained using SM2VCF](https://github.com/mmollina/MAPpoly_vignettes/tree/master/data/BT)
-  * [Hexaploid simulation with dosage call in MAPpoly format](https://github.com/mmollina/tutorials/blob/master/datasets/hexafake)
-  * [Hexaploid simulation with dosage probabilities in MAPpoly format](https://github.com/mmollina/tutorials/blob/master/datasets/hexafake_geno_dist)
-  * [Tetraploid potato with dosage call in MAPpoly format](https://github.com/mmollina/tutorials/blob/master/datasets/SolCAP_dosage)
-  * [Tetraploid potato with dosage call in CSV format](https://github.com/mmollina/tutorials/blob/master/datasets/tetra_solcap.csv)
-  * [Tetraploid potato with dosage probabilities in MAPpoly format](https://github.com/mmollina/tutorials/blob/master/datasets/SolCAP)
+  * [Hexaploid sweetpotato VCF dataset (Beauregard x Tanzania) obtained using VCF2SM](https://github.com/mmollina/MAPpoly_vignettes/tree/master/data/BT)
+  * [Hexaploid simulation with dosage call in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/tree/master/data/hexafake)
+  * [Hexaploid simulation with dosage probabilities in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/tree/master/data/hexafake_geno_dist)
+  * [Tetraploid potato with dosage call in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/tree/master/data/SolCAP_dosage)
+  * [Tetraploid potato with dosage call in CSV format](https://github.com/mmollina/MAPpoly_vignettes/tree/master/data/tetra_solcap.csv)
+  * [Tetraploid potato with dosage probabilities in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/tree/master/data/SolCAP)
   
 # Acknowledgment 
 
