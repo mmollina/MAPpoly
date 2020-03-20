@@ -10,11 +10,12 @@ est_pairwise_rf(
   input.seq,
   count.cache,
   n.clusters = 1,
-  platform = "windows",
   tol = .Machine$double.eps^0.25,
   mrk.pairs = NULL,
-  batch.size = NULL,
-  verbose = TRUE
+  n.batches = 1,
+  verbose = TRUE,
+  memory.warning = FALSE,
+  parallelization.type = c("PSOCK", "FORK")
 )
 
 \method{print}{poly.est.two.pts.pairwise}(x, ...)
@@ -30,21 +31,23 @@ pre-computed genotype frequencies, obtained with
 
 \item{n.clusters}{Number of parallel processes (cores) to spawn (default = 1)}
 
-\item{platform}{if \code{'windows'} (default), function uses PSOCK as a basis
-for parallel computing. if \code{'unix'}, function uses FORK as a basis for
-parallel computing. If \code{'auto'}, function automatically detects your operating system}
-
 \item{tol}{the desired accuracy. See \code{optimize()} for details}
 
 \item{mrk.pairs}{a matrix of dimensions 2*N, containing N
 pairs of markers to be analyzed. If \code{NULL} (default), all pairs are
 considered}
 
-\item{batch.size}{The number of pairs that shold be analyzed in parallel.
-If \code{NULL} (default), all pairs are analyized}
+\item{n.batches}{The number of batches of marker pairs that should be analyzed 
+in parallel.}
 
 \item{verbose}{If \code{TRUE} (default), current progress is shown; if
 \code{FALSE}, no output is produced}
+
+\item{memory.warning}{if \code{TRUE}, prints a memory warning if the 
+number of markers is greater than 2000. Mostly for internal use}
+
+\item{parallelization.type}{one of the supported cluster types. This should 
+be either PSOCK (default) or FORK.}
 }
 \value{
 An object of class \code{poly.est.two.pts.pairwise} which
@@ -70,17 +73,59 @@ between all pairwise markers given one or more linkage phase configurations.
 }
 \examples{
   \dontrun{
-    data(hexafake)
-    all.mrk<-make_seq_mappoly(hexafake, 'all')
-    red.mrk<-elim_redundant(all.mrk)
-    unique.mrks<-make_seq_mappoly(red.mrk)
-    counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
-    all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-                               count.cache = counts.web,
-                               n.clusters = 16, 
+  ## Tetraploid example: 
+  all.mrk <- make_seq_mappoly(tetra.solcap, 'all')
+  red.mrk <- elim_redundant(all.mrk)
+  unique.mrks <- make_seq_mappoly(red.mrk)
+  counts <- cache_counts_twopt(unique.mrks, cached = TRUE)
+  # will take ~ 13 min
+  all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
+                               count.cache = counts,
+                               n.clusters = 7, 
                                verbose=TRUE)
    all.pairs
    plot(all.pairs, 90, 91)
+   mat <- rf_list_to_matrix(all.pairs)
+   plot(mat)
+   
+   ## Hexaploid example
+   fl = "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr1.vcf.gz"
+   tempfl <- tempfile(pattern = 'chr1_', fileext = '.vcf.gz')
+   download.file(fl, destfile = tempfl)
+   dat.dose.vcf = read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2")
+   
+   ## Filtering dataset by marker
+   dat.filt.mrk <- filter_missing(input.data = dat.dose.vcf, 
+                                  type = "marker", 
+                                  filter.thres = 0.10, 
+                                  inter = FALSE)
+   ## Filtering dataset by individual
+   dat.filt.ind <- filter_missing(input.data = dat.filt.mrk, 
+                                  type = "individual", 
+                                  filter.thres = 0.10, 
+                                  inter = FALSE)
+  ## Segregation test
+  pval.bonf <- 0.05/dat.filt.ind$n.mrk
+  mrks.chi.filt <- filter_segregation(dat.filt.ind,
+                                      chisq.pval.thres =  pval.bonf, 
+                                      inter = FALSE)
+  seq.ch1<-make_seq_mappoly(mrks.chi.filt)
+  plot(seq.ch1)
+  counts <- cache_counts_twopt(seq.ch1, cached = TRUE)
+  ## will take ~  19 min / peak of memory usage ~ 10GB
+  all.pairs.1 <- est_pairwise_rf(input.seq = seq.ch1,
+                                 count.cache = counts,
+                                 n.clusters = 7, 
+                                 verbose=TRUE)
+  ## same thing, but it will take ~  21 min / peak of memory usage ~ 6GB
+  all.pairs.2 <- est_pairwise_rf(input.seq = seq.ch1,
+                                 count.cache = counts,
+                                 n.clusters = 7, 
+                                 n.batch = 10,
+                                 verbose=TRUE)   
+   plot(all.pairs, 90, 91)
+   mat <- rf_list_to_matrix(all.pairs.1)
+   plot(mat)
    }
    
 }
