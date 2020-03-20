@@ -50,10 +50,10 @@
 #'     all.mrk<-make_seq_mappoly(hexafake, 'all')
 #'     red.mrk<-elim_redundant(all.mrk)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
-#'     counts.web<-cache_counts_twopt(unique.mrks, get.from.web = TRUE)
+#'     counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
 #'     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
 #'                                count.cache = counts.web,
-#'                                n.clusters = 16,
+#'                                n.clusters = 16, 
 #'                                verbose=TRUE)
 #'    all.pairs
 #'    plot(all.pairs, 90, 91)
@@ -69,7 +69,7 @@
 #'     \url{https://doi.org/10.1534/g3.119.400378}
 #'
 #' @export est_pairwise_rf
-
+#' @importFrom parallel makeCluster clusterEvalQ stopCluster parLapply
 est_pairwise_rf <- function(input.seq, count.cache,
                             n.clusters = 1,
                             platform = 'windows',
@@ -94,7 +94,7 @@ est_pairwise_rf <- function(input.seq, count.cache,
     stop("There are duplicated markers in the sequence:\n Check markers: ", unique(input.seq$seq.num[dpl]), " at position(s) ", which(dpl))
   # Memory warning
   ANSWER = "flag"
-  if (length(input.seq$seq.num) > 2000 && interactive()){
+  if (length(input.seq$seq.num) > 2000 && interactive() && is.null(batch.size)){
     while (substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !=""){
       message("
   The sequence contains more than 2000 markers. 
@@ -104,12 +104,7 @@ est_pairwise_rf <- function(input.seq, count.cache,
       if (substr(ANSWER, 1, 1) == "n" || substr(ANSWER, 1, 1) == "no") 
         stop("  You decided to stop 'est_pairwise_rf'.")
     }
-  } else if (length(input.seq$seq.num) > 2000) 
-    warning("
-  The sequence contains more than 2000 markers. 
-  This requires high-performance computing resources. 
-  Please make sure you meet this requirement, 
-  or you may experience crashs.")
+  } 
   geno <- get(input.seq$data.name, pos=1)$geno.dose
   ## all possible pairs
   if (is.null(mrk.pairs)) {
@@ -128,19 +123,19 @@ est_pairwise_rf <- function(input.seq, count.cache,
       start <- proc.time()
       if (verbose)
         cat("INFO: Using ", n.clusters, " CPUs for calculation.\n")
-      if (platform == 'windows') {cl <- makeCluster(n.clusters)}
-      else {cl = makeCluster(n.clusters, type = 'FORK')}
-        clusterEvalQ(cl, require(mappoly))
-        on.exit(stopCluster(cl))
-        res <- parLapply(cl,
-                         input.list,
-                         paralell_pairwise,
-                         input.seq = input.seq,
-                         geno = geno,
-                         dP = get(input.seq$data.name)$dosage.p,
-                         dQ = get(input.seq$data.name)$dosage.q,
-                         count.cache = count.cache,
-                         tol = tol)
+      if (platform == 'windows') {cl <- parallel::makeCluster(n.clusters)}
+      else {cl = parallel::makeCluster(n.clusters, type = 'FORK')}
+      parallel::clusterEvalQ(cl, require(mappoly))
+      on.exit(parallel::stopCluster(cl))
+      res <- parallel::parLapply(cl,
+                                 input.list,
+                                 paralell_pairwise,
+                                 input.seq = input.seq,
+                                 geno = geno,
+                                 dP = get(input.seq$data.name)$dosage.p,
+                                 dQ = get(input.seq$data.name)$dosage.q,
+                                 count.cache = count.cache,
+                                 tol = tol)
         end <- proc.time()
       if (verbose) {
         cat("INFO: Done with",
@@ -275,6 +270,7 @@ paralell_pairwise <- function(mrk.pairs,
 #'
 #' @param void interfunction to be documented
 #' @keywords internal
+#' @export format_rf
 format_rf <- function(res) {
   x <- res
   if (length(x) != 4) {
