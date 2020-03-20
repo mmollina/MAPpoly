@@ -26,6 +26,8 @@
 #'
 #' @param verbose If \code{TRUE} (default), current progress is shown; if
 #'     \code{FALSE}, no output is produced
+#'     
+#' @param recursive for internal use only.
 #'
 #' @return An object of class \code{poly.est.two.pts.pairwise} which
 #'     is a list  containing the following components:
@@ -76,7 +78,8 @@ est_pairwise_rf <- function(input.seq, count.cache,
                             tol = .Machine$double.eps^0.25,
                             mrk.pairs = NULL,
                             batch.size = NULL,
-                            verbose = TRUE)
+                            verbose = TRUE,
+                            recursive = FALSE)
 {
     ## Getting and checking platform
     if (platform == 'auto'){
@@ -94,7 +97,7 @@ est_pairwise_rf <- function(input.seq, count.cache,
     stop("There are duplicated markers in the sequence:\n Check markers: ", unique(input.seq$seq.num[dpl]), " at position(s) ", which(dpl))
   # Memory warning
   ANSWER = "flag"
-  if (length(input.seq$seq.num) > 2000 && interactive() && is.null(batch.size)){
+  if (length(input.seq$seq.num) > 2000 && interactive() && is.null(batch.size) && !recursive){
     while (substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !=""){
       message("
   The sequence contains more than 2000 markers. 
@@ -202,9 +205,11 @@ est_pairwise_rf <- function(input.seq, count.cache,
                                             count.cache = count.cache,
                                             n.clusters = n.clusters,
                                             tol = tol,
+                                            platform = platform,
                                             mrk.pairs = mrk.pairs[,1:batch.size],
                                             batch.size = NULL,
-                                            verbose = FALSE)$pairwise)
+                                            verbose = FALSE,
+                                            recursive = TRUE)$pairwise)
     if (verbose) {
       cat("INFO:",
           batch.size,
@@ -229,7 +234,9 @@ est_pairwise_rf <- function(input.seq, count.cache,
                                tol = tol,
                                mrk.pairs = mrk.pairs[,id.batch[i]:(id.batch[i + 1] - 1)],
                                batch.size = NULL,
-                               verbose = FALSE)$pairwise)
+                               verbose = FALSE, 
+                               recursive = TRUE, 
+                               platform = platform)$pairwise)
     }
   }
   return(structure(list(data.name = input.seq$data.name,

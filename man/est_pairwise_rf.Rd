@@ -14,7 +14,8 @@ est_pairwise_rf(
   tol = .Machine$double.eps^0.25,
   mrk.pairs = NULL,
   batch.size = NULL,
-  verbose = TRUE
+  verbose = TRUE,
+  recursive = FALSE
 )
 
 \method{print}{poly.est.two.pts.pairwise}(x, ...)
@@ -45,6 +46,8 @@ If \code{NULL} (default), all pairs are analyized}
 
 \item{verbose}{If \code{TRUE} (default), current progress is shown; if
 \code{FALSE}, no output is produced}
+
+\item{recursive}{for internal use only.}
 }
 \value{
 An object of class \code{poly.est.two.pts.pairwise} which
