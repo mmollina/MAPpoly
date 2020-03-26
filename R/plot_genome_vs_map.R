@@ -19,8 +19,7 @@
 #'     models, _G3: Genes, Genomes, Genetics_. 
 #'     \url{https://doi.org/10.1534/g3.119.400378}
 #'
-#' @export plot_map_list
-#'
+#' @export plot_genome_vs_map
 plot_genome_vs_map<-function(map.list, config = "best"){
   if(class(map.list) == "mappoly.map")  
     map.list<-list(map.list)
