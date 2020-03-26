@@ -156,6 +156,19 @@ read_geno_csv <- function(file.in, ploidy, filter.non.conforming = TRUE, elim.re
     redun = elim_redundant(seqred, data = res)
     res$kept = redun$kept
     res$elim.correspondence = redun$elim.correspondence
+    mrks.rem = match(res$elim.correspondence$elim, res$mrk.names)
+    res$elim.correspondence$sequence = res$sequence[c(mrks.rem)]
+    res$elim.correspondence$sequence.pos = res$sequence.pos[c(mrks.rem)]
+    res$elim.correspondence$seq.ref = NA
+    res$elim.correspondence$seq.alt = NA
+    res$elim.correspondence$all.mrk.depth = NA
+    res$n.mrk = length(res$kept)
+    res$mrk.names = res$mrk.names[-c(mrks.rem)]
+    res$geno.dose = res$geno.dose[-c(mrks.rem),]
+    res$dosage.p = res$dosage.p[-c(mrks.rem)]
+    res$dosage.q = res$dosage.q[-c(mrks.rem)]
+    res$sequence = res$sequence[-c(mrks.rem)]
+    res$sequence.pos = res$sequence.pos[-c(mrks.rem)]
   }
   return(res)
 }

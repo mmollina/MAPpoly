@@ -105,11 +105,11 @@ make_seq_mappoly <- function(input.obj, arg = NULL, genomic.info = NULL, data.na
     stop("argument 'arg' expected.")
   }
   realkeep = FALSE
-  if ((!is.null(input.obj$kept))){
-    tokeep = input.obj$kept
-    realkeep = TRUE
-    seq.num = match(tokeep,input.obj$mrk.names)
-  }
+  # if ((!is.null(input.obj$kept))){
+  #   tokeep = input.obj$kept
+  #   realkeep = TRUE
+  #   seq.num = match(tokeep,input.obj$mrk.names)
+  # }
   if (class(input.obj) == "mappoly.data")
   {
     chisq.pval<-input.obj$chisq.pval
@@ -190,7 +190,7 @@ make_seq_mappoly <- function(input.obj, arg = NULL, genomic.info = NULL, data.na
     data.name <- input.obj$data.name
     input.obj <- get(data.name, pos = 1)
     if (!is.null(genomic.info)){
-      seq.num.seq = match(input.obj$mrk.names, input.obj$mrk.names[match(seqs, input.obj$sequence)])
+      seq.num.seq = match(input.obj$mrk.names[(input.obj$sequence %in% seqs)], input.obj$mrk.names)
       seq.num1 = intersect(seq.num.group, seq.num.seq)
       if(realkeep) seq.num = intersect(seq.num1, seq.num)
       else seq.num = seq.num1
