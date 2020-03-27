@@ -133,6 +133,7 @@ est_pairwise_rf <- function(input.seq, count.cache,
     stop("There are duplicated markers in the sequence:\n Check markers: ", unique(input.seq$seq.num[dpl]), " at position(s) ", which(dpl))
   # Memory warning
   ANSWER = "flag"
+
   if(input.seq$m < 6){
     if (length(input.seq$seq.num) > 10000 && interactive() && n.batches == 1 && !memory.warning){
       while (substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !=""){
