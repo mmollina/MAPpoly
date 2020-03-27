@@ -11,8 +11,6 @@
 #'
 #' @param n.clusters Number of parallel processes (cores) to spawn (default = 1)
 #'
-#' @param tol the desired accuracy. See \code{optimize()} for details
-#'
 #' @param mrk.pairs a matrix of dimensions 2*N, containing N
 #'    pairs of markers to be analyzed. If \code{NULL} (default), all pairs are
 #'    considered
@@ -28,6 +26,8 @@
 #' 
 #' @param parallelization.type one of the supported cluster types. This should 
 #' be either PSOCK (default) or FORK.
+#'
+#' @param tol the desired accuracy. See \code{optimize()} for details
 #' 
 #' @return An object of class \code{poly.est.two.pts.pairwise} which
 #'     is a list  containing the following components:
@@ -114,14 +114,11 @@
 #'
 #' @export est_pairwise_rf
 #' @importFrom parallel makeCluster clusterEvalQ stopCluster parLapply
-est_pairwise_rf <- function(input.seq, count.cache,
-                            n.clusters = 1,
-                            tol = .Machine$double.eps^0.25,
-                            mrk.pairs = NULL,
-                            n.batches = 1,
-                            verbose = TRUE,
-                            memory.warning = FALSE, 
-                            parallelization.type = c("PSOCK", "FORK"))
+est_pairwise_rf <- function(input.seq, count.cache, n.clusters = 1,
+                            mrk.pairs = NULL, n.batches = 1,
+                            verbose = TRUE, memory.warning = FALSE, 
+                            parallelization.type = c("PSOCK", "FORK"), 
+                            tol = .Machine$double.eps^0.25)
 {
   ## checking for correct object
   if (!class(input.seq) == "mappoly.sequence")
