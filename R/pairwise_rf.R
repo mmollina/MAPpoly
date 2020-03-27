@@ -11,22 +11,24 @@
 #'
 #' @param n.clusters Number of parallel processes (cores) to spawn (default = 1)
 #'
-#' @param platform if \code{'windows'} (default), function uses PSOCK as a basis
-#' for parallel computing. if \code{'unix'}, function uses FORK as a basis for
-#' parallel computing. If \code{'auto'}, function automatically detects your operating system
-#'
-#' @param tol the desired accuracy. See \code{optimize()} for details
-#'
 #' @param mrk.pairs a matrix of dimensions 2*N, containing N
 #'    pairs of markers to be analyzed. If \code{NULL} (default), all pairs are
 #'    considered
 #'
-#' @param batch.size The number of pairs that shold be analyzed in parallel.
-#'    If \code{NULL} (default), all pairs are analyized
+#' @param n.batches The number of batches of marker pairs that should be analyzed 
+#'    in parallel.
 #'
 #' @param verbose If \code{TRUE} (default), current progress is shown; if
 #'     \code{FALSE}, no output is produced
+#'     
+#' @param memory.warning if \code{TRUE}, prints a memory warning if the 
+#' number of markers is greater than 2000. Mostly for internal use 
+#' 
+#' @param parallelization.type one of the supported cluster types. This should 
+#' be either PSOCK (default) or FORK.
 #'
+#' @param tol the desired accuracy. See \code{optimize()} for details
+#' 
 #' @return An object of class \code{poly.est.two.pts.pairwise} which
 #'     is a list  containing the following components:
 #'     \item{data.name}{name of the object of class
@@ -46,17 +48,59 @@
 #'
 #' @examples
 #'   \dontrun{
-#'     data(hexafake)
-#'     all.mrk<-make_seq_mappoly(hexafake, 'all')
-#'     red.mrk<-elim_redundant(all.mrk)
-#'     unique.mrks<-make_seq_mappoly(red.mrk)
-#'     counts.web<-cache_counts_twopt(unique.mrks, get.from.web = TRUE)
-#'     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-#'                                count.cache = counts.web,
-#'                                n.clusters = 16,
+#'   ## Tetraploid example: 
+#'   all.mrk <- make_seq_mappoly(tetra.solcap, 'all')
+#'   red.mrk <- elim_redundant(all.mrk)
+#'   unique.mrks <- make_seq_mappoly(red.mrk)
+#'   counts <- cache_counts_twopt(unique.mrks, cached = TRUE)
+#'   # will take ~ 13 min
+#'   all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
+#'                                count.cache = counts,
+#'                                n.clusters = 7, 
 #'                                verbose=TRUE)
 #'    all.pairs
 #'    plot(all.pairs, 90, 91)
+#'    mat <- rf_list_to_matrix(all.pairs)
+#'    plot(mat)
+#'    
+#'    ## Hexaploid example
+#'    fl = "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr1.vcf.gz"
+#'    tempfl <- tempfile(pattern = 'chr1_', fileext = '.vcf.gz')
+#'    download.file(fl, destfile = tempfl)
+#'    dat.dose.vcf = read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2")
+#'    
+#'    ## Filtering dataset by marker
+#'    dat.filt.mrk <- filter_missing(input.data = dat.dose.vcf, 
+#'                                   type = "marker", 
+#'                                   filter.thres = 0.10, 
+#'                                   inter = FALSE)
+#'    ## Filtering dataset by individual
+#'    dat.filt.ind <- filter_missing(input.data = dat.filt.mrk, 
+#'                                   type = "individual", 
+#'                                   filter.thres = 0.10, 
+#'                                   inter = FALSE)
+#'   ## Segregation test
+#'   pval.bonf <- 0.05/dat.filt.ind$n.mrk
+#'   mrks.chi.filt <- filter_segregation(dat.filt.ind,
+#'                                       chisq.pval.thres =  pval.bonf, 
+#'                                       inter = FALSE)
+#'   seq.ch1<-make_seq_mappoly(mrks.chi.filt)
+#'   plot(seq.ch1)
+#'   counts <- cache_counts_twopt(seq.ch1, cached = TRUE)
+#'   ## will take ~  19 min / peak of memory usage ~ 10GB
+#'   all.pairs.1 <- est_pairwise_rf(input.seq = seq.ch1,
+#'                                  count.cache = counts,
+#'                                  n.clusters = 7, 
+#'                                  verbose=TRUE)
+#'   ## same thing, but it will take ~  21 min / peak of memory usage ~ 6GB
+#'   all.pairs.2 <- est_pairwise_rf(input.seq = seq.ch1,
+#'                                  count.cache = counts,
+#'                                  n.clusters = 7, 
+#'                                  n.batch = 10,
+#'                                  verbose=TRUE)   
+#'    plot(all.pairs, 90, 91)
+#'    mat <- rf_list_to_matrix(all.pairs.1)
+#'    plot(mat)
 #'    }
 #'    
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -69,53 +113,59 @@
 #'     \url{https://doi.org/10.1534/g3.119.400378}
 #'
 #' @export est_pairwise_rf
-
-est_pairwise_rf <- function(input.seq, count.cache,
-                            n.clusters = 1,
-                            platform = 'windows',
-                            tol = .Machine$double.eps^0.25,
-                            mrk.pairs = NULL,
-                            batch.size = NULL,
-                            verbose = TRUE)
+#' @importFrom parallel makeCluster clusterEvalQ stopCluster parLapply
+est_pairwise_rf <- function(input.seq, count.cache, n.clusters = 1,
+                            mrk.pairs = NULL, n.batches = 1,
+                            verbose = TRUE, memory.warning = FALSE, 
+                            parallelization.type = c("PSOCK", "FORK"), 
+                            tol = .Machine$double.eps^0.25)
 {
-    ## Getting and checking platform
-    if (platform == 'auto'){
-        platform = .Platform$OS.type
-    }
-    if (!any(platform %in% c('unix','windows'))){
-        stop("This function is not supported in your platform. Current supported platforms are Unix and Windows.")
-    }
   ## checking for correct object
   if (!class(input.seq) == "mappoly.sequence")
     stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
+  parallelization.type <- match.arg(parallelization.type)
   dpl <- duplicated(input.seq$seq.num)
   ## checking for duplicated markers
   if (any(dpl))
     stop("There are duplicated markers in the sequence:\n Check markers: ", unique(input.seq$seq.num[dpl]), " at position(s) ", which(dpl))
   # Memory warning
   ANSWER = "flag"
-  if (length(input.seq$seq.num) > 2000 && interactive()){
-    while (substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !=""){
-      message("
-  The sequence contains more than 2000 markers. 
+
+  if(input.seq$m < 6){
+    if (length(input.seq$seq.num) > 10000 && interactive() && n.batches == 1 && !memory.warning){
+      while (substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !=""){
+        cat("  Ploidy level:", input.seq$m, "\n~~~~~~~~~~\n")
+        message("
+  The sequence contains more than 10000 markers. 
   This requires high-performance computing resources.
   Do you want to proceed? (Y/n): ")
-      ANSWER <- readline("")
-      if (substr(ANSWER, 1, 1) == "n" || substr(ANSWER, 1, 1) == "no") 
-        stop("  You decided to stop 'est_pairwise_rf'.")
-    }
-  } else if (length(input.seq$seq.num) > 2000) 
-    warning("
-  The sequence contains more than 2000 markers. 
-  This requires high-performance computing resources. 
-  Please make sure you meet this requirement, 
-  or you may experience crashs.")
+        ANSWER <- readline("")
+        if (substr(ANSWER, 1, 1) == "n" || substr(ANSWER, 1, 1) == "no") 
+          stop("  You decided to stop 'est_pairwise_rf'.")
+      }
+    } 
+  } else {
+    if (length(input.seq$seq.num) > 3000 && interactive() && n.batches == 1 && !memory.warning){
+      while (substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !=""){
+        cat("  Ploidy level:", input.seq$m, "\n~~~~~~~~~~\n")
+        message("
+  The sequence contains more than 3000 markers. 
+  This requires high-performance computing resources.
+  Do you want to proceed? (Y/n): ")
+        ANSWER <- readline("")
+        if (substr(ANSWER, 1, 1) == "n" || substr(ANSWER, 1, 1) == "no") 
+          stop("  You decided to stop 'est_pairwise_rf'.")
+      }
+    } 
+  }
   geno <- get(input.seq$data.name, pos=1)$geno.dose
   ## all possible pairs
   if (is.null(mrk.pairs)) {
     mrk.pairs <- combn(sort(input.seq$seq.num), 2) - 1
-    # mrk.pairs<-mrk.pairs[,order(mrk.pairs[1,],mrk.pairs[2,])]
   }
+  batch.size <- NULL
+  if(n.batches > 1)
+    batch.size <- ceiling(ncol(mrk.pairs)/n.batches)
   if (is.null(batch.size)) {
     ## splitting pairs in chunks
     if (length(input.seq$seq.num) < 10)
@@ -128,20 +178,19 @@ est_pairwise_rf <- function(input.seq, count.cache,
       start <- proc.time()
       if (verbose)
         cat("INFO: Using ", n.clusters, " CPUs for calculation.\n")
-      if (platform == 'windows') {cl <- makeCluster(n.clusters)}
-      else {cl = makeCluster(n.clusters, type = 'FORK')}
-        clusterEvalQ(cl, require(mappoly))
-        on.exit(stopCluster(cl))
-        res <- parLapply(cl,
-                         input.list,
-                         paralell_pairwise,
-                         input.seq = input.seq,
-                         geno = geno,
-                         dP = get(input.seq$data.name)$dosage.p,
-                         dQ = get(input.seq$data.name)$dosage.q,
-                         count.cache = count.cache,
-                         tol = tol)
-        end <- proc.time()
+      cl = parallel::makeCluster(n.clusters, type = parallelization.type)
+      parallel::clusterEvalQ(cl, require(mappoly))
+      on.exit(parallel::stopCluster(cl))
+      res <- parallel::parLapply(cl,
+                                 input.list,
+                                 paralell_pairwise,
+                                 input.seq = input.seq,
+                                 geno = geno,
+                                 dP = get(input.seq$data.name)$dosage.p,
+                                 dQ = get(input.seq$data.name)$dosage.q,
+                                 count.cache = count.cache,
+                                 tol = tol)
+      end <- proc.time()
       if (verbose) {
         cat("INFO: Done with",
             ncol(mrk.pairs),
@@ -177,19 +226,9 @@ est_pairwise_rf <- function(input.seq, count.cache,
                           seq.num = input.seq$seq.num,
                           pairwise = res,
                           chisq.pval.thres = input.seq$chisq.pval.thres,
-                          chisq.pval = input.seq$chisq.pval),
+                          chisq.pval = input.seq$chisq.pval,
+                          nas  = sapply(res, function(x) any(is.na(x)))),
                      class = "poly.est.two.pts.pairwise"))
-  } else if (ncol(mrk.pairs) < batch.size) {
-    if (verbose)
-      cat("INFO: batch size is greater than the numberof marker pairs.\n")
-    if (verbose)
-      cat("      running function in one batch.\n")
-    return(est_pairwise_rf(input.seq = input.seq,
-                           count.cache = count.cache,
-                           n.clusters = n.clusters,
-                           tol = tol,
-                           batch.size = NULL,
-                           verbose = verbose))
   } else {
     if (verbose)
       cat("INFO: There are ",
@@ -198,18 +237,23 @@ est_pairwise_rf <- function(input.seq, count.cache,
     id.batch <- c(seq(batch.size + 1,
                       ncol(mrk.pairs),
                       batch.size),
-                  ncol(mrk.pairs) + 1)
+                  + 1)
+    
+    id.batch <- unique(c(seq(batch.size, ncol(mrk.pairs), batch.size), ncol(mrk.pairs)))
+    id.batch <- cbind(c(1, 1+id.batch[1:(length(id.batch)-1)]), id.batch)
+    res <- vector("list", ncol(mrk.pairs))
     if (verbose)
       cat("INFO: Estimating the first batch of ",
           batch.size,
           " recombination fractions.\n")
-    z <- system.time(res <- est_pairwise_rf(input.seq = input.seq,
-                                            count.cache = count.cache,
-                                            n.clusters = n.clusters,
-                                            tol = tol,
-                                            mrk.pairs = mrk.pairs[,1:batch.size],
-                                            batch.size = NULL,
-                                            verbose = FALSE)$pairwise)
+    z <- system.time(res[id.batch[1,1]:id.batch[1,2]] <- est_pairwise_rf(input.seq = input.seq,
+                                                                         count.cache = count.cache,
+                                                                         n.clusters = n.clusters,
+                                                                         tol = tol,
+                                                                         parallelization.type = parallelization.type,
+                                                                         mrk.pairs = mrk.pairs[,id.batch[1,1]:id.batch[1,2]],
+                                                                         verbose = FALSE,
+                                                                         memory.warning = TRUE)$pairwise)
     if (verbose) {
       cat("INFO:",
           batch.size,
@@ -218,23 +262,23 @@ est_pairwise_rf <- function(input.seq, count.cache,
     }
     if (verbose) {
       cat("INFO: Estimated time to complete the job (",
-          length(id.batch) - 1,
+          nrow(id.batch),
           " batches):",
-          round(z[3] * (length(id.batch) - 1)/60,
+          round(z[3] * (nrow(id.batch) - 1)/60,
                 digits = 3),
           " minutes.\n")
     }
-    for (i in 1:(length(id.batch) - 1)) {
+    for (i in 2:nrow(id.batch)) {
       if (verbose)
-        cat("batch ", i, " of ", length(id.batch) - 1, "\n")
-      res <- c(res,
-               est_pairwise_rf(input.seq = input.seq,
-                               count.cache = count.cache,
-                               n.clusters = n.clusters,
-                               tol = tol,
-                               mrk.pairs = mrk.pairs[,id.batch[i]:(id.batch[i + 1] - 1)],
-                               batch.size = NULL,
-                               verbose = FALSE)$pairwise)
+        cat("batch ", i, " of ", nrow(id.batch), "\n")
+      res[id.batch[i,1]:id.batch[i,2]] <- est_pairwise_rf(input.seq = input.seq,
+                                                          count.cache = count.cache,
+                                                          n.clusters = n.clusters,
+                                                          tol = tol,
+                                                          mrk.pairs = mrk.pairs[,id.batch[i,1]:id.batch[i,2]],
+                                                          verbose = FALSE, 
+                                                          memory.warning = TRUE, 
+                                                          parallelization.type = parallelization.type)$pairwise
     }
   }
   return(structure(list(data.name = input.seq$data.name,
@@ -242,7 +286,8 @@ est_pairwise_rf <- function(input.seq, count.cache,
                         seq.num = input.seq$seq.num,
                         pairwise = res,
                         chisq.pval.thres = input.seq$chisq.pval.thres,
-                        chisq.pval = input.seq$chisq.pval),
+                        chisq.pval = input.seq$chisq.pval,
+                        nas  = sapply(res, function(x) any(is.na(x)))),
                    class = "poly.est.two.pts.pairwise"))
 }
 
@@ -275,6 +320,7 @@ paralell_pairwise <- function(mrk.pairs,
 #'
 #' @param void interfunction to be documented
 #' @keywords internal
+#' @export format_rf
 format_rf <- function(res) {
   x <- res
   if (length(x) != 4) {
@@ -299,10 +345,9 @@ print.poly.est.two.pts.pairwise <- function(x, ...) {
   cat("  This is an object of class 'poly.est.two.pts.pairwise'")
   cat("\n  -----------------------------------------------------")
   ## printing summary
-  nas <- sum(sapply(x$pairwise, function(x) any(is.na(x))))
   cat("\n  No. markers:                            ", x$n.mrk, "\n")
-  cat("  No. estimated recombination fractions:  ", choose(x$n.mrk, 2) - nas)
-  cat(" (", round(100 - 100 * nas/choose(x$n.mrk, 2), 1), "%)\n", sep = "")
+  cat("  No. estimated recombination fractions:  ", choose(x$n.mrk, 2) - sum(x$nas))
+  cat(" (", round(100 - 100 * sum(x$nas)/length(x$nas), 1), "%)\n", sep = "")
   cat("  -----------------------------------------------------\n")
 }
 
@@ -332,6 +377,6 @@ plot.poly.est.two.pts.pairwise <- function(x, first.mrk, second.mrk, ...) {
     ggplot2::scale_y_continuous(name="LOD") +
     ggplot2::scale_fill_manual(values=c("#E69F00", "#56B4E9"),
                                name="",
-                               breaks=c("ph_LOD", "rf_LOD"),
-                               labels=c("phase LOD", "rf LOD"))
+                               breaks=c("LOD_ph", "LOD_rf"),
+                               labels=c("LOD_phase", "LOD_rf"))
 }
