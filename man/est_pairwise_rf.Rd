@@ -10,12 +10,12 @@ est_pairwise_rf(
   input.seq,
   count.cache,
   n.clusters = 1,
-  tol = .Machine$double.eps^0.25,
   mrk.pairs = NULL,
   n.batches = 1,
   verbose = TRUE,
   memory.warning = FALSE,
-  parallelization.type = c("PSOCK", "FORK")
+  parallelization.type = c("PSOCK", "FORK"),
+  tol = .Machine$double.eps^0.25
 )
 
 \method{print}{poly.est.two.pts.pairwise}(x, ...)
@@ -30,8 +30,6 @@ pre-computed genotype frequencies, obtained with
 \code{\link[mappoly]{cache_counts_twopt}}}
 
 \item{n.clusters}{Number of parallel processes (cores) to spawn (default = 1)}
-
-\item{tol}{the desired accuracy. See \code{optimize()} for details}
 
 \item{mrk.pairs}{a matrix of dimensions 2*N, containing N
 pairs of markers to be analyzed. If \code{NULL} (default), all pairs are
@@ -48,6 +46,8 @@ number of markers is greater than 2000. Mostly for internal use}
 
 \item{parallelization.type}{one of the supported cluster types. This should 
 be either PSOCK (default) or FORK.}
+
+\item{tol}{the desired accuracy. See \code{optimize()} for details}
 }
 \value{
 An object of class \code{poly.est.two.pts.pairwise} which
