@@ -16,7 +16,8 @@
 #'    considered
 #'
 #' @param n.batches The number of batches of marker pairs that should be analyzed 
-#'    in parallel.
+#'    in parallel. Using \code{n.batches > 1}, will usually result in more processing 
+#'    time. However, it will require less memory. See examples.
 #'
 #' @param verbose If \code{TRUE} (default), current progress is shown; if
 #'     \code{FALSE}, no output is produced
