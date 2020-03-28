@@ -1,24 +1,29 @@
 #' Data Input VCF
 #'
-#' Reads an external VCF file. This function accepts version 4.0 and higher, and creates an object of class \code{mappoly.data}
+#' Reads an external VCF file. This function accepts version 4.0 and higher, 
+#' and creates an object of class \code{mappoly.data}
 #' 
-#' This function can handle .vcf files of version 4.0 and higher. The ploidy can be automatically detected, but it is highly
-#' recommended that you inform it to check for mismatches. All individual and marker names will be kept as they are in the .vcf file.
+#' This function can handle .vcf files of version 4.0 and higher. The ploidy 
+#' can be automatically detected, but it is highly recommended that you 
+#' inform it to check for mismatches. All individual and marker names 
+#' will be kept as they are in the .vcf file.
 #'
-#' @param file.in a character string with the name of (or full path to) the input file which contains the data (VCF format)
-#'
-#' @param ploidy the species ploidy (optional, it will be automatically detected)
-#'
-#' @param filter.non.conforming if \code{TRUE} (default) exclude samples with non 
-#'     expected genotypes under random chromosome pairing and no double reduction 
-#'     
-#' @param thresh.line threshold used for p-values on segregation test (default = 0.05)
+#' @param file.in a character string with the name of (or full path to) the 
+#'   input file which contains the data (VCF format)
 #' 
 #' @param parent.1 a character string containing the name of parent 1
 #' 
 #' @param parent.2 a character string containing the name of parent 2
 #'
-#' @param min.gt.depth minimum genotype depth to keep information. If the genotype depth is below \code{min.gt.depth},
+#' @param ploidy the species ploidy (optional, it will be automatically detected)
+#' 
+#' @param filter.non.conforming if \code{TRUE} (default) exclude samples with non 
+#'     expected genotypes under random chromosome pairing and no double reduction 
+#'     
+#' @param thresh.line threshold used for p-values on segregation test (default = 0.05)     
+#' 
+#' @param min.gt.depth minimum genotype depth to keep information. 
+#'  If the genotype depth is below \code{min.gt.depth},
 #'  it will be replaced with NA (default = 0)
 #'
 #' @param min.av.depth minimum average depth to keep markers (default = 0)
@@ -66,7 +71,7 @@
 #' dat.dose.vcf = read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2")
 #' plot(dat.dose.vcf)
 #' 
-#' ## Loading the full sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
+#' ## Loading full sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
 #' ## Needs ~ 3GB
 #' dat <- NULL
 #' for(i in 1:15){
@@ -118,10 +123,10 @@
 #'
 #' @export read_vcf
 #' 
-read_vcf = function(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
-                     ploidy = NA, thresh.line = 0.05, min.gt.depth = 0, min.av.depth = 0,
-                     max.missing = 1, elim.redundant = TRUE) {
-    
+read_vcf = function(file.in, parent.1, parent.2, ploidy = NA, 
+                    filter.non.conforming = TRUE, thresh.line = 0.05, 
+                    min.gt.depth = 0, min.av.depth = 0, max.missing = 1, 
+                    elim.redundant = TRUE) {
   # Checking even ploidy
   if(!is.na(ploidy) && (ploidy %% 2) != 0){
     stop("MAPpoly only supports even ploidy levels. Please check the 'ploidy' parameter and try again.")
