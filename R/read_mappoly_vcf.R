@@ -1,24 +1,29 @@
 #' Data Input VCF
 #'
-#' Reads an external VCF file. This function accepts version 4.0 and higher, and creates an object of class \code{mappoly.data}
+#' Reads an external VCF file. This function accepts version 4.0 and higher, 
+#' and creates an object of class \code{mappoly.data}
 #' 
-#' This function can handle .vcf files of version 4.0 and higher. The ploidy can be automatically detected, but it is highly
-#' recommended that you inform it to check for mismatches. All individual and marker names will be kept as they are in the .vcf file.
+#' This function can handle .vcf files of version 4.0 and higher. The ploidy 
+#' can be automatically detected, but it is highly recommended that you 
+#' inform it to check for mismatches. All individual and marker names 
+#' will be kept as they are in the .vcf file.
 #'
-#' @param file.in a character string with the name of (or full path to) the input file which contains the data (VCF format)
-#'
-#' @param ploidy the species ploidy (optional, it will be automatically detected)
-#'
-#' @param filter.non.conforming if \code{TRUE} (default) exclude samples with non 
-#'     expected genotypes under random chromosome pairing and no double reduction 
-#'     
-#' @param thresh.line threshold used for p-values on segregation test (default = 0.05)
+#' @param file.in a character string with the name of (or full path to) the 
+#'   input file which contains the data (VCF format)
 #' 
 #' @param parent.1 a character string containing the name of parent 1
 #' 
 #' @param parent.2 a character string containing the name of parent 2
 #'
-#' @param min.gt.depth minimum genotype depth to keep information. If the genotype depth is below \code{min.gt.depth},
+#' @param ploidy the species ploidy (optional, it will be automatically detected)
+#' 
+#' @param filter.non.conforming if \code{TRUE} (default) exclude samples with non 
+#'     expected genotypes under random chromosome pairing and no double reduction 
+#'     
+#' @param thresh.line threshold used for p-values on segregation test (default = 0.05)     
+#' 
+#' @param min.gt.depth minimum genotype depth to keep information. 
+#'  If the genotype depth is below \code{min.gt.depth},
 #'  it will be replaced with NA (default = 0)
 #'
 #' @param min.av.depth minimum average depth to keep markers (default = 0)
@@ -65,10 +70,51 @@
 #' download.file(fl, destfile = tempfl)
 #' dat.dose.vcf = read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2")
 #' plot(dat.dose.vcf)
+#' 
+#' ## Loading full sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
+#' ## Needs ~ 3GB
+#' dat <- NULL
+#' for(i in 1:15){
+#'   cat("Loading chromosome", i, "...\n")
+#'   invisible(capture.output(y <- {
+#'     tempfl <- tempfile(pattern = paste0("ch", i), fileext = ".vcf.gz")
+#'     address <- paste0("https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr", i, ".vcf.gz")
+#'     download.file(url = address, destfile = tempfl)
+#'     dattemp <- read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2", ploidy = 6)
+#'     dat <- merge_datasets(dat, dattemp)
+#'   }))
+#'   cat("\n")
+#' }
+#' ## Filtering dataset by marker
+#' dat <- filter_missing(input.data = dat, type = "marker", 
+#'                       filter.thres = 0.05, inter = TRUE)
+#' 
+#' ## Filtering dataset by individual
+#' dat <- filter_missing(input.data = dat, type = "individual", 
+#'                       filter.thres = 0.05, inter = TRUE)
+#' print(dat, detailed = TRUE)
+#' 
+#' ## Segregation test
+#' pval.bonf <- 0.05/dat$n.mrk
+#' mrks.chi.filt <- filter_segregation(dat, 
+#'                                     chisq.pval.thres =  pval.bonf, 
+#'                                     inter = TRUE)
+#' seq.init<-make_seq_mappoly(mrks.chi.filt)
+#' length(seq.init$seq.mrk.names)
+#' plot(seq.init)
+#' print(seq.init, detailed = TRUE)
 #'}
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'
 #' @references
+#' 
+#'     Mollinari M., Olukolu B. A.,  Pereira G. da S., 
+#'     Khan A., Gemenet D., Yench G. C., Zeng Z-B. (2020), 
+#'     Unraveling the Hexaploid Sweetpotato Inheritance 
+#'     Using Ultra-Dense Multilocus Mapping, 
+#'     _G3: Genes, Genomes, Genetics_. 
+#'     \url{https://doi.org/10.1534/g3.119.400620} 
+#'     
 #'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
@@ -77,10 +123,10 @@
 #'
 #' @export read_vcf
 #' 
-read_vcf = function(file.in, filter.non.conforming = TRUE, parent.1, parent.2,
-                     ploidy = NA, thresh.line = 0.05, min.gt.depth = 0, min.av.depth = 0,
-                     max.missing = 1, elim.redundant = TRUE) {
-    
+read_vcf = function(file.in, parent.1, parent.2, ploidy = NA, 
+                    filter.non.conforming = TRUE, thresh.line = 0.05, 
+                    min.gt.depth = 0, min.av.depth = 0, max.missing = 1, 
+                    elim.redundant = TRUE) {
   # Checking even ploidy
   if(!is.na(ploidy) && (ploidy %% 2) != 0){
     stop("MAPpoly only supports even ploidy levels. Please check the 'ploidy' parameter and try again.")
