@@ -39,9 +39,12 @@
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
-#'     Mollinari, M. et al. (2019) Unraveling the hexaploid 
-#'     sweetpotato inheritance using ultra-dense multilocus mapping, 
-#'     _G3: Genes, Genomes, Genetics_. \url{http://dx.doi.org/10.1534/g3.119.400620}
+#'     Mollinari M., Olukolu B. A.,  Pereira G. da S., 
+#'     Khan A., Gemenet D., Yench G. C., Zeng Z-B. (2020), 
+#'     Unraveling the Hexaploid Sweetpotato Inheritance 
+#'     Using Ultra-Dense Multilocus Mapping, 
+#'     _G3: Genes, Genomes, Genetics_. 
+#'     \url{https://doi.org/10.1534/g3.119.400620} 
 #'     
 #' @export
 #' @importFrom ggplot2 ggplot geom_hline theme geom_smooth ggtitle facet_grid theme_minimal ylab xlab aes vars scale_color_manual
