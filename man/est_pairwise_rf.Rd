@@ -13,7 +13,7 @@ est_pairwise_rf(
   mrk.pairs = NULL,
   n.batches = 1,
   verbose = TRUE,
-  memory.warning = FALSE,
+  memory.warning = TRUE,
   parallelization.type = c("PSOCK", "FORK"),
   tol = .Machine$double.eps^0.25
 )
@@ -43,7 +43,8 @@ time. However, it will require less memory. See examples.}
 \code{FALSE}, no output is produced}
 
 \item{memory.warning}{if \code{TRUE}, prints a memory warning if the 
-number of markers is greater than 2000. Mostly for internal use}
+number of markers is greater than 10000 for ploidy levels up to 4, and 
+3000 for ploidy levels > 4.}
 
 \item{parallelization.type}{one of the supported cluster types. This should 
 be either PSOCK (default) or FORK.}
