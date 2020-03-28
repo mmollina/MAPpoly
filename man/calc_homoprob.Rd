@@ -63,9 +63,12 @@ population given a map with the final genotype probabilities.
 
 }
 \references{
-Mollinari, M. et al. (2019) Unraveling the hexaploid 
-    sweetpotato inheritance using ultra-dense multilocus mapping. 
-    _G3: Genes, Genomes, Genetics_. \url{http://dx.doi.org/10.1534/g3.119.400620}
+Mollinari M., Olukolu B. A.,  Pereira G. da S., 
+    Khan A., Gemenet D., Yench G. C., Zeng Z-B. (2020), 
+    Unraveling the Hexaploid Sweetpotato Inheritance 
+    Using Ultra-Dense Multilocus Mapping, 
+    _G3: Genes, Genomes, Genetics_. 
+    \url{https://doi.org/10.1534/g3.119.400620}
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}
