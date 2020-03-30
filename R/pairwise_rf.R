@@ -181,7 +181,8 @@ est_pairwise_rf <- function(input.seq, count.cache, n.clusters = 1,
       if (verbose)
         cat("INFO: Using ", n.clusters, " CPUs for calculation.\n")
       cl = parallel::makeCluster(n.clusters, type = parallelization.type)
-      parallel::clusterEvalQ(cl, require(mappoly))
+      #parallel::clusterEvalQ(cl, require(mappoly))
+      parallel::clusterExport(cl, "paralell_pairwise")
       on.exit(parallel::stopCluster(cl))
       res <- parallel::parLapply(cl,
                                  input.list,
@@ -281,6 +282,7 @@ est_pairwise_rf <- function(input.seq, count.cache, n.clusters = 1,
                                                           verbose = FALSE, 
                                                           memory.warning = TRUE, 
                                                           parallelization.type = parallelization.type)$pairwise
+      gc(reset = TRUE)
     }
   }
   return(structure(list(data.name = input.seq$data.name,
