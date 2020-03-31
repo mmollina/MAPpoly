@@ -181,7 +181,8 @@ est_pairwise_rf <- function(input.seq, count.cache, n.clusters = 1,
       if (verbose)
         cat("INFO: Using ", n.clusters, " CPUs for calculation.\n")
       cl = parallel::makeCluster(n.clusters, type = parallelization.type)
-      parallel::clusterEvalQ(cl, require(mappoly))
+      #parallel::clusterEvalQ(cl, require(mappoly))
+      parallel::clusterExport(cl, "paralell_pairwise")
       on.exit(parallel::stopCluster(cl))
       res <- parallel::parLapply(cl,
                                  input.list,
@@ -223,13 +224,14 @@ est_pairwise_rf <- function(input.seq, count.cache, n.clusters = 1,
                         2,
                         paste,
                         collapse = "-")
+    nas <- sapply(res, function(x) any(is.na(x)))
     return(structure(list(data.name = input.seq$data.name,
                           n.mrk = length(input.seq$seq.num),
                           seq.num = input.seq$seq.num,
                           pairwise = res,
                           chisq.pval.thres = input.seq$chisq.pval.thres,
                           chisq.pval = input.seq$chisq.pval,
-                          nas  = sapply(res, function(x) any(is.na(x)))),
+                          nas  = nas),
                      class = "poly.est.two.pts.pairwise"))
   } else {
     if (verbose)
@@ -281,15 +283,17 @@ est_pairwise_rf <- function(input.seq, count.cache, n.clusters = 1,
                                                           verbose = FALSE, 
                                                           memory.warning = TRUE, 
                                                           parallelization.type = parallelization.type)$pairwise
+      gc(reset = TRUE)
     }
   }
+  nas <- sapply(res, function(x) any(is.na(x)))
   return(structure(list(data.name = input.seq$data.name,
                         n.mrk = length(input.seq$seq.num),
                         seq.num = input.seq$seq.num,
                         pairwise = res,
                         chisq.pval.thres = input.seq$chisq.pval.thres,
                         chisq.pval = input.seq$chisq.pval,
-                        nas  = sapply(res, function(x) any(is.na(x)))),
+                        nas  = nas),
                    class = "poly.est.two.pts.pairwise"))
 }
 
