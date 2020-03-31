@@ -244,6 +244,19 @@ read_geno <- function(file.in, filter.non.conforming = TRUE, elim.redundant = TR
     redun = elim_redundant(seqred, data = res)
     res$kept = redun$kept
     res$elim.correspondence = redun$elim.correspondence
+    mrks.rem = match(res$elim.correspondence$elim, res$mrk.names)
+    res$elim.correspondence$sequence = res$sequence[c(mrks.rem)]
+    res$elim.correspondence$sequence.pos = res$sequence.pos[c(mrks.rem)]
+    res$elim.correspondence$seq.ref = NA
+    res$elim.correspondence$seq.alt = NA
+    res$elim.correspondence$all.mrk.depth = NA
+    res$n.mrk = length(res$kept)
+    res$mrk.names = res$mrk.names[-c(mrks.rem)]
+    res$geno.dose = res$geno.dose[-c(mrks.rem),]
+    res$dosage.p = res$dosage.p[-c(mrks.rem)]
+    res$dosage.q = res$dosage.q[-c(mrks.rem)]
+    res$sequence = res$sequence[-c(mrks.rem)]
+    res$sequence.pos = res$sequence.pos[-c(mrks.rem)]
   }
   return(res)
 }
@@ -257,8 +270,8 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
   cat("    No. individuals:                        ", x$n.ind, "\n")
   cat("    No. markers:                            ", x$n.mrk, "\n")
   miss<-round(100*sum(x$geno.dose==x$m+1)/length(as.matrix(x$geno.dose)),2)
-  if(!is.null(x$unique.seq)){
-    redundant = round(100*((x$n.mrk - length(x$kept))/x$n.mrk),2)
+  if(!is.null(x$kept)){
+    redundant = round(100*(nrow(x$elim.correspondence)/(length(x$kept)+nrow(x$elim.correspondence))),2)
   }
   ##if no prior probabilities
   if(nrow(x$geno)==x$n.mrk){
@@ -266,7 +279,7 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
   } else {
     cat("    Missing data under ", x$prob.thres, " prob. threshold: ", miss, "%\n", sep = "")    
   }
-  if(!is.null(x$unique.seq)){
+  if(!is.null(x$kept)){
     cat("    Redundant markers:                       ", redundant, "%\n", sep = "")  
   }
   w <- table(x$sequence)
@@ -339,7 +352,7 @@ plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
          bty = "n", xpd=TRUE)
   if(!is.null(x$elim.correspondence)){
     par(mar = c(5,0,2,2))
-    red = round(100*nrow(x$elim.correspondence)/length(x$sequence),1)
+    red = round(100*nrow(x$elim.correspondence)/(length(x$kept)+nrow(x$elim.correspondence)),1)
     mat = matrix(c(100-red, red), ncol = 1)
     w = barplot(mat, main="",
                 xlab="", col=c(blues9[3],blues9[6]),
