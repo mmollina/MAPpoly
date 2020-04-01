@@ -100,7 +100,8 @@ for(i in 1:15){
   cat("Loading chromosome", i, "...\n")
   invisible(capture.output(y <- {
     tempfl <- tempfile(pattern = paste0("ch", i), fileext = ".vcf.gz")
-    address <- paste0("https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr", i, ".vcf.gz")
+    x <- "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr"
+    address <- paste0(x, i, ".vcf.gz")
     download.file(url = address, destfile = tempfl)
     dattemp <- read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2", ploidy = 6)
     dat <- merge_datasets(dat, dattemp)
