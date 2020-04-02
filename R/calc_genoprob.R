@@ -30,7 +30,7 @@
 #'     mrk.subset<-make_seq_mappoly(hexafake, 1:100)
 #'     red.mrk<-elim_redundant(mrk.subset)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
-#'     counts.web<-cache_counts_twopt(unique.mrks, get.from.web = TRUE)
+#'     counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
 #'     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
 #'                                   count.cache = counts.web,
 #'                                   n.clusters = 16,
@@ -74,30 +74,45 @@ calc_genoprob<-function(input.map, step = 0,  phase.config = "best", verbose = T
   } else i.lpc <- phase.config
   m<-input.map$info$m
   n.ind<-get(input.map$info$data.name, pos=1)$n.ind
-  Dtemp<-get(input.map$info$data.name, pos=1)$geno.dose[input.map$maps[[1]]$seq.num,]
-  map.pseudo <- create_map(input.map, step, phase.config = i.lpc)
-  mrknames<-names(map.pseudo)
-  n.mrk<-length(map.pseudo)
-  indnames<-colnames(Dtemp)
-  D<-matrix(m+1, nrow = length(map.pseudo), ncol = ncol(Dtemp), 
-            dimnames = list(mrknames, indnames))
-  D[rownames(Dtemp), ] <- as.matrix(Dtemp)
-  dptemp <- get(input.map$info$data.name)$dosage.p[input.map$maps[[i.lpc]]$seq.num]
-  dqtemp <- get(input.map$info$data.name)$dosage.q[input.map$maps[[i.lpc]]$seq.num]
-  dq<-dp<-rep(m/2, length(mrknames))
-  names(dp)<-names(dq)<-mrknames
-  dp[names(dptemp)]<-dptemp
-  dq[names(dqtemp)]<-dqtemp
-  phPtemp <- lapply(input.map$maps[[i.lpc]]$seq.ph$P, function(x) x-1)
-  phQtemp <- lapply(input.map$maps[[i.lpc]]$seq.ph$Q, function(x) x-1)
-  phP <- phQ <- vector("list", n.mrk)
-  for(i in 1:length(phP)){
-    phP[[i]] <- phQ[[i]] <- c(0:(m/2 - 1))
+  ## This is used to calculate genoprobs for 'add_marker' function
+  if(length(input.map$info$mrk.names)==2 & input.map$info$mrk.names[1] == input.map$info$mrk.names[2]){
+    D<-get(input.map$info$data.name, pos=1)$geno.dose[input.map$maps[[1]]$seq.num,]
+    map.pseudo <- create_map(input.map, step, phase.config = i.lpc)
+    mrknames<-names(map.pseudo)
+    n.mrk<-length(map.pseudo)
+    indnames<-colnames(D)
+    dp <- get(input.map$info$data.name)$dosage.p[input.map$maps[[i.lpc]]$seq.num]
+    dq <- get(input.map$info$data.name)$dosage.q[input.map$maps[[i.lpc]]$seq.num]
+    phP <- lapply(input.map$maps[[i.lpc]]$seq.ph$P, function(x) x-1)
+    phQ <- lapply(input.map$maps[[i.lpc]]$seq.ph$Q, function(x) x-1)
+    seq.rf.pseudo <- input.map$maps[[i.lpc]]$seq.rf
   }
-  names(phP) <- names(phQ) <- mrknames
-  phP[rownames(Dtemp)] <- phPtemp
-  phQ[rownames(Dtemp)] <- phQtemp
-  seq.rf.pseudo <- mf_h(diff(map.pseudo))
+  else {
+    Dtemp<-get(input.map$info$data.name, pos=1)$geno.dose[input.map$info$mrk.names,]
+    map.pseudo <- create_map(input.map, step, phase.config = i.lpc)
+    mrknames<-names(map.pseudo)
+    n.mrk<-length(map.pseudo)
+    indnames<-colnames(Dtemp)
+    D<-matrix(m+1, nrow = length(map.pseudo), ncol = ncol(Dtemp), 
+              dimnames = list(mrknames, indnames))
+    D[rownames(Dtemp), ] <- as.matrix(Dtemp)
+    dptemp <- get(input.map$info$data.name)$dosage.p[input.map$maps[[i.lpc]]$seq.num]
+    dqtemp <- get(input.map$info$data.name)$dosage.q[input.map$maps[[i.lpc]]$seq.num]
+    dq<-dp<-rep(m/2, length(mrknames))
+    names(dp)<-names(dq)<-mrknames
+    dp[names(dptemp)]<-dptemp
+    dq[names(dqtemp)]<-dqtemp
+    phPtemp <- lapply(input.map$maps[[i.lpc]]$seq.ph$P, function(x) x-1)
+    phQtemp <- lapply(input.map$maps[[i.lpc]]$seq.ph$Q, function(x) x-1)
+    phP <- phQ <- vector("list", n.mrk)
+    for(i in 1:length(phP)){
+      phP[[i]] <- phQ[[i]] <- c(0:(m/2 - 1))
+    }
+    names(phP) <- names(phQ) <- mrknames
+    phP[rownames(Dtemp)] <- phPtemp
+    phQ[rownames(Dtemp)] <- phQtemp
+    seq.rf.pseudo <- mf_h(diff(map.pseudo))
+  }
   for (j in 1:nrow(D))
     D[j, D[j, ] == input.map$info$m + 1] <- dp[j] + dq[j] + 1 + as.numeric(dp[j]==0 || dq[j]==0)
   res.temp<-.Call("calc_genoprob",

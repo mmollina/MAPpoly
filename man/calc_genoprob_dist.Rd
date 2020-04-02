@@ -35,7 +35,7 @@ the probabilities are not calculated between markers.
     mrk.subset<-make_seq_mappoly(hexafake.geno.dist, 1:100)
     red.mrk<-elim_redundant(mrk.subset)
     unique.mrks<-make_seq_mappoly(red.mrk)
-    counts.web<-cache_counts_twopt(unique.mrks, get.from.web = TRUE)
+    counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
                                   count.cache = counts.web,
                                   n.clusters = 16,

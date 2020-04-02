@@ -93,6 +93,7 @@ RcppExport SEXP est_haplotype_map(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP
 RcppExport SEXP est_map_hmm(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP est_map_hmm_highprec(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP get_counts_one_parent_cpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP loglike_hmm(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP pairwise_rf_estimation(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP poly_hmm_est_CPP(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
@@ -110,6 +111,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"est_map_hmm",               (DL_FUNC) &est_map_hmm,                8},
     {"est_map_hmm_highprec",      (DL_FUNC) &est_map_hmm_highprec,       8},
     {"get_counts_one_parent_cpp", (DL_FUNC) &get_counts_one_parent_cpp,  6},
+    {"loglike_hmm",               (DL_FUNC) &loglike_hmm,                6},
     {"pairwise_rf_estimation",    (DL_FUNC) &pairwise_rf_estimation,     7},
     {"poly_hmm_est_CPP",          (DL_FUNC) &poly_hmm_est_CPP,          13},
     {NULL, NULL, 0}

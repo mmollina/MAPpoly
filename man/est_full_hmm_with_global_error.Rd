@@ -47,8 +47,7 @@ a genetic map using Hidden Markov models
 \examples{
   \dontrun{
     seq1.20<-make_seq_mappoly(hexafake, 1:20)
-    counts<-cache_counts_twopt(seq1.20,
-                               get.from.web=TRUE)
+    counts<-cache_counts_twopt(seq1.20, cached = TRUE)
     subset.pairs<-est_pairwise_rf(seq1.20, counts,
                                n.clusters=1)
     subset.map <- est_rf_hmm_sequential(input.seq  = seq1.20,

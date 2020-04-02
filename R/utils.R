@@ -601,19 +601,19 @@ drop_marker<-function(input.map, mrk)
 #' @examples
 #' \dontrun{
 #' sub.map<-get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
+#' plot(sub.map, mrk.names = TRUE)
 #' s<-make_seq_mappoly(hexafake, sub.map$info$mrk.names)
-#' counts<-cache_counts_twopt(input.seq = s, get.from.web = TRUE)
+#' counts<-cache_counts_twopt(input.seq = s, cached = TRUE)
 #' tpt <- est_pairwise_rf(input.seq = s, count.cache = counts)
 #' rf.matrix <- rf_list_to_matrix(input.twopt = tpt,
 #'                                thresh.LOD.ph = 3, 
 #'                                thresh.LOD.rf = 3,
 #'                                shared.alleles = TRUE)
-#' image(rf.matrix$ShP)
 #' ###### Removing marker "M_1" (first) #######
 #' mrk.to.remove <- "M_1"
 #' input.map <- drop_marker(sub.map, mrk.to.remove)
 #' plot(input.map, mrk.names = TRUE)
-#' # Computing conditional probabilities using the resulting map
+#' ## Computing conditional probabilities using the resulting map
 #' genoprob <- calc_genoprob(input.map)
 #' res.add.M_1<-add_marker(input.map = input.map,
 #'                         mrk = "M_1",
@@ -630,7 +630,7 @@ drop_marker<-function(input.map, mrk)
 #'                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
 #'                          hom.allele.q2 = sub.map$maps[[1]]$seq.ph$Q[names.id])
 #'                          
-#' ###### Removing marker "M_20" (first) #######
+#' ###### Removing marker "M_20" (middle) #######
 #' mrk.to.remove <- "M_20"
 #' input.map <- drop_marker(sub.map, mrk.to.remove)
 #' plot(input.map, mrk.names = TRUE)
@@ -644,6 +644,27 @@ drop_marker<-function(input.map, mrk)
 #'                         tol = 10e-4)  
 #'  plot(res.add.M_20, mrk.names = TRUE)                       
 #'  best.phase <- res.add.M_20$maps[[1]]$seq.ph
+#'  names.id<-names(best.phase$P)
+#'  plot_compare_haplotypes(m = 6,
+#'                          hom.allele.p1 = best.phase$P[names.id],
+#'                          hom.allele.q1 = best.phase$Q[names.id],
+#'                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
+#'                          hom.allele.q2 = sub.map$maps[[1]]$seq.ph$Q[names.id]) 
+#'                          
+#' ###### Removing marker "M_53" (last) #######
+#' mrk.to.remove <- "M_53"
+#' input.map <- drop_marker(sub.map, mrk.to.remove)
+#' plot(input.map, mrk.names = TRUE)
+#' # Computing conditional probabilities using the resulting map
+#' genoprob <- calc_genoprob(input.map)
+#' res.add.M_53<-add_marker(input.map = input.map,
+#'                         mrk = "M_53",
+#'                         pos = "M_52",
+#'                         rf.matrix = rf.matrix,
+#'                         genoprob = genoprob,
+#'                         tol = 10e-4)  
+#'  plot(res.add.M_53, mrk.names = TRUE)                       
+#'  best.phase <- res.add.M_53$maps[[1]]$seq.ph
 #'  names.id<-names(best.phase$P)
 #'  plot_compare_haplotypes(m = 6,
 #'                          hom.allele.p1 = best.phase$P[names.id],
@@ -746,7 +767,8 @@ add_marker <- function(input.map,
                                                              m = m, max.inc = 0)
       
     }
-  } else if(pos > 0 & pos < nmrk){   ## Adding marker: middle positions
+  } 
+  else if(pos > 0 & pos < nmrk){   ## Adding marker: middle positions
     ## h: states to visit in both parents
     ## e: probability distribution (ignored in this version) 
     e.left <- h.left <- e.right <- h.right <- vector("list", nind)
@@ -778,7 +800,8 @@ add_marker <- function(input.map,
                                                               m = m, max.inc = 0)
     ## Using both information sources, left and right 
     r.test <- unique(r.left, r.right)
-  } else if(pos == nmrk){
+  } 
+  else if(pos == nmrk){
     ## h: states to visit in both parents
     ## e: probability distribution (ignored in this version) 
     e.left <- h.left <- vector("list", nind)
@@ -791,11 +814,13 @@ add_marker <- function(input.map,
                                                            block2 = mrk.id, 
                                                            rf.matrix = rf.matrix, 
                                                            m = m, max.inc = 0)
-  } else stop("should not get here!")
+  } 
+  else stop("should not get here!")
   ## gathering maps to test and conditional probabilities
   test.maps <- mrk.genoprobs <- vector("list", length(r.test))
   for(i in 1:length(test.maps))
   {
+    ## This submap is just to create a framework
     suppressMessages(hap.temp <- get_submap(input.map, 
                                             c(1,1), 
                                             reestimate.rf = FALSE))
@@ -803,6 +828,7 @@ add_marker <- function(input.map,
     hap.temp$maps[[1]]$seq.ph <- list(P = c(r.test[[i]]$P, r.test[[i]]$P),
                                       Q = c(r.test[[i]]$Q, r.test[[i]]$Q))
     hap.temp$maps[[1]]$seq.rf <- 10e-6
+    hap.temp$info$mrk.names <- rep(mrk,2)
     test.maps[[i]] <- hap.temp
     ## States to visit for inserted biallelic SNP 
     mrk.genoprobs[[i]] <- calc_genoprob(test.maps[[i]], verbose = FALSE)
@@ -849,7 +875,8 @@ add_marker <- function(input.map,
       names(P)<-names(Q)<-c(test.maps[[i]]$maps[[1]]$seq.num[1], 
                             input.map$maps[[1]]$seq.num)
       configs[[i]]<-list(P = P, Q = Q)
-    } else if(pos > 0 & pos < nmrk){
+    } 
+    else if(pos > 0 & pos < nmrk){
       h.test<-c(list(h.left), h[i], list(h.right))
       names(h.test) <- c("hap1", "hap2", "hap3")
       e.test<-c(list(e.left), e[i], list(e.right))
@@ -874,7 +901,8 @@ add_marker <- function(input.map,
                             test.maps[[i]]$maps[[1]]$seq.num[1], 
                             map.right$maps[[1]]$seq.num)
       configs[[i]]<-list(P = P, Q = Q)
-    } else if(pos == nmrk){
+    } 
+    else if(pos == nmrk){
       h.test<-c(list(h.left), h[i])
       names(h.test) <- c("hap1", "hap2")
       e.test<-c(list(e.left), e[i])
@@ -914,9 +942,9 @@ add_marker <- function(input.map,
     if(pos == 0){
       seq.rf <- c(res[i, "rf1"], input.map$maps[[i.lpc]]$seq.rf)
     } else if(pos > 0 & pos < nmrk){
-      seq.rf <- c(head(input.map$maps[[i.lpc]]$seq.rf, n = pos-1),
+      seq.rf <- c(head(input.map$maps[[i.lpc]]$seq.rf, n = pos - 1),
                   res[i, c("rf1", "rf2")], 
-                  tail(input.map$maps[[i.lpc]]$seq.rf, n = pos+1))
+                  tail(input.map$maps[[i.lpc]]$seq.rf, n = input.map$info$n.mrk - pos - 1))
     } else if(pos == nmrk){
       seq.rf <- c(input.map$maps[[i.lpc]]$seq.rf, res[i, "rf1"])
     }

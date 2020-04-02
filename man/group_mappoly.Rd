@@ -64,7 +64,7 @@ Identifies linkage groups of markers using the results of two-point
     all.mrk <- make_seq_mappoly(hexafake, 'all')
     red.mrk <- elim_redundant(all.mrk)
     unique.mrks <- make_seq_mappoly(red.mrk)
-    counts <- cache_counts_twopt(unique.mrks, get.from.web = TRUE)
+    counts <- cache_counts_twopt(unique.mrks, cached = TRUE)
     all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
                                  count.cache = counts,
                                  n.clusters = 16,
