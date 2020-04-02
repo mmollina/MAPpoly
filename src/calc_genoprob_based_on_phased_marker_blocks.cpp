@@ -68,7 +68,6 @@ RcppExport SEXP calc_genprob_haplo(SEXP ploidyR,
   
   //Initializing some variables
   int g = nChoosek(m, m/2), k, k1, count = 0;
-  double s, loglike=0.0, nr=0.0, temp=0.0;
   std::vector<double> term(n_ind);
   std::fill(term.begin(), term.end(), 0.0);
   
