@@ -278,7 +278,7 @@ read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
         res$n.mrk = length(res$kept)
         res$mrk.names = res$mrk.names[-c(mrks.rem)]
         res$geno.dose = res$geno.dose[-c(mrks.rem),]
-        # UPDATE GENO
+        res$geno = res$geno[which(res$geno$mrk %in% rownames(res$geno.dose)),]
         res$dosage.p = res$dosage.p[-c(mrks.rem)]
         res$dosage.q = res$dosage.q[-c(mrks.rem)]
         res$sequence = res$sequence[-c(mrks.rem)]
