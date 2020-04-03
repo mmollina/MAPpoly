@@ -4,7 +4,8 @@
 \name{tetra.solcap.geno.dist}
 \alias{tetra.solcap.geno.dist}
 \title{Autotetraploid potato dataset with genotype probabilities.}
-\format{An object of class \code{mappoly.data} which contains a
+\format{
+An object of class \code{mappoly.data} which contains a
     list with the following components:
 \describe{
     \item{m}{ploidy level = 4}
@@ -36,7 +37,8 @@
       \code{ploidy_level + 1 = 5}}
     \item{n.phen}{There are no phenotypes in this simulation}
     \item{phen}{There are no phenotypes in this simulation}
-}}
+}
+}
 \usage{
 tetra.solcap.geno.dist
 }

@@ -82,10 +82,10 @@ reest_rf<-function(input.map, input.mat = NULL, tol = 10e-3,  phase.config = "al
   }
   else if(method == "hmm")
   {
-    for(j in i.lpc){
     s<-make_seq_mappoly(input.obj = get(input.map$info$data.name, pos =1),
-                        arg = input.map$maps[[j]]$seq.num,
+                        arg = input.map$info$mrk.names,
                         data.name = input.map$info$data.name)
+    for(j in i.lpc){
     mtemp<-est_rf_hmm_single(input.seq = s,
                              input.ph.single = input.map$maps[[j]]$seq.ph,
                              rf.temp = input.map$maps[[j]]$seq.rf,

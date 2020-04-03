@@ -35,7 +35,7 @@
 #'     s1<-make_seq_mappoly(tetra.solcap, 'seq1')
 #'     red.mrk<-elim_redundant(s1)
 #'     s1.unique.mrks<-make_seq_mappoly(red.mrk)
-#'     counts.web<-cache_counts_twopt(s1.unique.mrks, get.from.web = TRUE)
+#'     counts.web<-cache_counts_twopt(s1.unique.mrks, cached = TRUE)
 #'     s1.pairs<-est_pairwise_rf(input.seq = s1.unique.mrks,
 #'                                   count.cache = counts.web,
 #'                                   n.clusters = 10,

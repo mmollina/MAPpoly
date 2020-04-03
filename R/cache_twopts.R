@@ -41,7 +41,6 @@
 #'
 #' @examples
 #'   \dontrun{
-#'     data(hexafake)
 #'     all.mrk<-make_seq_mappoly(hexafake, 'all')
 #'     ## local computation
 #'     counts<-cache_counts_twopt(all.mrk, n.clusters = 8)
@@ -63,7 +62,8 @@
 #' @importFrom stats na.omit
 #' @importFrom utils combn read.table
 #'
-cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL, n.clusters = 1, verbose = TRUE, joint.prob = FALSE) {
+cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL, 
+                               n.clusters = 1, verbose = TRUE, joint.prob = FALSE) {
     ## checking for correct object
     start <- proc.time()
     input_classes <- c("mappoly.sequence")
@@ -82,7 +82,7 @@ cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL, n.c
       else if (input.seq$m == 6) ploidy = 'hexaploid'
       else if (input.seq$m == 8) ploidy = 'octaploid'
       else return(get_cache_two_pts_from_web(input.seq$m))
-      return(full_counts[[ploidy]])
+      return(structure(full_counts[[ploidy]], class = "cache.info"))
     }
     temp.count <- NULL
     if (joint.prob) {
