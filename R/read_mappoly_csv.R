@@ -169,6 +169,7 @@ read_geno_csv <- function(file.in, ploidy, filter.non.conforming = TRUE, elim.re
     res$dosage.q = res$dosage.q[-c(mrks.rem)]
     res$sequence = res$sequence[-c(mrks.rem)]
     res$sequence.pos = res$sequence.pos[-c(mrks.rem)]
+    res$chisq.pval = res$chisq.pval[-c(mrks.rem)]
   }
   return(res)
 }

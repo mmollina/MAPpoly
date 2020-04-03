@@ -319,6 +319,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
       res$seq.ref = res$seq.ref[-c(mrks.rem)]
       res$seq.alt = res$seq.alt[-c(mrks.rem)]
       res$all.mrk.depth = res$all.mrk.depth[-c(mrks.rem)]
+      res$chisq.pval = res$chisq.pval[-c(mrks.rem)]
     }
   return(res)
 }

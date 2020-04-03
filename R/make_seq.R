@@ -15,8 +15,10 @@
 #'     \code{input.object} has class \code{mappoly.group}; or v) NULL if 
 #'     \code{input.object} has class \code{mappoly.pcmap}, \code{mappoly.pcmap3d} or 
 #'     \code{mappoly.unique.seq}
-#'     
-#'     @param genomic.info optional argument applied for \code{mappoly.group} objects only. This argument can be \code{NULL},
+#'
+#' @param data.name name of the object of class \code{mappoly.data}
+#' 
+#' @param genomic.info optional argument applied for \code{mappoly.group} objects only. This argument can be \code{NULL},
 #'     or can hold the numeric combination of sequences from genomic information to be used when making the sequences.
 #'     When \code{genomic.info = NULL} (default), the function returns a sequence containing all markers defined 
 #'     by the grouping function. When \code{genomic.info = 1}, the function returns a sequence with markers
@@ -25,8 +27,6 @@
 #'     when \code{genomic.info = c(1,2)}, the function returns a sequence with markers
 #'     that matched the intersection between grouping function and genomic information, considering two sequences
 #'     from genomic information that presented the maximum number of markers matching the group; and so on.
-#'
-#' @param data.name name of the object of class \code{mappoly.data}
 #'
 #' @param x an object of the class \code{mappoly.sequence}
 #'
@@ -93,7 +93,7 @@
 #'
 #' @export
 
-make_seq_mappoly <- function(input.obj, arg = NULL, genomic.info = NULL, data.name = NULL) {
+make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.info = NULL) {
   ## checking for correct object
   input_classes <- c("mappoly.data", "mappoly.unique.seq", "mappoly.pcmap", "mappoly.pcmap3d", "mappoly.group", "mappoly.chitest.seq")
   if (!inherits(input.obj, input_classes)) {
@@ -104,7 +104,10 @@ make_seq_mappoly <- function(input.obj, arg = NULL, genomic.info = NULL, data.na
   if (is.null(arg) && class(input.obj) != "mappoly.chitest.seq" && class(input.obj) != "mappoly.unique.seq" && class(input.obj) != "mappoly.pcmap"&& class(input.obj) != "mappoly.pcmap3d") {
     stop("argument 'arg' expected.")
   }
+  ## Variables defined to block removing redundant markers
   realkeep = FALSE
+  tokeep = FALSE
+  # ## Old code to handle redundant markers
   # if ((!is.null(input.obj$kept))){
   #   tokeep = input.obj$kept
   #   realkeep = TRUE
@@ -124,16 +127,14 @@ make_seq_mappoly <- function(input.obj, arg = NULL, genomic.info = NULL, data.na
     ## make sequence with all markers
     if (length(arg) == 1 && arg == "all")
     {
-      if (realkeep) seq.num = match(tokeep,input.obj$mrk.names)
-      else seq.num = as.integer(1:input.obj$n.mrk)
+      if (realkeep) {seq.num = match(tokeep,input.obj$mrk.names)} else {seq.num = as.integer(1:input.obj$n.mrk)}
     }
     else if (all(is.character(arg)) && length(grep("seq", arg)) == length(arg))
     {
       if (length(input.obj$sequence) == 1 && input.obj$sequence == 0)
         stop("There is no sequence information in ", deparse(substitute(input.obj)))
       seq.num1 <- as.integer(which(!is.na(match(input.obj$sequence, gsub("[^0-9]", "", arg)))))
-      if(realkeep) seq.num = intersect(seq.num1, seq.num)
-      else seq.num = seq.num1
+      if(realkeep) {seq.num = intersect(seq.num1, seq.num)} else {seq.num = seq.num1}
       sequence <- input.obj$sequence[seq.num]
       if (length(input.obj$sequence.pos) > 2)
         sequence.pos <- input.obj$sequence.pos[seq.num]
@@ -141,8 +142,7 @@ make_seq_mappoly <- function(input.obj, arg = NULL, genomic.info = NULL, data.na
     else if (all(is.character(arg)) && (length(arg) == length(arg %in% input.obj$mrk.names)))
     {
       seq.num1 <- as.integer(match(arg, input.obj$mrk.names))
-      if(realkeep) seq.num = intersect(seq.num1, seq.num)
-      else seq.num = seq.num1
+      if(realkeep) {seq.num = intersect(seq.num1, seq.num)} else {seq.num = seq.num1}
       sequence <- input.obj$sequence[seq.num]
       if (length(input.obj$sequence.pos) > 2)
         sequence.pos <- input.obj$sequence.pos[seq.num]
@@ -150,8 +150,7 @@ make_seq_mappoly <- function(input.obj, arg = NULL, genomic.info = NULL, data.na
     else if (is.vector(arg) && all(is.numeric(arg)))
     {
       seq.num1 <- as.integer(arg)
-      if(realkeep) seq.num = intersect(seq.num1, seq.num)
-      else seq.num = seq.num1
+      if(realkeep) {seq.num = intersect(seq.num1, seq.num)} else {seq.num = seq.num1}
       sequence <- input.obj$sequence[seq.num]
       if (length(input.obj$sequence.pos) > 2)
         sequence.pos <- input.obj$sequence.pos[seq.num]
