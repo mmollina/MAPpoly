@@ -278,13 +278,12 @@ read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
         res$n.mrk = length(res$kept)
         res$mrk.names = res$mrk.names[-c(mrks.rem)]
         res$geno.dose = res$geno.dose[-c(mrks.rem),]
+        # UPDATE GENO
         res$dosage.p = res$dosage.p[-c(mrks.rem)]
         res$dosage.q = res$dosage.q[-c(mrks.rem)]
         res$sequence = res$sequence[-c(mrks.rem)]
         res$sequence.pos = res$sequence.pos[-c(mrks.rem)]
-        res$seq.ref = res$seq.ref[-c(mrks.rem)]
-        res$seq.alt = res$seq.alt[-c(mrks.rem)]
-        res$all.mrk.depth = res$all.mrk.depth[-c(mrks.rem)]
+        res$chisq.pval = res$chisq.pval[-c(mrks.rem)]
   }
    return(res)
 }

@@ -257,6 +257,7 @@ read_geno <- function(file.in, filter.non.conforming = TRUE, elim.redundant = TR
     res$dosage.q = res$dosage.q[-c(mrks.rem)]
     res$sequence = res$sequence[-c(mrks.rem)]
     res$sequence.pos = res$sequence.pos[-c(mrks.rem)]
+    res$chisq.pval = res$chisq.pval[-c(mrks.rem)]
   }
   return(res)
 }
