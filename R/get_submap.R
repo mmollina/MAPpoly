@@ -105,9 +105,11 @@ get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf =
   LOD.conf <- get_LOD(input.map)
   if(phase.config == "best") {
     i.lpc <- which.min(LOD.conf)
-  } else if (phase.config > length(LOD.conf)) {
+  } 
+  else if (phase.config > length(LOD.conf)) {
     stop("invalid linkage phase configuration")
-  } else i.lpc <- phase.config
+  } 
+  else i.lpc <- phase.config
   input.obj = get(input.map$info$data.name, pos = 1)
   if(reestimate.rf & !reestimate.phase)
   {
@@ -115,7 +117,8 @@ get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf =
     ph<-list(P = input.map$maps[[i.lpc]]$seq.ph$P[as.character(seq.num)],
              Q = input.map$maps[[i.lpc]]$seq.ph$Q[as.character(seq.num)])
     s<-make_seq_mappoly(input.obj = input.obj,
-                        arg = seq.num, data.name = input.map$info$data.name)
+                        arg = seq.num, 
+                        data.name = input.map$info$data.name)
     rf.temp <- NULL#input.map$maps[[i.lpc]]$seq.rf[mrk.pos[-length(mrk.pos)]]
     res<-est_rf_hmm_single(input.seq = s, input.ph.single = ph, tol = tol.final,
                            verbose = verbose, rf.temp = rf.temp,
@@ -157,7 +160,7 @@ get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf =
                                       high.prec = high.prec)
     return(output.map)
   }
-  output.map<-input.map
+  output.map <- input.map
   z<-cumsum(c(0, imf_h(input.map$maps[[i.lpc]]$seq.rf)))[mrk.pos]
   rf.vec<-mf_h(abs(diff(z)))
   message("
@@ -169,12 +172,24 @@ get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf =
     reestimate the map using functions 'reest_rf', 
     'est_full_hmm_with_global_error' or 
     'est_full_hmm_with_prior_dist'")
+  ##phase info
   output.map$maps[[i.lpc]]$seq.rf <- rf.vec
   output.map$maps[[i.lpc]]$seq.num <- input.map$maps[[i.lpc]]$seq.num[mrk.pos]
   output.map$maps[[i.lpc]]$seq.ph$P <- input.map$maps[[i.lpc]]$seq.ph$P[mrk.pos]
   output.map$maps[[i.lpc]]$seq.ph$Q <- input.map$maps[[i.lpc]]$seq.ph$Q[mrk.pos]
   output.map$maps[[i.lpc]]$loglike <- 0
+  ##map info
   output.map$info$n.mrk <- length(mrk.pos)
   output.map$info$mrk.names <- input.map$info$mrk.names[mrk.pos]
+  output.map$info$seq.num <- input.map$info$seq.num [mrk.pos]
+  output.map$info$mrk.names <- input.map$info$mrk.names[mrk.pos]
+  output.map$info$seq.dose.p <- input.map$info$seq.dose.p[mrk.pos]
+  output.map$info$seq.dose.q <- input.map$info$seq.dose.q[mrk.pos]
+  output.map$info$sequence <- input.map$info$sequence[mrk.pos] 
+  output.map$info$sequence.pos <- input.map$info$sequence.pos[mrk.pos]  
+  output.map$info$seq.ref <- input.map$info$seq.ref[mrk.pos] 
+  output.map$info$seq.alt <- input.map$info$seq.alt[mrk.pos] 
+  output.map$info$chisq.pval <- input.map$info$chisq.pval[mrk.pos] 
+  
   return(output.map)
 }

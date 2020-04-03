@@ -6,7 +6,7 @@
 #'   \dontrun{
 #'     seq.all.mrk <- make_seq_mappoly(hexafake, 'all')
 #'     id <- get_genomic_order(seq.all.mrk)
-#'     counts <- cache_counts_twopt(seq.all.mrk, get.from.web=TRUE)
+#'     counts <- cache_counts_twopt(seq.all.mrk, cached=TRUE)
 #'     seq5 <- make_seq_mappoly(hexafake, rownames(id)[1:5])
 #'     twopt<-est_pairwise_rf(seq5, counts)
 #'     

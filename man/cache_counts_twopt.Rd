@@ -57,7 +57,6 @@ combinations and for all possible linkage phase configurations.
 }
 \examples{
   \dontrun{
-    data(hexafake)
     all.mrk<-make_seq_mappoly(hexafake, 'all')
     ## local computation
     counts<-cache_counts_twopt(all.mrk, n.clusters = 8)

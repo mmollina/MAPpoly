@@ -70,7 +70,7 @@ RcppExport SEXP est_haplotype_map(SEXP ploidyR,
   double tol = Rcpp::as<double>(tolR);
   
   //Initializing some variables
-  int g = nChoosek(m, m/2), k, k1,  maxit = 1000, flag=0;
+  int k, k1,  maxit = 1000, flag=0;
   double s, loglike=0.0, nr=0.0, temp=0.0;
   std::vector<double> rf_cur(rf.size());
   std::vector<double> term(n_ind);
@@ -140,7 +140,6 @@ RcppExport SEXP est_haplotype_map(SEXP ploidyR,
     for(int ind=0; ind < n_ind; ind++)
     {
       R_CheckUserInterrupt();
-      //std::fill(alpha[ind][0].begin(), alpha[ind][0].end(), 1.0/(g*g));
       for(int j=0; (unsigned)j < e[0][ind].size(); j++)
       {
         alpha[ind][0][j] = e[0][ind][j];
