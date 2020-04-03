@@ -180,7 +180,6 @@ int get_depth(std::string mystring, int dp_pos){
   //  Rcpp::Rcout << "In strsplit" << std::endl;
   
   char split = ':';
-  int flag;
   std::vector<std::string> vec_o_strings;
   int start = 0;
   unsigned int i=0;
