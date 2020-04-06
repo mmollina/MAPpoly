@@ -57,18 +57,24 @@
 #'     solcap.file <- system.file('extdata', 'tetra_solcap.csv', package = 'mappoly')
 #'     tetra.solcap <- read_geno_csv(file.in  = solcap.file, ploidy = 4)
 #'     print(tetra.solcap, detailed = TRUE)
-#'
-#'     ## Same thing
-#'     data("tetra.solcap")
+#'     plot(tetra.solcap)
 #'}
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
+#' 
+#'     Mollinari M., Olukolu B. A.,  Pereira G. da S., 
+#'     Khan A., Gemenet D., Yench G. C., Zeng Z-B. (2020), 
+#'     Unraveling the Hexaploid Sweetpotato Inheritance 
+#'     Using Ultra-Dense Multilocus Mapping, 
+#'     _G3: Genes, Genomes, Genetics_. 
+#'     \url{https://doi.org/10.1534/g3.119.400620} 
+#'     
 #'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
 #'     models, _G3: Genes, Genomes, Genetics_. 
-#'     \url{https://doi.org/10.1534/g3.119.400378}
+#'     \url{https://doi.org/10.1534/g3.119.400378} 
 #'
 #' @export read_geno_csv
 

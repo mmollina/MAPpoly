@@ -97,7 +97,14 @@ containing the dosage for each marker (rows) for each individual (columns). \cod
 }
 }
 \references{
-Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
+Mollinari M., Olukolu B. A.,  Pereira G. da S., 
+    Khan A., Gemenet D., Yench G. C., Zeng Z-B. (2020), 
+    Unraveling the Hexaploid Sweetpotato Inheritance 
+    Using Ultra-Dense Multilocus Mapping, 
+    _G3: Genes, Genomes, Genetics_. 
+    \url{https://doi.org/10.1534/g3.119.400620} 
+    
+    Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     analysis and haplotype phasing in experimental autopolyploid
     populations with high ploidy level using hidden Markov
     models, _G3: Genes, Genomes, Genetics_. 
