@@ -1290,17 +1290,48 @@ summary_maps = function(map.object){
                        "Genomic sequence" = as.character(unlist(lapply(map.object, function(x) unique(get(x$info$data.name, pos = 1)$sequence[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)])))),
                        "Map size (cM)" = unlist(lapply(map.object, function(x) round(sum(c(0, imf_h(x$maps[[1]]$seq.rf))), 2))),
                        "Markers/cM" = round(unlist(lapply(map.object, function(x) x$info$n.mrk/(round(sum(c(0, imf_h(x$maps[[1]]$seq.rf))), 2)))),2),
-                       "Simplex" = unlist(lapply(map.object, function(x) sum(table(get(x$info$data.name, pos = 1)$dosage.p[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)], get(x$info$data.name, pos = 1)$dosage.q[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)])[rbind(c(1,2),c(2,1),c(x$info$m,(x$info$m+1)),c((x$info$m+1),x$info$m))]))),
-                       "Double-simplex" = unlist(lapply(map.object, function(x) sum(table(get(x$info$data.name, pos = 1)$dosage.p[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)], get(x$info$data.name, pos = 1)$dosage.q[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)])[rbind(c(2,2),c(x$info$m,x$info$m))]))),
-                       "Multiplex" = unlist(lapply(map.object, function(x) sum(table(get(x$info$data.name, pos = 1)$dosage.p[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)], get(x$info$data.name, pos = 1)$dosage.q[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)])) - sum(table(get(x$info$data.name, pos = 1)$dosage.p[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)], get(x$info$data.name, pos = 1)$dosage.q[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)])[rbind(c(2,2),c(x$info$m,x$info$m))]) - sum(table(get(x$info$data.name, pos = 1)$dosage.p[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)], get(x$info$data.name, pos = 1)$dosage.q[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)])[rbind(c(1,2),c(2,1),c(x$info$m,(x$info$m+1)),c((x$info$m+1),x$info$m))]))),
+                       "Simplex" = unlist(lapply(map.object, function(x) sum(get_tab_mrks(x)[rbind(c(1,2),c(2,1),c(x$info$m,(x$info$m+1)),c((x$info$m+1),x$info$m))]))),
+                       "Double-simplex" = unlist(lapply(map.object, function(x) sum(get_tab_mrks(x)[rbind(c(2,2),c(x$info$m,x$info$m))]))),
+                       "Multiplex" = unlist(lapply(map.object, function(x) sum(get_tab_mrks(x)) - sum(get_tab_mrks(x)[rbind(c(2,2),c(x$info$m,x$info$m))]) - sum(get_tab_mrks(x)[rbind(c(1,2),c(2,1),c(x$info$m,(x$info$m+1)),c((x$info$m+1),x$info$m))]))),
                        "Total" = unlist(lapply(map.object, function(x) x$info$n.mrk)),
                        "Max gap" = unlist(lapply(map.object, function(x) round(imf_h(max(x$maps[[1]]$seq.rf)),2))),
                        check.names = FALSE, stringsAsFactors = F)
   results = rbind(results, c('Total', NA, sum(as.numeric(results$`Map size (cM)`)), round(mean(as.numeric(results$`Markers/cM`)),2), sum(as.numeric(results$Simplex)), sum(as.numeric(results$`Double-simplex`)), sum(as.numeric(results$Multiplex)), sum(as.numeric(results$Total)), mean(as.numeric(results$`Max gap`))))
   if (!is.null(get(map.object[[1]]$info$data.name, pos = 1)$elim.correspondence)){
-    cat("\nYour dataset contains removed (redundant) markers. Once finished the map, remember to add the redundant ones with the function 'update_map'.\n")
+    cat("\nYour dataset contains removed (redundant) markers. Once finished the map, remember to add the redundant ones with the function 'update_map'.\n\n")
   }
   return(results)
+}
+
+#' Get table of dosage combinations
+#' 
+#' Internal function
+#'
+#' @param void
+#'
+#' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' 
+get_tab_mrks = function(x){
+  tab = table(get(x$info$data.name, pos = 1)$dosage.p[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)], get(x$info$data.name, pos = 1)$dosage.q[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)])
+  doses = as.character(seq(0,x$info$m,1))
+  # checking dimensions
+  if (!all(doses %in% colnames(tab))){
+    newmat = matrix(NA, nrow(tab), length(doses))
+    newmat[,which(doses %in% colnames(tab))] = tab[,which(colnames(tab) %in% doses)]
+    newmat[,which(!doses %in% colnames(tab))] = 0
+    rownames(newmat) = rownames(tab)
+    colnames(newmat) = doses
+    tab = newmat
+  }
+  if (!all(doses %in% rownames(tab))){
+    newmat = matrix(NA, length(doses), ncol(tab))
+    newmat[which(doses %in% rownames(tab)),] = tab[which(rownames(tab) %in% doses),]
+    newmat[which(!doses %in% rownames(tab)),] = 0
+    colnames(newmat) = colnames(tab)
+    rownames(newmat) = doses
+    tab = newmat
+  }
+  return(tab)
 }
 
 #' Update map
