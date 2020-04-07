@@ -765,11 +765,11 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
     zy <- zy - 1.1
     mtext(text = "Parent 2", side = 4, at = mean(zy), line = -1, font = 4)
     for(i in 1:map.info$m)
-      mtext(letters[(2*map.info$m):(map.info$m+1)][i], line = 0, at = zy[i], side = 4)
+      mtext(letters[(map.info$m+1):(2*map.info$m)][i], line = 0, at = zy[i], side = 4)
     zy <- zy + 1.1
     mtext(text = "Parent 1", side = 4, at = mean(zy), line = -1, font = 4)
     for(i in 1:map.info$m)
-      mtext(letters[map.info$m:1][i],  line = 0, at = zy[i], side = 4)
+      mtext(letters[1:map.info$m][i],  line = 0, at = zy[i], side = 4)
     par(op)
     op <- par(mar = c(0,1,2,4), xpd=FALSE)
     plot(x = curx,
