@@ -7,7 +7,7 @@
 get_tab_mrks(x)
 }
 \arguments{
-\item{void}{}
+\item{x}{an object of class \code{mappoly.map}}
 }
 \description{
 Internal function

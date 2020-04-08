@@ -1307,7 +1307,7 @@ summary_maps = function(map.object){
 #' 
 #' Internal function
 #'
-#' @param void
+#' @param x an object of class \code{mappoly.map}
 #'
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' 
