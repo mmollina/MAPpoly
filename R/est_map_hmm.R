@@ -278,7 +278,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'     for the search space reduction (A.K.A. \eqn{\eta} in 
 #'     \cite{Mollinari and Garcia (2019)}, default = 5)
 #'     
-#' @param thres.hmm the threshold used to determine if the linkage
+#' @param thres.hmm the LOD threshold used to determine if the linkage
 #'     phases compared via hmm analysis should be evaluated in the 
 #'     next round of marker inclusion (default = 50)
 #'     
@@ -312,6 +312,8 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'     
 #' @param verbose If \code{TRUE} (default), current progress is shown; if
 #'     \code{FALSE}, no output is produced
+#'     
+#' @param detailed.verbose If \code{TRUE}, map expansion of the tested maps is shown; 
 #'     
 #' @param high.prec logical. If \code{TRUE} uses high precision 
 #' (long double) numbers in the HMM procedure implemented in C++,
@@ -416,6 +418,7 @@ est_rf_hmm_sequential<-function(input.seq,
                                 tol = 10e-2,
                                 tol.final = 10e-4,
                                 verbose = TRUE,
+                                detailed.verbose = FALSE,
                                 high.prec = FALSE)
 {
   ## checking for correct object
@@ -487,10 +490,19 @@ est_rf_hmm_sequential<-function(input.seq,
   }
   while(ct <= length(input.seq$seq.num))
   {
+    ## Number of multipoint phases evaluated in the 
+    ## previous round of marker insertion
     hmm.phase.number<-length(cur.map$maps)
+    ## Get the map tail containing sufficient markers to 
+    ## distinguish among the m*2 possible homologs.
     if(info.tail)
       tail.temp <- get_full_info_tail(cur.map)
     input.ph <- NULL
+    ## for each linkage phase inherited from HMM 
+    ## analysis from previous round, evaluate the
+    ## possible linkage phases for the marker inserted 
+    ## in the current round using two-point information
+    ## under the threshold of thres.twopt
     for(i in 1:length(all.ph$config.to.test))
     {
       seq.num <- NULL
@@ -498,6 +510,12 @@ est_rf_hmm_sequential<-function(input.seq,
         seq.num <- tail.temp$maps[[i]]$seq.num 
       if(length(seq.num) < extend.tail)
         seq.num <- tail(cur.map$maps[[i]]$seq.num, extend.tail)
+      ## If the tail do not contain the marker responsable for carrying 
+      ## multiple linkage phases through the rounds of insertion,
+      ## extend the tail so it contains that marker
+      if(max(check_ls_phase(all.ph)) >= length(seq.num)){
+        seq.num <- tail(cur.map$maps[[i]]$seq.num, max(check_ls_phase(all.ph)) + start.set)        
+      }
       seq.cur <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1),
                                   arg = seq.num,
                                   data.name = input.seq$data.name)
@@ -509,25 +527,28 @@ est_rf_hmm_sequential<-function(input.seq,
                                          prev.info = all.ph.temp)
       input.ph <- concatenate_ph_list(input.ph, input.ph.temp)
     }
+    ## This is the number of linkage phases to be tested 
+    ## combining HMM phases from previous round of mrk
+    ## insertion and the linkage phases from the two-point
+    ## information obtained in the current round
     twopt.phase.number<-length(input.ph$config.to.test)
+    ## If this number is higher than phase.number.limit,
+    ## procede to the next iteration
     if(length(input.ph$config.to.test) > phase.number.limit) {
       if(verbose)
-        cat(crayon::red(paste0(ct ,": not included (too many linkage phases)\n", sep = "")))
+        cat(crayon::italic$yellow(paste0(ct ,": not included (linkage phases)\n", sep = "")))
       ct <- ct + 1
       next()
     }
+    ## Appending the marker to the numeric 
+    ## sequence and makeing a new sequence
     seq.num <- c(seq.num, input.seq$seq.num[ct])
     seq.cur <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1),
                                 arg = seq.num,
                                 data.name = input.seq$data.name)
     if(verbose)
-    {
-      pc <- round(100*ct/length(input.seq$seq.num),1)
-      cat(ct,": ", pc,"% (", input.seq$seq.num[ct] ,"): ", length(input.ph$config.to.test), 
-          " ph(s) : (", hmm.phase.number, "/", twopt.phase.number,")", 
-          "--t: ", length(seq.num),"\n",
-          sep = "")
-    }
+      cat_phase(input.seq, input.ph, all.ph, ct, seq.num, twopt.phase.number, hmm.phase.number)
+    ## Evaluation all maps using HMM
     cur.map.temp <- est_rf_hmm(input.seq = seq.cur,
                                input.ph = input.ph,
                                twopt = twopt,
@@ -535,11 +556,18 @@ est_rf_hmm_sequential<-function(input.seq,
                                verbose = FALSE,
                                reestimate.single.ph.configuration = reestimate.single.ph.configuration,
                                high.prec = high.prec)
+    ## Filtering linkage phase configurations under a HMM LOD threshold
     cur.map.temp <- filter_map_at_hmm_thres(cur.map.temp, thres.hmm)
+    ## Gathering linkage phases of the current map, excluding the marker inserted 
+    ## in the current round
     ph.new<-lapply(cur.map.temp$maps, function(x) list(P = head(x$seq.ph$P, -1), 
                                                        Q = head(x$seq.ph$Q, -1)))
+    ## Gathering linkage phases of the previous map, excluding the marker inserted 
+    ## in the current round
     ph.old<-lapply(cur.map$maps, function(x, id) list(P = x$seq.ph$P[id], 
                                                       Q = x$seq.ph$Q[id]), id = names(ph.new[[1]]$P))
+    ## Check in which whole phase configurations the new 
+    ## HMM tail should be appended
     MQ<-MP<-matrix(NA, length(ph.old), length(ph.new))
     for(j1 in 1:nrow(MP)){
       for(j2 in 1:ncol(MP)){
@@ -562,19 +590,19 @@ est_rf_hmm_sequential<-function(input.seq,
     LOD <- get_LOD(cur.map.temp, sorted = FALSE)
     if(sub.map.size.diff.limit!=Inf){
       selected.map <- submap.expansion < sub.map.size.diff.limit & LOD < thres.hmm
-      if(verbose){
+      if(detailed.verbose){
         x <- round(cbind(submap.length.new, submap.expansion, last.mrk.expansion),2)
         for(j1 in 1:nrow(x)){
           cat("    ", x[j1,1], ": (", x[j1,2],  "/", x[j1,3],")", sep = "")
           if(j1!=nrow(x)) cat("\n")
         }
       }
-      if(verbose){
+      if(detailed.verbose){
         if(all(!selected.map)) cat(paste0(crayon::red(cli::symbol$cross), "\n"))
         else cat(paste0(crayon::green(cli::symbol$tick), "\n"))
       }
       if(all(!selected.map)){
-        if(verbose) cat(crayon::red(paste0(ct ,": not included (map expansion)\n", sep = "")))
+        if(verbose) cat(crayon::italic$yellow(paste0(ct ,": not included (map extension)\n", sep = "")))
         ct <- ct + 1
         next()
       }
@@ -951,4 +979,82 @@ add_mrk_at_tail_ph_list <- function(ph.list.1, ph.list.2, cor.index){
                  thres.hmm = ph.list.1$thres.hmm),
             class = "two.pts.linkage.phases")
 }
+
+#' compare a list of linkage phases and return the 
+#' markers for which they are different.
+#' @param void interfunction to be documented
+#' @keywords internal
+#' @export check_ls_phase
+check_ls_phase<-function(ph){
+  if(length(ph$config.to.test) == 1) return(0)
+  id <- rep(1, length(ph$config.to.test[[1]]$P))
+  for(i in 1:length(ph$config.to.test[[1]]$P)){
+    w <- ph$config.to.test[[1]]$P[i]
+    for(j in 2:length(ph$config.to.test))
+      id[i] <- id[i] + identical(w, ph$config.to.test[[j]]$P[i])
+  }
+  names(id) <- names((ph$config.to.test[[1]]$P))
+  w <- length(ph$config.to.test[[1]]$P) - which(id < length(ph$config.to.test)) 
+  if(length(w)==0) return(0)
+  w
+}
+
+
+#' cat for graphical representation of the phases
+#' @param void interfunction to be documented
+#' @keywords internal
+print_ph<-function(input.ph){
+  phs.P<-lapply(input.ph$config.to.test, 
+                function(x, m) {
+                  M <- matrix("|", nrow = 1, ncol = m) 
+                  M[unlist(tail(x$P, 1))] <- crayon::red(cli::symbol$bullet)
+                  paste(M, collapse = "")}, 
+                m = input.ph$m) 
+  phs.Q<-lapply(input.ph$config.to.test, 
+                function(x, m) {
+                  M <- matrix("|", nrow = 1, ncol = m) 
+                  M[unlist(tail(x$Q, 1))] <- crayon::cyan(cli::symbol$bullet)
+                  paste(M, collapse = "")}, 
+                m = input.ph$m) 
+  if(length(phs.P) == 1)
+    return(paste(unlist(phs.P)[1], unlist(phs.Q)[1], "                   "))
+  if(length(phs.P) == 2)
+    return(paste(unlist(phs.P)[1], unlist(phs.Q)[1], "     ", unlist(phs.P)[2], unlist(phs.Q)[2]))
+  if(length(phs.P) > 2)
+    return(paste(unlist(phs.P)[1], unlist(phs.Q)[1], " ... ", unlist(phs.P)[2], unlist(phs.Q)[2]))
+}
+
+#' cat for phase information
+#' @param void interfunction to be documented
+#' @keywords internal
+cat_phase <- function(input.seq,
+                      input.ph,
+                      all.ph,
+                      ct,
+                      seq.num,
+                      twopt.phase.number,
+                      hmm.phase.number){
+  pc <- round(100*ct/length(input.seq$seq.num),1)
+  xmax11 <- nchar(length(input.seq$seq.num))
+  x11 <- ct
+  x11 <- paste0(x11, paste(rep(" ", xmax11-nchar(x11)), collapse = ""))
+  x12 <- length(all.ph$config.to.test[[1]]$P) + 1
+  x12 <- paste0(x12, paste(rep(" ", xmax11-nchar(x12)), collapse = ""))
+  x13 <- pc
+  x13 <- paste0(":(",pc,"%)", paste(rep(" ", 5-nchar(x13)), collapse = ""))
+  x1 <- paste0(x12,"/",x11, x13)
+  xmax21 <- nchar(max(input.seq$seq.num)) 
+  x21 <- input.seq$seq.num[ct]
+  x21 <- paste0(x21, paste(rep(" ", xmax21-nchar(x21)), collapse = ""))
+  x22 <- length(input.ph$config.to.test)
+  x22 <- paste0(x22, " ph ", paste(rep(" ", 5-nchar(x22)), collapse = ""))
+  x23 <- paste0("(", hmm.phase.number, "/", twopt.phase.number,")  ")
+  x23 <- paste0(x23, paste(rep(" ", 10-nchar(x23)), collapse = ""))
+  x2 <- paste0( x21, ": ", x22, x23)
+  x31 <- length(seq.num)-1
+  x31 <- paste0(x31, paste(rep(" ", xmax11-nchar(x31)), collapse = ""))
+  x3 <- paste0(" -- tail: ", x31)
+  cat(x1, x2, x3, print_ph(input.ph), "\n")
+}
+
 

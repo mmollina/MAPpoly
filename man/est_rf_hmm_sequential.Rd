@@ -18,6 +18,7 @@ est_rf_hmm_sequential(
   tol = 0.1,
   tol.final = 0.001,
   verbose = TRUE,
+  detailed.verbose = FALSE,
   high.prec = FALSE
 )
 }
@@ -34,7 +35,7 @@ phases compared via two-point analysis should be considered
 for the search space reduction (A.K.A. \eqn{\eta} in 
 \cite{Mollinari and Garcia (2019)}, default = 5)}
 
-\item{thres.hmm}{the threshold used to determine if the linkage
+\item{thres.hmm}{the LOD threshold used to determine if the linkage
 phases compared via hmm analysis should be evaluated in the 
 next round of marker inclusion (default = 50)}
 
@@ -68,6 +69,9 @@ where there are only one possible linkage phase configuration}
 
 \item{verbose}{If \code{TRUE} (default), current progress is shown; if
 \code{FALSE}, no output is produced}
+
+\item{detailed.verbose}{If \code{TRUE}, current detailed progress is shown; if
+\code{FALSE} (default), default verbose output is produced}
 
 \item{high.prec}{logical. If \code{TRUE} uses high precision 
 (long double) numbers in the HMM procedure implemented in C++,
