@@ -287,9 +287,9 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
 #' @export
 filter_segregation<-function(input.data, chisq.pval.thres = 10e-5, inter = TRUE){
   ANSWER <- "flag"
-  op<-par(bg = "gray", xpd = TRUE)
   if(interactive() && inter)
   {
+    op<-par(bg = "gray", xpd = TRUE)
     while(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
     {
       plot(log10(sort(input.data$chisq.pval, decreasing = TRUE)), xlab = "markers", ylab = "log10(p.val)", axes=F)
@@ -301,9 +301,9 @@ filter_segregation<-function(input.data, chisq.pval.thres = 10e-5, inter = TRUE)
       if(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
         chisq.pval.thres  <- as.numeric(ANSWER)
     }
+    par(op)
   }
   keep<-names(which(input.data$chisq.pval >= chisq.pval.thres))
   exclude<-names(which(input.data$chisq.pval < chisq.pval.thres))
-  par(op)
   structure(list(keep = keep, exclude = exclude, chisq.pval.thres = chisq.pval.thres, data.name = as.character(sys.call())[2]), class = "mappoly.chitest.seq")
 }
