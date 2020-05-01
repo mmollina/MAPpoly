@@ -250,6 +250,7 @@ read_geno <- function(file.in, filter.non.conforming = TRUE, elim.redundant = TR
   if (elim.redundant){
     seqred = make_seq_mappoly(res, arg = 'all', data.name = res)
     redun = elim_redundant(seqred, data = res)
+    if (nrow(redun$elim.correspondence) < 1) return(res)
     res$kept = redun$kept
     res$elim.correspondence = redun$elim.correspondence
     mrks.rem = match(res$elim.correspondence$elim, res$mrk.names)
