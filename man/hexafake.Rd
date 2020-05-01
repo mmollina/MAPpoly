@@ -4,7 +4,8 @@
 \name{hexafake}
 \alias{hexafake}
 \title{Simulated autohexaploid dataset.}
-\format{An object of class \code{mappoly.data} which contains a
+\format{
+An object of class \code{mappoly.data} which contains a
     list with the following components:
 \describe{
     \item{m}{ploidy level = 6}
@@ -29,7 +30,8 @@
     \item{chisq.pval}{vector containing p-values for all markers associated to 
                       the chi-square test for the expected segregation patterns 
                       under Mendelian segregation}
-}}
+}
+}
 \usage{
 hexafake
 }

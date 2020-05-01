@@ -4,7 +4,8 @@
 \name{hexafake.geno.dist}
 \alias{hexafake.geno.dist}
 \title{Simulated autohexaploid dataset with genotype probabilities.}
-\format{An object of class \code{mappoly.data} which contains a
+\format{
+An object of class \code{mappoly.data} which contains a
     list with the following components:
 \describe{
     \item{m}{ploidy level = 6}
@@ -36,7 +37,8 @@
       \code{ploidy_level + 1 = 7}}
     \item{n.phen}{There are no phenotypes in this simulation}
     \item{phen}{There are no phenotypes in this simulation}
-}}
+}
+}
 \usage{
 hexafake.geno.dist
 }

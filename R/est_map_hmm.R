@@ -313,7 +313,8 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #' @param verbose If \code{TRUE} (default), current progress is shown; if
 #'     \code{FALSE}, no output is produced
 #'     
-#' @param detailed.verbose If \code{TRUE}, map expansion of the tested maps is shown; 
+#' @param detailed.verbose If \code{TRUE}, the expansion of the current 
+#'     submap is shown; 
 #'     
 #' @param high.prec logical. If \code{TRUE} uses high precision 
 #' (long double) numbers in the HMM procedure implemented in C++,

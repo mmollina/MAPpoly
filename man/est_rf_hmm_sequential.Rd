@@ -70,8 +70,8 @@ where there are only one possible linkage phase configuration}
 \item{verbose}{If \code{TRUE} (default), current progress is shown; if
 \code{FALSE}, no output is produced}
 
-\item{detailed.verbose}{If \code{TRUE}, current detailed progress is shown; if
-\code{FALSE} (default), default verbose output is produced}
+\item{detailed.verbose}{If \code{TRUE}, the expansion of the current 
+submap is shown;}
 
 \item{high.prec}{logical. If \code{TRUE} uses high precision 
 (long double) numbers in the HMM procedure implemented in C++,

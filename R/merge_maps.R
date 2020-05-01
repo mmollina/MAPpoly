@@ -7,9 +7,7 @@
 #' linkage phase search space. The remaining linkage phases are tested using the genotype 
 #' probabilities
 #' 
-#' @param input.map1 an object of class \code{mappoly.map}, which comprehends the first map to be merged
-#' 
-#' @param input.map2 an object of class \code{mappoly.map}, which comprehends the second map to be merged 
+#' @param map.list a list of object of class \code{mappoly.map} to be merged.
 #' 
 #' @param twopt an object of class \code{poly.est.two.pts.pairwise}
 #'     containing the two-point information
@@ -19,16 +17,12 @@
 #'     for the search space reduction (default = 3)
 #'      
 #' @param thres.hmm the threshold used to determine which linkage 
-#'     phase configurations should be retuned (default = 10)
+#'     phase configurations should be retuned when merging two maps.
+#'     If "best" (default), returns only the best linkage phase 
+#'     configuration. For multiple maps, thres.hmm = "best".   
 #'     
-#' @param genoprob.map1 an object of class \code{mappoly.genoprob} containing the 
-#' genotype probabilities for the first map
-#' 
-#' @param phase.config.map1 which phase configuration should be used for \code{input.map1}. "best" (default) 
-#'                     will choose the configuration associated with the maximum likelihood
-#'                     
-#' @param phase.config.map2 which phase configuration should be used for \code{input.map2}. "best" (default) 
-#'                     will choose the configuration associated with the maximum likelihood
+#' @param genoprob.list a list of objects of class \code{mappoly.genoprob} containing the 
+#' genotype probabilities for the maps to be merged
 #'                     
 #' @param tol the desired accuracy (default = 10e-04)
 #'                     
@@ -48,217 +42,223 @@
 #' #### Tetraploid example #####
 #' map1<-get_submap(solcap.dose.map[[1]], 1:5)
 #' map2<-get_submap(solcap.dose.map[[1]], 6:15)
-#' full.map<-get_submap(solcap.dose.map[[1]], 1:15)
+#' map3<-get_submap(solcap.dose.map[[1]], 16:30)
+#' full.map<-get_submap(solcap.dose.map[[1]], 1:30)
 #' s<-make_seq_mappoly(tetra.solcap, full.map$maps[[1]]$seq.num)
 #' counts<-cache_counts_twopt(input.seq = s, cached = TRUE)
 #' twopt <- est_pairwise_rf(input.seq = s, count.cache = counts)
-#' genoprob.map1 <- calc_genoprob(map1)
-#' merged.maps<-merge_maps(input.map1 = map1, 
-#'                         input.map2 = map2, 
+#' merged.maps<-merge_maps(map.list = list(map1, map2, map3), 
 #'                         twopt = twopt,
-#'                         thres.twopt = 3,
-#'                         genoprob.map1 = genoprob.map1)
-#' 
-#' plot(merged.maps, mrk.names = TRUE)                       
+#'                         thres.twopt = 3)
+#' plot(merged.maps$map, mrk.names = TRUE)                       
 #' plot(full.map, mrk.names = TRUE)                       
-#' best.phase <- merged.maps$maps[[1]]$seq.ph
+#' best.phase <- merged.maps$map$maps[[1]]$seq.ph
 #' names.id<-names(best.phase$P)
-#' plot_compare_haplotypes(m = 6,
-#'                         hom.allele.p1 = best.phase$P[names.id],
-#'                         hom.allele.q1 = best.phase$Q[names.id],
-#'                         hom.allele.p2 = full.map$maps[[1]]$seq.ph$P[names.id],
-#'                         hom.allele.q2 = full.map$maps[[1]]$seq.ph$Q[names.id])  
-#'                         
+#' compare_haplotypes(m = 4, best.phase$P[names.id], 
+#'                    full.map$maps[[1]]$seq.ph$P[names.id]) 
+#' compare_haplotypes(m = 4, best.phase$Q[names.id], 
+#'                    full.map$maps[[1]]$seq.ph$Q[names.id])
+#'                     
 #' #### Hexaploid example #####
 #' map1<-get_submap(maps.hexafake[[1]], 1:5)
 #' map2<-get_submap(maps.hexafake[[1]], 6:15)
-#' full.map<-get_submap(maps.hexafake[[1]], 1:15)
+#' map3<-get_submap(maps.hexafake[[1]], 16:30)
+#' full.map<-get_submap(maps.hexafake[[1]], 1:30)
 #' s<-make_seq_mappoly(hexafake, full.map$maps[[1]]$seq.num)
 #' counts<-cache_counts_twopt(input.seq = s, cached = TRUE)
 #' twopt <- est_pairwise_rf(input.seq = s, count.cache = counts)
-#' genoprob.map1 <- calc_genoprob(map1)
-#' merged.maps<-merge_maps(input.map1 = map1, 
-#'                         input.map2 = map2, 
+#' merged.maps<-merge_maps(map.list = list(map1, map2, map3), 
 #'                         twopt = twopt,
-#'                         thres.twopt = 3,
-#'                         genoprob.map1 = genoprob.map1)
-#' 
-#' plot(merged.maps, mrk.names = TRUE)                       
+#'                         thres.twopt = 3)
+#' plot(merged.maps$map, mrk.names = TRUE)                       
 #' plot(full.map, mrk.names = TRUE)                       
-#' best.phase <- merged.maps$maps[[1]]$seq.ph
+#' best.phase <- merged.maps$map$maps[[1]]$seq.ph
 #' names.id<-names(best.phase$P)
-#' plot_compare_haplotypes(m = 6,
-#'                         hom.allele.p1 = best.phase$P[names.id],
-#'                         hom.allele.q1 = best.phase$Q[names.id],
-#'                         hom.allele.p2 = full.map$maps[[1]]$seq.ph$P[names.id],
-#'                         hom.allele.q2 = full.map$maps[[1]]$seq.ph$Q[names.id])  
+#' compare_haplotypes(m = 6, best.phase$P[names.id], 
+#'                    full.map$maps[[1]]$seq.ph$P[names.id]) 
+#' compare_haplotypes(m = 6, best.phase$Q[names.id], 
+#'                    full.map$maps[[1]]$seq.ph$Q[names.id])
 #'}
 #' 
 #' @export
-merge_maps<-function(input.map1, 
-                     input.map2, 
+merge_maps<-function(map.list, 
                      twopt,
-                     thres.twopt = 3,
-                     thres.hmm = 10,
-                     genoprob.map1 = NULL,
-                     phase.config.map1 = "best",
-                     phase.config.map2 = "best",
-                     tol = 10e-4){
+                     thres.twopt = 10,
+                     genoprob.list = NULL,
+                     thres.hmm = "best",
+                     tol = 10e-5){
   ## Checking class of arguments
-  if(!inherits(input.map1, "mappoly.map")) {
-    stop(deparse(substitute(input.map1)), " is not an object of class 'mappoly.map'")
-  }
-  if(!inherits(input.map2, "mappoly.map")) {
-    stop(deparse(substitute(input.map2)), " is not an object of class 'mappoly.map'")
-  }
-  if(input.map1$info$data.name != input.map2$info$data.name)
+  #if(any(sapply(map.list, class) != "mappoly.map"))
+  #stop("at least one object in ", deparse(substitute(map.list)), " is not an object of class 'mappoly.map'")
+  if (length(unique(sapply(map.list, function(x) x$info$data.name))) != 1)
     stop("MAPpoly won't merge maps from different datasets.")
   if (!any(class(twopt) == "poly.est.two.pts.pairwise")){
     stop(deparse(substitute(twopt)), " is not an object of class 'poly.est.two.pts.pairwise'")    
   }
   ## Check twopt consistency
-  s.temp<-make_seq_mappoly(get(input.map1$info$data.name), 
-                           c(input.map1$info$mrk.names, input.map2$info$mrk.names), 
-                           data.name = input.map1$info$data.name)
+  s.temp<-make_seq_mappoly(get(map.list[[1]]$info$data.name), 
+                           unlist(sapply(map.list, function(x) x$info$mrk.names)), 
+                           map.list[[1]]$info$data.name)
   check <- check_pairwise(s.temp, twopt)
   if (any(check != 0)){
     cat("There is no information for pairs: \n")
     print(check)
     stop()
   }
-  
-  ## choosing the linkage phase configuration
-  ## map 1
-  LOD.conf1 <- get_LOD(input.map1, sorted = FALSE)
-  if(phase.config.map1 == "best") {
-    i.lpc1 <- which.min(LOD.conf1)
-  }  else if (phase.config.map1 > length(LOD.conf1)) {
-    stop("invalid linkage phase configuration")
-  } else i.lpc1 <- phase.config.map1
-  ## map 2
-  LOD.conf2 <- get_LOD(input.map2, sorted = FALSE)
-  if(phase.config.map2 == "best") {
-    i.lpc2 <- which.min(LOD.conf2)
-  }  else if (phase.config.map2 > length(LOD.conf2)) {
-    stop("invalid linkage phase configuration")
-  } else i.lpc2 <- phase.config.map2
-  
-  ## FIXME: include a check for the appropriate phase of the provided genoprob.map's
-  if(is.null(genoprob.map1)){
-    message("Calculating genoprob.map1")
-    genoprob.map1 <- calc_genoprob(input.map1, phase.config = i.lpc1)
-  }
-  if(!inherits(genoprob.map1 , "mappoly.genoprob")) {
-    stop("'", deparse(substitute(genoprob.map1)), "' is not an object of class 'mappoly.genoprob'")
-  }
-  if(!identical(names(genoprob.map1$map), input.map1$info$mrk.names)){
-    warning("'", deparse(substitute(genoprob.map1)), "' is inconsistent with 'input.map1'.\n  Recalculating genoprob.map1.")
-    genoprob.map1 <- calc_genoprob(input.map1)
+  ## For merging multiple maps 
+  if(length(map.list) > 2)
+    thres.hmm = "best"
+  ## choosing best linkage phase configuration
+  i.lpc <- sapply(map.list, function(x) which.min(get_LOD(x, sorted = FALSE)))
+  ## Calculating genoprob if needed
+  if (is.null(genoprob.list) | 
+      length(genoprob.list) != length(map.list) |
+      !identical(sapply(genoprob.list, function(x) names(x$map)), sapply(map.list, function(x) x$info$mrk.names)))
+  {
+    ##message("Calculating genoprob.list")
+    genoprob.list <- vector("list", length(map.list))
+    for(i in 1:length(genoprob.list)){
+      r <- map.list[[i]]$maps[[1]]$seq.rf
+      r[r<1e-5] <- 1e-5
+      map.list[[i]]$maps[[1]]$seq.rf <- r
+      suppressMessages(genoprob.list[[i]] <- calc_genoprob(map.list[[i]], phase.config = i.lpc[[i]], verbose = FALSE))
+    }
   }
   ## ploidy
-  m1 <- input.map1$info$m
-  m2 <- input.map2$info$m
-  if(m1!=m2)
+  m <- unique(sapply(map.list, function(x) x$info$m))
+  if(length(m) != 1)
     stop("MAPpoly won't merge maps with different ploidy levels.")
-  m <- m1
   ## number of genotipic states
   ngam <- choose(m, m/2)
   ## Number of genotypes in the offspring
-  ngen <- ngam^2
+  ngen <- ngam * ngam
   ## number of markers
-  nmrk1 <- input.map1$info$n.mrk
-  nmrk2 <- input.map2$info$n.mrk
+  nmrk <- sapply(map.list, function(x) length(x$info$mrk.names))
   ## number of individuals
-  nind <- dim(genoprob.map1$probs)[3]
+  nind <- dim(genoprob.list[[1]]$probs)[3]
   ## the threshold for visiting states: 1/ngen
   thresh.cut.path <- 1/ngen
-  
   ## Hash table: homolog combination --> states to visit in both parents
   A<-as.matrix(expand.grid(0:(ngam-1), 
                            0:(ngam-1))[,2:1])
-  rownames(A) <- dimnames(genoprob.map1$probs)[[1]]
-  ## First map
-  ## h: states to visit in both parents
-  ## e: probability distribution 
-  e.first <- h.first <- vector("list", nind)
-  for(i in 1:nind){
-    a <- genoprob.map1$probs[,dim(genoprob.map1$probs)[2],i]  
-    e.first[[i]] <- a[a > thresh.cut.path]
-    h.first[[i]] <- A[names(e.first[[i]]), , drop = FALSE]
-  }
-  ## Second map
-  tpt.temp <- make_pairs_mappoly(input.twopt = twopt, s.temp)
-  rf.matrix <- rf_list_to_matrix(input.twopt = tpt.temp,
-                                 thresh.LOD.ph =  thres.twopt, 
-                                 thresh.LOD.rf = thres.twopt, 
-                                 shared.alleles = TRUE)
-  w<-generate_all_link_phases_elim_equivalent_haplo(block1 = input.map1$maps[[i.lpc1]], 
-                                                    block2 = input.map2$maps[[i.lpc2]],
-                                                    rf.matrix = rf.matrix,
-                                                    m = m, 
-                                                    max.inc = 0)
-  ## get test.maps and conditional probabilities
-  test.maps<-p<-vector("list", length(w))
-  for(i in 1:length(w))
-  {
-    input.map2$maps[[1]]$seq.ph <- w[[i]]
-    test.maps[[i]] <- input.map2
-    p[[i]] <- calc_genoprob(test.maps[[i]], verbose = FALSE)
-  }
-  ## h: states to visit in both parents
-  ## e: probability distrobution 
-  h.second<-e.second<-vector("list", length(w))
-  for(j in 1:length(w)){
-    etemp<-htemp<-vector("list", nind)
+  rownames(A) <- dimnames(genoprob.list[[1]]$probs)[[1]]
+  if(length(map.list) == 2){
+    ## h: states to visit in both parents
+    ## e: probability distribution 
+    e.first <- h.first <- vector("list", nind)
     for(i in 1:nind){
-      a <- p[[j]]$probs[,1,i]  
-      etemp[[i]] <- a[a > thresh.cut.path]
-      htemp[[i]] <- A[names(etemp[[i]]), , drop = FALSE]
+      a <- genoprob.list[[1]]$probs[,dim(genoprob.list[[1]]$probs)[2],i]  
+      e.first[[i]] <- a[a > thresh.cut.path]
+      h.first[[i]] <- A[names(e.first[[i]]), , drop = FALSE]
     }
-    h.second[[j]] <- htemp
-    e.second[[j]] <- etemp
+    ## Second map
+    tpt.temp <- make_pairs_mappoly(input.twopt = twopt, s.temp)
+    rf.matrix <- rf_list_to_matrix(input.twopt = tpt.temp,
+                                   thresh.LOD.ph =  thres.twopt, 
+                                   thresh.LOD.rf = thres.twopt, 
+                                   shared.alleles = TRUE, 
+                                   verbose = FALSE)
+    w<-generate_all_link_phases_elim_equivalent_haplo(block1 = map.list[[1]]$maps[[i.lpc[1]]], 
+                                                      block2 = map.list[[2]]$maps[[i.lpc[2]]],
+                                                      rf.matrix = rf.matrix,
+                                                      m = m, 
+                                                      max.inc = 0)
+    ## get test.maps and conditional probabilities
+    test.maps<-p<-vector("list", length(w))
+    rem <- logical(length(w))
+    for(i in 1:length(w))
+    {
+      test.maps[[i]] <- map.list[[2]]
+      test.maps[[i]]$maps[[1]]$seq.ph <- w[[i]]
+      r <- test.maps[[i]]$maps[[1]]$seq.rf
+      r[r<1e-5] <- 1e-5
+      test.maps[[i]]$maps[[1]]$seq.rf <- r
+      suppressMessages(p[[i]] <- calc_genoprob(test.maps[[i]], verbose = FALSE))
+    }
+    ## h: states to visit in both parents
+    ## e: probability distrobution 
+    h.second<-e.second<-vector("list", length(w))
+    for(j in 1:length(w)){
+      etemp<-htemp<-vector("list", nind)
+      for(i in 1:nind){
+        a <- p[[j]]$probs[,1,i]  
+        etemp[[i]] <- a[a > thresh.cut.path]
+        htemp[[i]] <- A[names(etemp[[i]]), , drop = FALSE]
+      }
+      h.second[[j]] <- htemp
+      e.second[[j]] <- etemp
+    }
+    configs<-vector("list", length(test.maps))
+    names(configs) <- paste0("Phase_config.", 1:length(test.maps))
+    res<-matrix(NA, nrow = length(w), ncol = 2, dimnames = list(names(configs), c("log_like", "rf")))
+    ## HMM
+    for(i in 1:length(w)){
+      #cat("testing", i, "of", length(h), "\n")
+      #cat(".")
+      h.test<-c(list(h.first), h.second[i])
+      e.test<-c(list(e.first), e.second[i])
+      restemp<-est_haplo_hmm(m = m, 
+                             n.mrk = length(h.test), 
+                             n.ind = nind, 
+                             haplo = h.test, 
+                             emit = e.test, 
+                             rf_vec = rep(0.01, length(h.test)-1), 
+                             verbose = FALSE, 
+                             use_H0 = FALSE, 
+                             tol = tol) 
+      res[i,]<-unlist(restemp)
+    }
+    #cat("\n")
+    for(i in 1:length(test.maps)){
+      P<-c(map.list[[1]]$maps[[i.lpc[1]]]$seq.ph$P, test.maps[[i]]$maps[[1]]$seq.ph$P)
+      Q<-c(map.list[[1]]$maps[[i.lpc[1]]]$seq.ph$Q, test.maps[[i]]$maps[[1]]$seq.ph$Q)
+      names(P)<-names(Q)<-c(map.list[[1]]$maps[[i.lpc[1]]]$seq.num, test.maps[[i]]$maps[[1]]$seq.num)
+      configs[[i]]<-list(P = P, Q = Q)
+    }
+    res<-res[order(res[,"log_like"], decreasing = TRUE),,drop = FALSE]
+    ## Updating map
+    output.map<-map.list[[1]]
+    seq.num<-as.numeric(names(configs[[1]]$P))
+    output.map$info$mrk.names <- c(map.list[[1]]$info$mrk.names, map.list[[2]]$info$mrk.names) 
+    output.map$info$n.mrk <- length(output.map$info$mrk.names)
+    for(i in 1:nrow(res))
+    {
+      seq.rf <- c(map.list[[1]]$maps[[i.lpc[1]]]$seq.rf, res[i, "rf"], map.list[[2]]$maps[[i.lpc[2]]]$seq.rf)
+      output.map$maps[[i]] <- list(seq.num = seq.num, 
+                                   seq.rf = seq.rf, 
+                                   seq.ph = configs[[rownames(res)[i]]],
+                                   loglike = res[i, "log_like"])
+    }
+    if(thres.hmm == "best")
+      thres.hmm <- 10e-10
+    output.map <- filter_map_at_hmm_thres(output.map, thres.hmm)
+    return(output.map)
+  } else { 
+    ##sequential phasing
+    out.map <- map.list[[1]]
+    for(i in 2:length(map.list)){
+      out.map<-merge_maps(map.list = list(out.map, map.list[[i]]), twopt = twopt, tol = tol, thres.twopt = thres.twopt)  
+    }
+    out.map$info$seq.num <- unlist(sapply(map.list, function(x) x$info$seq.num))
+    out.map$info$seq.dose.p <- unlist(sapply(map.list, function(x) x$info$seq.dose.p))
+    out.map$info$seq.dose.q <- unlist(sapply(map.list, function(x) x$info$seq.dose.q))
+    out.map$info$sequence <- unlist(sapply(map.list, function(x) x$info$sequence))
+    out.map$info$sequence.pos <- unlist(sapply(map.list, function(x) x$info$sequence.pos))
+    out.map$info$chisq.pval <- unlist(sapply(map.list, function(x) x$info$chisq.pval))
+    ##spliting to reestimate
+    map.list2 <- vector("list", length(map.list))
+    for(i in 1:length(map.list)){
+      suppressMessages(map.list2[[i]] <- get_submap(out.map, mrk.pos = match(map.list[[i]]$info$mrk.names, out.map$info$mrk.names), reestimate.rf = FALSE))
+    }
+    temp.map<-est_map_haplo_given_genoprob(map.list2, genoprob.list, tol = tol)
+    out.map$maps[[1]]$loglike <- temp.map$map[[1]] 
+    w <- NULL
+    for(i in 1:(length(map.list)-1)){
+      w <- c(w, map.list[[i]]$maps[[1]]$seq.rf, temp.map$map[[2]][i])
+    }
+    out.map$maps[[1]]$seq.rf <- c(w, map.list[[length(map.list)]]$maps[[1]]$seq.rf)
+    temp.map$genoprob$map <- cumsum(c(0, imf_h(temp.map$genoprob$map)))
+    dimnames(temp.map$genoprob$probs)[[2]] <- names(temp.map$genoprob$map) <- paste0("M_", 1:length(temp.map$genoprob$map))
+    return(list(map = out.map, genoprob = temp.map$genoprob))
   }
-  configs<-vector("list", length(test.maps))
-  names(configs) <- paste0("Phase_config.", 1:length(test.maps))
-  res<-matrix(NA, nrow = length(w), ncol = 2, dimnames = list(names(configs), c("log_like", "rf")))
-  ## HMM
-  for(i in 1:length(w)){
-    #cat("testing", i, "of", length(h), "\n")
-    cat(".")
-    h.test<-c(list(h.first), h.second[i])
-    e.test<-c(list(e.first), e.second[i])
-    restemp<-est_haplo_hmm(m = m, 
-                           n.mrk = length(h.test), 
-                           n.ind = nind, 
-                           haplo = h.test, 
-                           emit = e.test, 
-                           rf_vec = rep(0.01, length(h.test)-1), 
-                           verbose = FALSE, 
-                           use_H0 = FALSE, 
-                           tol = tol) 
-    res[i,]<-unlist(restemp)
-  }
-  cat("\n")
-  for(i in 1:length(test.maps)){
-    P<-c(input.map1$maps[[i.lpc1]]$seq.ph$P, test.maps[[i]]$maps[[1]]$seq.ph$P)
-    Q<-c(input.map1$maps[[i.lpc1]]$seq.ph$Q, test.maps[[i]]$maps[[1]]$seq.ph$Q)
-    names(P)<-names(Q)<-c(input.map1$maps[[i.lpc1]]$seq.num, test.maps[[i]]$maps[[1]]$seq.num)
-    configs[[i]]<-list(P = P, Q = Q)
-  }
-  res<-res[order(res[,"log_like"], decreasing = TRUE),,drop = FALSE]
-  ## Updating map
-  output.map<-input.map1
-  seq.num<-as.numeric(names(configs[[1]]$P))
-  output.map$info$mrk.names <- c(input.map1$info$mrk.names, input.map2$info$mrk.names) 
-  output.map$info$n.mrk <- length(output.map$info$mrk.names)
-  for(i in 1:nrow(res))
-  {
-    seq.rf <- c(input.map1$maps[[i.lpc1]]$seq.rf, res[i, "rf"], input.map2$maps[[i.lpc2]]$seq.rf)
-    output.map$maps[[i]] <- list(seq.num = seq.num, 
-                                 seq.rf = seq.rf, 
-                                 seq.ph = configs[[rownames(res)[i]]],
-                                 loglike = res[i, "log_like"])
-  }
-  output.map <- filter_map_at_hmm_thres(output.map, thres.hmm)
-  return(output.map)
 }
