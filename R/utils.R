@@ -78,7 +78,7 @@ get_memory<-function(){
 rev_map<-function(input.map)
 {
   output.map<-input.map
-  output.map$info$mrk.names <- rev(input.map$info$mrk.names)
+  output.map$info <- lapply(output.map$info, rev)
   for(i in 1:length(output.map$maps))
   {
     output.map$maps[[i]]$seq.num <- rev(input.map$maps[[i]]$seq.num)
@@ -88,6 +88,12 @@ rev_map<-function(input.map)
   }
   return(output.map)
 }
+
+
+
+
+
+
 
 #' Selects the class with high probability and return it instead of
 #' the distribution of probabilities for all classes
