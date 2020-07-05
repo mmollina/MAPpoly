@@ -4,7 +4,7 @@
 \alias{plot_genome_vs_map}
 \title{Physical versus genetic distance}
 \usage{
-plot_genome_vs_map(map.list, config = "best")
+plot_genome_vs_map(map.list, config = "best", same.ch.lg = FALSE)
 }
 \arguments{
 \item{map.list}{A list or a single object of class \code{mappoly.map}}
@@ -12,6 +12,9 @@ plot_genome_vs_map(map.list, config = "best")
 \item{config}{A vector containing the position of the
 configuration(s) to be plotted. If \code{'best'} (default), plots the configuration
 with the highest likelihood for all elements in \code{'map.list'}}
+
+\item{same.ch.lg}{Logical. If \code{TRUE} displays only the scatterplots between the 
+chromosomes and linkage groups with the same number. Default is \code{FALSE}.}
 }
 \description{
 This function plots scatterplot(s) of physical distance (in Mb) versus the genetic 

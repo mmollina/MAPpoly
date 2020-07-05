@@ -14,7 +14,7 @@ merge_maps(
 )
 }
 \arguments{
-\item{map.list}{a list of object of class \code{mappoly.map} to be merged.}
+\item{map.list}{a list of objects of class \code{mappoly.map} to be merged.}
 
 \item{twopt}{an object of class \code{poly.est.two.pts.pairwise}
 containing the two-point information}
@@ -23,13 +23,14 @@ containing the two-point information}
 phases compared via two-point analysis should be considered 
 for the search space reduction (default = 3)}
 
-\item{genoprob.list}{a list of objects of class \code{mappoly.genoprob} containing the 
-genotype probabilities for the maps to be merged}
+\item{genoprob.list}{a list of objects of class \code{mappoly.genoprob} 
+containing the genotype probabilities for the maps to be merged. 
+If \code{NULL} (default), the probabilities are computed.}
 
 \item{thres.hmm}{the threshold used to determine which linkage 
 phase configurations should be retuned when merging two maps.
 If "best" (default), returns only the best linkage phase 
-configuration. For multiple maps, thres.hmm = "best".}
+configuration.}
 
 \item{tol}{the desired accuracy (default = 10e-04)}
 }

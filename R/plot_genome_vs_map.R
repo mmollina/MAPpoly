@@ -10,6 +10,9 @@
 #'     configuration(s) to be plotted. If \code{'best'} (default), plots the configuration
 #'     with the highest likelihood for all elements in \code{'map.list'} 
 #'     
+#' @param same.ch.lg Logical. If \code{TRUE} displays only the scatterplots between the 
+#'   chromosomes and linkage groups with the same number. Default is \code{FALSE}.    
+#'   
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
@@ -20,13 +23,15 @@
 #'     \url{https://doi.org/10.1534/g3.119.400378}
 #'
 #' @export plot_genome_vs_map
-plot_genome_vs_map<-function(map.list, config = "best"){
+plot_genome_vs_map<-function(map.list, config = "best", same.ch.lg = FALSE){
   if(class(map.list) == "mappoly.map")  
     map.list<-list(map.list)
   if(any(sapply(map.list, class)!="mappoly.map"))
     stop("All elemnts in 'map.list' should be of class 'mappoly.map'")
   if(length(config)!=length(map.list))
     config<-rep(config[1], length(map.list))
+  if(any(sapply(map.list, function(x) is.null(x$info$sequence.pos))))
+    stop("All elemnts in 'map.list' should have the genomic position of the markers")
   geno.vs.map <- NULL
   for(i in 1:length(map.list)){
     ## Get linkage phase configuration
@@ -46,8 +51,16 @@ plot_genome_vs_map<-function(map.list, config = "best"){
                                   LG = paste0("LG_", i),
                                   chr = map.list[[i]]$info$sequence))
   }
-  p<-ggplot2::ggplot(geno.vs.map, ggplot2::aes(genomic.pos, map.pos)) +
-    ggplot2::geom_point(alpha = 1/5, ggplot2::aes(colour = LG)) +
-    ggplot2::facet_grid(chr~LG) +  ggplot2::xlab("Genome Position (Mb)") + ggplot2::ylab("Map Distance (cM)")
+  
+  if(same.ch.lg){
+    p<-ggplot2::ggplot(geno.vs.map, ggplot2::aes(genomic.pos, map.pos)) +
+      ggplot2::geom_point(alpha = 1/5, ggplot2::aes(colour = LG)) +
+      ggplot2::facet_wrap(~LG, nrow = floor(sqrt(length(map.list)))) +  
+      ggplot2::xlab("Genome Position (Mb)") + ggplot2::ylab("Map Distance (cM)")
+  } else {
+    p<-ggplot2::ggplot(geno.vs.map, ggplot2::aes(genomic.pos, map.pos)) +
+      ggplot2::geom_point(alpha = 1/5, ggplot2::aes(colour = LG)) +
+      ggplot2::facet_grid(chr~LG) +  ggplot2::xlab("Genome Position (Mb)") + ggplot2::ylab("Map Distance (cM)")    
+  }
   p
 }
