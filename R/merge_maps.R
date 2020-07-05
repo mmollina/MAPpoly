@@ -7,7 +7,7 @@
 #' linkage phase search space. The remaining linkage phases are tested using the genotype 
 #' probabilities
 #' 
-#' @param map.list a list of object of class \code{mappoly.map} to be merged.
+#' @param map.list a list of objects of class \code{mappoly.map} to be merged.
 #' 
 #' @param twopt an object of class \code{poly.est.two.pts.pairwise}
 #'     containing the two-point information
@@ -19,10 +19,11 @@
 #' @param thres.hmm the threshold used to determine which linkage 
 #'     phase configurations should be retuned when merging two maps.
 #'     If "best" (default), returns only the best linkage phase 
-#'     configuration. For multiple maps, thres.hmm = "best".   
+#'     configuration. 
 #'     
-#' @param genoprob.list a list of objects of class \code{mappoly.genoprob} containing the 
-#' genotype probabilities for the maps to be merged
+#' @param genoprob.list a list of objects of class \code{mappoly.genoprob} 
+#'     containing the genotype probabilities for the maps to be merged. 
+#'     If \code{NULL} (default), the probabilities are computed.
 #'                     
 #' @param tol the desired accuracy (default = 10e-04)
 #'                     
@@ -176,7 +177,7 @@ merge_maps<-function(map.list,
       suppressMessages(p[[i]] <- calc_genoprob(test.maps[[i]], verbose = FALSE))
     }
     ## h: states to visit in both parents
-    ## e: probability distrobution 
+    ## e: probability distribution 
     h.second<-e.second<-vector("list", length(w))
     for(j in 1:length(w)){
       etemp<-htemp<-vector("list", nind)
