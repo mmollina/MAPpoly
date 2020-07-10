@@ -8,7 +8,7 @@
 \usage{
 est_pairwise_rf(
   input.seq,
-  count.cache,
+  count.cache = NULL,
   n.clusters = 1,
   mrk.pairs = NULL,
   n.batches = 1,
@@ -27,7 +27,8 @@ est_pairwise_rf(
 
 \item{count.cache}{an object of class \code{cache.info} containing
 pre-computed genotype frequencies, obtained with
-\code{\link[mappoly]{cache_counts_twopt}}}
+\code{\link[mappoly]{cache_counts_twopt}}. If \code{NULL} (default),
+genotype frequencies are internally loaded.}
 
 \item{n.clusters}{Number of parallel processes (cores) to spawn (default = 1)}
 
@@ -79,10 +80,8 @@ between all pairwise markers given one or more linkage phase configurations.
   all.mrk <- make_seq_mappoly(tetra.solcap, 'all')
   red.mrk <- elim_redundant(all.mrk)
   unique.mrks <- make_seq_mappoly(red.mrk)
-  counts <- cache_counts_twopt(unique.mrks, cached = TRUE)
   # will take ~ 13 min
   all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
-                               count.cache = counts,
                                n.clusters = 7, 
                                verbose=TRUE)
    all.pairs
@@ -113,15 +112,12 @@ between all pairwise markers given one or more linkage phase configurations.
                                       inter = FALSE)
   seq.ch1<-make_seq_mappoly(mrks.chi.filt)
   plot(seq.ch1)
-  counts <- cache_counts_twopt(seq.ch1, cached = TRUE)
   ## will take ~  19 min / peak of memory usage ~ 10GB
   all.pairs.1 <- est_pairwise_rf(input.seq = seq.ch1,
-                                 count.cache = counts,
                                  n.clusters = 7, 
                                  verbose=TRUE)
   ## same thing, but it will take ~  21 min / peak of memory usage ~ 6GB
   all.pairs.2 <- est_pairwise_rf(input.seq = seq.ch1,
-                                 count.cache = counts,
                                  n.clusters = 7, 
                                  n.batch = 10,
                                  verbose=TRUE)   
