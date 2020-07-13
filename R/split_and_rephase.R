@@ -42,6 +42,8 @@
 #'
 #' @export split_and_rephase
 #'
+#' @importFrom utils capture.output
+#' 
 split_and_rephase<-function(input.map,
                             twopt,
                             gap.threshold = 5, 
