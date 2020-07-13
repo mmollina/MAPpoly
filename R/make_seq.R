@@ -279,8 +279,8 @@ plot.mappoly.sequence <- function(x, ...)
   op <- par(mar = c(5,4,1,2))
   layout(matrix(c(1,1,1,2,3,3,6,4,5), 3, 3), widths = c(1.2,3,.5), heights = c(1.5,4.5,.5))
   barplot(mrk.dist, las = 2, col = pal[match(type, type.names)], 
-          xlab = "dosage combination", 
-          ylab = "number of markers", horiz = TRUE)
+          xlab = "Number of markers", 
+          ylab = "Dosage combination", horiz = TRUE)
   pval<-x$chisq.pval[x$seq.mrk.names]
   if(is.null(x$chisq.pval))
   {
