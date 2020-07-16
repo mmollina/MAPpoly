@@ -57,7 +57,7 @@ generate_all_link_phases_elim_equivalent_haplo <-
     dimnames(hQ2) <- list(block2$seq.num, q2)
     q2 <- perm_tot(q2)
     
-    ## WP: removing redundancy and accounting for shared elleles
+    ## WP: removing redundancy and accounting for shared alleles
     wp <- NULL
     for (i in 1:nrow(p2))
       wp <- rbind(wp, paste(p1, p2[i, ], sep = "-"))
@@ -117,13 +117,7 @@ generate_all_link_phases_elim_equivalent_haplo <-
         cte <- cte + 1
       }
     }
-    ## Eliminating equivalent linkage phase configurations
-    Z1<-lapply(phase.to.test, function(x) ph_list_to_matrix(L = x$P, m))
-    a1 <- sapply(Z1, function(x) paste(sort(apply(x, 2, paste, collapse = "")), collapse = ""))
-    Z2<-lapply(phase.to.test, function(x) ph_list_to_matrix(L = x$Q, m))
-    a2 <- sapply(Z2, function(x) paste(sort(apply(x, 2, paste, collapse = "")), collapse = ""))
-    a<-paste(a1, a2)
-    phase.to.test <- phase.to.test[which(!duplicated(a))]
+    phase.to.test <- unique(phase.to.test)
     names(phase.to.test) <- paste0("config.", 1:length(phase.to.test))
     return(phase.to.test)
   }
