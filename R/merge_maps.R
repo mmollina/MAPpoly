@@ -19,7 +19,8 @@
 #' @param thres.hmm the threshold used to determine which linkage 
 #'     phase configurations should be retuned when merging two maps.
 #'     If "best" (default), returns only the best linkage phase 
-#'     configuration. 
+#'     configuration. NOTE: if merging multiple maps, it always uses 
+#'     the "best" linkage phase configuration at each block insertion.
 #'     
 #' @param genoprob.list a list of objects of class \code{mappoly.genoprob} 
 #'     containing the genotype probabilities for the maps to be merged. 
@@ -89,8 +90,8 @@ merge_maps<-function(map.list,
                      thres.hmm = "best",
                      tol = 10e-5){
   ## Checking class of arguments
-  #if(any(sapply(map.list, class) != "mappoly.map"))
-  #stop("at least one object in ", deparse(substitute(map.list)), " is not an object of class 'mappoly.map'")
+  if(any(sapply(map.list, class) != "mappoly.map"))
+    stop("at least one object in ", deparse(substitute(map.list)), " is not an object of class 'mappoly.map'")
   if (length(unique(sapply(map.list, function(x) x$info$data.name))) != 1)
     stop("MAPpoly won't merge maps from different datasets.")
   if (!any(class(twopt) == "poly.est.two.pts.pairwise")){
@@ -125,7 +126,7 @@ merge_maps<-function(map.list,
       suppressMessages(genoprob.list[[i]] <- calc_genoprob(map.list[[i]], phase.config = i.lpc[[i]], verbose = FALSE))
     }
   }
-  ## ploidy
+  ## checking ploidy level consistency
   m <- unique(sapply(map.list, function(x) x$info$m))
   if(length(m) != 1)
     stop("MAPpoly won't merge maps with different ploidy levels.")
@@ -236,9 +237,14 @@ merge_maps<-function(map.list,
     return(output.map)
   } else { 
     ##sequential phasing
+    ## FIXME: instead of computing genoprob for each round of block insetion$
+    ## Inherit from previous rounds
     out.map <- map.list[[1]]
     for(i in 2:length(map.list)){
-      out.map<-merge_maps(map.list = list(out.map, map.list[[i]]), twopt = twopt, tol = tol, thres.twopt = thres.twopt)  
+      out.map<-merge_maps(map.list = list(out.map, map.list[[i]]), 
+                          twopt = twopt, 
+                          tol = tol, 
+                          thres.twopt = thres.twopt)  
     }
     out.map$info$seq.num <- unlist(sapply(map.list, function(x) x$info$seq.num))
     out.map$info$seq.dose.p <- unlist(sapply(map.list, function(x) x$info$seq.dose.p))
@@ -251,6 +257,13 @@ merge_maps<-function(map.list,
     for(i in 1:length(map.list)){
       suppressMessages(map.list2[[i]] <- get_submap(out.map, mrk.pos = match(map.list[[i]]$info$mrk.names, out.map$info$mrk.names), reestimate.rf = FALSE))
     }
+    genoprob.list <- vector("list", length(map.list2))
+    for(i in 1:length(genoprob.list)){
+      r <- map.list2[[i]]$maps[[1]]$seq.rf
+      r[r<1e-5] <- 1e-5
+      map.list2[[i]]$maps[[1]]$seq.rf <- r
+      suppressMessages(genoprob.list[[i]] <- calc_genoprob(map.list2[[i]], verbose = FALSE))
+    }
     temp.map<-est_map_haplo_given_genoprob(map.list2, genoprob.list, tol = tol)
     out.map$maps[[1]]$loglike <- temp.map$map[[1]] 
     w <- NULL
@@ -260,6 +273,6 @@ merge_maps<-function(map.list,
     out.map$maps[[1]]$seq.rf <- c(w, map.list[[length(map.list)]]$maps[[1]]$seq.rf)
     temp.map$genoprob$map <- cumsum(c(0, imf_h(temp.map$genoprob$map)))
     dimnames(temp.map$genoprob$probs)[[2]] <- names(temp.map$genoprob$map) <- paste0("M_", 1:length(temp.map$genoprob$map))
-    return(list(map = out.map, genoprob = temp.map$genoprob))
+    return(out.map)
   }
 }
