@@ -42,13 +42,13 @@ plot_genome_vs_map<-function(map.list, config = "best", same.ch.lg = FALSE){
       i.lpc <- config[i]
       if(i.lpc > length(LOD.conf))
         stop("invalid linkage phase configuration")
-      } else stop("invalid linkage phase configuration")
+    } else stop("invalid linkage phase configuration")
     LG <- genomic.pos <- map.pos <- NULL
     geno.vs.map<-rbind(geno.vs.map,
                        data.frame(mrk.names = map.list[[i]]$info$mrk.names,
                                   map.pos = cumsum(imf_h(c(0, map.list[[i]]$maps[[i.lpc]]$seq.rf))),
                                   genomic.pos = map.list[[i]]$info$sequence.pos/1e6, 
-                                  LG = paste0("LG_", i),
+                                  LG = as.character(i),
                                   chr = map.list[[i]]$info$sequence))
   }
   
@@ -56,11 +56,17 @@ plot_genome_vs_map<-function(map.list, config = "best", same.ch.lg = FALSE){
     p<-ggplot2::ggplot(geno.vs.map, ggplot2::aes(genomic.pos, map.pos)) +
       ggplot2::geom_point(alpha = 1/5, ggplot2::aes(colour = LG)) +
       ggplot2::facet_wrap(~LG, nrow = floor(sqrt(length(map.list)))) +  
-      ggplot2::xlab("Genome Position (Mb)") + ggplot2::ylab("Map Distance (cM)")
+      ggplot2::labs(subtitle = "Linkage group", x = "Genome position (Mbp)", y = "Map position (cM)") +
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1), legend.position="none", plot.subtitle = ggplot2::element_text(hjust = 0.5)) 
+    
   } else {
     p<-ggplot2::ggplot(geno.vs.map, ggplot2::aes(genomic.pos, map.pos)) +
       ggplot2::geom_point(alpha = 1/5, ggplot2::aes(colour = LG)) +
-      ggplot2::facet_grid(chr~LG) +  ggplot2::xlab("Genome Position (Mb)") + ggplot2::ylab("Map Distance (cM)")    
+      ggplot2::facet_grid(chr~LG) + 
+      ggplot2::labs(x = "Genome position (Mbp)", y = "Map position (cM)") +
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1), legend.position="none") 
   }
   p
 }

@@ -11,7 +11,7 @@
 #' @param col a vector of colors for the bars or bar components (default = 'lightgrey')
 #'            \code{ggstyle} produces maps using the default \code{ggplot} color palette 
 #'            
-#' @param title a title (string) for the maps (default = 'Linkage Groups')
+#' @param title a title (string) for the maps (default = 'Linkage group')
 #'
 #' @return A \code{data.frame} object containing the name of the markers and their genetic position
 #' 
@@ -54,7 +54,7 @@
 #'
 #' @export plot_map_list
 #'
-plot_map_list<-function(map.list, horiz = TRUE, col = "lightgray", title = "Linkage Groups"){
+plot_map_list<-function(map.list, horiz = TRUE, col = "lightgray", title = "Linkage group"){
   if(class(map.list) == "mappoly.map")  
     map.list<-list(map.list)
   if(any(sapply(map.list, class)!="mappoly.map"))
@@ -72,12 +72,12 @@ plot_map_list<-function(map.list, horiz = TRUE, col = "lightgray", title = "Link
          xlim = c(0, max.dist), 
          ylim = c(0,length(map.list)+1), 
          type = "n", axes = FALSE, 
-         xlab = "Centimorgans (cM)", 
+         xlab = "Map position (cM)", 
          ylab = title)
     axis(1)
     for(i in 1:length(map.list)){
       d <- extract_map(map.list[[i]])
-      z<-rbind(z, data.frame(mrk = get(map.list[[i]]$info$data.name)$mrk.names[map.list[[i]]$maps[[1]]$seq.num], 
+      z<-rbind(z, data.frame(mrk = map.list[[i]]$info$mrk.names, 
                              LG = names(map.list)[i], pos = d))
       plot_one_map(d, i = i, horiz = TRUE, col = col[i])   
     }
@@ -87,13 +87,13 @@ plot_map_list<-function(map.list, horiz = TRUE, col = "lightgray", title = "Link
          ylim = c(-max.dist, 0), 
          xlim = c(0,length(map.list)+1), 
          type = "n", axes = FALSE, 
-         ylab = "Centimorgans (cM)", 
+         ylab = "Map position (cM)", 
          xlab = title)
     x<-axis(2, labels = FALSE, lwd = 0)
     axis(2, at = x, labels = abs(x))
     for(i in 1:length(map.list)){
       d <- extract_map(map.list[[i]])
-      z<-rbind(z, data.frame(mrk = get(map.list[[i]]$info$data.name)$mrk.names[map.list[[i]]$maps[[1]]$seq.num], 
+      z<-rbind(z, data.frame(mrk = map.list[[i]]$info$mrk.names, 
                              LG = names(map.list)[i],pos = d))
       plot_one_map(d, i = i, horiz = FALSE, col = col[i])  
     }

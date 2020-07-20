@@ -30,7 +30,8 @@ If \code{NULL} (default), the probabilities are computed.}
 \item{thres.hmm}{the threshold used to determine which linkage 
 phase configurations should be retuned when merging two maps.
 If "best" (default), returns only the best linkage phase 
-configuration.}
+configuration. NOTE: if merging multiple maps, it always uses 
+the "best" linkage phase configuration at each block insertion.}
 
 \item{tol}{the desired accuracy (default = 10e-04)}
 }

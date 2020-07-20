@@ -8,7 +8,7 @@ plot_map_list(
   map.list,
   horiz = TRUE,
   col = "lightgray",
-  title = "Linkage Groups"
+  title = "Linkage group"
 )
 }
 \arguments{
@@ -20,7 +20,7 @@ If TRUE  (default), the maps are drawn horizontally with the first at the bottom
 \item{col}{a vector of colors for the bars or bar components (default = 'lightgrey')
 \code{ggstyle} produces maps using the default \code{ggplot} color palette}
 
-\item{title}{a title (string) for the maps (default = 'Linkage Groups')}
+\item{title}{a title (string) for the maps (default = 'Linkage group')}
 }
 \value{
 A \code{data.frame} object containing the name of the markers and their genetic position
