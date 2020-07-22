@@ -109,9 +109,12 @@
 #'     populations with high ploidy level using hidden Markov
 #'     models, _G3: Genes, Genomes, Genetics_. 
 #'     \url{https://doi.org/10.1534/g3.119.400378}
-#'
+#'     
+#' @useDynLib mappoly
 #' @export est_pairwise_rf
 #' @importFrom parallel makeCluster clusterEvalQ stopCluster parLapply
+#' @importFrom Rcpp sourceCpp
+#' 
 est_pairwise_rf <- function(input.seq, count.cache = NULL, n.clusters = 1,
                             mrk.pairs = NULL, n.batches = 1,
                             verbose = TRUE, memory.warning = TRUE, 
