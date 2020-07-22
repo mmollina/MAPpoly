@@ -110,7 +110,6 @@
 #'     models, _G3: Genes, Genomes, Genetics_. 
 #'     \url{https://doi.org/10.1534/g3.119.400378}
 #'     
-#' @useDynLib mappoly
 #' @export est_pairwise_rf
 #' @importFrom parallel makeCluster clusterEvalQ stopCluster parLapply
 #' @importFrom Rcpp sourceCpp
