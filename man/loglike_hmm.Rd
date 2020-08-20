@@ -4,10 +4,12 @@
 \alias{loglike_hmm}
 \title{Multipoint log-likelihood computation}
 \usage{
-loglike_hmm(input.map, verbose = FALSE)
+loglike_hmm(input.map, input.data = NULL, verbose = FALSE)
 }
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}
+
+\item{input.data}{An object of class \code{mappoly.data}, which was used to generate \code{input.map}}
 
 \item{verbose}{If \code{TRUE}, map information is shown; if
 \code{FALSE}(default), no output is produced}

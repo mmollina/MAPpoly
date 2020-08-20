@@ -14,7 +14,7 @@ make_seq_mappoly(input.obj, arg = NULL, data.name = NULL, genomic.info = NULL)
 }
 \arguments{
 \item{input.obj}{an object of one of the following classes:
-\code{mappoly.data}, \code{mappoly.group}, \code{mappoly.unique.seq},
+\code{mappoly.data}, \code{mappoly.map}, \code{mappoly.group}, \code{mappoly.unique.seq},
 \code{mappoly.pcmap} or \code{mappoly.pcmap3d}}
 
 \item{arg}{can be one of the following objects: i) a string 'all',

@@ -14,16 +14,17 @@ Description: Software to construct genetic maps in autopolyploid full sib
 License: GPL-3 | file LICENSE
 LazyData: TRUE
 Depends:
-    R (>= 3.6.0)
+    R (>= 3.5.0)
 Imports:
     Rcpp (>= 0.12.6),
     parallel,
     RCurl,
     plotly,
-    gridExtra,
     fields,
     RColorBrewer,
     bitops,
+    ggpubr, 
+    ggsci,
     spam,
     maps,
     berryFunctions,

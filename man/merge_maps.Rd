@@ -5,21 +5,16 @@
 \title{Merge two maps}
 \usage{
 merge_maps(
-  input.map1,
-  input.map2,
+  map.list,
   twopt,
-  thres.twopt = 3,
-  thres.hmm = 10,
-  genoprob.map1 = NULL,
-  phase.config.map1 = "best",
-  phase.config.map2 = "best",
-  tol = 0.001
+  thres.twopt = 10,
+  genoprob.list = NULL,
+  thres.hmm = "best",
+  tol = 1e-04
 )
 }
 \arguments{
-\item{input.map1}{an object of class \code{mappoly.map}, which comprehends the first map to be merged}
-
-\item{input.map2}{an object of class \code{mappoly.map}, which comprehends the second map to be merged}
+\item{map.list}{a list of objects of class \code{mappoly.map} to be merged.}
 
 \item{twopt}{an object of class \code{poly.est.two.pts.pairwise}
 containing the two-point information}
@@ -28,17 +23,15 @@ containing the two-point information}
 phases compared via two-point analysis should be considered 
 for the search space reduction (default = 3)}
 
+\item{genoprob.list}{a list of objects of class \code{mappoly.genoprob} 
+containing the genotype probabilities for the maps to be merged. 
+If \code{NULL} (default), the probabilities are computed.}
+
 \item{thres.hmm}{the threshold used to determine which linkage 
-phase configurations should be retuned (default = 10)}
-
-\item{genoprob.map1}{an object of class \code{mappoly.genoprob} containing the 
-genotype probabilities for the first map}
-
-\item{phase.config.map1}{which phase configuration should be used for \code{input.map1}. "best" (default) 
-will choose the configuration associated with the maximum likelihood}
-
-\item{phase.config.map2}{which phase configuration should be used for \code{input.map2}. "best" (default) 
-will choose the configuration associated with the maximum likelihood}
+phase configurations should be retuned when merging two maps.
+If "best" (default), returns only the best linkage phase 
+configuration. NOTE: if merging multiple maps, it always uses 
+the "best" linkage phase configuration at each block insertion.}
 
 \item{tol}{the desired accuracy (default = 10e-04)}
 }
@@ -66,50 +59,42 @@ probabilities
 #### Tetraploid example #####
 map1<-get_submap(solcap.dose.map[[1]], 1:5)
 map2<-get_submap(solcap.dose.map[[1]], 6:15)
-full.map<-get_submap(solcap.dose.map[[1]], 1:15)
+map3<-get_submap(solcap.dose.map[[1]], 16:30)
+full.map<-get_submap(solcap.dose.map[[1]], 1:30)
 s<-make_seq_mappoly(tetra.solcap, full.map$maps[[1]]$seq.num)
 counts<-cache_counts_twopt(input.seq = s, cached = TRUE)
 twopt <- est_pairwise_rf(input.seq = s, count.cache = counts)
-genoprob.map1 <- calc_genoprob(map1)
-merged.maps<-merge_maps(input.map1 = map1, 
-                        input.map2 = map2, 
+merged.maps<-merge_maps(map.list = list(map1, map2, map3), 
                         twopt = twopt,
-                        thres.twopt = 3,
-                        genoprob.map1 = genoprob.map1)
-
-plot(merged.maps, mrk.names = TRUE)                       
+                        thres.twopt = 3)
+plot(merged.maps$map, mrk.names = TRUE)                       
 plot(full.map, mrk.names = TRUE)                       
-best.phase <- merged.maps$maps[[1]]$seq.ph
+best.phase <- merged.maps$map$maps[[1]]$seq.ph
 names.id<-names(best.phase$P)
-plot_compare_haplotypes(m = 6,
-                        hom.allele.p1 = best.phase$P[names.id],
-                        hom.allele.q1 = best.phase$Q[names.id],
-                        hom.allele.p2 = full.map$maps[[1]]$seq.ph$P[names.id],
-                        hom.allele.q2 = full.map$maps[[1]]$seq.ph$Q[names.id])  
-                        
+compare_haplotypes(m = 4, best.phase$P[names.id], 
+                   full.map$maps[[1]]$seq.ph$P[names.id]) 
+compare_haplotypes(m = 4, best.phase$Q[names.id], 
+                   full.map$maps[[1]]$seq.ph$Q[names.id])
+                    
 #### Hexaploid example #####
 map1<-get_submap(maps.hexafake[[1]], 1:5)
 map2<-get_submap(maps.hexafake[[1]], 6:15)
-full.map<-get_submap(maps.hexafake[[1]], 1:15)
+map3<-get_submap(maps.hexafake[[1]], 16:30)
+full.map<-get_submap(maps.hexafake[[1]], 1:30)
 s<-make_seq_mappoly(hexafake, full.map$maps[[1]]$seq.num)
 counts<-cache_counts_twopt(input.seq = s, cached = TRUE)
 twopt <- est_pairwise_rf(input.seq = s, count.cache = counts)
-genoprob.map1 <- calc_genoprob(map1)
-merged.maps<-merge_maps(input.map1 = map1, 
-                        input.map2 = map2, 
+merged.maps<-merge_maps(map.list = list(map1, map2, map3), 
                         twopt = twopt,
-                        thres.twopt = 3,
-                        genoprob.map1 = genoprob.map1)
-
-plot(merged.maps, mrk.names = TRUE)                       
+                        thres.twopt = 3)
+plot(merged.maps$map, mrk.names = TRUE)                       
 plot(full.map, mrk.names = TRUE)                       
-best.phase <- merged.maps$maps[[1]]$seq.ph
+best.phase <- merged.maps$map$maps[[1]]$seq.ph
 names.id<-names(best.phase$P)
-plot_compare_haplotypes(m = 6,
-                        hom.allele.p1 = best.phase$P[names.id],
-                        hom.allele.q1 = best.phase$Q[names.id],
-                        hom.allele.p2 = full.map$maps[[1]]$seq.ph$P[names.id],
-                        hom.allele.q2 = full.map$maps[[1]]$seq.ph$Q[names.id])  
+compare_haplotypes(m = 6, best.phase$P[names.id], 
+                   full.map$maps[[1]]$seq.ph$P[names.id]) 
+compare_haplotypes(m = 6, best.phase$Q[names.id], 
+                   full.map$maps[[1]]$seq.ph$Q[names.id])
 }
 
 }

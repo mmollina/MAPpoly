@@ -16,6 +16,8 @@ calc_prefpair_profiles(input.genoprobs)
   min.y.prof = 0,
   max.y.prof = 1,
   thresh = 0.01,
+  P = "P",
+  Q = "Q",
   ...
 )
 }
@@ -36,6 +38,10 @@ the preferential pairing profile for the homolog pairs)}
 \item{max.y.prof}{upper bound for y axis on the probability profile graphic (default = 1)}
 
 \item{thresh}{threshold for chi-square test (default = 0.01)}
+
+\item{P}{a string containing the name of parent P}
+
+\item{Q}{a string containing the name of parent Q}
 }
 \description{
 Given the genotype conditional probabilities for a map, this function
@@ -55,6 +61,7 @@ in both parents.
   x2 <- calc_prefpair_profiles(w2)
   print(x2)
   plot(x2)
+  plot(x2, type = "hom.pairs")
 }
 
 }
@@ -67,6 +74,6 @@ Mollinari M., Olukolu B. A.,  Pereira G. da S.,
     \url{https://doi.org/10.1534/g3.119.400620}
 }
 \author{
-Marcelo Mollinari, \email{mmollin@ncsu.edu}
+Marcelo Mollinari, \email{mmollin@ncsu.edu} and Guilherme Pereira, \email{g.pereira@cgiar.org}
 }
 \keyword{internal}

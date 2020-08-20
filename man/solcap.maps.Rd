@@ -11,14 +11,22 @@
 \title{Solcap Maps
 
 Resulting maps from \code{\link[mappoly]{tetra.solcap}} and \code{\link[mappoly]{tetra.solcap.geno.dist}} datasets.}
-\format{All maps have the same format: a list containing 12 objects of class \code{mappoly.map}, each one 
+\format{
+All maps have the same format: a list containing 12 objects of class \code{mappoly.map}, each one 
 representing one linkage group. 
 \describe{
     \item{solcap.map}{genetic map using genomic order and dosage call}
     \item{solcap.mds.map}{genetic map using \code{\link[mappoly]{mds_mappoly} order and dosage call}}
     \item{solcap.prior.map}{genetic map using genomic order and prior probability distribution}
     \item{solcap.err.map}{genetic map using genomic order, dosage call and global calling error}     
-}}
+}
+
+An object of class \code{list} of length 12.
+
+An object of class \code{list} of length 12.
+
+An object of class \code{list} of length 12.
+}
 \usage{
 solcap.dose.map
 

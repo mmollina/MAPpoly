@@ -7,7 +7,8 @@
 #'
 #' @param count.cache an object of class \code{cache.info} containing
 #'     pre-computed genotype frequencies, obtained with
-#'     \code{\link[mappoly]{cache_counts_twopt}}
+#'     \code{\link[mappoly]{cache_counts_twopt}}. If \code{NULL} (default),
+#'     genotype frequencies are internally loaded.   
 #'
 #' @param n.clusters Number of parallel processes (cores) to spawn (default = 1)
 #'
@@ -54,10 +55,8 @@
 #'   all.mrk <- make_seq_mappoly(tetra.solcap, 'all')
 #'   red.mrk <- elim_redundant(all.mrk)
 #'   unique.mrks <- make_seq_mappoly(red.mrk)
-#'   counts <- cache_counts_twopt(unique.mrks, cached = TRUE)
 #'   # will take ~ 13 min
 #'   all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
-#'                                count.cache = counts,
 #'                                n.clusters = 7, 
 #'                                verbose=TRUE)
 #'    all.pairs
@@ -88,15 +87,12 @@
 #'                                       inter = FALSE)
 #'   seq.ch1<-make_seq_mappoly(mrks.chi.filt)
 #'   plot(seq.ch1)
-#'   counts <- cache_counts_twopt(seq.ch1, cached = TRUE)
 #'   ## will take ~  19 min / peak of memory usage ~ 10GB
 #'   all.pairs.1 <- est_pairwise_rf(input.seq = seq.ch1,
-#'                                  count.cache = counts,
 #'                                  n.clusters = 7, 
 #'                                  verbose=TRUE)
 #'   ## same thing, but it will take ~  21 min / peak of memory usage ~ 6GB
 #'   all.pairs.2 <- est_pairwise_rf(input.seq = seq.ch1,
-#'                                  count.cache = counts,
 #'                                  n.clusters = 7, 
 #'                                  n.batch = 10,
 #'                                  verbose=TRUE)   
@@ -113,10 +109,12 @@
 #'     populations with high ploidy level using hidden Markov
 #'     models, _G3: Genes, Genomes, Genetics_. 
 #'     \url{https://doi.org/10.1534/g3.119.400378}
-#'
+#'     
 #' @export est_pairwise_rf
 #' @importFrom parallel makeCluster clusterEvalQ stopCluster parLapply
-est_pairwise_rf <- function(input.seq, count.cache, n.clusters = 1,
+#' @importFrom Rcpp sourceCpp
+#' 
+est_pairwise_rf <- function(input.seq, count.cache = NULL, n.clusters = 1,
                             mrk.pairs = NULL, n.batches = 1,
                             verbose = TRUE, memory.warning = TRUE, 
                             parallelization.type = c("PSOCK", "FORK"), 
@@ -130,9 +128,10 @@ est_pairwise_rf <- function(input.seq, count.cache, n.clusters = 1,
   ## checking for duplicated markers
   if (any(dpl))
     stop("There are duplicated markers in the sequence:\n Check markers: ", unique(input.seq$seq.num[dpl]), " at position(s) ", which(dpl))
+  if(is.null(count.cache))
+    count.cache = cache_counts_twopt(input.seq, cached = TRUE)
   # Memory warning
   ANSWER = "flag"
-
   if(input.seq$m < 6){
     if (length(input.seq$seq.num) > 10000 && interactive() && n.batches == 1 && !memory.warning){
       while (substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !=""){

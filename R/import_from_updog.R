@@ -80,7 +80,9 @@ import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = 
   if (class(object) == "multidog"){
     m = object$snpdf$ploidy[1]
     dosage.p = object$snpdf$p1geno
+    names(dosage.p) <- object$snpdf$snp
     dosage.q = object$snpdf$p2geno
+    names(dosage.q) <- object$snpdf$snp
     if (is.null(prob.thres)) prob.thres = 0.95
     # Selecting conforming markers
     dp = abs(abs(dosage.p-(m/2))-(m/2))
@@ -90,19 +92,22 @@ import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = 
     dosage.q = dosage.q[id]
     mrk.names = unique(as.character(object$snpdf$snp))[id]
     mrk.sel = which(object$inddf$snp %in% mrk.names)
-    geno = data.frame(mrk = as.character(object$inddf$snp)[mrk.sel], ind = as.character(object$inddf$ind)[mrk.sel], stringsAsFactors = FALSE)
-    for (i in 0:m){
-      geno[[paste0(i)]] = object$inddf[[paste0('Pr_', i)]][mrk.sel]
-    }
+    geno<-object$inddf[mrk.sel,]
+    geno <- geno[c(1,2,grep(pattern = "Pr_", colnames(geno)))]
+    colnames(geno) <- c("mrk", "ind", 0:m)
+    geno<-geno[order(geno$ind, geno$mrk, decreasing=TRUE),]
     ind.names = unique(geno$ind)
+    mrk.names = unique(geno$mrk)
     n.ind = length(ind.names)
     n.mrk = length(mrk.names)
+    if(n.ind * n.mrk != nrow(geno))
+      stop("Check your dataset.")
     sequence = NULL
     sequence.pos = NULL
     ## dosage info
-    if(filter.non.conforming)
-      geno.dose = matrix(NA,1,1)
-    else{
+    if(filter.non.conforming){
+      geno.dose = matrix(NA,1,1)      
+    } else {
       geno.dose = dist_prob_to_class(geno = geno, prob.thres = prob.thres)
       geno.dose[is.na(geno.dose)] = m + 1
     }
@@ -113,8 +118,8 @@ import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = 
                         n.mrk = sum(id),
                         ind.names = ind.names,
                         mrk.names = mrk.names,
-                        dosage.p = dosage.p,
-                        dosage.q = dosage.q,
+                        dosage.p = dosage.p[mrk.names],
+                        dosage.q = dosage.q[mrk.names],
                         sequence = sequence,
                         sequence.pos = sequence.pos,
                         prob.thres = prob.thres,
@@ -124,7 +129,6 @@ import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = 
                         phen = phen,
                         chisq.pval = NULL),
                    class = "mappoly.data")
-    
     if(filter.non.conforming){
       cat("    Filtering non-conforming markers.\n    ...")
       res<-filter_non_conforming_classes(res)

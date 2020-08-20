@@ -313,7 +313,8 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #' @param verbose If \code{TRUE} (default), current progress is shown; if
 #'     \code{FALSE}, no output is produced
 #'     
-#' @param detailed.verbose If \code{TRUE}, map expansion of the tested maps is shown; 
+#' @param detailed.verbose If \code{TRUE}, the expansion of the current 
+#'     submap is shown; 
 #'     
 #' @param high.prec logical. If \code{TRUE} uses high precision 
 #' (long double) numbers in the HMM procedure implemented in C++,
@@ -694,6 +695,7 @@ print.mappoly.map <- function(x, detailed = FALSE, ...) {
 plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
                              phase = TRUE, mrk.names = FALSE, 
                              cex = 1, config = "best", ...) {
+  opar <- par(no.readonly = TRUE)
   if(phase){
     map.info <- prepare_map(x, config)
     if(any(map.info$ph.p=="B")){
@@ -818,8 +820,8 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
     legend("bottomright", legend=names(d.col)[-1], title = "Doses" ,
            col = d.col[-1], ncol = map.info$m/2, pch = 19,
            box.lty=0)
-    par(op)
-    par(mfrow = c(1,1))
+    par(opar)
+    #par(mfrow = c(1,1))
   } else {
     plot_map_list(x) 
   }

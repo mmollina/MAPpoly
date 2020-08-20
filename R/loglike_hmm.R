@@ -5,6 +5,8 @@
 #' 
 #' @param input.map An object of class \code{mappoly.map}
 #' 
+#' @param input.data  An object of class \code{mappoly.data}, which was used to generate \code{input.map}
+#' 
 #' @param verbose If \code{TRUE}, map information is shown; if
 #'     \code{FALSE}(default), no output is produced
 #'     
@@ -26,15 +28,18 @@
 #'
 #' @export loglike_hmm
 #' 
-loglike_hmm<-function(input.map, verbose = FALSE)
+loglike_hmm<-function(input.map, input.data = NULL, verbose = FALSE)
 {
   ## Checking class of arguments
   if(!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
   }
-  D<-get(input.map$info$data.name, pos=1)$geno.dose[input.map$info$mrk.names,]
-  dp <- get(input.map$info$data.name)$dosage.p[input.map$info$mrk.names]
-  dq <- get(input.map$info$data.name)$dosage.q[input.map$info$mrk.names]
+  if(is.null(input.data))
+    D<-get(input.map$info$data.name, pos=1)$geno.dose[input.map$info$mrk.names,]
+  else
+    D<-input.data$geno.dose[input.map$info$mrk.names,]
+  dp <- input.map$info$seq.dose.p
+  dq <- input.map$info$seq.dose.q
   for (j in 1:nrow(D))
     D[j, D[j, ] == input.map$info$m + 1] <- dp[j] + dq[j] + 1 + as.numeric(dp[j]==0 || dq[j]==0)
   for(i in 1:length(input.map$maps)){

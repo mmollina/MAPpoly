@@ -3,7 +3,7 @@
 #' Makes a sequence of markers based on an object of another class.
 #'
 #' @param input.obj an object of one of the following classes:
-#'     \code{mappoly.data}, \code{mappoly.group}, \code{mappoly.unique.seq},
+#'     \code{mappoly.data}, \code{mappoly.map}, \code{mappoly.group}, \code{mappoly.unique.seq},
 #'     \code{mappoly.pcmap} or \code{mappoly.pcmap3d}
 #'
 #' @param arg can be one of the following objects: i) a string 'all',
@@ -95,11 +95,16 @@
 
 make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.info = NULL) {
   ## checking for correct object
-  input_classes <- c("mappoly.data", "mappoly.unique.seq", "mappoly.pcmap", "mappoly.pcmap3d", "mappoly.group", "mappoly.chitest.seq")
+  input_classes <- c("mappoly.data", "mappoly.map", "mappoly.unique.seq", "mappoly.pcmap", "mappoly.pcmap3d", "mappoly.group", "mappoly.chitest.seq")
   if (!inherits(input.obj, input_classes)) {
-    stop(deparse(substitute(input.obj)), " is not an object of class 'mappoly.data',
+    stop(deparse(substitute(input.obj)), " is not an object of class 'mappoly.data', 'mappoly.map', 
                'mappoly.chitest.seq', 'mappoly.unique.seq', 'mappoly.pcmap', 'mappoly.pcmap3d', or 'mappoly.group'")
   }
+  ## if input object is a map, call 'make_seq_mappoly' recursively
+  if(class(input.obj) == "mappoly.map")
+    return(make_seq_mappoly(get(input.obj$info$data.name, pos = 1), 
+                          arg = input.obj$info$mrk.names, 
+                          data.name = input.obj$info$data.name))
   ## checking for argument to make a sequence
   if (is.null(arg) && class(input.obj) != "mappoly.chitest.seq" && class(input.obj) != "mappoly.unique.seq" && class(input.obj) != "mappoly.pcmap"&& class(input.obj) != "mappoly.pcmap3d") {
     stop("argument 'arg' expected.")
@@ -274,8 +279,8 @@ plot.mappoly.sequence <- function(x, ...)
   op <- par(mar = c(5,4,1,2))
   layout(matrix(c(1,1,1,2,3,3,6,4,5), 3, 3), widths = c(1.2,3,.5), heights = c(1.5,4.5,.5))
   barplot(mrk.dist, las = 2, col = pal[match(type, type.names)], 
-          xlab = "dosage combination", 
-          ylab = "number of markers", horiz = TRUE)
+          xlab = "Number of markers", 
+          ylab = "Dosage combination", horiz = TRUE)
   pval<-x$chisq.pval[x$seq.mrk.names]
   if(is.null(x$chisq.pval))
   {

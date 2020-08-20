@@ -19,6 +19,10 @@
 #' 
 #' @param x an object of class \code{mappoly.prefpair.profiles}
 #' 
+#' @param P a string containing the name of parent P
+#' 
+#' @param Q a string containing the name of parent Q
+#' 
 #' @param ... unused arguments
 #' 
 #'@examples
@@ -34,9 +38,10 @@
 #'   x2 <- calc_prefpair_profiles(w2)
 #'   print(x2)
 #'   plot(x2)
+#'   plot(x2, type = "hom.pairs")
 #'}
 #'
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} and Guilherme Pereira, \email{g.pereira@cgiar.org}
 #'
 #' @references
 #'     Mollinari M., Olukolu B. A.,  Pereira G. da S., 
@@ -48,8 +53,10 @@
 #'     
 #' @export
 #' @importFrom ggplot2 ggplot geom_hline theme geom_smooth ggtitle facet_grid theme_minimal ylab xlab aes vars scale_color_manual
-#' @importFrom gridExtra grid.arrange
 #' @importFrom reshape melt
+#' @importFrom ggpubr ggarrange
+#' @importFrom ggsci scale_color_d3 pal_d3
+#' 
 #' 
 calc_prefpair_profiles<-function(input.genoprobs){
   if(class(input.genoprobs) == "mappoly.genoprob")
@@ -220,46 +227,59 @@ print.mappoly.prefpair.profiles <- function(x, ...){
 #' @export
 plot.mappoly.prefpair.profiles <- function(x, type = c("pair.configs", "hom.pairs"), 
                                            min.y.prof = 0, max.y.prof = 1, 
-                                           thresh = 0.01, ...){
+                                           thresh = 0.01, P = "P", Q = "Q", ...){
   type <- match.arg(type)
+  colnames(x$prefpair.psi.pval)[1:2] <- c(P, Q)
   if(type == "pair.configs"){
     m<-x$info$m
     variable <- value <- map.position <- probability <- colour <- pair.conf <-NULL
     p1<-ggplot2::ggplot(x$prefpair.psi) + 
       ggplot2::geom_smooth(ggplot2::aes(map.position, probability, colour = pair.conf), size = 1, se = FALSE) + 
-      ggplot2::facet_grid(parent~LG, scales = "free_x", space = "free_x") +
+      ggplot2::facet_grid(parent~LG, scales = "free_x", space = "free_x", labeller = ggplot2::labeller(parent=ggplot2::as_labeller(c(P=P, Q=Q)))) +
       ggplot2::geom_hline(yintercept = 1/(prod(choose(seq(2,m,2),2))/factorial(m/2)), linetype="dashed") +
       ggplot2::ylim(min.y.prof,max.y.prof) + 
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1)) +
-      ggplot2::ylab("Probability") + ggplot2::xlab("Distance (cM)") 
-    DF<-reshape::melt(data = x$prefpair.psi.pval, measure.vars = c("p.val.P", "p.val.Q"))
+      ggplot2::scale_x_continuous(breaks = seq(0, max(x$prefpair.psi$map.position), 100), expand = ggplot2::expansion(add = 15)) +
+      ggplot2::labs(subtitle = "Linkage group", y = "Probability", x = ggplot2::element_blank(), col = "Pairing\nconfig.") + 
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1), panel.spacing = ggplot2::unit(0, "lines"), plot.subtitle = ggplot2::element_text(hjust = 0.5), axis.title.y = ggplot2::element_text(margin = ggplot2::margin(t = 0, r = 5, b = 0, l = 0))) 
+    DF<-reshape::melt(data = x$prefpair.psi.pval, measure.vars = c(P, Q))
     p2<-ggplot2::ggplot(DF, ggplot2::aes(map.position, -log10(value), colour = variable)) +
       ggplot2::geom_point(alpha = .7, size = 1) +  
       ggplot2::facet_grid(.~LG, scales = "free_x", space = "free_x") +
-      ggplot2::geom_hline(yintercept = -log10(thresh), linetype="dashed") +  
-      ggplot2::scale_color_manual(values=c("#E69F00","#56B4E9"), name = "Parents") +
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1)) +
-      ggplot2::ylab("-log_10(P)") + ggplot2::xlab("Distance (cM)")
-    p<-gridExtra::grid.arrange(p1, p2, nrow = 2)
-    invisible(p)
+      ggplot2::geom_hline(yintercept = -log10(thresh), linetype="dashed") + 
+      ggplot2::labs(y = expression(paste("-",log[10],"(",italic(P),")")), x = "Map Position (cM)") +
+      ggplot2::scale_x_continuous(breaks = seq(0, max(x$prefpair.psi$map.position), 100), expand = ggplot2::expansion(add = 15)) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1), panel.spacing = ggplot2::unit(0, "lines"), legend.box.margin = ggplot2::margin(t = 0, r = 0, b = 0, l = 3)) 
+    if(m <6 ){
+      p1 <- p1 + ggsci::scale_color_d3()
+      p2 <- p2 + ggplot2::scale_color_manual(values=c(ggsci::pal_d3(alpha = 0.8)(nlevels(x$prefpair.psi$pair.conf))[c(1,(nlevels(x$prefpair.psi$pair.conf)/2)+1)]), labels = c(P, Q), name = "Parents")
+    }
+    p <- ggpubr::ggarrange(p1, p2, ncol = 1, nrow = 2, labels = c("A", "B"), heights = c(1.5,1))
+    print(p)
   } else if(type == "hom.pairs"){
     m<-x$info$m
     hom.pair <- phh <- variable <- p.val <- map.position <- probability <- colour <- pair.conf <-NULL
     p1<-ggplot2::ggplot(x$prefpair.homolog) + 
       ggplot2::geom_smooth(ggplot2::aes(map.position, phh, colour = hom.pair), size = 1, se = FALSE) + 
-      ggplot2::facet_grid(parent~LG, scales = "free_x", space = "free_x") +
+      ggplot2::facet_grid(parent~LG, scales = "free_x", space = "free_x", labeller = ggplot2::labeller(parent=ggplot2::as_labeller(c(P=P, Q=Q)))) +
       ggplot2::geom_hline(yintercept = get_w_m(m - 2)/get_w_m(m), linetype="dashed") +
       ggplot2::ylim(min.y.prof,max.y.prof) + 
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1)) +
-      ggplot2::ylab("Probability") + ggplot2::xlab("Distance (cM)") 
+      ggplot2::scale_x_continuous(breaks = seq(0, max(x$prefpair.psi$map.position), 100)) +
+      ggplot2::labs(subtitle = "Linkage group", y = "Probability", x = ggplot2::element_blank(), col = "Homolog\npairs") +
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1), panel.spacing = ggplot2::unit(0, "lines"), plot.subtitle = ggplot2::element_text(hjust = 0.5), axis.title.y = ggplot2::element_text(margin = ggplot2::margin(t = 0, r = 5, b = 0, l = 0))) 
     p2<-ggplot2::ggplot(x$prefpair.homolog) + 
       ggplot2::geom_point(ggplot2::aes(map.position, -log10(p.val), colour = hom.pair)) + 
-      ggplot2::facet_grid(parent~LG, scales = "free_x", space = "free_x") +
+      ggplot2::facet_grid(parent~LG, scales = "free_x", space = "free_x", labeller = ggplot2::labeller(parent=ggplot2::as_labeller(c(P=P, Q=Q)))) +
       ggplot2::geom_hline(yintercept = -log10(thresh), linetype="dashed") +  
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90, hjust = 1)) +
-      ggplot2::ylab("-log10(P)") + ggplot2::xlab("Distance (cM)") 
-    p<-gridExtra::grid.arrange(p1, p2, nrow = 2)
+      ggplot2::labs(y = expression(paste("-",log[10],"(",italic(P),")")), x = "Map Position (cM)") +
+      ggplot2::scale_x_continuous(breaks = seq(0, max(x$prefpair.psi$map.position), 100)) +
+      ggplot2::theme_bw() +
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1), panel.spacing = ggplot2::unit(0, "lines")) 
+    # p<-gridExtra::grid.arrange(p1, p2, nrow = 2)
+    p <- ggpubr::ggarrange(p1, p2, ncol = 1, nrow = 2, labels = c("A", "B"), common.legend = TRUE, legend = "right")
+    print(p)
   }
-  
 }
 

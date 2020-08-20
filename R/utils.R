@@ -78,7 +78,7 @@ get_memory<-function(){
 rev_map<-function(input.map)
 {
   output.map<-input.map
-  output.map$info$mrk.names <- rev(input.map$info$mrk.names)
+  output.map$info <- lapply(output.map$info, rev)
   for(i in 1:length(output.map$maps))
   {
     output.map$maps[[i]]$seq.num <- rev(input.map$maps[[i]]$seq.num)
@@ -1296,7 +1296,7 @@ summary_maps = function(map.object){
                        "Total" = unlist(lapply(map.object, function(x) x$info$n.mrk)),
                        "Max gap" = unlist(lapply(map.object, function(x) round(imf_h(max(x$maps[[1]]$seq.rf)),2))),
                        check.names = FALSE, stringsAsFactors = F)
-  results = rbind(results, c('Total', NA, sum(as.numeric(results$`Map size (cM)`)), round(mean(as.numeric(results$`Markers/cM`)),2), sum(as.numeric(results$Simplex)), sum(as.numeric(results$`Double-simplex`)), sum(as.numeric(results$Multiplex)), sum(as.numeric(results$Total)), mean(as.numeric(results$`Max gap`))))
+  results = rbind(results, c('Total', NA, sum(as.numeric(results$`Map size (cM)`)), round(mean(as.numeric(results$`Markers/cM`)),2), sum(as.numeric(results$Simplex)), sum(as.numeric(results$`Double-simplex`)), sum(as.numeric(results$Multiplex)), sum(as.numeric(results$Total)), round(mean(as.numeric(results$`Max gap`)),2)))
   if (!is.null(get(map.object[[1]]$info$data.name, pos = 1)$elim.correspondence)){
     cat("\nYour dataset contains removed (redundant) markers. Once finished the map, remember to add the redundant ones with the function 'update_map'.\n\n")
   }

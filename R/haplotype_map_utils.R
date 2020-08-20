@@ -57,7 +57,7 @@ generate_all_link_phases_elim_equivalent_haplo <-
     dimnames(hQ2) <- list(block2$seq.num, q2)
     q2 <- perm_tot(q2)
     
-    ## WP: removing redundancy and accounting for shared elleles
+    ## WP: removing redundancy and accounting for shared alleles
     wp <- NULL
     for (i in 1:nrow(p2))
       wp <- rbind(wp, paste(p1, p2[i, ], sep = "-"))
@@ -155,6 +155,65 @@ est_haplo_hmm <-
             PACKAGE = "mappoly")
     res.temp
   }
+
+
+#' Estimate a genetic map given a sequence of block markers 
+#'
+#' @param void interfunction to be documented
+#' @keywords internal
+#' @export est_map_haplo_given_genoprob
+est_map_haplo_given_genoprob<-function(map.list,
+                                    genoprob.list,
+                                    tol = 10e-5){
+  m<-map.list[[1]]$info$m
+  ## number of genotipic states
+  ngam <- choose(m, m/2)
+  ## Number of genotypes in the offspring
+  ngen <- ngam^2
+  ## number of markers
+  nmrk <- sapply(map.list, function(x) length(x$info$seq.num))
+  ## number of individuals
+  nind <- dim(genoprob.list[[1]]$probs)[3]
+  ## the threshold for visiting states: 1/ngen
+  thresh.cut.path <- 1/ngen
+  
+  ## Hash table: homolog combination --> states to visit in both parents
+  A<-as.matrix(expand.grid(0:(ngam-1), 
+                           0:(ngam-1))[,2:1])
+  rownames(A) <- dimnames(genoprob.list[[1]]$probs)[[1]]
+  ## h: states to visit in both parents
+  ## e: probability distribution 
+  h<-e<-NULL
+  for(j in 1:length(map.list)){
+    e.temp <- h.temp <- vector("list", nind)
+    for(i in 1:nind){
+      a <- genoprob.list[[j]]$probs[,dim(genoprob.list[[j]]$probs)[2],i]  
+      e.temp[[i]] <- a[a > thresh.cut.path]
+      h.temp[[i]] <- A[names(e.temp[[i]]), , drop = FALSE]
+    }
+    h<-c(h, list(h.temp))
+    e<-c(e, list(e.temp))    
+  }
+  map<-est_haplo_hmm(m = m, 
+                     n.mrk = length(h), 
+                     n.ind = nind, 
+                     haplo = h, 
+                     emit = e, 
+                     rf_vec = rep(0.01, length(h)-1), 
+                     verbose = FALSE, 
+                     use_H0 = FALSE, 
+                     tol = tol)
+  genoprob<-calc_genoprob_haplo (m = m, 
+                                 n.mrk = length(h), 
+                                 n.ind = nind, 
+                                 haplo = h, 
+                                 emit = e,  
+                                 rf_vec = map[[2]],
+                                 indnames = dimnames(genoprob.list[[1]]$probs)[[3]],
+                                 verbose = FALSE)
+  list(map = map, genoprob = genoprob)
+}
+
 
 #' Estimate a genetic map given a sequence of block markers
 #'
