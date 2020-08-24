@@ -632,7 +632,7 @@ est_rf_hmm_sequential<-function(input.seq,
   if(verbose) {
     #cat("\n------------------------------------------")
     cat("Markers in the initial sequence: ", length(input.seq$seq.num), sep = "")
-    cat("\nMaped markers                  : ", final.map$info$n.mrk, " (", 
+    cat("\nMapped markers                  : ", final.map$info$n.mrk, " (", 
         round(100*final.map$info$n.mrk/length(input.seq$seq.num),1) ,"%)\n", sep = "")
     msg("", line = 2)
   }
