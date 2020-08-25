@@ -109,15 +109,26 @@ import_data_from_polymapR <- function(input.data,
 #'  plot(mappoly.maplist[[5]])
 #'  
 #'  ## Computing conditional genotype probabilities
-#'  genoprob <- lapply(mappoly.maplist, calc_genoprob_error, step = 1, error = 0.05)
+#'  genoprob0 <- lapply(mappoly.maplist, calc_genoprob, step = 1)
 #'  
 #'  ## Computing preferential pairing profiles
-#'  pref.pair <- calc_prefpair_profiles(genoprob)
-#'  plot(pref.pair, min.y.prof = .25, max.y.prof = 0.4, P = "P1", Q = "P2")
+#'  pref.pair0 <- calc_prefpair_profiles(genoprob0)
+#'  plot(pref.pair0, min.y.prof = .25, max.y.prof = 0.4, P = "P1", Q = "P2")
 #'  
 #'  ## Computing homolog probabilities
-#'  h.prob<-calc_homoprob(genoprob)
-#'  plot(h.prob, ind = 10) ## plot haplotype of individual 10 
+#'  h.prob0<-calc_homoprob(genoprob0)
+#'  plot(h.prob0, ind = "F1_030") ## plot haplotype of individual "F1_030"
+#'  
+#'  #### Computing conditional genotype probabilities including error
+#'  genoprob1 <- lapply(mappoly.maplist, calc_genoprob_error, step = 1, error = 0.05)
+#'  
+#'  ## Computing preferential pairing profiles
+#'  pref.pair1 <- calc_prefpair_profiles(genoprob1)
+#'  plot(pref.pair1, min.y.prof = .25, max.y.prof = 0.4, P = "P1", Q = "P2")
+#'  
+#'  ## Computing homolog probabilities
+#'  h.prob1<-calc_homoprob(genoprob1)
+#'  plot(h.prob1, ind = "F1_030") ## plot haplotype of individual "F1_030" 
 #'  
 #'  #### Reestimating recombination fractions using HMM
 #'  cl <- parallel::makeCluster(5)
@@ -137,7 +148,7 @@ import_data_from_polymapR <- function(input.data,
 #'  
 #'  ## Computing homolog probabilities
 #'  h.prob2<-calc_homoprob(genoprob2)
-#'  plot(h.prob2, ind = "F1_001") 
+#'  plot(h.prob2, ind = "F1_030") 
 #'  
 #'  #### Reconstructing the map using MAPpoly
 #'  s <- make_seq_mappoly(mappoly.data, "all")
@@ -188,6 +199,13 @@ import_data_from_polymapR <- function(input.data,
 #'                                     error = 0.05)
 #'  parallel::stopCluster(cl)
 #'  
+#'  ## Comparing resulting maps
+#'  ## polymapR
+#'  summary_maps(mappoly.maplist) 
+#'  
+#'  ## MAPpoly
+#'  summary_maps(recons.maps) 
+#'
 #'  ## Computing conditional genotype probabilities
 #'  genoprob3 <- lapply(recons.maps, 
 #'                      calc_genoprob_error, 
@@ -198,11 +216,12 @@ import_data_from_polymapR <- function(input.data,
 #'  pref.pair3 <- calc_prefpair_profiles(genoprob3)
 #'  plot(pref.pair3, min.y.prof = .25, max.y.prof = 0.4, P = "P1", Q = "P2")
 #'  
-#'  ## Computing homolog probabilities
+#'  ## Comparing homolog probabilities with different mapping approaches
 #'  h.prob3<-calc_homoprob(genoprob3)
-#'  plot(h.prob, ind = "F1_030")  ## plot haplotype of individual 10 (polymapR)
-#'  plot(h.prob2, ind = "F1_030") ## plot haplotype of individual 10 (reestimated - MAPpoly)
-#'  plot(h.prob3, ind = "F1_030") ## plot haplotype of individual 10 (reconstructed - MAPpoly)
+#'  plot(h.prob0, ind = "F1_030", use.plotly = FALSE)  ## plot haplotype of individual 10 (polymapR)
+#'  plot(h.prob1, ind = "F1_030", use.plotly = FALSE)  ## plot haplotype of individual 10 (polymapR + HMM error modeling)
+#'  plot(h.prob2, ind = "F1_030", use.plotly = FALSE) ## plot haplotype of individual 10 (reestimated: MAPpoly)
+#'  plot(h.prob3, ind = "F1_030", use.plotly = FALSE) ## plot haplotype of individual 10 (reconstructed: MAPpoly)
 #'}
 #'
 #' @author Marcelo Mollinari \email{mmollin@ncsu.edu}
