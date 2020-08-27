@@ -45,7 +45,32 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
   * [Tetraploid potato with dosage call in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/tree/master/data/SolCAP_dosage)
   * [Tetraploid potato with dosage call in CSV format](https://github.com/mmollina/MAPpoly_vignettes/tree/master/data/tetra_solcap.csv)
   * [Tetraploid potato with dosage probabilities in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/tree/master/data/SolCAP)
+
+# Related softwares
+
+* Genotype calling
+  * [fitPoly: Genotype Calling for Bi-Allelic Marker Assays](https://cran.r-project.org/web/packages/fitPoly/)
+  * [ClusterCall: Automated tetraploid genotype calling by hierarchical clustering](https://potatobreeding.cals.wisc.edu/software/)
+  * [SuperMASSA: Graphical Bayesian inference tool for genotyping polyploids](https://bitbucket.org/orserang/supermassa)
+  * [updog: Flexible Genotyping for Polyploids](https://cran.r-project.org/web/packages/updog/)
+  * [polyRAD: Genotype Calling with Uncertainty from Sequencing Data in Polyploids and Diploids](https://cran.r-project.org/web/packages/polyRAD/index.html)
+ 
+* Genetic mapping in polyploids
+  * [polymapR: Linkage Analysis in Outcrossing Polyploids](https://cran.r-project.org/web/packages/polymapR/index.html)
+  * [TetraploidSNPMap: Linkage maps and mapping QTLs for autotetraploid species, using SNP dosage data.](https://www.bioss.ac.uk/knowledge/tetraploidmap/)
+  * [MDSMap: High Density Genetic Linkage Mapping using Multidimensional Scaling](https://cran.r-project.org/web/packages/MDSMap/index.html)
   
+* Haplotye reconstruction
+  *[TetraOrigin:haplotype reconstruction in a full-sib tetraploid family](https://github.com/chaozhi/TetraOrigin)
+  * [PolyOriginR:haplotye reconstruction in polyploid multiparental pouplations](https://github.com/chaozhi/PolyOriginR)
+
+* QTL mapping
+  * [QTLpoly: QTL mapping in full-sib families of outcrossing autopolyploid species based on a random-effect multiple QTL model](https://github.com/guilherme-pereira/QTLpoly)
+  * [diaQTL: QTL analysis of diploid and autotetraploid diallel populations](https://github.com/jendelman/diaQTL)
+
+# Miscellaneous
+* [Workshop: Polyploid Genetic Data Analysis: From Dosage Calling to Linkage and QTL Analysis](http://152.1.45.19/esalq_2019.html)
+
 # Acknowledgment 
 
 This package has been developed as part of the [Genomic Tools for Sweetpotato Improvement project](https://sweetpotatogenomics.cals.ncsu.edu/) (GT4SP) and [SweetGAINS](https://cgspace.cgiar.org/handle/10568/106838), both funded by [Bill & Melinda Gates Foundation](https://www.gatesfoundation.org/).
