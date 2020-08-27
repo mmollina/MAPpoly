@@ -52,6 +52,7 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
   * [fitPoly: Genotype Calling for Bi-Allelic Marker Assays](https://cran.r-project.org/web/packages/fitPoly/)
   * [ClusterCall: Automated tetraploid genotype calling by hierarchical clustering](https://potatobreeding.cals.wisc.edu/software/)
   * [SuperMASSA: Graphical Bayesian inference tool for genotyping polyploids](https://bitbucket.org/orserang/supermassa)
+  * [VCF2SM: Python script that integrates VCF files and SuperMASSA](https://github.com/guilherme-pereira/vcf2sm)
   * [updog: Flexible Genotyping for Polyploids](https://cran.r-project.org/web/packages/updog/)
   * [polyRAD: Genotype Calling with Uncertainty from Sequencing Data in Polyploids and Diploids](https://cran.r-project.org/web/packages/polyRAD/index.html)
  

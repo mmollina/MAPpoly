@@ -11,8 +11,11 @@ notifications:
 
 before_install:
   - sudo apt-get update
-  - sudo apt-get install -y libgsl0-dev libegl1-mesa libegl1-mesa-dev libglu1-mesa-dev freeglut3-dev mesa-common-dev python-pip  libblas-dev r-cran-spam
+  - sudo apt-get install -y libgsl0-dev libegl1-mesa libegl1-mesa-dev libglu1-mesa-dev freeglut3-dev mesa-common-dev python-pip  libblas-dev
   - pip install --user numpy
   - export RGL_USE_NULL=TRUE
-  
-  
+
+install:
+  - R -e 'install.packages("devtools")'
+  - R -e 'install.packages("Rcpp")'
+  - R -e 'install.packages("spam")'
