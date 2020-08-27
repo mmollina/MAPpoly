@@ -45,6 +45,9 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
   * [Tetraploid potato with dosage call in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/tree/master/data/SolCAP_dosage)
   * [Tetraploid potato with dosage call in CSV format](https://github.com/mmollina/MAPpoly_vignettes/tree/master/data/tetra_solcap.csv)
   * [Tetraploid potato with dosage probabilities in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/tree/master/data/SolCAP)
+
+* Other material
+  * [Workshop: Polyploid Genetic Data Analysis: From Dosage Calling to Linkage and QTL Analysis](http://152.1.45.19/esalq_2019.html)
   
 # Acknowledgment 
 
