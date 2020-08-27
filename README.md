@@ -65,8 +65,8 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
   * [PolyOriginR:haplotye reconstruction in polyploid multiparental pouplations](https://github.com/chaozhi/PolyOriginR)
 
 * QTL mapping
-  *[QTLpoly: QTL mapping in full-sib families of outcrossing autopolyploid species based on a random-effect multiple QTL model](https://github.com/guilherme-pereira/QTLpoly)
-  *[diaQTL: QTL analysis of diploid and autotetraploid diallel populations](https://github.com/jendelman/diaQTL)
+  * [QTLpoly: QTL mapping in full-sib families of outcrossing autopolyploid species based on a random-effect multiple QTL model](https://github.com/guilherme-pereira/QTLpoly)
+  * [diaQTL: QTL analysis of diploid and autotetraploid diallel populations](https://github.com/jendelman/diaQTL)
 
 # Miscellaneous
 * [Workshop: Polyploid Genetic Data Analysis: From Dosage Calling to Linkage and QTL Analysis](http://152.1.45.19/esalq_2019.html)
