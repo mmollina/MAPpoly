@@ -124,6 +124,35 @@ dist_prob_to_class <- function(geno, prob.thres = 0.95) {
   return(z[unique(geno$mrk),])
 }
 
+#' Export data to \code{polymapR}
+#' @param an object of class \code{mappoly.data}
+#' @return a dosage \code{matrix} 
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
+#' @examples
+#' \dontrun{
+#' require(polymapR)
+#' dat<-export_data_to_polymapR(hexafake)
+#' F1checked <- checkF1(dosage_matrix = dat, 
+#'                      parent1 = "P1",
+#'                      parent2 = "P2",
+#'                      F1 = colnames(dat)[-c(1:2)],
+#'                      polysomic = TRUE, 
+#'                      disomic = FALSE, 
+#'                      mixed = FALSE, 
+#'                      ploidy = 6)
+#'  head(F1checked$checked_F1)
+#'  PCA_progeny(dosage_matrix = dat, 
+#'              highlight = list(c("P1", "P2")), 
+#'              colors = "red")
+#'}  
+#' @export export_data_to_polymapR
+export_data_to_polymapR <- function(data.in)
+{
+  return(as.matrix(data.frame(P1 = data.in$dosage.p,     
+                       P2 = data.in$dosage.q,
+                       data.in$geno.dose)))
+}
+
 #' Msg function
 #'
 #' @param void interfunction to be documented
