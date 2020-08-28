@@ -125,7 +125,7 @@ dist_prob_to_class <- function(geno, prob.thres = 0.95) {
 }
 
 #' Export data to \code{polymapR}
-#' @param an object of class \code{mappoly.data}
+#' @param data.in an object of class \code{mappoly.data}
 #' @return a dosage \code{matrix} 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' @examples

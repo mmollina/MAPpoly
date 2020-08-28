@@ -7,7 +7,7 @@
 export_data_to_polymapR(data.in)
 }
 \arguments{
-\item{an}{object of class \code{mappoly.data}}
+\item{data.in}{an object of class \code{mappoly.data}}
 }
 \value{
 a dosage \code{matrix}
