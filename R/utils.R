@@ -148,9 +148,11 @@ dist_prob_to_class <- function(geno, prob.thres = 0.95) {
 #' @export export_data_to_polymapR
 export_data_to_polymapR <- function(data.in)
 {
-  return(as.matrix(data.frame(P1 = data.in$dosage.p,     
+  data.out<-as.matrix(data.frame(P1 = data.in$dosage.p,     
                        P2 = data.in$dosage.q,
-                       data.in$geno.dose)))
+                       data.in$geno.dose))
+  data.out[data.out == (data.in$m + 1)] <- NA
+  return(data.out)
 }
 
 #' Msg function
