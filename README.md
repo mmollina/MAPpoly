@@ -71,7 +71,7 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
 
 # Miscellaneous
 * [Workshop: Polyploid Genetic Data Analysis: From Dosage Calling to Linkage and QTL Analysis](http://152.1.45.19/esalq_2019.html)
-* [Micellaneous scripts](https://github.com/mmollina/MAPpoly_vignettes/blob/master/README.md)
+* [Miscellaneous scripts](https://github.com/mmollina/MAPpoly_vignettes/blob/master/README.md)
 
 # Acknowledgment 
 
