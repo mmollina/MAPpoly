@@ -62,7 +62,7 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
   * [MDSMap: High Density Genetic Linkage Mapping using Multidimensional Scaling](https://cran.r-project.org/web/packages/MDSMap/index.html)
   
 * Haplotye reconstruction
-  *[TetraOrigin:haplotype reconstruction in a full-sib tetraploid family](https://github.com/chaozhi/TetraOrigin)
+  * [TetraOrigin:haplotype reconstruction in a full-sib tetraploid family](https://github.com/chaozhi/TetraOrigin)
   * [PolyOriginR:haplotye reconstruction in polyploid multiparental pouplations](https://github.com/chaozhi/PolyOriginR)
 
 * QTL mapping
