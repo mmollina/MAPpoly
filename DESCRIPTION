@@ -46,5 +46,5 @@ RoxygenNote: 7.1.1
 SystemRequirements: C++11
 Encoding: UTF-8
 Suggests: 
-    testthat
+    testthat,
     polymapR
