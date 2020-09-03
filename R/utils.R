@@ -63,8 +63,6 @@ get_memory<-function(){
   return(list(mem = mem, t.all = t.all))
 }
 
-
-
 #' Reverse map
 #'
 #' Provides the reverse version of a given map.
@@ -1427,3 +1425,81 @@ update_map = function(map){
   map$maps[[1]]$seq.ph$Q = phase.Q
   return(map)
 }
+
+#' Random sampling of dataset
+#' @param x an object  of class \code{mappoly.data}
+#' @param n number of individuals or markers to be sampled
+#' @param percentage if \code{n==NULL}, the percentage of individuals or markers to be sampled
+#' @param type should sample individuals or markers?
+#' @return an object  of class \code{mappoly.data}
+#' @keywords internal
+#' @export
+#' @importFrom magrittr "%>%"
+#' @importFrom dplyr filter
+sample_data <- function(input.data, n = NULL, percentage = NULL, type = c("individual", "marker")){
+  type <- match.arg(type)
+  if(type == "individual"){
+    if(!is.null(n)){
+      selected.ind.id <- sort(sample(input.data$n.ind, n))
+    } else if(!is.null(percentage)){
+      selected.ind.id <- sample(input.data$n.ind, ceiling(input.data$n.ind * percentage/100))
+    } else {
+      stop("Inform 'n' or 'percentage'.")
+    }
+    ind <- mrk <- NULL
+    selected.ind <- input.data$ind.names[selected.ind.id]
+    if(length(selected.ind.id) >= input.data$n.ind) return(input.data)
+    if(nrow(input.data$geno)!=input.data$n.mrk)
+      input.data$geno <-  input.data$geno %>%
+      dplyr::filter(ind%in%selected.ind)
+    input.data$geno.dose<-input.data$geno.dose[,selected.ind.id]
+    input.data$ind.names<-input.data$ind.names[selected.ind.id]
+    input.data$n.ind <- ncol(input.data$geno.dose)
+    ##Computing chi-square p.values
+    if(!is.null(input.data$chisq.pval)){
+      m<-input.data$m
+      Ds <- array(NA, dim = c(m+1, m+1, m+1))
+      for(i in 0:m)
+        for(j in 0:m)
+          Ds[i+1,j+1,] <- segreg_poly(m = m, dP = i, dQ = j)
+      Dpop<-cbind(input.data$dosage.p, input.data$dosage.q)
+      M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
+      dimnames(M)<-list(input.data$mrk.names, c(0:m))
+      M<-cbind(M, input.data$geno.dose)
+      input.data$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
+    }
+    return(input.data)
+  } 
+  else if(type == "marker"){
+    if(!is.null(n)){
+      selected.mrks.id <- sort(sample(input.data$n.mrk, n))
+    } else if(!is.null(percentage)){
+      selected.mrks.id <- sort(sample(input.data$n.mrk, ceiling(input.data$n.mrk * percentage/100)))
+    } else {
+      stop("Inform 'n' or 'percentage'.")
+    }
+    selected.mrks <- input.data$mrk.names[selected.mrks.id]
+    if(length(selected.mrks.id) >= input.data$n.mrk) return(input.data)
+    if(nrow(input.data$geno)!=input.data$n.mrk)
+      input.data$geno <-  input.data$geno %>%
+      dplyr::filter(mrk%in%selected.mrks)
+    input.data$geno.dose<-input.data$geno.dose[selected.mrks.id,]
+    input.data$n.mrk <- nrow(input.data$geno.dose)
+    input.data$mrk.names <- input.data$mrk.names[selected.mrks.id]
+    input.data$dosage.p <- input.data$dosage.p[selected.mrks.id]
+    input.data$dosage.q <- input.data$dosage.q[selected.mrks.id]
+    input.data$sequence <- input.data$sequence[selected.mrks.id]
+    input.data$sequence.pos <- input.data$sequence.pos[selected.mrks.id]
+    input.data$seq.ref <- input.data$seq.ref[selected.mrks.id]
+    input.data$seq.alt <- input.data$seq.alt[selected.mrks.id]
+    input.data$all.mrk.depth <- input.data$all.mrk.depth[selected.mrks.id]
+    input.data$kept <- intersect(input.data$mrk.names, input.data$kept)
+    input.data$elim.correspondence <- input.data$elim.correspondence[input.data$elim.correspondence$kept%in%input.data$mrk.names,]
+    input.data$chisq.pval <- input.data$chisq.pval[names(input.data$chisq.pval)%in%input.data$mrk.names]
+    if(!is.null(input.data$chisq.pval)) 
+      input.data$chisq.pval <- input.data$chisq.pval[names(input.data$chisq.pval)%in%input.data$mrk.names]
+    return(input.data)  
+  }
+  else stop("Inform type")
+}
+

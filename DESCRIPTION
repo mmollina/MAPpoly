@@ -47,3 +47,4 @@ SystemRequirements: C++11
 Encoding: UTF-8
 Suggests: 
     testthat
+    polymapR

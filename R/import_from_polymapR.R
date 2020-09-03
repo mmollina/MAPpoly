@@ -218,10 +218,14 @@ import_data_from_polymapR <- function(input.data,
 #'  
 #'  ## Comparing homolog probabilities with different mapping approaches
 #'  h.prob3<-calc_homoprob(genoprob3)
-#'  plot(h.prob0, ind = "F1_030", use.plotly = FALSE)  ## plot haplotype of individual 10 (polymapR)
-#'  plot(h.prob1, ind = "F1_030", use.plotly = FALSE)  ## plot haplotype of individual 10 (polymapR + HMM error modeling)
-#'  plot(h.prob2, ind = "F1_030", use.plotly = FALSE) ## plot haplotype of individual 10 (reestimated: MAPpoly)
-#'  plot(h.prob3, ind = "F1_030", use.plotly = FALSE) ## plot haplotype of individual 10 (reconstructed: MAPpoly)
+#'  ## plot haplotype of individual 10 (polymapR)
+#'  plot(h.prob0, ind = "F1_030", use.plotly = FALSE) 
+#'  ## plot haplotype of individual 10 (polymapR + HMM error modeling) 
+#'  plot(h.prob1, ind = "F1_030", use.plotly = FALSE)  
+#'  ## plot haplotype of individual 10 (reestimated: MAPpoly)
+#'  plot(h.prob2, ind = "F1_030", use.plotly = FALSE) 
+#'  ## plot haplotype of individual 10 (reconstructed: MAPpoly)
+#'  plot(h.prob3, ind = "F1_030", use.plotly = FALSE) 
 #'}
 #'
 #' @author Marcelo Mollinari \email{mmollin@ncsu.edu}
