@@ -37,3 +37,4 @@ install:
   - R -e 'install.packages("smacof")'        
   - R -e 'install.packages("princurve")'        
   - R -e 'install.packages("dendextend")'
+  - R -e 'install.packages("polymapR")'
