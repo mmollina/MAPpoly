@@ -12,13 +12,14 @@ read_geno_csv(
 )
 }
 \arguments{
-\item{file.in}{a character string with the name of (or full path to) the input file which contains the data to
-be read}
+\item{file.in}{a character string with the name of (or full path to) the input file 
+containing the data to be read}
 
 \item{ploidy}{the ploidy level}
 
-\item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
-expected genotypes under random chromosome pairing and no double reduction}
+\item{filter.non.conforming}{if \code{TRUE} (default) converts data points with unexpected 
+genotypes (i.e. no double reduction) to 'NA'. See function \code{\link[mappoly]{segreg_poly}} 
+for information on expected classes and their respective frequencies.}
 
 \item{elim.redundant}{logical. If \code{TRUE} (default), removes redundant markers
 during map construction, keeping them annotated to export to the final map.}
@@ -66,14 +67,17 @@ This is an alternative and a somewhat more straightforward version of the functi
  the sequence information (i.e. chromosome,  scaffold, contig, etc) and the 
  position of the marker within the sequence. The remaining columns contain 
  the dosage of the full-sib population. A tetraploid example of such file 
- can be found in \code{ins/extdata/tetra_solcap.csv}
+ can be found in the \code{Examples} section.
 }
 \examples{
 \dontrun{
-    solcap.file <- system.file('extdata', 'tetra_solcap.csv', package = 'mappoly')
-    tetra.solcap <- read_geno_csv(file.in  = solcap.file, ploidy = 4)
-    print(tetra.solcap, detailed = TRUE)
-    plot(tetra.solcap)
+#### Tetraploid Example
+ft="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/tetra_solcap.csv"
+tempfl <- tempfile()
+download.file(ft, destfile = tempfl)
+SolCAP.dose <- read_geno_csv(file.in  = tempfl, ploidy = 4)
+print(SolCAP.dose, detailed = TRUE)
+plot(SolCAP.dose)
 }
 }
 \references{

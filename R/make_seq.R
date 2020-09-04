@@ -275,7 +275,9 @@ plot.mappoly.sequence <- function(x, ...)
   type.names<-names(table(type))
   mrk.dist<-as.numeric(freq)
   names(mrk.dist)<-apply(d.temp, 1 , paste, collapse = "-")
-  pal<-colorRampPalette(RColorBrewer::brewer.pal(9,"Greys"))(length(type.names))
+  w <- c("#FFFFFF", "#F0F0F0", "#D9D9D9", "#BDBDBD", "#969696",
+         "#737373", "#525252", "#252525", "#000000")
+  pal<-colorRampPalette(w)(length(type.names))
   op <- par(mar = c(5,4,1,2))
   layout(matrix(c(1,1,1,2,3,3,6,4,5), 3, 3), widths = c(1.2,3,.5), heights = c(1.5,4.5,.5))
   barplot(mrk.dist, las = 2, col = pal[match(type, type.names)], 
@@ -295,7 +297,17 @@ plot.mappoly.sequence <- function(x, ...)
     mtext(text = bquote(log[10](P)), side = 4, line = 4, cex = .7)
   }
   par(mar=c(5,1,0,2))
-  pal<-c("black", RColorBrewer::brewer.pal((x$m+1),"RdYlGn"))
+  
+  if(x$m == 2) {
+    pal <- c("black", "#FC8D59", "#FFFFBF", "#91CF60")
+  }else if(x$m == 4){
+    pal <- c("black", "#D7191C", "#FDAE61", "#FFFFBF", "#A6D96A", "#1A9641")
+  }else if(x$m == 6){
+    pal <- c("black", "#D73027", "#FC8D59", "#FEE08B", "#FFFFBF", "#D9EF8B", "#91CF60", "#1A9850")
+  }else if(x$m == 8){
+    pal <- c("black", "#D73027", "#F46D43", "#FDAE61", "#FEE08B", "#FFFFBF", "#D9EF8B", "#A6D96A", "#66BD63", "#1A9850") 
+  } else pal <- c("black", gg_color_hue(x$m))
+  
   names(pal)<-c(-1:x$m)
   M<-as.matrix(get(x$data.name, pos = 1)$geno.dose[x$seq.mrk.names,])
   M[M==x$m+1]<--1

@@ -83,7 +83,7 @@ calc_genoprob_dist<-function(input.map, dat.dist, phase.config = "best", verbose
   temp.map$maps[[i.lpc]]$seq.num<-dat.dist.pos
   names(temp.map$maps[[i.lpc]]$seq.ph$P)<-names(temp.map$maps[[i.lpc]]$seq.ph$Q)<-dat.dist.pos
   if(!all(sort(get(temp.map$info$data.name, pos = 1)$ind.names) %in% sort(get(input.map$info$data.name, pos = 1)$ind.names)))
-    stop("The individuals in the new data set are not contained in the original data set")
+    stop("The individuals in the new dataset are not contained in the original dataset")
   geno<-subset(get(temp.map$info$data.name, pos = 1)$geno, mrk%in%original.map.mrk)
   geno.new<-NULL
   for(i in unique(geno$ind))

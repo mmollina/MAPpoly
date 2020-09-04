@@ -34,9 +34,9 @@
 #' Simulated autohexaploid dataset with genotype probabilities.
 #'
 #' A dataset of an hipotetical autohexaploid full-sib population 
-#' containing three homology groups. This data set contains the
+#' containing three homology groups. This dataset contains the
 #' probability distribution of the genotypes and 2\% of missing data, 
-#' but is essentialy the same data set found in \code{\link[mappoly]{hexafake}}
+#' but is essentialy the same dataset found in \code{\link[mappoly]{hexafake}}
 #'
 #' @format An object of class \code{mappoly.data} which contains a
 #'     list with the following components:
@@ -86,11 +86,11 @@
 
 #' Autotetraploid potato dataset.
 #'
-#' A data set of the B2721 population which derived from a cross between 
+#' A dataset of the B2721 population which derived from a cross between 
 #' two tetraploid potato varieties: Atlantic × B1829-5. The population comprises 160 
 #' offsprings genotyped with the SolCAP Infinium 8303 potato array. The original data 
 #' set can be found in [The Solanaceae Coordinated Agricultural Project (SolCAP) webpage](http://solcap.msu.edu/potato_infinium.shtml) 
-#' The data set also contains the genomic order of the SNPs from the Solanum 
+#' The dataset also contains the genomic order of the SNPs from the Solanum 
 #' tuberosum genome version 4.03. The genotype calling was performed using the
 #' fitPoly R package.
 #'
@@ -124,15 +124,15 @@
 
 #' Autotetraploid potato dataset with genotype probabilities.
 #'
-#' A data set of the B2721 population which derived from a cross between 
+#' A dataset of the B2721 population which derived from a cross between 
 #' two tetraploid potato varieties: Atlantic × B1829-5. The population comprises 160 
 #' offsprings genotyped with the SolCAP Infinium 8303 potato array. The original data 
 #' set can be found in [The Solanaceae Coordinated Agricultural Project (SolCAP) webpage](http://solcap.msu.edu/potato_infinium.shtml) 
-#' The data set also contains the genomic order of the SNPs from the Solanum 
+#' The dataset also contains the genomic order of the SNPs from the Solanum 
 #' tuberosum genome version 4.03. The genotype calling was performed using the
-#' fitPoly R package. Although this data set contains the
+#' fitPoly R package. Although this dataset contains the
 #' probability distribution of the genotypes, 
-#' it is essentialy the same data set found in \code{\link[mappoly]{tetra.solcap}}
+#' it is essentialy the same dataset found in \code{\link[mappoly]{tetra.solcap}}
 #'
 #' @format An object of class \code{mappoly.data} which contains a
 #'     list with the following components:

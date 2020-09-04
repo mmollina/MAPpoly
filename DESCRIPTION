@@ -7,7 +7,6 @@ Authors@R: c(person("Marcelo", "Mollinari", role = c("aut", "cre"), email = "mmo
              person("Guilhereme", "Pereira", role = c("ctb"), email = "gdasilv@ncsu.edu"),
              person("Augusto", "Garcia", role = c("ctb"), email = "augusto.garcia@usp.br"),
              person("Zhao-Bang", "Zeng", role = c("ctb"), email = "zeng@statgen.ncsu.edu"))
-Author: Marcelo Mollinari [aut, cre]
 Maintainer: Marcelo Mollinari <mmollin@ncsu.edu>
 Description: Software to construct genetic maps in autopolyploid full sib
     populations.
@@ -17,17 +16,11 @@ Depends:
     R (>= 3.5.0)
 Imports:
     Rcpp (>= 0.12.6),
-    parallel,
     RCurl,
     plotly,
     fields,
-    RColorBrewer,
-    bitops,
     ggpubr, 
     ggsci,
-    spam,
-    maps,
-    berryFunctions,
     rstudioapi,
     plot3D,
     memuse,
@@ -45,6 +38,7 @@ LinkingTo: Rcpp
 RoxygenNote: 7.1.1
 SystemRequirements: C++11
 Encoding: UTF-8
-Suggests: 
-    testthat
+Suggests:
+    testthat,
+    RColorBrewer,
     polymapR

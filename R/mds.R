@@ -142,7 +142,7 @@
 #' @importFrom princurve principal.curve
 #' @importFrom stats runif 
 #' @importFrom utils read.csv write.csv
-#' @importFrom MDSMap calc.nnfit
+#' @import MDSMap 
 #' @export mds_mappoly
 mds_mappoly<-function(input.mat,
                       p = NULL,

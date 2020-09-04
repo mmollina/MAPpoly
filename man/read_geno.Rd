@@ -16,8 +16,9 @@ read_geno(file.in, filter.non.conforming = TRUE, elim.redundant = TRUE)
 \item{file.in}{a character string with the name of (or full path to) the input file
 which contains the data to be read}
 
-\item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
-expected genotypes under random chromosome pairing and no double reduction}
+\item{filter.non.conforming}{if \code{TRUE} (default) converts data points with unexpected 
+genotypes (i.e. no double reduction) to 'NA'. See function \code{\link[mappoly]{segreg_poly}} 
+for information on expected classes and their respective frequencies.}
 
 \item{elim.redundant}{logical. If \code{TRUE} (default), removes redundant markers
 during map construction, keeping them annotated to export to the final map.}
@@ -88,12 +89,22 @@ containing the dosage for each marker (rows) for each individual (columns). \cod
 }
 \examples{
 \dontrun{
-    hexa.file<-system.file('extdata', 'hexafake_geno', package = 'mappoly')
-    hexafake<-read_geno(file.in  = hexa.file)
-    print(hexafake, detailed = TRUE)
 
-    ## Same thing
-    data(hexafake)
+#### Tetraploid Example
+fl1 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage"
+tempfl <- tempfile()
+download.file(fl1, destfile = tempfl)
+SolCAP.dose <- read_geno(file.in  = tempfl)
+print(SolCAP.dose, detailed = TRUE)
+plot(SolCAP.dose)
+
+#### Hexaploid example
+fl2 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexafake"
+tempfl <- tempfile()
+download.file(fl2, destfile = tempfl)
+hexa.dose <- read_geno(file.in  = tempfl)
+print(hexa.dose, detailed = TRUE)
+plot(hexa.dose)
 }
 }
 \references{

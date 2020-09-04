@@ -703,15 +703,24 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
       var.col <- var.col[1:2]
       names(var.col) <- c("A", "B")
     } else {
-      var.col <- RColorBrewer::brewer.pal(n = 4, name = "Set1")
+      var.col <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")
       names(var.col) <- c("A", "T", "C", "G")
     }
-    d.col<-c(NA, RColorBrewer::brewer.pal(n = map.info$m, name = "Dark2"))
-    names(d.col) <- 0:map.info$m
+    m <- map.info$m
+    if(m == 2) {
+      d.col <- c(NA, "#1B9E77", "#D95F02")
+    }else if(m == 4){
+      d.col <- c(NA, "#1B9E77", "#D95F02", "#7570B3", "#E7298A")
+    }else if(m == 6){
+      d.col <- c(NA, "#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02")
+    }else if(m == 8){
+      d.col <- c(NA, "#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02", "#A6761D", "#666666") 
+    } else d.col <- c(NA, gg_color_hue(m))
+    names(d.col) <- 0:m
     d.col[1]<-NA
     x <- map.info$map
     lab <- names(x)
-    zy <- seq(0, 0.5, length.out = map.info$m) + 1.5
+    zy <- seq(0, 0.5, length.out = m) + 1.5
     pp <- map.info$ph.p
     pq <- map.info$ph.q
     dp <- map.info$dp
@@ -750,7 +759,7 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
       x.control <- x.control * .8
     if(length(x1) < 25)
       x.control <- x.control * .8
-    for(i in 1:map.info$m)
+    for(i in 1:m)
     {
       lines(range(x1), c(zy[i], zy[i]), lwd=8, col = "lightgray")
       y1 <- rep(zy[i], length(curx))
@@ -761,12 +770,12 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
     for(i in 1:length(x1))
       lines(c(curx[i], x1[i]), c(0.575, zy[1]-.05), lwd=0.2)
     points(x = x1,
-           y = zy[map.info$m]+0.05+dq[id.left:id.right]/20,
+           y = zy[m]+0.05+dq[id.left:id.right]/20,
            col = d.col[as.character(dq[id.left:id.right])],
            pch = 19, cex = .7)
     #Parent 1
     zy<-zy + 1.1
-    for(i in 1:map.info$m)
+    for(i in 1:m)
     {
       lines(range(x1), c(zy[i], zy[i]), lwd=8, col = "gray")
       y1 <- rep(zy[i], length(curx))
@@ -774,13 +783,13 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
       rect(xleft = x1 - x.control, ybottom = y1 -.05, xright = x1 + x.control, ytop = y1 +.05, col = pal, border = NA)
     }
     points(x = x1,
-           y = zy[map.info$m]+0.05+dp[id.left:id.right]/20,
+           y = zy[m]+0.05+dp[id.left:id.right]/20,
            col = d.col[as.character(dp[id.left:id.right])],
            pch = 19, cex = .7)
    
     if(mrk.names)
       text(x = x1,
-           y = rep(zy[map.info$m]+0.05+.3, length(curx)),
+           y = rep(zy[m]+0.05+.3, length(curx)),
            labels = names(curx),
            srt=90, adj = 0, cex = cex)
     par(op)
@@ -794,12 +803,12 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
          ylim = c(.25, 4.5))
     zy <- zy - 1.1
     mtext(text = "Parent 2", side = 4, at = mean(zy), line = -1, font = 4)
-    for(i in 1:map.info$m)
-      mtext(letters[(map.info$m+1):(2*map.info$m)][i], line = 0, at = zy[i], side = 4)
+    for(i in 1:m)
+      mtext(letters[(m+1):(2*m)][i], line = 0, at = zy[i], side = 4)
     zy <- zy + 1.1
     mtext(text = "Parent 1", side = 4, at = mean(zy), line = -1, font = 4)
-    for(i in 1:map.info$m)
-      mtext(letters[1:map.info$m][i],  line = 0, at = zy[i], side = 4)
+    for(i in 1:m)
+      mtext(letters[1:m][i],  line = 0, at = zy[i], side = 4)
     par(op)
     op <- par(mar = c(0,1,2,4), xpd=FALSE)
     plot(x = curx,
@@ -818,7 +827,7 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
              box.lty=0, bg="transparent", ncol = 4)
     }
     legend("bottomright", legend=names(d.col)[-1], title = "Doses" ,
-           col = d.col[-1], ncol = map.info$m/2, pch = 19,
+           col = d.col[-1], ncol = m/2, pch = 19,
            box.lty=0)
     par(opar)
     #par(mfrow = c(1,1))

@@ -28,7 +28,7 @@ will choose the maximum likelihood configuration}
 \item{error}{the assumed global error rate (default = 0.01)}
 
 \item{th.prob}{the threshold for using global error or genotype 
-probability distribution contained in the data set (default = 0.95)}
+probability distribution contained in the dataset (default = 0.95)}
 
 \item{restricted}{if \code{TRUE} (default), restricts the prior to the 
 possible classes under mendelian non double-reduced segregation 
@@ -107,7 +107,7 @@ the probabilities are not calculated between markers.
    pr1<-probs$probs[,,ind]
    d1<-probs$map
    image(t(pr1),
-         col=RColorBrewer::brewer.pal(n=9 , name = "YlOrRd"),
+         col = RColorBrewer::brewer.pal(n=9 , name = "YlOrRd"),
          axes=FALSE,
          xlab = "Markers",
          ylab = " ",

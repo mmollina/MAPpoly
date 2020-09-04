@@ -71,9 +71,9 @@ est_full_hmm_with_prior_dist<-function(input.map, phase.config = "best",
   } else i.lpc <- phase.config
     if(nrow(get(input.map$info$data.name, pos=1)$geno)==get(input.map$info$data.name, pos=1)$n.mrk) 
       stop("
-            The data set associated to 'input.map'
+            The dataset associated to 'input.map'
             contains no genotypic probability distribution.
-            Please provide provide data set in argument 
+            Please provide provide dataset in argument 
            'dat.dist'.
            ")
     dat.dist <- get(input.map$info$data.name, pos=1)
@@ -87,7 +87,7 @@ est_full_hmm_with_prior_dist<-function(input.map, phase.config = "best",
     temp.map$maps[[i.lpc]]$seq.num<-dat.dist.pos
     names(temp.map$maps[[i.lpc]]$seq.ph$P)<-names(temp.map$maps[[i.lpc]]$seq.ph$Q)<-dat.dist.pos
     if(!all(sort(get(temp.map$info$data.name, pos = 1)$ind.names) %in% sort(get(input.map$info$data.name, pos = 1)$ind.names)))
-      stop("The individuals in the new data set are not contained in the original data set")
+      stop("The individuals in the new dataset are not contained in the original dataset")
     geno<-subset(get(temp.map$info$data.name, pos = 1)$geno, mrk%in%original.map.mrk)
     geno.new<-NULL
     for(i in unique(geno$ind))

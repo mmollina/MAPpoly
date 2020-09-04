@@ -44,8 +44,8 @@ hexafake.geno.dist
 }
 \description{
 A dataset of an hipotetical autohexaploid full-sib population 
-containing three homology groups. This data set contains the
+containing three homology groups. This dataset contains the
 probability distribution of the genotypes and 2\% of missing data, 
-but is essentialy the same data set found in \code{\link[mappoly]{hexafake}}
+but is essentialy the same dataset found in \code{\link[mappoly]{hexafake}}
 }
 \keyword{datasets}

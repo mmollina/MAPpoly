@@ -128,21 +128,20 @@ extract_map<-function(input.map, phase.config = "best")
 #' @param void interfunction to be documented
 #' @keywords internal
 #' @export
-#' @importFrom berryFunctions roundedRect
 plot_one_map<-function(x, i = 0, horiz = FALSE, col = "lightgray")
 {
   if(horiz)
   {
-    berryFunctions::roundedRect(xleft = x[1], ybottom = i-0.25, 
-                                xright = rev(x)[1], ytop = i+0.25,
-                                rounding=0, col = col)
+    rect(xleft = x[1], ybottom = i-0.25, 
+         xright = tail(x,1), ytop = i+0.25,
+         col = col)
     for(j in 1:length(x))
       lines(x = c(x[j], x[j]), y = c(i-0.25, i+0.25), lwd = .5)
   } else {
     x <- -rev(x)
-    berryFunctions::roundedRect(xleft = i-0.25, ybottom = x[1], 
-                                xright = i+0.25, ytop = rev(x)[1],
-                                rounding = 0, col = col)
+    rect(xleft = i-0.25, ybottom = x[1], 
+         xright = i+0.25, ytop = tail(x,1),
+         col = col)
     for(j in 1:length(x))
       lines(y = c(x[j], x[j]), x = c(i-0.25, i+0.25), lwd = .5)
   }

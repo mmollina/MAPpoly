@@ -52,7 +52,7 @@ genotyping_global_error<-function(x, m, restricted = TRUE,  error=0.01, th.prob=
 #'                   given dosage of the parents
 #'                    
 #' @param th.prob the threshold for using global error or genotype 
-#'     probability distribution contained in the data set (default = 0.95)
+#'     probability distribution contained in the dataset (default = 0.95)
 #'      
 #' @param verbose if \code{TRUE}, current progress is shown; if
 #'     \code{FALSE} (default), no output is produced

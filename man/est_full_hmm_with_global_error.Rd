@@ -25,7 +25,7 @@ possible classes under mendelian non double-reduced segregation
 given dosage of the parents}
 
 \item{th.prob}{the threshold for using global error or genotype 
-probability distribution contained in the data set (default = 0.95)}
+probability distribution contained in the dataset (default = 0.95)}
 
 \item{verbose}{if \code{TRUE}, current progress is shown; if
 \code{FALSE} (default), no output is produced}

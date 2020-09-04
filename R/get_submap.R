@@ -30,10 +30,6 @@
 #'     \code{info.tail = TRUE}, the function uses at least \code{extend.tail}
 #'     as the length of the tail (default = 50)
 #'     
-#' @param count.cache an object of class \code{cache.info} containing
-#'     pre-computed genotype frequencies, obtained with
-#'     \code{\link[mappoly]{cache_counts_twopt}}
-#'     
 #' @param tol the desired accuracy during the sequential phase (default = 0.1)
 #' 
 #' @param tol.final the desired accuracy for the final map (default = 10e-04)
@@ -47,33 +43,26 @@
 #'     
 #' @examples
 #'  \dontrun{
-#'     data("hexafake")
-#'     data("maps.hexafake")
-#'     
 #'     ## selecting the 100 first markers in linkage group 1
-#'     ## reestimating the recombination 
-#'     ## fractions     
+#'     ####
+#'     ## re-estimating recombination fractions     
 #'     submap1.lg1<-get_submap(input.map = maps.hexafake[[1]], 
 #'                            mrk.pos = 1:100, verbose = TRUE, 
 #'                            tol.final = 10e-3)
-#'     ## reestimating the recombination 
-#'     ## fractions and linkage phases
-#'     counts<-get_cache_two_pts_from_web(6)                       
+#'     ## re-estimating the recombination fractions and linkage phases
 #'     submap2.lg1<-get_submap(input.map = maps.hexafake[[1]], 
 #'                            mrk.pos = 1:100, verbose = TRUE,
 #'                            reestimate.phase = TRUE, 
-#'                            count.cache = counts,
 #'                            tol.final = 10e-3)
-#'    ## without recombination 
-#'    ## fraction reestimation                                                     
+#'    ## no recombination fraction re-estimation                                                     
 #'    submap3.lg1<-get_submap(input.map = maps.hexafake[[1]], 
 #'                            mrk.pos = 1:100, reestimate.rf = FALSE,
 #'                            verbose = TRUE, 
 #'                            tol.final = 10e-3)                      
 #'   plot(maps.hexafake[[1]])
-#'   plot(submap1.lg1)
-#'   plot(submap2.lg1)
-#'   plot(submap3.lg1)
+#'   plot(submap1.lg1, mrk.names = T, cex = .5)
+#'   plot(submap2.lg1, mrk.names = T, cex = .5)
+#'   plot(submap3.lg1, mrk.names = T, cex = .5)
 #'   }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -89,7 +78,7 @@
 #'
 get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf = TRUE,
                      reestimate.phase = FALSE, thres.twopt = 5, thres.hmm = 3,
-                     extend.tail = 50, count.cache = NULL, tol = 0.1, tol.final = 10e-4,
+                     extend.tail = 50, tol = 0.1, tol.final = 10e-4,
                      use.high.precision = FALSE, verbose=TRUE)
 {
   if (!inherits(input.map, "mappoly.map")) {
@@ -135,16 +124,12 @@ get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf =
       message("
     The recombination fraction will be reestimated 
     since 'reestimate.phase = TRUE'")
-    if(is.null(count.cache))
-      stop("
-    To perform phase reestimation, please 
-    provide the genotype counts.")
     s<-make_seq_mappoly(get(input.map$info$data.name, pos = 1),
                         input.map$maps[[i.lpc]]$seq.num[mrk.pos],
                         input.map$info$data.name)
     if(verbose)
       cat("\nEstimating pairwise recombination fraction for marker sequence ...")
-    p<-est_pairwise_rf(input.seq = s, count.cache = count.cache, verbose = FALSE)
+    p<-est_pairwise_rf(input.seq = s, verbose = FALSE)
     if(verbose){
       cat("done\n")      
       cat("\nEstimating sequential map: \n----------------------------------------\n")

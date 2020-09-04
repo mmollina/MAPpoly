@@ -64,93 +64,92 @@
 #'
 cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL, 
                                n.clusters = 1, verbose = TRUE, joint.prob = FALSE) {
-    ## checking for correct object
-    start <- proc.time()
-    input_classes <- c("mappoly.sequence")
-    if (!inherits(input.seq, input_classes)) {
-        stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
-    }
-    cache.prev = NULL
-    if(input.seq$m==2)
-    {
-      cached <- FALSE
-      cat("INFO: Computing genotype frequencies ...\n")
-    }
-    if (cached){
-      if (input.seq$m == 2) ploidy = 'diploid'
-      else if (input.seq$m == 4) ploidy = 'tetraploid'
-      else if (input.seq$m == 6) ploidy = 'hexaploid'
-      else if (input.seq$m == 8) ploidy = 'octaploid'
-      else return(get_cache_two_pts_from_web(input.seq$m))
-      return(structure(full_counts[[ploidy]], class = "cache.info"))
-    }
-    temp.count <- NULL
-    if (joint.prob) {
-        temp.count <- cache_counts_twopt(input.seq, cached = FALSE, cache.prev = cache.prev, n.clusters = n.clusters, verbose = verbose, joint.prob = FALSE)$cond
-    }
-    if (input.seq$m >= 8)
-        message("\nploidy level ", input.seq$m, ": this operation could take a very long time.
+  ## checking for correct object
+  start <- proc.time()
+  input_classes <- c("mappoly.sequence")
+  if (!inherits(input.seq, input_classes)) {
+    stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
+  }
+  cache.prev = NULL
+  if(input.seq$m==2)
+  {
+    cached <- FALSE
+    cat("INFO: Computing genotype frequencies ...\n")
+  }
+  if (cached){
+    if (input.seq$m == 2) ploidy = 'diploid'
+    else if (input.seq$m == 4) ploidy = 'tetraploid'
+    else if (input.seq$m == 6) ploidy = 'hexaploid'
+    else return(get_cache_two_pts_from_web(input.seq$m))
+    return(structure(full_counts[[ploidy]], class = "cache.info"))
+  }
+  temp.count <- NULL
+  if (joint.prob) {
+    temp.count <- cache_counts_twopt(input.seq, cached = FALSE, cache.prev = cache.prev, n.clusters = n.clusters, verbose = verbose, joint.prob = FALSE)$cond
+  }
+  if (input.seq$m >= 8)
+    message("\nploidy level ", input.seq$m, ": this operation could take a very long time.
                  \ntry to use the option 'cached' instead.\n")
-    dose.names <- sort(unique(apply(rbind(combn(input.seq$seq.dose.p, 2), combn(input.seq$seq.dose.q, 2)), 2, paste, collapse = "-")))
-    if (!is.null(cache.prev)) {
-        if (!inherits(cache.prev, "cache.info")) {
-            stop(deparse(substitute(cache.prev)), " is not an object of class 'cache.info'")
-        }
-        ## Number of distinct genotypic combinations for differennt ploidy levels
-        x <- c(3, 6, 10, 15, 21, 28, 36)
-        names(x) <- c("2", "4", "6", "8", "10", "12", "14")
-        pl.class <- choose(1 + input.seq$m/2, 2) + 1 + input.seq$m/2
-        first.na <- sapply(unlist(cache.prev, recursive = FALSE), function(x) !all(is.na(x)))
-
-        ## check if the ploidy levels match
-        if (ncol(cache.prev[[min(which(first.na))]][[1]]) != pl.class) {
-            warning(deparse(substitute(cache.prev)), " contains counts for ploidy level ", names(which(x == ncol(cache.prev[[1]][[1]]))), "\n  Obtaining new counts for ploidy ",
-                input.seq$m)
-            return(cache_counts_twopt(input.seq = input.seq, cache.prev = NULL, n.clusters = n.clusters, verbose = verbose, joint.prob = joint.prob))
-        }
-        remaining <- which(is.na(pmatch(dose.names, names(cache.prev))))
-        if (length(remaining) == 0) {
-            cat("\n Nothing to add to 'cache.prev'. Returning original 'cache prev'.\n")
-            return(cache.prev)
-        }
-        dose.names <- dose.names[remaining]
+  dose.names <- sort(unique(apply(rbind(combn(input.seq$seq.dose.p, 2), combn(input.seq$seq.dose.q, 2)), 2, paste, collapse = "-")))
+  if (!is.null(cache.prev)) {
+    if (!inherits(cache.prev, "cache.info")) {
+      stop(deparse(substitute(cache.prev)), " is not an object of class 'cache.info'")
     }
-    aux.mat <- matrix(unlist(lapply(strsplit(dose.names, split = "-"), as.numeric)), ncol = 4, byrow = TRUE)
-    dimnames(aux.mat) <- list(paste("Conf.", 1:nrow(aux.mat), sep = ""), c("P.k", "P.k+1", "Q.k", "Q.k+1"))
-    if (verbose) {
-        cat("\n   Caching the following dosage combination: \n")
-        print(aux.mat)
+    ## Number of distinct genotypic combinations for differennt ploidy levels
+    x <- c(3, 6, 10, 15, 21, 28, 36)
+    names(x) <- c("2", "4", "6", "8", "10", "12", "14")
+    pl.class <- choose(1 + input.seq$m/2, 2) + 1 + input.seq$m/2
+    first.na <- sapply(unlist(cache.prev, recursive = FALSE), function(x) !all(is.na(x)))
+    
+    ## check if the ploidy levels match
+    if (ncol(cache.prev[[min(which(first.na))]][[1]]) != pl.class) {
+      warning(deparse(substitute(cache.prev)), " contains counts for ploidy level ", names(which(x == ncol(cache.prev[[1]][[1]]))), "\n  Obtaining new counts for ploidy ",
+              input.seq$m)
+      return(cache_counts_twopt(input.seq = input.seq, cache.prev = NULL, n.clusters = n.clusters, verbose = verbose, joint.prob = joint.prob))
     }
-    if (n.clusters > 1) {
-        if (verbose)
-            cat("INFO: Using ", n.clusters, " CPU's for calculation.\n")
-        cl <- makeCluster(n.clusters)
-        on.exit(stopCluster(cl))
-        y <- parApply(cl, aux.mat, 1, get_counts_all_phases, m = input.seq$m, joint.prob = joint.prob)
-        end <- proc.time()
-    } else {
-        if (verbose)
-            cat("INFO: Going singlemode. Using one Core/CPU/PC for calculation.\n")
-        y <- apply(aux.mat, 1, get_counts_all_phases, input.seq$m, joint.prob = joint.prob)
-        end <- proc.time()
+    remaining <- which(is.na(pmatch(dose.names, names(cache.prev))))
+    if (length(remaining) == 0) {
+      cat("\n Nothing to add to 'cache.prev'. Returning original 'cache prev'.\n")
+      return(cache.prev)
     }
-    if (verbose) {
-        cat("INFO: Done with", nrow(aux.mat), "phase configurations\n")
-        cat("INFO: Calculation took:", round((end - start)[3], digits = 3), "seconds\n")
-    }
-    names(y) <- dose.names
-    w <- c(cache.prev, y)
-    joint <- NULL
-    cond <- temp.count
-    if (joint.prob)
-        joint <- w else cond <- w
-    all.dose.names <- apply(expand.grid(0:input.seq$m, 0:input.seq$m, 0:input.seq$m, 0:input.seq$m), 1, paste, collapse = "-")
-    z1 <- z2 <- vector("list", length(all.dose.names))
-    names(z1) <- names(z2) <- all.dose.names
-    z1[names(cond)] <- cond
-    if (joint.prob)
-        z2[names(joint)] <- joint
-    structure(list(cond = z1, joint = z2), class = "cache.info")
+    dose.names <- dose.names[remaining]
+  }
+  aux.mat <- matrix(unlist(lapply(strsplit(dose.names, split = "-"), as.numeric)), ncol = 4, byrow = TRUE)
+  dimnames(aux.mat) <- list(paste("Conf.", 1:nrow(aux.mat), sep = ""), c("P.k", "P.k+1", "Q.k", "Q.k+1"))
+  if (verbose) {
+    cat("\n   Caching the following dosage combination: \n")
+    print(aux.mat)
+  }
+  if (n.clusters > 1) {
+    if (verbose)
+      cat("INFO: Using ", n.clusters, " CPU's for calculation.\n")
+    cl <- makeCluster(n.clusters)
+    on.exit(stopCluster(cl))
+    y <- parApply(cl, aux.mat, 1, get_counts_all_phases, m = input.seq$m, joint.prob = joint.prob)
+    end <- proc.time()
+  } else {
+    if (verbose)
+      cat("INFO: Going singlemode. Using one Core/CPU/PC for calculation.\n")
+    y <- apply(aux.mat, 1, get_counts_all_phases, input.seq$m, joint.prob = joint.prob)
+    end <- proc.time()
+  }
+  if (verbose) {
+    cat("INFO: Done with", nrow(aux.mat), "phase configurations\n")
+    cat("INFO: Calculation took:", round((end - start)[3], digits = 3), "seconds\n")
+  }
+  names(y) <- dose.names
+  w <- c(cache.prev, y)
+  joint <- NULL
+  cond <- temp.count
+  if (joint.prob)
+    joint <- w else cond <- w
+  all.dose.names <- apply(expand.grid(0:input.seq$m, 0:input.seq$m, 0:input.seq$m, 0:input.seq$m), 1, paste, collapse = "-")
+  z1 <- z2 <- vector("list", length(all.dose.names))
+  names(z1) <- names(z2) <- all.dose.names
+  z1[names(cond)] <- cond
+  if (joint.prob)
+    z2[names(joint)] <- joint
+  structure(list(cond = z1, joint = z2), class = "cache.info")
 }
 
 #' @export

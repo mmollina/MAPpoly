@@ -1,2 +1,8 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^.*\.pdf
+^.*\.pptx
+^.*\.gif
+^.*\.yml
+^.*\.ai
+^.*\.png

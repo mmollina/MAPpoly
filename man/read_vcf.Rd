@@ -27,8 +27,9 @@ input file which contains the data (VCF format)}
 
 \item{ploidy}{the species ploidy (optional, it will be automatically detected)}
 
-\item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
-expected genotypes under random chromosome pairing and no double reduction}
+\item{filter.non.conforming}{if \code{TRUE} (default) converts data points with unexpected 
+genotypes (i.e. no double reduction) to 'NA'. See function \code{\link[mappoly]{segreg_poly}} 
+for information on expected classes and their respective frequencies.}
 
 \item{thresh.line}{threshold used for p-values on segregation test (default = 0.05)}
 
@@ -76,11 +77,10 @@ An object of class \code{mappoly.data} which contains a
 its equivalence to the redundant ones}
 }
 \description{
-Reads an external VCF file. This function accepts version 4.0 and higher, 
-and creates an object of class \code{mappoly.data}
+Reads an external VCF file and creates an object of class \code{mappoly.data}
 }
 \details{
-This function can handle .vcf files of version 4.0 and higher. The ploidy 
+This function can handle .vcf files versions 4.0 or higher. The ploidy 
 can be automatically detected, but it is highly recommended that you 
 inform it to check for mismatches. All individual and marker names 
 will be kept as they are in the .vcf file.

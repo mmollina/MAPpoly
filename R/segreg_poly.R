@@ -1,22 +1,24 @@
 #' Polysomic segregation frequency
 #'
 #' Computes the polysomic segregation frequency given a ploidy level
-#' and the dosage of the locus in both parents.
+#' and the dosage of the locus in both parents. It does not consider
+#' double reduction.
 #'
 #' @param m the ploidy level
 #'
-#' @param dP the allelic dosage in parent P
+#' @param dP the dosage in parent P
 #'
-#' @param dQ the allelic dosage in parent Q
+#' @param dQ the dosage in parent Q
 #'
 #' @return a vector containing the expected segregation frequency for
 #'     all possible genotypic classes.
 #'
 #' @examples
-#' #auto-octaploid with two and three doses in parents P and Q,
-#' #respectively
-#' (seg<-segreg_poly(m=8, dP=2, dQ=3))
+#' # autohexaploid with two and three doses in parents P and Q,
+#' # respectively
+#' seg<-segreg_poly(m=6, dP=2, dQ=3)
 #' barplot(seg, las=2)
+#' 
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'

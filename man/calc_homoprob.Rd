@@ -27,7 +27,7 @@ are stacked in the plot (default = FALSE)}
 \code{"all"}, the function plots all linkage groups}
 
 \item{ind}{indicates which individuals should be plotted. It can be the 
-position of the individuals in the data set or it's name. 
+position of the individuals in the dataset or it's name. 
 If \code{NULL} (default), the function plots the first 
 individual}
 

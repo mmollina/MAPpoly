@@ -19,8 +19,9 @@ be read}
 dosage. Markers with maximum genotype probability smaller than \code{prob.thres} 
 are considered as missing data for the dosage calling purposes (default = 0.95)}
 
-\item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
-expected genotypes under random chromosome pairing and no double reduction}
+\item{filter.non.conforming}{if \code{TRUE} (default) converts data points with unexpected 
+genotypes (i.e. no double reduction) to 'NA'. See function \code{\link[mappoly]{segreg_poly}} 
+for information on expected classes and their respective frequencies.}
 
 \item{elim.redundant}{logical. If \code{TRUE} (default), removes redundant markers
 during map construction, keeping them annotated to export to the final map.}
@@ -60,10 +61,10 @@ an object of class \code{mappoly.data} which contains a
       segregation ratio using function \code{\link[mappoly]{segreg_poly}}}
     \item{n.phen}{number of phenotypic traits}
     \item{phen}{a matrix containing the phenotypic data. The rows
-                corespond to the trais and the columns correspond
+                correspond to the trais and the columns correspond
                 to the individuals}
     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
-    test of mendelian segregation performed for all markers}
+    test of Mendelian segregation performed for all markers}
     \item{kept}{if elim.redundant=TRUE, holds all non-redundant markers}
     \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
 its equivalence to the redundant ones}
@@ -97,15 +98,27 @@ associated with each one of the possible dosages. \code{NA} represents missing d
 }
 \examples{
 \dontrun{
-    solcap.file <- system.file('extdata', 'SolCAP.bz2', package = 'mappoly')
-    dat <- read_geno_dist(file.in  = solcap.file)
-    print(tetra.solcap, detailed = TRUE)
+#### Tetraploid Example
+ft="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP"
+tempfl <- tempfile()
+download.file(ft, destfile = tempfl)
+SolCAP.dose.prob <- read_geno_dist(file.in  = tempfl)
+print(SolCAP.dose.prob, detailed = TRUE)
+plot(SolCAP.dose.prob)
+## save dataset for future uses
+saveRDS(SolCAP.dose.prob, file = "solcap.rds")
+SolCAP.dose.prob <- readRDS("solcap.rds")
 
-    ## Same data set
-    data("tetra.solcap.geno.dist")
-    
-    identical(tetra.solcap.geno.dist, dat)
-    
+#### Hexaploid example
+fh="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexafake_geno_dist"
+tempfl <- tempfile()
+download.file(fh, destfile = tempfl)
+hexa.dose.prob <- read_geno_dist(file.in  = tempfl, prob.thres = 0.8)
+print(hexa.dose.prob, detailed = TRUE)
+plot(hexa.dose.prob)
+## save dataset for future uses
+saveRDS(hexa.dose.prob, file = "hexa.rds")
+hexa.dose.prob <- readRDS("hexa.rds")
 }
 
 }

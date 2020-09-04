@@ -26,8 +26,9 @@
 #' @param file.in a character string with the name of (or full path to) the input file
 #'  which contains the data to be read
 #'
-#' @param filter.non.conforming if \code{TRUE} (default) exclude samples with non 
-#'     expected genotypes under random chromosome pairing and no double reduction
+#' @param filter.non.conforming if \code{TRUE} (default) converts data points with unexpected 
+#'        genotypes (i.e. no double reduction) to 'NA'. See function \code{\link[mappoly]{segreg_poly}} 
+#'        for information on expected classes and their respective frequencies.  
 #'
 #' @param elim.redundant logical. If \code{TRUE} (default), removes redundant markers
 #' during map construction, keeping them annotated to export to the final map.
@@ -71,12 +72,22 @@
 #' its equivalence to the redundant ones}
 #' @examples
 #' \dontrun{
-#'     hexa.file<-system.file('extdata', 'hexafake_geno', package = 'mappoly')
-#'     hexafake<-read_geno(file.in  = hexa.file)
-#'     print(hexafake, detailed = TRUE)
-#'
-#'     ## Same thing
-#'     data(hexafake)
+#' 
+#' #### Tetraploid Example
+#' fl1 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage"
+#' tempfl <- tempfile()
+#' download.file(fl1, destfile = tempfl)
+#' SolCAP.dose <- read_geno(file.in  = tempfl)
+#' print(SolCAP.dose, detailed = TRUE)
+#' plot(SolCAP.dose)
+#' 
+#' #### Hexaploid example
+#' fl2 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexafake"
+#' tempfl <- tempfile()
+#' download.file(fl2, destfile = tempfl)
+#' hexa.dose <- read_geno(file.in  = tempfl)
+#' print(hexa.dose, detailed = TRUE)
+#' plot(hexa.dose)
 #'}
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
@@ -312,7 +323,6 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
 #' @export
 #' @keywords internal
 #' @importFrom graphics barplot layout mtext image legend 
-#' @importFrom RColorBrewer brewer.pal
 #' @importFrom grDevices colorRampPalette
 #' @importFrom grDevices blues9
 plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
@@ -323,7 +333,9 @@ plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
   type.names<-names(table(type))
   mrk.dist<-as.numeric(freq)
   names(mrk.dist)<-apply(d.temp, 1 , paste, collapse = "-")
-  pal<-colorRampPalette(RColorBrewer::brewer.pal(9,"Greys"))(length(type.names))
+  w <- c("#FFFFFF", "#F0F0F0", "#D9D9D9", "#BDBDBD", "#969696",
+         "#737373", "#525252", "#252525", "#000000")
+  pal<-colorRampPalette(w)(length(type.names))
   op <- par(mar = c(5,4,1,2))
   layout(matrix(c(1,1,1,2,3,3,6,4,5), 3, 3), widths = c(1.2,3,.5), heights = c(1.5,2,3))
   barplot(mrk.dist, las = 2, col = pal[match(type, type.names)], 
@@ -343,7 +355,17 @@ plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
     lines(x=c(0, x$n.mrk), y = rep(log10(thresh.line),2), col = 2, lty = 2)
   }
   par(mar=c(5,1,0,2))
-  pal<-c("black", RColorBrewer::brewer.pal((x$m+1),"RdYlGn"))
+  
+  if(x$m == 2) {
+    pal <- c("black", "#FC8D59", "#FFFFBF", "#91CF60")
+  }else if(x$m == 4){
+    pal <- c("black", "#D7191C", "#FDAE61", "#FFFFBF", "#A6D96A", "#1A9641")
+  }else if(x$m == 6){
+    pal <- c("black", "#D73027", "#FC8D59", "#FEE08B", "#FFFFBF", "#D9EF8B", "#91CF60", "#1A9850")
+  }else if(x$m == 8){
+    pal <- c("black", "#D73027", "#F46D43", "#FDAE61", "#FEE08B", "#FFFFBF", "#D9EF8B", "#A6D96A", "#66BD63", "#1A9850") 
+  } else pal <- c("black", gg_color_hue(x$m))
+  
   names(pal)<-c(-1:x$m)
   M <- as.matrix(x$geno.dose)
   M[M==x$m+1]<--1
