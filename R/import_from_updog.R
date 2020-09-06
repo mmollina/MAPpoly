@@ -101,8 +101,8 @@ import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = 
     geno <- geno[c(1,2,grep(pattern = "Pr_", colnames(geno)))]
     colnames(geno) <- c("mrk", "ind", 0:m)
     geno<-geno[order(geno$ind, geno$mrk, decreasing=TRUE),]
-    ind.names = unique(geno$ind)
-    mrk.names = unique(geno$mrk)
+    ind.names = as.character(unique(geno$ind))
+    mrk.names = as.character(unique(geno$mrk))
     n.ind = length(ind.names)
     n.mrk = length(mrk.names)
     if(n.ind * n.mrk != nrow(geno))
