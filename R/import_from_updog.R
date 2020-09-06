@@ -62,6 +62,11 @@
 #'                 p2_id = colnames(t(uitdewilligen$sizemat))[2],
 #'                 nc = 4)
 #' mydata = import_from_updog(mout)
+#' mydata
+#' plot(mydata)
+#' mydata = import_from_updog(mout, filter.non.conforming = TRUE)
+#' mydata
+#' plot(mydata)
 #'}
 #'
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}

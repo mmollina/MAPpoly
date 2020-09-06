@@ -41,4 +41,6 @@ Encoding: UTF-8
 Suggests:
     testthat,
     RColorBrewer,
+    updog,
+    polyRAD,
     polymapR
