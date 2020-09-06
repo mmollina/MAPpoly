@@ -73,6 +73,9 @@ mout = multidog(refmat = t(uitdewilligen$refmat),
 mydata = import_from_updog(mout)
 mydata
 plot(mydata)
+mydata = import_from_updog(mout, filter.non.conforming = TRUE)
+mydata
+plot(mydata)
 }
 
 }
