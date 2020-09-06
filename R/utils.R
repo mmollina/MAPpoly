@@ -119,7 +119,7 @@ dist_prob_to_class <- function(geno, prob.thres = 0.95) {
     m<-matrix(NA, nrow = length(n), ncol = ncol(z), dimnames = list(n, colnames(z)))
     z<-rbind(z,m)
   }
-  return(z[unique(geno$mrk),])
+  return(z[as.character(unique(geno$mrk)),])
 }
 
 #' Export data to \code{polymapR}
