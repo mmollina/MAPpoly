@@ -37,9 +37,8 @@ devtools::install_github("mmollina/mappoly")
 For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherme-pereira/QTLpoly) package. QTLpoly is an under development software to map quantitative trait loci (QTL) in full-sib families of outcrossing autopolyploid species based on a random-effect multiple QTL model [Pereira et al. 2020](https://doi.org/10.1534/genetics.120.303080). 
 
 # Vignettes
-
-* [Building a genetic map in an hexaploid full-sib population using MAPpoly](https://mmollina.github.io/tutorials/hexa_fake/haxaploid_map_construction.html)
 * [Building a genetic map using potato genotype data from SolCAP](https://mmollina.github.io/MAPpoly_vignettes/vignette_tetraploid/vignette_tetraploid.html)
+* [Building a genetic map in an hexaploid full-sib population using MAPpoly](https://mmollina.github.io/tutorials/hexa_fake/haxaploid_map_construction.html)
 * Dataset examples
   * [Hexaploid sweetpotato VCF dataset (Beauregard x Tanzania) obtained using VCF2SM](https://github.com/mmollina/MAPpoly_vignettes/tree/master/data/BT)
   * [Hexaploid simulation with dosage call in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/tree/master/data/hexafake)
