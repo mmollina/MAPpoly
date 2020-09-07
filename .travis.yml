@@ -39,4 +39,3 @@ install:
   - R -e 'install.packages("dendextend")'
   - R -e 'install.packages("polymapR")'
   - R -e 'install.packages("updog")'
-  - R -e 'install.packages("polyRAD")'

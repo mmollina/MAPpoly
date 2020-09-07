@@ -42,5 +42,4 @@ Suggests:
     testthat,
     RColorBrewer,
     updog,
-    polyRAD,
     polymapR
