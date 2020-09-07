@@ -38,16 +38,16 @@ elim_redundant<-function(input.seq, data = NULL)
 {
   if (is.null(data)) x<-get(input.seq$data.name, pos = 1)$geno.dose[input.seq$seq.num, ]
   else x = data$geno.dose[input.seq$seq.num, ]
-    dat_temp <- unique(x, dimnames = TRUE)
-    if (is.null(data)) output.seq <- make_seq_mappoly(get(input.seq$data.name, pos = 1), rownames(dat_temp), data.name = input.seq$data.name)
-    else output.seq <- make_seq_mappoly(data, rownames(dat_temp), data.name = data)
+  dat_temp <- unique(x, dimnames = TRUE)
+  if (is.null(data)) output.seq <- make_seq_mappoly(get(input.seq$data.name, pos = 1), rownames(dat_temp), data.name = input.seq$data.name)
+  else output.seq <- make_seq_mappoly(data, rownames(dat_temp), data.name = data)
   output.seq$chisq.pval.thres <-input.seq$chisq.pval.thres
   output.seq$chisq.pval <-input.seq$chisq.pval
   if (is.null(data)) mrknames <- get(input.seq$data.name, pos = 1)$mrk.names
   else mrknames <- data$mrk.names
   elim<-setdiff(input.seq$seq.num,output.seq$seq.num)
   n1<-apply(dat_temp, 1, paste, collapse="")
-  n2<-apply(x[mrknames[elim],], 1, paste, collapse="")
+  n2<-apply(x[mrknames[elim], , drop = FALSE], 1, paste, collapse="")
   elim.out <- data.frame(kept = rownames(dat_temp)[match(n2,n1)], elim = mrknames[elim])
   structure(list(unique.seq = output.seq, kept = mrknames[output.seq$seq.num],
                  elim.correspondence =  elim.out),

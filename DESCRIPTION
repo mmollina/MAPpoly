@@ -1,7 +1,7 @@
 Package: mappoly
 Type: Package
 Title: Construction of Genetic Linkage Maps in Autopolyploids
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(person("Marcelo", "Mollinari", role = c("aut", "cre"), email = "mmollin@ncsu.edu",comment=c(ORCID="0000-0002-7001-8498")),
              person("Gabriel", "Gesteira", role = c("ctb"), email = "gabrielgesteira@usp.br",comment=c(ORCID="0000-0002-4106-7346")),
              person("Guilhereme", "Pereira", role = c("ctb"), email = "gdasilv@ncsu.edu",comment=c(ORCID="0000-0002-7106-8630")),
