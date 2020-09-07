@@ -1,6 +1,6 @@
 #' Simulated autohexaploid dataset.
 #'
-#' A dataset of an hipotetical autohexaploid full-sib population 
+#' A dataset of a hypothetical autohexaploid full-sib population 
 #' containing three homology groups
 #'
 #' @format An object of class \code{mappoly.data} which contains a
@@ -33,10 +33,10 @@
 
 #' Simulated autohexaploid dataset with genotype probabilities.
 #'
-#' A dataset of an hipotetical autohexaploid full-sib population 
+#' A dataset of a hypothetical autohexaploid full-sib population 
 #' containing three homology groups. This dataset contains the
 #' probability distribution of the genotypes and 2\% of missing data, 
-#' but is essentialy the same dataset found in \code{\link[mappoly]{hexafake}}
+#' but is essentially the same dataset found in \code{\link[mappoly]{hexafake}}
 #'
 #' @format An object of class \code{mappoly.data} which contains a
 #'     list with the following components:
@@ -169,31 +169,40 @@
 #' }
 "tetra.solcap.geno.dist"
 
-#' @name solcap.maps
-#' @aliases solcap.map
-#' @aliases solcap.mds.map
-#' @aliases solcap.prior.map
-#' @aliases solcap.err.map
-#' 
-#' @title Solcap Maps
-#' 
-#' Resulting maps from \code{\link[mappoly]{tetra.solcap}} and \code{\link[mappoly]{tetra.solcap.geno.dist}} datasets.
-#'
-#' @format All maps have the same format: a list containing 12 objects of class \code{mappoly.map}, each one 
-#' representing one linkage group. 
-#' \describe{
-#'     \item{solcap.map}{genetic map using genomic order and dosage call}
-#'     \item{solcap.mds.map}{genetic map using \code{\link[mappoly]{mds_mappoly} order and dosage call}}
-#'     \item{solcap.prior.map}{genetic map using genomic order and prior probability distribution}
-#'     \item{solcap.err.map}{genetic map using genomic order, dosage call and global calling error}     
-#' }
-#' 
-#' @rdname solcap.maps
-"solcap.dose.map"
-#' @rdname solcap.maps
-"solcap.mds.map"
-#' @rdname solcap.maps
-"solcap.prior.map"
-#' @rdname solcap.maps
-"solcap.err.map"
 
+#' Resulting maps from \code{\link[mappoly]{tetra.solcap}}
+#'
+#' A list containing 12 linkage groups estimated using genomic order and dosage call
+#' 
+#' @format A list containing 12 objects of class \code{mappoly.map}, each one 
+#' representing one linkage group in the \code{\link[mappoly]{tetra.solcap}} dataset. 
+#' 
+"solcap.dose.map"
+
+#' Resulting maps from \code{\link[mappoly]{tetra.solcap}}
+#'
+#' A list containing 12 linkage groups estimated using \code{\link[mappoly]{mds_mappoly}} order and dosage call
+#' 
+#' @format A list containing 12 objects of class \code{mappoly.map}, each one 
+#' representing one linkage group in the \code{\link[mappoly]{tetra.solcap}} dataset. 
+#' 
+"solcap.mds.map"
+
+
+#' Resulting maps from \code{\link[mappoly]{tetra.solcap.geno.dist}}
+#'
+#' A list containing 12 linkage groups estimated using genomic order and prior probability distribution
+#' 
+#' @format A list containing 12 objects of class \code{mappoly.map}, each one 
+#' representing one linkage group in the \code{\link[mappoly]{tetra.solcap.geno.dist}} dataset. 
+#' 
+"solcap.prior.map"
+
+#' Resulting maps from \code{\link[mappoly]{tetra.solcap}} 
+#'
+#' A list containing 12 linkage groups estimated using genomic order, dosage call and global calling error
+#' 
+#' @format A list containing 12 objects of class \code{mappoly.map}, each one 
+#' representing one linkage group in the \code{\link[mappoly]{tetra.solcap}} dataset. 
+#' 
+"solcap.err.map"

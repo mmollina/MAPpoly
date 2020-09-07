@@ -43,9 +43,9 @@ An object of class \code{mappoly.data} which contains a
 hexafake.geno.dist
 }
 \description{
-A dataset of an hipotetical autohexaploid full-sib population 
+A dataset of a hypothetical autohexaploid full-sib population 
 containing three homology groups. This dataset contains the
 probability distribution of the genotypes and 2\% of missing data, 
-but is essentialy the same dataset found in \code{\link[mappoly]{hexafake}}
+but is essentially the same dataset found in \code{\link[mappoly]{hexafake}}
 }
 \keyword{datasets}

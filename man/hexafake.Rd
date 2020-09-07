@@ -36,7 +36,7 @@ An object of class \code{mappoly.data} which contains a
 hexafake
 }
 \description{
-A dataset of an hipotetical autohexaploid full-sib population 
+A dataset of a hypothetical autohexaploid full-sib population 
 containing three homology groups
 }
 \keyword{datasets}
