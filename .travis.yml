@@ -1,8 +1,12 @@
 language: r
 cache: packages
+r: release
+
+env:
+  global: RGL_USE_NULL=TRUE
 
 r_build_args: --no-build-vignettes
-r_check_args: --no-vignettes
+r_check_args:  "--no-vignettes --as-cran --install-args=--build"
 
 notifications:
   email:
