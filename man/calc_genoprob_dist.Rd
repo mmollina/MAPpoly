@@ -2,7 +2,7 @@
 % Please edit documentation in R/calc_genoprob_dist.R
 \name{calc_genoprob_dist}
 \alias{calc_genoprob_dist}
-\title{Compute genotype conditional probabilities using probability distribution of dosages}
+\title{Compute conditional probabilities of the genotypes using probability distribution of dosages}
 \usage{
 calc_genoprob_dist(input.map, dat.dist, phase.config = "best", verbose = TRUE)
 }
@@ -13,7 +13,7 @@ calc_genoprob_dist(input.map, dat.dist, phase.config = "best", verbose = TRUE)
 probability distribution of the genotypes}
 
 \item{phase.config}{which phase configuration should be used. "best" (default) 
-will choose the phase configuration associated with the
+will choose the phase configuration with the
 maximum likelihood}
 
 \item{verbose}{if \code{TRUE} (default), the current progress is shown; if
@@ -26,35 +26,26 @@ in each marker position; and the marker sequence with it's recombination frequen
 }
 \description{
 Conditional genotype probabilities are calculated for each marker
-position and each individual given a map. In this version,
+position and each individual given a map. In this function,
 the probabilities are not calculated between markers.
 }
 \examples{
  \dontrun{
-    data(hexafake.geno.dist)
-    mrk.subset<-make_seq_mappoly(hexafake.geno.dist, 1:100)
-    red.mrk<-elim_redundant(mrk.subset)
-    unique.mrks<-make_seq_mappoly(red.mrk)
-    counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
-    subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-                                  count.cache = counts.web,
-                                  n.clusters = 16,
-                                  verbose=TRUE)
-    system.time(
-    subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
-                                        thres.twopt = 5,
-                                        thres.hmm = 3,
-                                        extend.tail = 50,
-                                        tol = 0.1,
-                                        tol.final = 10e-3,
-                                        twopt = subset.pairs,
-                                        verbose = TRUE))
-                                        
-   probs<-calc_genoprob_dist(input.map = subset.map,
+ ## tetraploid example
+ probs.t<-calc_genoprob_dist(input.map = solcap.prior.map[[1]],
+                           dat.dist = tetra.solcap.geno.dist,
+                           verbose = TRUE)
+ probs.t
+ ## displaying individual 1, 36 genotypic states (rows) across linkage group 1 (columns)                          
+ image(t(probs.t$probs[,,1]))
+ 
+ ## hexaploid example
+ probs.h<-calc_genoprob_dist(input.map = maps.hexafake[[1]],
                              dat.dist = hexafake.geno.dist,
                              verbose = TRUE)
-   probs                          
-   image(t(probs$probs[,,1]), col = rev(heat.colors(100)))
+ probs.h
+ ## displaying individual 1, 400 genotypic states (rows) across linkage group 1 (columns)                               
+ image(t(probs.h$probs[,,1]))
  }
 
 }

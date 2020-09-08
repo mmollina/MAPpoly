@@ -1,8 +1,7 @@
-#' Compute genotype conditional probabilities
+#' Compute conditional probabilities of the genotypes
 #'
 #' Conditional genotype probabilities are calculated for each marker
-#' position and each individual given a map. In this version,
-#' the probabilities are not calculated between markers.
+#' position and each individual given a map. 
 #'
 #' @param input.map An object of class \code{mappoly.map}
 #' 
@@ -26,27 +25,19 @@
 #'
 #' @examples
 #'  \dontrun{
-#'     data(hexafake)
-#'     mrk.subset<-make_seq_mappoly(hexafake, 1:100)
-#'     red.mrk<-elim_redundant(mrk.subset)
-#'     unique.mrks<-make_seq_mappoly(red.mrk)
-#'     counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
-#'     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-#'                                   count.cache = counts.web,
-#'                                   n.clusters = 16,
-#'                                   verbose=TRUE)
-#'     system.time(
-#'     subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
-#'                                         thres.twopt = 5,
-#'                                         thres.hmm = 3,
-#'                                         extend.tail = 50,
-#'                                         tol = 0.1,
-#'                                         tol.final = 10e-3,
-#'                                         twopt = subset.pairs,
-#'                                         verbose = TRUE))
-#'    probs<-calc_genoprob(input.map = subset.map,
+#'  ## tetraploid example
+#'  probs.t<-calc_genoprob(input.map = solcap.dose.map[[1]],
 #'                         verbose = TRUE)
-#'    image(t(probs$probs[,,1]), col = rev(heat.colors(100)))
+#'  probs.t
+#'  ## displaying individual 1, 36 genotypic states (rows) across linkage group 1 (columns)                          
+#'  image(t(probs.t$probs[,,1]))
+#'  
+#'  ## hexaploid example
+#'  probs.h<-calc_genoprob(input.map = maps.hexafake[[1]],
+#'                              verbose = TRUE)
+#'  probs.h
+#'  ## displaying individual 1, 400 genotypic states (rows) across linkage group 1 (columns)                               
+#'  image(t(probs.h$probs[,,1]))
 #'  }
 #' 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -59,7 +50,6 @@
 #'     \url{https://doi.org/10.1534/g3.119.400378} 
 #'
 #' @export calc_genoprob
-#'
 calc_genoprob<-function(input.map, step = 0,  phase.config = "best", verbose = TRUE)
 {
   if (!inherits(input.map, "mappoly.map")) {
@@ -131,9 +121,7 @@ calc_genoprob<-function(input.map, step = 0,  phase.config = "best", verbose = T
                                   mrknames, indnames)
   structure(list(probs = res.temp[[1]], map = map.pseudo), class="mappoly.genoprob")
 }
-
-#' @rdname calc_genoprob
-#' @keywords internal
+#' @method print mappoly.genoprob    
 #' @export
 print.mappoly.genoprob <- function(x, ...) {
   cat("  This is an object of class 'mappoly.genoprob'")

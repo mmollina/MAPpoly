@@ -26,13 +26,14 @@ pre-computed genotype frequencies, obtained with
 \item{n.clusters}{Number of parallel processes to spawn (default = 1)}
 
 \item{verbose}{If \code{TRUE} (default), print the linkage phase
-confgurations. If \code{cached = TRUE}, nothing is
+configurations. If \code{cached = TRUE}, nothing is
 printed, since all linkage phase configurations will be cached.}
 
 \item{joint.prob}{If \code{FALSE} (default), returns the frequency of
 genotypes for transition probabilities (conditional
 probabilities). If \code{TRUE} returns the frequency for joint
-probabilities.}
+probabilities. The latter is especially important to compute the 
+Fisher's Information for a pair of markers.}
 }
 \value{
 An object of class \code{cache.info} which contains one (conditional probabilities)
@@ -60,7 +61,7 @@ combinations and for all possible linkage phase configurations.
     all.mrk<-make_seq_mappoly(hexafake, 'all')
     ## local computation
     counts<-cache_counts_twopt(all.mrk, n.clusters = 8)
-    ## load from internal file (specially important for high ploidy levels)
+    ## load from internal file of web-stored counts (especially important for high ploidy levels)
     counts.cached<-cache_counts_twopt(all.mrk, cached = TRUE)
     }
 
@@ -73,5 +74,5 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     \url{https://doi.org/10.1534/g3.119.400378}
 }
 \author{
-Marcelo Mollinari, \email{mmollin@ncsu.edu} with changes by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+Marcelo Mollinari, \email{mmollin@ncsu.edu} with updates by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 }

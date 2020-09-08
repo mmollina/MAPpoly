@@ -2,12 +2,9 @@
 % Please edit documentation in R/calc_genoprob.R
 \name{calc_genoprob}
 \alias{calc_genoprob}
-\alias{print.mappoly.genoprob}
-\title{Compute genotype conditional probabilities}
+\title{Compute conditional probabilities of the genotypes}
 \usage{
 calc_genoprob(input.map, step = 0, phase.config = "best", verbose = TRUE)
-
-\method{print}{mappoly.genoprob}(x, ...)
 }
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}
@@ -33,32 +30,23 @@ in each marker position; and the marker sequence with it's recombination frequen
 }
 \description{
 Conditional genotype probabilities are calculated for each marker
-position and each individual given a map. In this version,
-the probabilities are not calculated between markers.
+position and each individual given a map.
 }
 \examples{
  \dontrun{
-    data(hexafake)
-    mrk.subset<-make_seq_mappoly(hexafake, 1:100)
-    red.mrk<-elim_redundant(mrk.subset)
-    unique.mrks<-make_seq_mappoly(red.mrk)
-    counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
-    subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-                                  count.cache = counts.web,
-                                  n.clusters = 16,
-                                  verbose=TRUE)
-    system.time(
-    subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
-                                        thres.twopt = 5,
-                                        thres.hmm = 3,
-                                        extend.tail = 50,
-                                        tol = 0.1,
-                                        tol.final = 10e-3,
-                                        twopt = subset.pairs,
-                                        verbose = TRUE))
-   probs<-calc_genoprob(input.map = subset.map,
+ ## tetraploid example
+ probs.t<-calc_genoprob(input.map = solcap.dose.map[[1]],
                         verbose = TRUE)
-   image(t(probs$probs[,,1]), col = rev(heat.colors(100)))
+ probs.t
+ ## displaying individual 1, 36 genotypic states (rows) across linkage group 1 (columns)                          
+ image(t(probs.t$probs[,,1]))
+ 
+ ## hexaploid example
+ probs.h<-calc_genoprob(input.map = maps.hexafake[[1]],
+                             verbose = TRUE)
+ probs.h
+ ## displaying individual 1, 400 genotypic states (rows) across linkage group 1 (columns)                               
+ image(t(probs.h$probs[,,1]))
  }
 
 }
@@ -72,4 +60,3 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }
-\keyword{internal}

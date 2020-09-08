@@ -78,14 +78,37 @@ submap is shown;}
 which can take a long time to perform (default = FALSE)}
 }
 \value{
-An object of class \code{mappoly.map} with the following structure:
+A list of class \code{mappoly.map} with two elements: 
+
+i) info:  a list containing information about the map, regardless of the linkage phase configuration:
 \item{m}{the ploidy level}
-\item{mrk.names}{the names of markers present in the sequence}
+\item{n.mrk}{number of markers}
+\item{seq.num}{a vector containing the (ordered) indices of markers in the map, 
+               according to the input file}
+\item{mrk.names}{the names of markers in the map}
+\item{seq.dose.p}{a vector containing the dosage in parent 1 for all markers in the map}
+\item{seq.dose.q}{a vector containing the dosage in parent 2 for all markers in the map}
+\item{sequence}{a vector indicating the sequence (usually chromosome) each marker belongs 
+                as informed in the input file. If not available, 
+                \code{sequence = NULL}}
+\item{sequence.pos}{physical position (usually in megabase) of the markers into the sequence}
+\item{seq.ref}{reference base used for each marker (i.e. A, T, C, G). If not available, 
+                \code{seq.ref = NULL}}                 
+\item{seq.alt}{alternative base used for each marker (i.e. A, T, C, G). If not available, 
+                \code{seq.ref = NULL}}
+\item{chisq.pval}{a vector containing p-values of the chi-squared test of Mendelian 
+                  segregation for all markers in the map}                 
 \item{data.name}{name of the dataset of class \code{mappoly.data}}
 \item{ph.thres}{the LOD threshold used to define the linkage phase configurations to test}
-\item{maps}{a list containing the sequence of markers, their recombination fractions,
-the linkage phase configuration for all markers in both parents P and Q and the 
-map's joint likelihood}
+
+ii) a list of maps with possible linkage phase configuration. Each map in the list is also a 
+   list containing
+\item{seq.num}{a vector containing the (ordered) indices of markers in the map, 
+               according to the input file}
+\item{seq.rf}{a vector of size (\code{n.mrk - 1}) containing a sequence of recombination 
+              fraction between the adjacent markers in the map}
+\item{seq.ph}{linkage phase configuration for all markers in both parents}
+\item{loglike}{the hmm-based multipoint likelihood}
 }
 \description{
 Performs the multipoint analysis proposed by \cite{Mollinari and

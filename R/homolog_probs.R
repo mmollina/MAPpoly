@@ -1,7 +1,7 @@
 #' Homolog probabilities 
 #' 
 #' Compute homolog probabilities for all individuals in the full-sib
-#' population given a map with the final genotype probabilities. 
+#' population given a map and conditional genotype probabilities. 
 #'
 #' @param input.genoprobs an object of class \code{mappoly.genoprob}
 #' 
@@ -11,8 +11,8 @@
 #'              are stacked in the plot (default = FALSE)
 #'              
 #' @param lg indicates which linkage group should be plotted. If \code{NULL} 
-#'           (default), the function plots the first linkage group. If 
-#'           \code{"all"}, the function plots all linkage groups
+#'           (default), it plots the first linkage group. If 
+#'           \code{"all"}, it plots all linkage groups
 #'           
 #' @param ind indicates which individuals should be plotted. It can be the 
 #'            position of the individuals in the dataset or it's name. 
@@ -25,6 +25,19 @@
 #' 
 #'@examples
 #' \dontrun{
+#'   ## tetraploid solcap example
+#'   w2<-lapply(solcap.dose.map, calc_genoprob)
+#'   h.prob.solcap<-calc_homoprob(w2)
+#'   print(h.prob.solcap)
+#'   plot(h.prob.solcap, ind = "ind_10")
+#'   plot(h.prob.solcap, stack = TRUE, ind = 5)
+#'   plot(h.prob.solcap, stack = TRUE, ind = 5, lg = "all")
+#'   
+#'   w3<-lapply(solcap.err.map, calc_genoprob_error, error = 0.05)
+#'   h.prob.solcap.err<-calc_homoprob(w3)
+#'   plot(h.prob.solcap, lg = 1, ind = 100, use.plotly = FALSE)
+#'   plot(h.prob.solcap.err, lg = 1, ind = 100, use.plotly = FALSE)
+#'   
 #'   ## hexaploid example
 #'   w1 <- lapply(maps.hexafake, calc_genoprob)
 #'   h.prob <- calc_homoprob(w1)
@@ -34,17 +47,6 @@
 #'   plot(h.prob, lg = c(1,3), ind = 15, use.plotly = FALSE)
 #'   plot(h.prob, lg = "all")
 #'   
-#'   ## tetraploid solcap example
-#'   w2<-lapply(solcap.dose.map, calc_genoprob)
-#'   h.prob.solcap<-calc_homoprob(w2)
-#'   print(h.prob.solcap)
-#'   plot(h.prob.solcap, ind = "ind_10")
-#'   plot(h.prob.solcap, stack = TRUE, ind = 5)
-#'   
-#'   w3<-lapply(solcap.err.map, calc_genoprob_error, error = 0.05)
-#'   h.prob.solcap.err<-calc_homoprob(w3)
-#'   plot(h.prob.solcap, lg = 1, ind = 100, use.plotly = FALSE)
-#'   plot(h.prob.solcap.err, lg = 1, ind = 100, use.plotly = FALSE)
 #'}
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -57,9 +59,9 @@
 #'     _G3: Genes, Genomes, Genetics_. 
 #'     \url{https://doi.org/10.1534/g3.119.400620} 
 #'     
-#' @export
 #' @importFrom ggplot2 ggplot geom_density ggtitle facet_grid theme_minimal ylab xlab aes vars
 #' @importFrom plotly ggplotly
+#' @export calc_homoprob
 #' 
 calc_homoprob<-function(input.genoprobs){
   if(class(input.genoprobs) == "mappoly.genoprob")
@@ -92,15 +94,13 @@ calc_homoprob<-function(input.genoprobs){
   structure(list(info = list(m = m, nind = length(ind.names)) , homoprob = df.res), class = "mappoly.homoprob")
 }
 
-#' @rdname calc_homoprob
-#' @keywords internal
+#' @method print mappoly.homoprob    
 #' @export
 print.mappoly.homoprob<-function(x, ...){
   head(x$homoprob, 20)
 }
 
-#' @rdname calc_homoprob
-#' @keywords internal
+#' @method plot mappoly.homoprob    
 #' @export
 plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL, 
                                 ind = NULL, use.plotly = TRUE, ...){

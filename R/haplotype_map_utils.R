@@ -217,9 +217,8 @@ est_map_haplo_given_genoprob<-function(map.list,
 
 #' Estimate a genetic map given a sequence of block markers
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
-#' @export
 calc_genoprob_haplo <- function(m, n.mrk, n.ind, haplo, emit = NULL, 
                                 rf_vec, indnames, verbose=TRUE) {
   ## In case no genotypic probabilities distrubutions are provided

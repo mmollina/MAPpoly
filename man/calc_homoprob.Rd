@@ -2,29 +2,21 @@
 % Please edit documentation in R/homolog_probs.R
 \name{calc_homoprob}
 \alias{calc_homoprob}
-\alias{print.mappoly.homoprob}
-\alias{plot.mappoly.homoprob}
 \title{Homolog probabilities}
 \usage{
 calc_homoprob(input.genoprobs)
-
-\method{print}{mappoly.homoprob}(x, ...)
-
-\method{plot}{mappoly.homoprob}(x, stack = FALSE, lg = NULL, ind = NULL, use.plotly = TRUE, ...)
 }
 \arguments{
 \item{input.genoprobs}{an object of class \code{mappoly.genoprob}}
 
 \item{x}{an object of class \code{mappoly.homoprob}}
 
-\item{...}{unused arguments}
-
 \item{stack}{logical. If \code{TRUE}, probability profiles of all homologs
 are stacked in the plot (default = FALSE)}
 
 \item{lg}{indicates which linkage group should be plotted. If \code{NULL} 
-(default), the function plots the first linkage group. If 
-\code{"all"}, the function plots all linkage groups}
+(default), it plots the first linkage group. If 
+\code{"all"}, it plots all linkage groups}
 
 \item{ind}{indicates which individuals should be plotted. It can be the 
 position of the individuals in the dataset or it's name. 
@@ -32,13 +24,28 @@ If \code{NULL} (default), the function plots the first
 individual}
 
 \item{use.plotly}{if \code{TRUE} (default), it uses plotly interactive graphics}
+
+\item{...}{unused arguments}
 }
 \description{
 Compute homolog probabilities for all individuals in the full-sib
-population given a map with the final genotype probabilities.
+population given a map and conditional genotype probabilities.
 }
 \examples{
 \dontrun{
+  ## tetraploid solcap example
+  w2<-lapply(solcap.dose.map, calc_genoprob)
+  h.prob.solcap<-calc_homoprob(w2)
+  print(h.prob.solcap)
+  plot(h.prob.solcap, ind = "ind_10")
+  plot(h.prob.solcap, stack = TRUE, ind = 5)
+  plot(h.prob.solcap, stack = TRUE, ind = 5, lg = "all")
+  
+  w3<-lapply(solcap.err.map, calc_genoprob_error, error = 0.05)
+  h.prob.solcap.err<-calc_homoprob(w3)
+  plot(h.prob.solcap, lg = 1, ind = 100, use.plotly = FALSE)
+  plot(h.prob.solcap.err, lg = 1, ind = 100, use.plotly = FALSE)
+  
   ## hexaploid example
   w1 <- lapply(maps.hexafake, calc_genoprob)
   h.prob <- calc_homoprob(w1)
@@ -48,17 +55,6 @@ population given a map with the final genotype probabilities.
   plot(h.prob, lg = c(1,3), ind = 15, use.plotly = FALSE)
   plot(h.prob, lg = "all")
   
-  ## tetraploid solcap example
-  w2<-lapply(solcap.dose.map, calc_genoprob)
-  h.prob.solcap<-calc_homoprob(w2)
-  print(h.prob.solcap)
-  plot(h.prob.solcap, ind = "ind_10")
-  plot(h.prob.solcap, stack = TRUE, ind = 5)
-  
-  w3<-lapply(solcap.err.map, calc_genoprob_error, error = 0.05)
-  h.prob.solcap.err<-calc_homoprob(w3)
-  plot(h.prob.solcap, lg = 1, ind = 100, use.plotly = FALSE)
-  plot(h.prob.solcap.err, lg = 1, ind = 100, use.plotly = FALSE)
 }
 
 }
@@ -73,4 +69,3 @@ Mollinari M., Olukolu B. A.,  Pereira G. da S.,
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }
-\keyword{internal}

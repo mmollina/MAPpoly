@@ -73,9 +73,9 @@ ph_list_to_matrix <- function(L, m) {
 #' @param x a data frame containing information about two markers. In
 #'     this data frame, the lines indicate the possible configuration
 #'     phases and the columns indicate the LOD for configuration phase
-#'     (ph_LOD), the recombination fraction (rf), the LOD for
-#'     recombination fraction (rf_LOD) and the fisher information
-#'     (fisher.info)
+#'     (ph_LOD), the recombination fraction (rf), and the LOD for
+#'     recombination fraction (rf_LOD) 
+#'     
 #' @param thres a threshold from which the linkage phases can be
 #'     discarded (if abs(ph_LOD) > thres)
 #' @return a list of indices for both parents

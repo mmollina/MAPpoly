@@ -16,13 +16,14 @@
 #' @param n.clusters Number of parallel processes to spawn (default = 1)
 #'
 #' @param verbose If \code{TRUE} (default), print the linkage phase
-#'     confgurations. If \code{cached = TRUE}, nothing is
+#'     configurations. If \code{cached = TRUE}, nothing is
 #'     printed, since all linkage phase configurations will be cached.
 #'
 #' @param joint.prob If \code{FALSE} (default), returns the frequency of
 #'     genotypes for transition probabilities (conditional
 #'     probabilities). If \code{TRUE} returns the frequency for joint
-#'     probabilities.
+#'     probabilities. The latter is especially important to compute the 
+#'     Fisher's Information for a pair of markers.  
 #'
 #' @return An object of class \code{cache.info} which contains one (conditional probabilities)
 #'     or two (both conditional and joint probabilities) lists. Each list
@@ -44,11 +45,11 @@
 #'     all.mrk<-make_seq_mappoly(hexafake, 'all')
 #'     ## local computation
 #'     counts<-cache_counts_twopt(all.mrk, n.clusters = 8)
-#'     ## load from internal file (specially important for high ploidy levels)
+#'     ## load from internal file of web-stored counts (especially important for high ploidy levels)
 #'     counts.cached<-cache_counts_twopt(all.mrk, cached = TRUE)
 #'     }
 #'
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} with changes by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} with updates by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'
 #' @references
 #'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
@@ -61,7 +62,6 @@
 #' @import parallel Rcpp RCurl
 #' @importFrom stats na.omit
 #' @importFrom utils combn read.table
-#'
 cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL, 
                                n.clusters = 1, verbose = TRUE, joint.prob = FALSE) {
   ## checking for correct object
