@@ -884,7 +884,7 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
 }
 
 #' prepare maps for plot 
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 prepare_map<-function(input.map, config = "best"){
   if (!inherits(input.map, "mappoly.map")) {
@@ -927,7 +927,7 @@ prepare_map<-function(input.map, config = "best"){
 #' Get the tail of a marker sequence up to the point where the markers
 #' provide no additional infomation.
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export get_full_info_tail
 get_full_info_tail <- function(input.obj, extend = NULL) {
@@ -963,7 +963,7 @@ get_full_info_tail <- function(input.obj, extend = NULL) {
 }
 
 #' remove maps under a certain threshold
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export filter_map_at_hmm_thres
 filter_map_at_hmm_thres <- function(map, thres.hmm){
@@ -974,7 +974,7 @@ filter_map_at_hmm_thres <- function(map, thres.hmm){
 
 #' makes a phase list from map, selecting only 
 #' configurations under a certain threshold
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export update_ph_list_at_hmm_thres
 update_ph_list_at_hmm_thres <- function(map, thres.hmm){
@@ -990,7 +990,7 @@ update_ph_list_at_hmm_thres <- function(map, thres.hmm){
 }
 
 #' subset of a linkage phase list
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export get_ph_list_subset
 get_ph_list_subset<-function(ph.list, seq.num, conf){
@@ -1005,9 +1005,8 @@ get_ph_list_subset<-function(ph.list, seq.num, conf){
 }
 
 #' concatenate two linkage phase lists
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
-#' @export concatenate_ph_list
 concatenate_ph_list<-function(ph.list.1, ph.list.2){
   if(length(ph.list.1)==0)
     return(ph.list.2)
@@ -1037,9 +1036,9 @@ add_mrk_at_tail_ph_list <- function(ph.list.1, ph.list.2, cor.index){
             class = "two.pts.linkage.phases")
 }
 
-#' compare a list of linkage phases and return the 
+#' Compare a list of linkage phases and return the 
 #' markers for which they are different.
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 check_ls_phase<-function(ph){
   if(length(ph$config.to.test) == 1) return(0)
@@ -1057,7 +1056,7 @@ check_ls_phase<-function(ph){
 
 
 #' cat for graphical representation of the phases
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 print_ph<-function(input.ph){
   phs.P<-lapply(input.ph$config.to.test, 
@@ -1081,7 +1080,7 @@ print_ph<-function(input.ph){
 }
 
 #' cat for phase information
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 cat_phase <- function(input.seq,
                       input.ph,

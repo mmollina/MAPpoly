@@ -16,8 +16,6 @@
 #'
 #' @param verbose if \code{TRUE} (default), current progress is shown; if
 #'     \code{FALSE}, no output is produced
-#'     
-#' @param ... currently ignored
 #'
 #' @return An object of class 'mappoly.genoprob' which has two elements: a tridimensional
 #' array containing the probabilities of all possible genotypes for each individual
@@ -133,11 +131,10 @@ cat("\n  No. genotypic classes:                    ", dim(x$probs)[1], "\n")
   cat("  -----------------------------------------------------\n")
 }
 
-#' Create a marker with pseudomarkers
+#' Create a map with pseudomarkers at a given step
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
-#' @export
 create_map<-function(input.map, step = 0,
                      phase.config = "best")
 {

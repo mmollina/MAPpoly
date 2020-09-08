@@ -14,7 +14,7 @@
 #'                                   n.ind=10)
 #'
 #' }
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #'
 sim_cross_one_informative_parent<-function(m,
@@ -92,7 +92,7 @@ sim_cross_one_informative_parent<-function(m,
 
 #' Simulate mapping population (tow parents)
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #'
 #' @examples
 #'  \dontrun{
@@ -138,7 +138,7 @@ sim_cross_two_informative_parents<-function(m,
 #' phase configuration) in a pdf output. This function is not to
 #' be directly called by the user
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @importFrom grDevices pdf dev.off
 #' @keywords internal
 draw_cross<-function(m,rf.vec=NULL,hom.allele.p,hom.allele.q, file=NULL, width=12, height=6){

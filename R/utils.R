@@ -17,7 +17,7 @@ get_LOD <- function(x, sorted = TRUE) {
 
 #' Get recombination fraction from a matrix
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 get_rf_from_mat <- function(M){
@@ -30,7 +30,7 @@ get_rf_from_mat <- function(M){
 
 #' Get the number of bivalent configurations
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 get_w_m <- function(m){
@@ -42,7 +42,7 @@ get_w_m <- function(m){
 
 #' Get used memory (unix only)
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 get_memory<-function(){
@@ -155,7 +155,7 @@ export_data_to_polymapR <- function(data.in)
 
 #' Msg function
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 #' @importFrom cli rule
@@ -187,26 +187,26 @@ text_col <- function(x) {
 
 #' Map functions
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 mf_k <- function(d) 0.5 * tanh(d/50)
 #'
 #' Map functions
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 mf_h <- function(d) 0.5 * (1 - exp(-d/50))
 #' Map functions
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 mf_m <- function(d) sapply(d, function(a) min(a/100, 0.5))
 #' Map functions
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 imf_k <- function(r) {
@@ -215,7 +215,7 @@ imf_k <- function(r) {
 }
 #' Map functions
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 imf_h <- function(r) {
@@ -224,7 +224,7 @@ imf_h <- function(r) {
 }
 #' Map functions
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 imf_m <- function(r) sapply(r, function(a) min(a * 100, 50))
@@ -236,9 +236,9 @@ imf_m <- function(r) sapply(r, function(a) min(a * 100, 50))
 #' @param h1 homology group 1
 #' @param h2 homology group 2
 #' @return a numeric vector of size \code{m} indicating which
-#'     homologous in h2 represents the homologous in h1. If there is
-#'     no correspondence, i.e. different homologous, it returns NA for
-#'     that homologous.
+#'     homolog in h2 represents the homolog in h1. If there is
+#'     no correspondence, i.e. different homolog, it returns NA for
+#'     that homolog.
 #' @keywords internal
 #' @export compare_haplotypes
 compare_haplotypes <- function(m, h1, h2) {
@@ -256,7 +256,7 @@ compare_haplotypes <- function(m, h1, h2) {
 
 #' Plot two overlapped haplotypes
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export plot_compare_haplotypes
 plot_compare_haplotypes <- function(m, hom.allele.p1, hom.allele.q1, hom.allele.p2 = NULL, hom.allele.q2 = NULL) {
@@ -346,7 +346,7 @@ print_mrk<-function(input.data, mrks)
 #' fraction between neighbour markers using two-point
 #' estimation
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 pos_twopt_est<-function(input.seq)
@@ -366,7 +366,7 @@ pos_twopt_est<-function(input.seq)
 
 #' N! combination
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 perm_tot <- function(v) {
@@ -389,7 +389,7 @@ perm_tot <- function(v) {
 
 #' N!/2 combination
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 perm_pars <- function(v) {
@@ -421,7 +421,7 @@ perm_pars <- function(v) {
 
 #' Color pallete ggplot-like
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 #' @importFrom grDevices hcl
@@ -466,7 +466,7 @@ update_missing<-function(input.data,
 
 #' Chi-square test
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 mrk_chisq_test<-function(x, m){

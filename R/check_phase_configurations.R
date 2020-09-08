@@ -125,22 +125,14 @@ generate_all_link_phase_elim_equivalent <- function(X, d, sh, m, k1, k2) {
 #'
 #' @param X a list of matrices whose columns represent homologous
 #'     chromosomes and the rows represent markers
-#' 
 #' @param d the dosage of the inserted marker
-#' 
 #' @param sh a list of shared alleles between all markers in the sequence
-#' 
 #' @param seq.num a vector of integers containing the number of each marker in the raw data file
-#' 
 #' @param m the ploidy level
-#' 
 #' @param mrk the marker to be inserted
-#' 
 #' @return a unique list of matrices representing linkage phases
 #'
 #' @keywords internal
-#' 
-#' @export
 concatenate_new_marker <- function(X = NULL, d, sh = NULL, seq.num = NULL, m, mrk = 1) {
     if (is.null(X) & is.null(sh) & mrk == 1 & is.null(seq.num)) {
         Y <- numeric(m)
@@ -257,10 +249,9 @@ get_ph_conf_ret_sh <- function(M) {
 #' @param input.seq An object of class \code{mappoly.sequence}
 #' @param twopt An object of class \code{poly.est.two.pts.pairwise}
 #' @return If all pairwise combinations of elements of
-#'     \code{input.seq} are cointained in \code{twopt}, the function
-#'     returns 0. Otherewise, returns the missing pairs.
+#'     \code{input.seq} are contained in \code{twopt}, the function
+#'     returns 0. Otherwise, returns the missing pairs.
 #' @keywords internal
-#' @export
 check_pairwise <- function(input.seq, twopt) {
     if (!(class(input.seq) == "mappoly.sequence" || class(input.seq) == "integer" || class(input.seq) == "numeric" || class(input.seq) == "character"))
         stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence', 'numeric' or 'integer'")
