@@ -654,6 +654,7 @@ drop_marker<-function(input.map, mrk)
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' 
 #' @examples
+#' \dontrun{
 #' sub.map<-get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
 #' plot(sub.map, mrk.names = TRUE)
 #' s<-make_seq_mappoly(hexafake, sub.map$info$mrk.names)
@@ -724,7 +725,7 @@ drop_marker<-function(input.map, mrk)
 #'                          hom.allele.q1 = best.phase$Q[names.id],
 #'                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
 #'                          hom.allele.q2 = sub.map$maps[[1]]$seq.ph$Q[names.id])                
-#' 
+#' }
 #' @export
 add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL, 
                        phase.config = "best", tol = 10e-4, r.test = NULL){
@@ -1011,16 +1012,25 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
 #'
 #' @param x an object of class \code{mappoly.data}
 #' 
+#' @return if consistent, returns 0. If not consistent, returns a 
+#'         vector with a number of tests, where \code{TRUE} indicates
+#'         a failed test.
+#' 
 #' @examples
 #' \dontrun{
+#' #### Tetraploid example
+#' fl1 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage"
+#' tempfl <- tempfile()
+#' download.file(fl1, destfile = tempfl)
+#' SolCAP.dose <- read_geno(file.in  = tempfl)
+#' check_data_sanity(SolCAP.dose)
 #' 
-#'     solcap.dose.file <- system.file('extdata', 'tetra_solcap_geno', package = 'mappoly')
-#'     dat.dose <- read_geno(file.in  = solcap.dose.file)
-#'     check_data_sanity(dat.dose)
-#' 
-#'     solcap.file <- system.file('extdata', 'tetra_solcap_geno_dist.bz2', package = 'mappoly')
-#'     dat.dist <- read_geno_dist(file.in  = solcap.file)
-#'     check_data_sanity(dat.dist)
+#' #### Hexaploid example
+#' fl2 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexafake"
+#' tempfl <- tempfile()
+#' download.file(fl2, destfile = tempfl)
+#' hexa.dose <- read_geno(file.in  = tempfl)
+#' check_data_sanity(hexa.dose)
 #'}
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
@@ -1031,7 +1041,6 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
 #'     models, _G3: Genes, Genomes, Genetics_. 
 #'     \url{https://doi.org/10.1534/g3.119.400378}
 #'     
-#' @keywords internal
 #' @export check_data_sanity
 check_data_sanity<-function(x){
   if(ncol(x$geno) == x$n.ind)
@@ -1044,7 +1053,7 @@ check_data_sanity<-function(x){
 
 #' Checks the consistency of dataset (dosage)
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 check_data_dose_sanity <- function(x){
   test<-logical(24L)
@@ -1094,7 +1103,7 @@ check_data_dose_sanity <- function(x){
 
 #' Checks the consistency of dataset (probability distribution)
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 check_data_dist_sanity <- function(x){
   test<-logical(29L)

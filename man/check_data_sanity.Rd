@@ -9,19 +9,29 @@ check_data_sanity(x)
 \arguments{
 \item{x}{an object of class \code{mappoly.data}}
 }
+\value{
+if consistent, returns 0. If not consistent, returns a 
+        vector with a number of tests, where \code{TRUE} indicates
+        a failed test.
+}
 \description{
 Checks the consistency of a dataset
 }
 \examples{
 \dontrun{
+#### Tetraploid example
+fl1 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage"
+tempfl <- tempfile()
+download.file(fl1, destfile = tempfl)
+SolCAP.dose <- read_geno(file.in  = tempfl)
+check_data_sanity(SolCAP.dose)
 
-    solcap.dose.file <- system.file('extdata', 'tetra_solcap_geno', package = 'mappoly')
-    dat.dose <- read_geno(file.in  = solcap.dose.file)
-    check_data_sanity(dat.dose)
-
-    solcap.file <- system.file('extdata', 'tetra_solcap_geno_dist.bz2', package = 'mappoly')
-    dat.dist <- read_geno_dist(file.in  = solcap.file)
-    check_data_sanity(dat.dist)
+#### Hexaploid example
+fl2 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexafake"
+tempfl <- tempfile()
+download.file(fl2, destfile = tempfl)
+hexa.dose <- read_geno(file.in  = tempfl)
+check_data_sanity(hexa.dose)
 }
 }
 \references{
@@ -34,4 +44,3 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }
-\keyword{internal}

@@ -7,7 +7,7 @@
 check_data_dist_sanity(x)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Checks the consistency of dataset (probability distribution)

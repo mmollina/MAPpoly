@@ -83,6 +83,7 @@ the log-likelihood of all possible linkage phases under a two-point threshold
 inherited from function \code{\link[mappoly]{rf_list_to_matrix}}.
 }
 \examples{
+\dontrun{
 sub.map<-get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
 plot(sub.map, mrk.names = TRUE)
 s<-make_seq_mappoly(hexafake, sub.map$info$mrk.names)
@@ -153,7 +154,7 @@ res.add.M_53<-add_marker(input.map = input.map,
                          hom.allele.q1 = best.phase$Q[names.id],
                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
                          hom.allele.q2 = sub.map$maps[[1]]$seq.ph$Q[names.id])                
-
+}
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

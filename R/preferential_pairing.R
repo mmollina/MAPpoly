@@ -1,29 +1,10 @@
 #' Preferential pairing profiles
 #'
 #' Given the genotype conditional probabilities for a map, this function
-#' computes the probability profiles for all possible pairing configurations 
-#' in both parents.
+#' computes the probability profiles for all possible homolog pairing 
+#' configurations in both parents.
 #'
 #' @param input.genoprobs an object of class \code{mappoly.genoprob}
-#' 
-#' @param type a character string indicating which type of graphic is ploted:
-#'             \code{"pair.configs"} (default: plots the preferential pairing 
-#'             profile for the pairing configurations) or \code{"hom.pairs"} (plots 
-#'             the preferential pairing profile for the homolog pairs)
-#'             
-#' @param min.y.prof lower bound for y axis on the probability profile graphic (default = 0)
-#' 
-#' @param max.y.prof upper bound for y axis on the probability profile graphic (default = 1)
-#' 
-#' @param thresh threshold for chi-square test (default = 0.01)
-#' 
-#' @param x an object of class \code{mappoly.prefpair.profiles}
-#' 
-#' @param P a string containing the name of parent P
-#' 
-#' @param Q a string containing the name of parent Q
-#' 
-#' @param ... unused arguments
 #' 
 #'@examples
 #' \dontrun{
@@ -37,8 +18,8 @@
 #'   w2 <- lapply(solcap.err.map, calc_genoprob_error, error = 0.05)
 #'   x2 <- calc_prefpair_profiles(w2)
 #'   print(x2)
-#'   plot(x2)
-#'   plot(x2, type = "hom.pairs")
+#'   plot(x2, min.y.prof = 0.15, max.y.prof = .50)
+#'   plot(x2, type = "hom.pairs", min.y.prof = 0.15, max.y.prof = .50)
 #'}
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} and Guilherme Pereira, \email{g.pereira@cgiar.org}
@@ -172,8 +153,7 @@ calc_prefpair_profiles<-function(input.genoprobs){
                  prefpair.homolog = df.hompair.pval),
             class = "mappoly.prefpair.profiles")
 }
-#' @rdname calc_prefpair_profiles
-#' @keywords internal
+
 #' @export
 print.mappoly.prefpair.profiles <- function(x, ...){
   cat("  This is an object of class 'mappoly.prefpair.profiles'")
@@ -222,8 +202,27 @@ print.mappoly.prefpair.profiles <- function(x, ...){
   }
   cat("  -----------------------------------------------------\n")
 }
-#' @rdname calc_prefpair_profiles
-#' @keywords internal
+
+#' Plots mappoly.prefpair.profiles
+#' 
+#' @param x an object of class \code{mappoly.prefpair.profiles}
+#' 
+#' @param type a character string indicating which type of graphic is plotted:
+#'             \code{"pair.configs"} (default) plots the preferential pairing 
+#'             profile for the pairing configurations or \code{"hom.pairs"} plots 
+#'             the preferential pairing profile for the homolog pairs
+#'             
+#' @param min.y.prof lower bound for y axis on the probability profile graphic (default = 0)
+#' 
+#' @param max.y.prof upper bound for y axis on the probability profile graphic (default = 1)
+#' 
+#' @param thresh threshold for chi-square test (default = 0.01)
+#' 
+#' @param P a string containing the name of parent P
+#' 
+#' @param Q a string containing the name of parent Q
+#' 
+#' @param ... unused arguments
 #' @export
 plot.mappoly.prefpair.profiles <- function(x, type = c("pair.configs", "hom.pairs"), 
                                            min.y.prof = 0, max.y.prof = 1, 

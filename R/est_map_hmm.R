@@ -1041,7 +1041,6 @@ add_mrk_at_tail_ph_list <- function(ph.list.1, ph.list.2, cor.index){
 #' markers for which they are different.
 #' @param void interfunction to be documented
 #' @keywords internal
-#' @export check_ls_phase
 check_ls_phase<-function(ph){
   if(length(ph$config.to.test) == 1) return(0)
   id <- rep(1, length(ph$config.to.test[[1]]$P))

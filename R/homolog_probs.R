@@ -82,7 +82,7 @@ print.mappoly.homoprob<-function(x, ...){
   head(x$homoprob, 20)
 }
 
-#' Prints mappoly.homoprob
+#' Plots mappoly.homoprob
 #' 
 #' @param x an object of class \code{mappoly.homoprob}
 #' 

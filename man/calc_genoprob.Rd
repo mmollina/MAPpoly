@@ -2,12 +2,9 @@
 % Please edit documentation in R/calc_genoprob.R
 \name{calc_genoprob}
 \alias{calc_genoprob}
-\alias{print.mappoly.genoprob}
 \title{Compute conditional probabilities of the genotypes}
 \usage{
 calc_genoprob(input.map, step = 0, phase.config = "best", verbose = TRUE)
-
-\method{print}{mappoly.genoprob}(x, ...)
 }
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}
@@ -63,4 +60,3 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }
-\keyword{internal}

@@ -2,51 +2,17 @@
 % Please edit documentation in R/preferential_pairing.R
 \name{calc_prefpair_profiles}
 \alias{calc_prefpair_profiles}
-\alias{print.mappoly.prefpair.profiles}
-\alias{plot.mappoly.prefpair.profiles}
 \title{Preferential pairing profiles}
 \usage{
 calc_prefpair_profiles(input.genoprobs)
-
-\method{print}{mappoly.prefpair.profiles}(x, ...)
-
-\method{plot}{mappoly.prefpair.profiles}(
-  x,
-  type = c("pair.configs", "hom.pairs"),
-  min.y.prof = 0,
-  max.y.prof = 1,
-  thresh = 0.01,
-  P = "P",
-  Q = "Q",
-  ...
-)
 }
 \arguments{
 \item{input.genoprobs}{an object of class \code{mappoly.genoprob}}
-
-\item{x}{an object of class \code{mappoly.prefpair.profiles}}
-
-\item{...}{unused arguments}
-
-\item{type}{a character string indicating which type of graphic is ploted:
-\code{"pair.configs"} (default: plots the preferential pairing 
-profile for the pairing configurations) or \code{"hom.pairs"} (plots 
-the preferential pairing profile for the homolog pairs)}
-
-\item{min.y.prof}{lower bound for y axis on the probability profile graphic (default = 0)}
-
-\item{max.y.prof}{upper bound for y axis on the probability profile graphic (default = 1)}
-
-\item{thresh}{threshold for chi-square test (default = 0.01)}
-
-\item{P}{a string containing the name of parent P}
-
-\item{Q}{a string containing the name of parent Q}
 }
 \description{
 Given the genotype conditional probabilities for a map, this function
-computes the probability profiles for all possible pairing configurations 
-in both parents.
+computes the probability profiles for all possible homolog pairing 
+configurations in both parents.
 }
 \examples{
 \dontrun{
@@ -60,8 +26,8 @@ in both parents.
   w2 <- lapply(solcap.err.map, calc_genoprob_error, error = 0.05)
   x2 <- calc_prefpair_profiles(w2)
   print(x2)
-  plot(x2)
-  plot(x2, type = "hom.pairs")
+  plot(x2, min.y.prof = 0.15, max.y.prof = .50)
+  plot(x2, type = "hom.pairs", min.y.prof = 0.15, max.y.prof = .50)
 }
 
 }
@@ -76,4 +42,3 @@ Mollinari M., Olukolu B. A.,  Pereira G. da S.,
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu} and Guilherme Pereira, \email{g.pereira@cgiar.org}
 }
-\keyword{internal}
