@@ -5,23 +5,6 @@
 #'
 #' @param input.genoprobs an object of class \code{mappoly.genoprob}
 #' 
-#' @param x an object of class \code{mappoly.homoprob}
-#' 
-#' @param stack logical. If \code{TRUE}, probability profiles of all homologs
-#'              are stacked in the plot (default = FALSE)
-#'              
-#' @param lg indicates which linkage group should be plotted. If \code{NULL} 
-#'           (default), it plots the first linkage group. If 
-#'           \code{"all"}, it plots all linkage groups
-#'           
-#' @param ind indicates which individuals should be plotted. It can be the 
-#'            position of the individuals in the dataset or it's name. 
-#'            If \code{NULL} (default), the function plots the first 
-#'            individual
-#'            
-#' @param use.plotly if \code{TRUE} (default), it uses plotly interactive graphics
-#' 
-#' @param ... unused arguments
 #' 
 #'@examples
 #' \dontrun{
@@ -94,13 +77,30 @@ calc_homoprob<-function(input.genoprobs){
   structure(list(info = list(m = m, nind = length(ind.names)) , homoprob = df.res), class = "mappoly.homoprob")
 }
 
-#' @method print mappoly.homoprob    
 #' @export
 print.mappoly.homoprob<-function(x, ...){
   head(x$homoprob, 20)
 }
 
-#' @method plot mappoly.homoprob    
+#' Prints mappoly.homoprob
+#' 
+#' @param x an object of class \code{mappoly.homoprob}
+#' 
+#' @param stack logical. If \code{TRUE}, probability profiles of all homologs
+#'              are stacked in the plot (default = FALSE)
+#'              
+#' @param lg indicates which linkage group should be plotted. If \code{NULL} 
+#'           (default), it plots the first linkage group. If 
+#'           \code{"all"}, it plots all linkage groups
+#'           
+#' @param ind indicates which individuals should be plotted. It can be the 
+#'            position of the individuals in the dataset or it's name. 
+#'            If \code{NULL} (default), the function plots the first 
+#'            individual
+#'            
+#' @param use.plotly if \code{TRUE} (default), it uses plotly interactive graphics
+#' 
+#' @param ... unused arguments
 #' @export
 plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL, 
                                 ind = NULL, use.plotly = TRUE, ...){

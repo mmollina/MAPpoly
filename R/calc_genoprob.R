@@ -121,7 +121,7 @@ calc_genoprob<-function(input.map, step = 0,  phase.config = "best", verbose = T
                                   mrknames, indnames)
   structure(list(probs = res.temp[[1]], map = map.pseudo), class="mappoly.genoprob")
 }
-#' @method print mappoly.genoprob    
+
 #' @export
 print.mappoly.genoprob <- function(x, ...) {
   cat("  This is an object of class 'mappoly.genoprob'")

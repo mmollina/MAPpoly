@@ -2,14 +2,22 @@
 % Please edit documentation in R/homolog_probs.R
 \name{calc_homoprob}
 \alias{calc_homoprob}
+\alias{print.mappoly.homoprob}
+\alias{plot.mappoly.homoprob}
 \title{Homolog probabilities}
 \usage{
 calc_homoprob(input.genoprobs)
+
+\method{print}{mappoly.homoprob}(x, ...)
+
+\method{plot}{mappoly.homoprob}(x, stack = FALSE, lg = NULL, ind = NULL, use.plotly = TRUE, ...)
 }
 \arguments{
 \item{input.genoprobs}{an object of class \code{mappoly.genoprob}}
 
 \item{x}{an object of class \code{mappoly.homoprob}}
+
+\item{...}{unused arguments}
 
 \item{stack}{logical. If \code{TRUE}, probability profiles of all homologs
 are stacked in the plot (default = FALSE)}
@@ -24,8 +32,6 @@ If \code{NULL} (default), the function plots the first
 individual}
 
 \item{use.plotly}{if \code{TRUE} (default), it uses plotly interactive graphics}
-
-\item{...}{unused arguments}
 }
 \description{
 Compute homolog probabilities for all individuals in the full-sib
@@ -69,3 +75,4 @@ Mollinari M., Olukolu B. A.,  Pereira G. da S.,
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }
+\keyword{internal}
