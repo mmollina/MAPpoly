@@ -7,7 +7,7 @@
 est_map_haplo_given_genoprob(map.list, genoprob.list, tol = 1e-04)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Estimate a genetic map given a sequence of block markers

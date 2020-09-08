@@ -7,7 +7,7 @@
 get_w_m(m)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Get the number of bivalent configurations

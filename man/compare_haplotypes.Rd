@@ -15,9 +15,9 @@ compare_haplotypes(m, h1, h2)
 }
 \value{
 a numeric vector of size \code{m} indicating which
-    homologous in h2 represents the homologous in h1. If there is
-    no correspondence, i.e. different homologous, it returns NA for
-    that homologous.
+    homolog in h2 represents the homolog in h1. If there is
+    no correspondence, i.e. different homolog, it returns NA for
+    that homolog.
 }
 \description{
 Compare two polyploid haplotypes stored in list format

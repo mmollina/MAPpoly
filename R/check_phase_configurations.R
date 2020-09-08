@@ -11,8 +11,6 @@
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @keywords internal
-#'
-#' @export elim_equiv
 elim_equiv <- function(Z) {
     a <- sapply(Z, function(x) paste(sort(apply(x, 2, paste, collapse = "")), collapse = ""))
     Z[which(!duplicated(a))]
@@ -172,17 +170,11 @@ concatenate_new_marker <- function(X = NULL, d, sh = NULL, seq.num = NULL, m, mr
 #' and a LOD threshold
 #'
 #' @param input.seq an object of class \code{mappoly.sequence}.
-#'
 #' @param twopt an object of class \code{poly.est.two.pts.pairwise}
-#'
 #' @param thres threshold from which the linkage phases can be
 #'     discarded (if abs(ph_LOD) > thres)
-#'
 #' @return a unique list of matrices representing linkage phases
-#'
 #' @keywords internal
-#'
-#' @export
 elim_conf_using_two_pts <- function(input.seq, twopt, thres) {
     if (!class(input.seq) == "mappoly.sequence")
         stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")

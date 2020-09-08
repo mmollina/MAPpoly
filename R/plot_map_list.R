@@ -102,10 +102,17 @@ plot_map_list<-function(map.list, horiz = TRUE, col = "lightgray", title = "Link
   invisible(z)
 }
 
-#' extract the distance from an object of class 'mappoly.map'
+#' Extract the maker position from an object of class 'mappoly.map'
 #'
-#' @param void interfunction to be documented
-#' @keywords internal
+#' @param input.map An object of class \code{mappoly.map}
+#' @param phase.config which phase configuration should be used. "best" (default) 
+#'                     will choose the maximum likelihood configuration
+#' @examples
+#'  \dontrun{
+#'  x <- maps.hexafake[[1]]$info$sequence.pos/1e6
+#'  y <- extract_map(maps.hexafake[[1]])
+#'  plot(y~x, ylab = "Map position (cM)", xlab = "Genome Position (Mbp)")
+#'  }
 #' @export
 extract_map<-function(input.map, phase.config = "best")
 {

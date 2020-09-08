@@ -1,14 +1,11 @@
-#' Introduces genotyping error into a full informative vector
+#' Prior probability for genotyping error
 #'
 #' If \code{restricted = TRUE}, it restricts the prior to the 
-#' possible classes under mendelian non double-reduced segregation 
+#' possible classes under Mendelian, non double-reduced segregation 
 #' given dosage of the parents
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
-#'
-#' @export genotyping_global_error
-#'
 genotyping_global_error<-function(x, m, restricted = TRUE,  error=0.01, th.prob=0.95)
 {
   if(restricted){
@@ -38,8 +35,10 @@ genotyping_global_error<-function(x, m, restricted = TRUE,  error=0.01, th.prob=
 
 #' Reestimate genetic map given a global genotyping error
 #'
-#' This function considers a global error when reestimating
-#' a genetic map using Hidden Markov models
+#' This function considers a global error when re-estimating
+#' a genetic map using Hidden Markov models. Since this function 
+#' uses the whole transition space in the HMM, its computation 
+#' can take a while, especially for hexaploid maps. 
 #'
 #' @param input.map an object of class \code{mappoly.map}
 #' 
@@ -48,23 +47,46 @@ genotyping_global_error<-function(x, m, restricted = TRUE,  error=0.01, th.prob=
 #' @param tol the desired accuracy (default = 10e-04)
 #' 
 #' @param restricted if \code{TRUE} (default), restricts the prior to the 
-#'                   possible classes under mendelian non double-reduced segregation 
+#'                   possible classes under Mendelian, non double-reduced segregation 
 #'                   given dosage of the parents
 #'                    
 #' @param th.prob the threshold for using global error or genotype 
-#'     probability distribution contained in the dataset (default = 0.95)
+#'     probability distribution if present in the dataset (default = 0.95)
 #'      
 #' @param verbose if \code{TRUE}, current progress is shown; if
 #'     \code{FALSE} (default), no output is produced
 #'
-#' @return An object of class 'mappoly.map' with the following structure:
+#' @return A list of class \code{mappoly.map} with two elements: 
+#' 
+#' i) info:  a list containing information about the map, regardless of the linkage phase configuration:
 #' \item{m}{the ploidy level}
-#' \item{mrk.names}{the names of markers present in the sequence}
+#' \item{n.mrk}{number of markers}
+#' \item{seq.num}{a vector containing the (ordered) indices of markers in the map, 
+#'                according to the input file}
+#' \item{mrk.names}{the names of markers in the map}
+#' \item{seq.dose.p}{a vector containing the dosage in parent 1 for all markers in the map}
+#' \item{seq.dose.q}{a vector containing the dosage in parent 2 for all markers in the map}
+#' \item{sequence}{a vector indicating the sequence (usually chromosome) each marker belongs 
+#'                 as informed in the input file. If not available, 
+#'                 \code{sequence = NULL}}
+#' \item{sequence.pos}{physical position (usually in megabase) of the markers into the sequence}
+#' \item{seq.ref}{reference base used for each marker (i.e. A, T, C, G). If not available, 
+#'                 \code{seq.ref = NULL}}                 
+#' \item{seq.alt}{alternative base used for each marker (i.e. A, T, C, G). If not available, 
+#'                 \code{seq.ref = NULL}}
+#' \item{chisq.pval}{a vector containing p-values of the chi-squared test of Mendelian 
+#'                   segregation for all markers in the map}                 
 #' \item{data.name}{name of the dataset of class \code{mappoly.data}}
 #' \item{ph.thres}{the LOD threshold used to define the linkage phase configurations to test}
-#' \item{maps}{a list containing the sequence of markers, their recombination fractions,
-#' the linkage phase configuration for all markers in both parents P and Q and the 
-#' map's joint likelihood}
+#' 
+#' ii) a list of maps with possible linkage phase configuration. Each map in the list is also a 
+#'    list containing
+#' \item{seq.num}{a vector containing the (ordered) indices of markers in the map, 
+#'                according to the input file}
+#' \item{seq.rf}{a vector of size (\code{n.mrk - 1}) containing a sequence of recombination 
+#'               fraction between the adjacent markers in the map}
+#' \item{seq.ph}{linkage phase configuration for all markers in both parents}
+#' \item{loglike}{the hmm-based multipoint likelihood}
 #'
 #' @examples
 #'   \dontrun{
@@ -100,7 +122,6 @@ genotyping_global_error<-function(x, m, restricted = TRUE,  error=0.01, th.prob=
 #'     \url{https://doi.org/10.1534/g3.119.400378}
 #'
 #' @export est_full_hmm_with_global_error
-#'
 est_full_hmm_with_global_error <- function(input.map, error=NULL, tol=10e-4, 
                                            restricted = TRUE, 
                                            th.prob=0.95, verbose = FALSE)

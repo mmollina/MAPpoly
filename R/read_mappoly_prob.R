@@ -88,7 +88,7 @@
 #' ft="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP"
 #' tempfl <- tempfile()
 #' download.file(ft, destfile = tempfl)
-#' SolCAP.dose.prob <- read_geno_dist(file.in  = tempfl)
+#' SolCAP.dose.prob <- read_geno_prob(file.in  = tempfl)
 #' print(SolCAP.dose.prob, detailed = TRUE)
 #' plot(SolCAP.dose.prob)
 #' ## save dataset for future uses
@@ -99,7 +99,7 @@
 #' fh="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexafake_geno_dist"
 #' tempfl <- tempfile()
 #' download.file(fh, destfile = tempfl)
-#' hexa.dose.prob <- read_geno_dist(file.in  = tempfl, prob.thres = 0.8)
+#' hexa.dose.prob <- read_geno_prob(file.in  = tempfl, prob.thres = 0.8)
 #' print(hexa.dose.prob, detailed = TRUE)
 #' plot(hexa.dose.prob)
 #' ## save dataset for future uses
@@ -124,9 +124,9 @@
 #'     models, _G3: Genes, Genomes, Genetics_. 
 #'     \url{https://doi.org/10.1534/g3.119.400378} 
 #'     
-#' @export read_geno_dist
+#' @export read_geno_prob
 
-read_geno_dist <- function(file.in, prob.thres = 0.95, filter.non.conforming = TRUE, elim.redundant = TRUE) {
+read_geno_prob <- function(file.in, prob.thres = 0.95, filter.non.conforming = TRUE, elim.redundant = TRUE) {
     ## get ploidy level ----------------------
     temp <- scan(file.in, what = character(), sep = " ", nlines = 1, quiet = TRUE)
     m <- na.omit(as.numeric(temp[2]))

@@ -1,6 +1,6 @@
 #' Multipoint analysis using Hidden Markov Models (single phase)
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @examples
 #'   \dontrun{

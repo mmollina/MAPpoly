@@ -18,7 +18,7 @@ The map(s) should be passed as a single object or a list of objects of class \co
 }
 \examples{
  \dontrun{
- ## hexafake map
+ export_map_list(solcap.err.map[[1]], file = "")
  export_map_list(maps.hexafake)
  }
 }

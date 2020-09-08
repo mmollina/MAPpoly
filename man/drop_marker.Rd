@@ -9,10 +9,11 @@ drop_marker(input.map, mrk)
 \arguments{
 \item{input.map}{an object of class \code{mappoly.map}}
 
-\item{mrk}{a vector containing markers to be removed from the input map, identified by their names or positions on the map}
+\item{mrk}{a vector containing markers to be removed from the input map, 
+identified by their names or positions}
 }
 \value{
-An object of class \code{mappoly.map}
+an object of class \code{mappoly.map}
 }
 \description{
 This function creates a new map by removing markers from an existing one.

@@ -15,7 +15,7 @@ sim_cross_one_informative_parent(
 )
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 This function simulates a polyploid mapping population

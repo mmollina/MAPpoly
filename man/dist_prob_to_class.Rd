@@ -2,25 +2,31 @@
 % Please edit documentation in R/utils.R
 \name{dist_prob_to_class}
 \alias{dist_prob_to_class}
-\title{Selects the class with high probability and return it instead of
-the distribution of probabilities for all classes}
+\title{Returns the class with the highest probability in 
+a genotype probability distribution}
 \usage{
 dist_prob_to_class(geno, prob.thres = 0.95)
 }
 \arguments{
-\item{geno}{the genotypes contained in the object
+\item{geno}{the probabilistic genotypes contained in the object
 \code{'mappoly.data'}}
 
-\item{prob.thres}{probability threshold to accept the genotyupe as
-the correct one. Values below this genotype are assumed as
-missing data}
+\item{prob.thres}{probability threshold to select the genotype. 
+Values below this genotype are assumed as missing data}
 }
 \value{
 a matrix containing the doses of each genotype and
-    marker. Missing data are represented by NAs
+    marker. Markers are disposed in rows and individuals are 
+    disposed in columns. Missing data are represented by NAs
 }
 \description{
-Selects the class with high probability and return it instead of
-the distribution of probabilities for all classes
+Returns the class with the highest probability in 
+a genotype probability distribution
+}
+\examples{
+\dontrun{
+geno.dose <- dist_prob_to_class(tetra.solcap.geno.dist$geno)
+geno.dose[1:10, 1:10]
+}   
 }
 \keyword{internal}

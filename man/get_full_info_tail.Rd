@@ -8,7 +8,7 @@ provide no additional infomation.}
 get_full_info_tail(input.obj, extend = NULL)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Get the tail of a marker sequence up to the point where the markers

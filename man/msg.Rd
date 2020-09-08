@@ -7,7 +7,7 @@
 msg(text, line = 1)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Msg function

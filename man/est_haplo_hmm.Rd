@@ -17,7 +17,7 @@ est_haplo_hmm(
 )
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Estimate a genetic map given a sequence of block markers

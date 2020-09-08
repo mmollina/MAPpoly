@@ -7,7 +7,7 @@
 print_ph(input.ph)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 cat for graphical representation of the phases

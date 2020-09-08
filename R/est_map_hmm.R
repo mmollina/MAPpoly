@@ -20,10 +20,10 @@
 #' @param input.ph an object of class \code{two.pts.linkage.phases}. 
 #' If not available (default = NULL), it will be computed
 #'
-#' @param thres the LOD threshold used to determine if the linkage phases
+#' @param thres LOD Score threshold used to determine if the linkage phases
 #'     compared via two-point analysis should be considered. Smaller 
 #'     values will result in smaller number of linkage phase 
-#'     configurations
+#'     configurations to be evaluated by the multipoint algorithm. 
 #'
 #' @param twopt an object of class \code{poly.est.two.pts.pairwise}
 #'     containing two-point information
@@ -34,12 +34,13 @@
 #' @param tol the desired accuracy (default = 1e-04)
 #'
 #' @param est.given.0.rf logical. If TRUE returns a map forcing all
-#' recombination fractions equals to 0 (1e-5, for internal use only. Default = FALSE)
+#' recombination fractions equals to 0 (1e-5, for internal use only. 
+#' Default = FALSE)
 #'
 #' @param reestimate.single.ph.configuration logical. If \code{TRUE}
-#' returns a map without reestimating the map parameters for cases
+#' returns a map without re-estimating the map parameters for cases
 #' where there is only one possible linkage phase configuration. 
-#' This argument is intended to be used in a sequential map contruction
+#' This argument is intended to be used in a sequential map construction
 #' 
 #' @param high.prec logical. If \code{TRUE} (default) uses high precision 
 #' long double numbers in the HMM procedure
@@ -47,7 +48,7 @@
 #' @param x an object of the class \code{mappoly.map}
 #' 
 #' @param detailed logical. if TRUE, prints the linkage phase configuration and the marker 
-#' position for all maps. if FALSE (default), prints a map summary 
+#' position for all maps. If FALSE (default), prints a map summary 
 #' 
 #' @param left.lim the left limit of the plot (in cM, default = 0). 
 #' 
@@ -101,13 +102,10 @@
 #'
 #' @examples
 #'  \dontrun{
-#'     data(hexafake)
 #'     mrk.subset<-make_seq_mappoly(hexafake, 1:50)
 #'     red.mrk<-elim_redundant(mrk.subset)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
-#'     counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
 #'     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-#'                                   count.cache = counts.web,
 #'                                   n.clusters = 1,
 #'                                   verbose=TRUE)
 #'
@@ -374,11 +372,38 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'               fraction between the adjacent markers in the map}
 #' \item{seq.ph}{linkage phase configuration for all markers in both parents}
 #' \item{loglike}{the hmm-based multipoint likelihood}
-
 #'
 #' @examples
 #'  \dontrun{
-#'     data(hexafake)
+#'     #### Autotetraploid example
+#'     s1<-make_seq_mappoly(tetra.solcap, 'seq1')
+#'     red.mrk<-elim_redundant(s1)
+#'     s1.unique.mrks<-make_seq_mappoly(red.mrk)
+#'     counts.web<-cache_counts_twopt(s1.unique.mrks, cached = TRUE)
+#'     s1.pairs<-est_pairwise_rf(input.seq = s1.unique.mrks,
+#'                                   count.cache = counts.web,
+#'                                   n.clusters = 7,
+#'                                   verbose=TRUE)
+#'     unique.gen.ord<-get_genomic_order(s1.unique.mrks)
+#'     ## Selecting a subset of 100 markers at the beginning of chromosome 1 
+#'     s1.gen.subset<-make_seq_mappoly(tetra.solcap, rownames(unique.gen.ord)[1:100])
+#'     s1.gen.subset.map <- est_rf_hmm_sequential(input.seq = s1.gen.subset,
+#'                                                start.set = 10,
+#'                                                thres.twopt = 10, 
+#'                                                thres.hmm = 10,
+#'                                                extend.tail = 30,
+#'                                                info.tail = TRUE, 
+#'                                                twopt = s1.pairs,
+#'                                                sub.map.size.diff.limit = 5, 
+#'                                                phase.number.limit = 40,
+#'                                                reestimate.single.ph.configuration = TRUE,
+#'                                                tol = 10e-3,
+#'                                                tol.final = 10e-5)
+#'      print(s1.gen.subset.map, detailed = TRUE)
+#'      plot(s1.gen.subset.map)
+#'      plot(s1.gen.subset.map, phase = FALSE)
+#'      
+#'     #### Autohexaploid example
 #'     mrk.subset<-make_seq_mappoly(hexafake, 1:50)
 #'     red.mrk<-elim_redundant(mrk.subset)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
@@ -397,6 +422,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'                                         verbose = TRUE)
 #'      print(subset.map, detailed = TRUE)
 #'      plot(subset.map)
+#'      plot(subset.map, left.lim = 0, right.lim = 1, mrk.names = TRUE)
 #'      plot(subset.map, phase = FALSE)
 #'      
 #'      ## Retrieving simulated linkage phase
@@ -405,40 +431,8 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'      ## Estimated linkage phase
 #'      ph.P.est <- subset.map$maps[[1]]$seq.ph$P
 #'      ph.Q.est <- subset.map$maps[[1]]$seq.ph$Q
-#'      ##Notice that two estimated homologous in parent P are different
-#'      ##from the simulated ones
 #'      compare_haplotypes(m = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
 #'      compare_haplotypes(m = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
-#'      
-#'      
-#'      ############# Autotetraploid example
-#'     data(tetra.solcap)
-#'     s1<-make_seq_mappoly(tetra.solcap, 'seq1')
-#'     red.mrk<-elim_redundant(s1)
-#'     s1.unique.mrks<-make_seq_mappoly(red.mrk)
-#'     counts.web<-cache_counts_twopt(s1.unique.mrks, cached = TRUE)
-#'     s1.pairs<-est_pairwise_rf(input.seq = s1.unique.mrks,
-#'                                   count.cache = counts.web,
-#'                                   n.clusters = 10,
-#'                                   verbose=TRUE)
-#'     unique.gen.ord<-get_genomic_order(s1.unique.mrks)
-#'     ## Selecting a subset of 100 markers at the beginning of chromosome 1 
-#'     s1.gen.subset<-make_seq_mappoly(tetra.solcap, rownames(unique.gen.ord)[1:100])
-#'     s1.gen.subset.map <- est_rf_hmm_sequential(input.seq = s1.gen.subset,
-#'                                                start.set = 10,
-#'                                                thres.twopt = 10, 
-#'                                                thres.hmm = 10,
-#'                                                extend.tail = 50,
-#'                                                info.tail = TRUE, 
-#'                                                twopt = s1.pairs,
-#'                                                sub.map.size.diff.limit = 5, 
-#'                                                phase.number.limit = 40,
-#'                                                reestimate.single.ph.configuration = TRUE,
-#'                                                tol = 10e-3,
-#'                                                tol.final = 10e-5)
-#'      print(s1.gen.subset.map, detailed = TRUE)
-#'      plot(s1.gen.subset.map)
-#'      plot(s1.gen.subset.map, phase = FALSE)
 #'    }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -687,8 +681,7 @@ est_rf_hmm_sequential<-function(input.seq,
 }
 
 #' @rdname est_rf_hmm
-#' @keywords internal
-#' @export
+#' @export 
 print.mappoly.map <- function(x, detailed = FALSE, ...) {
   cat("This is an object of class 'mappoly.map'\n")
   cat("    Ploidy level:\t", x$info$m, "\n")
@@ -737,8 +730,7 @@ print.mappoly.map <- function(x, detailed = FALSE, ...) {
 #' @rdname est_rf_hmm
 #' @importFrom grDevices rgb
 #' @importFrom graphics rect
-#' @keywords internal
-#' @export
+#' @export 
 plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
                              phase = TRUE, mrk.names = FALSE, 
                              cex = 1, config = "best", ...) {
@@ -929,7 +921,6 @@ prepare_map<-function(input.map, config = "best"){
 #'
 #' @param void internal function to be documented
 #' @keywords internal
-#' @export get_full_info_tail
 get_full_info_tail <- function(input.obj, extend = NULL) {
   ## checking for correct object
   if (all(is.na(match(class(input.obj), c("mappoly.map", "mappoly.map.haplo")))))
@@ -976,7 +967,6 @@ filter_map_at_hmm_thres <- function(map, thres.hmm){
 #' configurations under a certain threshold
 #' @param void internal function to be documented
 #' @keywords internal
-#' @export update_ph_list_at_hmm_thres
 update_ph_list_at_hmm_thres <- function(map, thres.hmm){
   temp.map <- filter_map_at_hmm_thres(map, thres.hmm)
   config.to.test <- lapply(temp.map$maps, function(x) x$seq.ph)
@@ -992,7 +982,6 @@ update_ph_list_at_hmm_thres <- function(map, thres.hmm){
 #' subset of a linkage phase list
 #' @param void internal function to be documented
 #' @keywords internal
-#' @export get_ph_list_subset
 get_ph_list_subset<-function(ph.list, seq.num, conf){
   config.to.test <- list(lapply(ph.list$config.to.test[[conf]], function(x, seq.num) x[as.character(seq.num)], seq.num))
   rf.vec <- ph.list$rec.frac[conf, , drop = FALSE]
@@ -1053,7 +1042,6 @@ check_ls_phase<-function(ph){
   if(length(w)==0) return(0)
   w
 }
-
 
 #' cat for graphical representation of the phases
 #' @param void internal function to be documented

@@ -2,14 +2,23 @@
 % Please edit documentation in R/plot_map_list.R
 \name{extract_map}
 \alias{extract_map}
-\title{extract the distance from an object of class 'mappoly.map'}
+\title{Extract the maker position from an object of class 'mappoly.map'}
 \usage{
 extract_map(input.map, phase.config = "best")
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{input.map}{An object of class \code{mappoly.map}}
+
+\item{phase.config}{which phase configuration should be used. "best" (default) 
+will choose the maximum likelihood configuration}
 }
 \description{
-extract the distance from an object of class 'mappoly.map'
+Extract the maker position from an object of class 'mappoly.map'
 }
-\keyword{internal}
+\examples{
+ \dontrun{
+ x <- maps.hexafake[[1]]$info$sequence.pos/1e6
+ y <- extract_map(maps.hexafake[[1]])
+ plot(y~x, ylab = "Map position (cM)", xlab = "Genome Position (Mbp)")
+ }
+}

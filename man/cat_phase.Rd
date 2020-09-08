@@ -15,7 +15,7 @@ cat_phase(
 )
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 cat for phase information

@@ -6,7 +6,7 @@
 #'
 #' @param input.map An object of class \code{mappoly.map}
 #'
-#' @param dat.dist an object of class \code{mappoly.data} containing the
+#' @param dat.prob an object of class \code{mappoly.data} containing the
 #'                 probability distribution of the genotypes
 #' 
 #' @param phase.config which phase configuration should be used. "best" (default) 
@@ -25,7 +25,7 @@
 #'  \dontrun{
 #'  ## tetraploid example
 #'  probs.t<-calc_genoprob_dist(input.map = solcap.prior.map[[1]],
-#'                            dat.dist = tetra.solcap.geno.dist,
+#'                            dat.prob = tetra.solcap.geno.dist,
 #'                            verbose = TRUE)
 #'  probs.t
 #'  ## displaying individual 1, 36 genotypic states (rows) across linkage group 1 (columns)                          
@@ -33,7 +33,7 @@
 #'  
 #'  ## hexaploid example
 #'  probs.h<-calc_genoprob_dist(input.map = maps.hexafake[[1]],
-#'                              dat.dist = hexafake.geno.dist,
+#'                              dat.prob = hexafake.geno.dist,
 #'                              verbose = TRUE)
 #'  probs.h
 #'  ## displaying individual 1, 400 genotypic states (rows) across linkage group 1 (columns)                               
@@ -50,7 +50,7 @@
 #'     \url{https://doi.org/10.1534/g3.119.400378} 
 #'
 #' @export calc_genoprob_dist
-calc_genoprob_dist<-function(input.map, dat.dist, phase.config = "best", verbose = TRUE)
+calc_genoprob_dist<-function(input.map, dat.prob = NULL, phase.config = "best", verbose = TRUE)
 {
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
@@ -62,19 +62,30 @@ calc_genoprob_dist<-function(input.map, dat.dist, phase.config = "best", verbose
   } else if (phase.config > length(LOD.conf)) {
     stop("invalid linkage phase configuration")
   } else i.lpc <- phase.config
+  if(is.null(dat.prob)){
+    if(nrow(get(input.map$info$data.name, pos=1)$geno)==get(input.map$info$data.name, pos=1)$n.mrk){
+      stop("
+            The dataset associated to 'input.map'
+            contains no genotypic probability distribution.
+            Please provide provide dataset in argument 
+           'dat.prob'.
+           ")
+    } else {
+      dat.prob <- get(input.map$info$data.name, pos=1)
+    }
+  }
   mrk<-NULL
-  original.map.mrk<-get(input.map$info$data.name, pos=1)$mrk.names[input.map$maps[[i.lpc]]$seq.num]
-  dat.dist.pos<-match(original.map.mrk, dat.dist$mrk.names)
-  which.is.na<-which(is.na(dat.dist.pos))
+  original.map.mrk <- input.map$info$mrk.names
+  dat.prob.pos <- match(original.map.mrk, dat.prob$mrk.names)
+  which.is.na<-which(is.na(dat.prob.pos))
   if(length(which.is.na) > 0)
-    stop("Markers", original.map.mrk[which.is.na], "are not present in the 'dat.dist' object")
+    stop("Markers", original.map.mrk[which.is.na], "are not present in the 'dat.prob' object")
   temp.map<-input.map
-  temp.map$info$data.name<-as.character(sys.call())[3]
-  temp.map$maps[[i.lpc]]$seq.num<-dat.dist.pos
-  names(temp.map$maps[[i.lpc]]$seq.ph$P)<-names(temp.map$maps[[i.lpc]]$seq.ph$Q)<-dat.dist.pos
+  temp.map$info$seq.num <- temp.map$maps[[i.lpc]]$seq.num<-dat.prob.pos
+  names(temp.map$maps[[i.lpc]]$seq.ph$P)<-names(temp.map$maps[[i.lpc]]$seq.ph$Q)<-dat.prob.pos
   if(!all(sort(get(temp.map$info$data.name, pos = 1)$ind.names) %in% sort(get(input.map$info$data.name, pos = 1)$ind.names)))
-    stop("The individuals in the new dataset are not contained in the original dataset")
-  geno<-subset(get(temp.map$info$data.name, pos = 1)$geno, mrk%in%original.map.mrk)
+    stop("The individuals are different in the new and original datasets")
+  geno<-subset(dat.prob$geno, mrk%in%original.map.mrk)
   geno.new<-NULL
   for(i in unique(geno$ind))
     geno.new<-rbind(geno.new, geno[geno[,"ind"] == i, ][match(original.map.mrk, geno[,"mrk"]),])
@@ -87,7 +98,7 @@ calc_genoprob_dist<-function(input.map, dat.dist, phase.config = "best", verbose
   q = as.numeric(unlist(temp.map$maps[[1]]$seq.ph$Q))
   dq = as.numeric(cumsum(c(0, sapply(temp.map$maps[[1]]$seq.ph$Q, function(x) sum(length(x))))))
   rf = temp.map$maps[[1]]$seq.rf
-  indnames<-dat.dist$ind.names
+  indnames<-dat.prob$ind.names
   res.temp <-
     .Call(
       "calc_genoprob_prior",

@@ -16,7 +16,7 @@ est_rf_hmm_single(
 )
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Multipoint analysis using Hidden Markov Models (single phase)

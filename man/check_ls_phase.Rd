@@ -2,16 +2,16 @@
 % Please edit documentation in R/est_map_hmm.R
 \name{check_ls_phase}
 \alias{check_ls_phase}
-\title{compare a list of linkage phases and return the 
+\title{Compare a list of linkage phases and return the 
 markers for which they are different.}
 \usage{
 check_ls_phase(ph)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
-compare a list of linkage phases and return the 
+Compare a list of linkage phases and return the 
 markers for which they are different.
 }
 \keyword{internal}

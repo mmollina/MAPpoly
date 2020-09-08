@@ -13,7 +13,7 @@ plot_compare_haplotypes(
 )
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Plot two overlapped haplotypes

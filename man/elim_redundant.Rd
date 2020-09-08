@@ -2,22 +2,14 @@
 % Please edit documentation in R/eliminate_redundant.R
 \name{elim_redundant}
 \alias{elim_redundant}
-\alias{plot.mappoly.unique.seq}
-\alias{print.mappoly.unique.seq}
 \title{Eliminate redundant markers}
 \usage{
 elim_redundant(input.seq, data = NULL)
-
-\method{plot}{mappoly.unique.seq}(x, ...)
-
-\method{print}{mappoly.unique.seq}(x, ...)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}}
 
 \item{data}{name of the dataset that contains sequence markers (optional, default = NULL)}
-
-\item{...}{currently ignored}
 }
 \value{
 An object of class \code{mappoly.unique.seq} which
@@ -28,16 +20,13 @@ An object of class \code{mappoly.unique.seq} which
     \item{eliminated}{a vector containing the name of the non-informative (eliminated) markers}
 }
 \description{
-Eliminate markers with identical dosage infomation throughout individuals.
+Eliminate markers with identical dosage information for all individuals.
 }
 \examples{
-  \dontrun{
-    data(hexafake)
     all.mrk<-make_seq_mappoly(hexafake, 'all')
     red.mrk<-elim_redundant(all.mrk)
     plot(red.mrk)
     unique.mrks<-make_seq_mappoly(red.mrk)
-   }
    
 }
 \references{
@@ -50,4 +39,3 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}, with minor modifications by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 }
-\keyword{internal}

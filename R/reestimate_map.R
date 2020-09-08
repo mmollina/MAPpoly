@@ -1,6 +1,6 @@
 #' Reestimate the recombination fractions in a genetic map
 #' 
-#' This function reestimates the recombination fractions between all markers in a given map.
+#' This function re-estimates the recombination fractions between all markers in a given map.
 #'
 #' @param input.map An object of class \code{mappoly.map}
 #' 

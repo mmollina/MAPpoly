@@ -2,8 +2,6 @@
 % Please edit documentation in R/pairwise_rf.R
 \name{est_pairwise_rf}
 \alias{est_pairwise_rf}
-\alias{print.poly.est.two.pts.pairwise}
-\alias{plot.poly.est.two.pts.pairwise}
 \title{Pairwise two-point analysis}
 \usage{
 est_pairwise_rf(
@@ -17,10 +15,6 @@ est_pairwise_rf(
   parallelization.type = c("PSOCK", "FORK"),
   tol = .Machine$double.eps^0.25
 )
-
-\method{print}{poly.est.two.pts.pairwise}(x, ...)
-
-\method{plot}{poly.est.two.pts.pairwise}(x, first.mrk, second.mrk, ...)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}}
@@ -61,18 +55,22 @@ An object of class \code{poly.est.two.pts.pairwise} which
     \item{seq.num}{a \code{vector} containing the (ordered) indices
         of markers inthe sequence, according to the input file}
     \item{pairwise}{a list of size
-    \code{choose(length(input.seq$seq.num), 2)}, each of them containing: a matrix
-    with the linkage phase configuration i.e. the number of
-    homologous that share alelels; the LOD Score relative to each
-    one of these configurations; the recombination fraction
-    estimated for each configuration; and their associated LOD
-    score}
+    \code{choose(length(input.seq$seq.num), 2)}, each of them containing a 
+    matrix where the name of the rows have the form x-y, where x and y indicate 
+    how many homologues share the same allelic variant in parents P and Q, 
+    respectively (see Mollinari and Garcia, 2019 for notation). The first 
+    column indicates the LOD Score in relation to the most likely linkage 
+    phase configuration. The second column shows the estimated recombination 
+    fraction for each configuration, and the third indicates the LOD Score 
+    comparing the likelihood under no linkage (r=0.5) with the estimated 
+    recombination fraction (evidence of linkage).}
     \code{chisq.pval.thres}{threshold used to perform the segregation tests}
     \code{chisq.pval}{p-values associated with the performed segregation tests}
 }
 \description{
-Performs the two-point pairwise analysis, accounting for the recombination fractions
-between all pairwise markers given one or more linkage phase configurations.
+Performs the two-point pairwise analysis between all markers in a sequence. 
+For each pair, the function estimates the recombination fraction for all 
+possible linkage phase configurations and associated LOD Scores.
 }
 \examples{
   \dontrun{
@@ -137,4 +135,3 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }
-\keyword{internal}

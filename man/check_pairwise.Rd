@@ -14,8 +14,8 @@ check_pairwise(input.seq, twopt)
 }
 \value{
 If all pairwise combinations of elements of
-    \code{input.seq} are cointained in \code{twopt}, the function
-    returns 0. Otherewise, returns the missing pairs.
+    \code{input.seq} are contained in \code{twopt}, the function
+    returns 0. Otherwise, returns the missing pairs.
 }
 \description{
 Check if all pairwise combinations of elements of \code{input.seq}

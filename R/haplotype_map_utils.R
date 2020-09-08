@@ -126,7 +126,6 @@ generate_all_link_phases_elim_equivalent_haplo <-
 #'
 #' @param void internal function to be documented
 #' @keywords internal
-#' @export
 est_haplo_hmm <-
   function(m, n.mrk, n.ind, haplo, emit = NULL, 
            rf_vec, verbose, use_H0 = FALSE, tol) {
@@ -161,10 +160,9 @@ est_haplo_hmm <-
 #'
 #' @param void internal function to be documented
 #' @keywords internal
-#' @export est_map_haplo_given_genoprob
 est_map_haplo_given_genoprob<-function(map.list,
-                                    genoprob.list,
-                                    tol = 10e-5){
+                                       genoprob.list,
+                                       tol = 10e-5){
   m<-map.list[[1]]$info$m
   ## number of genotipic states
   ngam <- choose(m, m/2)

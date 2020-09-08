@@ -7,7 +7,7 @@
 mrk_chisq_test(x, m)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Chi-square test

@@ -9,7 +9,7 @@ estimation}
 pos_twopt_est(input.seq)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Check if it is possible to estimate the recombination

@@ -28,7 +28,7 @@ The chi-square tests assume that markers follow the expected segregation
 }
 \examples{
 \dontrun{
-    mydata <- filter_segregation(mydata, chisq.pval.thres = 0.05/mydata$n.mrk, inter = TRUE)
+    mrks.chi.filt <- filter_segregation(input.data = tetra.solcap, chisq.pval.thres = 0.05/mydata$n.mrk, inter = TRUE)
     seq.init<-make_seq_mappoly(mrks.chi.filt)
 }
 

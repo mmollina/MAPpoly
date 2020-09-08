@@ -7,7 +7,7 @@
 filter_map_at_hmm_thres(map, thres.hmm)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 remove maps under a certain threshold

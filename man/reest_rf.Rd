@@ -48,7 +48,7 @@ a numeric vector of size \code{m} indicating which
     that homologous
 }
 \description{
-This function reestimates the recombination fractions between all markers in a given map.
+This function re-estimates the recombination fractions between all markers in a given map.
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

@@ -156,7 +156,7 @@ import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = 
   # else if (class(object) == 'RADdata'){
   #   outfile = paste0(getwd(), '/import_temp')
   #   polyRAD::Export_MAPpoly(object, file = outfile)
-  #   res = read_geno_dist(outfile)
+  #   res = read_geno_prob(outfile)
   #   return(res)
   # }
   else stop("You must provide an object of class 'multidog'(from package 'updog') in order to continue importing data. Please read the documentation and try again.")

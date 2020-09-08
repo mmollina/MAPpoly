@@ -15,7 +15,7 @@ draw_cross(
 )
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 This function draws the parental map (including the linkage

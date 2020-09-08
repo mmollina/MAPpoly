@@ -1,12 +1,10 @@
 #' Eliminate redundant markers
 #'
-#' Eliminate markers with identical dosage infomation throughout individuals.
+#' Eliminate markers with identical dosage information for all individuals.
 #'
 #' @param input.seq an object of class \code{mappoly.sequence}
 #'
 #' @param data name of the dataset that contains sequence markers (optional, default = NULL)
-#' 
-#' @param ... currently ignored
 #'
 #' @return An object of class \code{mappoly.unique.seq} which
 #'     is a list  containing the following components:
@@ -16,13 +14,10 @@
 #'     \item{eliminated}{a vector containing the name of the non-informative (eliminated) markers}
 #'
 #' @examples
-#'   \dontrun{
-#'     data(hexafake)
 #'     all.mrk<-make_seq_mappoly(hexafake, 'all')
 #'     red.mrk<-elim_redundant(all.mrk)
 #'     plot(red.mrk)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
-#'    }
 #'    
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}, with minor modifications by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'
@@ -54,8 +49,6 @@ elim_redundant<-function(input.seq, data = NULL)
             class = "mappoly.unique.seq")
 }
 
-#' @rdname elim_redundant
-#' @keywords internal
 #' @export
 plot.mappoly.unique.seq<-function(x, ...)
 {
@@ -67,8 +60,6 @@ plot.mappoly.unique.seq<-function(x, ...)
   pie(slc, labels = lbls)
 }
 
-#' @rdname elim_redundant
-#' @keywords internal
 #' @export
 print.mappoly.unique.seq<-function(x, ...)
 {

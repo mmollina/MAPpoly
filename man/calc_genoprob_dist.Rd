@@ -4,12 +4,17 @@
 \alias{calc_genoprob_dist}
 \title{Compute conditional probabilities of the genotypes using probability distribution of dosages}
 \usage{
-calc_genoprob_dist(input.map, dat.dist, phase.config = "best", verbose = TRUE)
+calc_genoprob_dist(
+  input.map,
+  dat.prob = NULL,
+  phase.config = "best",
+  verbose = TRUE
+)
 }
 \arguments{
 \item{input.map}{An object of class \code{mappoly.map}}
 
-\item{dat.dist}{an object of class \code{mappoly.data} containing the
+\item{dat.prob}{an object of class \code{mappoly.data} containing the
 probability distribution of the genotypes}
 
 \item{phase.config}{which phase configuration should be used. "best" (default) 
@@ -33,7 +38,7 @@ the probabilities are not calculated between markers.
  \dontrun{
  ## tetraploid example
  probs.t<-calc_genoprob_dist(input.map = solcap.prior.map[[1]],
-                           dat.dist = tetra.solcap.geno.dist,
+                           dat.prob = tetra.solcap.geno.dist,
                            verbose = TRUE)
  probs.t
  ## displaying individual 1, 36 genotypic states (rows) across linkage group 1 (columns)                          
@@ -41,7 +46,7 @@ the probabilities are not calculated between markers.
  
  ## hexaploid example
  probs.h<-calc_genoprob_dist(input.map = maps.hexafake[[1]],
-                             dat.dist = hexafake.geno.dist,
+                             dat.prob = hexafake.geno.dist,
                              verbose = TRUE)
  probs.h
  ## displaying individual 1, 400 genotypic states (rows) across linkage group 1 (columns)                               

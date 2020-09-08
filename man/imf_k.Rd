@@ -7,7 +7,7 @@
 imf_k(r)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Map functions

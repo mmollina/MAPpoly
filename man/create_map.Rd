@@ -2,14 +2,14 @@
 % Please edit documentation in R/calc_genoprob.R
 \name{create_map}
 \alias{create_map}
-\title{Create a marker with pseudomarkers}
+\title{Create a map with pseudomarkers at a given step}
 \usage{
 create_map(input.map, step = 0, phase.config = "best")
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
-Create a marker with pseudomarkers
+Create a map with pseudomarkers at a given step
 }
 \keyword{internal}

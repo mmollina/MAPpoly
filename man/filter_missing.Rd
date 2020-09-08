@@ -18,7 +18,7 @@ filter_missing(
 \code{'marker'}{filter out markers based on their percentage of missing data (default)}
 \code{'individual'}{filter out individuals based on their percentage of missing data}
 Please notice that removing individuals with certain amount of data can change some marker parameters
-(such as depth), and can also change the estimated genotypes for other idividuals.
+(such as depth), and can also change the estimated genotypes for other individuals.
 So be careful when removing individuals.}
 
 \item{filter.thres}{maximum percentage of missing data (default = 0.2)}

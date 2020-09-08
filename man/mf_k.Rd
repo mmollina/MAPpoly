@@ -7,7 +7,7 @@
 mf_k(d)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Map functions

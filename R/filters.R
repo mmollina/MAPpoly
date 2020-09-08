@@ -1,6 +1,6 @@
-#' Filter non-conforming classes in F1 segregation
+#' Filter non-conforming classes in F1, non double reduced population.
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
@@ -61,7 +61,7 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
 #' \code{'marker'}{filter out markers based on their percentage of missing data (default)}
 #' \code{'individual'}{filter out individuals based on their percentage of missing data}
 #' Please notice that removing individuals with certain amount of data can change some marker parameters
-#' (such as depth), and can also change the estimated genotypes for other idividuals.
+#' (such as depth), and can also change the estimated genotypes for other individuals.
 #' So be careful when removing individuals.
 #' 
 #' @param filter.thres maximum percentage of missing data (default = 0.2)
@@ -96,7 +96,6 @@ filter_missing<-function(input.data,
 #' @param filter.thres maximum percentage of missing data
 #' @param inter if \code{TRUE}, plots markers vs. frequency of genotyped individuals
 #' @keywords internal
-#' @export
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
 #' @importFrom graphics axis
@@ -171,7 +170,6 @@ filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
 #' @param filter.thres maximum percentage of missing data
 #' @param inter if \code{TRUE}, plots markers vs. frequency of genotyped individuals
 #' @keywords internal
-#' @export
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
 #' @importFrom graphics axis
@@ -250,10 +248,10 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
 
 #' Filter markers based on chi-square test
 #'
-#' This function filter markers based on chi-square test p-values. 
-#' The chi-square tests assume that markers follow the expected segregation
-#'  patterns under Mendelian inheritance, only random chromosome bivalent 
-#'  pairing occurs and there is no double reduction.
+#' This function filter markers based on p-values of a chi-square test. 
+#' The chi-square test assumes that markers follow the expected segregation
+#'  patterns under Mendelian inheritance, random chromosome bivalent 
+#'  pairing and no double reduction.
 #'
 #' @param input.data name of input object (class \code{mappoly.data})
 #' 
@@ -269,7 +267,9 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
 #' 
 #'@examples
 #' \dontrun{
-#'     mydata <- filter_segregation(mydata, chisq.pval.thres = 0.05/mydata$n.mrk, inter = TRUE)
+#'     mrks.chi.filt <- filter_segregation(input.data = tetra.solcap, 
+#'                                         chisq.pval.thres = 0.05/mydata$n.mrk, 
+#'                                         inter = TRUE)
 #'     seq.init<-make_seq_mappoly(mrks.chi.filt)
 #'}
 #'

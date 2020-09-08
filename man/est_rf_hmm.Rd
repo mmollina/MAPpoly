@@ -37,10 +37,10 @@ est_rf_hmm(
 \item{input.ph}{an object of class \code{two.pts.linkage.phases}. 
 If not available (default = NULL), it will be computed}
 
-\item{thres}{the LOD threshold used to determine if the linkage phases
+\item{thres}{LOD Score threshold used to determine if the linkage phases
 compared via two-point analysis should be considered. Smaller 
 values will result in smaller number of linkage phase 
-configurations}
+configurations to be evaluated by the multipoint algorithm.}
 
 \item{twopt}{an object of class \code{poly.est.two.pts.pairwise}
 containing two-point information}
@@ -51,12 +51,13 @@ containing two-point information}
 \item{tol}{the desired accuracy (default = 1e-04)}
 
 \item{est.given.0.rf}{logical. If TRUE returns a map forcing all
-recombination fractions equals to 0 (1e-5, for internal use only. Default = FALSE)}
+recombination fractions equals to 0 (1e-5, for internal use only. 
+Default = FALSE)}
 
 \item{reestimate.single.ph.configuration}{logical. If \code{TRUE}
-returns a map without reestimating the map parameters for cases
+returns a map without re-estimating the map parameters for cases
 where there is only one possible linkage phase configuration. 
-This argument is intended to be used in a sequential map contruction}
+This argument is intended to be used in a sequential map construction}
 
 \item{high.prec}{logical. If \code{TRUE} (default) uses high precision 
 long double numbers in the HMM procedure}
@@ -64,7 +65,7 @@ long double numbers in the HMM procedure}
 \item{x}{an object of the class \code{mappoly.map}}
 
 \item{detailed}{logical. if TRUE, prints the linkage phase configuration and the marker 
-position for all maps. if FALSE (default), prints a map summary}
+position for all maps. If FALSE (default), prints a map summary}
 
 \item{...}{currently ignored}
 
@@ -136,13 +137,10 @@ This function first enumerates a set of linkage phase configurations
 }
 \examples{
  \dontrun{
-    data(hexafake)
     mrk.subset<-make_seq_mappoly(hexafake, 1:50)
     red.mrk<-elim_redundant(mrk.subset)
     unique.mrks<-make_seq_mappoly(red.mrk)
-    counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-                                  count.cache = counts.web,
                                   n.clusters = 1,
                                   verbose=TRUE)
 
@@ -187,4 +185,3 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }
-\keyword{internal}

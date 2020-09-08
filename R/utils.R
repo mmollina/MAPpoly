@@ -87,21 +87,26 @@ rev_map<-function(input.map)
   return(output.map)
 }
 
-#' Selects the class with high probability and return it instead of
-#' the distribution of probabilities for all classes
+#' Returns the class with the highest probability in 
+#' a genotype probability distribution
 #'
-#' @param geno the genotypes contained in the object
+#' @param geno the probabilistic genotypes contained in the object
 #'     \code{'mappoly.data'}
-#' @param prob.thres probability threshold to accept the genotyupe as
-#'     the correct one. Values below this genotype are assumed as
-#'     missing data
+#' @param prob.thres probability threshold to select the genotype. 
+#'     Values below this genotype are assumed as missing data
 #' @return a matrix containing the doses of each genotype and
-#'     marker. Missing data are represented by NAs
+#'     marker. Markers are disposed in rows and individuals are 
+#'     disposed in columns. Missing data are represented by NAs
 #' @keywords internal
-#' @export
+#' @examples
+#' \dontrun{
+#' geno.dose <- dist_prob_to_class(tetra.solcap.geno.dist$geno)
+#' geno.dose[1:10, 1:10]
+#'}   
 #' @importFrom magrittr "%>%"
 #' @importFrom reshape melt cast
 #' @importFrom dplyr group_by filter arrange
+#' @export
 dist_prob_to_class <- function(geno, prob.thres = 0.95) {
   a<-reshape::melt(geno, id.vars = c("mrk", "ind"))
   mrk <- ind <- value <- variable <- NULL # Setting the variables to NULL first
@@ -526,10 +531,9 @@ get_genomic_order<-function(input.seq){
 #' This function creates a new map by removing markers from an existing one.
 #'
 #' @param input.map an object of class \code{mappoly.map}
-#'  
-#' @param mrk a vector containing markers to be removed from the input map, identified by their names or positions on the map
-#' 
-#' @return An object of class \code{mappoly.map}
+#' @param mrk a vector containing markers to be removed from the input map, 
+#'            identified by their names or positions
+#' @return an object of class \code{mappoly.map}
 #' 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' 
@@ -582,7 +586,7 @@ drop_marker<-function(input.map, mrk)
     input map; For accurate values, plese 
     reestimate the map using functions 'reest_rf', 
     'est_full_hmm_with_global_error' or 
-    'est_full_hmm_with_prior_dist'")
+    'est_full_hmm_with_prior_prob'")
   return(output.map)
 }
 

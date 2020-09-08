@@ -17,7 +17,7 @@ sim_cross_two_informative_parents(
 )
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Simulate mapping population (tow parents)

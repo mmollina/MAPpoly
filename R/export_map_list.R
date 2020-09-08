@@ -10,7 +10,7 @@
 #' 
 #' @examples
 #'  \dontrun{
-#'  ## hexafake map
+#'  export_map_list(solcap.err.map[[1]], file = "")
 #'  export_map_list(maps.hexafake)
 #'  }
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -24,7 +24,6 @@
 #'
 #' @export export_map_list
 #' @importFrom dplyr tibble
-#'
 export_map_list <- function(map.list, file = "map_output.csv"){
   if(class(map.list) == "mappoly.map")  
     map.list<-list(map.list)
