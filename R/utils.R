@@ -37,7 +37,6 @@ get_w_m <- function(m){
    1/factorial((m/2)) * prod(choose(seq(2, m, 2),2))
 }
 
-
 #' Get used memory (unix systems only)
 #'
 #' @param void internal function to be documented
@@ -166,15 +165,14 @@ export_data_to_polymapR <- function(data.in)
 #' @param void internal function to be documented
 #' @keywords internal
 #' @importFrom cli rule
-msg <- function(text, line = 1)
+msg <- function(text, line = 1){
     cli::rule(line = line, right = text) %>%
   text_col() %>%
   message()
-
+}
 
 #' @importFrom rstudioapi isAvailable hasFun getThemeInfo
 #' @importFrom crayon white black
-
 text_col <- function(x) {
   # If RStudio not available, messages already printed in black
   if (!rstudioapi::isAvailable()) {
@@ -327,8 +325,7 @@ plot_compare_haplotypes <- function(m, hom.allele.p1, hom.allele.q1, hom.allele.
 #'  print_mrk(hexafake, 256)
 #'  }  
 #' @export
-print_mrk<-function(input.data, mrks)
-{
+print_mrk<-function(input.data, mrks){
   for(i in 1:length(mrks))
   {
     x<-input.data$geno.dose[mrks[i], ]
@@ -357,8 +354,7 @@ print_mrk<-function(input.data, mrks)
 #'
 #' @param void internal function to be documented
 #' @keywords internal
-pos_twopt_est<-function(input.seq)
-{
+pos_twopt_est<-function(input.seq){
   dp<-abs(abs(input.seq$seq.dose.p-(input.seq$m/2))-(input.seq$m/2))
   dq<-abs(abs(input.seq$seq.dose.q-(input.seq$m/2))-(input.seq$m/2))
   y<-numeric(length(input.seq$seq.num)-1)
@@ -370,7 +366,6 @@ pos_twopt_est<-function(input.seq)
   y<-as.logical(y)
   y
 }
-
 
 #' N! combination
 #'
@@ -438,31 +433,23 @@ gg_color_hue <- function(n) {
   hcl(h = hues, l = 65, c = 100)[1:n]
 }
 
-
 #' Update missing information
 #'
 #' Updates the missing data in the dosage matrix of an object of class 
 #' \code{mappoly.data} given a new probability threshold
-#' 
 #' @param input.data an object of class \code{mappoly.data}
-#' 
 #' @param prob.thres probability threshold to associate a marker call to a 
 #'     dosage. Markers with maximum genotype probability smaller than 'prob.thres' 
 #'     are considered as missing data for the dosage calling purposes
-#'     
 #' @examples
 #' \dontrun{
 #' data.updated = update_missing(tetra.solcap.geno.dist, prob.thres = 0.5)
 #' print(tetra.solcap.geno.dist)
 #' print(data.updated)
 #' }
-#'     
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
-#'     
 #' @export
-update_missing<-function(input.data, 
-                         prob.thres = 0.95)
-{
+update_missing<-function(input.data, prob.thres = 0.95){
   geno.dose <- dist_prob_to_class(geno = input.data$geno, 
                                   prob.thres = prob.thres)
   geno.dose[is.na(geno.dose)] <- input.data$m + 1
@@ -488,16 +475,12 @@ mrk_chisq_test<-function(x, m){
   pval
 }
 
-
 #' Get the genomic position of markers in a sequence
 #'
 #' This functions gets the genomic position of markers in a sequence and
 #' return an ordered data frame with the name and position of each marker
-#'
 #' @param input.seq a sequence object of class \code{mappoly.sequence} 
-#' 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
-#' 
 #' @examples
 #' \dontrun{
 #' s1<-make_seq_mappoly(tetra.solcap, "all")
@@ -531,7 +514,6 @@ get_genomic_order<-function(input.seq){
     return(M[order(as.numeric(M[,1]), as.numeric(M[,2])),])
   }
 }
-
 
 #' Remove markers from a map
 #' 
@@ -1377,11 +1359,8 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
 #' Summary map
 #'
 #' This function generates a brief summary table of a list of \code{mappoly.map} objects
-#' 
 #' @param map.object a list of objects of class \code{mappoly.map}
-#'
 #' @return a dataframe containing a brief summary of all maps contained in \code{map.object}
-#' 
 #' @examples
 #'  \dontrun{
 #' (tetra.sum <- summary_maps(solcap.err.map))
@@ -1389,12 +1368,8 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
 #' (hexa.sum <- summary_maps(maps.hexafake))
 #' formattable::formattable(hexa.sum)
 #' }
-#' 
-#
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
-#'
 #' @export summary_maps
-#' 
 summary_maps = function(map.object){
   ## Check data
   if (!all(unlist(lapply(map.object, function(x) class(x))) == 'mappoly.map')) stop('The indicated map object is not of class "mappoly.map".')
@@ -1419,11 +1394,8 @@ summary_maps = function(map.object){
 #' Get table of dosage combinations
 #' 
 #' Internal function
-#'
 #' @param x an object of class \code{mappoly.map}
-#'
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
-#' 
 get_tab_mrks = function(x){
   tab = table(get(x$info$data.name, pos = 1)$dosage.p[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)], get(x$info$data.name, pos = 1)$dosage.q[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)])
   doses = as.character(seq(0,x$info$m,1))
@@ -1455,12 +1427,9 @@ get_tab_mrks = function(x){
 #' and another HMM round is performed.
 #' 
 #' @param map an map object of class \code{mappoly.map}
-#' 
 #' @return an updated object of class \code{mappoly.map}, containing the original map plus redundant markers
-#' 
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
-#' 
-#' @example 
+#' @examples 
 #'  \dontrun{
 #'  orig.map   <- solcap.err.map
 #'  up.map <- lapply(solcap.err.map, update_map)

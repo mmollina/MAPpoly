@@ -304,6 +304,7 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, n.clusters = 1,
 #'
 #' @param void interfunction to be documented
 #' @keywords internal
+#' @export
 paralell_pairwise <- function(mrk.pairs,
                               input.seq,
                               geno,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/split_and_rephase.R
 \name{split_and_rephase}
 \alias{split_and_rephase}
-\title{Divides map in sub-maps and rephase them}
+\title{Divides map in sub-maps and re-phase them}
 \usage{
 split_and_rephase(
   input.map,
@@ -17,10 +17,12 @@ split_and_rephase(
 \item{input.map}{an object of class \code{mappoly.map}}
 
 \item{twopt}{an object of class \code{poly.est.two.pts.pairwise}
-containing the two-point information}
+containing the two-point information for the markers contained 
+in \code{input.map}}
 
 \item{gap.threshold}{distance threshold of neighboring markers 
-where the map should be splitted. The default velue is 5 cM}
+where the map should be spitted. The default 
+value is 5 cM}
 
 \item{remove.single}{Should isolated markers be removed?}
 
@@ -46,6 +48,7 @@ and evaluates alternative phases between the sub-maps.
  plot_map_list(list(map, new.map))
  map
  new.map
+ plot_map_list(list(old.map = map, new.map = new.map))
  }
 
 }

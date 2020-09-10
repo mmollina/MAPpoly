@@ -57,7 +57,9 @@
 #'     populations with high ploidy level using hidden Markov
 #'     models, _G3: Genes, Genomes, Genetics_. 
 #'     \url{https://doi.org/10.1534/g3.119.400378} 
-#'
+#'     
+#' @keywords two-point analysis
+#' 
 #' @export
 #' @import parallel Rcpp RCurl
 #' @importFrom stats na.omit

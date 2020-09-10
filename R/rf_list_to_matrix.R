@@ -37,7 +37,8 @@
 #'
 #' @param main.text a character string as the title of the heatmap (default = NULL)
 #'
-#' @param index logical. should the numbers corresponding to the markers be printed in the diagonal of the heatmap? (default = TRUE)
+#' @param index logical. should the numbers corresponding to the markers be printed in the 
+#' diagonal of the heatmap? (default = FALSE)
 #'
 #' @param ... currently ignored
 #'
@@ -211,7 +212,8 @@ print.mappoly.rf.matrix <- function(x, ...) {
 
 #' @rdname rf_list_to_matrix
 #' @export
-plot.mappoly.rf.matrix <- function(x, type = c("rf", "lod"), ord = NULL, rem = NULL, main.text = NULL, index = TRUE, ...)
+plot.mappoly.rf.matrix <- function(x, type = c("rf", "lod"), ord = NULL, rem = NULL, 
+                                   main.text = NULL, index = FALSE, ...)
 {
   type<-match.arg(type)
   if(type == "rf"){

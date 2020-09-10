@@ -288,8 +288,6 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
 #'     populations with high ploidy level using hidden Markov
 #'     models, _submited_. \url{https://doi.org/10.1101/415232}
 #'     
-#' @keywords segregation
-#'     
 #' @importFrom graphics axis
 #' @export
 filter_segregation<-function(input.data, chisq.pval.thres = 10e-5, inter = TRUE){

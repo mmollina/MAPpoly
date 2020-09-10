@@ -24,7 +24,7 @@ rf_list_to_matrix(
   ord = NULL,
   rem = NULL,
   main.text = NULL,
-  index = TRUE,
+  index = FALSE,
   ...
 )
 }
@@ -59,7 +59,8 @@ for LOD Score}
 
 \item{main.text}{a character string as the title of the heatmap (default = NULL)}
 
-\item{index}{logical. should the numbers corresponding to the markers be printed in the diagonal of the heatmap? (default = TRUE)}
+\item{index}{logical. should the numbers corresponding to the markers be printed in the 
+diagonal of the heatmap? (default = FALSE)}
 }
 \value{
 A list containing two matrices. The first one contains the

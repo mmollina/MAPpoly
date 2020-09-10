@@ -23,7 +23,6 @@ data.updated = update_missing(tetra.solcap.geno.dist, prob.thres = 0.5)
 print(tetra.solcap.geno.dist)
 print(data.updated)
 }
-    
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

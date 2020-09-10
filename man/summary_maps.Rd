@@ -22,7 +22,6 @@ formattable::formattable(tetra.sum)
 (hexa.sum <- summary_maps(maps.hexafake))
 formattable::formattable(hexa.sum)
 }
-
 }
 \author{
 Gabriel Gesteira, \email{gabrielgesteira@usp.br}

@@ -1,4 +1,4 @@
-#' Divides map in sub-maps and rephase them
+#' Divides map in sub-maps and re-phase them
 #'
 #' The function splits the input map in sub-maps 
 #' given a distance threshold of neighboring markers 
@@ -7,10 +7,12 @@
 #' @param input.map an object of class \code{mappoly.map}
 #' 
 #' @param twopt an object of class \code{poly.est.two.pts.pairwise}
-#'     containing the two-point information
+#'     containing the two-point information for the markers contained 
+#'     in \code{input.map}
 #'     
 #' @param gap.threshold distance threshold of neighboring markers 
-#' where the map should be splitted. The default velue is 5 cM
+#'                      where the map should be spitted. The default 
+#'                      value is 5 cM
 #' 
 #' @param remove.single Should isolated markers be removed?
 #' 
@@ -29,6 +31,7 @@
 #'  plot_map_list(list(map, new.map))
 #'  map
 #'  new.map
+#'  plot_map_list(list(old.map = map, new.map = new.map))
 #'  }
 #' 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}

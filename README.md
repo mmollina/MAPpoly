@@ -53,17 +53,17 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
   * [PedigreeSim: Simulation of genetic marker data in diploid and polyploid pedigreed populations.](https://www.wur.nl/en/show/Software-PedigreeSim.htm)
 
 * Genotype calling
-  * [fitPoly: Genotype Calling for Bi-Allelic Marker Assays](https://cran.r-project.org/web/packages/fitPoly/)
+  * [fitPoly: Genotype Calling for Bi-Allelic Marker Assays](https://CRAN.R-project.org/package=fitPoly)
   * [ClusterCall: Automated tetraploid genotype calling by hierarchical clustering](https://potatobreeding.cals.wisc.edu/software/)
   * [SuperMASSA: Graphical Bayesian inference tool for genotyping polyploids](https://bitbucket.org/orserang/supermassa)
   * [VCF2SM: Python script that integrates VCF files and SuperMASSA](https://github.com/guilherme-pereira/vcf2sm)
-  * [updog: Flexible Genotyping for Polyploids](https://cran.r-project.org/web/packages/updog/)
-  * [polyRAD: Genotype Calling with Uncertainty from Sequencing Data in Polyploids and Diploids](https://cran.r-project.org/web/packages/polyRAD/index.html)
+  * [updog: Flexible Genotyping for Polyploids](https://CRAN.R-project.org/package=updog)
+  * [polyRAD: Genotype Calling with Uncertainty from Sequencing Data in Polyploids and Diploids](https://CRAN.R-project.org/package=polyRAD)
  
 * Genetic mapping in polyploids
-  * [polymapR: Linkage Analysis in Outcrossing Polyploids](https://cran.r-project.org/web/packages/polymapR/index.html)
+  * [polymapR: Linkage Analysis in Outcrossing Polyploids](https://CRAN.R-project.org/package=polymapR)
   * [TetraploidSNPMap: Linkage maps and mapping QTLs for autotetraploid species, using SNP dosage data.](https://www.bioss.ac.uk/knowledge/tetraploidmap/)
-  * [MDSMap: High Density Genetic Linkage Mapping using Multidimensional Scaling](https://cran.r-project.org/web/packages/MDSMap/index.html)
+  * [MDSMap: High Density Genetic Linkage Mapping using Multidimensional Scaling](https://CRAN.R-project.org/package=MDSMap)
   
 * Haplotye reconstruction
   * [TetraOrigin:haplotype reconstruction in a full-sib tetraploid family](https://github.com/chaozhi/TetraOrigin)

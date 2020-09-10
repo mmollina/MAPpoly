@@ -27,7 +27,7 @@ configuration (default = 5)}
 
 \item{thresh.perc}{threshold for the percentage of the pairwise marker
 combinations that should be considered in order to
-keep the marker. A \code{thresh.perc = 0.05} means that, at least
+keep the marker. For example, \code{thresh.perc = 0.05} means that at least
 5\% of the pairwise combinations should be present in order to
 keep the marker (default = 0.05)}
 
@@ -46,15 +46,15 @@ See \code{\link[mappoly]{make_seq_mappoly}} for details
 Remove markers that do not meet a LOD and recombination fraction
  criteria for at least a percentage of the pairwise marker
  combinations. It also removes markers with strong evidence of
-linkage across the whole linkage group (false positive).
+ linkage across the whole linkage group (false positive).
 }
 \details{
 \code{thresh.LOD.ph} should be set in order to only select
     recombination fractions that have LOD scores associated to the
     linkage phase configuration higher than \code{thresh_LOD_ph}
     when compared to the second most likely linkage phase configuration.
-    Please notice that eliminated markers are usually unlinked to the
-    set of markers analyzed.
+    That action usually eliminates markers that are unlinked to the
+    set of analyzed markers.
 }
 \examples{
  \dontrun{
@@ -68,9 +68,7 @@ linkage across the whole linkage group (false positive).
     ## Full recombination fraction matrix
     mat.full<-rf_list_to_matrix(input.twopt=all.pairs)
     plot(mat.full)
-
     lgs <- group_mappoly(input.mat = mat.full,
-                         input.seq = unique.mrks,
                          expected.groups = 3,
                          inter = TRUE,
                          comp.mat = TRUE, #this data has physical information
@@ -97,7 +95,6 @@ linkage across the whole linkage group (false positive).
     par(op)
 
     ## Removing disruptive SNPs
-
     lg1.filt<-rf_snp_filter(p1, 5, 5, 0.15, thresh.perc = 0.05)
     lg2.filt<-rf_snp_filter(p2, 5, 5, 0.15, thresh.perc = 0.05)
     lg3.filt<-rf_snp_filter(p3, 5, 5, 0.15, thresh.perc = 0.05)
