@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{gg_color_hue}
 \alias{gg_color_hue}
-\title{Color pallete ggplot-like}
+\title{Color pallet ggplot-like}
 \usage{
 gg_color_hue(n)
 }
@@ -10,6 +10,6 @@ gg_color_hue(n)
 \item{void}{internal function to be documented}
 }
 \description{
-Color pallete ggplot-like
+Color pallet ggplot-like
 }
 \keyword{internal}

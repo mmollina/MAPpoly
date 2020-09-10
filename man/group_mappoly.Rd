@@ -2,8 +2,6 @@
 % Please edit documentation in R/group.R
 \name{group_mappoly}
 \alias{group_mappoly}
-\alias{print.mappoly.group}
-\alias{plot.mappoly.group}
 \title{Assign markers to linkage groups}
 \usage{
 group_mappoly(
@@ -13,10 +11,6 @@ group_mappoly(
   comp.mat = FALSE,
   verbose = TRUE
 )
-
-\method{print}{mappoly.group}(x, detailed = TRUE, ...)
-
-\method{plot}{mappoly.group}(x, ...)
 }
 \arguments{
 \item{input.mat}{an object of class \code{mappoly.rf.matrix}}
@@ -33,13 +27,6 @@ available (default = FALSE)}
 
 \item{verbose}{logical. If \code{TRUE} (default), current progress is shown;
 if \code{FALSE}, no output is produced}
-
-\item{x}{an object of class \code{onemap.segreg.test}}
-
-\item{detailed}{logical. If \code{TRUE} (default) the markers in each
-linkage group are printed}
-
-\item{...}{currently ignored}
 }
 \value{
 Returns an object of class \code{mappoly.group}, which is a list
@@ -60,22 +47,21 @@ Identifies linkage groups of markers using the results of two-point
 }
 \examples{
  \dontrun{
-    data(hexafake)
     all.mrk <- make_seq_mappoly(hexafake, 'all')
     red.mrk <- elim_redundant(all.mrk)
     unique.mrks <- make_seq_mappoly(red.mrk)
     counts <- cache_counts_twopt(unique.mrks, cached = TRUE)
+    ##will take ~ 7 minutes
     all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
                                  count.cache = counts,
-                                 n.clusters = 16,
+                                 n.clusters = 7,
                                  verbose=TRUE)
 
     ## Full recombination fraction matrix
     mat.full<-rf_list_to_matrix(input.twopt=all.pairs)
-    plot(mat.full)
+    plot(mat.full, index = FALSE)
 
     lgs <- group_mappoly(input.mat = mat.full,
-                         input.seq = unique.mrks,
                          expected.groups = 3,
                          inter = TRUE,
                          comp.mat = TRUE, #this data has physical information
@@ -91,9 +77,9 @@ Identifies linkage groups of markers using the results of two-point
     m2<-make_mat_mappoly(input.seq = lg2, input.mat = mat.full)
     m3<-make_mat_mappoly(input.seq = lg3, input.mat = mat.full)
     op<-par(mfrow = c(1,3), pty = "s")
-    plot(m1, main.text = "LG1")
-    plot(m2, main.text = "LG2")
-    plot(m3, main.text = "LG3")
+    plot(m1, main.text = "LG1", index = FALSE)
+    plot(m2, main.text = "LG2", index = FALSE)
+    plot(m3, main.text = "LG3", index = FALSE)
     par(op)
    }
    
@@ -108,4 +94,3 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }
-\keyword{internal}

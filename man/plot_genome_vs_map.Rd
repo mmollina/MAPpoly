@@ -4,22 +4,34 @@
 \alias{plot_genome_vs_map}
 \title{Physical versus genetic distance}
 \usage{
-plot_genome_vs_map(map.list, config = "best", same.ch.lg = FALSE)
+plot_genome_vs_map(map.list, phase.config = "best", same.ch.lg = FALSE)
 }
 \arguments{
 \item{map.list}{A list or a single object of class \code{mappoly.map}}
 
-\item{config}{A vector containing the position of the
-configuration(s) to be plotted. If \code{'best'} (default), plots the configuration
+\item{phase.config}{A vector containing which phase configuration should be
+plotted. If \code{'best'} (default), plots the configuration
 with the highest likelihood for all elements in \code{'map.list'}}
 
 \item{same.ch.lg}{Logical. If \code{TRUE} displays only the scatterplots between the 
 chromosomes and linkage groups with the same number. Default is \code{FALSE}.}
 }
 \description{
-This function plots scatterplot(s) of physical distance (in Mb) versus the genetic 
+This function plots scatterplot(s) of physical distance (in Mbp) versus the genetic 
 distance (in cM). Map(s) should be passed as a single object or a list of objects 
 of class \code{mappoly.map}.
+}
+\examples{
+ \dontrun{
+ ## tetraploid example
+ plot_genome_vs_map(solcap.mds.map)
+ plot_genome_vs_map(solcap.mds.map, same.ch.lg = TRUE)
+ 
+ ## hexaploid example
+ plot_genome_vs_map(maps.hexafake)
+ plot_genome_vs_map(maps.hexafake, same.ch.lg = TRUE)
+ } 
+ 
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

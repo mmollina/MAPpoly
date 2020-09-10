@@ -14,6 +14,13 @@ plot_mrk_info(input.data, mrk)
 \description{
 Plots summary statistics for a given marker
 }
+\examples{
+ \dontrun{
+ plot_mrk_info(tetra.solcap.geno.dist, 2680)
+ plot_mrk_info(tetra.solcap.geno.dist, "solcap_snp_c2_23828")
+ }   
+    
+}
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     analysis and haplotype phasing in experimental autopolyploid

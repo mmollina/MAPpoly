@@ -1,4 +1,4 @@
-#' Reestimate the recombination fractions in a genetic map
+#' Re-estimate the recombination fractions in a genetic map
 #' 
 #' This function re-estimates the recombination fractions between all markers in a given map.
 #'
@@ -12,22 +12,21 @@
 #'                     will choose the maximum likelihood configuration
 #'                     
 #' @param method indicates whether to use \code{'hmm'} (Hidden Markov Models) 
-#' or \code{'ols'} (Ordinary Least Squares) to reestimate the recombination fractions
+#' or \code{'ols'} (Ordinary Least Squares) to re-estimate the recombination fractions
 #'     
 #' @param weight if \code{TRUE} (default), it uses the LOD scores to perform a weighted
-#'    regression when the Ordinary Least Saquares is chosen
+#'    regression when the Ordinary Least Squares is chosen
 #'    
 #' @param verbose if \code{TRUE} (default), current progress is shown; if
 #'     \code{FALSE}, no output is produced
+#'     
 #' @param high.prec logical. If \code{TRUE} uses high precision 
 #' (long double) numbers in the HMM procedure implemented in C++,
-#' which can take a long time to perform (default = FALSE)     
+#' which can take a long time to perform (default = FALSE)  
+#'    
 #' @param max.rf.to.break.EM for internal use only.   
 #'     
-#' @return a numeric vector of size \code{m} indicating which
-#'     homologous in h2 represents the homologous in h1. If there is
-#'     no correspondence, i.e. different homologous, it returns NA for
-#'     that homologous
+#' @return An updated object of class \code{mappoly.map}
 #'     
 #' @references
 #'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
@@ -35,6 +34,10 @@
 #'     populations with high ploidy level using hidden Markov
 #'     models, _G3: Genes, Genomes, Genetics_. 
 #'     \url{https://doi.org/10.1534/g3.119.400378}     
+#'     
+#'     Stam P (1993) Construction of integrated genetic-linkage maps 
+#'     by means of a new computer package: Joinmap. _Plant J_ 3:739–744
+#'     \url{https://doi.org/10.1111/j.1365-313X.1993.00739.x}
 #'     
 #' @export reest_rf
 #' 

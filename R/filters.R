@@ -69,7 +69,14 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
 #' @param inter if \code{TRUE} (default), it plots markers or individuals vs. frequency of missing data
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
-#' 
+#'@examples
+#' \dontrun{
+#'     plot(tetra.solcap)
+#'     dat.filt.mrk <- filter_missing(input.data = tetra.solcap,
+#'                                    type = "marker", 
+#'                                    filter.thres = 0.1)
+#'     plot(dat.filt.mrk)
+#'}
 #' @export
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
@@ -105,7 +112,6 @@ filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
   mrk <- NULL
   if(interactive() && inter)
   {
-    op<-par(bg = "gray", xpd = TRUE)
     while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
     {
       na.num<-apply(input.data$geno.dose, 1, function(x,m) sum(x==m+1), m = input.data$m)
@@ -120,7 +126,9 @@ filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
         filter.thres  <- as.numeric(ANSWER)
     }
     rm.mrks.id<-which(perc.na > filter.thres)
-    if(length(rm.mrks.id)==0) return(input.data)
+    if(length(rm.mrks.id)==0){
+      return(input.data)
+    } 
     rm.mrks<-names(rm.mrks.id)
     if(nrow(input.data$geno)!=input.data$n.mrk)
       input.data$geno <-  input.data$geno %>%
@@ -134,7 +142,6 @@ filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
     if(!is.null(input.data$chisq.pval)) 
       input.data$chisq.pval <- input.data$chisq.pval[-rm.mrks.id]
     input.data$sequence.pos <- input.data$sequence.pos[-rm.mrks.id]
-    par(op)
     return(input.data)
   } else {
     na.num<-apply(input.data$geno.dose, 1, function(x,m) sum(x==m+1), m = input.data$m)
@@ -179,7 +186,6 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
   ind <- NULL
   if(interactive() && inter)
   {
-    op<-par(bg = "gray", xpd = TRUE)
     while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
     {
       na.num<-apply(input.data$geno.dose, 2, function(x,m) sum(x==m+1), m = input.data$m)
@@ -194,7 +200,9 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
         filter.thres  <- as.numeric(ANSWER)
     }
     rm.ind.id<-which(perc.na > filter.thres)
-    if(length(rm.ind.id)==0) return(input.data)
+    if(length(rm.ind.id)==0){
+      return(input.data)
+    } 
     rm.ind<-names(rm.ind.id)
     if(nrow(input.data$geno)!=input.data$n.mrk)
       input.data$geno <-  input.data$geno %>%
@@ -215,7 +223,6 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
       M<-cbind(M, input.data$geno.dose)
       input.data$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
     }
-    par(op)
     return(input.data)
   } else {
     na.num<-apply(input.data$geno.dose, 2, function(x,m) sum(x==m+1), m = input.data$m)
@@ -289,7 +296,6 @@ filter_segregation<-function(input.data, chisq.pval.thres = 10e-5, inter = TRUE)
   ANSWER <- "flag"
   if(interactive() && inter)
   {
-    op<-par(bg = "gray", xpd = TRUE)
     while(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
     {
       plot(log10(sort(input.data$chisq.pval, decreasing = TRUE)), xlab = "markers", ylab = "log10(p.val)", axes=F)
@@ -301,7 +307,6 @@ filter_segregation<-function(input.data, chisq.pval.thres = 10e-5, inter = TRUE)
       if(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
         chisq.pval.thres  <- as.numeric(ANSWER)
     }
-    par(op)
   }
   keep<-names(which(input.data$chisq.pval >= chisq.pval.thres))
   exclude<-names(which(input.data$chisq.pval < chisq.pval.thres))

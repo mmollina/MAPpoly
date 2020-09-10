@@ -24,13 +24,9 @@ Get a subset of an object of class \code{mappoly.rf.matrix}, i.e.
 }
 \examples{
  \dontrun{
-    data(hexafake)
     # sequence with 100 markers
     mrk.seq<-make_seq_mappoly(hexafake, 1:100)
-    counts.web<-cache_counts_twopt(mrk.seq, cached = TRUE)
     mrk.pairs<-est_pairwise_rf(input.seq = mrk.seq,
-                               count.cache = counts.web,
-                               n.clusters = 1,
                                verbose=TRUE)
     ## Full recombination fraction matrix
     mat<-rf_list_to_matrix(input.twopt=mrk.pairs)

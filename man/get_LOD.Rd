@@ -2,14 +2,12 @@
 % Please edit documentation in R/utils.R
 \name{get_LOD}
 \alias{get_LOD}
-\title{Extract the LOD Scores in a \code{'mappoly.compare'} or
-\code{'mappoly.try'} object}
+\title{Extract the LOD Scores in a \code{'mappoly.map'} object}
 \usage{
 get_LOD(x, sorted = TRUE)
 }
 \arguments{
-\item{x}{an object of class \code{'mappoly.compare'} or
-\code{'mappoly.try'}}
+\item{x}{an object of class \code{mappoly.map}}
 
 \item{sorted}{logical. if \code{TRUE}, the LOD Scores are displayed
 in a decreasing order}
@@ -18,7 +16,6 @@ in a decreasing order}
 a numeric vector containing the LOD Scores
 }
 \description{
-Extract the LOD Scores in a \code{'mappoly.compare'} or
-\code{'mappoly.try'} object
+Extract the LOD Scores in a \code{'mappoly.map'} object
 }
 \keyword{internal}

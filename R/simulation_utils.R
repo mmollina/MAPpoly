@@ -106,7 +106,6 @@ sim_cross_one_informative_parent<-function(m,
 #'                                      hom.allele.q)
 #'                                      }
 #' @keywords internal
-#' @export
 sim_cross_two_informative_parents<-function(m,
                                            n.mrk,
                                            rf.vec,

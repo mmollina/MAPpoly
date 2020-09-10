@@ -52,10 +52,47 @@ holds all non-redundant markers and its equivalence to the redundant ones}
 \description{
 This function merges two datasets of class \code{mappoly.data}. This can be useful
 when individuals of a population were genotyped using two or more techniques
-and have datasets in different files or formats. Please notice that the datasets
-should contain the same number of individuals, which must be represented identically
-in both datasets (e.g. \code{Ind_1} in both datasets, not \code{Ind_1}
+and have datasets in different files or formats. Please notice that the datasets 
+should contain the same number of individuals and they must be represented identically 
+in both datasets  (e.g. \code{Ind_1} in both datasets, not \code{Ind_1}
 in one dataset and \code{ind_1} or \code{Ind.1} in the other).
+}
+\examples{
+\dontrun{
+## Loading three chromosomes of sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
+dat <- NULL
+for(i in 1:3){
+  cat("Loading chromosome", i, "...\n")
+  invisible(capture.output(y <- {
+    tempfl <- tempfile(pattern = paste0("ch", i), fileext = ".vcf.gz")
+    x <- "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr"
+    address <- paste0(x, i, ".vcf.gz")
+    download.file(url = address, destfile = tempfl)
+    dattemp <- read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2", ploidy = 6)
+    dat <- merge_datasets(dat, dattemp)
+  }))
+  cat("\n")
+}
+## Filtering dataset by marker
+dat <- filter_missing(input.data = dat, type = "marker", 
+                      filter.thres = 0.05, inter = FALSE)
+
+## Filtering dataset by individual
+dat <- filter_missing(input.data = dat, type = "individual", 
+                      filter.thres = 0.05, inter = TRUE)
+print(dat, detailed = TRUE)
+
+## Segregation test
+pval.bonf <- 0.05/dat$n.mrk
+mrks.chi.filt <- filter_segregation(dat, 
+                                    chisq.pval.thres =  pval.bonf, 
+                                    inter = TRUE)
+seq.init<-make_seq_mappoly(mrks.chi.filt)
+length(seq.init$seq.mrk.names)
+plot(seq.init)
+print(seq.init, detailed = TRUE)
+}
+
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

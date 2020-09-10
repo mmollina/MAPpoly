@@ -14,6 +14,7 @@
 #' require(polymapR)
 #' data("screened_data3")
 #' mappoly.data <- import_data_from_polymapR(screened_data3, 4)
+#' plot(mappoly.data)
 #'}
 #'
 #' @author Marcelo Mollinari \email{mmollin@ncsu.edu}
@@ -77,7 +78,7 @@ import_data_from_polymapR <- function(input.data,
 #' Function to import phased map lists from polymapR
 #' 
 #' @param maplist a list of phased maps obtained using function 
-#' \code{create_phased_maplist} from pacakge \code{polymapR} 
+#' \code{create_phased_maplist} from package \code{polymapR} 
 #' @param mappoly.data a dataset used to obtain \code{maplist}, 
 #' converted into class \code{mappoly.data}
 #' @param ploidy the ploidy level     

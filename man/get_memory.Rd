@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{get_memory}
 \alias{get_memory}
-\title{Get used memory (unix only)}
+\title{Get used memory (unix systems only)}
 \usage{
 get_memory()
 }
@@ -10,6 +10,6 @@ get_memory()
 \item{void}{internal function to be documented}
 }
 \description{
-Get used memory (unix only)
+Get used memory (unix systems only)
 }
 \keyword{internal}

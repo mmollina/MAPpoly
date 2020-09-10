@@ -4,7 +4,6 @@
 #' @keywords internal
 #' @import RCurl
 #' @export get_cache_two_pts_from_web
-
 get_cache_two_pts_from_web <- function(m, url.address = NULL, joint.prob = TRUE) {
     if (is.null(url.address)) {
         if (m == 2)

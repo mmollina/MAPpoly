@@ -2,7 +2,7 @@
 % Please edit documentation in R/check_phase_configurations.R
 \name{ph_list_to_matrix}
 \alias{ph_list_to_matrix}
-\title{MAPpoly object conversion: phase configurations (list to matrix)}
+\title{Linkage phase format conversion: list to matrix}
 \usage{
 ph_list_to_matrix(L, m)
 }

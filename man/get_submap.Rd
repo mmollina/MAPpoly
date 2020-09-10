@@ -30,10 +30,10 @@ will choose the configuration associated with the maximum
 likelihood}
 
 \item{reestimate.rf}{logical. If \code{TRUE} (default) the recombination fractions 
-between markers are reestimated}
+between markers are re-estimated}
 
 \item{reestimate.phase}{logical. If \code{TRUE}, the linkage phase configurations are 
-reestimated (default = FALSE)}
+re-estimated (default = FALSE)}
 
 \item{thres.twopt}{the LOD threshold used to determine if the linkage
 phases compared via two-point analysis should be considered (default = 5)}
@@ -59,31 +59,31 @@ which can take a long time to perform (default = FALSE)}
 }
 \description{
 Given a pre-constructed map, it extracts a sub-map for a provided 
-sequence of marker positions and can optionally update it's linkage phase
+sequence of marker positions. Optionally, it can update the linkage phase
 configurations and respective recombination fractions.
 }
 \examples{
  \dontrun{
-    ## selecting the 100 first markers in linkage group 1
+    ## selecting the 20 first markers in linkage group 1
     ####
     ## re-estimating recombination fractions     
     submap1.lg1<-get_submap(input.map = maps.hexafake[[1]], 
-                           mrk.pos = 1:100, verbose = TRUE, 
+                           mrk.pos = 1:20, verbose = TRUE, 
                            tol.final = 10e-3)
     ## re-estimating the recombination fractions and linkage phases
     submap2.lg1<-get_submap(input.map = maps.hexafake[[1]], 
-                           mrk.pos = 1:100, verbose = TRUE,
+                           mrk.pos = 1:20, verbose = TRUE,
                            reestimate.phase = TRUE, 
                            tol.final = 10e-3)
    ## no recombination fraction re-estimation                                                     
    submap3.lg1<-get_submap(input.map = maps.hexafake[[1]], 
-                           mrk.pos = 1:100, reestimate.rf = FALSE,
+                           mrk.pos = 1:20, reestimate.rf = FALSE,
                            verbose = TRUE, 
                            tol.final = 10e-3)                      
   plot(maps.hexafake[[1]])
-  plot(submap1.lg1, mrk.names = T, cex = .5)
-  plot(submap2.lg1, mrk.names = T, cex = .5)
-  plot(submap3.lg1, mrk.names = T, cex = .5)
+  plot(submap1.lg1, mrk.names = T, cex = .8)
+  plot(submap2.lg1, mrk.names = T, cex = .8)
+  plot(submap3.lg1, mrk.names = T, cex = .8)
   }
 
 }

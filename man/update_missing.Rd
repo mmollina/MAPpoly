@@ -19,9 +19,8 @@ Updates the missing data in the dosage matrix of an object of class
 }
 \examples{
 \dontrun{
-data = data(hexafake.dist.geno)
-data.updated = update_missing(data, prob.thres = 0.5)
-print(data)
+data.updated = update_missing(tetra.solcap.geno.dist, prob.thres = 0.5)
+print(tetra.solcap.geno.dist)
 print(data.updated)
 }
     

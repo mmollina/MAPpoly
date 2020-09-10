@@ -283,7 +283,6 @@ read_geno <- function(file.in, filter.non.conforming = TRUE, elim.redundant = TR
 }
 
 #' @rdname read_geno
-#' @keywords internal
 #' @export
 print.mappoly.data <- function(x, detailed = FALSE, ...) {
   cat("This is an object of class 'mappoly.data'\n")
@@ -321,7 +320,6 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
 
 #' @rdname read_geno
 #' @export
-#' @keywords internal
 #' @importFrom graphics barplot layout mtext image legend 
 #' @importFrom grDevices colorRampPalette
 #' @importFrom grDevices blues9

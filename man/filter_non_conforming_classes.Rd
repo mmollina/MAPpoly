@@ -2,14 +2,14 @@
 % Please edit documentation in R/filters.R
 \name{filter_non_conforming_classes}
 \alias{filter_non_conforming_classes}
-\title{Filter non-conforming classes in F1 segregation}
+\title{Filter non-conforming classes in F1, non double reduced population.}
 \usage{
 filter_non_conforming_classes(input.data, prob.thres = NULL)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
-Filter non-conforming classes in F1 segregation
+Filter non-conforming classes in F1, non double reduced population.
 }
 \keyword{internal}

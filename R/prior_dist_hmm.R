@@ -1,9 +1,8 @@
 #' Estimate genetic map using as input the probability distribution of
-#' genotypes
+#' genotypes (wrapper function to C++)
 #'
 #' @param void intern function to be documented
 #' @keywords internal
-#' @export poly_hmm_est
 poly_hmm_est <-
   function(m,
            n.mrk,

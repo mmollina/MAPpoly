@@ -52,11 +52,12 @@
 #'
 #' @examples
 #' \dontrun{
-#'     data(hexafake)
 #'     all.mrk<-make_seq_mappoly(hexafake, 'all')
 #'     seq1.mrk<-make_seq_mappoly(hexafake, 'seq1')
+#'     plot(seq1.mrk)
 #'     some.mrk.pos<-c(1,4,28,32,45)
 #'     (some.mrk.1<-make_seq_mappoly(hexafake, some.mrk.pos))
+#'     plot(some.mrk.1)
 #'     #same thing
 #'     (some.mrk.names<-hexafake$mrk.names[c(1,4,28,32,45)])
 #'     some.mrk.2<-make_seq_mappoly(hexafake, some.mrk.names)
@@ -67,18 +68,13 @@
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'     
 #'     ## Making a sequence using the intersection between groups and genomic information
-#'     solcap.geno.file <- system.file('extdata', 'tetra_solcap_geno', package = 'mappoly')
-#'     dat.dose.mpl <- read_geno(file.in  = solcap.geno.file)
-#'     seq.init <- make_seq_mappoly(dat.dose.mpl, 'all')
-#'     counts <- cache_counts_twopt(input.seq = seq.init, cached = TRUE)
-#'     all.rf.pairwise <- est_pairwise_rf(input.seq = seq.init, 
-#'                                        count.cache = counts, 
-#'                                        n.clusters = 12)
-#'    mat <- rf_list_to_matrix(input.twopt = all.rf.pairwise)
+#'     s <- make_seq_mappoly(tetra.solcap, 'all')
+#'     tpt <- est_pairwise_rf(input.seq = s, 
+#'                            n.clusters = 7)
+#'    mat <- rf_list_to_matrix(tpt)
 #'    grs <- group_mappoly(input.mat = mat,
 #'                         expected.groups = 12,
-#'                         comp.mat = TRUE, 
-#'                         inter = TRUE)
+#'                         comp.mat = FALSE)
 #'    seq1 = make_seq_mappoly(grs, arg = 1, genomic.info = 1)
 #' }
 #'
@@ -224,7 +220,6 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.in
 }
 
 #' @rdname make_seq_mappoly
-#' @keywords internal
 #' @export
 print.mappoly.sequence <- function(x, ...) {
   cat("This is an object of class 'mappoly.sequence'\n")
@@ -263,7 +258,6 @@ print.mappoly.sequence <- function(x, ...) {
 
 #' @rdname make_seq_mappoly
 #' @export
-#' @keywords internal
 #' @importFrom graphics barplot layout mtext image legend 
 #' @importFrom grDevices colorRampPalette
 plot.mappoly.sequence <- function(x, ...)

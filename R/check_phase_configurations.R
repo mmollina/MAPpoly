@@ -25,7 +25,7 @@ elim_equiv <- function(Z) {
 get_ij <- function(w) as.numeric(unlist(strsplit(w, split = "-")))
 
 
-#' MAPpoly object conversion: phase configurations (matrix to list)
+#' Linkage phase format conversion: matrix to list
 #' 
 #' This function converts linkage phase configurations from matrix
 #' form to list
@@ -33,10 +33,9 @@ get_ij <- function(w) as.numeric(unlist(strsplit(w, split = "-")))
 #' @param M matrix whose columns represent homologous chromosomes and
 #'     the rows represent markers
 #' 
-#' @return a list of configuration phases
+#' @return a list of linkage phase configurations
 #' 
 #' @keywords internal
-#' 
 #' @export
 ph_matrix_to_list <- function(M) {
     w <- lapply(split(M, seq(NROW(M))), function(x, M) which(x == 1))
@@ -44,7 +43,7 @@ ph_matrix_to_list <- function(M) {
     w
 }
 
-#' MAPpoly object conversion: phase configurations (list to matrix)
+#' Linkage phase format conversion: list to matrix
 #' 
 #' This function converts linkage phase configurations from list
 #' to matrix form
@@ -57,7 +56,6 @@ ph_matrix_to_list <- function(M) {
 #'     the rows represent markers
 #' 
 #' @keywords internal
-#' 
 #' @export
 ph_list_to_matrix <- function(L, m) {
     M <- matrix(0, nrow = length(L), ncol = m)
@@ -78,7 +76,6 @@ ph_list_to_matrix <- function(L, m) {
 #'     discarded (if abs(ph_LOD) > thres)
 #' @return a list of indices for both parents
 #' @keywords internal
-#' @export
 get_indices_from_selected_phases <- function(x, thres) {
     y <- rownames(x)[which(abs(x[, 1]) <= abs(thres))]
     y <- matrix(as.numeric(unlist(strsplit(y, split = "-"))), ncol = 2, byrow = TRUE)
@@ -334,9 +331,8 @@ get_rf_from_list <- function(twopt, ph.list) {
 #'   \dontrun{
 #'     seq.all.mrk <- make_seq_mappoly(hexafake, 'all')
 #'     id <- get_genomic_order(seq.all.mrk)
-#'     counts <- cache_counts_twopt(seq.all.mrk, cached = TRUE)
 #'     seq10 <- make_seq_mappoly(hexafake, rownames(id)[1:10])
-#'     twopt<-est_pairwise_rf(seq10, counts)
+#'     twopt<-est_pairwise_rf(seq10)
 #'     
 #'     ## Using the first 10 markers 
 #'     l10.seq.3.0 <- ls_linkage_phases(input.seq = seq10, thres = 3, twopt = twopt)

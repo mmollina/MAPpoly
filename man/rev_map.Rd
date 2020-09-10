@@ -10,7 +10,13 @@ rev_map(input.map)
 \item{input.map}{an object of class \code{mappoly.map}}
 }
 \description{
-Provides the reverse version of a given map.
+Provides the reverse of a given map.
+}
+\examples{
+\dontrun{
+    plot_genome_vs_map(solcap.mds.map[[1]])
+    plot_genome_vs_map(rev_map(solcap.mds.map[[1]]))
+}
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

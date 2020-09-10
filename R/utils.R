@@ -1,7 +1,5 @@
-#' Extract the LOD Scores in a \code{'mappoly.compare'} or
-#' \code{'mappoly.try'} object
-#' @param x an object of class \code{'mappoly.compare'} or
-#'     \code{'mappoly.try'}
+#' Extract the LOD Scores in a \code{'mappoly.map'} object
+#' @param x an object of class \code{mappoly.map}
 #' @param sorted logical. if \code{TRUE}, the LOD Scores are displayed
 #'     in a decreasing order
 #' @return a numeric vector containing the LOD Scores
@@ -40,7 +38,7 @@ get_w_m <- function(m){
 }
 
 
-#' Get used memory (unix only)
+#' Get used memory (unix systems only)
 #'
 #' @param void internal function to be documented
 #' @keywords internal
@@ -65,10 +63,15 @@ get_memory<-function(){
 
 #' Reverse map
 #'
-#' Provides the reverse version of a given map.
+#' Provides the reverse of a given map.
 #'
 #' @param input.map an object of class \code{mappoly.map}
-#'
+#' 
+#'@examples
+#' \dontrun{
+#'     plot_genome_vs_map(solcap.mds.map[[1]])
+#'     plot_genome_vs_map(rev_map(solcap.mds.map[[1]]))
+#'}
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #'@export
@@ -162,7 +165,6 @@ export_data_to_polymapR <- function(data.in)
 #'
 #' @param void internal function to be documented
 #' @keywords internal
-#' @export
 #' @importFrom cli rule
 msg <- function(text, line = 1)
     cli::rule(line = line, right = text) %>%
@@ -188,7 +190,6 @@ text_col <- function(x) {
   if (isTRUE(theme$dark)) crayon::white(x) else crayon::black(x)
   
 }
-
 
 #' Map functions
 #'
@@ -319,9 +320,12 @@ plot_compare_haplotypes <- function(m, hom.allele.p1, hom.allele.q1, hom.allele.
 #' Returns information related to a given set of markers
 #'
 #' @param input.data an object \code{'mappoly.data'}
-#' 
 #' @param mrks marker sequence index (integer vector)
-#' 
+#' @examples
+#'  \dontrun{
+#'  print_mrk(tetra.solcap.geno.dist, 1:5)
+#'  print_mrk(hexafake, 256)
+#'  }  
 #' @export
 print_mrk<-function(input.data, mrks)
 {
@@ -348,12 +352,11 @@ print_mrk<-function(input.data, mrks)
 }
 
 #' Check if it is possible to estimate the recombination
-#' fraction between neighbour markers using two-point
+#' fraction between neighbor markers using two-point
 #' estimation
 #'
 #' @param void internal function to be documented
 #' @keywords internal
-#' @export
 pos_twopt_est<-function(input.seq)
 {
   dp<-abs(abs(input.seq$seq.dose.p-(input.seq$m/2))-(input.seq$m/2))
@@ -424,7 +427,7 @@ perm_pars <- function(v) {
     return(result)
 }
 
-#' Color pallete ggplot-like
+#' Color pallet ggplot-like
 #'
 #' @param void internal function to be documented
 #' @keywords internal
@@ -449,9 +452,8 @@ gg_color_hue <- function(n) {
 #'     
 #' @examples
 #' \dontrun{
-#' data = data(hexafake.dist.geno)
-#' data.updated = update_missing(data, prob.thres = 0.5)
-#' print(data)
+#' data.updated = update_missing(tetra.solcap.geno.dist, prob.thres = 0.5)
+#' print(tetra.solcap.geno.dist)
 #' print(data.updated)
 #' }
 #'     
@@ -473,7 +475,6 @@ update_missing<-function(input.data,
 #'
 #' @param void internal function to be documented
 #' @keywords internal
-#' @export
 mrk_chisq_test<-function(x, m){
   y<-x[-c(1:(m+1))]
   y[y==m+1]<-NA
@@ -488,15 +489,21 @@ mrk_chisq_test<-function(x, m){
 }
 
 
-#' Get genomic order of the markers
+#' Get the genomic position of markers in a sequence
 #'
-#' This functions gets the genomic order of the markers, if provided.
+#' This functions gets the genomic position of markers in a sequence and
+#' return an ordered data frame with the name and position of each marker
 #'
 #' @param input.seq a sequence object of class \code{mappoly.sequence} 
 #' 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' 
-#' @keywords genomic
+#' @examples
+#' \dontrun{
+#' s1<-make_seq_mappoly(tetra.solcap, "all")
+#' o1<-get_genomic_order(s1)
+#' head(o1)
+#' }
 #' @export
 get_genomic_order<-function(input.seq){
   if (!class(input.seq) == "mappoly.sequence")
@@ -515,13 +522,13 @@ get_genomic_order<-function(input.seq){
     else{
       message("Ordering markers based on sequence position information")
       M<-data.frame(seq.pos = input.seq$sequence.pos, row.names = input.seq$seq.mrk.names)
-      return(M[order(M[,1]),])
+      return(M[order(as.numeric(M[,1])),])
     }
   } else{
     M<-data.frame(seq = input.seq$sequence, 
                   seq.pos = input.seq$sequence.pos, 
                   row.names = input.seq$seq.mrk.names)
-    return(M[order(M[,1], as.numeric(M[,2])),])
+    return(M[order(as.numeric(M[,1]), as.numeric(M[,2])),])
   }
 }
 
@@ -1163,9 +1170,9 @@ check_data_dist_sanity <- function(x){
 #'
 #' This function merges two datasets of class \code{mappoly.data}. This can be useful
 #' when individuals of a population were genotyped using two or more techniques
-#' and have datasets in different files or formats. Please notice that the datasets
-#' should contain the same number of individuals, which must be represented identically
-#' in both datasets (e.g. \code{Ind_1} in both datasets, not \code{Ind_1}
+#' and have datasets in different files or formats. Please notice that the datasets 
+#' should contain the same number of individuals and they must be represented identically 
+#' in both datasets  (e.g. \code{Ind_1} in both datasets, not \code{Ind_1}
 #' in one dataset and \code{ind_1} or \code{Ind.1} in the other).
 #'
 #' @param dat.1 the first dataset of class \code{mappoly.data} to be merged
@@ -1210,6 +1217,41 @@ check_data_dist_sanity <- function(x){
 #' holds all non-redundant markers and its equivalence to the redundant ones}
 #' 
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' @examples
+#' \dontrun{
+#' ## Loading three chromosomes of sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
+#' dat <- NULL
+#' for(i in 1:3){
+#'   cat("Loading chromosome", i, "...\n")
+#'   invisible(capture.output(y <- {
+#'     tempfl <- tempfile(pattern = paste0("ch", i), fileext = ".vcf.gz")
+#'     x <- "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr"
+#'     address <- paste0(x, i, ".vcf.gz")
+#'     download.file(url = address, destfile = tempfl)
+#'     dattemp <- read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2", ploidy = 6)
+#'     dat <- merge_datasets(dat, dattemp)
+#'   }))
+#'   cat("\n")
+#' }
+#' ## Filtering dataset by marker
+#' dat <- filter_missing(input.data = dat, type = "marker", 
+#'                       filter.thres = 0.05, inter = FALSE)
+#' 
+#' ## Filtering dataset by individual
+#' dat <- filter_missing(input.data = dat, type = "individual", 
+#'                       filter.thres = 0.05, inter = TRUE)
+#' print(dat, detailed = TRUE)
+#' 
+#' ## Segregation test
+#' pval.bonf <- 0.05/dat$n.mrk
+#' mrks.chi.filt <- filter_segregation(dat, 
+#'                                     chisq.pval.thres =  pval.bonf, 
+#'                                     inter = TRUE)
+#' seq.init<-make_seq_mappoly(mrks.chi.filt)
+#' length(seq.init$seq.mrk.names)
+#' plot(seq.init)
+#' print(seq.init, detailed = TRUE)
+#'}
 #'
 #' @references
 #'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
@@ -1340,6 +1382,15 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
 #'
 #' @return a dataframe containing a brief summary of all maps contained in \code{map.object}
 #' 
+#' @examples
+#'  \dontrun{
+#' (tetra.sum <- summary_maps(solcap.err.map))
+#' formattable::formattable(tetra.sum)
+#' (hexa.sum <- summary_maps(maps.hexafake))
+#' formattable::formattable(hexa.sum)
+#' }
+#' 
+#
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'
 #' @export summary_maps
@@ -1408,6 +1459,14 @@ get_tab_mrks = function(x){
 #' @return an updated object of class \code{mappoly.map}, containing the original map plus redundant markers
 #' 
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' 
+#' @example 
+#'  \dontrun{
+#'  orig.map   <- solcap.err.map
+#'  up.map <- lapply(solcap.err.map, update_map)
+#'  formattable::formattable(summary_maps(orig.map))
+#'  formattable::formattable(summary_maps(up.map))
+#' }
 #' 
 #' @export update_map
 #' 

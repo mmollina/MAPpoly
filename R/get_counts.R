@@ -11,12 +11,8 @@
 #' @return S3 object; a list consisting of
 #' \item{counts}{counts for each one of the classes}
 #' @keywords internal
-#' @examples
-#' get_counts_one_parent(ploidy=4,gen.par.mk1=0:2,gen.par.mk2=0:2,gen.prog.mk1=1,gen.prog.mk2=1)
 #'
 #' @useDynLib mappoly
-#' @export
-#'
 get_counts_one_parent <- function(ploidy, gen.par.mk1, gen.par.mk2, gen.prog.mk1, gen.prog.mk2) {
     res <- .Call("get_counts_one_parent_cpp", as.numeric(ploidy), as.numeric(gen.par.mk1), as.numeric(gen.par.mk2), as.numeric(gen.prog.mk1), as.numeric(gen.prog.mk2), 
         as.numeric(rep(0, ploidy + 1)), PACKAGE = "mappoly")
@@ -140,7 +136,6 @@ get_counts <- function(m, P.k = NULL, P.k1 = NULL, Q.k = NULL, Q.k1 = NULL, verb
 #'
 #' @param void interfunction to be documented
 #' @keywords internal
-#' @export get_counts_all_phases
 get_counts_all_phases <- function(x, m, verbose = FALSE, make.names = FALSE, joint.prob = FALSE) {
     pk <- x[1]
     pk1 <- x[2]

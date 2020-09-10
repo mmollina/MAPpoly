@@ -49,6 +49,9 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
 
 # Related software
 
+* Simulations
+  * [PedigreeSim: Simulation of genetic marker data in diploid and polyploid pedigreed populations.](https://www.wur.nl/en/show/Software-PedigreeSim.htm)
+
 * Genotype calling
   * [fitPoly: Genotype Calling for Bi-Allelic Marker Assays](https://cran.r-project.org/web/packages/fitPoly/)
   * [ClusterCall: Automated tetraploid genotype calling by hierarchical clustering](https://potatobreeding.cals.wisc.edu/software/)
@@ -71,6 +74,7 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
   * [diaQTL: QTL analysis of diploid and autotetraploid diallel populations](https://github.com/jendelman/diaQTL)
 
 # Miscellaneous
+* [Supplementary scripts for Mollinari and Garcia (2019)](https://github.com/mmollina/Autopolyploid_Linkage)
 * [Workshop: Polyploid Genetic Data Analysis: From Dosage Calling to Linkage and QTL Analysis](http://152.1.45.19/esalq_2019.html)
 * [Miscellaneous scripts](https://github.com/mmollina/MAPpoly_vignettes/blob/master/README.md)
 

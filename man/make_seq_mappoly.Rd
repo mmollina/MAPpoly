@@ -67,11 +67,12 @@ Makes a sequence of markers based on an object of another class.
 }
 \examples{
 \dontrun{
-    data(hexafake)
     all.mrk<-make_seq_mappoly(hexafake, 'all')
     seq1.mrk<-make_seq_mappoly(hexafake, 'seq1')
+    plot(seq1.mrk)
     some.mrk.pos<-c(1,4,28,32,45)
     (some.mrk.1<-make_seq_mappoly(hexafake, some.mrk.pos))
+    plot(some.mrk.1)
     #same thing
     (some.mrk.names<-hexafake$mrk.names[c(1,4,28,32,45)])
     some.mrk.2<-make_seq_mappoly(hexafake, some.mrk.names)
@@ -82,18 +83,13 @@ Makes a sequence of markers based on an object of another class.
     unique.mrks<-make_seq_mappoly(red.mrk)
     
     ## Making a sequence using the intersection between groups and genomic information
-    solcap.geno.file <- system.file('extdata', 'tetra_solcap_geno', package = 'mappoly')
-    dat.dose.mpl <- read_geno(file.in  = solcap.geno.file)
-    seq.init <- make_seq_mappoly(dat.dose.mpl, 'all')
-    counts <- cache_counts_twopt(input.seq = seq.init, cached = TRUE)
-    all.rf.pairwise <- est_pairwise_rf(input.seq = seq.init, 
-                                       count.cache = counts, 
-                                       n.clusters = 12)
-   mat <- rf_list_to_matrix(input.twopt = all.rf.pairwise)
+    s <- make_seq_mappoly(tetra.solcap, 'all')
+    tpt <- est_pairwise_rf(input.seq = s, 
+                           n.clusters = 7)
+   mat <- rf_list_to_matrix(tpt)
    grs <- group_mappoly(input.mat = mat,
                         expected.groups = 12,
-                        comp.mat = TRUE, 
-                        inter = TRUE)
+                        comp.mat = FALSE)
    seq1 = make_seq_mappoly(grs, arg = 1, genomic.info = 1)
 }
 
@@ -108,4 +104,3 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}, with modifications by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 }
-\keyword{internal}

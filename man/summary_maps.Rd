@@ -15,6 +15,15 @@ a dataframe containing a brief summary of all maps contained in \code{map.object
 \description{
 This function generates a brief summary table of a list of \code{mappoly.map} objects
 }
+\examples{
+ \dontrun{
+(tetra.sum <- summary_maps(solcap.err.map))
+formattable::formattable(tetra.sum)
+(hexa.sum <- summary_maps(maps.hexafake))
+formattable::formattable(hexa.sum)
+}
+
+}
 \author{
 Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 }

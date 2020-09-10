@@ -147,9 +147,8 @@
 #'     populations with high ploidy level using hidden Markov
 #'     models, _G3: Genes, Genomes, Genetics_. 
 #'     https://doi.org/10.1534/g3.119.400378 
-#'
+#' @rdname est_rf_hmm
 #' @export est_rf_hmm
-#'
 est_rf_hmm <- function(input.seq, input.ph = NULL,
                        thres = 0.5, twopt = NULL,
                        verbose = FALSE, 
@@ -682,6 +681,7 @@ est_rf_hmm_sequential<-function(input.seq,
 
 #' @rdname est_rf_hmm
 #' @export 
+
 print.mappoly.map <- function(x, detailed = FALSE, ...) {
   cat("This is an object of class 'mappoly.map'\n")
   cat("    Ploidy level:\t", x$info$m, "\n")

@@ -27,11 +27,11 @@
 #'
 #' @param x an object of class \code{mappoly.rf.matrix}
 #'
-#' @param type type of matrix that shuold be printed. Can be one of the
+#' @param type type of matrix that should be printed. Can be one of the
 #'        following: \code{"rf"}, for recombination fraction or \code{"lod"}
 #'        for LOD Score
 #'
-#' @param ord the order in which the markes should be ploted (default = NULL)
+#' @param ord the order in which the markers should be plotted (default = NULL)
 #'
 #' @param rem which markers should be removed from the heatmap (default = NULL)
 #'
@@ -47,14 +47,11 @@
 #'
 #' @examples
 #'   \dontrun{
-#'     data(hexafake)
 #'     all.mrk<-make_seq_mappoly(hexafake, 'all')
 #'     red.mrk<-elim_redundant(all.mrk)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
-#'     counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
 #'     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-#'                                count.cache = counts.web,
-#'                                n.clusters = 16,
+#'                                n.clusters = 7,
 #'                                verbose=TRUE)
 #'
 #'     ## Full recombination fraction matrix
@@ -67,7 +64,6 @@
 #'                                 thresh.LOD.ph = 5,
 #'                                 thresh.LOD.rf = 5,
 #'                                 thresh.rf = 0.5,
-#'                                 n.clusters = 1,
 #'                                 verbose = TRUE)
 #'     plot(mat.filt)
 #'     plot(mat.filt, type = "lod")
@@ -187,7 +183,6 @@ rf_list_to_matrix <- function(input.twopt,
 }
 
 #' @rdname rf_list_to_matrix
-#' @keywords internal 
 #' @export
 print.mappoly.rf.matrix <- function(x, ...) {
   ## checking for correct object
@@ -215,7 +210,6 @@ print.mappoly.rf.matrix <- function(x, ...) {
 }
 
 #' @rdname rf_list_to_matrix
-#' @keywords internal 
 #' @export
 plot.mappoly.rf.matrix <- function(x, type = c("rf", "lod"), ord = NULL, rem = NULL, main.text = NULL, index = TRUE, ...)
 {
@@ -271,7 +265,6 @@ plot.mappoly.rf.matrix <- function(x, type = c("rf", "lod"), ord = NULL, rem = N
 #'
 #' @param void internal function to be documented
 #' @keywords internal
-#' @export
 select_rf <- function(x, thresh.LOD.ph, thresh.LOD.rf, thresh.rf, shared.alleles = FALSE)
 {
   if(any(is.na(x)))

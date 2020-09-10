@@ -58,14 +58,11 @@ linkage across the whole linkage group (false positive).
 }
 \examples{
  \dontrun{
-    data(hexafake)
     all.mrk<-make_seq_mappoly(hexafake, 'all')
     red.mrk<-elim_redundant(all.mrk)
     unique.mrks<-make_seq_mappoly(red.mrk)
-    counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-                               count.cache = counts.web,
-                               n.clusters = 16,
+                               n.clusters = 7,
                                verbose=TRUE)
 
     ## Full recombination fraction matrix

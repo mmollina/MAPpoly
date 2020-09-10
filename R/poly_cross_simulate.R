@@ -9,6 +9,8 @@
 #'  located. For instance, a vector containing \eqn{(1,3,4)} means that
 #'  the marker has three doses located in the chromosomes 1, 3 and 4. For
 #'  zero doses, use 0.
+#'  For more sophisticated simulations, we strongly recommend using PedigreeSim V2.0
+#'  \url{https://www.wur.nl/en/show/Software-PedigreeSim.htm}
 #'
 #' @param m ploidy level. Must be an even number
 #' 
@@ -48,6 +50,8 @@
 #'     h.temp<-sim_homologous(m=6, n.mrk=20, max.d=3, max.ph=3, seed=123)
 #'     fake.poly.dat<-poly_cross_simulate(m=6, rf.vec=.05, n.mrk=20,
 #'                                   n.ind=200, h.temp, seed=123)
+#'     plot(fake.poly.dat)
+#'                                    
 #'                                   
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'

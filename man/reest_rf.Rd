@@ -2,7 +2,7 @@
 % Please edit documentation in R/reestimate_map.R
 \name{reest_rf}
 \alias{reest_rf}
-\title{Reestimate the recombination fractions in a genetic map}
+\title{Re-estimate the recombination fractions in a genetic map}
 \usage{
 reest_rf(
   input.map,
@@ -27,10 +27,10 @@ reest_rf(
 will choose the maximum likelihood configuration}
 
 \item{method}{indicates whether to use \code{'hmm'} (Hidden Markov Models) 
-or \code{'ols'} (Ordinary Least Squares) to reestimate the recombination fractions}
+or \code{'ols'} (Ordinary Least Squares) to re-estimate the recombination fractions}
 
 \item{weight}{if \code{TRUE} (default), it uses the LOD scores to perform a weighted
-regression when the Ordinary Least Saquares is chosen}
+regression when the Ordinary Least Squares is chosen}
 
 \item{verbose}{if \code{TRUE} (default), current progress is shown; if
 \code{FALSE}, no output is produced}
@@ -42,10 +42,7 @@ which can take a long time to perform (default = FALSE)}
 \item{max.rf.to.break.EM}{for internal use only.}
 }
 \value{
-a numeric vector of size \code{m} indicating which
-    homologous in h2 represents the homologous in h1. If there is
-    no correspondence, i.e. different homologous, it returns NA for
-    that homologous
+An updated object of class \code{mappoly.map}
 }
 \description{
 This function re-estimates the recombination fractions between all markers in a given map.
@@ -55,5 +52,9 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     analysis and haplotype phasing in experimental autopolyploid
     populations with high ploidy level using hidden Markov
     models, _G3: Genes, Genomes, Genetics_. 
-    \url{https://doi.org/10.1534/g3.119.400378}
+    \url{https://doi.org/10.1534/g3.119.400378}     
+    
+    Stam P (1993) Construction of integrated genetic-linkage maps 
+    by means of a new computer package: Joinmap. _Plant J_ 3:739–744
+    \url{https://doi.org/10.1111/j.1365-313X.1993.00739.x}
 }

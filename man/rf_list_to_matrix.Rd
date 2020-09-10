@@ -49,11 +49,11 @@ the number of homologues that share alleles (default = FALSE)}
 
 \item{...}{currently ignored}
 
-\item{type}{type of matrix that shuold be printed. Can be one of the
+\item{type}{type of matrix that should be printed. Can be one of the
 following: \code{"rf"}, for recombination fraction or \code{"lod"}
 for LOD Score}
 
-\item{ord}{the order in which the markes should be ploted (default = NULL)}
+\item{ord}{the order in which the markers should be plotted (default = NULL)}
 
 \item{rem}{which markers should be removed from the heatmap (default = NULL)}
 
@@ -79,14 +79,11 @@ fraction matrix
 }
 \examples{
   \dontrun{
-    data(hexafake)
     all.mrk<-make_seq_mappoly(hexafake, 'all')
     red.mrk<-elim_redundant(all.mrk)
     unique.mrks<-make_seq_mappoly(red.mrk)
-    counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-                               count.cache = counts.web,
-                               n.clusters = 16,
+                               n.clusters = 7,
                                verbose=TRUE)
 
     ## Full recombination fraction matrix
@@ -99,7 +96,6 @@ fraction matrix
                                 thresh.LOD.ph = 5,
                                 thresh.LOD.rf = 5,
                                 thresh.rf = 0.5,
-                                n.clusters = 1,
                                 verbose = TRUE)
     plot(mat.filt)
     plot(mat.filt, type = "lod")
@@ -116,4 +112,3 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }
-\keyword{internal}

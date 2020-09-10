@@ -8,7 +8,7 @@ import_phased_maplist_from_polymapR(maplist, mappoly.data, ploidy = NULL)
 }
 \arguments{
 \item{maplist}{a list of phased maps obtained using function 
-\code{create_phased_maplist} from pacakge \code{polymapR}}
+\code{create_phased_maplist} from package \code{polymapR}}
 
 \item{mappoly.data}{a dataset used to obtain \code{maplist}, 
 converted into class \code{mappoly.data}}

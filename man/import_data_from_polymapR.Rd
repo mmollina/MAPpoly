@@ -32,6 +32,7 @@ Function to import datasets from polymapR
 require(polymapR)
 data("screened_data3")
 mappoly.data <- import_data_from_polymapR(screened_data3, 4)
+plot(mappoly.data)
 }
 
 }

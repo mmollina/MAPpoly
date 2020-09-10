@@ -3,7 +3,7 @@
 \name{pos_twopt_est}
 \alias{pos_twopt_est}
 \title{Check if it is possible to estimate the recombination
-fraction between neighbour markers using two-point
+fraction between neighbor markers using two-point
 estimation}
 \usage{
 pos_twopt_est(input.seq)
@@ -13,7 +13,7 @@ pos_twopt_est(input.seq)
 }
 \description{
 Check if it is possible to estimate the recombination
-fraction between neighbour markers using two-point
+fraction between neighbor markers using two-point
 estimation
 }
 \keyword{internal}
