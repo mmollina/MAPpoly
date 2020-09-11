@@ -143,9 +143,9 @@ RcppExport SEXP calc_genoprob(SEXP ploidyR,
       std::fill(gamma.begin(), gamma.end(), 0);
       int s = v[k][geno(ind,k)].size();
       long double w = 0.0;
-      for(int j=0; j < alpha[ind][k].size(); j++)
+      for(int j=0; (unsigned)j < alpha[ind][k].size(); j++)
         w += alpha[ind][k][j]*beta[ind][k][j];
-      for(int j=0; j < alpha[ind][k].size(); j++)
+      for(int j=0; (unsigned)j < alpha[ind][k].size(); j++)
         gamma[v[k][geno(ind,k)][j]*g + v[k][geno(ind,k)][j+s/2]] = alpha[ind][k][j]*beta[ind][k][j]/w;
       for(int j=0; j < g*g; j++)
       {

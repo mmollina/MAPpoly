@@ -299,7 +299,7 @@ RcppExport SEXP poly_hmm_est_CPP(SEXP m_R,
         {
           for(int l2 = 0; l2 < gam; l2++)
           {
-            if(emit_beta[l1*gam+l2] > TOL & beta[l1*gam+l2][k+1] > TOL)
+            if((emit_beta[l1*gam+l2] > TOL) & (beta[l1*gam+l2][k+1] > TOL))
             {
               a=alpha_ai_dot(pre_calc_prob_alpha, m, gam, gam_pow_2, l1, l2);
               for(int j=0; j<gam_pow_2; j++)
@@ -311,7 +311,7 @@ RcppExport SEXP poly_hmm_est_CPP(SEXP m_R,
         {
           for(int l2 = 0; l2 < gam; l2++)
           {
-            if(emit_beta[l1*gam+l2] > TOL & beta[l1*gam+l2][k+1] > TOL)
+            if((emit_beta[l1*gam+l2] > TOL) & (beta[l1*gam+l2][k+1] > TOL))
             {
               rec=nrec(m, gam, gam_pow_2, l1, l2);
               a=alpha_ai_dot(pre_calc_prob_alpha, m, gam, gam_pow_2, l1, l2);

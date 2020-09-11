@@ -258,13 +258,13 @@ std::vector<std::vector<int> > index_func(int m,
       s=0;
       for(int j=0; (unsigned)j < p.size(); j++)
         if(p[j]>=0) s=s+vp[p[j]];
-        for(int j=0; (unsigned)j < q.size(); j++)
-          if(q[j]>=0) s=s+vq[q[j]];
-          v1[s].push_back(ip);
-          v2[s].push_back(iq);
-          v1[v1.size()-1].push_back(ip);
-          v2[v2.size()-1].push_back(iq);
-          iq++;
+      for(int j=0; (unsigned)j < q.size(); j++)
+        if(q[j]>=0) s=s+vq[q[j]];
+      v1[s].push_back(ip);
+      v2[s].push_back(iq);
+      v1[v1.size()-1].push_back(ip);
+      v2[v2.size()-1].push_back(iq);
+      iq++;
     }
     while (std::prev_permutation(vq.begin(), vq.end()));
     ip++;

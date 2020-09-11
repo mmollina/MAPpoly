@@ -41,7 +41,8 @@ the probabilities are not calculated between markers.
                            dat.prob = tetra.solcap.geno.dist,
                            verbose = TRUE)
  probs.t
- ## displaying individual 1, 36 genotypic states (rows) across linkage group 1 (columns)                          
+ ## displaying individual 1, 36 genotypic states 
+ ## (rows) across linkage group 1 (columns)                          
  image(t(probs.t$probs[,,1]))
  
  ## hexaploid example
@@ -49,7 +50,8 @@ the probabilities are not calculated between markers.
                              dat.prob = hexafake.geno.dist,
                              verbose = TRUE)
  probs.h
- ## displaying individual 1, 400 genotypic states (rows) across linkage group 1 (columns)                               
+ ## displaying individual 1, 400 genotypic states 
+ ## (rows) across linkage group 1 (columns)                               
  image(t(probs.h$probs[,,1]))
  }
 
