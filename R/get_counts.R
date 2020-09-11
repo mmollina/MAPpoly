@@ -46,7 +46,7 @@ get_counts_two_parents <- function(x = c(2, 2), ploidy, p.k, p.k1, q.k, q.k1, ve
     comb.all.gam.k <- expand.grid(dpk, dqk)
     ## Combining dosages from P and Q (locus k+1)
     comb.all.gam.k1 <- expand.grid(dpk1, dqk1)
-    ## Combintation of gametes that have x[1] doses in k
+    ## Combination of gametes that have x[1] doses in k
     pos.k <- comb.all.gam.k[apply(comb.all.gam.k, 1, sum) == x[1], ]
     ## Combintation of gametes that have x[2] doses in k+1
     pos.k1 <- comb.all.gam.k1[apply(comb.all.gam.k1, 1, sum) == x[2], ]

@@ -13,7 +13,7 @@
 #'  of markers (e.g. 50 markers for hexaploids) since the possible linkage 
 #'  phase combinations bounded only by the two-point information can be huge. 
 #'  Also, it can be quite sensible to small changes in \code{'thresh'}. 
-#'  For higher number of markers, please see \code{\link[mappoly]{est_rf_hmm_sequential}}.
+#'  For a large number of markers, please see \code{\link[mappoly]{est_rf_hmm_sequential}}.
 #
 #' @param input.seq an object of class \code{mappoly.sequence}
 #'
@@ -487,7 +487,7 @@ est_rf_hmm_sequential<-function(input.seq,
   } 
   ##### More than 3 markers ####
   ##Starting sequential algorithm for maps with more than 3 markers
-  ## Fisrt step: test all possible phase configurations under 
+  ## First step: test all possible phase configurations under 
   ## a 'thres.twopt' threshold for a sequence of size 'start.set'
   if(start.set > length(input.seq$seq.num))
     start.set <- length(input.seq$seq.num)
@@ -1099,5 +1099,3 @@ cat_phase <- function(input.seq,
   x3 <- paste0(" -- tail: ", x31)
   cat(x1, x2, x3, print_ph(input.ph), "\n")
 }
-
-

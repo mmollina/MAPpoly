@@ -41,7 +41,6 @@ Encoding: UTF-8
 Suggests:
     testthat,
     RColorBrewer,
-    updog,
-    polymapR
+    updog
 URL: https://github.com/mmollina/MAPpoly
 BugReports: https://github.com/mmollina/MAPpoly/issues

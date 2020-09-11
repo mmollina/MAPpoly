@@ -1,16 +1,16 @@
 #' Compute conditional probabilities of the genotypes
 #'
 #' Conditional genotype probabilities are calculated for each marker
-#' position and each individual given a map. 
+#' position and each individual given a map.
 #'
 #' @param input.map An object of class \code{mappoly.map}
 #' 
-#' @param step 	Maximum distance (in cM) between positions at which 
-#'              the genotype probabilities are calculated, though for 
-#'              step = 0, probabilities are calculated only at the 
+#' @param step 	Maximum distance (in cM) between positions at which
+#'              the genotype probabilities are calculated, though for
+#'              step = 0, probabilities are calculated only at the
 #'              marker locations.
 #' 
-#' @param phase.config which phase configuration should be used. "best" (default) 
+#' @param phase.config which phase configuration should be used. "best" (default)
 #'                     will choose the phase configuration associated with the
 #'                     maximum likelihood
 #'
@@ -27,7 +27,7 @@
 #'  probs.t<-calc_genoprob(input.map = solcap.dose.map[[1]],
 #'                         verbose = TRUE)
 #'  probs.t
-#'  ## displaying individual 1, 36 genotypic states 
+#'  ## displaying individual 1, 36 genotypic states
 #'  ## (rows) across linkage group 1 (columns)                          
 #'  image(t(probs.t$probs[,,1]))
 #'  
@@ -35,7 +35,7 @@
 #'  probs.h<-calc_genoprob(input.map = maps.hexafake[[1]],
 #'                              verbose = TRUE)
 #'  probs.h
-#'  ## displaying individual 1, 400 genotypic states 
+#'  ## displaying individual 1, 400 genotypic states
 #'  ## (rows) across linkage group 1 (columns)                               
 #'  image(t(probs.h$probs[,,1]))
 #'  }
