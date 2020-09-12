@@ -56,9 +56,9 @@
 #' @export plot_map_list
 #'
 plot_map_list<-function(map.list, horiz = TRUE, col = "lightgray", title = "Linkage group"){
-  if(class(map.list) == "mappoly.map")  
+  if(inherits(map.list, "mappoly.map"))
     map.list<-list(map.list)
-  if(any(sapply(map.list, class)!="mappoly.map"))
+  if (any(!sapply(map.list, inherits, "mappoly.map"))) 
     stop("All elemnts in 'map.list' should be of class 'mappoly.map'")
   if(all(col == "ggstyle"))
     col <-gg_color_hue(length(map.list))

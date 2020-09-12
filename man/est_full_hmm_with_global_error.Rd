@@ -73,8 +73,7 @@ can take a while, especially for hexaploid maps.
   \dontrun{
     seq1.20<-make_seq_mappoly(hexafake, 1:20)
     counts<-cache_counts_twopt(seq1.20, cached = TRUE)
-    subset.pairs<-est_pairwise_rf(seq1.20, counts,
-                               n.clusters=1)
+    subset.pairs<-est_pairwise_rf(seq1.20, counts)
     subset.map <- est_rf_hmm_sequential(input.seq  = seq1.20,
                                         thres.twopt = 5,
                                         thres.hmm = 10,

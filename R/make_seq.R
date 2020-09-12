@@ -70,7 +70,7 @@
 #'     ## Making a sequence using the intersection between groups and genomic information
 #'     s <- make_seq_mappoly(tetra.solcap, 'all')
 #'     tpt <- est_pairwise_rf(input.seq = s, 
-#'                            n.clusters = 7)
+#'                            ncpus = 7)
 #'    mat <- rf_list_to_matrix(tpt)
 #'    grs <- group_mappoly(input.mat = mat,
 #'                         expected.groups = 12,
@@ -91,18 +91,20 @@
 
 make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.info = NULL) {
   ## checking for correct object
-  input_classes <- c("mappoly.data", "mappoly.map", "mappoly.unique.seq", "mappoly.pcmap", "mappoly.pcmap3d", "mappoly.group", "mappoly.chitest.seq")
+  input_classes <- c("mappoly.data", "mappoly.map", "mappoly.unique.seq", "mappoly.pcmap", "mappoly.pcmap3d", 
+                     "mappoly.group", "mappoly.chitest.seq")
   if (!inherits(input.obj, input_classes)) {
     stop(deparse(substitute(input.obj)), " is not an object of class 'mappoly.data', 'mappoly.map', 
                'mappoly.chitest.seq', 'mappoly.unique.seq', 'mappoly.pcmap', 'mappoly.pcmap3d', or 'mappoly.group'")
   }
   ## if input object is a map, call 'make_seq_mappoly' recursively
-  if(class(input.obj) == "mappoly.map")
+  if(inherits (input.obj, "mappoly.map"))
     return(make_seq_mappoly(get(input.obj$info$data.name, pos = 1), 
                           arg = input.obj$info$mrk.names, 
                           data.name = input.obj$info$data.name))
   ## checking for argument to make a sequence
-  if (is.null(arg) && class(input.obj) != "mappoly.chitest.seq" && class(input.obj) != "mappoly.unique.seq" && class(input.obj) != "mappoly.pcmap"&& class(input.obj) != "mappoly.pcmap3d") {
+  if (is.null(arg) && !inherits(input.obj, "mappoly.chitest.seq") && !inherits(input.obj, "mappoly.unique.seq") && 
+      !inherits(input.obj, "mappoly.pcmap") && !inherits(input.obj, "mappoly.pcmap3d")) {
     stop("argument 'arg' expected.")
   }
   ## Variables defined to block removing redundant markers
@@ -114,7 +116,7 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.in
   #   realkeep = TRUE
   #   seq.num = match(tokeep,input.obj$mrk.names)
   # }
-  if (class(input.obj) == "mappoly.data")
+  if (inherits(input.obj, "mappoly.data"))
   {
     chisq.pval<-input.obj$chisq.pval
     chisq.pval.thres<-NULL
@@ -160,13 +162,13 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.in
     if (is.null(data.name))
       data.name <- as.character(sys.call())[2]
   }
-  if (class(input.obj) == "mappoly.unique.seq")
+  if (inherits(input.obj, "mappoly.unique.seq"))
   {
     if(!is.null(arg))
       warning("Ignoring argument 'arg' and using the unique sequence instead.")
     return(input.obj$unique.seq)
   }
-  if (class(input.obj) == "mappoly.chitest.seq")
+  if (inherits(input.obj, "mappoly.chitest.seq"))
   {
     if(!is.null(arg))
       warning("Ignoring argument 'arg' and using chi-square filtered markers instead.")
@@ -175,7 +177,7 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.in
     tmp$chisq.pval<-get(input.obj$data.name, pos = 1)$chisq.pval[input.obj$keep]
     return(tmp)
   }
-  if (class(input.obj) == "mappoly.group")
+  if (inherits(input.obj, "mappoly.group"))
   {
     chisq.pval<-input.obj$chisq.pval
     chisq.pval.thres<-input.obj$chisq.pval.thres
@@ -203,7 +205,7 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.in
     else
       sequence <- sequence.pos <- NULL
   }
-  if (class(input.obj) == "mappoly.pcmap" | class(input.obj) == "mappoly.pcmap3d" )
+  if (inherits(input.obj, "mappoly.pcmap") | inherits(input.obj, "mappoly.pcmap3d" ))
   {
     if(!is.null(arg))
       warning("Ignoring argument 'arg' and using the MDS order instead.")

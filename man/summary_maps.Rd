@@ -4,13 +4,13 @@
 \alias{summary_maps}
 \title{Summary map}
 \usage{
-summary_maps(map.object)
+summary_maps(map.list)
 }
 \arguments{
-\item{map.object}{a list of objects of class \code{mappoly.map}}
+\item{map.list}{a list of objects of class \code{mappoly.map}}
 }
 \value{
-a data frame containing a brief summary of all maps contained in \code{map.object}
+a data frame containing a brief summary of all maps contained in \code{map.list}
 }
 \description{
 This function generates a brief summary table of a list of \code{mappoly.map} objects

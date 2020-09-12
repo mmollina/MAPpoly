@@ -141,7 +141,7 @@ This function first enumerates a set of linkage phase configurations
     red.mrk<-elim_redundant(mrk.subset)
     unique.mrks<-make_seq_mappoly(red.mrk)
     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-                                  n.clusters = 1,
+                                  ncpus = 1,
                                   verbose=TRUE)
 
     ## Estimating subset map with a low tolerance for the E.M. procedure

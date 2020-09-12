@@ -32,7 +32,7 @@
 #' of its pairwise recombination fractions below \code{remove.fp} value throughout
 #' the linkage group
 #' 
-#' @param n.clusters number of parallel processes (i.e. cores) to spawn (default = 1)
+#' @param ncpus number of parallel processes (i.e. cores) to spawn (default = 1)
 #'
 #' @return A filtered object of class \code{mappoly.sequence}. 
 #' See \code{\link[mappoly]{make_seq_mappoly}} for details
@@ -43,7 +43,7 @@
 #'     red.mrk<-elim_redundant(all.mrk)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-#'                                n.clusters = 7,
+#'                                ncpus = 7,
 #'                                verbose=TRUE)
 #'
 #'     ## Full recombination fraction matrix
@@ -115,7 +115,7 @@ rf_snp_filter<-function(input.twopt,
                         thresh.rf = 0.15,
                         thresh.perc = 0.05,
                         remove.fp = NULL,
-                        n.clusters = 1)
+                        ncpus = 1L)
 {
     ## checking for correct object
     input_classes <-c("poly.est.two.pts.pairwise")
@@ -128,7 +128,7 @@ rf_snp_filter<-function(input.twopt,
     if (!is.null(remove.fp)){
         if (remove.fp < 0.0 || remove.fp > 0.5)
             stop("'remove.fp' value should be defined between 0.0 and 0.5.")
-        rf_mat_fp = rf_list_to_matrix(input.twopt = input.twopt, n.clusters = n.clusters, verbose = FALSE)
+        rf_mat_fp = rf_list_to_matrix(input.twopt = input.twopt, ncpus = ncpus, verbose = FALSE)
         xo = apply(rf_mat_fp$rec.mat, 2, function(x) sum(x < remove.fp, na.rm = T))
         o2 = names(which(xo > 0.90*(length(xo))))
         o1 = !(names(xo) %in% o2)
@@ -138,7 +138,7 @@ rf_snp_filter<-function(input.twopt,
     thresh.missing<-1-thresh.perc
     rf_mat<- rf_list_to_matrix(input.twopt = input.twopt, thresh.LOD.ph = thresh.LOD.ph,
                                thresh.LOD.rf = thresh.LOD.rf, thresh.rf = thresh.rf,
-                               n.clusters = n.clusters, verbose = FALSE)
+                               ncpus = ncpus, verbose = FALSE)
 
     ## Removing false positives
     if (!is.null(remove.fp))

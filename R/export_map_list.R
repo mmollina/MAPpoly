@@ -25,10 +25,12 @@
 #' @export export_map_list
 #' @importFrom dplyr tibble
 export_map_list <- function(map.list, file = "map_output.csv"){
-  if(class(map.list) == "mappoly.map")  
-    map.list<-list(map.list)
-  if(any(sapply(map.list, class)!="mappoly.map"))
-    stop("All elemnts in 'map.list' should be of class 'mappoly.map'")
+  if (inherits(map.list, "mappoly.map")) 
+    map.list <- list(map.list)
+  if(is.list(map.list)){
+    if (any(!sapply(map.list, inherits, "mappoly.map"))) 
+      stop("All elemnts in 'map.list' should be of class 'mappoly.map'")
+  }
   R <- NULL
   for(i in 1:length(map.list)){
     m <- map.list[[i]]$info$m

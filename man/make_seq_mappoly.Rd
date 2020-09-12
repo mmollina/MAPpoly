@@ -85,7 +85,7 @@ Makes a sequence of markers based on an object of another class.
     ## Making a sequence using the intersection between groups and genomic information
     s <- make_seq_mappoly(tetra.solcap, 'all')
     tpt <- est_pairwise_rf(input.seq = s, 
-                           n.clusters = 7)
+                           ncpus = 7)
    mat <- rf_list_to_matrix(tpt)
    grs <- group_mappoly(input.mat = mat,
                         expected.groups = 12,

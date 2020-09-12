@@ -155,8 +155,8 @@ est_haplo_hmm <-
     res.temp
   }
 
-
 #' Estimate a genetic map given a sequence of block markers 
+#' given the conditional probabilities of the genotypes
 #'
 #' @param void internal function to be documented
 #' @keywords internal
@@ -212,8 +212,8 @@ est_map_haplo_given_genoprob<-function(map.list,
   list(map = map, genoprob = genoprob)
 }
 
-
-#' Estimate a genetic map given a sequence of block markers
+#' Compute conditional probabilities of the genotypes given a sequence 
+#' of block markers
 #'
 #' @param void internal function to be documented
 #' @keywords internal

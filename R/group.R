@@ -39,7 +39,7 @@
 #'     ##will take ~ 7 minutes
 #'     all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
 #'                                  count.cache = counts,
-#'                                  n.clusters = 7,
+#'                                  ncpus = 7,
 #'                                  verbose=TRUE)
 #'
 #'     ## Full recombination fraction matrix
@@ -166,10 +166,6 @@ group_mappoly <- function(input.mat, expected.groups = NULL,
 
 #' @export
 print.mappoly.group <- function(x, detailed = TRUE, ...) {
-    ## checking for correct object
-    if (!any(class(x) == "mappoly.group"))
-        stop(deparse(substitute(x)), " is not an object of class 'group'")
-
     cat("  This is an object of class 'mappoly.group'\n  ------------------------------------------\n")
     ## criteria
     cat("  Criteria used to assign markers to groups:\n\n")

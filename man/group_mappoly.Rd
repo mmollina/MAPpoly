@@ -54,7 +54,7 @@ Identifies linkage groups of markers using the results of two-point
     ##will take ~ 7 minutes
     all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
                                  count.cache = counts,
-                                 n.clusters = 7,
+                                 ncpus = 7,
                                  verbose=TRUE)
 
     ## Full recombination fraction matrix

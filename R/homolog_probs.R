@@ -47,12 +47,14 @@
 #' @export calc_homoprob
 #' 
 calc_homoprob<-function(input.genoprobs){
-  if(class(input.genoprobs) == "mappoly.genoprob")
+  if(inherits(input.genoprobs, "mappoly.genoprob")) 
     input.genoprobs <- list(input.genoprobs)
-  if(class(input.genoprobs) == "list"){
-    if(!all(sapply(input.genoprobs, class) == "mappoly.genoprob"))
-      stop(deparse(substitute(input.genoprobs)), " is not an object of class 'mappoly.sequence' neither a list containing 'mappoly.sequence' objects.")
-  }
+  if(!inherits(input.genoprobs, "list"))
+    stop(deparse(substitute(input.genoprobs)), 
+         " is not an object of class 'mappoly.genoprob' neither a list containing 'mappoly.genoprob' objects.")
+  if (any(!sapply(input.genoprobs, inherits, "mappoly.genoprob"))) 
+    stop(deparse(substitute(input.genoprobs)), 
+         " is not an object of class 'mappoly.genoprob' neither a list containing 'mappoly.genoprob' objects.")
   df.res <- NULL
   for(j in 1:length(input.genoprobs)){
     cat("\nLinkage group ", j, "...")

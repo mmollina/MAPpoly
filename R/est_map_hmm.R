@@ -106,7 +106,7 @@
 #'     red.mrk<-elim_redundant(mrk.subset)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-#'                                   n.clusters = 1,
+#'                                   ncpus = 1,
 #'                                   verbose=TRUE)
 #'
 #'     ## Estimating subset map with a low tolerance for the E.M. procedure
@@ -379,7 +379,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'     red.mrk<-elim_redundant(s1)
 #'     s1.unique.mrks<-make_seq_mappoly(red.mrk)
 #'     s1.pairs<-est_pairwise_rf(input.seq = s1.unique.mrks,
-#'                                   n.clusters = 7,
+#'                                   ncpus = 7,
 #'                                   verbose=TRUE)
 #'     unique.gen.ord<-get_genomic_order(s1.unique.mrks)
 #'     ## Selecting a subset of 100 markers at the beginning of chromosome 1 
@@ -405,7 +405,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'     red.mrk<-elim_redundant(mrk.subset)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-#'                                   n.clusters = 1,
+#'                                   ncpus = 1,
 #'                                   verbose=TRUE)
 #'     subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
 #'                                         thres.twopt = 5,
@@ -922,8 +922,8 @@ prepare_map<-function(input.map, config = "best"){
 #' @keywords internal
 get_full_info_tail <- function(input.obj, extend = NULL) {
   ## checking for correct object
-  if (all(is.na(match(class(input.obj), c("mappoly.map", "mappoly.map.haplo")))))
-    stop(deparse(substitute(input.obj)), " is not an object of class 'mappoly.map' or 'mappoly.map.haplo'")
+  if(!inherits(input.obj, "mappoly.map"))
+    stop(deparse(substitute(input.obj)), " is not an object of class 'mappoly.map''")
   if (!is.null(extend))
     if (extend > input.obj$info$n.mrk)
       return(input.obj)

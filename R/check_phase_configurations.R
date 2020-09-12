@@ -173,7 +173,7 @@ concatenate_new_marker <- function(X = NULL, d, sh = NULL, seq.num = NULL, m, mr
 #' @return a unique list of matrices representing linkage phases
 #' @keywords internal
 elim_conf_using_two_pts <- function(input.seq, twopt, thres) {
-    if (!class(input.seq) == "mappoly.sequence")
+    if (!inherits(input.seq, "mappoly.sequence"))
         stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
     dp <- input.seq$seq.dose.p
     dq <- input.seq$seq.dose.q
@@ -242,19 +242,19 @@ get_ph_conf_ret_sh <- function(M) {
 #'     returns 0. Otherwise, returns the missing pairs.
 #' @keywords internal
 check_pairwise <- function(input.seq, twopt) {
-    if (!(class(input.seq) == "mappoly.sequence" || class(input.seq) == "integer" || class(input.seq) == "numeric" || class(input.seq) == "character"))
+    if(!(inherits(input.seq) == "mappoly.sequence" || is.integer(input.seq) || is.numeric(input.seq) || is.character(input.seq)))
         stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence', 'numeric' or 'integer'")
-    if (!(class(twopt) == "poly.est.two.pts.pairwise" || class(twopt) == "poly.haplo.est.two.pts.pairwise"))
+    if(!inherits(twopt, "poly.est.two.pts.pairwise"))
         stop(deparse(substitute(twopt)), " is not an object of class 'poly.est.two.pts.pairwise' or 'poly.haplo.est.two.pts.pairwise'")
     id.seq <- input.seq
-    if (class(input.seq) == "mappoly.sequence")
+    if(inherits(input.seq, "mappoly.sequence"))
         id.seq <- input.seq$seq.num
     dpl <- duplicated(id.seq)
-    if (any(dpl))
+    if(any(dpl))
         stop("There are duplicated markers in the sequence:\n Check markers: ", unique(id.seq[dpl]), " at position(s) ", which(dpl))
     index <- apply(apply(combn(id.seq, 2), 2, sort), 2, paste, collapse = "-")
     miss.pairs <- which(is.na(match(index, names(twopt$pairwise))))
-    if (length(miss.pairs) > 0)
+    if(length(miss.pairs) > 0)
         return(index[miss.pairs])
     return(0)
 }

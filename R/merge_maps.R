@@ -112,11 +112,12 @@ merge_maps<-function(map.list,
                      thres.hmm = "best",
                      tol = 10e-5){
   ## Checking class of arguments
-  if(any(sapply(map.list, class) != "mappoly.map"))
-    stop("at least one object in ", deparse(substitute(map.list)), " is not an object of class 'mappoly.map'")
+  if (any(!sapply(map.list, inherits, "mappoly.map"))) 
+    stop(deparse(substitute(map.list)), 
+         " is not a list containing 'mappoly.map' objects.")
   if (length(unique(sapply(map.list, function(x) x$info$data.name))) != 1)
     stop("MAPpoly won't merge maps from different datasets.")
-  if (!any(class(twopt) == "poly.est.two.pts.pairwise")){
+  if (!inherits(twopt, "poly.est.two.pts.pairwise")){
     stop(deparse(substitute(twopt)), " is not an object of class 'poly.est.two.pts.pairwise'")    
   }
   ## Check twopt consistency

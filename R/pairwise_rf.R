@@ -11,7 +11,7 @@
 #'     \code{\link[mappoly]{cache_counts_twopt}}. If \code{NULL} (default),
 #'     genotype frequencies are internally loaded.   
 #'
-#' @param n.clusters Number of parallel processes (cores) to spawn (default = 1)
+#' @param ncpus Number of parallel processes (cores) to spawn (default = 1)
 #'
 #' @param mrk.pairs a matrix of dimensions 2*N, containing N
 #'    pairs of markers to be analyzed. If \code{NULL} (default), all pairs are
@@ -61,7 +61,7 @@
 #'   unique.mrks <- make_seq_mappoly(red.mrk)
 #'   # will take ~ 13 min
 #'   all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
-#'                                n.clusters = 7, 
+#'                                ncpus = 7, 
 #'                                verbose=TRUE)
 #'    all.pairs
 #'    plot(all.pairs, 90, 91)
@@ -93,11 +93,11 @@
 #'   plot(seq.ch1)
 #'   ## will take ~  19 min / peak of memory usage ~ 10GB
 #'   all.pairs.1 <- est_pairwise_rf(input.seq = seq.ch1,
-#'                                  n.clusters = 7, 
+#'                                  ncpus = 7, 
 #'                                  verbose=TRUE)
 #'   ## same thing, but it will take ~  21 min / peak of memory usage ~ 6GB
 #'   all.pairs.2 <- est_pairwise_rf(input.seq = seq.ch1,
-#'                                  n.clusters = 7, 
+#'                                  ncpus = 7, 
 #'                                  n.batch = 10,
 #'                                  verbose=TRUE)   
 #'    plot(all.pairs, 90, 91)
@@ -118,14 +118,14 @@
 #' @importFrom parallel makeCluster clusterEvalQ stopCluster parLapply
 #' @importFrom Rcpp sourceCpp
 #' 
-est_pairwise_rf <- function(input.seq, count.cache = NULL, n.clusters = 1,
-                            mrk.pairs = NULL, n.batches = 1,
+est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
+                            mrk.pairs = NULL, n.batches = 1L,
                             verbose = TRUE, memory.warning = TRUE, 
                             parallelization.type = c("PSOCK", "FORK"), 
                             tol = .Machine$double.eps^0.25)
 {
   ## checking for correct object
-  if (!class(input.seq) == "mappoly.sequence")
+  if (!inherits(input.seq, "mappoly.sequence"))
     stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
   parallelization.type <- match.arg(parallelization.type)
   dpl <- duplicated(input.seq$seq.num)
@@ -174,16 +174,16 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, n.clusters = 1,
   if (is.null(batch.size)) {
     ## splitting pairs in chunks
     if (length(input.seq$seq.num) < 10)
-      n.clusters <- 1
-    id <- ceiling(seq(1, (ncol(mrk.pairs) + 1), length.out = n.clusters + 1))
-    input.list <- vector("list", n.clusters)
-    for (i in 1:n.clusters) input.list[[i]] <- mrk.pairs[, id[i]:(id[i + 1] - 1)]
+      ncpus <- 1
+    id <- ceiling(seq(1, (ncol(mrk.pairs) + 1), length.out = ncpus + 1))
+    input.list <- vector("list", ncpus)
+    for (i in 1:ncpus) input.list[[i]] <- mrk.pairs[, id[i]:(id[i + 1] - 1)]
     ## parallel version
-    if (n.clusters > 1) {
+    if (ncpus > 1) {
       start <- proc.time()
       if (verbose)
-        cat("INFO: Using ", n.clusters, " CPUs for calculation.\n")
-      cl = parallel::makeCluster(n.clusters, type = parallelization.type)
+        cat("INFO: Using ", ncpus, " CPUs for calculation.\n")
+      cl = parallel::makeCluster(ncpus, type = parallelization.type)
       #parallel::clusterEvalQ(cl, require(mappoly))
       parallel::clusterExport(cl, "paralell_pairwise")
       on.exit(parallel::stopCluster(cl))
@@ -255,7 +255,7 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, n.clusters = 1,
           " recombination fractions.\n")
     z <- system.time(res[id.batch[1,1]:id.batch[1,2]] <- est_pairwise_rf(input.seq = input.seq,
                                                                          count.cache = count.cache,
-                                                                         n.clusters = n.clusters,
+                                                                         ncpus = ncpus,
                                                                          tol = tol,
                                                                          parallelization.type = parallelization.type,
                                                                          mrk.pairs = mrk.pairs[,id.batch[1,1]:id.batch[1,2]],
@@ -280,7 +280,7 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, n.clusters = 1,
         cat("batch ", i, " of ", nrow(id.batch), "\n")
       res[id.batch[i,1]:id.batch[i,2]] <- est_pairwise_rf(input.seq = input.seq,
                                                           count.cache = count.cache,
-                                                          n.clusters = n.clusters,
+                                                          ncpus = ncpus,
                                                           tol = tol,
                                                           mrk.pairs = mrk.pairs[,id.batch[i,1]:id.batch[i,2]],
                                                           verbose = FALSE, 

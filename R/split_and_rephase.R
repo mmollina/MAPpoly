@@ -89,7 +89,7 @@ split_and_rephase<-function(input.map,
   newmap<-temp.maps[[1]]
   for(i in 2:length(temp.maps)){
     cat("Adding block", i, "of", length(temp.maps), "\n")
-    if(class(temp.maps[[i]]) != "character"){
+    if(!is.character(temp.maps[[i]])){
       invisible(capture.output(suppressMessages(
         newmap<-merge_maps(list(newmap, temp.maps[[i]]), 
                            twopt = twopt, 

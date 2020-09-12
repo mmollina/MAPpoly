@@ -153,7 +153,7 @@ import_data_from_polymapR <- function(input.data,
 #'  
 #'  #### Reconstructing the map using MAPpoly
 #'  s <- make_seq_mappoly(mappoly.data, "all")
-#'  tpt <- est_pairwise_rf(input.seq = s, n.clusters = 7)
+#'  tpt <- est_pairwise_rf(input.seq = s, ncpus = 7)
 #'  mat <- rf_list_to_matrix(make_pairs_mappoly(tpt, s))
 #'  grs <- group_mappoly(input.mat = mat,
 #'                       expected.groups = 5,

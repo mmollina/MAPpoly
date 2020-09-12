@@ -82,7 +82,7 @@
 #' 
 import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = FALSE){
   # Case 1: updog
-  if (class(object) == "multidog"){
+  if (inherits(object, "multidog")){
     m = object$snpdf$ploidy[1]
     dosage.p = object$snpdf$p1geno
     names(dosage.p) <- object$snpdf$snp
@@ -153,11 +153,11 @@ import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = 
     return(res)
   }
   # # Case 2: polyRAD
-  # else if (class(object) == 'RADdata'){
+  # else if (inherits(object, 'RADdata')){
   #   outfile = paste0(getwd(), '/import_temp')
   #   polyRAD::Export_MAPpoly(object, file = outfile)
   #   res = read_geno_prob(outfile)
   #   return(res)
   # }
-  else stop("You must provide an object of class 'multidog'(from package 'updog') in order to continue importing data. Please read the documentation and try again.")
+  else stop("You must provide an object of class 'multidog' (from package 'updog') in order to continue importing data.")
 }

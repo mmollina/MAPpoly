@@ -8,7 +8,7 @@ cache_counts_twopt(
   input.seq,
   cached = FALSE,
   cache.prev = NULL,
-  n.clusters = 1,
+  ncpus = 1L,
   verbose = TRUE,
   joint.prob = FALSE
 )
@@ -23,7 +23,7 @@ linkage phase configurations in a internal file (default = FALSE)}
 pre-computed genotype frequencies, obtained with
 \code{\link[mappoly]{cache_counts_twopt}} (optional, default = NULL)}
 
-\item{n.clusters}{Number of parallel processes to spawn (default = 1)}
+\item{ncpus}{Number of parallel processes to spawn (default = 1)}
 
 \item{verbose}{If \code{TRUE} (default), print the linkage phase
 configurations. If \code{cached = TRUE}, nothing is
@@ -60,7 +60,7 @@ combinations and for all possible linkage phase configurations.
   \dontrun{
     all.mrk<-make_seq_mappoly(hexafake, 'all')
     ## local computation
-    counts<-cache_counts_twopt(all.mrk, n.clusters = 8)
+    counts<-cache_counts_twopt(all.mrk, ncpus = 8)
     ## load from internal file of web-stored counts (especially important for high ploidy levels)
     counts.cached<-cache_counts_twopt(all.mrk, cached = TRUE)
     }

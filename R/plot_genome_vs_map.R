@@ -35,9 +35,11 @@
 #'
 #' @export plot_genome_vs_map
 plot_genome_vs_map<-function(map.list, phase.config = "best", same.ch.lg = FALSE){
-  if(class(map.list) == "mappoly.map")  
-    map.list<-list(map.list)
-  if(any(sapply(map.list, class)!="mappoly.map"))
+  if(inherits(map.list, "mappoly.map")) 
+    map.list <- list(map.list)
+  if(!inherits(map.list, "list"))
+    stop("All elemnts in 'map.list' should be of class 'mappoly.map'")
+  if (any(!sapply(map.list, inherits, "mappoly.map"))) 
     stop("All elemnts in 'map.list' should be of class 'mappoly.map'")
   if(length(phase.config)!=length(map.list))
     phase.config<-rep(phase.config[1], length(map.list))

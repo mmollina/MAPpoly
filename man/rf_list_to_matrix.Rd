@@ -11,7 +11,7 @@ rf_list_to_matrix(
   thresh.LOD.ph = 0,
   thresh.LOD.rf = 0,
   thresh.rf = 0.5,
-  n.clusters = 1,
+  ncpus = 1L,
   shared.alleles = FALSE,
   verbose = TRUE
 )
@@ -37,7 +37,7 @@ rf_list_to_matrix(
 
 \item{thresh.rf}{the threshold used for recombination fraction filtering (default = 0.5)}
 
-\item{n.clusters}{number of parallel processes (i.e. cores) to spawn (default = 1)}
+\item{ncpus}{number of parallel processes (i.e. cores) to spawn (default = 1)}
 
 \item{shared.alleles}{if \code{TRUE}, computes two matrices (for both parents) indicating 
 the number of homologues that share alleles (default = FALSE)}
@@ -59,7 +59,7 @@ for LOD Score}
 
 \item{main.text}{a character string as the title of the heatmap (default = NULL)}
 
-\item{index}{logical. should the numbers corresponding to the markers be printed in the 
+\item{index}{\code{logical} should the name of the markers be printed in the 
 diagonal of the heatmap? (default = FALSE)}
 }
 \value{
@@ -84,7 +84,7 @@ fraction matrix
     red.mrk<-elim_redundant(all.mrk)
     unique.mrks<-make_seq_mappoly(red.mrk)
     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-                               n.clusters = 7,
+                               ncpus = 7,
                                verbose=TRUE)
 
     ## Full recombination fraction matrix

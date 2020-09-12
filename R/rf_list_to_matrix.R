@@ -17,7 +17,7 @@
 #'
 #' @param thresh.rf the threshold used for recombination fraction filtering (default = 0.5)
 #'
-#' @param n.clusters number of parallel processes (i.e. cores) to spawn (default = 1)
+#' @param ncpus number of parallel processes (i.e. cores) to spawn (default = 1)
 #' 
 #' @param shared.alleles if \code{TRUE}, computes two matrices (for both parents) indicating 
 #'                       the number of homologues that share alleles (default = FALSE) 
@@ -37,7 +37,7 @@
 #'
 #' @param main.text a character string as the title of the heatmap (default = NULL)
 #'
-#' @param index logical. should the numbers corresponding to the markers be printed in the 
+#' @param index \code{logical} should the name of the markers be printed in the 
 #' diagonal of the heatmap? (default = FALSE)
 #'
 #' @param ... currently ignored
@@ -52,7 +52,7 @@
 #'     red.mrk<-elim_redundant(all.mrk)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-#'                                n.clusters = 7,
+#'                                ncpus = 7,
 #'                                verbose=TRUE)
 #'
 #'     ## Full recombination fraction matrix
@@ -86,13 +86,11 @@ rf_list_to_matrix <- function(input.twopt,
                               thresh.LOD.ph = 0,
                               thresh.LOD.rf = 0,
                               thresh.rf = 0.5,
-                              n.clusters = 1,
+                              ncpus = 1L,
                               shared.alleles = FALSE,
                               verbose = TRUE) {
   ## checking for correct object
-  input_classes <-c("poly.est.two.pts.pairwise",
-                    "poly.haplo.est.two.pts.pairwise")
-  if (!inherits(input.twopt, input_classes)) {
+  if (!inherits(input.twopt, "poly.est.two.pts.pairwise")) {
     stop(deparse(substitute(input.twopt)),
          " is not an object of class 'poly.est.two.pts.pairwise'")
   }
@@ -106,11 +104,11 @@ rf_list_to_matrix <- function(input.twopt,
   #seq.num.orig<-unique(sapply(strsplit(x = names(input.twopt$pairwise), split = "-"), function(x) as.numeric(x[1])))
   #seq.num.orig<-c(seq.num.orig, strsplit(tail(names(input.twopt$pairwise), n = 1), "-")[[1]][2])
   #dimnames(lod.mat) = dimnames(rec.mat) = list(seq.num.orig, seq.num.orig)
-  if (n.clusters > 1) {
+  if (ncpus > 1) {
     start <- proc.time()
     if (verbose)
-      cat("INFO: Using ", n.clusters, " CPUs.\n")
-    cl <- parallel::makeCluster(n.clusters)
+      cat("INFO: Using ", ncpus, " CPUs.\n")
+    cl <- parallel::makeCluster(ncpus)
     parallel::clusterExport(cl,
                             varlist = c("thresh.LOD.ph", "thresh.LOD.rf", "thresh.rf", "shared.alleles"),
                             envir = environment())
@@ -186,10 +184,6 @@ rf_list_to_matrix <- function(input.twopt,
 #' @rdname rf_list_to_matrix
 #' @export
 print.mappoly.rf.matrix <- function(x, ...) {
-  ## checking for correct object
-  if (!any(class(x) == "mappoly.rf.matrix"))
-    stop(deparse(substitute(x)), " is not an object of class 'group'")
-  
   cat("  This is an object of class 'mappoly.rf.matrix'\n\n")
   ## criteria
   cat("  Criteria used to filter markers:\n\n")
@@ -213,8 +207,7 @@ print.mappoly.rf.matrix <- function(x, ...) {
 #' @rdname rf_list_to_matrix
 #' @export
 plot.mappoly.rf.matrix <- function(x, type = c("rf", "lod"), ord = NULL, rem = NULL, 
-                                   main.text = NULL, index = FALSE, ...)
-{
+                                   main.text = NULL, index = FALSE, ...){
   type<-match.arg(type)
   if(type == "rf"){
     w<-x$rec.mat

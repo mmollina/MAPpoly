@@ -2,7 +2,8 @@
 % Please edit documentation in R/haplotype_map_utils.R
 \name{est_map_haplo_given_genoprob}
 \alias{est_map_haplo_given_genoprob}
-\title{Estimate a genetic map given a sequence of block markers}
+\title{Estimate a genetic map given a sequence of block markers 
+given the conditional probabilities of the genotypes}
 \usage{
 est_map_haplo_given_genoprob(map.list, genoprob.list, tol = 1e-04)
 }
@@ -10,6 +11,7 @@ est_map_haplo_given_genoprob(map.list, genoprob.list, tol = 1e-04)
 \item{void}{internal function to be documented}
 }
 \description{
-Estimate a genetic map given a sequence of block markers
+Estimate a genetic map given a sequence of block markers 
+given the conditional probabilities of the genotypes
 }
 \keyword{internal}

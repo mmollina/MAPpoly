@@ -2,7 +2,8 @@
 % Please edit documentation in R/haplotype_map_utils.R
 \name{calc_genoprob_haplo}
 \alias{calc_genoprob_haplo}
-\title{Estimate a genetic map given a sequence of block markers}
+\title{Compute conditional probabilities of the genotypes given a sequence 
+of block markers}
 \usage{
 calc_genoprob_haplo(
   m,
@@ -19,6 +20,7 @@ calc_genoprob_haplo(
 \item{void}{internal function to be documented}
 }
 \description{
-Estimate a genetic map given a sequence of block markers
+Compute conditional probabilities of the genotypes given a sequence 
+of block markers
 }
 \keyword{internal}

@@ -7,9 +7,9 @@
 est_pairwise_rf(
   input.seq,
   count.cache = NULL,
-  n.clusters = 1,
+  ncpus = 1L,
   mrk.pairs = NULL,
-  n.batches = 1,
+  n.batches = 1L,
   verbose = TRUE,
   memory.warning = TRUE,
   parallelization.type = c("PSOCK", "FORK"),
@@ -24,7 +24,7 @@ pre-computed genotype frequencies, obtained with
 \code{\link[mappoly]{cache_counts_twopt}}. If \code{NULL} (default),
 genotype frequencies are internally loaded.}
 
-\item{n.clusters}{Number of parallel processes (cores) to spawn (default = 1)}
+\item{ncpus}{Number of parallel processes (cores) to spawn (default = 1)}
 
 \item{mrk.pairs}{a matrix of dimensions 2*N, containing N
 pairs of markers to be analyzed. If \code{NULL} (default), all pairs are
@@ -80,7 +80,7 @@ possible linkage phase configurations and associated LOD Scores.
   unique.mrks <- make_seq_mappoly(red.mrk)
   # will take ~ 13 min
   all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
-                               n.clusters = 7, 
+                               ncpus = 7, 
                                verbose=TRUE)
    all.pairs
    plot(all.pairs, 90, 91)
@@ -112,11 +112,11 @@ possible linkage phase configurations and associated LOD Scores.
   plot(seq.ch1)
   ## will take ~  19 min / peak of memory usage ~ 10GB
   all.pairs.1 <- est_pairwise_rf(input.seq = seq.ch1,
-                                 n.clusters = 7, 
+                                 ncpus = 7, 
                                  verbose=TRUE)
   ## same thing, but it will take ~  21 min / peak of memory usage ~ 6GB
   all.pairs.2 <- est_pairwise_rf(input.seq = seq.ch1,
-                                 n.clusters = 7, 
+                                 ncpus = 7, 
                                  n.batch = 10,
                                  verbose=TRUE)   
    plot(all.pairs, 90, 91)

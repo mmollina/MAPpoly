@@ -4,10 +4,10 @@
 \alias{update_map}
 \title{Update map}
 \usage{
-update_map(map)
+update_map(input.map)
 }
 \arguments{
-\item{map}{an map object of class \code{mappoly.map}}
+\item{input.map}{an map object of class \code{mappoly.map}}
 }
 \value{
 an updated object of class \code{mappoly.map}, containing the original map plus redundant markers

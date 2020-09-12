@@ -130,7 +130,7 @@ the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
     red.mrk<-elim_redundant(s1)
     s1.unique.mrks<-make_seq_mappoly(red.mrk)
     s1.pairs<-est_pairwise_rf(input.seq = s1.unique.mrks,
-                                  n.clusters = 7,
+                                  ncpus = 7,
                                   verbose=TRUE)
     unique.gen.ord<-get_genomic_order(s1.unique.mrks)
     ## Selecting a subset of 100 markers at the beginning of chromosome 1 
@@ -156,7 +156,7 @@ the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
     red.mrk<-elim_redundant(mrk.subset)
     unique.mrks<-make_seq_mappoly(red.mrk)
     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-                                  n.clusters = 1,
+                                  ncpus = 1,
                                   verbose=TRUE)
     subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
                                         thres.twopt = 5,

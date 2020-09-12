@@ -1361,8 +1361,8 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
 #' Summary map
 #'
 #' This function generates a brief summary table of a list of \code{mappoly.map} objects
-#' @param map.object a list of objects of class \code{mappoly.map}
-#' @return a data frame containing a brief summary of all maps contained in \code{map.object}
+#' @param map.list a list of objects of class \code{mappoly.map}
+#' @return a data frame containing a brief summary of all maps contained in \code{map.list}
 #' @examples
 #'  \dontrun{
 #' (tetra.sum <- summary_maps(solcap.err.map))
@@ -1372,23 +1372,23 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
 #' }
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' @export summary_maps
-summary_maps = function(map.object){
+summary_maps = function(map.list){
   ## Check data
-  if (any(!sapply(map.object, inherits, "mappoly.map"))) 
-    stop(deparse(substitute(map.object)), 
+  if (any(!sapply(map.list, inherits, "mappoly.map"))) 
+    stop(deparse(substitute(map.list)), 
          " is not a list containing 'mappoly.map' objects.")
-  results = data.frame("LG" = as.character(seq(1,length(map.object),1)),
-                       "Genomic sequence" = as.character(unlist(lapply(map.object, function(x) unique(get(x$info$data.name, pos = 1)$sequence[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)])))),
-                       "Map size (cM)" = unlist(lapply(map.object, function(x) round(sum(c(0, imf_h(x$maps[[1]]$seq.rf))), 2))),
-                       "Markers/cM" = round(unlist(lapply(map.object, function(x) x$info$n.mrk/(round(sum(c(0, imf_h(x$maps[[1]]$seq.rf))), 2)))),2),
-                       "Simplex" = unlist(lapply(map.object, function(x) sum(get_tab_mrks(x)[rbind(c(1,2),c(2,1),c(x$info$m,(x$info$m+1)),c((x$info$m+1),x$info$m))]))),
-                       "Double-simplex" = unlist(lapply(map.object, function(x) sum(get_tab_mrks(x)[rbind(c(2,2),c(x$info$m,x$info$m))]))),
-                       "Multiplex" = unlist(lapply(map.object, function(x) sum(get_tab_mrks(x)) - sum(get_tab_mrks(x)[rbind(c(2,2),c(x$info$m,x$info$m))]) - sum(get_tab_mrks(x)[rbind(c(1,2),c(2,1),c(x$info$m,(x$info$m+1)),c((x$info$m+1),x$info$m))]))),
-                       "Total" = unlist(lapply(map.object, function(x) x$info$n.mrk)),
-                       "Max gap" = unlist(lapply(map.object, function(x) round(imf_h(max(x$maps[[1]]$seq.rf)),2))),
+  results = data.frame("LG" = as.character(seq(1,length(map.list),1)),
+                       "Genomic sequence" = as.character(unlist(lapply(map.list, function(x) unique(get(x$info$data.name, pos = 1)$sequence[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)])))),
+                       "Map size (cM)" = unlist(lapply(map.list, function(x) round(sum(c(0, imf_h(x$maps[[1]]$seq.rf))), 2))),
+                       "Markers/cM" = round(unlist(lapply(map.list, function(x) x$info$n.mrk/(round(sum(c(0, imf_h(x$maps[[1]]$seq.rf))), 2)))),2),
+                       "Simplex" = unlist(lapply(map.list, function(x) sum(get_tab_mrks(x)[rbind(c(1,2),c(2,1),c(x$info$m,(x$info$m+1)),c((x$info$m+1),x$info$m))]))),
+                       "Double-simplex" = unlist(lapply(map.list, function(x) sum(get_tab_mrks(x)[rbind(c(2,2),c(x$info$m,x$info$m))]))),
+                       "Multiplex" = unlist(lapply(map.list, function(x) sum(get_tab_mrks(x)) - sum(get_tab_mrks(x)[rbind(c(2,2),c(x$info$m,x$info$m))]) - sum(get_tab_mrks(x)[rbind(c(1,2),c(2,1),c(x$info$m,(x$info$m+1)),c((x$info$m+1),x$info$m))]))),
+                       "Total" = unlist(lapply(map.list, function(x) x$info$n.mrk)),
+                       "Max gap" = unlist(lapply(map.list, function(x) round(imf_h(max(x$maps[[1]]$seq.rf)),2))),
                        check.names = FALSE, stringsAsFactors = F)
   results = rbind(results, c('Total', NA, sum(as.numeric(results$`Map size (cM)`)), round(mean(as.numeric(results$`Markers/cM`)),2), sum(as.numeric(results$Simplex)), sum(as.numeric(results$`Double-simplex`)), sum(as.numeric(results$Multiplex)), sum(as.numeric(results$Total)), round(mean(as.numeric(results$`Max gap`)),2)))
-  if (!is.null(get(map.object[[1]]$info$data.name, pos = 1)$elim.correspondence)){
+  if (!is.null(get(map.list[[1]]$info$data.name, pos = 1)$elim.correspondence)){
     cat("\nYour dataset contains removed (redundant) markers. Once finished the map, remember to add the redundant ones with the function 'update_map'.\n\n")
   }
   return(results)
@@ -1429,7 +1429,7 @@ get_tab_mrks = function(x){
 #' are found, they are re-added to the map in their respective equivalent positions
 #' and another HMM round is performed.
 #' 
-#' @param map an map object of class \code{mappoly.map}
+#' @param input.map an map object of class \code{mappoly.map}
 #' @return an updated object of class \code{mappoly.map}, containing the original map plus redundant markers
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' @examples 
@@ -1442,40 +1442,37 @@ get_tab_mrks = function(x){
 #' 
 #' @export update_map
 #' 
-update_map = function(map){
+update_map = function(input.map){
   ## Checking object
-  
-  if (!inherits(input.seq, "mappoly.map")) {
-    stop(deparse(substitute(input.seq)), 
+  if (!inherits(input.map, "mappoly.map")) {
+    stop(deparse(substitute(input.map)), 
          " is not an object of class 'mappoly.map'")
   }
-  
-  ## Checking the existance of redundant markers
-  if (is.null(get(map$info$data.name, pos = 1)$elim.correspondence)) stop('Your dataset does not contain redundant markers. Please check it and try again.')
-  
+  ## Checking the existence of redundant markers
+  if (is.null(get(input.map$info$data.name, pos = 1)$elim.correspondence)) stop('Your dataset does not contain redundant markers. Please check it and try again.')
   ## Checking if redundant markers belong to the informed map
-  map.kept.mrks = which(as.character(get(map$info$data.name, pos = 1)$elim.correspondence$kept) %in% map$info$mrk.names)
+  map.kept.mrks = which(as.character(get(input.map$info$data.name, pos = 1)$elim.correspondence$kept) %in% input.map$info$mrk.names)
   if (is.null(map.kept.mrks)) stop("The redundant markers does not belong to the informed map. Please check it and try again.")
-  corresp = get(map$info$data.name, pos = 1)$elim.correspondence[which(as.character(get(map$info$data.name, pos = 1)$elim.correspondence$kept) %in% map$info$mrk.names),]
+  corresp = get(input.map$info$data.name, pos = 1)$elim.correspondence[which(as.character(get(input.map$info$data.name, pos = 1)$elim.correspondence$kept) %in% input.map$info$mrk.names),]
   
   ## Check if redundant markers were not already added to the map
-  if (any(corresp$elim %in% map$info$mrk.names)) {
+  if (any(corresp$elim %in% input.map$info$mrk.names)) {
     warning("Some redundant markers were already added to the map. These markers will be skipped.")
-    corresp = corresp[!(corresp$elim %in% map$info$mrk.names),]
+    corresp = corresp[!(corresp$elim %in% input.map$info$mrk.names),]
   }
   
   ## Updating number of markers
-  map$info$n.mrk = map$info$n.mrk + nrow(corresp)
+  input.map$info$n.mrk = input.map$info$n.mrk + nrow(corresp)
   
   ## Adding markers to the sequence
-  mrk.old = map$info$mrk.names
-  seq.old = map$maps[[1]]$seq.num
-  rf.old = map$maps[[1]]$seq.rf
-  phase.P = map$maps[[1]]$seq.ph$P
-  phase.Q = map$maps[[1]]$seq.ph$Q
+  mrk.old = input.map$info$mrk.names
+  seq.old = input.map$maps[[1]]$seq.num
+  rf.old = input.map$maps[[1]]$seq.rf
+  phase.P = input.map$maps[[1]]$seq.ph$P
+  phase.Q = input.map$maps[[1]]$seq.ph$Q
   while (nrow(corresp) > 0){
-    pos.kep = match(as.character(corresp$kept), get(map$info$data.name, pos = 1)$mrk.names)
-    pos.red = which(get(map$info$data.name, pos = 1)$mrk.names %in% as.character(corresp$elim))
+    pos.kep = match(as.character(corresp$kept), get(input.map$info$data.name, pos = 1)$mrk.names)
+    pos.red = which(get(input.map$info$data.name, pos = 1)$mrk.names %in% as.character(corresp$elim))
     seq.old = append(seq.old, pos.red[1], after = which(seq.old == pos.kep[1]))
     rf.old = append(rf.old, 0.000, after = which(seq.old == pos.kep[1]))
     mrk.old = append(mrk.old, as.character(corresp$elim[1]), after = which(mrk.old == as.character(corresp$kept[1])))
@@ -1486,12 +1483,12 @@ update_map = function(map){
   phase.P = phase.P[as.character(seq.old)]
   phase.Q = phase.Q[as.character(seq.old)]
   
-  map$info$mrk.names = mrk.old
-  map$maps[[1]]$seq.num = seq.old
-  map$maps[[1]]$seq.rf = rf.old
-  map$maps[[1]]$seq.ph$P = phase.P
-  map$maps[[1]]$seq.ph$Q = phase.Q
-  return(map)
+  input.map$info$mrk.names = mrk.old
+  input.map$maps[[1]]$seq.num = seq.old
+  input.map$maps[[1]]$seq.rf = rf.old
+  input.map$maps[[1]]$seq.ph$P = phase.P
+  input.map$maps[[1]]$seq.ph$Q = phase.Q
+  return(input.map)
 }
 
 #' Random sampling of dataset

@@ -13,7 +13,7 @@
 #'     pre-computed genotype frequencies, obtained with
 #'     \code{\link[mappoly]{cache_counts_twopt}} (optional, default = NULL)
 #'
-#' @param n.clusters Number of parallel processes to spawn (default = 1)
+#' @param ncpus Number of parallel processes to spawn (default = 1)
 #'
 #' @param verbose If \code{TRUE} (default), print the linkage phase
 #'     configurations. If \code{cached = TRUE}, nothing is
@@ -44,7 +44,7 @@
 #'   \dontrun{
 #'     all.mrk<-make_seq_mappoly(hexafake, 'all')
 #'     ## local computation
-#'     counts<-cache_counts_twopt(all.mrk, n.clusters = 8)
+#'     counts<-cache_counts_twopt(all.mrk, ncpus = 8)
 #'     ## load from internal file of web-stored counts (especially important for high ploidy levels)
 #'     counts.cached<-cache_counts_twopt(all.mrk, cached = TRUE)
 #'     }
@@ -65,11 +65,10 @@
 #' @importFrom stats na.omit
 #' @importFrom utils combn read.table
 cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL, 
-                               n.clusters = 1, verbose = TRUE, joint.prob = FALSE) {
+                               ncpus = 1L, verbose = TRUE, joint.prob = FALSE) {
   ## checking for correct object
   start <- proc.time()
-  input_classes <- c("mappoly.sequence")
-  if (!inherits(input.seq, input_classes)) {
+  if (!inherits(input.seq, "mappoly.sequence")) {
     stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
   }
   cache.prev = NULL
@@ -87,7 +86,7 @@ cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL,
   }
   temp.count <- NULL
   if (joint.prob) {
-    temp.count <- cache_counts_twopt(input.seq, cached = FALSE, cache.prev = cache.prev, n.clusters = n.clusters, verbose = verbose, joint.prob = FALSE)$cond
+    temp.count <- cache_counts_twopt(input.seq, cached = FALSE, cache.prev = cache.prev, ncpus = ncpus, verbose = verbose, joint.prob = FALSE)$cond
   }
   if (input.seq$m >= 8)
     message("\nploidy level ", input.seq$m, ": this operation could take a very long time.
@@ -107,7 +106,7 @@ cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL,
     if (ncol(cache.prev[[min(which(first.na))]][[1]]) != pl.class) {
       warning(deparse(substitute(cache.prev)), " contains counts for ploidy level ", names(which(x == ncol(cache.prev[[1]][[1]]))), "\n  Obtaining new counts for ploidy ",
               input.seq$m)
-      return(cache_counts_twopt(input.seq = input.seq, cache.prev = NULL, n.clusters = n.clusters, verbose = verbose, joint.prob = joint.prob))
+      return(cache_counts_twopt(input.seq = input.seq, cache.prev = NULL, ncpus = ncpus, verbose = verbose, joint.prob = joint.prob))
     }
     remaining <- which(is.na(pmatch(dose.names, names(cache.prev))))
     if (length(remaining) == 0) {
@@ -122,10 +121,10 @@ cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL,
     cat("\n   Caching the following dosage combination: \n")
     print(aux.mat)
   }
-  if (n.clusters > 1) {
+  if (ncpus > 1) {
     if (verbose)
-      cat("INFO: Using ", n.clusters, " CPU's for calculation.\n")
-    cl <- makeCluster(n.clusters)
+      cat("INFO: Using ", ncpus, " CPU's for calculation.\n")
+    cl <- makeCluster(ncpus)
     on.exit(stopCluster(cl))
     y <- parApply(cl, aux.mat, 1, get_counts_all_phases, m = input.seq$m, joint.prob = joint.prob)
     end <- proc.time()

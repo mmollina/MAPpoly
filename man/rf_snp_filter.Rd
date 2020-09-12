@@ -11,7 +11,7 @@ rf_snp_filter(
   thresh.rf = 0.15,
   thresh.perc = 0.05,
   remove.fp = NULL,
-  n.clusters = 1
+  ncpus = 1L
 )
 }
 \arguments{
@@ -36,7 +36,7 @@ this parameter identifies and removes markers that presented more than 90\%
 of its pairwise recombination fractions below \code{remove.fp} value throughout
 the linkage group}
 
-\item{n.clusters}{number of parallel processes (i.e. cores) to spawn (default = 1)}
+\item{ncpus}{number of parallel processes (i.e. cores) to spawn (default = 1)}
 }
 \value{
 A filtered object of class \code{mappoly.sequence}. 
@@ -62,7 +62,7 @@ Remove markers that do not meet a LOD and recombination fraction
     red.mrk<-elim_redundant(all.mrk)
     unique.mrks<-make_seq_mappoly(red.mrk)
     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-                               n.clusters = 7,
+                               ncpus = 7,
                                verbose=TRUE)
 
     ## Full recombination fraction matrix
