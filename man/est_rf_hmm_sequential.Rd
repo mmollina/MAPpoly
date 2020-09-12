@@ -129,9 +129,7 @@ the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
     s1<-make_seq_mappoly(tetra.solcap, 'seq1')
     red.mrk<-elim_redundant(s1)
     s1.unique.mrks<-make_seq_mappoly(red.mrk)
-    counts.web<-cache_counts_twopt(s1.unique.mrks, cached = TRUE)
     s1.pairs<-est_pairwise_rf(input.seq = s1.unique.mrks,
-                                  count.cache = counts.web,
                                   n.clusters = 7,
                                   verbose=TRUE)
     unique.gen.ord<-get_genomic_order(s1.unique.mrks)
@@ -157,9 +155,7 @@ the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
     mrk.subset<-make_seq_mappoly(hexafake, 1:50)
     red.mrk<-elim_redundant(mrk.subset)
     unique.mrks<-make_seq_mappoly(red.mrk)
-    counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-                                  count.cache = counts.web,
                                   n.clusters = 1,
                                   verbose=TRUE)
     subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,

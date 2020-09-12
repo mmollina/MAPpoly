@@ -489,8 +489,10 @@ mrk_chisq_test<-function(x, m){
 #' }
 #' @export
 get_genomic_order<-function(input.seq){
-  if (!class(input.seq) == "mappoly.sequence")
-    stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
+  if (!inherits(input.seq, "mappoly.sequence")) {
+    stop(deparse(substitute(input.seq)), 
+         " is not an object of class 'mappoly.sequence'")
+  }
   if(all(is.na(input.seq$sequence.pos))){
     if(all(is.na(input.seq$sequence))) 
       stop("No sequence or sequence position information found.")
@@ -1248,18 +1250,18 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
   ## Check objects class
   if (is.null(dat.1)){
     if (is.null(dat.2)) return(dat.1)
-    if (class(dat.2) != 'mappoly.data'){
-      stop("The second dataset is not of class 'mappoly.data'.")
+    if (!inherits(dat.2, "mappoly.data")) {
+      stop(deparse(substitute(dat.2)), " is not an object of class 'mappoly.data'")
     } else {
       return(dat.2)
     }
   } 
-  if (class(dat.1) != 'mappoly.data'){
-    stop("The first dataset is not of class 'mappoly.data'.")
+  if (!inherits(dat.1, "mappoly.data")) {
+    stop(deparse(substitute(dat.1)), " is not an object of class 'mappoly.data'")
   }
   if (is.null(dat.2)) return(dat.1)
-  if (class(dat.2) != 'mappoly.data'){
-    stop("The second dataset is not of class 'mappoly.data'.")
+  if (!inherits(dat.2, "mappoly.data")) {
+    stop(deparse(substitute(dat.2)), " is not an object of class 'mappoly.data'")
   }
   ## Check ploidy
   if (dat.1$m != dat.2$m){
@@ -1360,7 +1362,7 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
 #'
 #' This function generates a brief summary table of a list of \code{mappoly.map} objects
 #' @param map.object a list of objects of class \code{mappoly.map}
-#' @return a dataframe containing a brief summary of all maps contained in \code{map.object}
+#' @return a data frame containing a brief summary of all maps contained in \code{map.object}
 #' @examples
 #'  \dontrun{
 #' (tetra.sum <- summary_maps(solcap.err.map))
@@ -1372,8 +1374,9 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
 #' @export summary_maps
 summary_maps = function(map.object){
   ## Check data
-  if (!all(unlist(lapply(map.object, function(x) class(x))) == 'mappoly.map')) stop('The indicated map object is not of class "mappoly.map".')
-  
+  if (any(!sapply(map.object, inherits, "mappoly.map"))) 
+    stop(deparse(substitute(map.object)), 
+         " is not a list containing 'mappoly.map' objects.")
   results = data.frame("LG" = as.character(seq(1,length(map.object),1)),
                        "Genomic sequence" = as.character(unlist(lapply(map.object, function(x) unique(get(x$info$data.name, pos = 1)$sequence[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)])))),
                        "Map size (cM)" = unlist(lapply(map.object, function(x) round(sum(c(0, imf_h(x$maps[[1]]$seq.rf))), 2))),
@@ -1441,7 +1444,11 @@ get_tab_mrks = function(x){
 #' 
 update_map = function(map){
   ## Checking object
-  if (class(map) != 'mappoly.map') stop('The informed object is not of class mappoly.map. Please check it and try again.')
+  
+  if (!inherits(input.seq, "mappoly.map")) {
+    stop(deparse(substitute(input.seq)), 
+         " is not an object of class 'mappoly.map'")
+  }
   
   ## Checking the existance of redundant markers
   if (is.null(get(map$info$data.name, pos = 1)$elim.correspondence)) stop('Your dataset does not contain redundant markers. Please check it and try again.')

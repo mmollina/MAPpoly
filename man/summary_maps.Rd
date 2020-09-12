@@ -10,7 +10,7 @@ summary_maps(map.object)
 \item{map.object}{a list of objects of class \code{mappoly.map}}
 }
 \value{
-a dataframe containing a brief summary of all maps contained in \code{map.object}
+a data frame containing a brief summary of all maps contained in \code{map.object}
 }
 \description{
 This function generates a brief summary table of a list of \code{mappoly.map} objects

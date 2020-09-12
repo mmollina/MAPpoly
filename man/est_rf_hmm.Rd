@@ -133,7 +133,7 @@ This function first enumerates a set of linkage phase configurations
  of markers (e.g. 50 markers for hexaploids) since the possible linkage 
  phase combinations bounded only by the two-point information can be huge. 
  Also, it can be quite sensible to small changes in \code{'thresh'}. 
- For higher number of markers, please see \code{\link[mappoly]{est_rf_hmm_sequential}}.
+ For a large number of markers, please see \code{\link[mappoly]{est_rf_hmm_sequential}}.
 }
 \examples{
  \dontrun{

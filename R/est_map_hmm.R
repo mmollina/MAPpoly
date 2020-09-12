@@ -378,9 +378,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'     s1<-make_seq_mappoly(tetra.solcap, 'seq1')
 #'     red.mrk<-elim_redundant(s1)
 #'     s1.unique.mrks<-make_seq_mappoly(red.mrk)
-#'     counts.web<-cache_counts_twopt(s1.unique.mrks, cached = TRUE)
 #'     s1.pairs<-est_pairwise_rf(input.seq = s1.unique.mrks,
-#'                                   count.cache = counts.web,
 #'                                   n.clusters = 7,
 #'                                   verbose=TRUE)
 #'     unique.gen.ord<-get_genomic_order(s1.unique.mrks)
@@ -406,9 +404,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'     mrk.subset<-make_seq_mappoly(hexafake, 1:50)
 #'     red.mrk<-elim_redundant(mrk.subset)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
-#'     counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
 #'     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-#'                                   count.cache = counts.web,
 #'                                   n.clusters = 1,
 #'                                   verbose=TRUE)
 #'     subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
@@ -463,12 +459,15 @@ est_rf_hmm_sequential<-function(input.seq,
                                 high.prec = FALSE)
 {
   ## checking for correct object
-  if (!any(class(input.seq) == "mappoly.sequence"))
-    stop(deparse(substitute(input.seq)),
+  input_classes <- c("mappoly.sequence", "poly.est.two.pts.pairwise")
+  if (!inherits(input.seq, input_classes[1])) {
+    stop(deparse(substitute(input.seq)), 
          " is not an object of class 'mappoly.sequence'")
-  if (!any(class(twopt) == "poly.est.two.pts.pairwise"))
-    stop(deparse(substitute(twopt)),
+  }
+  if (!inherits(twopt, input_classes[2])) {
+    stop(deparse(substitute(twopt)), 
          " is not an object of class 'poly.est.two.pts.pairwise'")
+  }
   ## Information about the map
   if(verbose) {
     cli::cat_line("Number of markers: ", length(input.seq$seq.num))
