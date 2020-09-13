@@ -30,7 +30,6 @@ Imports:
     magrittr,
     reshape,
     ggplot2,
-    MDSMap, 
     smacof,
     princurve,
     dendextend

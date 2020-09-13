@@ -42,69 +42,21 @@
 #'
 #' @examples
 #'  \dontrun{
-#'     all.mrk<-make_seq_mappoly(hexafake, 'all')
-#'     red.mrk<-elim_redundant(all.mrk)
-#'     unique.mrks<-make_seq_mappoly(red.mrk)
-#'     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-#'                                ncpus = 7,
-#'                                verbose=TRUE)
-#'
-#'     ## Full recombination fraction matrix
-#'     mat.full<-rf_list_to_matrix(input.twopt=all.pairs)
-#'     plot(mat.full)
-#'
-#'     lgs <- group_mappoly(input.mat = mat.full,
-#'                          expected.groups = 3,
-#'                          inter = TRUE,
-#'                          comp.mat = TRUE, #this data has physical information
-#'                          verbose=TRUE)
-#'     lgs
-#'     plot(lgs)
-#'     lg1 <- make_seq_mappoly(lgs, 1)
-#'     lg2 <- make_seq_mappoly(lgs, 2)
-#'     lg3 <- make_seq_mappoly(lgs, 3)
-#'
-#'     ##Plot matrices
-#'     p1<-make_pairs_mappoly(input.seq = lg1, input.twopt = all.pairs)
-#'     p2<-make_pairs_mappoly(input.seq = lg2, input.twopt = all.pairs)
-#'     p3<-make_pairs_mappoly(input.seq = lg3, input.twopt = all.pairs)
-#'     m1<-rf_list_to_matrix(input.twopt = p1)
-#'     m2<-rf_list_to_matrix(input.twopt = p2)
-#'     m3<-rf_list_to_matrix(input.twopt = p3)
-#'     op<-par(mfrow = c(1,3), pty = "s")
-#'     plot(m1, main.text = "LG1")
-#'     plot(m2, main.text = "LG2")
-#'     plot(m3, main.text = "LG3")
-#'     par(op)
-#'
+#'     s1 <- make_seq_mappoly(hexafake, 'seq1')
+#'     t1 <- est_pairwise_rf(s1, ncpus = 7)
+#'     m1 <- rf_list_to_matrix(t1)
+#'     plot(m1, ord = rownames(get_genomic_order(s1)))
+#'     
 #'     ## Removing disruptive SNPs
-#'     lg1.filt<-rf_snp_filter(p1, 5, 5, 0.15, thresh.perc = 0.05)
-#'     lg2.filt<-rf_snp_filter(p2, 5, 5, 0.15, thresh.perc = 0.05)
-#'     lg3.filt<-rf_snp_filter(p3, 5, 5, 0.15, thresh.perc = 0.05)
-#'     p1.filt<-make_pairs_mappoly(input.seq = lg1.filt, input.twopt = all.pairs)
-#'     p2.filt<-make_pairs_mappoly(input.seq = lg2.filt, input.twopt = all.pairs)
-#'     p3.filt<-make_pairs_mappoly(input.seq = lg3.filt, input.twopt = all.pairs)
-#'     m1.filt<-rf_list_to_matrix(input.twopt = p1.filt)
-#'     m2.filt<-rf_list_to_matrix(input.twopt = p2.filt)
-#'     m3.filt<-rf_list_to_matrix(input.twopt = p3.filt)
-#'     
-#'     
-#'     mds.ord1 <- mds_mappoly(input.mat = m1.filt, p = NULL, n = NULL, ndim = 2)
-#'     plot(mds.ord1)
-#'     plot(mds.ord1)
-#'     mds.ord2 <- mds_mappoly(input.mat = m2.filt, p = NULL, n = NULL, ndim = 2)
-#'     plot(mds.ord2)
-#'     mds.ord3 <- mds_mappoly(input.mat = m3.filt, p = NULL, n = NULL, ndim = 2)
-#'     plot(mds.ord3)
-#'     mds.seq.ord1 <- make_seq_mappoly(mds.ord1)
-#'     mds.seq.ord2 <- make_seq_mappoly(mds.ord2)
-#'     mds.seq.ord3 <- make_seq_mappoly(mds.ord3)
-#'    
-#'     op<-par(mfrow = c(1,3), pty = "s")
-#'     plot(m1.filt, ord = mds.seq.ord1$seq.mrk.names, main.text = "LG1_MDS")
-#'     plot(m2.filt, ord = mds.seq.ord2$seq.mrk.names, main.text = "LG2_MDS")
-#'     plot(m3.filt, ord = mds.seq.ord3$seq.mrk.names, main.text = "LG3_MDS")
-#'     par(op)
+#'     s1f <- rf_snp_filter(t1, 5, 5, 0.15, thresh.perc = 0.05)
+#'     m1f <- make_mat_mappoly(m1, s1f)
+#'     mds.ord <- mds_mappoly(m1f)
+#'     plot(mds.ord)
+#'     so <- make_seq_mappoly(mds.ord)
+#'     plot(m1f, ord = rownames(get_genomic_order(so)))
+#'     plot(so$seq.num ~ I(so$sequence.pos/1e6), 
+#'          xlab = "Genome Position",
+#'          ylab = "MDS position")
 #'    }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} mostly adapted from TetraploidSNPMap codes
@@ -119,7 +71,6 @@
 #' @importFrom princurve principal.curve
 #' @importFrom stats runif 
 #' @importFrom utils read.csv write.csv
-#' @import MDSMap 
 #' @export mds_mappoly
 mds_mappoly<-function(input.mat,
                       p = NULL,
@@ -167,7 +118,7 @@ mds_mappoly<-function(input.mat,
   } else {
     locikey<-data.frame(locus=lodrf$locinames,confplotno=confplotno)
   }
-  nnfit<-MDSMap::calc.nnfit(distmap,lodmap,estpos)
+  nnfit<-calc.nnfit(distmap,lodmap,estpos)
   locimap<-data.frame(confplotno=confplotno[maporder],locus=locikey$locus[maporder],position=estpos,nnfit=nnfit$pointfits,row.names=1:nloci)
   if(!is.null(n)) {
     removedloci<-data.frame(n,lodrf$locinames[n],row.names=NULL)
@@ -210,17 +161,110 @@ print.mappoly.pcmap3d<-function(x, ...)
   cat("\nMean Nearest Neighbour Fit:", x$meannnfit)
 }
 
-#' @importFrom utils getFromNamespace
 #' @export
-plot.mappoly.pcmap<-function(x, D1lim = NULL, D2lim = NULL, displaytext = FALSE,...)
+plot.mappoly.pcmap<-function (x, D1lim = NULL, D2lim = NULL, displaytext = FALSE, ...) 
 {
-  fun <- getFromNamespace("plot.pcmap", "MDSMap")
-  fun(x, D1lim = D1lim, D2lim = D2lim, displaytext = displaytext, ...)
+  op<-graphics::par(mfrow = c(1, 2))
+  with(x, {
+    if (displaytext == TRUE) {
+      labels = locikey$locus
+    }
+    else {
+      labels = locikey$confplotno
+    }
+    graphics::plot(smacofsym$conf, type = "n", main = "MDS with principal curve", 
+                   xlim = D1lim, ylim = D2lim, xlab = "Dim 1", ylab = "Dim 2")
+    text(smacofsym$conf, labels = labels, cex = 0.8)
+    lines(pc)
+    if (displaytext == TRUE) {
+      labels1 = locimap$locus
+    }
+    else {
+      labels1 = locimap$confplotno
+    }
+    graphics::plot(locimap$position, locimap$nnfit, type = "n", 
+                   xlab = "Position", ylab = "nnfit", main = "nearest neighbour fits")
+    text(locimap$position, locimap$nnfit, labels1)
+  })
+  par(op)
 }
 
 #' @export
-plot.mappoly.pcmap3d<-function(x, D1lim = NULL, D2lim = NULL, displaytext = FALSE,...)
+plot.mappoly.pcmap3d<-function(x, D1lim = NULL, D2lim = NULL, D3lim = NULL, displaytext = FALSE, ...) 
 {
-  fun <- getFromNamespace("plot.pcmap3d", "MDSMap")
-  fun(x, D1lim = D1lim, D2lim = D2lim, displaytext = displaytext, ...)
+  op <- graphics::par(mfrow = c(2, 2))
+  with(x, {
+    if (displaytext == TRUE) {
+      labels = locikey$locus
+    }
+    else {
+      labels = locikey$confplotno
+    }
+    graphics::par(mfrow = c(2, 2))
+    graphics::plot(smacofsym$conf[, "D1"], smacofsym$conf[, 
+                                                          "D2"], type = "n", main = "MDS with principal curve", 
+                   xlab = "Dimension 1", ylab = "Dimension 2", xlim = D1lim, 
+                   ylim = D2lim)
+    text(smacofsym$conf[, "D1"], smacofsym$conf[, "D2"], 
+         labels = labels, cex = 0.8)
+    lines(pc$s[, "D1"][pc$ord], pc$s[, "D2"][pc$ord])
+    graphics::plot(smacofsym$conf[, "D1"], smacofsym$conf[, 
+                                                          "D3"], type = "n", main = "MDS with principal curve", 
+                   xlab = "Dimension 1", ylab = "Dimension 3", xlim = D1lim, 
+                   ylim = D3lim)
+    text(smacofsym$conf[, "D1"], smacofsym$conf[, "D3"], 
+         labels = labels, cex = 0.8)
+    lines(pc$s[, "D1"][pc$ord], pc$s[, "D3"][pc$ord])
+    graphics::plot(smacofsym$conf[, "D2"], smacofsym$conf[, 
+                                                          "D3"], type = "n", main = "MDS with principal curve", 
+                   xlab = "Dimension 2", ylab = "Dimension 3", xlim = D2lim, 
+                   ylim = D3lim)
+    text(smacofsym$conf[, "D2"], smacofsym$conf[, "D3"], 
+         labels = labels, cex = 0.8)
+    lines(pc$s[, "D2"][pc$ord], pc$s[, "D3"][pc$ord])
+    if (displaytext == TRUE) {
+      labels1 = locimap$locus
+    }
+    else {
+      labels1 = locimap$confplotno
+    }
+    graphics::plot(locimap$position, locimap$nnfit, type = "n", 
+                   xlab = "Position", ylab = "nnfit", main = "nearest neighbour fits")
+    text(locimap$position, locimap$nnfit, labels1)
+  })
+  par(op)
 }
+
+#'@keywords internal
+calc.nnfit <- function (distmap, lodmap, estmap){
+  pointfits <- unlist(lapply(1:dim(distmap)[2], calc.nnfit.loci, 
+                             distmap = distmap, lodmap = lodmap, estmap = estmap))
+  fit <- sum(pointfits)
+  list(fit = fit, pointfits = pointfits, meanfit = mean(pointfits))
+}
+#'@keywords internal
+calc.nnfit.loci <- function (loci, distmap, lodmap, estmap){
+  nns <- get.nearest.informative(loci, lodmap)
+  obs <- distmap[loci, nns]
+  est <- estmap[loci] - estmap[nns]
+  nn.fit <- sum(abs(obs - est))
+  nn.fit
+}
+#'@keywords internal
+get.nearest.informative <- function (loci, lodmap){
+  neighbours <- NULL
+  if (loci > 1) {
+    locileft <- lodmap[loci, (loci - 1):1]
+    if (length(which(locileft != 0)) > 0) 
+      neighbours <- loci - min(which(locileft != 0))
+  }
+  if (loci < dim(lodmap)[2]) {
+    lociright <- lodmap[loci, (loci + 1):dim(lodmap)[2]]
+    if (length(which(lociright != 0)) > 0) 
+      neighbours <- c(neighbours, loci + min(which(lociright != 0)))
+  }
+  neighbours
+}
+
+
+
