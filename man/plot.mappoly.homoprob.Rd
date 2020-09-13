@@ -9,7 +9,7 @@
 \arguments{
 \item{x}{an object of class \code{mappoly.homoprob}}
 
-\item{stack}{logical. If \code{TRUE}, probability profiles of all homologs
+\item{stack}{logical. If \code{TRUE}, probability profiles of all homologues
 are stacked in the plot (default = FALSE)}
 
 \item{lg}{indicates which linkage group should be plotted. If \code{NULL} 

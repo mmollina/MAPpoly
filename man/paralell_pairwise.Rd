@@ -15,7 +15,7 @@ paralell_pairwise(
 )
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Wrapper function to pairwise two-point estimation in C++

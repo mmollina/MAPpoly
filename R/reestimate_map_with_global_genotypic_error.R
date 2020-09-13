@@ -33,7 +33,7 @@ genotyping_global_error<-function(x, m, restricted = TRUE,  error=0.01, th.prob=
   }
 }
 
-#' Reestimate genetic map given a global genotyping error
+#' Re-estimate genetic map given a global genotyping error
 #'
 #' This function considers a global error when re-estimating
 #' a genetic map using Hidden Markov models. Since this function 

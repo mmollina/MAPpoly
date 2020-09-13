@@ -44,7 +44,7 @@ the final object will contain 'geno'. This is set to NULL otherwise}
     \item{nphen}{(0)}
     \item{phen}{(NULL)}
     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
-    test of mendelian segregation performed for all markers in both datasets}
+    test of Mendelian segregation performed for all markers in both datasets}
     \item{kept}{if elim.redundant=TRUE when reading any dataset, holds all non-redundant markers}
     \item{elim.correspondence}{if elim.redundant=TRUE when reading any dataset,
 holds all non-redundant markers and its equivalence to the redundant ones}

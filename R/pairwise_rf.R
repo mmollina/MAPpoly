@@ -39,7 +39,7 @@
 #'         \code{mappoly.data} with the raw data}
 #'     \item{n.mrk}{number of markers in the sequence}
 #'     \item{seq.num}{a \code{vector} containing the (ordered) indices
-#'         of markers inthe sequence, according to the input file}
+#'         of markers in the sequence, according to the input file}
 #'     \item{pairwise}{a list of size
 #'     \code{choose(length(input.seq$seq.num), 2)}, each of them containing a 
 #'     matrix where the name of the rows have the form x-y, where x and y indicate 
@@ -302,7 +302,7 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
 
 #' Wrapper function to pairwise two-point estimation in C++
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 paralell_pairwise <- function(mrk.pairs,
@@ -327,7 +327,7 @@ paralell_pairwise <- function(mrk.pairs,
 
 #' Format results from pairwise two-point estimation in C++
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 format_rf <- function(res) {
   x <- res

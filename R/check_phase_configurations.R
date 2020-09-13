@@ -274,7 +274,7 @@ check_pairwise <- function(input.seq, twopt) {
 #'     where x is the object of class \code{two.pts.linkage.phases}
 #'     and i is one of the possible configurations.
 #' @return a vector with the recombination fraction between markers
-#'     present in ph.list, for that spacific order.
+#'     present in ph.list, for that specific order.
 #' @keywords internal
 get_rf_from_list <- function(twopt, ph.list) {
     nm <- as.numeric(names(ph.list$P))
@@ -505,7 +505,7 @@ plot.two.pts.linkage.phases <- function(x, ...) {
 #'
 #' @param m ploidy level
 #' @param hom.allele.p a \code{list} of vectors containing linkage
-#'     phase configuration for paraent P. Each vector contains the
+#'     phase configuration for parent P. Each vector contains the
 #'     numbers of the homologous chromosomes in which the alleles are
 #'     located.
 #' @param hom.allele.q same for parent Q

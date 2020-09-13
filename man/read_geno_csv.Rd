@@ -49,7 +49,7 @@ An object of class \code{mappoly.data} which contains a
       \code{ploidy_level + 1}}
     \item{n.phen}{number of phenotypic traits}
     \item{phen}{a matrix containing the phenotypic data. The rows
-                corespond to the trais and the columns correspond
+                correspond to the traits and the columns correspond
                 to the individuals}
     \item{kept}{if elim.redundant=TRUE, holds all non-redundant markers}
     \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
@@ -82,7 +82,7 @@ plot(SolCAP.dose)
 }
 \references{
 Mollinari M., Olukolu B. A.,  Pereira G. da S., 
-    Khan A., Gemenet D., Yench G. C., Zeng Z-B. (2020), 
+    Khan A., Gemenet D., Yencho G. C., Zeng Z-B. (2020), 
     Unraveling the Hexaploid Sweetpotato Inheritance 
     Using Ultra-Dense Multilocus Mapping, 
     _G3: Genes, Genomes, Genetics_. 

@@ -36,7 +36,7 @@
 #'
 #' @references
 #'     Mollinari M., Olukolu B. A.,  Pereira G. da S., 
-#'     Khan A., Gemenet D., Yench G. C., Zeng Z-B. (2020), 
+#'     Khan A., Gemenet D., Yencho G. C., Zeng Z-B. (2020), 
 #'     Unraveling the Hexaploid Sweetpotato Inheritance 
 #'     Using Ultra-Dense Multilocus Mapping, 
 #'     _G3: Genes, Genomes, Genetics_. 
@@ -88,7 +88,7 @@ print.mappoly.homoprob<-function(x, ...){
 #' 
 #' @param x an object of class \code{mappoly.homoprob}
 #' 
-#' @param stack logical. If \code{TRUE}, probability profiles of all homologs
+#' @param stack logical. If \code{TRUE}, probability profiles of all homologues
 #'              are stacked in the plot (default = FALSE)
 #'              
 #' @param lg indicates which linkage group should be plotted. If \code{NULL} 

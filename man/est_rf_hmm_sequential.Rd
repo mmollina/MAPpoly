@@ -60,7 +60,7 @@ of the chain (i.e. number of markers where all homologous
 (\eqn{ploidy x 2}) can be distinguished) to calculate the map likelihood}
 
 \item{reestimate.single.ph.configuration}{logical. If \code{FALSE} (default)
-returns a map without reestimating the map parameters in cases
+returns a map without re-estimating the map parameters in cases
 where there are only one possible linkage phase configuration}
 
 \item{tol}{the desired accuracy during the sequential phase (default = 10e-02)}

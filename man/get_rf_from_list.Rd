@@ -23,7 +23,7 @@ and i is one of the possible configurations.}
 }
 \value{
 a vector with the recombination fraction between markers
-    present in ph.list, for that spacific order.
+    present in ph.list, for that specific order.
 }
 \description{
 Get the recombination fraction for a sequence of markers given an

@@ -51,6 +51,6 @@ The dataset also contains the genomic order of the SNPs from the Solanum
 tuberosum genome version 4.03. The genotype calling was performed using the
 fitPoly R package. Although this dataset contains the
 probability distribution of the genotypes, 
-it is essentialy the same dataset found in \code{\link[mappoly]{tetra.solcap}}
+it is essentially the same dataset found in \code{\link[mappoly]{tetra.solcap}}
 }
 \keyword{datasets}

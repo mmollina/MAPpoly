@@ -21,7 +21,7 @@ get_counts_one_parent <- function(ploidy, gen.par.mk1, gen.par.mk2, gen.prog.mk1
 
 #' Counts for recombinant classes
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 get_counts_two_parents <- function(x = c(2, 2), ploidy, p.k, p.k1, q.k, q.k1, verbose = FALSE, joint.prob = FALSE) {
     gen.prog.mk1 <- x[1]
@@ -75,7 +75,7 @@ get_counts_two_parents <- function(x = c(2, 2), ploidy, p.k, p.k1, q.k, q.k1, ve
 
 #' Counts for recombinant classes
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 get_counts <- function(m, P.k = NULL, P.k1 = NULL, Q.k = NULL, Q.k1 = NULL, verbose = FALSE, make.names = FALSE, joint.prob = FALSE) {
     if (verbose) {
@@ -134,7 +134,7 @@ get_counts <- function(m, P.k = NULL, P.k1 = NULL, Q.k = NULL, Q.k1 = NULL, verb
 #' homologous chromosomes. The row names indicates the dosage in loci
 #' k and k+1 respectively
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 get_counts_all_phases <- function(x, m, verbose = FALSE, make.names = FALSE, joint.prob = FALSE) {
     pk <- x[1]

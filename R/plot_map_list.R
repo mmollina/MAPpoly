@@ -133,7 +133,7 @@ extract_map<-function(input.map, phase.config = "best")
 
 #' plot a single linkage group with no phase
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 plot_one_map<-function(x, i = 0, horiz = FALSE, col = "lightgray")
 {

@@ -3,7 +3,7 @@
 \name{get_full_info_tail}
 \alias{get_full_info_tail}
 \title{Get the tail of a marker sequence up to the point where the markers
-provide no additional infomation.}
+provide no additional information.}
 \usage{
 get_full_info_tail(input.obj, extend = NULL)
 }
@@ -12,6 +12,6 @@ get_full_info_tail(input.obj, extend = NULL)
 }
 \description{
 Get the tail of a marker sequence up to the point where the markers
-provide no additional infomation.
+provide no additional information.
 }
 \keyword{internal}

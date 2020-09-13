@@ -42,7 +42,7 @@ population given a map and conditional genotype probabilities.
 }
 \references{
 Mollinari M., Olukolu B. A.,  Pereira G. da S., 
-    Khan A., Gemenet D., Yench G. C., Zeng Z-B. (2020), 
+    Khan A., Gemenet D., Yencho G. C., Zeng Z-B. (2020), 
     Unraveling the Hexaploid Sweetpotato Inheritance 
     Using Ultra-Dense Multilocus Mapping, 
     _G3: Genes, Genomes, Genetics_. 

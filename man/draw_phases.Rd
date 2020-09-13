@@ -10,7 +10,7 @@ draw_phases(m, hom.allele.p, hom.allele.q)
 \item{m}{ploidy level}
 
 \item{hom.allele.p}{a \code{list} of vectors containing linkage
-phase configuration for paraent P. Each vector contains the
+phase configuration for parent P. Each vector contains the
 numbers of the homologous chromosomes in which the alleles are
 located.}
 

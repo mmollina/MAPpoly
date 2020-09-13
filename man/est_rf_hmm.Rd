@@ -72,7 +72,7 @@ position for all maps. If FALSE (default), prints a map summary}
 \item{left.lim}{the left limit of the plot (in cM, default = 0).}
 
 \item{right.lim}{the right limit of the plot (in cM, default = Inf, i.e., 
-will print the intire map)}
+will print the entire map)}
 
 \item{phase}{logical. If \code{TRUE} (default) plots the phase configuration
 for both parents}

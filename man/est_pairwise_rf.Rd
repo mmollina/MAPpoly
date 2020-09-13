@@ -53,7 +53,7 @@ An object of class \code{poly.est.two.pts.pairwise} which
         \code{mappoly.data} with the raw data}
     \item{n.mrk}{number of markers in the sequence}
     \item{seq.num}{a \code{vector} containing the (ordered) indices
-        of markers inthe sequence, according to the input file}
+        of markers in the sequence, according to the input file}
     \item{pairwise}{a list of size
     \code{choose(length(input.seq$seq.num), 2)}, each of them containing a 
     matrix where the name of the rows have the form x-y, where x and y indicate 

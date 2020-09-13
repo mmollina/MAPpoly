@@ -2,7 +2,7 @@
 % Please edit documentation in R/reestimate_map_with_global_genotypic_error.R
 \name{est_full_hmm_with_global_error}
 \alias{est_full_hmm_with_global_error}
-\title{Reestimate genetic map given a global genotyping error}
+\title{Re-estimate genetic map given a global genotyping error}
 \usage{
 est_full_hmm_with_global_error(
   input.map,

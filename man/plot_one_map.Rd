@@ -7,7 +7,7 @@
 plot_one_map(x, i = 0, horiz = FALSE, col = "lightgray")
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 plot a single linkage group with no phase

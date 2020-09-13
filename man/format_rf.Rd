@@ -7,7 +7,7 @@
 format_rf(res)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Format results from pairwise two-point estimation in C++

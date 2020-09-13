@@ -281,13 +281,7 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
 #'}
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
-#'
-#' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
-#'     analysis and haplotype phasing in experimental autopolyploid
-#'     populations with high ploidy level using hidden Markov
-#'     models, _submited_. \url{https://doi.org/10.1101/415232}
-#'     
+#' 
 #' @importFrom graphics axis
 #' @export
 filter_segregation<-function(input.data, chisq.pval.thres = 10e-5, inter = TRUE){

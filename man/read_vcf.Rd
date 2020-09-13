@@ -71,7 +71,7 @@ An object of class \code{mappoly.data} which contains a
     \item{phen}{(unused field)}
     \item{all.mrk.depth}{DP information for all markers on VCF file}
     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
-    test of mendelian segregation performed for all markers}
+    test of Mendelian segregation performed for all markers}
     \item{kept}{if elim.redundant=TRUE, holds all non-redundant markers}
     \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
 its equivalence to the redundant ones}
@@ -130,7 +130,7 @@ print(seq.init, detailed = TRUE)
 }
 \references{
 Mollinari M., Olukolu B. A.,  Pereira G. da S., 
-    Khan A., Gemenet D., Yench G. C., Zeng Z-B. (2020), 
+    Khan A., Gemenet D., Yencho G. C., Zeng Z-B. (2020), 
     Unraveling the Hexaploid Sweetpotato Inheritance 
     Using Ultra-Dense Multilocus Mapping, 
     _G3: Genes, Genomes, Genetics_. 

@@ -13,7 +13,7 @@ get_counts_all_phases(
 )
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 return the counts of each recombinant class (for two loci) in

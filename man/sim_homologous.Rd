@@ -30,7 +30,7 @@ different dosage to be simulated (default = NULL)}
 \item{max.ph}{maximum phase difference}
 
 \item{restriction}{if TRUE (default), avoid cases where it is impossible to
-estmate recombination fraction and/or linkage phases via
+estimate recombination fraction and/or linkage phases via
 two-point analysis}
 
 \item{seed}{random number generator seed}

@@ -26,7 +26,7 @@
 #'
 #' @return A list containing:
 #' \item{M}{the input distance map}
-#' \item{sm}{the unconstrained wMDS results}
+#' \item{sm}{the unconstrained MDS results}
 #' \item{pc}{the principal curve results}
 #' \item{distmap}{a matrix of pairwise distances between
 #' loci where the columns are in the estimated order}

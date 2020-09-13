@@ -53,7 +53,7 @@
 #' @param left.lim the left limit of the plot (in cM, default = 0). 
 #' 
 #' @param right.lim the right limit of the plot (in cM, default = Inf, i.e., 
-#'                  will print the intire map)
+#'                  will print the entire map)
 #' 
 #' @param phase logical. If \code{TRUE} (default) plots the phase configuration
 #'  for both parents 
@@ -323,7 +323,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'     (\eqn{ploidy x 2}) can be distinguished) to calculate the map likelihood 
 #'     
 #'@param reestimate.single.ph.configuration logical. If \code{FALSE} (default)
-#'     returns a map without reestimating the map parameters in cases
+#'     returns a map without re-estimating the map parameters in cases
 #'     where there are only one possible linkage phase configuration
 #'      
 #' @param tol the desired accuracy during the sequential phase (default = 10e-02)
@@ -916,7 +916,7 @@ prepare_map<-function(input.map, config = "best"){
 }
 
 #' Get the tail of a marker sequence up to the point where the markers
-#' provide no additional infomation.
+#' provide no additional information.
 #'
 #' @param void internal function to be documented
 #' @keywords internal

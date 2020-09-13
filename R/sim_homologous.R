@@ -21,7 +21,7 @@
 #' @param max.ph maximum phase difference
 #'  
 #' @param restriction if TRUE (default), avoid cases where it is impossible to
-#'     estmate recombination fraction and/or linkage phases via
+#'     estimate recombination fraction and/or linkage phases via
 #'     two-point analysis
 #'     
 #' @param seed random number generator seed

@@ -132,7 +132,7 @@
 #' tuberosum genome version 4.03. The genotype calling was performed using the
 #' fitPoly R package. Although this dataset contains the
 #' probability distribution of the genotypes, 
-#' it is essentialy the same dataset found in \code{\link[mappoly]{tetra.solcap}}
+#' it is essentially the same dataset found in \code{\link[mappoly]{tetra.solcap}}
 #'
 #' @format An object of class \code{mappoly.data} which contains a
 #'     list with the following components:

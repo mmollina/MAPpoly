@@ -61,7 +61,7 @@ an object of class \code{mappoly.data} which contains a
       segregation ratio using function \code{\link[mappoly]{segreg_poly}}}
     \item{n.phen}{number of phenotypic traits}
     \item{phen}{a matrix containing the phenotypic data. The rows
-                correspond to the trais and the columns correspond
+                correspond to the traits and the columns correspond
                 to the individuals}
     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
     test of Mendelian segregation performed for all markers}
@@ -124,7 +124,7 @@ hexa.dose.prob <- readRDS("hexa.rds")
 }
 \references{
 Mollinari M., Olukolu B. A.,  Pereira G. da S., 
-    Khan A., Gemenet D., Yench G. C., Zeng Z-B. (2020), 
+    Khan A., Gemenet D., Yencho G. C., Zeng Z-B. (2020), 
     Unraveling the Hexaploid Sweetpotato Inheritance 
     Using Ultra-Dense Multilocus Mapping, 
     _G3: Genes, Genomes, Genetics_. 

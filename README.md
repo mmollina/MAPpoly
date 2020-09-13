@@ -65,9 +65,9 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
   * [TetraploidSNPMap: Linkage maps and mapping QTLs for autotetraploid species, using SNP dosage data.](https://www.bioss.ac.uk/knowledge/tetraploidmap/)
   * [MDSMap: High Density Genetic Linkage Mapping using Multidimensional Scaling](https://CRAN.R-project.org/package=MDSMap)
   
-* Haplotye reconstruction
+* Haplotype reconstruction
   * [TetraOrigin:haplotype reconstruction in a full-sib tetraploid family](https://github.com/chaozhi/TetraOrigin)
-  * [PolyOriginR:haplotye reconstruction in polyploid multiparental pouplations](https://github.com/chaozhi/PolyOriginR)
+  * [PolyOriginR:haplotype reconstruction in polyploid multiparental populations](https://github.com/chaozhi/PolyOriginR)
 
 * QTL mapping
   * [QTLpoly: QTL mapping in full-sib families of outcrossing autopolyploid species based on a random-effect multiple QTL model](https://github.com/guilherme-pereira/QTLpoly)

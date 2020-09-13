@@ -74,7 +74,7 @@
 #'       segregation ratio using function \code{\link[mappoly]{segreg_poly}}}
 #'     \item{n.phen}{number of phenotypic traits}
 #'     \item{phen}{a matrix containing the phenotypic data. The rows
-#'                 correspond to the trais and the columns correspond
+#'                 correspond to the traits and the columns correspond
 #'                 to the individuals}
 #'     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
 #'     test of Mendelian segregation performed for all markers}
@@ -112,7 +112,7 @@
 #' @references
 #' 
 #'     Mollinari M., Olukolu B. A.,  Pereira G. da S., 
-#'     Khan A., Gemenet D., Yench G. C., Zeng Z-B. (2020), 
+#'     Khan A., Gemenet D., Yencho G. C., Zeng Z-B. (2020), 
 #'     Unraveling the Hexaploid Sweetpotato Inheritance 
 #'     Using Ultra-Dense Multilocus Mapping, 
 #'     _G3: Genes, Genomes, Genetics_. 
@@ -226,7 +226,7 @@ read_geno_prob <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
     colnames(geno) <- c("mrk", "ind", as.character(0:m))
     mrk <- NULL
     geno<-subset(geno, mrk%in%mrk.names[id])
-    ## transforming na's in expected genotypes using mendilian segregation
+    ## transforming na's in expected genotypes using Mendelian segregation
     i.na <- which(apply(geno, 1, function(x) any(is.na(x))))
     if (length(i.na) > 0) {
         m.na <- match(geno[i.na, 1], mrk.names)

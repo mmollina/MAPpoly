@@ -1,6 +1,6 @@
 #' Access a remote server to get Counts for recombinant classes
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @import RCurl
 #' @export get_cache_two_pts_from_web

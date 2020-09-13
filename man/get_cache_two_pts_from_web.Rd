@@ -7,7 +7,7 @@
 get_cache_two_pts_from_web(m, url.address = NULL, joint.prob = TRUE)
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Access a remote server to get Counts for recombinant classes
