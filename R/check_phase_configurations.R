@@ -242,7 +242,7 @@ get_ph_conf_ret_sh <- function(M) {
 #'     returns 0. Otherwise, returns the missing pairs.
 #' @keywords internal
 check_pairwise <- function(input.seq, twopt) {
-    if(!(inherits(input.seq) == "mappoly.sequence" || is.integer(input.seq) || is.numeric(input.seq) || is.character(input.seq)))
+    if(!(inherits(input.seq, "mappoly.sequence") || is.integer(input.seq) || is.numeric(input.seq) || is.character(input.seq)))
         stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence', 'numeric' or 'integer'")
     if(!inherits(twopt, "poly.est.two.pts.pairwise"))
         stop(deparse(substitute(twopt)), " is not an object of class 'poly.est.two.pts.pairwise' or 'poly.haplo.est.two.pts.pairwise'")
