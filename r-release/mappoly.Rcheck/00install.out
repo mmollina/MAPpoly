@@ -1,0 +1,31 @@
+* installing *source* package ‘mappoly’ ...
+** using staged installation
+** libs
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Library/Frameworks/R.framework/Versions/4.1/Resources/library/Rcpp/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c RcppExports.cpp -o RcppExports.o
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Library/Frameworks/R.framework/Versions/4.1/Resources/library/Rcpp/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c calc_genoprob.cpp -o calc_genoprob.o
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Library/Frameworks/R.framework/Versions/4.1/Resources/library/Rcpp/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c calc_genoprob_based_on_phased_marker_blocks.cpp -o calc_genoprob_based_on_phased_marker_blocks.o
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Library/Frameworks/R.framework/Versions/4.1/Resources/library/Rcpp/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c calc_loglike_given_map.cpp -o calc_loglike_given_map.o
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Library/Frameworks/R.framework/Versions/4.1/Resources/library/Rcpp/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c combinatorial.cpp -o combinatorial.o
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Library/Frameworks/R.framework/Versions/4.1/Resources/library/Rcpp/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c est_hmm_map_based_on_phased_mrk_blocks.cpp -o est_hmm_map_based_on_phased_mrk_blocks.o
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Library/Frameworks/R.framework/Versions/4.1/Resources/library/Rcpp/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c est_map_hmm_given_dose.cpp -o est_map_hmm_given_dose.o
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Library/Frameworks/R.framework/Versions/4.1/Resources/library/Rcpp/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c est_map_hmm_given_prior.cpp -o est_map_hmm_given_prior.o
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Library/Frameworks/R.framework/Versions/4.1/Resources/library/Rcpp/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c genotypic_counts.cpp -o genotypic_counts.o
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Library/Frameworks/R.framework/Versions/4.1/Resources/library/Rcpp/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c hmm_elements.cpp -o hmm_elements.o
+clang -mmacosx-version-min=10.13 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Library/Frameworks/R.framework/Versions/4.1/Resources/library/Rcpp/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c mappoly_init.c -o mappoly_init.o
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Library/Frameworks/R.framework/Versions/4.1/Resources/library/Rcpp/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c pairwise_estimation.cpp -o pairwise_estimation.o
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -I"/Library/Frameworks/R.framework/Resources/include" -DNDEBUG  -I'/Library/Frameworks/R.framework/Versions/4.1/Resources/library/Rcpp/include' -I/usr/local/include   -fPIC  -Wall -g -O2  -c read_mappoly_vcf.cpp -o read_mappoly_vcf.o
+clang++ -mmacosx-version-min=10.13 -std=gnu++11 -dynamiclib -Wl,-headerpad_max_install_names -undefined dynamic_lookup -single_module -multiply_defined suppress -L/Library/Frameworks/R.framework/Resources/lib -L/usr/local/lib -o mappoly.so RcppExports.o calc_genoprob.o calc_genoprob_based_on_phased_marker_blocks.o calc_loglike_given_map.o combinatorial.o est_hmm_map_based_on_phased_mrk_blocks.o est_map_hmm_given_dose.o est_map_hmm_given_prior.o genotypic_counts.o hmm_elements.o mappoly_init.o pairwise_estimation.o read_mappoly_vcf.o -F/Library/Frameworks/R.framework/.. -framework R -Wl,-framework -Wl,CoreFoundation
+installing to /Users/marcelomollinari/repos/MAPpoly/r-release/mappoly.Rcheck/00LOCK-mappoly/00new/mappoly/libs
+** R
+** data
+*** moving datasets to lazyload DB
+** inst
+** byte-compile and prepare package for lazy loading
+** help
+*** installing help indices
+** building package indices
+** testing if installed package can be loaded from temporary location
+** checking absolute paths in shared objects and dynamic libraries
+** testing if installed package can be loaded from final location
+** testing if installed package keeps a record of temporary installation path
+* DONE (mappoly)

@@ -1,0 +1,7 @@
+  Running ‘testthat.R’
+
+See
+  ‘/Users/marcelomollinari/repos/MAPpoly/r-release/mappoly.Rcheck/00check.log’
+for details.
+
+

@@ -6,3 +6,7 @@
 ^.*\.yml
 ^.*\.ai
 ^.*\.png
+cran-comments.md
+^cran-comments\.md$
+r-release
+^revdep$

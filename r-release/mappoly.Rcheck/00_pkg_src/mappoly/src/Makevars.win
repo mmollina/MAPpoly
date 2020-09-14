@@ -1,0 +1,3 @@
+PKG_LIBS = -lz
+
+CXX_STD = CXX11
