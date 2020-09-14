@@ -2,9 +2,9 @@
 #'
 #' Estimates loci position using Multidimensional Scaling proposed by
 #' \cite{Preedy and Hackett (2016)}. The code is an adaptation from
-#' the package \code{TetraploidSNPMap}, available under GNU GENERAL PUBLIC LICENSE,
+#' the package \code{MDSmap}, available under GNU GENERAL PUBLIC LICENSE,
 #' Version 3, at
-#' \url{https://github.com/BiomathematicsAndStatisticsScotland/TetraploidSNPMap}
+#' \url{ https://CRAN.R-project.org/package=MDSMap}
 #'
 #' @param input.mat an object of class \code{mappoly.input.matrix}
 #'
@@ -59,7 +59,8 @@
 #'          ylab = "MDS position")
 #'    }
 #'
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} mostly adapted from TetraploidSNPMap codes
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} mostly adapted from MDSmap 
+#'         codes, written by Katharine F. Preedy, \email{katharine.preedy@bioss.ac.uk}
 #'
 #' @references
 #'  Preedy, K. F., & Hackett, C. A. (2016). A rapid marker ordering approach for
@@ -161,6 +162,7 @@ print.mappoly.pcmap3d<-function(x, ...)
   cat("\nMean Nearest Neighbour Fit:", x$meannnfit)
 }
 
+#' @rdname mds_mappoly
 #' @export
 plot.mappoly.pcmap<-function (x, D1lim = NULL, D2lim = NULL, displaytext = FALSE, ...) 
 {
@@ -189,6 +191,7 @@ plot.mappoly.pcmap<-function (x, D1lim = NULL, D2lim = NULL, displaytext = FALSE
   par(op)
 }
 
+#' @rdname mds_mappoly
 #' @export
 plot.mappoly.pcmap3d<-function(x, D1lim = NULL, D2lim = NULL, D3lim = NULL, displaytext = FALSE, ...) 
 {
@@ -235,6 +238,7 @@ plot.mappoly.pcmap3d<-function(x, D1lim = NULL, D2lim = NULL, D3lim = NULL, disp
   par(op)
 }
 
+#'@author Katharine F. Preedy, \email{katharine.preedy@bioss.ac.uk}
 #'@keywords internal
 calc.nnfit <- function (distmap, lodmap, estmap){
   pointfits <- unlist(lapply(1:dim(distmap)[2], calc.nnfit.loci, 
@@ -242,6 +246,8 @@ calc.nnfit <- function (distmap, lodmap, estmap){
   fit <- sum(pointfits)
   list(fit = fit, pointfits = pointfits, meanfit = mean(pointfits))
 }
+
+#'@author Katharine F. Preedy, \email{katharine.preedy@bioss.ac.uk}
 #'@keywords internal
 calc.nnfit.loci <- function (loci, distmap, lodmap, estmap){
   nns <- get.nearest.informative(loci, lodmap)
@@ -250,6 +256,8 @@ calc.nnfit.loci <- function (loci, distmap, lodmap, estmap){
   nn.fit <- sum(abs(obs - est))
   nn.fit
 }
+
+#'@author Katharine F. Preedy, \email{katharine.preedy@bioss.ac.uk}
 #'@keywords internal
 get.nearest.informative <- function (loci, lodmap){
   neighbours <- NULL

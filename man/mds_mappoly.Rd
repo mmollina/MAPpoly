@@ -4,6 +4,8 @@
 \alias{mds_mappoly}
 \alias{print.mappoly.pcmap}
 \alias{print.mappoly.pcmap3d}
+\alias{plot.mappoly.pcmap}
+\alias{plot.mappoly.pcmap3d}
 \title{Estimates loci position using Multidimensional Scaling}
 \usage{
 mds_mappoly(
@@ -18,6 +20,10 @@ mds_mappoly(
 \method{print}{mappoly.pcmap}(x, ...)
 
 \method{print}{mappoly.pcmap3d}(x, ...)
+
+\method{plot}{mappoly.pcmap}(x, D1lim = NULL, D2lim = NULL, displaytext = FALSE, ...)
+
+\method{plot}{mappoly.pcmap3d}(x, D1lim = NULL, D2lim = NULL, D3lim = NULL, displaytext = FALSE, ...)
 }
 \arguments{
 \item{input.mat}{an object of class \code{mappoly.input.matrix}}
@@ -58,9 +64,9 @@ with each number on the MDS configuration plots}
 \description{
 Estimates loci position using Multidimensional Scaling proposed by
 \cite{Preedy and Hackett (2016)}. The code is an adaptation from
-the package \code{TetraploidSNPMap}, available under GNU GENERAL PUBLIC LICENSE,
+the package \code{MDSmap}, available under GNU GENERAL PUBLIC LICENSE,
 Version 3, at
-\url{https://github.com/BiomathematicsAndStatisticsScotland/TetraploidSNPMap}
+\url{ https://CRAN.R-project.org/package=MDSMap}
 }
 \examples{
  \dontrun{
@@ -89,5 +95,6 @@ Preedy, K. F., & Hackett, C. A. (2016). A rapid marker ordering approach for
  2117-2132. \url{https://doi.org/10.1007/s00122-016-2761-8}
 }
 \author{
-Marcelo Mollinari, \email{mmollin@ncsu.edu} mostly adapted from TetraploidSNPMap codes
+Marcelo Mollinari, \email{mmollin@ncsu.edu} mostly adapted from MDSmap 
+        codes, written by Katharine F. Preedy, \email{katharine.preedy@bioss.ac.uk}
 }
