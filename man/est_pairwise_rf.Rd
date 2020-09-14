@@ -119,11 +119,10 @@ possible linkage phase configurations and associated LOD Scores.
                                  ncpus = 7, 
                                  n.batch = 10,
                                  verbose=TRUE)   
-   plot(all.pairs, 90, 91)
+   plot(all.pairs.1, 161, 162)
    mat <- rf_list_to_matrix(all.pairs.1)
    plot(mat)
    }
-   
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

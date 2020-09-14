@@ -100,11 +100,10 @@
 #'                                  ncpus = 7, 
 #'                                  n.batch = 10,
 #'                                  verbose=TRUE)   
-#'    plot(all.pairs, 90, 91)
+#'    plot(all.pairs.1, 161, 162)
 #'    mat <- rf_list_to_matrix(all.pairs.1)
 #'    plot(mat)
 #'    }
-#'    
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
