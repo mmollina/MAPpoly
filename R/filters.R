@@ -275,7 +275,7 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
 #'@examples
 #' \dontrun{
 #'     mrks.chi.filt <- filter_segregation(input.data = tetra.solcap, 
-#'                                         chisq.pval.thres = 0.05/mydata$n.mrk, 
+#'                                         chisq.pval.thres = 0.05/tetra.solcap$n.mrk, 
 #'                                         inter = TRUE)
 #'     seq.init<-make_seq_mappoly(mrks.chi.filt)
 #'}
