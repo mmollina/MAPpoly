@@ -9,10 +9,7 @@ src/*.so
 src/*.dll
 docs/*.rda
 docs/*.rdb
-test.R
-testa.R
 new_functions.R
 *.ai
 *.pptx
 r-release/
-revdep/
