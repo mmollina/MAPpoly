@@ -14,3 +14,5 @@ testa.R
 new_functions.R
 *.ai
 *.pptx
+r-release/
+revdep/

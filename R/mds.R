@@ -162,7 +162,7 @@ print.mappoly.pcmap3d<-function(x, ...)
   cat("\nMean Nearest Neighbour Fit:", x$meannnfit)
 }
 
-#' @rdname mds_mappoly
+#' @author Katharine F. Preedy, \email{katharine.preedy@bioss.ac.uk}
 #' @export
 plot.mappoly.pcmap<-function (x, D1lim = NULL, D2lim = NULL, displaytext = FALSE, ...) 
 {
@@ -191,7 +191,7 @@ plot.mappoly.pcmap<-function (x, D1lim = NULL, D2lim = NULL, displaytext = FALSE
   par(op)
 }
 
-#' @rdname mds_mappoly
+#' @author Katharine F. Preedy, \email{katharine.preedy@bioss.ac.uk}
 #' @export
 plot.mappoly.pcmap3d<-function(x, D1lim = NULL, D2lim = NULL, D3lim = NULL, displaytext = FALSE, ...) 
 {

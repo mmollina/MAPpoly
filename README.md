@@ -5,7 +5,7 @@
 
 MAPpoly (v. 0.2.0) is an R package to construct genetic maps in autopolyploids with even ploidy levels. In its current version, MAPpoly can handle ploidy levels up to 8 when using hidden Markov models (HMM), and up to 12 when using the two-point simplification. All the two-point based functions are fast enough to run on standard computers. However, we strongly recommend to use high-performance computation for HMM-based analysis, especially for ploidy levels higher than 4. 
 
-![MAPpoly](https://raw.githubusercontent.com/mmollina/MAPpoly/master/mappoly.gif)
+![](https://raw.githubusercontent.com/mmollina/MAPpoly/master/mappoly.gif)
 
 
 In its current version, MAPpoly can handle three different types of datasets:
@@ -20,7 +20,17 @@ The derivation of the HMM used in MAPpoly can be found in [Mollinari and Garcia,
 
 # Installation
 
-MAPpoly is not available from CRAN, but you can install it from Git Hub. Within R, you need to install and load the package `devtools`:
+## From CRAN (stable version)
+
+To install MAPpoly from the The Comprehensive R Archive Network (CRAN) use
+
+```R
+install.packages("mappoly")
+```
+
+## From GitHub (development version)
+
+You can install the development version from Git Hub. Within R, you need to install `devtools`:
 
 ```R
 install.packages("devtools")
@@ -31,7 +41,7 @@ If you are using Windows, you must install the the latest recommended version of
 To install MAPpoly from Git Hub use
 
 ```R
-devtools::install_github("mmollina/mappoly")
+devtools::install_github("mmollina/mappoly", dependencies=TRUE)
 ```
 
 For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherme-pereira/QTLpoly) package. QTLpoly is an under development software to map quantitative trait loci (QTL) in full-sib families of outcrossing autopolyploid species based on a random-effect multiple QTL model [Pereira et al. 2020](https://doi.org/10.1534/genetics.120.303080). 
@@ -53,17 +63,18 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
   * [PedigreeSim: Simulation of genetic marker data in diploid and polyploid pedigreed populations.](https://www.wur.nl/en/show/Software-PedigreeSim.htm)
 
 * Genotype calling
-  * [fitPoly: Genotype Calling for Bi-Allelic Marker Assays](https://CRAN.R-project.org/package=fitPoly)
   * [ClusterCall: Automated tetraploid genotype calling by hierarchical clustering](https://potatobreeding.cals.wisc.edu/software/)
-  * [SuperMASSA: Graphical Bayesian inference tool for genotyping polyploids](https://bitbucket.org/orserang/supermassa)
-  * [VCF2SM: Python script that integrates VCF files and SuperMASSA](https://github.com/guilherme-pereira/vcf2sm)
-  * [updog: Flexible Genotyping for Polyploids](https://CRAN.R-project.org/package=updog)
+  * [fitPoly: Genotype Calling for Bi-Allelic Marker Assays](https://CRAN.R-project.org/package=fitPoly)
   * [polyRAD: Genotype Calling with Uncertainty from Sequencing Data in Polyploids and Diploids](https://CRAN.R-project.org/package=polyRAD)
+  * [SuperMASSA: Graphical Bayesian inference tool for genotyping polyploids](https://bitbucket.org/orserang/supermassa)
+  * [updog: Flexible Genotyping for Polyploids](https://CRAN.R-project.org/package=updog)
+  * [VCF2SM: Python script that integrates VCF files and SuperMASSA](https://github.com/guilherme-pereira/vcf2sm)
  
 * Genetic mapping in polyploids
+  * [MDSMap: High Density Genetic Linkage Mapping using Multidimensional Scaling](https://CRAN.R-project.org/package=MDSMap)
   * [polymapR: Linkage Analysis in Outcrossing Polyploids](https://CRAN.R-project.org/package=polymapR)
   * [TetraploidSNPMap: Linkage maps and mapping QTLs for autotetraploid species, using SNP dosage data.](https://www.bioss.ac.uk/knowledge/tetraploidmap/)
-  * [MDSMap: High Density Genetic Linkage Mapping using Multidimensional Scaling](https://CRAN.R-project.org/package=MDSMap)
+  
   
 * Haplotype reconstruction
   * [TetraOrigin:haplotype reconstruction in a full-sib tetraploid family](https://github.com/chaozhi/TetraOrigin)
