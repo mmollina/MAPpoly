@@ -281,9 +281,9 @@ get_rf_from_list <- function(twopt, ph.list) {
     rf <- numeric(length(nm) - 1)
     for (i in 1:(length(nm) - 1)) {
         id <- paste(sort(c(nm[i], nm[i + 1])), collapse = "-")
-        if (ph.list$P[[i]] == 0 || ph.list$P[[i + 1]] == 0)
+        if (all(ph.list$P[[i]] == 0) || all(ph.list$P[[i + 1]] == 0))
             id.ph.P <- "0" else id.ph.P <- sum(!is.na(match(ph.list$P[[i]], ph.list$P[[i + 1]])))
-        if (ph.list$Q[[i]] == 0 || ph.list$Q[[i + 1]] == 0)
+        if (all(ph.list$Q[[i]] == 0) || all(ph.list$Q[[i + 1]] == 0))
             id.ph.Q <- "0" else id.ph.Q <- sum(!is.na(match(ph.list$Q[[i]], ph.list$Q[[i + 1]])))
         rf[i] <- twopt$pairwise[[id]][paste(id.ph.P, id.ph.Q, sep = "-"), 2]
     }
