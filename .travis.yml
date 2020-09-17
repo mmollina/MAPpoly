@@ -19,28 +19,32 @@ before_install:
   - pip install --user numpy
   - export RGL_USE_NULL=TRUE
 
-install:
-  - R -e 'install.packages("devtools")'
-  - R -e 'install.packages("Rcpp")'
-  - R -e 'install.packages("spam")'
-  - R -e 'install.packages("RCurl")'
-  - R -e 'install.packages("plotly")'        
-  - R -e 'install.packages("fields")'        
-  - R -e 'install.packages("RColorBrewer")'        
-  - R -e 'install.packages("bitops")'        
-  - R -e 'install.packages("ggpubr")'
-  - R -e 'install.packages("ggsci")'        
-  - R -e 'install.packages("maps")'        
-  - R -e 'install.packages("berryFunctions")'        
-  - R -e 'install.packages("plot3D")'        
-  - R -e 'install.packages("memuse")'        
-  - R -e 'install.packages("dplyr")'
-  - R -e 'install.packages("reshape")'        
-  - R -e 'install.packages("ggplot2")'        
-  - R -e 'install.packages("MDSMap")'        
-  - R -e 'install.packages("smacof")'        
-  - R -e 'install.packages("princurve")'        
-  - R -e 'install.packages("dendextend")'
-  - R -e 'install.packages("polymapR")'
-  - R -e 'install.packages("updog")'
-  - R -e 'install.packages("covr")'
+r_packages:
+  - covr
+  - devtools
+  - Rcpp
+  - spam
+  - RCurl
+  - plotly
+  - fields
+  - RColorBrewer
+  - bitops
+  - ggpubr
+  - ggsci
+  - maps
+  - berryFunctions
+  - plot3D
+  - memuse
+  - dplyr
+  - reshape
+  - ggplot2
+  - MDSMap
+  - smacof
+  - princurve
+  - dendextend
+  - polymapR
+  - updog
+
+after_success:
+  - Rscript -e 'library(covr); codecov()'
+  

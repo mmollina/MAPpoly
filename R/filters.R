@@ -5,6 +5,9 @@
 #' @export
 filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
 {
+  if (!inherits(input.data, "mappoly.data")) {
+    stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
+  }
   m<-input.data$m
   dp<-input.data$dosage.p
   dq<-input.data$dosage.q
@@ -86,6 +89,9 @@ filter_missing<-function(input.data,
                          filter.thres = 0.2, 
                          inter = TRUE)
 {
+  if (!inherits(input.data, "mappoly.data")) {
+    stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
+  }
   type <- match.arg(type)
   switch(type,
          marker = filter_missing_mrk(input.data, 
@@ -286,6 +292,9 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
 #' @export
 filter_segregation<-function(input.data, chisq.pval.thres = 10e-5, inter = TRUE){
   ANSWER <- "flag"
+  if (!inherits(input.data, "mappoly.data")) {
+    stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
+  }
   if(interactive() && inter)
   {
     while(substr(ANSWER, 1, 1) != "y" && ANSWER !="")

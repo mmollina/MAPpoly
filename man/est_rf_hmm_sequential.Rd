@@ -93,11 +93,11 @@ i) info:  a list containing information about the map, regardless of the linkage
                 \code{sequence = NULL}}
 \item{sequence.pos}{physical position (usually in megabase) of the markers into the sequence}
 \item{seq.ref}{reference base used for each marker (i.e. A, T, C, G). If not available, 
-                \code{seq.ref = NULL}}                 
+                \code{seq.ref = NULL}}
 \item{seq.alt}{alternative base used for each marker (i.e. A, T, C, G). If not available, 
                 \code{seq.ref = NULL}}
 \item{chisq.pval}{a vector containing p-values of the chi-squared test of Mendelian 
-                  segregation for all markers in the map}                 
+                  segregation for all markers in the map}
 \item{data.name}{name of the dataset of class \code{mappoly.data}}
 \item{ph.thres}{the LOD threshold used to define the linkage phase configurations to test}
 
