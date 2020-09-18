@@ -881,7 +881,7 @@ prepare_map<-function(input.map, config = "best"){
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
   }
-  ## Choosing the liinkage phase configuration
+  ## Choosing the linkage phase configuration
   LOD.conf <- get_LOD(input.map, sorted = FALSE)
   if(config == "best") {
     i.lpc <- which.min(LOD.conf)
@@ -897,21 +897,20 @@ prepare_map<-function(input.map, config = "best"){
   ph.q <- ph_list_to_matrix(input.map$maps[[i.lpc]]$seq.ph$Q, input.map$info$m)
   dimnames(ph.p) <- list(names(map), letters[1:input.map$info$m])
   dimnames(ph.q) <- list(names(map), letters[(1+input.map$info$m):(2*input.map$info$m)])
-  dat<-get(input.map$info$data.name, pos = 1)
-  if(is.null(dat$seq.ref))
+  if(is.null(input.map$info$seq.alt))
   {
     ph.p[ph.p==1] <- ph.q[ph.q==1] <- "A"
     ph.p[ph.p==0] <- ph.q[ph.q==0] <- "B"  
   } else {
     for(i in input.map$info$mrk.names){
-      ph.p[i, ph.p[i,]==1] <- dat$seq.alt[i]
-      ph.p[i, ph.p[i,]==0] <- dat$seq.ref[i]
-      ph.q[i, ph.q[i,]==1] <- dat$seq.alt[i]
-      ph.q[i, ph.q[i,]==0] <- dat$seq.ref[i]
+      ph.p[i, ph.p[i,]==1] <- input.map$info$seq.alt[i]
+      ph.p[i, ph.p[i,]==0] <- input.map$info$seq.ref[i]
+      ph.q[i, ph.q[i,]==1] <- input.map$info$seq.alt[i]
+      ph.q[i, ph.q[i,]==0] <- input.map$info$seq.ref[i]
     }
   }
-  dp <- dat$dosage.p[input.map$info$mrk.names]
-  dq <- dat$dosage.q[input.map$info$mrk.names]
+  dp <- input.map$info$seq.dose.p
+  dq <- input.map$info$seq.dose.q
   list(m = input.map$info$m, map = map, ph.p = ph.p, ph.q = ph.q, dp = dp, dq = dq)
 }
 
