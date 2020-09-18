@@ -23,7 +23,7 @@ The derivation of the HMM used in MAPpoly can be found in [Mollinari and Garcia,
 
 # Installation
 
-## From CRAN (stable version)
+## From CRAN (stable version - not available yet)
 
 To install MAPpoly from the The Comprehensive R Archive Network (CRAN) use
 
