@@ -32,9 +32,9 @@ get_rf_from_mat <- function(M){
 #' @keywords internal
 #' @export
 get_w_m <- function(m){
-   if(m%%2 != 0) stop("ploidy level should be an even number") 
-   if(m <= 0) stop("ploidy level should be greater than zero")
-   1/factorial((m/2)) * prod(choose(seq(2, m, 2),2))
+  if(m%%2 != 0) stop("ploidy level should be an even number") 
+  if(m <= 0) stop("ploidy level should be greater than zero")
+  1/factorial((m/2)) * prod(choose(seq(2, m, 2),2))
 }
 
 #' Get used memory (unix systems only)
@@ -163,8 +163,8 @@ dist_prob_to_class <- function(geno, prob.thres = 0.95) {
 export_data_to_polymapR <- function(data.in)
 {
   data.out<-as.matrix(data.frame(P1 = data.in$dosage.p,     
-                       P2 = data.in$dosage.q,
-                       data.in$geno.dose))
+                                 P2 = data.in$dosage.q,
+                                 data.in$geno.dose))
   data.out[data.out == (data.in$m + 1)] <- NA
   return(data.out)
 }
@@ -175,9 +175,9 @@ export_data_to_polymapR <- function(data.in)
 #' @keywords internal
 #' @importFrom cli rule
 msg <- function(text, line = 1){
-    cli::rule(line = line, right = text) %>%
-  text_col() %>%
-  message()
+  cli::rule(line = line, right = text) %>%
+    text_col() %>%
+    message()
 }
 
 #' @importFrom rstudioapi isAvailable hasFun getThemeInfo
@@ -279,7 +279,7 @@ plot_compare_haplotypes <- function(m, hom.allele.p1, hom.allele.q1, hom.allele.
   hom.allele.p1 <- ph_matrix_to_list(ph_list_to_matrix(hom.allele.p1, m)[, o1])
   o2 <- order(apply(ph_list_to_matrix(hom.allele.q1, m), 2, paste, collapse = ""), decreasing = TRUE)
   hom.allele.q1 <- ph_matrix_to_list(ph_list_to_matrix(hom.allele.q1, m)[, o2])
-
+  
   if (!is.null(hom.allele.p2)) {
     o3 <- order(apply(ph_list_to_matrix(hom.allele.p2, m), 2, paste, collapse = ""), decreasing = TRUE)
     hom.allele.p2 <- ph_matrix_to_list(ph_list_to_matrix(hom.allele.p2, m)[, o3])
@@ -382,21 +382,21 @@ pos_twopt_est<-function(input.seq){
 #' @keywords internal
 #' @export
 perm_tot <- function(v) {
-    n <- length(v)
-    result <- v
-    if (n > 1) {
-        M <- perm_tot(v[2:n])
-        result <- cbind(v[1], M)
-        if (n > 2) {
-            for (i in 2:(n - 1)) {
-                N <- cbind(M[, 1:(i - 1)], v[1], M[, i:(n - 1)])
-                result <- rbind(result, N)
-            }
-        }
-        N <- cbind(M, v[1])
+  n <- length(v)
+  result <- v
+  if (n > 1) {
+    M <- perm_tot(v[2:n])
+    result <- cbind(v[1], M)
+    if (n > 2) {
+      for (i in 2:(n - 1)) {
+        N <- cbind(M[, 1:(i - 1)], v[1], M[, i:(n - 1)])
         result <- rbind(result, N)
+      }
     }
-    return(result)
+    N <- cbind(M, v[1])
+    result <- rbind(result, N)
+  }
+  return(result)
 }
 
 #' N!/2 combination
@@ -405,30 +405,30 @@ perm_tot <- function(v) {
 #' @keywords internal
 #' @export
 perm_pars <- function(v) {
-    n <- length(v)
-    result <- v
-    if (n > 2) {
-        Mt <- perm_tot(v[2:n])
-        result <- cbind(v[1], Mt)
-        f <- floor(n/2)
-        c <- ceiling(n/2)
-        if (n > 3) {
-            for (i in 2:f) {
-                N <- cbind(Mt[, 1:(i - 1)], v[1], Mt[, i:(n - 1)])
-                result <- rbind(result, N)
-            }
-        }
-        if (c > f) {
-            Ms <- perm_pars(v[2:n])
-            if (n > 3) {
-                N <- cbind(Ms[, 1:f], v[1], Ms[, c:(n - 1)])
-            } else {
-                N <- cbind(Ms[1:f], v[1], Ms[c:(n - 1)])
-            }
-            result <- rbind(result, N)
-        }
+  n <- length(v)
+  result <- v
+  if (n > 2) {
+    Mt <- perm_tot(v[2:n])
+    result <- cbind(v[1], Mt)
+    f <- floor(n/2)
+    c <- ceiling(n/2)
+    if (n > 3) {
+      for (i in 2:f) {
+        N <- cbind(Mt[, 1:(i - 1)], v[1], Mt[, i:(n - 1)])
+        result <- rbind(result, N)
+      }
     }
-    return(result)
+    if (c > f) {
+      Ms <- perm_pars(v[2:n])
+      if (n > 3) {
+        N <- cbind(Ms[, 1:f], v[1], Ms[, c:(n - 1)])
+      } else {
+        N <- cbind(Ms[1:f], v[1], Ms[c:(n - 1)])
+      }
+      result <- rbind(result, N)
+    }
+  }
+  return(result)
 }
 
 #' Color pallet ggplot-like
@@ -517,7 +517,7 @@ get_genomic_order<-function(input.seq){
       return(M[order(M[,1]),])
     }
   } else if(all(is.na(input.seq$sequence))){
-  if(all(is.na(input.seq$sequence.pos))) 
+    if(all(is.na(input.seq$sequence.pos))) 
       stop("No sequence or sequence position information found.")
     else{
       message("Ordering markers based on sequence position information")
@@ -1009,9 +1009,9 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
       seq.rf <- c(input.map$maps[[i.lpc]]$seq.rf, res[i, "rf1"])
     }
     output.map$maps[[i]] <- list(seq.num = seq.num, 
-                                seq.rf = seq.rf, 
-                                seq.ph = configs[[rownames(res)[i]]],
-                                loglike = res[i, "log_like"])
+                                 seq.rf = seq.rf, 
+                                 seq.ph = configs[[rownames(res)[i]]],
+                                 loglike = res[i, "log_like"])
   }
   return(output.map)
 }
@@ -1068,42 +1068,45 @@ check_data_sanity<-function(x){
 check_data_dose_sanity <- function(x){
   test<-logical(24L)
   names(test) <- 1:24
-
+  
   # ploidy
-  test[1] <- x$m%%2 != 0
-  test[2] <- any(sapply(x$dosage.p, function(y) max(y) > x$m | min(y) < 0))
-  test[3] <- any(sapply(x$dosage.q, function(y) max(y) > x$m | min(y) < 0))
-  test[4] <- max(x$geno.dose) > x$m + 1
-  test[5] <- min(x$geno.dose) < 0
+  test[1] <- x$m%%2 != 0 #is ploidy even?
+  test[2] <- any(sapply(x$dosage.p, function(y) max(y) > x$m | min(y) < 0)) #are dosages in P higher than ploidy?
+  test[3] <- any(sapply(x$dosage.q, function(y) max(y) > x$m | min(y) < 0)) #are dosages in Q higher than ploidy?
+  test[4] <- max(x$geno.dose) > x$m + 1 #is there any dose in offspring higher than ploidy?
+  test[5] <- min(x$geno.dose) < 0 #is there any negative dose in offspring?
   
   # number of individuals
-  test[6] <- x$n.ind < 0
-  test[7] <- length(x$ind.names) != x$n.ind
-  test[8] <- ncol(x$geno.dose) != x$n.ind
+  test[6] <- x$n.ind < 0 #is the number of individuals greater than zero?
+  test[7] <- length(x$ind.names) != x$n.ind #is the number of individual names equal to the number of individuals?
+  test[8] <- ncol(x$geno.dose) != x$n.ind #is the number of columns in the dosage matrix equal to the number of individuals?
   
   # number of markers
-  test[9] <- x$n.mrk < 0
-  test[10] <- length(x$mrk.names) != x$n.mrk
-  test[11] <- length(x$dosage.p) != x$n.mrk
-  test[12] <- length(x$dosage.q) != x$n.mrk
-  test[13] <- length(x$sequence) != x$n.mrk
-  test[14] <- length(x$sequence.pos) != x$n.mrk
-  test[15] <- nrow(x$geno.dose) != x$n.mrk
-  test[16] <- length(x$chisq.pval) != x$n.mrk
-  
-  # individual names in the probability dataset
-  test[17] <- !is.character(x$ind.names)
-  test[18] <- !identical(colnames(x$geno.dose), x$ind.names)
+  test[9] <- x$n.mrk < 0 #is the number of markers greater than zero?
+  test[10] <- length(x$mrk.names) != x$n.mrk #is the number of marker names equal to the number of markers?
+  test[11] <- length(x$dosage.p) != x$n.mrk #is the number of marker dosages in P equal to the number of markers?
+  test[12] <- length(x$dosage.q) != x$n.mrk #is the number of marker dosages in Q equal to the number of markers?
+  if(length(x$sequence) > 0)
+    test[13] <- length(x$sequence) != x$n.mrk #is the number of sequences equal to the number of markers?
+  if(length(x$sequence.pos) > 0)
+    test[14] <- length(x$sequence.pos) != x$n.mrk #is the number of sequence positions equal to the number of markers?
+  test[15] <- nrow(x$geno.dose) != x$n.mrk #is the number of rows in the dosage matrix equal to the number of markers?
+  if(length(x$chisq.pval) > 0)
+    test[16] <- length(x$chisq.pval) != x$n.mrk #is the number of chi-square tests equal to the number of markers?
   
   # individual names in the dosage dataset
-  test[19] <- !is.character(x$mrk.names)
-  test[20] <- !identical(rownames(x$geno.dose), x$mrk.names)
+  test[17] <- !is.character(x$ind.names) # are individual's names characters
+  test[18] <- !identical(colnames(x$geno.dose), x$ind.names) # are column names in dosage matrix identical to individual names?
+  
+  # markers names in the dosage dataset
+  test[19] <- !is.character(x$mrk.names)# are marker's names characters
+  test[20] <- !identical(rownames(x$geno.dose), x$mrk.names)# are row names in dosage matrix identical to marker names?
   
   # dosage in both parents
-  test[21] <- !is.integer(x$dosage.p)
-  test[22] <- !is.integer(x$dosage.q)
-  test[23] <- !identical(names(x$dosage.p), x$mrk.names)
-  test[24] <- !identical(names(x$dosage.q), x$mrk.names)
+  test[21] <- !is.integer(x$dosage.p) # are dosages in P numeric
+  test[22] <- !is.integer(x$dosage.q) # are dosages in Q numeric 
+  test[23] <- !identical(names(x$dosage.p), x$mrk.names) # are names in P's dosage vector identical to marker names?
+  test[24] <- !identical(names(x$dosage.q), x$mrk.names) # are names in Q's dosage vector identical to marker names?
   
   if(any(test))
     return(test)
@@ -1118,49 +1121,52 @@ check_data_dose_sanity <- function(x){
 check_data_dist_sanity <- function(x){
   test<-logical(29L)
   names(test) <- 1:29
+  
   # ploidy
-  test[1] <- x$m%%2 != 0
-  test[2] <- any(sapply(x$dosage.p, function(y) max(y) > x$m | min(y) < 0))
-  test[3] <- any(sapply(x$dosage.q, function(y) max(y) > x$m | min(y) < 0))
-  test[4] <- ncol(x$geno) > x$m + 3
-  test[5] <- max(x$geno.dose) > x$m + 1
-  test[6] <- min(x$geno.dose) < 0
+  test[1] <- x$m%%2 != 0 #is ploidy even?
+  test[2] <- any(sapply(x$dosage.p, function(y) max(y) > x$m | min(y) < 0)) #are dosages in P higher than ploidy?
+  test[3] <- any(sapply(x$dosage.q, function(y) max(y) > x$m | min(y) < 0)) #are dosages in Q higher than ploidy?
+  test[4] <- ncol(x$geno) > x$m + 3 #is the number of columns in the probability data frame correct? (ploidy + 3)
+  test[5] <- max(x$geno.dose) > x$m + 1 #is there any dose in offspring higher than ploidy?
+  test[6] <- min(x$geno.dose) < 0 #is there any negative dose in offspring?
   
   # number of individuals
-  test[7] <- x$n.ind < 0
-  test[8] <- length(x$ind.names) != x$n.ind
-  test[9] <- length(unique(x$geno$ind)) != x$n.ind
-  test[10] <- ncol(x$geno.dose) != x$n.ind
+  test[7] <- x$n.ind < 0 #is the number of individuals greater than zero?
+  test[8] <- length(x$ind.names) != x$n.ind #is the number of individual names equal to the number of individuals?
+  test[9] <- length(unique(x$geno$ind)) != x$n.ind #is the number of individuals in the probability data frame equal to the number of individuals?
+  test[10] <- ncol(x$geno.dose) != x$n.ind #is the number of columns in the dosage matrix equal to the number of individuals?
   
   # number of markers
-  test[11] <- x$n.mrk < 0
-  test[12] <- length(x$mrk.names) != x$n.mrk
-  test[13] <- length(x$dosage.p) != x$n.mrk
-  test[14] <- length(x$dosage.q) != x$n.mrk
+  test[11] <- x$n.mrk < 0 #is the number of markers greater than zero?
+  test[12] <- length(x$mrk.names) != x$n.mrk #is the number of marker names equal to the number of markers?
+  test[13] <- length(x$dosage.p) != x$n.mrk #is the number of marker dosages in P equal to the number of markers?
+  test[14] <- length(x$dosage.q) != x$n.mrk #is the number of marker dosages in Q equal to the number of markers?
   if(length(x$sequence) > 0)
-    test[15] <- length(x$sequence) != x$n.mrk
+    test[15] <- length(x$sequence) != x$n.mrk #is the number of sequences equal to the number of markers?
   if(length(x$sequence.pos) > 0)
-    test[16] <- length(x$sequence.pos) != x$n.mrk
-  test[17] <- nrow(x$geno)/x$n.ind != x$n.mrk
-  test[18] <- nrow(x$geno.dose) != x$n.mrk
+    test[16] <- length(x$sequence.pos) != x$n.mrk #is the number of sequence positions equal to the number of markers?
+  test[17] <- nrow(x$geno)/x$n.ind != x$n.mrk#is the number of rows in the probability data frame divided by n.ind equal to the number of markers?
+  test[18] <- nrow(x$geno.dose) != x$n.mrk#is the number of rows in the dosage matrix equal to the number of markers?
   if(length(x$chisq.pval) > 0)
-    test[19] <- length(x$chisq.pval) != x$n.mrk
+    test[19] <- length(x$chisq.pval) != x$n.mrk#is the number of chi-square tests equal to the number of markers?
   
-  # individual names in the probability dataset
-  test[20] <- !is.character(x$ind.names)
-  test[21] <- !identical(x$geno$ind, rep(x$ind.names, each = x$n.mrk))
-  test[22] <- !identical(colnames(x$geno.dose), x$ind.names)
+  # individual names in the dosage and probability dataset
+  test[20] <- !is.character(x$ind.names) # are individual's names characters
+  test[21] <- !identical(x$geno$ind, rep(x$ind.names, each = x$n.mrk)) #are individual's names in the probability data frame properly 
+                                                                       #arranged and consistent with the informed individual's names 
+  test[22] <- !identical(colnames(x$geno.dose), x$ind.names)# are column names in dosage matrix identical to individual names?
   
-  # individual names in the dosage dataset
-  test[23] <- !is.character(x$mrk.names)
-  test[24] <- !identical(x$geno$mrk, rep(x$mrk.names, x$n.ind))
-  test[25] <- !identical(rownames(x$geno.dose), x$mrk.names)
+  # marker names in the dosage and probability dataset
+  test[23] <- !is.character(x$mrk.names)# are marker's names characters
+  test[24] <- !identical(x$geno$mrk, rep(x$mrk.names, x$n.ind))#are marker names in the probability data frame properly 
+                                                               #arranged and consistent with the informed marker names 
+  test[25] <- !identical(rownames(x$geno.dose), x$mrk.names)# are row names in dosage matrix identical to marker names?
   
   # dosage in both parents
-  test[26] <- !is.integer(x$dosage.p)
-  test[27] <- !is.integer(x$dosage.q)
-  test[28] <- !identical(names(x$dosage.p), x$mrk.names)
-  test[29] <- !identical(names(x$dosage.q), x$mrk.names)
+  test[26] <- !is.integer(x$dosage.p)# are dosages in P numeric
+  test[27] <- !is.integer(x$dosage.q)# are dosages in Q numeric 
+  test[28] <- !identical(names(x$dosage.p), x$mrk.names)# are names in P's dosage vector identical to marker names?
+  test[29] <- !identical(names(x$dosage.q), x$mrk.names)# are names in Q's dosage vector identical to marker names?
   
   if(any(test))
     return(test)
@@ -1263,7 +1269,7 @@ check_data_dist_sanity <- function(x){
 #'     \url{https://doi.org/10.1534/g3.119.400378} 
 #'
 #' @export merge_datasets
-#' 
+#' @importFrom dplyr bind_rows arrange
 merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
   ## Check objects class
   if (is.null(dat.1)){
@@ -1307,7 +1313,6 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
   dat.1$dosage.p = c(dat.1$dosage.p, dat.2$dosage.p)
   dat.1$dosage.q = c(dat.1$dosage.q, dat.2$dosage.q)
   dat.1$mrk.names = c(dat.1$mrk.names, dat.2$mrk.names)
-  dat.1$chisq.pval = c(dat.1$chisq.pval, dat.2$chisq.pval)
   dat.1$n.mrk = dat.1$n.mrk + dat.2$n.mrk
   dat.1$sequence = c(dat.1$sequence, dat.2$sequence)
   dat.1$sequence.pos = c(dat.1$sequence.pos, dat.2$sequence.pos)
@@ -1366,13 +1371,14 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
   } else if (is.null(dat.1$elim.correspondence) && !is.null(dat.2$elim.correspondence)){
     dat.1$elim.correspondence = dat.2$elim.correspondence
   }  
-
   ## geno dist info (just keep if both datasets contain this information)
   if (exists('geno', where = dat.1) && exists('geno', where = dat.2)){
-    dat.1$geno = rbind(dat.1$geno,dat.2$geno)
+    #dat.1$geno = rbind(dat.1$geno,dat.2$geno)
+    ind <- NULL
+    dat.1$geno <- dplyr::bind_rows(dat.1$geno, dat.2$geno) %>% arrange(ind)
   } else dat.1$geno = NULL
-          
-  ## Returning merged dataset
+  if(!is.null(dat.1$chisq.pval) | !any(is.na(dat.1$chisq.pval)))
+    dat.1$chisq.pval <- dat.1$chisq.pval[dat.1$mrk.names]
   return(dat.1)
 }
 
