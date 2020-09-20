@@ -84,9 +84,9 @@ import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = 
   # Case 1: updog
   if (inherits(object, "multidog")){
     m = object$snpdf$ploidy[1]
-    dosage.p = object$snpdf$p1geno
+    dosage.p = as.integer(object$snpdf$p1geno)
     names(dosage.p) <- object$snpdf$snp
-    dosage.q = object$snpdf$p2geno
+    dosage.q = as.integer(object$snpdf$p2geno)
     names(dosage.q) <- object$snpdf$snp
     if (is.null(prob.thres)) prob.thres = 0.95
     # Selecting conforming markers
@@ -113,20 +113,29 @@ import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = 
     if(filter.non.conforming){
       geno.dose = matrix(NA,1,1)      
     } else {
-      geno.dose = dist_prob_to_class(geno = geno, prob.thres = prob.thres)
-      geno.dose[is.na(geno.dose)] = m + 1
+      geno.dose <- dist_prob_to_class(geno = geno, prob.thres = prob.thres)
+      if(geno.dose$flag)
+      {
+        geno <- geno.dose$geno
+        geno.dose <- geno.dose$geno.dose
+      } else {
+        geno.dose <- geno.dose$geno.dose
+      }
+      geno.dose[is.na(geno.dose)] <- m + 1
     }
+    mrk.names <- rownames(geno.dose)
+    ind.names <- colnames(geno.dose)
     nphen = 0
     phen = NULL
     res<-structure(list(m = m,
-                        n.ind = n.ind,
-                        n.mrk = sum(id),
+                        n.ind = length(ind.names),
+                        n.mrk = length(mrk.names),
                         ind.names = ind.names,
                         mrk.names = mrk.names,
                         dosage.p = dosage.p[mrk.names],
                         dosage.q = dosage.q[mrk.names],
-                        sequence = sequence,
-                        sequence.pos = sequence.pos,
+                        sequence = sequence[mrk.names],
+                        sequence.pos = sequence.pos[mrk.names],
                         prob.thres = prob.thres,
                         geno = geno,
                         geno.dose = geno.dose,

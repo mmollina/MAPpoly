@@ -240,10 +240,19 @@ read_geno_prob <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
       geno<-geno[order(geno$ind),]      
     #}
     ## dosage info
-    if(filter.non.conforming)
-      geno.dose <- matrix(NA,1,1)
-    else{
+    if(filter.non.conforming){
+      geno.dose <- matrix(NA,1,1)      
+    } else {
       geno.dose <- dist_prob_to_class(geno = geno, prob.thres = prob.thres)
+      if(geno.dose$flag)
+      {
+        geno <- geno.dose$geno
+        geno.dose <- geno.dose$geno.dose
+        n.ind <- ncol(geno.dose)
+        ind.names <- colnames(geno.dose)
+      } else {
+        geno.dose <- geno.dose$geno.dose
+      }
       geno.dose[is.na(geno.dose)] <- m + 1
     }
     ## returning the 'mappoly.data' object

@@ -8,6 +8,6 @@ StartWelcomeMessage <- function(){
           " [Version ", utils::packageDescription("mappoly")$Version,
            utils::packageDescription("mappoly")$Date, "]\n",
           "More information: https://github.com/mmollina/MAPpoly\n",
-          "==============================\n"),
+          "=============================="),
         sep="")
 }

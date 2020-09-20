@@ -126,7 +126,16 @@ dist_prob_to_class <- function(geno, prob.thres = 0.95) {
     m<-matrix(NA, nrow = length(n), ncol = ncol(z), dimnames = list(n, colnames(z)))
     z<-rbind(z,m)
   }
-  return(z[as.character(unique(geno$mrk)),])
+  rm.ind<-setdiff(unique(geno$ind), colnames(z))
+  flag <- FALSE
+  if(length(rm.ind) > 0){
+    flag <- TRUE
+    warning("Inividual(s) ", paste(rm.ind, collapse = " "), 
+            "\n  did not meet the 'prob.thres' criteria for any of\n  the markers and was (were) removed.")
+    geno <- geno %>% dplyr::filter(ind %in% colnames(z))
+  }
+  z <- z[as.character(unique(geno$mrk)), as.character(unique(geno$ind))]
+  list(geno.dose = z, geno = geno, flag = flag)
 }
 
 #' Export data to \code{polymapR}
@@ -450,9 +459,15 @@ gg_color_hue <- function(n) {
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' @export
 update_missing<-function(input.data, prob.thres = 0.95){
-  geno.dose <- dist_prob_to_class(geno = input.data$geno, 
-                                  prob.thres = prob.thres)
-  geno.dose[is.na(geno.dose)] <- input.data$m + 1
+  geno.dose <- dist_prob_to_class(geno = geno, prob.thres = prob.thres)
+  if(geno.dose$flag)
+  {
+    geno <- geno.dose$geno
+    geno.dose <- geno.dose$geno.dose
+  } else {
+    geno.dose <- geno.dose$geno.dose
+  }
+  geno.dose[is.na(geno.dose)] <- m + 1
   input.data$geno.dose<-geno.dose
   input.data$prob.thres<-prob.thres
   return(input.data)
@@ -1122,11 +1137,14 @@ check_data_dist_sanity <- function(x){
   test[12] <- length(x$mrk.names) != x$n.mrk
   test[13] <- length(x$dosage.p) != x$n.mrk
   test[14] <- length(x$dosage.q) != x$n.mrk
-  test[15] <- length(x$sequence) != x$n.mrk
-  test[16] <- length(x$sequence.pos) != x$n.mrk
+  if(length(x$sequence) > 0)
+    test[15] <- length(x$sequence) != x$n.mrk
+  if(length(x$sequence.pos) > 0)
+    test[16] <- length(x$sequence.pos) != x$n.mrk
   test[17] <- nrow(x$geno)/x$n.ind != x$n.mrk
   test[18] <- nrow(x$geno.dose) != x$n.mrk
-  test[19] <- length(x$chisq.pval) != x$n.mrk
+  if(length(x$chisq.pval) > 0)
+    test[19] <- length(x$chisq.pval) != x$n.mrk
   
   # individual names in the probability dataset
   test[20] <- !is.character(x$ind.names)

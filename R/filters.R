@@ -48,10 +48,18 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
   input.data$geno[,-c(1:2)]<-sweep(input.data$geno[,-c(1:2)], 1, rowSums(input.data$geno[,-c(1:2)]), FUN="/")
   if(is.null(prob.thres))
     prob.thres<-input.data$prob.thres
-  geno.dose <- dist_prob_to_class(input.data$geno, prob.thres)
-  geno.dose[is.na(geno.dose)] <- m + 1
-  input.data$geno.dose<-geno.dose
-  input.data
+  geno.dose <- dist_prob_to_class(geno = input.data$geno, prob.thres = prob.thres)
+  if(geno.dose$flag)
+  {
+    input.data$geno <- geno.dose$geno
+    input.data$geno.dose <- geno.dose$geno.dose
+  } else {
+    input.data$geno.dose <- geno.dose$geno.dose
+  }
+  input.data$geno.dose[is.na(input.data$geno.dose)] <- m + 1
+  input.data$n.ind <- ncol(input.data$geno.dose)
+  input.data$ind.names <- colnames(input.data$geno.dose)
+  return(input.data)
 }
 
 #' Filter missing genotypes
