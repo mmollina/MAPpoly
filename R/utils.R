@@ -467,7 +467,7 @@ update_missing<-function(input.data, prob.thres = 0.95){
   } else {
     geno.dose <- geno.dose$geno.dose
   }
-  geno.dose[is.na(geno.dose)] <- m + 1
+  geno.dose[is.na(geno.dose)] <- input.data$m + 1
   input.data$geno.dose<-geno.dose
   input.data$prob.thres<-prob.thres
   return(input.data)
