@@ -36,7 +36,7 @@ r_packages:
   - plot3D
   - memuse
   - dplyr
-  - reshape
+  - reshape2
   - ggplot2
   - MDSMap
   - smacof

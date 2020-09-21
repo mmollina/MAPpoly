@@ -106,18 +106,18 @@ rev_map<-function(input.map)
 #' geno.dose[1:10, 1:10]
 #'}   
 #' @importFrom magrittr "%>%"
-#' @importFrom reshape melt cast
+#' @importFrom reshape2 melt dcast
 #' @importFrom dplyr group_by filter arrange
 #' @export
 dist_prob_to_class <- function(geno, prob.thres = 0.95) {
-  a<-reshape::melt(geno, id.vars = c("mrk", "ind"))
+  a<-reshape2::melt(geno, id.vars = c("mrk", "ind"))
   mrk <- ind <- value <- variable <- NULL # Setting the variables to NULL first
   a$variable<-as.numeric(levels(a$variable))[a$variable]
   b<-a %>%
     dplyr::group_by(mrk, ind) %>%
     dplyr::filter(value > prob.thres) %>%
     dplyr::arrange(mrk, ind, variable)
-  z<-reshape::cast(data = b[,1:3], formula = mrk ~ ind, value = "variable")
+  z<-reshape2::dcast(data = b[,1:3], formula = mrk ~ ind, value = "variable")
   rownames(z)<-z[,"mrk"]
   z<-data.matrix(frame = z[,-1])
   n<-setdiff(unique(geno$mrk), rownames(z))

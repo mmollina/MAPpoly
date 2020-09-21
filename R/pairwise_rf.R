@@ -364,7 +364,7 @@ plot.poly.est.two.pts.pairwise <- function(x, first.mrk, second.mrk, ...) {
   data.name <- x$data.name
   x<-x$pairwise[[i]]
   variable<-value<-sh<-NULL
-  x<-reshape::melt(x, id=rownames(x))
+  x<-reshape2::melt(x, id=rownames(x))
   colnames(x)<-c("sh", "variable", "value")
   rfs<-as.character(format(round(t((subset(x, variable=="rf", select=value))), digits=2), digits=2))
   x.temp<-subset(x, variable!="rf")

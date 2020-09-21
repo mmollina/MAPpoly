@@ -68,7 +68,7 @@ calc_homoprob<-function(input.genoprobs){
     dimnames(hom.prob)<-list(letters[1:(2*m)], mrk.names, ind.names)
     for(i in letters[1:(2*m)])
       hom.prob[i,,] <- apply(input.genoprobs[[j]]$probs[grep(stt.names, pattern = i),,], c(2,3), function(x) round(sum(x, na.rm = TRUE),4))
-    df.hom<-reshape::melt(hom.prob)
+    df.hom<-reshape2::melt(hom.prob)
     map<-data.frame(map.position = input.genoprobs[[j]]$map, marker = names(input.genoprobs[[j]]$map))
     colnames(df.hom)<-c("homolog", "marker", "individual", "probability")
     df.hom<-merge(df.hom, map, sort = FALSE)

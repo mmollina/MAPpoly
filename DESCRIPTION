@@ -29,7 +29,7 @@ Imports:
     crayon,
     cli,
     magrittr,
-    reshape,
+    reshape2,
     ggplot2,
     smacof,
     princurve,
