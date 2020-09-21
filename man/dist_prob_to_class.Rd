@@ -5,7 +5,7 @@
 \title{Returns the class with the highest probability in 
 a genotype probability distribution}
 \usage{
-dist_prob_to_class(geno, prob.thres = 0.95)
+dist_prob_to_class(geno, prob.thres = 0.9)
 }
 \arguments{
 \item{geno}{the probabilistic genotypes contained in the object

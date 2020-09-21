@@ -109,7 +109,7 @@ rev_map<-function(input.map)
 #' @importFrom reshape2 melt dcast
 #' @importFrom dplyr group_by filter arrange
 #' @export
-dist_prob_to_class <- function(geno, prob.thres = 0.95) {
+dist_prob_to_class <- function(geno, prob.thres = 0.9) {
   a<-reshape2::melt(geno, id.vars = c("mrk", "ind"))
   mrk <- ind <- value <- variable <- NULL # Setting the variables to NULL first
   a$variable<-as.numeric(levels(a$variable))[a$variable]
@@ -117,7 +117,7 @@ dist_prob_to_class <- function(geno, prob.thres = 0.95) {
     dplyr::group_by(mrk, ind) %>%
     dplyr::filter(value > prob.thres) %>%
     dplyr::arrange(mrk, ind, variable)
-  z<-reshape2::dcast(data = b[,1:3], formula = mrk ~ ind, value = "variable")
+  z<-reshape2::dcast(data = b[,1:3], formula = mrk ~ ind, value.var = "variable")
   rownames(z)<-z[,"mrk"]
   z<-data.matrix(frame = z[,-1])
   n<-setdiff(unique(geno$mrk), rownames(z))
