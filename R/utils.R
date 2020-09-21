@@ -1053,11 +1053,11 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
 #'     
 #' @export check_data_sanity
 check_data_sanity<-function(x){
-  if(ncol(x$geno) == x$n.ind)
-    check_data_dose_sanity(x)
-  else if(ncol(x$geno) == x$m + 3)
+  if(exists('geno', where = x)){
     check_data_dist_sanity(x)
-  else
+  } else if (exists('geno.dose', where = x)){
+    check_data_dose_sanity(x)
+  } else
     stop("Inconsistent genotypic information.")
 }
 

@@ -219,8 +219,9 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
     ## mrk.names = mrk.names[which(rowSums(geno.ploidy == m) == (n.ind+2))]
     colnames(geno.dose) = ind.names
     rownames(geno.dose) = mrk.names
-    dosage.p = geno.dose[,which(colnames(geno.dose) == parent.1)] # Selecting dosages for parent 1
-    dosage.q = geno.dose[,which(colnames(geno.dose) == parent.2)] # Selecting dosages for parent 2
+    dosage.p = as.integer(geno.dose[,which(colnames(geno.dose) == parent.1)]) # Selecting dosages for parent 1
+    dosage.q = as.integer(geno.dose[,which(colnames(geno.dose) == parent.2)]) # Selecting dosages for parent 2
+    names(dosage.p) <- names(dosage.q) <- mrk.names
     geno.dose = geno.dose[, -c(which(colnames(geno.dose) %in% c(parent.1, parent.2)))] # Updating geno.dose matrix
     ind.names = ind.names[-c(which(ind.names %in% c(parent.1, parent.2)))] # Updating individual names
     geno.dose = data.frame(geno.dose)

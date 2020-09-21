@@ -13,3 +13,4 @@ new_functions.R
 *.ai
 *.pptx
 r-release/
+tests/testthat/Rplots.pdf
