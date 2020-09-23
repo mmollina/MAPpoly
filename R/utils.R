@@ -459,7 +459,7 @@ gg_color_hue <- function(n) {
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' @export
 update_missing<-function(input.data, prob.thres = 0.95){
-  geno.dose <- dist_prob_to_class(geno = geno, prob.thres = prob.thres)
+  geno.dose <- dist_prob_to_class(geno = input.data$geno, prob.thres = prob.thres)
   if(geno.dose$flag)
   {
     geno <- geno.dose$geno
