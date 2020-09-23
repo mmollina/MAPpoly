@@ -11,7 +11,7 @@ Authors@R: c(person("Marcelo", "Mollinari", role = c("aut", "cre"), email = "mmo
 Maintainer: Marcelo Mollinari <mmollin@ncsu.edu>
 Description: Software to construct genetic maps in autopolyploid full-sib
     populations.
-License: GPL-3 | file LICENSE
+License: GPL-3
 LazyData: TRUE
 Depends:
     R (>= 3.5.0)
