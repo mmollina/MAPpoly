@@ -1,9 +1,8 @@
 #' Data Input VCF
 #'
-#' Reads an external VCF file. This function accepts version 4.0 and higher, 
-#' and creates an object of class \code{mappoly.data}
+#' Reads an external VCF file and creates an object of class \code{mappoly.data}
 #' 
-#' This function can handle .vcf files of version 4.0 and higher. The ploidy 
+#' This function can handle .vcf files versions 4.0 or higher. The ploidy 
 #' can be automatically detected, but it is highly recommended that you 
 #' inform it to check for mismatches. All individual and marker names 
 #' will be kept as they are in the .vcf file.
@@ -17,8 +16,9 @@
 #'
 #' @param ploidy the species ploidy (optional, it will be automatically detected)
 #' 
-#' @param filter.non.conforming if \code{TRUE} (default) exclude samples with non 
-#'     expected genotypes under random chromosome pairing and no double reduction 
+#' @param filter.non.conforming if \code{TRUE} (default) converts data points with unexpected 
+#'        genotypes (i.e. no double reduction) to 'NA'. See function \code{\link[mappoly]{segreg_poly}} 
+#'        for information on expected classes and their respective frequencies.  
 #'     
 #' @param thresh.line threshold used for p-values on segregation test (default = 0.05)     
 #' 
@@ -59,7 +59,7 @@
 #'     \item{phen}{(unused field)}
 #'     \item{all.mrk.depth}{DP information for all markers on VCF file}
 #'     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
-#'     test of mendelian segregation performed for all markers}
+#'     test of Mendelian segregation performed for all markers}
 #'     \item{kept}{if elim.redundant=TRUE, holds all non-redundant markers}
 #'     \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
 #' its equivalence to the redundant ones}
@@ -110,7 +110,7 @@
 #' @references
 #' 
 #'     Mollinari M., Olukolu B. A.,  Pereira G. da S., 
-#'     Khan A., Gemenet D., Yench G. C., Zeng Z-B. (2020), 
+#'     Khan A., Gemenet D., Yencho G. C., Zeng Z-B. (2020), 
 #'     Unraveling the Hexaploid Sweetpotato Inheritance 
 #'     Using Ultra-Dense Multilocus Mapping, 
 #'     _G3: Genes, Genomes, Genetics_. 
@@ -219,8 +219,9 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
     ## mrk.names = mrk.names[which(rowSums(geno.ploidy == m) == (n.ind+2))]
     colnames(geno.dose) = ind.names
     rownames(geno.dose) = mrk.names
-    dosage.p = geno.dose[,which(colnames(geno.dose) == parent.1)] # Selecting dosages for parent 1
-    dosage.q = geno.dose[,which(colnames(geno.dose) == parent.2)] # Selecting dosages for parent 2
+    dosage.p = as.integer(geno.dose[,which(colnames(geno.dose) == parent.1)]) # Selecting dosages for parent 1
+    dosage.q = as.integer(geno.dose[,which(colnames(geno.dose) == parent.2)]) # Selecting dosages for parent 2
+    names(dosage.p) <- names(dosage.q) <- mrk.names
     geno.dose = geno.dose[, -c(which(colnames(geno.dose) %in% c(parent.1, parent.2)))] # Updating geno.dose matrix
     ind.names = ind.names[-c(which(ind.names %in% c(parent.1, parent.2)))] # Updating individual names
     geno.dose = data.frame(geno.dose)
@@ -326,7 +327,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
 }
 
 #' Function read.vcfR adapted from package vcfR 
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' 
 #' @importFrom memuse howbig

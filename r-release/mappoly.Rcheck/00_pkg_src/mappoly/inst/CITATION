@@ -1,0 +1,49 @@
+citHeader("To cite MAPpoly in publications use:")
+
+citEntry(entry = "Article",
+         title        = "Linkage Analysis and Haplotype Phasing in 
+                         Experimental Autopolyploid Populations with 
+                         High Ploidy Level Using Hidden Markov Models",
+         author       = personList(as.person("Marcelo Mollinari"),
+                                   as.person("A Augusto Franco Garcia")),
+         journal      = "G3: Genes, Genomes, Genetics",
+         year         = "2019",
+         volume       = "9",
+         number       = "10",
+         pages        = "3297--3314",
+         url          = "https://doi.org/10.1534/g3.119.400378",
+         doi          = "10.1534/g3.119.400378",
+
+         textVersion  = paste("Mollinari, M., and Garcia, A. A. F. (2019)",
+                              "Linkage analysis and haplotype phasing in ",
+                              "experimental autopolyploid populations with",
+                              "high ploidy level using hidden Markov models,",
+                              "_G3: Genes, Genomes, Genetics_, 9(10), 3297-3314",
+                              "URL https://doi.org/10.1534/g3.119.400378")
+)
+
+citEntry(entry = "Article",
+         title        = "Unraveling the Hexaploid Sweetpotato Inheritance 
+                         Using Ultra-Dense Multilocus Mapping",
+         author       = personList(as.person("Marcelo Mollinari"),
+                                   as.person("Bode A. Olukolu"),
+                                   as.person("Guilherme da S. Pereira"),
+                                   as.person("Awais Khan"),
+                                   as.person("Dorcus Gemenet"),
+                                   as.person("G. Craig Yencho"),
+                                   as.person("Zhao-Bang Zeng")),
+         journal      = "G3: Genes, Genomes, Genetics",
+         year         = "2020",
+         volume       = "10",
+         number       = "1", 
+         pages        = "281--292",
+         url          = "https://doi.org/10.1534/g3.119.400620",
+         doi          = "10.1534/g3.119.400620",
+
+         textVersion  = paste("Mollinari M., Olukolu B. A., Pereira G.da S.,",
+                              "Khan A., Gemenet D., Yench G. C., Zeng Z-B. (2020),",
+                              " Unraveling the Hexaploid Sweetpotato Inheritance ",
+                              "Using Ultra-Dense Multilocus Mapping,",
+                              "_G3: Genes, Genomes, Genetics_. (10)1 281-292",
+                              "https://doi.org/10.1534/g3.119.400620")
+)

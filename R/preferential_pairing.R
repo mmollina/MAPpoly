@@ -1,29 +1,10 @@
 #' Preferential pairing profiles
 #'
 #' Given the genotype conditional probabilities for a map, this function
-#' computes the probability profiles for all possible pairing configurations 
-#' in both parents.
+#' computes the probability profiles for all possible homolog pairing 
+#' configurations in both parents.
 #'
 #' @param input.genoprobs an object of class \code{mappoly.genoprob}
-#' 
-#' @param type a character string indicating which type of graphic is ploted:
-#'             \code{"pair.configs"} (default: plots the preferential pairing 
-#'             profile for the pairing configurations) or \code{"hom.pairs"} (plots 
-#'             the preferential pairing profile for the homolog pairs)
-#'             
-#' @param min.y.prof lower bound for y axis on the probability profile graphic (default = 0)
-#' 
-#' @param max.y.prof upper bound for y axis on the probability profile graphic (default = 1)
-#' 
-#' @param thresh threshold for chi-square test (default = 0.01)
-#' 
-#' @param x an object of class \code{mappoly.prefpair.profiles}
-#' 
-#' @param P a string containing the name of parent P
-#' 
-#' @param Q a string containing the name of parent Q
-#' 
-#' @param ... unused arguments
 #' 
 #'@examples
 #' \dontrun{
@@ -37,15 +18,15 @@
 #'   w2 <- lapply(solcap.err.map, calc_genoprob_error, error = 0.05)
 #'   x2 <- calc_prefpair_profiles(w2)
 #'   print(x2)
-#'   plot(x2)
-#'   plot(x2, type = "hom.pairs")
+#'   plot(x2, min.y.prof = 0.15, max.y.prof = .50)
+#'   plot(x2, type = "hom.pairs", min.y.prof = 0.15, max.y.prof = .50)
 #'}
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} and Guilherme Pereira, \email{g.pereira@cgiar.org}
 #'
 #' @references
 #'     Mollinari M., Olukolu B. A.,  Pereira G. da S., 
-#'     Khan A., Gemenet D., Yench G. C., Zeng Z-B. (2020), 
+#'     Khan A., Gemenet D., Yencho G. C., Zeng Z-B. (2020), 
 #'     Unraveling the Hexaploid Sweetpotato Inheritance 
 #'     Using Ultra-Dense Multilocus Mapping, 
 #'     _G3: Genes, Genomes, Genetics_. 
@@ -53,18 +34,19 @@
 #'     
 #' @export
 #' @importFrom ggplot2 ggplot geom_hline theme geom_smooth ggtitle facet_grid theme_minimal ylab xlab aes vars scale_color_manual
-#' @importFrom reshape melt
+#' @importFrom reshape2 melt
 #' @importFrom ggpubr ggarrange
 #' @importFrom ggsci scale_color_d3 pal_d3
 #' 
-#' 
 calc_prefpair_profiles<-function(input.genoprobs){
-  if(class(input.genoprobs) == "mappoly.genoprob")
+  if(inherits(input.genoprobs, "mappoly.genoprob")) 
     input.genoprobs <- list(input.genoprobs)
-  if(class(input.genoprobs) == "list"){
-    if(!all(sapply(input.genoprobs, class) == "mappoly.genoprob"))
-      stop(deparse(substitute(input.genoprobs)), " is not an object of class 'mappoly.sequence' neither a list containing 'mappoly.sequence' objects.")
-  } 
+  if(!inherits(input.genoprobs, "list"))
+    stop(deparse(substitute(input.genoprobs)), 
+         " is not an object of class 'mappoly.genoprob' neither a list containing 'mappoly.genoprob' objects.")
+  if (any(!sapply(input.genoprobs, inherits, "mappoly.genoprob"))) 
+    stop(deparse(substitute(input.genoprobs)), 
+         " is not an object of class 'mappoly.genoprob' neither a list containing 'mappoly.genoprob' objects.")
   df.hompair.pval <- df.prefpair <- df.prefpair.pval <- NULL
   for(j in 1:length(input.genoprobs)){
     cat("\nLinkage group ", j, "...")
@@ -124,8 +106,8 @@ calc_prefpair_profiles<-function(input.genoprobs){
     Q<-apply(AQ, MARGIN = c(1,2), mean)
     dimnames(P)<-list(colnames(Psi_given_G$P), names(input.genoprobs[[j]]$map))
     dimnames(Q)<-list(colnames(Psi_given_G$Q), names(input.genoprobs[[j]]$map))
-    df.prefpair.temp<-rbind(data.frame(reshape::melt(P), parent = "P", lg = j),
-                            data.frame(reshape::melt(Q), parent = "Q", lg = j))
+    df.prefpair.temp<-rbind(data.frame(reshape2::melt(P), parent = "P", lg = j),
+                            data.frame(reshape2::melt(Q), parent = "Q", lg = j))
     colnames(df.prefpair.temp) <- c("pair.conf", "marker", "probability", "parent", "LG")
     map<-data.frame(map.position = input.genoprobs[[j]]$map, marker = names(input.genoprobs[[j]]$map))
     df.prefpair.temp<-merge(df.prefpair.temp, map, sort = FALSE)
@@ -172,8 +154,7 @@ calc_prefpair_profiles<-function(input.genoprobs){
                  prefpair.homolog = df.hompair.pval),
             class = "mappoly.prefpair.profiles")
 }
-#' @rdname calc_prefpair_profiles
-#' @keywords internal
+
 #' @export
 print.mappoly.prefpair.profiles <- function(x, ...){
   cat("  This is an object of class 'mappoly.prefpair.profiles'")
@@ -222,8 +203,27 @@ print.mappoly.prefpair.profiles <- function(x, ...){
   }
   cat("  -----------------------------------------------------\n")
 }
-#' @rdname calc_prefpair_profiles
-#' @keywords internal
+
+#' Plots mappoly.prefpair.profiles
+#' 
+#' @param x an object of class \code{mappoly.prefpair.profiles}
+#' 
+#' @param type a character string indicating which type of graphic is plotted:
+#'             \code{"pair.configs"} (default) plots the preferential pairing 
+#'             profile for the pairing configurations or \code{"hom.pairs"} plots 
+#'             the preferential pairing profile for the homolog pairs
+#'             
+#' @param min.y.prof lower bound for y axis on the probability profile graphic (default = 0)
+#' 
+#' @param max.y.prof upper bound for y axis on the probability profile graphic (default = 1)
+#' 
+#' @param thresh threshold for chi-square test (default = 0.01)
+#' 
+#' @param P a string containing the name of parent P
+#' 
+#' @param Q a string containing the name of parent Q
+#' 
+#' @param ... unused arguments
 #' @export
 plot.mappoly.prefpair.profiles <- function(x, type = c("pair.configs", "hom.pairs"), 
                                            min.y.prof = 0, max.y.prof = 1, 
@@ -242,7 +242,7 @@ plot.mappoly.prefpair.profiles <- function(x, type = c("pair.configs", "hom.pair
       ggplot2::labs(subtitle = "Linkage group", y = "Probability", x = ggplot2::element_blank(), col = "Pairing\nconfig.") + 
       ggplot2::theme_bw() +
       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1), panel.spacing = ggplot2::unit(0, "lines"), plot.subtitle = ggplot2::element_text(hjust = 0.5), axis.title.y = ggplot2::element_text(margin = ggplot2::margin(t = 0, r = 5, b = 0, l = 0))) 
-    DF<-reshape::melt(data = x$prefpair.psi.pval, measure.vars = c(P, Q))
+    DF<-reshape2::melt(data = x$prefpair.psi.pval, measure.vars = c(P, Q))
     p2<-ggplot2::ggplot(DF, ggplot2::aes(map.position, -log10(value), colour = variable)) +
       ggplot2::geom_point(alpha = .7, size = 1) +  
       ggplot2::facet_grid(.~LG, scales = "free_x", space = "free_x") +

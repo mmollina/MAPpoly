@@ -1,10 +1,13 @@
-#' Filter non-conforming classes in F1 segregation
+#' Filter non-conforming classes in F1, non double reduced population.
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export
 filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
 {
+  if (!inherits(input.data, "mappoly.data")) {
+    stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
+  }
   m<-input.data$m
   dp<-input.data$dosage.p
   dq<-input.data$dosage.q
@@ -45,10 +48,18 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
   input.data$geno[,-c(1:2)]<-sweep(input.data$geno[,-c(1:2)], 1, rowSums(input.data$geno[,-c(1:2)]), FUN="/")
   if(is.null(prob.thres))
     prob.thres<-input.data$prob.thres
-  geno.dose <- dist_prob_to_class(input.data$geno, prob.thres)
-  geno.dose[is.na(geno.dose)] <- m + 1
-  input.data$geno.dose<-geno.dose
-  input.data
+  geno.dose <- dist_prob_to_class(geno = input.data$geno, prob.thres = prob.thres)
+  if(geno.dose$flag)
+  {
+    input.data$geno <- geno.dose$geno
+    input.data$geno.dose <- geno.dose$geno.dose
+  } else {
+    input.data$geno.dose <- geno.dose$geno.dose
+  }
+  input.data$geno.dose[is.na(input.data$geno.dose)] <- m + 1
+  input.data$n.ind <- ncol(input.data$geno.dose)
+  input.data$ind.names <- colnames(input.data$geno.dose)
+  return(input.data)
 }
 
 #' Filter missing genotypes
@@ -61,7 +72,7 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
 #' \code{'marker'}{filter out markers based on their percentage of missing data (default)}
 #' \code{'individual'}{filter out individuals based on their percentage of missing data}
 #' Please notice that removing individuals with certain amount of data can change some marker parameters
-#' (such as depth), and can also change the estimated genotypes for other idividuals.
+#' (such as depth), and can also change the estimated genotypes for other individuals.
 #' So be careful when removing individuals.
 #' 
 #' @param filter.thres maximum percentage of missing data (default = 0.2)
@@ -69,7 +80,14 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
 #' @param inter if \code{TRUE} (default), it plots markers or individuals vs. frequency of missing data
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
-#' 
+#'@examples
+#' \dontrun{
+#'     plot(tetra.solcap)
+#'     dat.filt.mrk <- filter_missing(input.data = tetra.solcap,
+#'                                    type = "marker", 
+#'                                    filter.thres = 0.1)
+#'     plot(dat.filt.mrk)
+#'}
 #' @export
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
@@ -79,6 +97,9 @@ filter_missing<-function(input.data,
                          filter.thres = 0.2, 
                          inter = TRUE)
 {
+  if (!inherits(input.data, "mappoly.data")) {
+    stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
+  }
   type <- match.arg(type)
   switch(type,
          marker = filter_missing_mrk(input.data, 
@@ -96,7 +117,6 @@ filter_missing<-function(input.data,
 #' @param filter.thres maximum percentage of missing data
 #' @param inter if \code{TRUE}, plots markers vs. frequency of genotyped individuals
 #' @keywords internal
-#' @export
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
 #' @importFrom graphics axis
@@ -106,7 +126,6 @@ filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
   mrk <- NULL
   if(interactive() && inter)
   {
-    op<-par(bg = "gray", xpd = TRUE)
     while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
     {
       na.num<-apply(input.data$geno.dose, 1, function(x,m) sum(x==m+1), m = input.data$m)
@@ -121,7 +140,9 @@ filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
         filter.thres  <- as.numeric(ANSWER)
     }
     rm.mrks.id<-which(perc.na > filter.thres)
-    if(length(rm.mrks.id)==0) return(input.data)
+    if(length(rm.mrks.id)==0){
+      return(input.data)
+    } 
     rm.mrks<-names(rm.mrks.id)
     if(nrow(input.data$geno)!=input.data$n.mrk)
       input.data$geno <-  input.data$geno %>%
@@ -135,7 +156,6 @@ filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
     if(!is.null(input.data$chisq.pval)) 
       input.data$chisq.pval <- input.data$chisq.pval[-rm.mrks.id]
     input.data$sequence.pos <- input.data$sequence.pos[-rm.mrks.id]
-    par(op)
     return(input.data)
   } else {
     na.num<-apply(input.data$geno.dose, 1, function(x,m) sum(x==m+1), m = input.data$m)
@@ -171,7 +191,6 @@ filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
 #' @param filter.thres maximum percentage of missing data
 #' @param inter if \code{TRUE}, plots markers vs. frequency of genotyped individuals
 #' @keywords internal
-#' @export
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
 #' @importFrom graphics axis
@@ -181,7 +200,6 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
   ind <- NULL
   if(interactive() && inter)
   {
-    op<-par(bg = "gray", xpd = TRUE)
     while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
     {
       na.num<-apply(input.data$geno.dose, 2, function(x,m) sum(x==m+1), m = input.data$m)
@@ -196,7 +214,9 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
         filter.thres  <- as.numeric(ANSWER)
     }
     rm.ind.id<-which(perc.na > filter.thres)
-    if(length(rm.ind.id)==0) return(input.data)
+    if(length(rm.ind.id)==0){
+      return(input.data)
+    } 
     rm.ind<-names(rm.ind.id)
     if(nrow(input.data$geno)!=input.data$n.mrk)
       input.data$geno <-  input.data$geno %>%
@@ -217,7 +237,6 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
       M<-cbind(M, input.data$geno.dose)
       input.data$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
     }
-    par(op)
     return(input.data)
   } else {
     na.num<-apply(input.data$geno.dose, 2, function(x,m) sum(x==m+1), m = input.data$m)
@@ -250,10 +269,10 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
 
 #' Filter markers based on chi-square test
 #'
-#' This function filter markers based on chi-square test p-values. 
-#' The chi-square tests assume that markers follow the expected segregation
-#'  patterns under Mendelian inheritance, only random chromosome bivalent 
-#'  pairing occurs and there is no double reduction.
+#' This function filter markers based on p-values of a chi-square test. 
+#' The chi-square test assumes that markers follow the expected segregation
+#'  patterns under Mendelian inheritance, random chromosome bivalent 
+#'  pairing and no double reduction.
 #'
 #' @param input.data name of input object (class \code{mappoly.data})
 #' 
@@ -269,27 +288,23 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
 #' 
 #'@examples
 #' \dontrun{
-#'     mydata <- filter_segregation(mydata, chisq.pval.thres = 0.05/mydata$n.mrk, inter = TRUE)
+#'     mrks.chi.filt <- filter_segregation(input.data = tetra.solcap, 
+#'                                         chisq.pval.thres = 0.05/tetra.solcap$n.mrk, 
+#'                                         inter = TRUE)
 #'     seq.init<-make_seq_mappoly(mrks.chi.filt)
 #'}
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
-#'
-#' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
-#'     analysis and haplotype phasing in experimental autopolyploid
-#'     populations with high ploidy level using hidden Markov
-#'     models, _submited_. \url{https://doi.org/10.1101/415232}
-#'     
-#' @keywords segregation
-#'     
+#' 
 #' @importFrom graphics axis
 #' @export
 filter_segregation<-function(input.data, chisq.pval.thres = 10e-5, inter = TRUE){
   ANSWER <- "flag"
+  if (!inherits(input.data, "mappoly.data")) {
+    stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
+  }
   if(interactive() && inter)
   {
-    op<-par(bg = "gray", xpd = TRUE)
     while(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
     {
       plot(log10(sort(input.data$chisq.pval, decreasing = TRUE)), xlab = "markers", ylab = "log10(p.val)", axes=F)
@@ -301,7 +316,6 @@ filter_segregation<-function(input.data, chisq.pval.thres = 10e-5, inter = TRUE)
       if(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
         chisq.pval.thres  <- as.numeric(ANSWER)
     }
-    par(op)
   }
   keep<-names(which(input.data$chisq.pval >= chisq.pval.thres))
   exclude<-names(which(input.data$chisq.pval < chisq.pval.thres))

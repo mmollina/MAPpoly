@@ -5,18 +5,8 @@
 #' with one informative parent. This function is not to be
 #' directly called by the user
 #'
-#' @examples
-#'  \dontrun{
-#'  sim_cross_one_informative_parent(m=6,
-#'                                   n.mrk=2,
-#'                                   rf.vec=.1,
-#'                                   hom.allele=list(c(2,4), c(2,3,6)),
-#'                                   n.ind=10)
-#'
-#' }
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
-#'
 sim_cross_one_informative_parent<-function(m,
                                            n.mrk,
                                            rf.vec,
@@ -92,21 +82,8 @@ sim_cross_one_informative_parent<-function(m,
 
 #' Simulate mapping population (tow parents)
 #'
-#' @param void interfunction to be documented
-#'
-#' @examples
-#'  \dontrun{
-#' hom.allele.p<-list(c(1,3,4), c(2,3,4), c(1,4,5,6), c(1,3,4,7), 1)
-#' hom.allele.q<-list(c(2,4), c(2,3,6), c(1,4,5,8), 0, c(1,2))
-#' x<-sim_cross_two_informative_parents(m=8,
-#'                                      n.mrk=5,
-#'                                      rf.vec=.1,
-#'                                      n.ind=100,
-#'                                      hom.allele.p,
-#'                                      hom.allele.q)
-#'                                      }
+#' @param void internal function to be documented
 #' @keywords internal
-#' @export
 sim_cross_two_informative_parents<-function(m,
                                            n.mrk,
                                            rf.vec,
@@ -138,7 +115,7 @@ sim_cross_two_informative_parents<-function(m,
 #' phase configuration) in a pdf output. This function is not to
 #' be directly called by the user
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @importFrom grDevices pdf dev.off
 #' @keywords internal
 draw_cross<-function(m,rf.vec=NULL,hom.allele.p,hom.allele.q, file=NULL, width=12, height=6){

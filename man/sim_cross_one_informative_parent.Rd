@@ -15,22 +15,12 @@ sim_cross_one_informative_parent(
 )
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 This function simulates a polyploid mapping population
 under random chromosome segregation
 with one informative parent. This function is not to be
 directly called by the user
-}
-\examples{
- \dontrun{
- sim_cross_one_informative_parent(m=6,
-                                  n.mrk=2,
-                                  rf.vec=.1,
-                                  hom.allele=list(c(2,4), c(2,3,6)),
-                                  n.ind=10)
-
-}
 }
 \keyword{internal}

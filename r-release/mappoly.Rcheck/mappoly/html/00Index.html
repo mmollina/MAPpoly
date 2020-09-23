@@ -1,0 +1,172 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>R: Construction of Genetic Linkage Maps in Autopolyploids</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+<h1> Construction of Genetic Linkage Maps in Autopolyploids
+<img class="toplogo" src="../../../doc/html/Rlogo.svg" alt="[R logo]" />
+</h1>
+<hr/>
+<div style="text-align: center;">
+<a href="../../../doc/html/packages.html"><img class="arrow" src="../../../doc/html/left.jpg" alt="[Up]" /></a>
+<a href="../../../doc/html/index.html"><img class="arrow" src="../../../doc/html/up.jpg" alt="[Top]" /></a>
+</div><h2>Documentation for package &lsquo;mappoly&rsquo; version 0.2.0</h2>
+
+<ul><li><a href="../DESCRIPTION">DESCRIPTION file</a>.</li>
+</ul>
+
+<h2>Help Pages</h2>
+
+
+<table width="100%">
+<tr><td style="width: 25%;"><a href="add_marker.html">add_marker</a></td>
+<td>Add a single marker to a map</td></tr>
+<tr><td style="width: 25%;"><a href="cache_counts_twopt.html">cache_counts_twopt</a></td>
+<td>Frequency of genotypes for two-point recombination fraction estimation</td></tr>
+<tr><td style="width: 25%;"><a href="calc_genoprob.html">calc_genoprob</a></td>
+<td>Compute conditional probabilities of the genotypes</td></tr>
+<tr><td style="width: 25%;"><a href="calc_genoprob_dist.html">calc_genoprob_dist</a></td>
+<td>Compute conditional probabilities of the genotypes using probability distribution of dosages</td></tr>
+<tr><td style="width: 25%;"><a href="calc_genoprob_error.html">calc_genoprob_error</a></td>
+<td>Compute conditional probabilities of the genotypes using global error</td></tr>
+<tr><td style="width: 25%;"><a href="calc_homoprob.html">calc_homoprob</a></td>
+<td>Homolog probabilities</td></tr>
+<tr><td style="width: 25%;"><a href="calc_prefpair_profiles.html">calc_prefpair_profiles</a></td>
+<td>Preferential pairing profiles</td></tr>
+<tr><td style="width: 25%;"><a href="check_data_sanity.html">check_data_sanity</a></td>
+<td>Data sanity check</td></tr>
+<tr><td style="width: 25%;"><a href="drop_marker.html">drop_marker</a></td>
+<td>Remove markers from a map</td></tr>
+<tr><td style="width: 25%;"><a href="elim_redundant.html">elim_redundant</a></td>
+<td>Eliminate redundant markers</td></tr>
+<tr><td style="width: 25%;"><a href="est_full_hmm_with_global_error.html">est_full_hmm_with_global_error</a></td>
+<td>Re-estimate genetic map given a global genotyping error</td></tr>
+<tr><td style="width: 25%;"><a href="est_full_hmm_with_prior_prob.html">est_full_hmm_with_prior_prob</a></td>
+<td>Re-estimate genetic map using dosage prior probability distribution</td></tr>
+<tr><td style="width: 25%;"><a href="est_pairwise_rf.html">est_pairwise_rf</a></td>
+<td>Pairwise two-point analysis</td></tr>
+<tr><td style="width: 25%;"><a href="est_rf_hmm.html">est_rf_hmm</a></td>
+<td>Multipoint analysis using Hidden Markov Models in autopolyploids</td></tr>
+<tr><td style="width: 25%;"><a href="est_rf_hmm_sequential.html">est_rf_hmm_sequential</a></td>
+<td>Multipoint analysis using Hidden Markov Models: Sequential phase elimination</td></tr>
+<tr><td style="width: 25%;"><a href="export_data_to_polymapR.html">export_data_to_polymapR</a></td>
+<td>Export data to 'polymapR'</td></tr>
+<tr><td style="width: 25%;"><a href="export_map_list.html">export_map_list</a></td>
+<td>Export a genetic map to a CSV file</td></tr>
+<tr><td style="width: 25%;"><a href="extract_map.html">extract_map</a></td>
+<td>Extract the maker position from an object of class 'mappoly.map'</td></tr>
+<tr><td style="width: 25%;"><a href="filter_missing.html">filter_missing</a></td>
+<td>Filter missing genotypes</td></tr>
+<tr><td style="width: 25%;"><a href="filter_segregation.html">filter_segregation</a></td>
+<td>Filter markers based on chi-square test</td></tr>
+<tr><td style="width: 25%;"><a href="get_genomic_order.html">get_genomic_order</a></td>
+<td>Get the genomic position of markers in a sequence</td></tr>
+<tr><td style="width: 25%;"><a href="get_submap.html">get_submap</a></td>
+<td>Extract sub-map from map</td></tr>
+<tr><td style="width: 25%;"><a href="get_tab_mrks.html">get_tab_mrks</a></td>
+<td>Get table of dosage combinations</td></tr>
+<tr><td style="width: 25%;"><a href="group_mappoly.html">group_mappoly</a></td>
+<td>Assign markers to linkage groups</td></tr>
+<tr><td style="width: 25%;"><a href="hexafake.html">hexafake</a></td>
+<td>Simulated autohexaploid dataset.</td></tr>
+<tr><td style="width: 25%;"><a href="hexafake.geno.dist.html">hexafake.geno.dist</a></td>
+<td>Simulated autohexaploid dataset with genotype probabilities.</td></tr>
+<tr><td style="width: 25%;"><a href="import_data_from_polymapR.html">import_data_from_polymapR</a></td>
+<td>Import data from polymapR</td></tr>
+<tr><td style="width: 25%;"><a href="import_from_updog.html">import_from_updog</a></td>
+<td>Import from updog</td></tr>
+<tr><td style="width: 25%;"><a href="import_phased_maplist_from_polymapR.html">import_phased_maplist_from_polymapR</a></td>
+<td>Import phased map list from polymapR</td></tr>
+<tr><td style="width: 25%;"><a href="loglike_hmm.html">loglike_hmm</a></td>
+<td>Multipoint log-likelihood computation</td></tr>
+<tr><td style="width: 25%;"><a href="make_mat_mappoly.html">make_mat_mappoly</a></td>
+<td>Subset recombination fraction matrices</td></tr>
+<tr><td style="width: 25%;"><a href="make_pairs_mappoly.html">make_pairs_mappoly</a></td>
+<td>Subset pairwise recombination fractions</td></tr>
+<tr><td style="width: 25%;"><a href="make_seq_mappoly.html">make_seq_mappoly</a></td>
+<td>Create a sequence of markers</td></tr>
+<tr><td style="width: 25%;"><a href="maps.hexafake.html">maps.hexafake</a></td>
+<td>Resulting maps from 'hexafake'</td></tr>
+<tr><td style="width: 25%;"><a href="mds_mappoly.html">mds_mappoly</a></td>
+<td>Estimates loci position using Multidimensional Scaling</td></tr>
+<tr><td style="width: 25%;"><a href="merge_datasets.html">merge_datasets</a></td>
+<td>Merge datasets</td></tr>
+<tr><td style="width: 25%;"><a href="merge_maps.html">merge_maps</a></td>
+<td>Merge two maps</td></tr>
+<tr><td style="width: 25%;"><a href="read_geno.html">plot.mappoly.data</a></td>
+<td>Data Input</td></tr>
+<tr><td style="width: 25%;"><a href="plot.mappoly.homoprob.html">plot.mappoly.homoprob</a></td>
+<td>Plots mappoly.homoprob</td></tr>
+<tr><td style="width: 25%;"><a href="est_rf_hmm.html">plot.mappoly.map</a></td>
+<td>Multipoint analysis using Hidden Markov Models in autopolyploids</td></tr>
+<tr><td style="width: 25%;"><a href="plot.mappoly.prefpair.profiles.html">plot.mappoly.prefpair.profiles</a></td>
+<td>Plots mappoly.prefpair.profiles</td></tr>
+<tr><td style="width: 25%;"><a href="rf_list_to_matrix.html">plot.mappoly.rf.matrix</a></td>
+<td>Recombination fraction list to matrix</td></tr>
+<tr><td style="width: 25%;"><a href="make_seq_mappoly.html">plot.mappoly.sequence</a></td>
+<td>Create a sequence of markers</td></tr>
+<tr><td style="width: 25%;"><a href="plot_genome_vs_map.html">plot_genome_vs_map</a></td>
+<td>Physical versus genetic distance</td></tr>
+<tr><td style="width: 25%;"><a href="plot_map_list.html">plot_map_list</a></td>
+<td>Plot a genetic map</td></tr>
+<tr><td style="width: 25%;"><a href="plot_mrk_info.html">plot_mrk_info</a></td>
+<td>Plot marker information</td></tr>
+<tr><td style="width: 25%;"><a href="poly_cross_simulate.html">poly_cross_simulate</a></td>
+<td>Simulate an autopolyploid full-sib population</td></tr>
+<tr><td style="width: 25%;"><a href="read_geno.html">print.mappoly.data</a></td>
+<td>Data Input</td></tr>
+<tr><td style="width: 25%;"><a href="est_rf_hmm.html">print.mappoly.map</a></td>
+<td>Multipoint analysis using Hidden Markov Models in autopolyploids</td></tr>
+<tr><td style="width: 25%;"><a href="mds_mappoly.html">print.mappoly.pcmap</a></td>
+<td>Estimates loci position using Multidimensional Scaling</td></tr>
+<tr><td style="width: 25%;"><a href="mds_mappoly.html">print.mappoly.pcmap3d</a></td>
+<td>Estimates loci position using Multidimensional Scaling</td></tr>
+<tr><td style="width: 25%;"><a href="rf_list_to_matrix.html">print.mappoly.rf.matrix</a></td>
+<td>Recombination fraction list to matrix</td></tr>
+<tr><td style="width: 25%;"><a href="make_seq_mappoly.html">print.mappoly.sequence</a></td>
+<td>Create a sequence of markers</td></tr>
+<tr><td style="width: 25%;"><a href="print_mrk.html">print_mrk</a></td>
+<td>Summary of a set of markers</td></tr>
+<tr><td style="width: 25%;"><a href="read_geno.html">read_geno</a></td>
+<td>Data Input</td></tr>
+<tr><td style="width: 25%;"><a href="read_geno_csv.html">read_geno_csv</a></td>
+<td>Data Input in CSV format</td></tr>
+<tr><td style="width: 25%;"><a href="read_geno_prob.html">read_geno_prob</a></td>
+<td>Data Input</td></tr>
+<tr><td style="width: 25%;"><a href="read_vcf.html">read_vcf</a></td>
+<td>Data Input VCF</td></tr>
+<tr><td style="width: 25%;"><a href="reest_rf.html">reest_rf</a></td>
+<td>Re-estimate the recombination fractions in a genetic map</td></tr>
+<tr><td style="width: 25%;"><a href="rev_map.html">rev_map</a></td>
+<td>Reverse map</td></tr>
+<tr><td style="width: 25%;"><a href="rf_list_to_matrix.html">rf_list_to_matrix</a></td>
+<td>Recombination fraction list to matrix</td></tr>
+<tr><td style="width: 25%;"><a href="rf_snp_filter.html">rf_snp_filter</a></td>
+<td>Remove markers that do not meet a LOD criteria</td></tr>
+<tr><td style="width: 25%;"><a href="segreg_poly.html">segreg_poly</a></td>
+<td>Polysomic segregation frequency</td></tr>
+<tr><td style="width: 25%;"><a href="sim_homologous.html">sim_homologous</a></td>
+<td>Simulate homology groups</td></tr>
+<tr><td style="width: 25%;"><a href="solcap.dose.map.html">solcap.dose.map</a></td>
+<td>Resulting maps from 'tetra.solcap'</td></tr>
+<tr><td style="width: 25%;"><a href="solcap.err.map.html">solcap.err.map</a></td>
+<td>Resulting maps from 'tetra.solcap'</td></tr>
+<tr><td style="width: 25%;"><a href="solcap.mds.map.html">solcap.mds.map</a></td>
+<td>Resulting maps from 'tetra.solcap'</td></tr>
+<tr><td style="width: 25%;"><a href="solcap.prior.map.html">solcap.prior.map</a></td>
+<td>Resulting maps from 'tetra.solcap.geno.dist'</td></tr>
+<tr><td style="width: 25%;"><a href="split_and_rephase.html">split_and_rephase</a></td>
+<td>Divides map in sub-maps and re-phase them</td></tr>
+<tr><td style="width: 25%;"><a href="summary_maps.html">summary_maps</a></td>
+<td>Summary map</td></tr>
+<tr><td style="width: 25%;"><a href="tetra.solcap.html">tetra.solcap</a></td>
+<td>Autotetraploid potato dataset.</td></tr>
+<tr><td style="width: 25%;"><a href="tetra.solcap.geno.dist.html">tetra.solcap.geno.dist</a></td>
+<td>Autotetraploid potato dataset with genotype probabilities.</td></tr>
+<tr><td style="width: 25%;"><a href="update_map.html">update_map</a></td>
+<td>Update map</td></tr>
+<tr><td style="width: 25%;"><a href="update_missing.html">update_missing</a></td>
+<td>Update missing information</td></tr>
+</table>
+</body></html>

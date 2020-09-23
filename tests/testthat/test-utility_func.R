@@ -1,0 +1,11 @@
+context("Utility functions")
+test_that("test several utility functions", {
+  x1<-plot_mrk_info(tetra.solcap, 1)
+  x2<-plot_mrk_info(tetra.solcap, "solcap_snp_c2_41437")
+  x3<-plot_mrk_info(tetra.solcap.geno.dist, 1)
+  x4<-plot_mrk_info(tetra.solcap.geno.dist, "solcap_snp_c2_41437")
+  expect_is(x1, "matrix")
+  expect_is(x2, "matrix")
+  expect_is(x3, "list")
+  expect_is(x4, "list")
+})

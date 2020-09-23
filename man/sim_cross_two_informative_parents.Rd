@@ -17,21 +17,9 @@ sim_cross_two_informative_parents(
 )
 }
 \arguments{
-\item{void}{interfunction to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Simulate mapping population (tow parents)
-}
-\examples{
- \dontrun{
-hom.allele.p<-list(c(1,3,4), c(2,3,4), c(1,4,5,6), c(1,3,4,7), 1)
-hom.allele.q<-list(c(2,4), c(2,3,6), c(1,4,5,8), 0, c(1,2))
-x<-sim_cross_two_informative_parents(m=8,
-                                     n.mrk=5,
-                                     rf.vec=.1,
-                                     n.ind=100,
-                                     hom.allele.p,
-                                     hom.allele.q)
-                                     }
 }
 \keyword{internal}

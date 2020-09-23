@@ -4,8 +4,6 @@
 \alias{mds_mappoly}
 \alias{print.mappoly.pcmap}
 \alias{print.mappoly.pcmap3d}
-\alias{plot.mappoly.pcmap}
-\alias{plot.mappoly.pcmap3d}
 \title{Estimates loci position using Multidimensional Scaling}
 \usage{
 mds_mappoly(
@@ -20,10 +18,6 @@ mds_mappoly(
 \method{print}{mappoly.pcmap}(x, ...)
 
 \method{print}{mappoly.pcmap3d}(x, ...)
-
-\method{plot}{mappoly.pcmap}(x, D1lim = NULL, D2lim = NULL, displaytext = FALSE, ...)
-
-\method{plot}{mappoly.pcmap3d}(x, D1lim = NULL, D2lim = NULL, displaytext = FALSE, ...)
 }
 \arguments{
 \item{input.mat}{an object of class \code{mappoly.input.matrix}}
@@ -43,14 +37,11 @@ MDS procedure (default = 2)}
 \item{x}{an object of class \code{mappoly.mds}}
 
 \item{...}{currently ignored}
-
-\item{displaytext}{logical. If \code{TRUE}, display the name of the markers in the
-diagnostic plot}
 }
 \value{
 A list containing:
 \item{M}{the input distance map}
-\item{sm}{the unconstrained wMDS results}
+\item{sm}{the unconstrained MDS results}
 \item{pc}{the principal curve results}
 \item{distmap}{a matrix of pairwise distances between
 loci where the columns are in the estimated order}
@@ -67,95 +58,27 @@ with each number on the MDS configuration plots}
 \description{
 Estimates loci position using Multidimensional Scaling proposed by
 \cite{Preedy and Hackett (2016)}. The code is an adaptation from
-the package \code{TetraploidSNPMap}, available under GNU GENERAL PUBLIC LICENSE,
+the package \code{MDSmap}, available under GNU GENERAL PUBLIC LICENSE,
 Version 3, at
-\url{https://github.com/BiomathematicsAndStatisticsScotland/TetraploidSNPMap}
+\url{ https://CRAN.R-project.org/package=MDSMap}
 }
 \examples{
  \dontrun{
-    data(hexafake)
-    all.mrk<-make_seq_mappoly(hexafake, 'all')
-    red.mrk<-elim_redundant(all.mrk)
-    unique.mrks<-make_seq_mappoly(red.mrk)
-    counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
-    all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-                               count.cache = counts.web,
-                               n.clusters = 16,
-                               verbose=TRUE)
-
-    ## Full recombination fraction matrix
-    mat.full<-rf_list_to_matrix(input.twopt=all.pairs)
-    plot(mat.full)
-
-    lgs <- group_mappoly(input.mat = mat.full,
-                         input.seq = unique.mrks,
-                         expected.groups = 3,
-                         inter = TRUE,
-                         comp.mat = TRUE, #this data has physical information
-                         verbose=TRUE)
-    lgs
-    plot(lgs)
-    lg1 <- make_seq_mappoly(lgs, 1)
-    lg2 <- make_seq_mappoly(lgs, 2)
-    lg3 <- make_seq_mappoly(lgs, 3)
-
-    ##Plot matrices
-    p1<-make_pairs_mappoly(input.seq = lg1, input.twopt = all.pairs)
-    p2<-make_pairs_mappoly(input.seq = lg2, input.twopt = all.pairs)
-    p3<-make_pairs_mappoly(input.seq = lg3, input.twopt = all.pairs)
-
-    m1<-rf_list_to_matrix(input.twopt = p1)
-    m2<-rf_list_to_matrix(input.twopt = p2)
-    m3<-rf_list_to_matrix(input.twopt = p3)
-
-    op<-par(mfrow = c(1,3), pty = "s")
-    plot(m1, main.text = "LG1")
-    plot(m2, main.text = "LG2")
-    plot(m3, main.text = "LG3")
-    par(op)
-
+    s1 <- make_seq_mappoly(hexafake, 'seq1')
+    t1 <- est_pairwise_rf(s1, ncpus = 7)
+    m1 <- rf_list_to_matrix(t1)
+    plot(m1, ord = rownames(get_genomic_order(s1)))
+    
     ## Removing disruptive SNPs
-
-    lg1.filt<-rf_snp_filter(p1, 5, 5, 0.15, thresh.perc = 0.05)
-    lg2.filt<-rf_snp_filter(p2, 5, 5, 0.15, thresh.perc = 0.05)
-    lg3.filt<-rf_snp_filter(p3, 5, 5, 0.15, thresh.perc = 0.05)
-
-    p1.filt<-make_pairs_mappoly(input.seq = lg1.filt, input.twopt = all.pairs)
-    p2.filt<-make_pairs_mappoly(input.seq = lg2.filt, input.twopt = all.pairs)
-    p3.filt<-make_pairs_mappoly(input.seq = lg3.filt, input.twopt = all.pairs)
-
-    m1.filt<-rf_list_to_matrix(input.twopt = p1.filt)
-    m2.filt<-rf_list_to_matrix(input.twopt = p2.filt)
-    m3.filt<-rf_list_to_matrix(input.twopt = p3.filt)
-
-    op<-par(mfrow = c(2,3), pty = "s")
-    plot(m1, main.text = "LG1")
-    plot(m2, main.text = "LG2")
-    plot(m3, main.text = "LG3")
-    plot(m1.filt, main.text = "LG1.filt")
-    plot(m2.filt, main.text = "LG2.filt")
-    plot(m3.filt, main.text = "LG3.filt")
-    par(op)
-    mds.ord1 <- mds_mappoly(input.mat = m1.filt, p = NULL, n = NULL, ndim = 2)
-    plot(mds.ord1)
-    mds.ord1 <- mds_mappoly(input.mat = m1.filt, p = NULL,
-                            n = c(346, 333), ndim = 2)
-    plot(mds.ord1)
-    mds.ord1 <- mds_mappoly(input.mat = m1.filt,
-                           p = NULL, n = c(346, 333, 437, 445, 275,31),
-                           ndim = 2)
-    plot(mds.ord1)
-
-    mds.ord2 <- mds_mappoly(input.mat = m2.filt, p = NULL, n = NULL, ndim = 2)
-    plot(mds.ord2)
-    mds.ord3 <- mds_mappoly(input.mat = m3.filt, p = NULL, n = NULL, ndim = 2)
-    plot(mds.ord3)
-
-    mds.seq.ord1 <- make_seq_mappoly(mds.ord1)
-    mds.seq.ord2 <- make_seq_mappoly(mds.ord2)
-    mds.seq.ord3 <- make_seq_mappoly(mds.ord3)
-
-
+    s1f <- rf_snp_filter(t1, 5, 5, 0.15, thresh.perc = 0.05)
+    m1f <- make_mat_mappoly(m1, s1f)
+    mds.ord <- mds_mappoly(m1f)
+    plot(mds.ord)
+    so <- make_seq_mappoly(mds.ord)
+    plot(m1f, ord = rownames(get_genomic_order(so)))
+    plot(so$seq.num ~ I(so$sequence.pos/1e6), 
+         xlab = "Genome Position",
+         ylab = "MDS position")
    }
 
 }
@@ -163,9 +86,9 @@ Version 3, at
 Preedy, K. F., & Hackett, C. A. (2016). A rapid marker ordering approach for
  high-density genetic linkage maps in experimental autotetraploid populations
  using multidimensional scaling. _Theoretical and Applied Genetics_, 129(11),
- 2117-2132. \url{http://doi.org/10.1007/s00122-016-2761-8}
+ 2117-2132. \url{https://doi.org/10.1007/s00122-016-2761-8}
 }
 \author{
-Marcelo Mollinari, \email{mmollin@ncsu.edu} mostly adapted from TetraploidSNPMap codes
+Marcelo Mollinari, \email{mmollin@ncsu.edu} mostly adapted from MDSmap 
+        codes, written by Katharine F. Preedy, \email{katharine.preedy@bioss.ac.uk}
 }
-\keyword{internal}

@@ -1,2 +1,15 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^.*\.pdf
+^.*\.pptx
+^.*\.gif
+^.*\.yml
+^.*\.ai
+^.*\.png
+^r-release$
+^revdep$
+^.cran-comments\.md
+cran-comments.md
+^CRAN-RELEASE$
+^appveyor\.yml$
+^tests/testthat/Rplots\.pdf

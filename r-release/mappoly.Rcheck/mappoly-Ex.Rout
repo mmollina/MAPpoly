@@ -1,0 +1,2321 @@
+
+R Under development (unstable) (2020-09-13 r79195) -- "Unsuffered Consequences"
+Copyright (C) 2020 The R Foundation for Statistical Computing
+Platform: x86_64-apple-darwin17.0 (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+  Natural language support but running in an English locale
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> pkgname <- "mappoly"
+> source(file.path(R.home("share"), "R", "examples-header.R"))
+> options(warn = 1)
+> base::assign(".ExTimings", "mappoly-Ex.timings", pos = 'CheckExEnv')
+> base::cat("name\tuser\tsystem\telapsed\n", file=base::get(".ExTimings", pos = 'CheckExEnv'))
+> base::assign(".format_ptime",
++ function(x) {
++   if(!is.na(x[4L])) x[1L] <- x[1L] + x[4L]
++   if(!is.na(x[5L])) x[2L] <- x[2L] + x[5L]
++   options(OutDec = '.')
++   format(x[1L:3L], digits = 7L)
++ },
++ pos = 'CheckExEnv')
+> 
+> ### * </HEADER>
+> library('mappoly')
+==============================
+MAPpoly Package [Version 0.2.0]
+More information: https://github.com/mmollina/MAPpoly
+==============================
+
+> 
+> base::assign(".oldSearch", base::search(), pos = 'CheckExEnv')
+> base::assign(".old_wd", base::getwd(), pos = 'CheckExEnv')
+> cleanEx()
+> nameEx("add_marker")
+> ### * add_marker
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: add_marker
+> ### Title: Add a single marker to a map
+> ### Aliases: add_marker
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D sub.map<-get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
+> ##D plot(sub.map, mrk.names = TRUE)
+> ##D s<-make_seq_mappoly(hexafake, sub.map$info$mrk.names)
+> ##D tpt <- est_pairwise_rf(s)
+> ##D rf.matrix <- rf_list_to_matrix(input.twopt = tpt,
+> ##D                                thresh.LOD.ph = 3, 
+> ##D                                thresh.LOD.rf = 3,
+> ##D                                shared.alleles = TRUE)
+> ##D ###### Removing marker "M_1" (first) #######
+> ##D mrk.to.remove <- "M_1"
+> ##D input.map <- drop_marker(sub.map, mrk.to.remove)
+> ##D plot(input.map, mrk.names = TRUE)
+> ##D ## Computing conditional probabilities using the resulting map
+> ##D genoprob <- calc_genoprob(input.map)
+> ##D res.add.M_1<-add_marker(input.map = input.map,
+> ##D                         mrk = "M_1",
+> ##D                         pos = 0,
+> ##D                         rf.matrix = rf.matrix,
+> ##D                         genoprob = genoprob,
+> ##D                         tol = 10e-4)  
+> ##D  plot(res.add.M_1, mrk.names = TRUE)                       
+> ##D  best.phase <- res.add.M_1$maps[[1]]$seq.ph
+> ##D  names.id<-names(best.phase$P)
+> ##D  plot_compare_haplotypes(m = 6,
+> ##D                          hom.allele.p1 = best.phase$P[names.id],
+> ##D                          hom.allele.q1 = best.phase$Q[names.id],
+> ##D                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
+> ##D                          hom.allele.q2 = sub.map$maps[[1]]$seq.ph$Q[names.id])
+> ##D                          
+> ##D ###### Removing marker "M_20" (middle) #######
+> ##D mrk.to.remove <- "M_20"
+> ##D input.map <- drop_marker(sub.map, mrk.to.remove)
+> ##D plot(input.map, mrk.names = TRUE)
+> ##D # Computing conditional probabilities using the resulting map
+> ##D genoprob <- calc_genoprob(input.map)
+> ##D res.add.M_20<-add_marker(input.map = input.map,
+> ##D                         mrk = "M_20",
+> ##D                         pos = "M_19",
+> ##D                         rf.matrix = rf.matrix,
+> ##D                         genoprob = genoprob,
+> ##D                         tol = 10e-4)  
+> ##D  plot(res.add.M_20, mrk.names = TRUE)                       
+> ##D  best.phase <- res.add.M_20$maps[[1]]$seq.ph
+> ##D  names.id<-names(best.phase$P)
+> ##D  plot_compare_haplotypes(m = 6,
+> ##D                          hom.allele.p1 = best.phase$P[names.id],
+> ##D                          hom.allele.q1 = best.phase$Q[names.id],
+> ##D                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
+> ##D                          hom.allele.q2 = sub.map$maps[[1]]$seq.ph$Q[names.id]) 
+> ##D                          
+> ##D ###### Removing marker "M_53" (last) #######
+> ##D mrk.to.remove <- "M_53"
+> ##D input.map <- drop_marker(sub.map, mrk.to.remove)
+> ##D plot(input.map, mrk.names = TRUE)
+> ##D # Computing conditional probabilities using the resulting map
+> ##D genoprob <- calc_genoprob(input.map)
+> ##D res.add.M_53<-add_marker(input.map = input.map,
+> ##D                         mrk = "M_53",
+> ##D                         pos = "M_52",
+> ##D                         rf.matrix = rf.matrix,
+> ##D                         genoprob = genoprob,
+> ##D                         tol = 10e-4)  
+> ##D  plot(res.add.M_53, mrk.names = TRUE)                       
+> ##D  best.phase <- res.add.M_53$maps[[1]]$seq.ph
+> ##D  names.id<-names(best.phase$P)
+> ##D  plot_compare_haplotypes(m = 6,
+> ##D                          hom.allele.p1 = best.phase$P[names.id],
+> ##D                          hom.allele.q1 = best.phase$Q[names.id],
+> ##D                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
+> ##D                          hom.allele.q2 = sub.map$maps[[1]]$seq.ph$Q[names.id])                
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("add_marker", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("cache_counts_twopt")
+> ### * cache_counts_twopt
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: cache_counts_twopt
+> ### Title: Frequency of genotypes for two-point recombination fraction
+> ###   estimation
+> ### Aliases: cache_counts_twopt
+> ### Keywords: analysis two-point
+> 
+> ### ** Examples
+> 
+>   ## Not run: 
+> ##D     all.mrk<-make_seq_mappoly(hexafake, 'all')
+> ##D     ## local computation
+> ##D     counts<-cache_counts_twopt(all.mrk, ncpus = 8)
+> ##D     ## load from internal file of web-stored counts (especially important for high ploidy levels)
+> ##D     counts.cached<-cache_counts_twopt(all.mrk, cached = TRUE)
+> ##D     
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("cache_counts_twopt", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("calc_genoprob")
+> ### * calc_genoprob
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: calc_genoprob
+> ### Title: Compute conditional probabilities of the genotypes
+> ### Aliases: calc_genoprob
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D  ## tetraploid example
+> ##D  probs.t<-calc_genoprob(input.map = solcap.dose.map[[1]],
+> ##D                         verbose = TRUE)
+> ##D  probs.t
+> ##D  ## displaying individual 1, 36 genotypic states
+> ##D  ## (rows) across linkage group 1 (columns)                          
+> ##D  image(t(probs.t$probs[,,1]))
+> ##D  
+> ##D  ## hexaploid example
+> ##D  probs.h<-calc_genoprob(input.map = maps.hexafake[[1]],
+> ##D                              verbose = TRUE)
+> ##D  probs.h
+> ##D  ## displaying individual 1, 400 genotypic states
+> ##D  ## (rows) across linkage group 1 (columns)                               
+> ##D  image(t(probs.h$probs[,,1]))
+> ##D  
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("calc_genoprob", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("calc_genoprob_dist")
+> ### * calc_genoprob_dist
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: calc_genoprob_dist
+> ### Title: Compute conditional probabilities of the genotypes using
+> ###   probability distribution of dosages
+> ### Aliases: calc_genoprob_dist
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D  ## tetraploid example
+> ##D  probs.t<-calc_genoprob_dist(input.map = solcap.prior.map[[1]],
+> ##D                            dat.prob = tetra.solcap.geno.dist,
+> ##D                            verbose = TRUE)
+> ##D  probs.t
+> ##D  ## displaying individual 1, 36 genotypic states 
+> ##D  ## (rows) across linkage group 1 (columns)                          
+> ##D  image(t(probs.t$probs[,,1]))
+> ##D  
+> ##D  ## hexaploid example
+> ##D  probs.h<-calc_genoprob_dist(input.map = maps.hexafake[[1]],
+> ##D                              dat.prob = hexafake.geno.dist,
+> ##D                              verbose = TRUE)
+> ##D  probs.h
+> ##D  ## displaying individual 1, 400 genotypic states 
+> ##D  ## (rows) across linkage group 1 (columns)                               
+> ##D  image(t(probs.h$probs[,,1]))
+> ##D  
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("calc_genoprob_dist", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("calc_genoprob_error")
+> ### * calc_genoprob_error
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: calc_genoprob_error
+> ### Title: Compute conditional probabilities of the genotypes using global
+> ###   error
+> ### Aliases: calc_genoprob_error
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D      probs<-calc_genoprob(input.map = solcap.dose.map[[1]],
+> ##D                                 verbose = TRUE)
+> ##D      probs.error<-calc_genoprob_error(input.map = solcap.err.map[[1]],
+> ##D                                 error = 0.05,
+> ##D                                 verbose = TRUE)
+> ##D    op<-par(mfrow = c(2,1))
+> ##D    ## Example: individual 11
+> ##D    ind<-11   
+> ##D    ## posterior probabilities with no error modeling
+> ##D    pr1<-probs$probs[,,ind]
+> ##D    d1<-probs$map
+> ##D    image(t(pr1),
+> ##D          col = RColorBrewer::brewer.pal(n=9 , name = "YlOrRd"),
+> ##D          axes=FALSE,
+> ##D          xlab = "Markers",
+> ##D          ylab = " ",
+> ##D          main = paste("LG_1, ind ", ind))
+> ##D    axis(side = 1, at = d1/max(d1),
+> ##D         labels =rep("", length(d1)), las=2)
+> ##D    axis(side = 2, at = seq(0,1,length.out = nrow(pr1)),
+> ##D         labels = rownames(pr1), las=2, cex.axis=.5)
+> ##D    
+> ##D    ## posterior probabilities with error modeling
+> ##D    pr2<-probs.error$probs[,,ind]
+> ##D    d2<-probs.error$map
+> ##D    image(t(pr2),
+> ##D          col=RColorBrewer::brewer.pal(n=9 , name = "YlOrRd"),
+> ##D          axes=FALSE,
+> ##D          xlab = "Markers",
+> ##D          ylab = " ",
+> ##D          main = paste("LG_1, ind ", ind, " - w/ error"))
+> ##D    axis(side = 1, at = d2/max(d2),
+> ##D         labels =rep("", length(d2)), las=2)
+> ##D    axis(side = 2, at = seq(0,1,length.out = nrow(pr2)),
+> ##D         labels = rownames(pr2), las=2, cex.axis=.5)
+> ##D    par(op)
+> ##D  
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("calc_genoprob_error", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("calc_homoprob")
+> ### * calc_homoprob
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: calc_homoprob
+> ### Title: Homolog probabilities
+> ### Aliases: calc_homoprob
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D   ## tetraploid solcap example
+> ##D   w2<-lapply(solcap.dose.map, calc_genoprob)
+> ##D   h.prob.solcap<-calc_homoprob(w2)
+> ##D   print(h.prob.solcap)
+> ##D   plot(h.prob.solcap, ind = "ind_10")
+> ##D   plot(h.prob.solcap, stack = TRUE, ind = 5)
+> ##D   plot(h.prob.solcap, stack = TRUE, ind = 5, lg = "all")
+> ##D   
+> ##D   w3<-lapply(solcap.err.map, calc_genoprob_error, error = 0.05)
+> ##D   h.prob.solcap.err<-calc_homoprob(w3)
+> ##D   plot(h.prob.solcap, lg = 1, ind = 100, use.plotly = FALSE)
+> ##D   plot(h.prob.solcap.err, lg = 1, ind = 100, use.plotly = FALSE)
+> ##D   
+> ##D   ## hexaploid example
+> ##D   w1 <- lapply(maps.hexafake, calc_genoprob)
+> ##D   h.prob <- calc_homoprob(w1)
+> ##D   print(h.prob)
+> ##D   plot(h.prob)
+> ##D   plot(h.prob, lg = 1, ind = 5, use.plotly = FALSE)
+> ##D   plot(h.prob, lg = c(1,3), ind = 15, use.plotly = FALSE)
+> ##D   plot(h.prob, lg = "all")
+> ##D   
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("calc_homoprob", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("calc_prefpair_profiles")
+> ### * calc_prefpair_profiles
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: calc_prefpair_profiles
+> ### Title: Preferential pairing profiles
+> ### Aliases: calc_prefpair_profiles
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D   ## hexaploid example
+> ##D   w1 <- lapply(maps.hexafake, calc_genoprob)
+> ##D   x1 <- calc_prefpair_profiles(w1)
+> ##D   print(x1)
+> ##D   plot(x1, min.y.prof = 0.05, max.y.prof = .15, thresh = 0.01)
+> ##D   
+> ##D   ## tetraploid example
+> ##D   w2 <- lapply(solcap.err.map, calc_genoprob_error, error = 0.05)
+> ##D   x2 <- calc_prefpair_profiles(w2)
+> ##D   print(x2)
+> ##D   plot(x2, min.y.prof = 0.15, max.y.prof = .50)
+> ##D   plot(x2, type = "hom.pairs", min.y.prof = 0.15, max.y.prof = .50)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("calc_prefpair_profiles", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("check_data_sanity")
+> ### * check_data_sanity
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: check_data_sanity
+> ### Title: Data sanity check
+> ### Aliases: check_data_sanity
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D #### Tetraploid example
+> ##D fl1 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage"
+> ##D tempfl <- tempfile()
+> ##D download.file(fl1, destfile = tempfl)
+> ##D SolCAP.dose <- read_geno(file.in  = tempfl)
+> ##D check_data_sanity(SolCAP.dose)
+> ##D 
+> ##D #### Hexaploid example
+> ##D fl2 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexafake"
+> ##D tempfl <- tempfile()
+> ##D download.file(fl2, destfile = tempfl)
+> ##D hexa.dose <- read_geno(file.in  = tempfl)
+> ##D check_data_sanity(hexa.dose)
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("check_data_sanity", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("dist_prob_to_class")
+> ### * dist_prob_to_class
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: dist_prob_to_class
+> ### Title: Returns the class with the highest probability in a genotype
+> ###   probability distribution
+> ### Aliases: dist_prob_to_class
+> ### Keywords: internal
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D geno.dose <- dist_prob_to_class(tetra.solcap.geno.dist$geno)
+> ##D geno.dose[1:10, 1:10]
+> ## End(Not run)   
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("dist_prob_to_class", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("drop_marker")
+> ### * drop_marker
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: drop_marker
+> ### Title: Remove markers from a map
+> ### Aliases: drop_marker
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D sub.map<-get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
+> ##D plot(sub.map, mrk.names = TRUE)
+> ##D mrk.to.remove <- c("M_1", "M_23", "M_34")
+> ##D red.map <- drop_marker(sub.map, mrk.to.remove)
+> ##D plot(red.map, mrk.names = TRUE)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("drop_marker", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("elim_redundant")
+> ### * elim_redundant
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: elim_redundant
+> ### Title: Eliminate redundant markers
+> ### Aliases: elim_redundant
+> 
+> ### ** Examples
+> 
+>     all.mrk<-make_seq_mappoly(hexafake, 'all')
+>     red.mrk<-elim_redundant(all.mrk)
+>     plot(red.mrk)
+>     unique.mrks<-make_seq_mappoly(red.mrk)
+>    
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("elim_redundant", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("est_full_hmm_with_global_error")
+> ### * est_full_hmm_with_global_error
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: est_full_hmm_with_global_error
+> ### Title: Re-estimate genetic map given a global genotyping error
+> ### Aliases: est_full_hmm_with_global_error
+> 
+> ### ** Examples
+> 
+>   ## Not run: 
+> ##D     seq1.20<-make_seq_mappoly(hexafake, 1:20)
+> ##D     counts<-cache_counts_twopt(seq1.20, cached = TRUE)
+> ##D     subset.pairs<-est_pairwise_rf(seq1.20, counts)
+> ##D     subset.map <- est_rf_hmm_sequential(input.seq  = seq1.20,
+> ##D                                         thres.twopt = 5,
+> ##D                                         thres.hmm = 10,
+> ##D                                         extend.tail = 10,
+> ##D                                         tol = 0.1,
+> ##D                                         tol.final = 10e-4,
+> ##D                                         twopt = subset.pairs,
+> ##D                                         verbose = TRUE)
+> ##D     subset.map
+> ##D     plot(subset.map)      
+> ##D     subset.map.reest<-est_full_hmm_with_global_error(subset.map, 
+> ##D                                                      error=0.01, 
+> ##D                                                      tol=10e-4, 
+> ##D                                                      verbose = TRUE)
+> ##D     subset.map.reest
+> ##D     plot(subset.map.reest)
+> ##D     
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("est_full_hmm_with_global_error", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("est_full_hmm_with_prior_prob")
+> ### * est_full_hmm_with_prior_prob
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: est_full_hmm_with_prior_prob
+> ### Title: Re-estimate genetic map using dosage prior probability
+> ###   distribution
+> ### Aliases: est_full_hmm_with_prior_prob
+> 
+> ### ** Examples
+> 
+>   ## Not run: 
+> ##D  solcap.p<-vector("list", 12)
+> ##D  names(solcap.p)<-names(solcap.dose.map)
+> ##D  for(i in 1:12){
+> ##D     cat("Lg ", i, "...")
+> ##D     solcap.p[[i]] <- est_full_hmm_with_prior_prob(solcap.dose.map[[i]], 
+> ##D                                                   dat.prob = tetra.solcap.geno.dist, 
+> ##D                                                   verbose = FALSE)
+> ##D     cat("\n")
+> ##D  }
+> ##D  w<-NULL
+> ##D  for(i in 1:12)
+> ##D    w<-c(w, c(solcap.dose.map[i], 
+> ##D              solcap.p[i]))
+> ##D  names(w) <- apply(expand.grid(c("dose", "prior"), paste0("LG_", 1:12), 
+> ##D                              stringsAsFactors = FALSE)[,2:1], 1, paste, 
+> ##D                  collapse = "_")
+> ##D  op <- par(cex.axis = .7)
+> ##D  plot_map_list(w, horiz = FALSE, col = rep(gg_color_hue(2), 12))
+> ##D  par(op)
+> ##D  legend("bottomright", legend = c("Dosage based", "Prob. based"), 
+> ##D          pch=15, col = rep(gg_color_hue(2)))
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("est_full_hmm_with_prior_prob", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("est_pairwise_rf")
+> ### * est_pairwise_rf
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: est_pairwise_rf
+> ### Title: Pairwise two-point analysis
+> ### Aliases: est_pairwise_rf
+> 
+> ### ** Examples
+> 
+>   ## Not run: 
+> ##D   ## Tetraploid example: 
+> ##D   all.mrk <- make_seq_mappoly(tetra.solcap, 'all')
+> ##D   red.mrk <- elim_redundant(all.mrk)
+> ##D   unique.mrks <- make_seq_mappoly(red.mrk)
+> ##D   # will take ~ 13 min
+> ##D   all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
+> ##D                                ncpus = 7, 
+> ##D                                verbose=TRUE)
+> ##D    all.pairs
+> ##D    plot(all.pairs, 90, 91)
+> ##D    mat <- rf_list_to_matrix(all.pairs)
+> ##D    plot(mat)
+> ##D    
+> ##D    ## Hexaploid example
+> ##D    fl = "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr1.vcf.gz"
+> ##D    tempfl <- tempfile(pattern = 'chr1_', fileext = '.vcf.gz')
+> ##D    download.file(fl, destfile = tempfl)
+> ##D    dat.dose.vcf = read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2")
+> ##D    
+> ##D    ## Filtering dataset by marker
+> ##D    dat.filt.mrk <- filter_missing(input.data = dat.dose.vcf, 
+> ##D                                   type = "marker", 
+> ##D                                   filter.thres = 0.10, 
+> ##D                                   inter = FALSE)
+> ##D    ## Filtering dataset by individual
+> ##D    dat.filt.ind <- filter_missing(input.data = dat.filt.mrk, 
+> ##D                                   type = "individual", 
+> ##D                                   filter.thres = 0.10, 
+> ##D                                   inter = FALSE)
+> ##D   ## Segregation test
+> ##D   pval.bonf <- 0.05/dat.filt.ind$n.mrk
+> ##D   mrks.chi.filt <- filter_segregation(dat.filt.ind,
+> ##D                                       chisq.pval.thres =  pval.bonf, 
+> ##D                                       inter = FALSE)
+> ##D   seq.ch1<-make_seq_mappoly(mrks.chi.filt)
+> ##D   plot(seq.ch1)
+> ##D   ## will take ~  19 min / peak of memory usage ~ 10GB
+> ##D   all.pairs.1 <- est_pairwise_rf(input.seq = seq.ch1,
+> ##D                                  ncpus = 7, 
+> ##D                                  verbose=TRUE)
+> ##D   ## same thing, but it will take ~  21 min / peak of memory usage ~ 6GB
+> ##D   all.pairs.2 <- est_pairwise_rf(input.seq = seq.ch1,
+> ##D                                  ncpus = 7, 
+> ##D                                  n.batch = 10,
+> ##D                                  verbose=TRUE)   
+> ##D    plot(all.pairs, 90, 91)
+> ##D    mat <- rf_list_to_matrix(all.pairs.1)
+> ##D    plot(mat)
+> ##D    
+> ## End(Not run)
+>    
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("est_pairwise_rf", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("est_rf_hmm")
+> ### * est_rf_hmm
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: est_rf_hmm
+> ### Title: Multipoint analysis using Hidden Markov Models in autopolyploids
+> ### Aliases: est_rf_hmm print.mappoly.map plot.mappoly.map
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D     mrk.subset<-make_seq_mappoly(hexafake, 1:50)
+> ##D     red.mrk<-elim_redundant(mrk.subset)
+> ##D     unique.mrks<-make_seq_mappoly(red.mrk)
+> ##D     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
+> ##D                                   ncpus = 1,
+> ##D                                   verbose=TRUE)
+> ##D 
+> ##D     ## Estimating subset map with a low tolerance for the E.M. procedure
+> ##D     subset.map <- est_rf_hmm(input.seq = unique.mrks,
+> ##D                              thres = 2,
+> ##D                              twopt = subset.pairs,
+> ##D                              verbose = TRUE,
+> ##D                              tol = 0.1,
+> ##D                              est.given.0.rf = FALSE)
+> ##D 
+> ##D     ## Re-estimating the map with the most likely configuration
+> ##D     subset.map1 <- est_rf_hmm_single(input.seq = unique.mrks,
+> ##D                                     input.ph.single = subset.map$maps[[1]]$seq.ph,
+> ##D                                     tol = 10e-3,
+> ##D                                     verbose = TRUE)
+> ##D 
+> ##D     subset.map$maps[[1]]$seq.ph <- subset.map1$seq.ph
+> ##D     
+> ##D     plot(subset.map)
+> ##D 
+> ##D      ## Retrieving simulated linkage phase
+> ##D      ph.P <- maps.hexafake[[1]]$maps[[1]]$seq.ph$P
+> ##D      ph.Q <- maps.hexafake[[1]]$maps[[1]]$seq.ph$Q
+> ##D 
+> ##D      ## Estimated linkage phase
+> ##D      ph.P.est <- subset.map$maps[[1]]$seq.ph$P
+> ##D      ph.Q.est <- subset.map$maps[[1]]$seq.ph$Q
+> ##D 
+> ##D      compare_haplotypes(m = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
+> ##D      compare_haplotypes(m = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
+> ##D    
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("est_rf_hmm", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("est_rf_hmm_sequential")
+> ### * est_rf_hmm_sequential
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: est_rf_hmm_sequential
+> ### Title: Multipoint analysis using Hidden Markov Models: Sequential phase
+> ###   elimination
+> ### Aliases: est_rf_hmm_sequential
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D     #### Autotetraploid example
+> ##D     s1<-make_seq_mappoly(tetra.solcap, 'seq1')
+> ##D     red.mrk<-elim_redundant(s1)
+> ##D     s1.unique.mrks<-make_seq_mappoly(red.mrk)
+> ##D     s1.pairs<-est_pairwise_rf(input.seq = s1.unique.mrks,
+> ##D                                   ncpus = 7,
+> ##D                                   verbose=TRUE)
+> ##D     unique.gen.ord<-get_genomic_order(s1.unique.mrks)
+> ##D     ## Selecting a subset of 100 markers at the beginning of chromosome 1 
+> ##D     s1.gen.subset<-make_seq_mappoly(tetra.solcap, rownames(unique.gen.ord)[1:100])
+> ##D     s1.gen.subset.map <- est_rf_hmm_sequential(input.seq = s1.gen.subset,
+> ##D                                                start.set = 10,
+> ##D                                                thres.twopt = 10, 
+> ##D                                                thres.hmm = 10,
+> ##D                                                extend.tail = 30,
+> ##D                                                info.tail = TRUE, 
+> ##D                                                twopt = s1.pairs,
+> ##D                                                sub.map.size.diff.limit = 5, 
+> ##D                                                phase.number.limit = 40,
+> ##D                                                reestimate.single.ph.configuration = TRUE,
+> ##D                                                tol = 10e-3,
+> ##D                                                tol.final = 10e-5)
+> ##D      print(s1.gen.subset.map, detailed = TRUE)
+> ##D      plot(s1.gen.subset.map)
+> ##D      plot(s1.gen.subset.map, phase = FALSE)
+> ##D      
+> ##D     #### Autohexaploid example
+> ##D     mrk.subset<-make_seq_mappoly(hexafake, 1:50)
+> ##D     red.mrk<-elim_redundant(mrk.subset)
+> ##D     unique.mrks<-make_seq_mappoly(red.mrk)
+> ##D     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
+> ##D                                   ncpus = 1,
+> ##D                                   verbose=TRUE)
+> ##D     subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
+> ##D                                         thres.twopt = 5,
+> ##D                                         thres.hmm = 10,
+> ##D                                         extend.tail = 10,
+> ##D                                         tol = 0.1,
+> ##D                                         tol.final = 10e-3,
+> ##D                                         twopt = subset.pairs,
+> ##D                                         verbose = TRUE)
+> ##D      print(subset.map, detailed = TRUE)
+> ##D      plot(subset.map)
+> ##D      plot(subset.map, left.lim = 0, right.lim = 1, mrk.names = TRUE)
+> ##D      plot(subset.map, phase = FALSE)
+> ##D      
+> ##D      ## Retrieving simulated linkage phase
+> ##D      ph.P <- maps.hexafake[[1]]$maps[[1]]$seq.ph$P
+> ##D      ph.Q <- maps.hexafake[[1]]$maps[[1]]$seq.ph$Q
+> ##D      ## Estimated linkage phase
+> ##D      ph.P.est <- subset.map$maps[[1]]$seq.ph$P
+> ##D      ph.Q.est <- subset.map$maps[[1]]$seq.ph$Q
+> ##D      compare_haplotypes(m = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
+> ##D      compare_haplotypes(m = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
+> ##D    
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("est_rf_hmm_sequential", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("est_rf_hmm_single")
+> ### * est_rf_hmm_single
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: est_rf_hmm_single
+> ### Title: Multipoint analysis using Hidden Markov Models (single phase)
+> ### Aliases: est_rf_hmm_single
+> ### Keywords: internal
+> 
+> ### ** Examples
+> 
+>   ## Not run: 
+> ##D     seq.all.mrk <- make_seq_mappoly(hexafake, 'all')
+> ##D     id <- get_genomic_order(seq.all.mrk)
+> ##D     counts <- cache_counts_twopt(seq.all.mrk, cached=TRUE)
+> ##D     seq5 <- make_seq_mappoly(hexafake, rownames(id)[1:5])
+> ##D     twopt<-est_pairwise_rf(seq5, counts)
+> ##D     
+> ##D     ## Using the first 10 markers 
+> ##D     l5 <- ls_linkage_phases(input.seq = seq5, thres = 5, twopt = twopt)
+> ##D     plot(l5)
+> ##D     
+> ##D     ## Evaluating 9 linkage phase configurations using HMM
+> ##D     maps1 <- vector("list", length(l5$config.to.test))
+> ##D     for(i in 1:length(maps1))
+> ##D     maps1[[i]] <- est_rf_hmm_single(seq5, l5$config.to.test[[i]], 
+> ##D                                    tol = 10e-3, verbose = TRUE, 
+> ##D                                    high.prec = FALSE)
+> ##D    (best<-which.max(sapply(maps1, function(x) x$loglike)))
+> ##D    dist1<-round(cumsum(c(0, imf_h(maps1[[best]]$seq.rf))),2)
+> ##D    
+> ##D    ## Same thing using automatic search
+> ##D    maps2<-est_rf_hmm(input.seq = seq5, twopt = twopt, thres = 5, 
+> ##D                      verbose = TRUE, tol = 10e-3, high.prec = FALSE)
+> ##D    plot(maps2)
+> ##D    dist1
+> ##D  
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("est_rf_hmm_single", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("export_data_to_polymapR")
+> ### * export_data_to_polymapR
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: export_data_to_polymapR
+> ### Title: Export data to 'polymapR'
+> ### Aliases: export_data_to_polymapR
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D require(polymapR)
+> ##D dat<-export_data_to_polymapR(hexafake)
+> ##D F1checked <- checkF1(dosage_matrix = dat, 
+> ##D                      parent1 = "P1",
+> ##D                      parent2 = "P2",
+> ##D                      F1 = colnames(dat)[-c(1:2)],
+> ##D                      polysomic = TRUE, 
+> ##D                      disomic = FALSE, 
+> ##D                      mixed = FALSE, 
+> ##D                      ploidy = 6)
+> ##D  head(F1checked$checked_F1)
+> ##D  PCA_progeny(dosage_matrix = dat, 
+> ##D              highlight = list(c("P1", "P2")), 
+> ##D              colors = "red")
+> ## End(Not run)  
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("export_data_to_polymapR", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("export_map_list")
+> ### * export_map_list
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: export_map_list
+> ### Title: Export a genetic map to a CSV file
+> ### Aliases: export_map_list
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D  export_map_list(solcap.err.map[[1]], file = "")
+> ##D  export_map_list(maps.hexafake)
+> ##D  
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("export_map_list", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("extract_map")
+> ### * extract_map
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: extract_map
+> ### Title: Extract the maker position from an object of class 'mappoly.map'
+> ### Aliases: extract_map
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D  x <- maps.hexafake[[1]]$info$sequence.pos/1e6
+> ##D  y <- extract_map(maps.hexafake[[1]])
+> ##D  plot(y~x, ylab = "Map position (cM)", xlab = "Genome Position (Mbp)")
+> ##D  
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("extract_map", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("filter_missing")
+> ### * filter_missing
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: filter_missing
+> ### Title: Filter missing genotypes
+> ### Aliases: filter_missing
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D     plot(tetra.solcap)
+> ##D     dat.filt.mrk <- filter_missing(input.data = tetra.solcap,
+> ##D                                    type = "marker", 
+> ##D                                    filter.thres = 0.1)
+> ##D     plot(dat.filt.mrk)
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("filter_missing", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("filter_segregation")
+> ### * filter_segregation
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: filter_segregation
+> ### Title: Filter markers based on chi-square test
+> ### Aliases: filter_segregation
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D     mrks.chi.filt <- filter_segregation(input.data = tetra.solcap, 
+> ##D                                         chisq.pval.thres = 0.05/mydata$n.mrk, 
+> ##D                                         inter = TRUE)
+> ##D     seq.init<-make_seq_mappoly(mrks.chi.filt)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("filter_segregation", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("get_genomic_order")
+> ### * get_genomic_order
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: get_genomic_order
+> ### Title: Get the genomic position of markers in a sequence
+> ### Aliases: get_genomic_order
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D s1<-make_seq_mappoly(tetra.solcap, "all")
+> ##D o1<-get_genomic_order(s1)
+> ##D head(o1)
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("get_genomic_order", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("get_submap")
+> ### * get_submap
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: get_submap
+> ### Title: Extract sub-map from map
+> ### Aliases: get_submap
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D     ## selecting the 20 first markers in linkage group 1
+> ##D     ####
+> ##D     ## re-estimating recombination fractions     
+> ##D     submap1.lg1<-get_submap(input.map = maps.hexafake[[1]], 
+> ##D                            mrk.pos = 1:20, verbose = TRUE, 
+> ##D                            tol.final = 10e-3)
+> ##D     ## re-estimating the recombination fractions and linkage phases
+> ##D     submap2.lg1<-get_submap(input.map = maps.hexafake[[1]], 
+> ##D                            mrk.pos = 1:20, verbose = TRUE,
+> ##D                            reestimate.phase = TRUE, 
+> ##D                            tol.final = 10e-3)
+> ##D    ## no recombination fraction re-estimation                                                     
+> ##D    submap3.lg1<-get_submap(input.map = maps.hexafake[[1]], 
+> ##D                            mrk.pos = 1:20, reestimate.rf = FALSE,
+> ##D                            verbose = TRUE, 
+> ##D                            tol.final = 10e-3)                      
+> ##D   plot(maps.hexafake[[1]])
+> ##D   plot(submap1.lg1, mrk.names = T, cex = .8)
+> ##D   plot(submap2.lg1, mrk.names = T, cex = .8)
+> ##D   plot(submap3.lg1, mrk.names = T, cex = .8)
+> ##D   
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("get_submap", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("group_mappoly")
+> ### * group_mappoly
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: group_mappoly
+> ### Title: Assign markers to linkage groups
+> ### Aliases: group_mappoly
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D     all.mrk <- make_seq_mappoly(hexafake, 'all')
+> ##D     red.mrk <- elim_redundant(all.mrk)
+> ##D     unique.mrks <- make_seq_mappoly(red.mrk)
+> ##D     counts <- cache_counts_twopt(unique.mrks, cached = TRUE)
+> ##D     ##will take ~ 7 minutes
+> ##D     all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
+> ##D                                  count.cache = counts,
+> ##D                                  ncpus = 7,
+> ##D                                  verbose=TRUE)
+> ##D 
+> ##D     ## Full recombination fraction matrix
+> ##D     mat.full<-rf_list_to_matrix(input.twopt=all.pairs)
+> ##D     plot(mat.full, index = FALSE)
+> ##D 
+> ##D     lgs <- group_mappoly(input.mat = mat.full,
+> ##D                          expected.groups = 3,
+> ##D                          inter = TRUE,
+> ##D                          comp.mat = TRUE, #this data has physical information
+> ##D                          verbose = TRUE)
+> ##D     lgs
+> ##D     plot(lgs)
+> ##D     lg1 <- make_seq_mappoly(lgs, 1)
+> ##D     lg2 <- make_seq_mappoly(lgs, 2)
+> ##D     lg3 <- make_seq_mappoly(lgs, 3)
+> ##D 
+> ##D     ##Plot matrices
+> ##D     m1<-make_mat_mappoly(input.seq = lg1, input.mat = mat.full)
+> ##D     m2<-make_mat_mappoly(input.seq = lg2, input.mat = mat.full)
+> ##D     m3<-make_mat_mappoly(input.seq = lg3, input.mat = mat.full)
+> ##D     op<-par(mfrow = c(1,3), pty = "s")
+> ##D     plot(m1, main.text = "LG1", index = FALSE)
+> ##D     plot(m2, main.text = "LG2", index = FALSE)
+> ##D     plot(m3, main.text = "LG3", index = FALSE)
+> ##D     par(op)
+> ##D    
+> ## End(Not run)
+>    
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("group_mappoly", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("import_data_from_polymapR")
+> ### * import_data_from_polymapR
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: import_data_from_polymapR
+> ### Title: Import data from polymapR
+> ### Aliases: import_data_from_polymapR
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D require(polymapR)
+> ##D data("screened_data3")
+> ##D mappoly.data <- import_data_from_polymapR(screened_data3, 4)
+> ##D plot(mappoly.data)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("import_data_from_polymapR", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("import_from_updog")
+> ### * import_from_updog
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: import_from_updog
+> ### Title: Import from updog
+> ### Aliases: import_from_updog
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D library("updog")
+> ##D data("uitdewilligen")
+> ##D mout = multidog(refmat = t(uitdewilligen$refmat), 
+> ##D                 sizemat = t(uitdewilligen$sizemat), 
+> ##D                 ploidy = uitdewilligen$ploidy, 
+> ##D                 model = "f1",
+> ##D                 p1_id = colnames(t(uitdewilligen$sizemat))[1],
+> ##D                 p2_id = colnames(t(uitdewilligen$sizemat))[2],
+> ##D                 nc = 4)
+> ##D mydata = import_from_updog(mout)
+> ##D mydata
+> ##D plot(mydata)
+> ##D mydata = import_from_updog(mout, filter.non.conforming = TRUE)
+> ##D mydata
+> ##D plot(mydata)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("import_from_updog", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("import_phased_maplist_from_polymapR")
+> ### * import_phased_maplist_from_polymapR
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: import_phased_maplist_from_polymapR
+> ### Title: Import phased map list from polymapR
+> ### Aliases: import_phased_maplist_from_polymapR
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D require(polymapR)
+> ##D ## Loading polymapR example
+> ##D data("integrated.maplist", "screened_data3", "marker_assignments_P1","marker_assignments_P2")
+> ##D maplist <- create_phased_maplist(maplist = integrated.maplist,
+> ##D                                  dosage_matrix.conv = screened_data3,
+> ##D                                  marker_assignment.1=marker_assignments_P1,
+> ##D                                  marker_assignment.2=marker_assignments_P2,
+> ##D                                  ploidy = 4)
+> ##D  ## Importing polymapR dataset                                
+> ##D  mappoly.data <- import_data_from_polymapR(screened_data3, 4)
+> ##D  plot(mappoly.data) 
+> ##D  
+> ##D  ## Importing polymapR phased maplist
+> ##D  mappoly.maplist <- import_phased_maplist_from_polymapR(maplist, mappoly.data)
+> ##D  plot_map_list(mappoly.maplist)
+> ##D  ## plot phased map
+> ##D  plot(mappoly.maplist[[1]])
+> ##D  ## plot a segment of phased map (from 0 to 20 cM)
+> ##D  plot(mappoly.maplist[[1]], mrk.names = T, left.lim = 0, right.lim = 20, cex = .7)
+> ##D  plot(mappoly.maplist[[2]])
+> ##D  plot(mappoly.maplist[[3]])
+> ##D  plot(mappoly.maplist[[4]])
+> ##D  plot(mappoly.maplist[[5]])
+> ##D  
+> ##D  ## Computing conditional genotype probabilities
+> ##D  genoprob0 <- lapply(mappoly.maplist, calc_genoprob, step = 1)
+> ##D  
+> ##D  ## Computing preferential pairing profiles
+> ##D  pref.pair0 <- calc_prefpair_profiles(genoprob0)
+> ##D  plot(pref.pair0, min.y.prof = .25, max.y.prof = 0.4, P = "P1", Q = "P2")
+> ##D  
+> ##D  ## Computing homolog probabilities
+> ##D  h.prob0<-calc_homoprob(genoprob0)
+> ##D  plot(h.prob0, ind = "F1_030") ## plot haplotype of individual "F1_030"
+> ##D  
+> ##D  #### Computing conditional genotype probabilities including error
+> ##D  genoprob1 <- lapply(mappoly.maplist, calc_genoprob_error, step = 1, error = 0.05)
+> ##D  
+> ##D  ## Computing preferential pairing profiles
+> ##D  pref.pair1 <- calc_prefpair_profiles(genoprob1)
+> ##D  plot(pref.pair1, min.y.prof = .25, max.y.prof = 0.4, P = "P1", Q = "P2")
+> ##D  
+> ##D  ## Computing homolog probabilities
+> ##D  h.prob1<-calc_homoprob(genoprob1)
+> ##D  plot(h.prob1, ind = "F1_030") ## plot haplotype of individual "F1_030" 
+> ##D  
+> ##D  #### Reestimating recombination fractions using HMM
+> ##D  cl <- parallel::makeCluster(5)
+> ##D  parallel::clusterEvalQ(cl, require(mappoly))
+> ##D  parallel::clusterExport(cl,  "mappoly.data")
+> ##D  reest.maps <- parallel::parLapply(cl, mappoly.maplist, 
+> ##D                                    est_full_hmm_with_global_error, 
+> ##D                                    error = 0.05)
+> ##D  parallel::stopCluster(cl)
+> ##D  
+> ##D  ## Computing conditional genotype probabilities
+> ##D  genoprob2 <- lapply(reest.maps, calc_genoprob_error, step = 1, error = 0.05)
+> ##D  
+> ##D  ## Computing preferential pairing profiles
+> ##D  pref.pair2 <- calc_prefpair_profiles(genoprob2)
+> ##D  plot(pref.pair2, min.y.prof = .25, max.y.prof = 0.4, P = "P1", Q = "P2")
+> ##D  
+> ##D  ## Computing homolog probabilities
+> ##D  h.prob2<-calc_homoprob(genoprob2)
+> ##D  plot(h.prob2, ind = "F1_030") 
+> ##D  
+> ##D  #### Reconstructing the map using MAPpoly
+> ##D  s <- make_seq_mappoly(mappoly.data, "all")
+> ##D  tpt <- est_pairwise_rf(input.seq = s, ncpus = 7)
+> ##D  mat <- rf_list_to_matrix(make_pairs_mappoly(tpt, s))
+> ##D  grs <- group_mappoly(input.mat = mat,
+> ##D                       expected.groups = 5,
+> ##D                       inter = TRUE)
+> ##D  grs
+> ##D  LG <- vector("list", 5)
+> ##D  op <- par(mfrow = c(2,3))
+> ##D  for(i in 1:5){
+> ##D    s.temp <-  make_seq_mappoly(grs, arg = i)
+> ##D    tpt.temp <- make_pairs_mappoly(tpt, s.temp)
+> ##D    sf<-rf_snp_filter(input.twopt = tpt.temp, 
+> ##D                      thresh.LOD.ph = 1, 
+> ##D                      thresh.LOD.rf = 1, 
+> ##D                      thresh.perc = 0.02)
+> ##D    M <- make_mat_mappoly(input.mat = mat, sf)
+> ##D    o <- mds_mappoly(M)
+> ##D    so<-make_seq_mappoly(o)
+> ##D    plot(M, ord = so$seq.mrk.names, main.text = paste("LG", i), index = FALSE)
+> ##D    LG[[i]] <- list(s = so, tpt = tpt.temp)
+> ##D    cat("\n")
+> ##D  }
+> ##D  par(op) 
+> ##D  MAPs <- vector("list", 5)
+> ##D  for(i in 1:5){
+> ##D  MAPs[[i]] <- est_rf_hmm_sequential(input.seq = LG[[i]]$s,
+> ##D                                     start.set = 6,
+> ##D                                     thres.twopt = 10,
+> ##D                                     thres.hmm = 50,
+> ##D                                     extend.tail = 30,
+> ##D                                     twopt = LG[[i]]$tpt,
+> ##D                                     verbose = TRUE,
+> ##D                                     tol = 10e-2,
+> ##D                                     tol.final = 10e-4,
+> ##D                                     phase.number.limit = 20,
+> ##D                                     sub.map.size.diff.limit =  5,
+> ##D                                     info.tail = TRUE,
+> ##D                                     reestimate.single.ph.configuration = TRUE)
+> ##D  }
+> ##D  cl <- parallel::makeCluster(5)
+> ##D  parallel::clusterEvalQ(cl, require(mappoly))
+> ##D  parallel::clusterExport(cl,  "mappoly.data")
+> ##D  recons.maps <- parallel::parLapply(cl, MAPs, 
+> ##D                                     est_full_hmm_with_global_error, 
+> ##D                                     error = 0.05)
+> ##D  parallel::stopCluster(cl)
+> ##D  
+> ##D  ## Comparing resulting maps
+> ##D  ## polymapR
+> ##D  summary_maps(mappoly.maplist) 
+> ##D  
+> ##D  ## MAPpoly
+> ##D  summary_maps(recons.maps) 
+> ##D 
+> ##D  ## Computing conditional genotype probabilities
+> ##D  genoprob3 <- lapply(recons.maps, 
+> ##D                      calc_genoprob_error, 
+> ##D                      step = 1, 
+> ##D                      error = 0.05)
+> ##D  
+> ##D  ## Computing preferential pairing profiles
+> ##D  pref.pair3 <- calc_prefpair_profiles(genoprob3)
+> ##D  plot(pref.pair3, min.y.prof = .25, max.y.prof = 0.4, P = "P1", Q = "P2")
+> ##D  
+> ##D  ## Comparing homolog probabilities with different mapping approaches
+> ##D  h.prob3<-calc_homoprob(genoprob3)
+> ##D  ## plot haplotype of individual 10 (polymapR)
+> ##D  plot(h.prob0, ind = "F1_030", use.plotly = FALSE) 
+> ##D  ## plot haplotype of individual 10 (polymapR + HMM error modeling) 
+> ##D  plot(h.prob1, ind = "F1_030", use.plotly = FALSE)  
+> ##D  ## plot haplotype of individual 10 (reestimated: MAPpoly)
+> ##D  plot(h.prob2, ind = "F1_030", use.plotly = FALSE) 
+> ##D  ## plot haplotype of individual 10 (reconstructed: MAPpoly)
+> ##D  plot(h.prob3, ind = "F1_030", use.plotly = FALSE) 
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("import_phased_maplist_from_polymapR", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("loglike_hmm")
+> ### * loglike_hmm
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: loglike_hmm
+> ### Title: Multipoint log-likelihood computation
+> ### Aliases: loglike_hmm
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D   hexa.map1<-reest_rf(solcap.dose.map[[1]], verbose = FALSE, tol = 10e-4)
+> ##D   hexa.map2<-loglike_hmm(hexa.map1)
+> ##D   hexa.map1;hexa.map2
+> ##D  
+> ## End(Not run)
+>  
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("loglike_hmm", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("ls_linkage_phases")
+> ### * ls_linkage_phases
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: ls_linkage_phases
+> ### Title: List of linkage phases
+> ### Aliases: ls_linkage_phases print.two.pts.linkage.phases
+> ###   plot.two.pts.linkage.phases
+> ### Keywords: internal
+> 
+> ### ** Examples
+> 
+>   ## Not run: 
+> ##D     seq.all.mrk <- make_seq_mappoly(hexafake, 'all')
+> ##D     id <- get_genomic_order(seq.all.mrk)
+> ##D     seq10 <- make_seq_mappoly(hexafake, rownames(id)[1:10])
+> ##D     twopt<-est_pairwise_rf(seq10)
+> ##D     
+> ##D     ## Using the first 10 markers 
+> ##D     l10.seq.3.0 <- ls_linkage_phases(input.seq = seq10, thres = 3, twopt = twopt)
+> ##D     l10.seq.3.0
+> ##D     plot(l10.seq.3.0)
+> ##D     l10.seq.2.0 <- ls_linkage_phases(input.seq = seq10, thres = 2.0, twopt = twopt)
+> ##D     l10.seq.2.0
+> ##D     plot(l10.seq.2.0)
+> ##D     l10.seq.1.0 <- ls_linkage_phases(input.seq = seq10, thres = 1.0, twopt = twopt)
+> ##D     l10.seq.1.0
+> ##D     plot(l10.seq.1.0)
+> ##D     
+> ##D     ## Using the first 5 markers 
+> ##D     seq5 <- make_seq_mappoly(hexafake, rownames(id)[1:5])
+> ##D     l5.seq.5.0 <- ls_linkage_phases(input.seq = seq5, thres = 5, twopt = twopt)
+> ##D     l5.seq.5.0
+> ##D     plot(l5.seq.5.0)
+> ##D     l5.seq.3.0 <- ls_linkage_phases(input.seq = seq5, thres = 3, twopt = twopt)
+> ##D     l5.seq.3.0
+> ##D     plot(l5.seq.3.0)
+> ##D     l5.seq.1.0 <- ls_linkage_phases(input.seq = seq5, thres = 1, twopt = twopt)
+> ##D     l5.seq.1.0
+> ##D     plot(l5.seq.1.0)
+> ##D     
+> ## End(Not run)
+>     
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("ls_linkage_phases", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("make_mat_mappoly")
+> ### * make_mat_mappoly
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: make_mat_mappoly
+> ### Title: Subset recombination fraction matrices
+> ### Aliases: make_mat_mappoly
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D     # sequence with 100 markers
+> ##D     mrk.seq<-make_seq_mappoly(hexafake, 1:100)
+> ##D     mrk.pairs<-est_pairwise_rf(input.seq = mrk.seq,
+> ##D                                verbose=TRUE)
+> ##D     ## Full recombination fraction matrix
+> ##D     mat<-rf_list_to_matrix(input.twopt=mrk.pairs)
+> ##D     plot(mat)
+> ##D     ## Matrix subset
+> ##D     id <- make_seq_mappoly(hexafake, 1:10)
+> ##D     mat.sub<-make_mat_mappoly(mat, id)
+> ##D     plot(mat.sub)
+> ##D    
+> ## End(Not run)
+>    
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("make_mat_mappoly", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("make_pairs_mappoly")
+> ### * make_pairs_mappoly
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: make_pairs_mappoly
+> ### Title: Subset pairwise recombination fractions
+> ### Aliases: make_pairs_mappoly
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D     all.mrk<-make_seq_mappoly(hexafake, sort(sample(1:1500, 200)))
+> ##D     red.mrk<-elim_redundant(all.mrk)
+> ##D     unique.mrks<-make_seq_mappoly(red.mrk)
+> ##D     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
+> ##D                                ncpus = 7,
+> ##D                                verbose=TRUE)
+> ##D 
+> ##D     ## Full recombination fraction matrix
+> ##D     mat.full<-rf_list_to_matrix(input.twopt = all.pairs)
+> ##D     plot(mat.full)
+> ##D 
+> ##D     lgs <- group_mappoly(input.mat = mat.full,
+> ##D                          expected.groups = 3,
+> ##D                          verbose=TRUE)
+> ##D     lgs
+> ##D     plot(lgs)
+> ##D     lg1 <- make_seq_mappoly(lgs, 1)
+> ##D     lg2 <- make_seq_mappoly(lgs, 2)
+> ##D     lg3 <- make_seq_mappoly(lgs, 3)
+> ##D 
+> ##D     ##Plot matrices
+> ##D     p1<-make_pairs_mappoly(input.seq = lg1, input.twopt = all.pairs)
+> ##D     p2<-make_pairs_mappoly(input.seq = lg2, input.twopt = all.pairs)
+> ##D     p3<-make_pairs_mappoly(input.seq = lg3, input.twopt = all.pairs)
+> ##D 
+> ##D     m1<-rf_list_to_matrix(input.twopt = p1)
+> ##D     m2<-rf_list_to_matrix(input.twopt = p2)
+> ##D     m3<-rf_list_to_matrix(input.twopt = p3)
+> ##D 
+> ##D     op<-par(mfrow = c(1,3), pty = "s")
+> ##D     plot(m1, main.text = "LG1")
+> ##D     plot(m2, main.text = "LG2")
+> ##D     plot(m3, main.text = "LG3")
+> ##D     par(op)
+> ##D    
+> ## End(Not run)
+>    
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("make_pairs_mappoly", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("make_seq_mappoly")
+> ### * make_seq_mappoly
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: make_seq_mappoly
+> ### Title: Create a sequence of markers
+> ### Aliases: make_seq_mappoly print.mappoly.sequence plot.mappoly.sequence
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D     all.mrk<-make_seq_mappoly(hexafake, 'all')
+> ##D     seq1.mrk<-make_seq_mappoly(hexafake, 'seq1')
+> ##D     plot(seq1.mrk)
+> ##D     some.mrk.pos<-c(1,4,28,32,45)
+> ##D     (some.mrk.1<-make_seq_mappoly(hexafake, some.mrk.pos))
+> ##D     plot(some.mrk.1)
+> ##D     #same thing
+> ##D     (some.mrk.names<-hexafake$mrk.names[c(1,4,28,32,45)])
+> ##D     some.mrk.2<-make_seq_mappoly(hexafake, some.mrk.names)
+> ##D     identical(some.mrk.1, some.mrk.2)
+> ##D 
+> ##D     ## Removing redundant markers and makeing a new sequence
+> ##D     red.mrk<-elim_redundant(all.mrk)
+> ##D     unique.mrks<-make_seq_mappoly(red.mrk)
+> ##D     
+> ##D     ## Making a sequence using the intersection between groups and genomic information
+> ##D     s <- make_seq_mappoly(tetra.solcap, 'all')
+> ##D     tpt <- est_pairwise_rf(input.seq = s, 
+> ##D                            ncpus = 7)
+> ##D    mat <- rf_list_to_matrix(tpt)
+> ##D    grs <- group_mappoly(input.mat = mat,
+> ##D                         expected.groups = 12,
+> ##D                         comp.mat = FALSE)
+> ##D    seq1 = make_seq_mappoly(grs, arg = 1, genomic.info = 1)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("make_seq_mappoly", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("mds_mappoly")
+> ### * mds_mappoly
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: mds_mappoly
+> ### Title: Estimates loci position using Multidimensional Scaling
+> ### Aliases: mds_mappoly print.mappoly.pcmap print.mappoly.pcmap3d
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D     s1 <- make_seq_mappoly(hexafake, 'seq1')
+> ##D     t1 <- est_pairwise_rf(s1, ncpus = 7)
+> ##D     m1 <- rf_list_to_matrix(t1)
+> ##D     plot(m1, ord = rownames(get_genomic_order(s1)))
+> ##D     
+> ##D     ## Removing disruptive SNPs
+> ##D     s1f <- rf_snp_filter(t1, 5, 5, 0.15, thresh.perc = 0.05)
+> ##D     m1f <- make_mat_mappoly(m1, s1f)
+> ##D     mds.ord <- mds_mappoly(m1f)
+> ##D     plot(mds.ord)
+> ##D     so <- make_seq_mappoly(mds.ord)
+> ##D     plot(m1f, ord = rownames(get_genomic_order(so)))
+> ##D     plot(so$seq.num ~ I(so$sequence.pos/1e6), 
+> ##D          xlab = "Genome Position",
+> ##D          ylab = "MDS position")
+> ##D    
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("mds_mappoly", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("merge_datasets")
+> ### * merge_datasets
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: merge_datasets
+> ### Title: Merge datasets
+> ### Aliases: merge_datasets
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D ## Loading three chromosomes of sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
+> ##D dat <- NULL
+> ##D for(i in 1:3){
+> ##D   cat("Loading chromosome", i, "...\n")
+> ##D   invisible(capture.output(y <- {
+> ##D     tempfl <- tempfile(pattern = paste0("ch", i), fileext = ".vcf.gz")
+> ##D     x <- "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr"
+> ##D     address <- paste0(x, i, ".vcf.gz")
+> ##D     download.file(url = address, destfile = tempfl)
+> ##D     dattemp <- read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2", ploidy = 6)
+> ##D     dat <- merge_datasets(dat, dattemp)
+> ##D   }))
+> ##D   cat("\n")
+> ##D }
+> ##D ## Filtering dataset by marker
+> ##D dat <- filter_missing(input.data = dat, type = "marker", 
+> ##D                       filter.thres = 0.05, inter = FALSE)
+> ##D 
+> ##D ## Filtering dataset by individual
+> ##D dat <- filter_missing(input.data = dat, type = "individual", 
+> ##D                       filter.thres = 0.05, inter = TRUE)
+> ##D print(dat, detailed = TRUE)
+> ##D 
+> ##D ## Segregation test
+> ##D pval.bonf <- 0.05/dat$n.mrk
+> ##D mrks.chi.filt <- filter_segregation(dat, 
+> ##D                                     chisq.pval.thres =  pval.bonf, 
+> ##D                                     inter = TRUE)
+> ##D seq.init<-make_seq_mappoly(mrks.chi.filt)
+> ##D length(seq.init$seq.mrk.names)
+> ##D plot(seq.init)
+> ##D print(seq.init, detailed = TRUE)
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("merge_datasets", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("merge_maps")
+> ### * merge_maps
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: merge_maps
+> ### Title: Merge two maps
+> ### Aliases: merge_maps
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D #### Tetraploid example #####
+> ##D map1<-get_submap(solcap.dose.map[[1]], 1:5)
+> ##D map2<-get_submap(solcap.dose.map[[1]], 6:15)
+> ##D map3<-get_submap(solcap.dose.map[[1]], 16:30)
+> ##D full.map<-get_submap(solcap.dose.map[[1]], 1:30)
+> ##D s<-make_seq_mappoly(tetra.solcap, full.map$maps[[1]]$seq.num)
+> ##D twopt <- est_pairwise_rf(input.seq = s)
+> ##D merged.maps<-merge_maps(map.list = list(map1, map2, map3), 
+> ##D                         twopt = twopt,
+> ##D                         thres.twopt = 3)
+> ##D plot(merged.maps, mrk.names = TRUE)                       
+> ##D plot(full.map, mrk.names = TRUE)                       
+> ##D best.phase <- merged.maps$maps[[1]]$seq.ph
+> ##D names.id<-names(best.phase$P)
+> ##D compare_haplotypes(m = 4, best.phase$P[names.id], 
+> ##D                    full.map$maps[[1]]$seq.ph$P[names.id]) 
+> ##D compare_haplotypes(m = 4, best.phase$Q[names.id], 
+> ##D                    full.map$maps[[1]]$seq.ph$Q[names.id])
+> ##D                     
+> ##D #### Hexaploid example #####
+> ##D map1<-get_submap(maps.hexafake[[1]], 1:5)
+> ##D map2<-get_submap(maps.hexafake[[1]], 6:15)
+> ##D map3<-get_submap(maps.hexafake[[1]], 16:30)
+> ##D full.map<-get_submap(maps.hexafake[[1]], 1:30)
+> ##D s<-make_seq_mappoly(hexafake, full.map$maps[[1]]$seq.num)
+> ##D twopt <- est_pairwise_rf(input.seq = s)
+> ##D merged.maps<-merge_maps(map.list = list(map1, map2, map3), 
+> ##D                         twopt = twopt,
+> ##D                         thres.twopt = 3)
+> ##D plot(merged.maps, mrk.names = TRUE)                       
+> ##D plot(full.map, mrk.names = TRUE)                       
+> ##D best.phase <- merged.maps$maps[[1]]$seq.ph
+> ##D names.id<-names(best.phase$P)
+> ##D compare_haplotypes(m = 6, best.phase$P[names.id], 
+> ##D                    full.map$maps[[1]]$seq.ph$P[names.id]) 
+> ##D compare_haplotypes(m = 6, best.phase$Q[names.id], 
+> ##D                    full.map$maps[[1]]$seq.ph$Q[names.id])
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("merge_maps", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("plot_genome_vs_map")
+> ### * plot_genome_vs_map
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: plot_genome_vs_map
+> ### Title: Physical versus genetic distance
+> ### Aliases: plot_genome_vs_map
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D  ## tetraploid example
+> ##D  plot_genome_vs_map(solcap.mds.map)
+> ##D  plot_genome_vs_map(solcap.mds.map, same.ch.lg = TRUE)
+> ##D  
+> ##D  ## hexaploid example
+> ##D  plot_genome_vs_map(maps.hexafake)
+> ##D  plot_genome_vs_map(maps.hexafake, same.ch.lg = TRUE)
+> ##D  
+> ## End(Not run) 
+>  
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("plot_genome_vs_map", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("plot_map_list")
+> ### * plot_map_list
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: plot_map_list
+> ### Title: Plot a genetic map
+> ### Aliases: plot_map_list
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D  ## hexafake map
+> ##D  plot_map_list(maps.hexafake, horiz = FALSE)
+> ##D  plot_map_list(maps.hexafake, col = c("#999999", "#E69F00", "#56B4E9"))
+> ##D  
+> ##D  ## solcap map
+> ##D  plot_map_list(solcap.dose.map, col = "ggstyle")
+> ##D  
+> ##D  ## Comparing mapping approaches
+> ##D  
+> ##D  w<-NULL
+> ##D  for(i in 1:12)
+> ##D    w<-c(w, c(solcap.dose.map[i], 
+> ##D              solcap.prior.map[i],
+> ##D              solcap.err.map[i]))
+> ##D              
+> ##D  names(w) <- apply(expand.grid(c("dose", "prior", "error"), paste0("LG_", 1:12), 
+> ##D                              stringsAsFactors = FALSE)[,2:1], 1, paste, 
+> ##D                  collapse = "_")
+> ##D                  
+> ##D  op <- par(cex.axis = .7)
+> ##D  z<-plot_map_list(w, horiz = FALSE, col = rep(gg_color_hue(3), 12))
+> ##D  par(op)
+> ##D  legend("bottomright", legend = c("Dosage based", "Prior", "Error"), 
+> ##D          pch=15, col = rep(gg_color_hue(3)))
+> ##D  head(z)        
+> ##D  
+> ## End(Not run)
+>  
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("plot_map_list", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("plot_mrk_info")
+> ### * plot_mrk_info
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: plot_mrk_info
+> ### Title: Plot marker information
+> ### Aliases: plot_mrk_info
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D  plot_mrk_info(tetra.solcap.geno.dist, 2680)
+> ##D  plot_mrk_info(tetra.solcap.geno.dist, "solcap_snp_c2_23828")
+> ##D  
+> ## End(Not run)   
+>     
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("plot_mrk_info", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("poly_cross_simulate")
+> ### * poly_cross_simulate
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: poly_cross_simulate
+> ### Title: Simulate an autopolyploid full-sib population
+> ### Aliases: poly_cross_simulate
+> 
+> ### ** Examples
+> 
+>     h.temp<-sim_homologous(m=6, n.mrk=20, max.d=3, max.ph=3, seed=123)
+>     fake.poly.dat<-poly_cross_simulate(m=6, rf.vec=.05, n.mrk=20,
++                                   n.ind=200, h.temp, seed=123)
+>     plot(fake.poly.dat)
+>                                    
+>                                   
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("poly_cross_simulate", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("print_mrk")
+> ### * print_mrk
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: print_mrk
+> ### Title: Summary of a set of markers
+> ### Aliases: print_mrk
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D  print_mrk(tetra.solcap.geno.dist, 1:5)
+> ##D  print_mrk(hexafake, 256)
+> ##D  
+> ## End(Not run)  
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("print_mrk", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("read_geno")
+> ### * read_geno
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: read_geno
+> ### Title: Data Input
+> ### Aliases: read_geno print.mappoly.data plot.mappoly.data
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D 
+> ##D #### Tetraploid Example
+> ##D fl1 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage"
+> ##D tempfl <- tempfile()
+> ##D download.file(fl1, destfile = tempfl)
+> ##D SolCAP.dose <- read_geno(file.in  = tempfl)
+> ##D print(SolCAP.dose, detailed = TRUE)
+> ##D plot(SolCAP.dose)
+> ##D 
+> ##D #### Hexaploid example
+> ##D fl2 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexafake"
+> ##D tempfl <- tempfile()
+> ##D download.file(fl2, destfile = tempfl)
+> ##D hexa.dose <- read_geno(file.in  = tempfl)
+> ##D print(hexa.dose, detailed = TRUE)
+> ##D plot(hexa.dose)
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("read_geno", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("read_geno_csv")
+> ### * read_geno_csv
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: read_geno_csv
+> ### Title: Data Input in CSV format
+> ### Aliases: read_geno_csv
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D #### Tetraploid Example
+> ##D ft="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/tetra_solcap.csv"
+> ##D tempfl <- tempfile()
+> ##D download.file(ft, destfile = tempfl)
+> ##D SolCAP.dose <- read_geno_csv(file.in  = tempfl, ploidy = 4)
+> ##D print(SolCAP.dose, detailed = TRUE)
+> ##D plot(SolCAP.dose)
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("read_geno_csv", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("read_geno_prob")
+> ### * read_geno_prob
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: read_geno_prob
+> ### Title: Data Input
+> ### Aliases: read_geno_prob
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D #### Tetraploid Example
+> ##D ft="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP"
+> ##D tempfl <- tempfile()
+> ##D download.file(ft, destfile = tempfl)
+> ##D SolCAP.dose.prob <- read_geno_prob(file.in  = tempfl)
+> ##D print(SolCAP.dose.prob, detailed = TRUE)
+> ##D plot(SolCAP.dose.prob)
+> ##D ## save dataset for future uses
+> ##D saveRDS(SolCAP.dose.prob, file = "solcap.rds")
+> ##D SolCAP.dose.prob <- readRDS("solcap.rds")
+> ##D 
+> ##D #### Hexaploid example
+> ##D fh="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexafake_geno_dist"
+> ##D tempfl <- tempfile()
+> ##D download.file(fh, destfile = tempfl)
+> ##D hexa.dose.prob <- read_geno_prob(file.in  = tempfl, prob.thres = 0.8)
+> ##D print(hexa.dose.prob, detailed = TRUE)
+> ##D plot(hexa.dose.prob)
+> ##D ## save dataset for future uses
+> ##D saveRDS(hexa.dose.prob, file = "hexa.rds")
+> ##D hexa.dose.prob <- readRDS("hexa.rds")
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("read_geno_prob", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("read_vcf")
+> ### * read_vcf
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: read_vcf
+> ### Title: Data Input VCF
+> ### Aliases: read_vcf
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D fl = "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr1.vcf.gz"
+> ##D tempfl <- tempfile(pattern = 'chr1_', fileext = '.vcf.gz')
+> ##D download.file(fl, destfile = tempfl)
+> ##D dat.dose.vcf = read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2")
+> ##D plot(dat.dose.vcf)
+> ##D 
+> ##D ## Loading full sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
+> ##D ## Needs ~ 3GB
+> ##D dat <- NULL
+> ##D for(i in 1:15){
+> ##D   cat("Loading chromosome", i, "...\n")
+> ##D   invisible(capture.output(y <- {
+> ##D     tempfl <- tempfile(pattern = paste0("ch", i), fileext = ".vcf.gz")
+> ##D     x <- "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr"
+> ##D     address <- paste0(x, i, ".vcf.gz")
+> ##D     download.file(url = address, destfile = tempfl)
+> ##D     dattemp <- read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2", ploidy = 6)
+> ##D     dat <- merge_datasets(dat, dattemp)
+> ##D   }))
+> ##D   cat("\n")
+> ##D }
+> ##D ## Filtering dataset by marker
+> ##D dat <- filter_missing(input.data = dat, type = "marker", 
+> ##D                       filter.thres = 0.05, inter = TRUE)
+> ##D 
+> ##D ## Filtering dataset by individual
+> ##D dat <- filter_missing(input.data = dat, type = "individual", 
+> ##D                       filter.thres = 0.05, inter = TRUE)
+> ##D print(dat, detailed = TRUE)
+> ##D 
+> ##D ## Segregation test
+> ##D pval.bonf <- 0.05/dat$n.mrk
+> ##D mrks.chi.filt <- filter_segregation(dat, 
+> ##D                                     chisq.pval.thres =  pval.bonf, 
+> ##D                                     inter = TRUE)
+> ##D seq.init<-make_seq_mappoly(mrks.chi.filt)
+> ##D length(seq.init$seq.mrk.names)
+> ##D plot(seq.init)
+> ##D print(seq.init, detailed = TRUE)
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("read_vcf", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("rev_map")
+> ### * rev_map
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: rev_map
+> ### Title: Reverse map
+> ### Aliases: rev_map
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D     plot_genome_vs_map(solcap.mds.map[[1]])
+> ##D     plot_genome_vs_map(rev_map(solcap.mds.map[[1]]))
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("rev_map", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("rf_list_to_matrix")
+> ### * rf_list_to_matrix
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: rf_list_to_matrix
+> ### Title: Recombination fraction list to matrix
+> ### Aliases: rf_list_to_matrix print.mappoly.rf.matrix
+> ###   plot.mappoly.rf.matrix
+> 
+> ### ** Examples
+> 
+>   ## Not run: 
+> ##D     all.mrk<-make_seq_mappoly(hexafake, 'all')
+> ##D     red.mrk<-elim_redundant(all.mrk)
+> ##D     unique.mrks<-make_seq_mappoly(red.mrk)
+> ##D     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
+> ##D                                ncpus = 7,
+> ##D                                verbose=TRUE)
+> ##D 
+> ##D     ## Full recombination fraction matrix
+> ##D     mat.full<-rf_list_to_matrix(input.twopt=all.pairs)
+> ##D     plot(mat.full)
+> ##D     plot(mat.full, type = "lod")
+> ##D 
+> ##D     ## Filtered matrix
+> ##D     mat.filt<-rf_list_to_matrix(input.twopt=all.pairs,
+> ##D                                 thresh.LOD.ph = 5,
+> ##D                                 thresh.LOD.rf = 5,
+> ##D                                 thresh.rf = 0.5,
+> ##D                                 verbose = TRUE)
+> ##D     plot(mat.filt)
+> ##D     plot(mat.filt, type = "lod")
+> ##D  
+> ## End(Not run)
+>  
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("rf_list_to_matrix", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("rf_snp_filter")
+> ### * rf_snp_filter
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: rf_snp_filter
+> ### Title: Remove markers that do not meet a LOD criteria
+> ### Aliases: rf_snp_filter
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D     all.mrk<-make_seq_mappoly(hexafake, 'all')
+> ##D     red.mrk<-elim_redundant(all.mrk)
+> ##D     unique.mrks<-make_seq_mappoly(red.mrk)
+> ##D     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
+> ##D                                ncpus = 7,
+> ##D                                verbose=TRUE)
+> ##D 
+> ##D     ## Full recombination fraction matrix
+> ##D     mat.full<-rf_list_to_matrix(input.twopt=all.pairs)
+> ##D     plot(mat.full)
+> ##D     lgs <- group_mappoly(input.mat = mat.full,
+> ##D                          expected.groups = 3,
+> ##D                          inter = TRUE,
+> ##D                          comp.mat = TRUE, #this data has physical information
+> ##D                          verbose=TRUE)
+> ##D     lgs
+> ##D     plot(lgs)
+> ##D     lg1 <- make_seq_mappoly(lgs, 1)
+> ##D     lg2 <- make_seq_mappoly(lgs, 2)
+> ##D     lg3 <- make_seq_mappoly(lgs, 3)
+> ##D 
+> ##D     ##Plot matrices
+> ##D     p1<-make_pairs_mappoly(input.seq = lg1, input.twopt = all.pairs)
+> ##D     p2<-make_pairs_mappoly(input.seq = lg2, input.twopt = all.pairs)
+> ##D     p3<-make_pairs_mappoly(input.seq = lg3, input.twopt = all.pairs)
+> ##D 
+> ##D     m1<-rf_list_to_matrix(input.twopt = p1)
+> ##D     m2<-rf_list_to_matrix(input.twopt = p2)
+> ##D     m3<-rf_list_to_matrix(input.twopt = p3)
+> ##D 
+> ##D     op<-par(mfrow = c(1,3), pty = "s")
+> ##D     plot(m1, main.text = "LG1")
+> ##D     plot(m2, main.text = "LG2")
+> ##D     plot(m3, main.text = "LG3")
+> ##D     par(op)
+> ##D 
+> ##D     ## Removing disruptive SNPs
+> ##D     lg1.filt<-rf_snp_filter(p1, 5, 5, 0.15, thresh.perc = 0.05)
+> ##D     lg2.filt<-rf_snp_filter(p2, 5, 5, 0.15, thresh.perc = 0.05)
+> ##D     lg3.filt<-rf_snp_filter(p3, 5, 5, 0.15, thresh.perc = 0.05)
+> ##D 
+> ##D     p1.filt<-make_pairs_mappoly(input.seq = lg1.filt, input.twopt = all.pairs)
+> ##D     p2.filt<-make_pairs_mappoly(input.seq = lg2.filt, input.twopt = all.pairs)
+> ##D     p3.filt<-make_pairs_mappoly(input.seq = lg3.filt, input.twopt = all.pairs)
+> ##D 
+> ##D     m1.filt<-rf_list_to_matrix(input.twopt = p1.filt)
+> ##D     m2.filt<-rf_list_to_matrix(input.twopt = p2.filt)
+> ##D     m3.filt<-rf_list_to_matrix(input.twopt = p3.filt)
+> ##D 
+> ##D     op<-par(mfrow = c(2,3), pty = "s")
+> ##D     plot(m1, main.text = "LG1")
+> ##D     plot(m2, main.text = "LG2")
+> ##D     plot(m3, main.text = "LG3")
+> ##D     plot(m1.filt, main.text = "LG1.filt")
+> ##D     plot(m2.filt, main.text = "LG2.filt")
+> ##D     plot(m3.filt, main.text = "LG3.filt")
+> ##D     par(op)
+> ##D    
+> ## End(Not run)
+>    
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("rf_snp_filter", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("segreg_poly")
+> ### * segreg_poly
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: segreg_poly
+> ### Title: Polysomic segregation frequency
+> ### Aliases: segreg_poly
+> 
+> ### ** Examples
+> 
+> # autohexaploid with two and three doses in parents P and Q,
+> # respectively
+> seg<-segreg_poly(m=6, dP=2, dQ=3)
+> barplot(seg, las=2)
+> 
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("segreg_poly", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("sim_cross_one_informative_parent")
+> ### * sim_cross_one_informative_parent
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: sim_cross_one_informative_parent
+> ### Title: Simulate mapping population (one parent)
+> ### Aliases: sim_cross_one_informative_parent
+> ### Keywords: internal
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D  sim_cross_one_informative_parent(m=6,
+> ##D                                   n.mrk=2,
+> ##D                                   rf.vec=.1,
+> ##D                                   hom.allele=list(c(2,4), c(2,3,6)),
+> ##D                                   n.ind=10)
+> ##D 
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("sim_cross_one_informative_parent", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("sim_cross_two_informative_parents")
+> ### * sim_cross_two_informative_parents
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: sim_cross_two_informative_parents
+> ### Title: Simulate mapping population (tow parents)
+> ### Aliases: sim_cross_two_informative_parents
+> ### Keywords: internal
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D hom.allele.p<-list(c(1,3,4), c(2,3,4), c(1,4,5,6), c(1,3,4,7), 1)
+> ##D hom.allele.q<-list(c(2,4), c(2,3,6), c(1,4,5,8), 0, c(1,2))
+> ##D x<-sim_cross_two_informative_parents(m=8,
+> ##D                                      n.mrk=5,
+> ##D                                      rf.vec=.1,
+> ##D                                      n.ind=100,
+> ##D                                      hom.allele.p,
+> ##D                                      hom.allele.q)
+> ##D                                      
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("sim_cross_two_informative_parents", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("sim_homologous")
+> ### * sim_homologous
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: sim_homologous
+> ### Title: Simulate homology groups
+> ### Aliases: sim_homologous
+> 
+> ### ** Examples
+> 
+>     h.temp<-sim_homologous(m=6, n.mrk=20, max.d=3, max.ph=3,
++                            seed=123)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("sim_homologous", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("split_and_rephase")
+> ### * split_and_rephase
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: split_and_rephase
+> ### Title: Divides map in sub-maps and re-phase them
+> ### Aliases: split_and_rephase
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D  map <- solcap.err.map[[1]]
+> ##D  tpt <- est_pairwise_rf(make_seq_mappoly(map))
+> ##D  new.map <- split_and_rephase(map, tpt, 5)
+> ##D  plot_map_list(list(map, new.map))
+> ##D  map
+> ##D  new.map
+> ##D  plot_map_list(list(old.map = map, new.map = new.map))
+> ##D  
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("split_and_rephase", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("summary_maps")
+> ### * summary_maps
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: summary_maps
+> ### Title: Summary map
+> ### Aliases: summary_maps
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D (tetra.sum <- summary_maps(solcap.err.map))
+> ##D formattable::formattable(tetra.sum)
+> ##D (hexa.sum <- summary_maps(maps.hexafake))
+> ##D formattable::formattable(hexa.sum)
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("summary_maps", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("update_map")
+> ### * update_map
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: update_map
+> ### Title: Update map
+> ### Aliases: update_map
+> 
+> ### ** Examples
+> 
+>  ## Not run: 
+> ##D  orig.map   <- solcap.err.map
+> ##D  up.map <- lapply(solcap.err.map, update_map)
+> ##D  formattable::formattable(summary_maps(orig.map))
+> ##D  formattable::formattable(summary_maps(up.map))
+> ## End(Not run)
+> 
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("update_map", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> cleanEx()
+> nameEx("update_missing")
+> ### * update_missing
+> 
+> flush(stderr()); flush(stdout())
+> 
+> base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+> ### Name: update_missing
+> ### Title: Update missing information
+> ### Aliases: update_missing
+> 
+> ### ** Examples
+> 
+> ## Not run: 
+> ##D data.updated = update_missing(tetra.solcap.geno.dist, prob.thres = 0.5)
+> ##D print(tetra.solcap.geno.dist)
+> ##D print(data.updated)
+> ## End(Not run)
+> 
+> 
+> 
+> base::assign(".dptime", (proc.time() - get(".ptime", pos = "CheckExEnv")), pos = "CheckExEnv")
+> base::cat("update_missing", base::get(".format_ptime", pos = 'CheckExEnv')(get(".dptime", pos = "CheckExEnv")), "\n", file=base::get(".ExTimings", pos = 'CheckExEnv'), append=TRUE, sep="\t")
+> ### * <FOOTER>
+> ###
+> cleanEx()
+> options(digits = 7L)
+> base::cat("Time elapsed: ", proc.time() - base::get("ptime", pos = 'CheckExEnv'),"\n")
+Time elapsed:  10.956 0.257 11.249 0.002 0.003 
+> grDevices::dev.off()
+null device 
+          1 
+> ###
+> ### Local variables: ***
+> ### mode: outline-minor ***
+> ### outline-regexp: "\\(> \\)?### [*]+" ***
+> ### End: ***
+> quit('no')

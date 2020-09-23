@@ -2,25 +2,19 @@
 % Please edit documentation in R/pairwise_rf.R
 \name{est_pairwise_rf}
 \alias{est_pairwise_rf}
-\alias{print.poly.est.two.pts.pairwise}
-\alias{plot.poly.est.two.pts.pairwise}
 \title{Pairwise two-point analysis}
 \usage{
 est_pairwise_rf(
   input.seq,
   count.cache = NULL,
-  n.clusters = 1,
+  ncpus = 1L,
   mrk.pairs = NULL,
-  n.batches = 1,
+  n.batches = 1L,
   verbose = TRUE,
   memory.warning = TRUE,
   parallelization.type = c("PSOCK", "FORK"),
   tol = .Machine$double.eps^0.25
 )
-
-\method{print}{poly.est.two.pts.pairwise}(x, ...)
-
-\method{plot}{poly.est.two.pts.pairwise}(x, first.mrk, second.mrk, ...)
 }
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}}
@@ -30,7 +24,7 @@ pre-computed genotype frequencies, obtained with
 \code{\link[mappoly]{cache_counts_twopt}}. If \code{NULL} (default),
 genotype frequencies are internally loaded.}
 
-\item{n.clusters}{Number of parallel processes (cores) to spawn (default = 1)}
+\item{ncpus}{Number of parallel processes (cores) to spawn (default = 1)}
 
 \item{mrk.pairs}{a matrix of dimensions 2*N, containing N
 pairs of markers to be analyzed. If \code{NULL} (default), all pairs are
@@ -59,20 +53,24 @@ An object of class \code{poly.est.two.pts.pairwise} which
         \code{mappoly.data} with the raw data}
     \item{n.mrk}{number of markers in the sequence}
     \item{seq.num}{a \code{vector} containing the (ordered) indices
-        of markers inthe sequence, according to the input file}
+        of markers in the sequence, according to the input file}
     \item{pairwise}{a list of size
-    \code{choose(length(input.seq$seq.num), 2)}, each of them containing: a matrix
-    with the linkage phase configuration i.e. the number of
-    homologous that share alelels; the LOD Score relative to each
-    one of these configurations; the recombination fraction
-    estimated for each configuration; and their associated LOD
-    score}
+    \code{choose(length(input.seq$seq.num), 2)}, each of them containing a 
+    matrix where the name of the rows have the form x-y, where x and y indicate 
+    how many homologues share the same allelic variant in parents P and Q, 
+    respectively (see Mollinari and Garcia, 2019 for notation). The first 
+    column indicates the LOD Score in relation to the most likely linkage 
+    phase configuration. The second column shows the estimated recombination 
+    fraction for each configuration, and the third indicates the LOD Score 
+    comparing the likelihood under no linkage (r=0.5) with the estimated 
+    recombination fraction (evidence of linkage).}
     \code{chisq.pval.thres}{threshold used to perform the segregation tests}
     \code{chisq.pval}{p-values associated with the performed segregation tests}
 }
 \description{
-Performs the two-point pairwise analysis, accounting for the recombination fractions
-between all pairwise markers given one or more linkage phase configurations.
+Performs the two-point pairwise analysis between all markers in a sequence. 
+For each pair, the function estimates the recombination fraction for all 
+possible linkage phase configurations and associated LOD Scores.
 }
 \examples{
   \dontrun{
@@ -82,7 +80,7 @@ between all pairwise markers given one or more linkage phase configurations.
   unique.mrks <- make_seq_mappoly(red.mrk)
   # will take ~ 13 min
   all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
-                               n.clusters = 7, 
+                               ncpus = 7, 
                                verbose=TRUE)
    all.pairs
    plot(all.pairs, 90, 91)
@@ -114,18 +112,17 @@ between all pairwise markers given one or more linkage phase configurations.
   plot(seq.ch1)
   ## will take ~  19 min / peak of memory usage ~ 10GB
   all.pairs.1 <- est_pairwise_rf(input.seq = seq.ch1,
-                                 n.clusters = 7, 
+                                 ncpus = 7, 
                                  verbose=TRUE)
   ## same thing, but it will take ~  21 min / peak of memory usage ~ 6GB
   all.pairs.2 <- est_pairwise_rf(input.seq = seq.ch1,
-                                 n.clusters = 7, 
+                                 ncpus = 7, 
                                  n.batch = 10,
                                  verbose=TRUE)   
-   plot(all.pairs, 90, 91)
+   plot(all.pairs.1, 161, 162)
    mat <- rf_list_to_matrix(all.pairs.1)
    plot(mat)
    }
-   
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
@@ -137,4 +134,3 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }
-\keyword{internal}

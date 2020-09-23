@@ -13,17 +13,17 @@
 #'  of markers (e.g. 50 markers for hexaploids) since the possible linkage 
 #'  phase combinations bounded only by the two-point information can be huge. 
 #'  Also, it can be quite sensible to small changes in \code{'thresh'}. 
-#'  For higher number of markers, please see \code{\link[mappoly]{est_rf_hmm_sequential}}.
+#'  For a large number of markers, please see \code{\link[mappoly]{est_rf_hmm_sequential}}.
 #
 #' @param input.seq an object of class \code{mappoly.sequence}
 #'
 #' @param input.ph an object of class \code{two.pts.linkage.phases}. 
 #' If not available (default = NULL), it will be computed
 #'
-#' @param thres the LOD threshold used to determine if the linkage phases
+#' @param thres LOD Score threshold used to determine if the linkage phases
 #'     compared via two-point analysis should be considered. Smaller 
 #'     values will result in smaller number of linkage phase 
-#'     configurations
+#'     configurations to be evaluated by the multipoint algorithm. 
 #'
 #' @param twopt an object of class \code{poly.est.two.pts.pairwise}
 #'     containing two-point information
@@ -34,12 +34,13 @@
 #' @param tol the desired accuracy (default = 1e-04)
 #'
 #' @param est.given.0.rf logical. If TRUE returns a map forcing all
-#' recombination fractions equals to 0 (1e-5, for internal use only. Default = FALSE)
+#' recombination fractions equals to 0 (1e-5, for internal use only. 
+#' Default = FALSE)
 #'
 #' @param reestimate.single.ph.configuration logical. If \code{TRUE}
-#' returns a map without reestimating the map parameters for cases
+#' returns a map without re-estimating the map parameters for cases
 #' where there is only one possible linkage phase configuration. 
-#' This argument is intended to be used in a sequential map contruction
+#' This argument is intended to be used in a sequential map construction
 #' 
 #' @param high.prec logical. If \code{TRUE} (default) uses high precision 
 #' long double numbers in the HMM procedure
@@ -47,12 +48,12 @@
 #' @param x an object of the class \code{mappoly.map}
 #' 
 #' @param detailed logical. if TRUE, prints the linkage phase configuration and the marker 
-#' position for all maps. if FALSE (default), prints a map summary 
+#' position for all maps. If FALSE (default), prints a map summary 
 #' 
 #' @param left.lim the left limit of the plot (in cM, default = 0). 
 #' 
 #' @param right.lim the right limit of the plot (in cM, default = Inf, i.e., 
-#'                  will print the intire map)
+#'                  will print the entire map)
 #' 
 #' @param phase logical. If \code{TRUE} (default) plots the phase configuration
 #'  for both parents 
@@ -67,25 +68,45 @@
 #'
 #' @param ... currently ignored
 #'
-#' @return An object of class \code{mappoly.map} with the following structure:
+#' @return A list of class \code{mappoly.map} with two elements: 
+#' 
+#' i) info:  a list containing information about the map, regardless of the linkage phase configuration:
 #' \item{m}{the ploidy level}
-#' \item{mrk.names}{the names of markers present in the sequence}
+#' \item{n.mrk}{number of markers}
+#' \item{seq.num}{a vector containing the (ordered) indices of markers in the map, 
+#'                according to the input file}
+#' \item{mrk.names}{the names of markers in the map}
+#' \item{seq.dose.p}{a vector containing the dosage in parent 1 for all markers in the map}
+#' \item{seq.dose.q}{a vector containing the dosage in parent 2 for all markers in the map}
+#' \item{sequence}{a vector indicating the sequence (usually chromosome) each marker belongs 
+#'                 as informed in the input file. If not available, 
+#'                 \code{sequence = NULL}}
+#' \item{sequence.pos}{physical position (usually in megabase) of the markers into the sequence}
+#' \item{seq.ref}{reference base used for each marker (i.e. A, T, C, G). If not available, 
+#'                 \code{seq.ref = NULL}}                 
+#' \item{seq.alt}{alternative base used for each marker (i.e. A, T, C, G). If not available, 
+#'                 \code{seq.ref = NULL}}
+#' \item{chisq.pval}{a vector containing p-values of the chi-squared test of Mendelian 
+#'                   segregation for all markers in the map}                 
 #' \item{data.name}{name of the dataset of class \code{mappoly.data}}
 #' \item{ph.thres}{the LOD threshold used to define the linkage phase configurations to test}
-#' \item{maps}{a list containing the sequence of markers, their recombination fractions,
-#' the linkage phase configuration for all markers in both parents P and Q and the 
-#' map's joint likelihood}
+#' 
+#' ii) a list of maps with possible linkage phase configuration. Each map in the list is also a 
+#'    list containing
+#' \item{seq.num}{a vector containing the (ordered) indices of markers in the map, 
+#'                according to the input file}
+#' \item{seq.rf}{a vector of size (\code{n.mrk - 1}) containing a sequence of recombination 
+#'               fraction between the adjacent markers in the map}
+#' \item{seq.ph}{linkage phase configuration for all markers in both parents}
+#' \item{loglike}{the hmm-based multipoint likelihood}
 #'
 #' @examples
 #'  \dontrun{
-#'     data(hexafake)
 #'     mrk.subset<-make_seq_mappoly(hexafake, 1:50)
 #'     red.mrk<-elim_redundant(mrk.subset)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
-#'     counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
 #'     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-#'                                   count.cache = counts.web,
-#'                                   n.clusters = 1,
+#'                                   ncpus = 1,
 #'                                   verbose=TRUE)
 #'
 #'     ## Estimating subset map with a low tolerance for the E.M. procedure
@@ -126,9 +147,8 @@
 #'     populations with high ploidy level using hidden Markov
 #'     models, _G3: Genes, Genomes, Genetics_. 
 #'     https://doi.org/10.1534/g3.119.400378 
-#'
+#' @rdname est_rf_hmm
 #' @export est_rf_hmm
-#'
 est_rf_hmm <- function(input.seq, input.ph = NULL,
                        thres = 0.5, twopt = NULL,
                        verbose = FALSE, 
@@ -303,7 +323,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'     (\eqn{ploidy x 2}) can be distinguished) to calculate the map likelihood 
 #'     
 #'@param reestimate.single.ph.configuration logical. If \code{FALSE} (default)
-#'     returns a map without reestimating the map parameters in cases
+#'     returns a map without re-estimating the map parameters in cases
 #'     where there are only one possible linkage phase configuration
 #'      
 #' @param tol the desired accuracy during the sequential phase (default = 10e-02)
@@ -320,25 +340,72 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #' (long double) numbers in the HMM procedure implemented in C++,
 #' which can take a long time to perform (default = FALSE)
 #' 
-#' @return An object of class \code{mappoly.map} with the following structure:
+#' @return A list of class \code{mappoly.map} with two elements: 
+#' 
+#' i) info:  a list containing information about the map, regardless of the linkage phase configuration:
 #' \item{m}{the ploidy level}
-#' \item{mrk.names}{the names of markers present in the sequence}
+#' \item{n.mrk}{number of markers}
+#' \item{seq.num}{a vector containing the (ordered) indices of markers in the map, 
+#'                according to the input file}
+#' \item{mrk.names}{the names of markers in the map}
+#' \item{seq.dose.p}{a vector containing the dosage in parent 1 for all markers in the map}
+#' \item{seq.dose.q}{a vector containing the dosage in parent 2 for all markers in the map}
+#' \item{sequence}{a vector indicating the sequence (usually chromosome) each marker belongs 
+#'                 as informed in the input file. If not available, 
+#'                 \code{sequence = NULL}}
+#' \item{sequence.pos}{physical position (usually in megabase) of the markers into the sequence}
+#' \item{seq.ref}{reference base used for each marker (i.e. A, T, C, G). If not available, 
+#'                 \code{seq.ref = NULL}}
+#' \item{seq.alt}{alternative base used for each marker (i.e. A, T, C, G). If not available, 
+#'                 \code{seq.ref = NULL}}
+#' \item{chisq.pval}{a vector containing p-values of the chi-squared test of Mendelian 
+#'                   segregation for all markers in the map}
 #' \item{data.name}{name of the dataset of class \code{mappoly.data}}
 #' \item{ph.thres}{the LOD threshold used to define the linkage phase configurations to test}
-#' \item{maps}{a list containing the sequence of markers, their recombination fractions,
-#' the linkage phase configuration for all markers in both parents P and Q and the 
-#' map's joint likelihood}
+#' 
+#' ii) a list of maps with possible linkage phase configuration. Each map in the list is also a 
+#'    list containing
+#' \item{seq.num}{a vector containing the (ordered) indices of markers in the map, 
+#'                according to the input file}
+#' \item{seq.rf}{a vector of size (\code{n.mrk - 1}) containing a sequence of recombination 
+#'               fraction between the adjacent markers in the map}
+#' \item{seq.ph}{linkage phase configuration for all markers in both parents}
+#' \item{loglike}{the hmm-based multipoint likelihood}
 #'
 #' @examples
 #'  \dontrun{
-#'     data(hexafake)
+#'     #### Autotetraploid example
+#'     s1<-make_seq_mappoly(tetra.solcap, 'seq1')
+#'     red.mrk<-elim_redundant(s1)
+#'     s1.unique.mrks<-make_seq_mappoly(red.mrk)
+#'     s1.pairs<-est_pairwise_rf(input.seq = s1.unique.mrks,
+#'                                   ncpus = 7,
+#'                                   verbose=TRUE)
+#'     unique.gen.ord<-get_genomic_order(s1.unique.mrks)
+#'     ## Selecting a subset of 100 markers at the beginning of chromosome 1 
+#'     s1.gen.subset<-make_seq_mappoly(tetra.solcap, rownames(unique.gen.ord)[1:100])
+#'     s1.gen.subset.map <- est_rf_hmm_sequential(input.seq = s1.gen.subset,
+#'                                                start.set = 10,
+#'                                                thres.twopt = 10, 
+#'                                                thres.hmm = 10,
+#'                                                extend.tail = 30,
+#'                                                info.tail = TRUE, 
+#'                                                twopt = s1.pairs,
+#'                                                sub.map.size.diff.limit = 5, 
+#'                                                phase.number.limit = 40,
+#'                                                reestimate.single.ph.configuration = TRUE,
+#'                                                tol = 10e-3,
+#'                                                tol.final = 10e-5)
+#'      print(s1.gen.subset.map, detailed = TRUE)
+#'      plot(s1.gen.subset.map)
+#'      plot(s1.gen.subset.map, phase = FALSE)
+#'      
+#'     #### Autohexaploid example
 #'     mrk.subset<-make_seq_mappoly(hexafake, 1:50)
 #'     red.mrk<-elim_redundant(mrk.subset)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
-#'     counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
 #'     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-#'                                   count.cache = counts.web,
-#'                                   n.clusters = 1,
+#'                                   ncpus = 1,
 #'                                   verbose=TRUE)
 #'     subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
 #'                                         thres.twopt = 5,
@@ -350,6 +417,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'                                         verbose = TRUE)
 #'      print(subset.map, detailed = TRUE)
 #'      plot(subset.map)
+#'      plot(subset.map, left.lim = 0, right.lim = 1, mrk.names = TRUE)
 #'      plot(subset.map, phase = FALSE)
 #'      
 #'      ## Retrieving simulated linkage phase
@@ -358,40 +426,8 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'      ## Estimated linkage phase
 #'      ph.P.est <- subset.map$maps[[1]]$seq.ph$P
 #'      ph.Q.est <- subset.map$maps[[1]]$seq.ph$Q
-#'      ##Notice that two estimated homologous in parent P are different
-#'      ##from the simulated ones
 #'      compare_haplotypes(m = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
 #'      compare_haplotypes(m = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
-#'      
-#'      
-#'      ############# Autotetraploid example
-#'     data(tetra.solcap)
-#'     s1<-make_seq_mappoly(tetra.solcap, 'seq1')
-#'     red.mrk<-elim_redundant(s1)
-#'     s1.unique.mrks<-make_seq_mappoly(red.mrk)
-#'     counts.web<-cache_counts_twopt(s1.unique.mrks, cached = TRUE)
-#'     s1.pairs<-est_pairwise_rf(input.seq = s1.unique.mrks,
-#'                                   count.cache = counts.web,
-#'                                   n.clusters = 10,
-#'                                   verbose=TRUE)
-#'     unique.gen.ord<-get_genomic_order(s1.unique.mrks)
-#'     ## Selecting a subset of 100 markers at the beginning of chromosome 1 
-#'     s1.gen.subset<-make_seq_mappoly(tetra.solcap, rownames(unique.gen.ord)[1:100])
-#'     s1.gen.subset.map <- est_rf_hmm_sequential(input.seq = s1.gen.subset,
-#'                                                start.set = 10,
-#'                                                thres.twopt = 10, 
-#'                                                thres.hmm = 10,
-#'                                                extend.tail = 50,
-#'                                                info.tail = TRUE, 
-#'                                                twopt = s1.pairs,
-#'                                                sub.map.size.diff.limit = 5, 
-#'                                                phase.number.limit = 40,
-#'                                                reestimate.single.ph.configuration = TRUE,
-#'                                                tol = 10e-3,
-#'                                                tol.final = 10e-5)
-#'      print(s1.gen.subset.map, detailed = TRUE)
-#'      plot(s1.gen.subset.map)
-#'      plot(s1.gen.subset.map, phase = FALSE)
 #'    }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -423,12 +459,15 @@ est_rf_hmm_sequential<-function(input.seq,
                                 high.prec = FALSE)
 {
   ## checking for correct object
-  if (!any(class(input.seq) == "mappoly.sequence"))
-    stop(deparse(substitute(input.seq)),
+  input_classes <- c("mappoly.sequence", "poly.est.two.pts.pairwise")
+  if (!inherits(input.seq, input_classes[1])) {
+    stop(deparse(substitute(input.seq)), 
          " is not an object of class 'mappoly.sequence'")
-  if (!any(class(twopt) == "poly.est.two.pts.pairwise"))
-    stop(deparse(substitute(twopt)),
+  }
+  if (!inherits(twopt, input_classes[2])) {
+    stop(deparse(substitute(twopt)), 
          " is not an object of class 'poly.est.two.pts.pairwise'")
+  }
   ## Information about the map
   if(verbose) {
     cli::cat_line("Number of markers: ", length(input.seq$seq.num))
@@ -447,7 +486,7 @@ est_rf_hmm_sequential<-function(input.seq,
   } 
   ##### More than 3 markers ####
   ##Starting sequential algorithm for maps with more than 3 markers
-  ## Fisrt step: test all possible phase configurations under 
+  ## First step: test all possible phase configurations under 
   ## a 'thres.twopt' threshold for a sequence of size 'start.set'
   if(start.set > length(input.seq$seq.num))
     start.set <- length(input.seq$seq.num)
@@ -632,7 +671,7 @@ est_rf_hmm_sequential<-function(input.seq,
   if(verbose) {
     #cat("\n------------------------------------------")
     cat("Markers in the initial sequence: ", length(input.seq$seq.num), sep = "")
-    cat("\nMaped markers                  : ", final.map$info$n.mrk, " (", 
+    cat("\nMapped markers                  : ", final.map$info$n.mrk, " (", 
         round(100*final.map$info$n.mrk/length(input.seq$seq.num),1) ,"%)\n", sep = "")
     msg("", line = 2)
   }
@@ -640,8 +679,8 @@ est_rf_hmm_sequential<-function(input.seq,
 }
 
 #' @rdname est_rf_hmm
-#' @keywords internal
-#' @export
+#' @export 
+
 print.mappoly.map <- function(x, detailed = FALSE, ...) {
   cat("This is an object of class 'mappoly.map'\n")
   cat("    Ploidy level:\t", x$info$m, "\n")
@@ -690,8 +729,7 @@ print.mappoly.map <- function(x, detailed = FALSE, ...) {
 #' @rdname est_rf_hmm
 #' @importFrom grDevices rgb
 #' @importFrom graphics rect
-#' @keywords internal
-#' @export
+#' @export 
 plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
                              phase = TRUE, mrk.names = FALSE, 
                              cex = 1, config = "best", ...) {
@@ -703,15 +741,24 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
       var.col <- var.col[1:2]
       names(var.col) <- c("A", "B")
     } else {
-      var.col <- RColorBrewer::brewer.pal(n = 4, name = "Set1")
+      var.col <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")
       names(var.col) <- c("A", "T", "C", "G")
     }
-    d.col<-c(NA, RColorBrewer::brewer.pal(n = map.info$m, name = "Dark2"))
-    names(d.col) <- 0:map.info$m
+    m <- map.info$m
+    if(m == 2) {
+      d.col <- c(NA, "#1B9E77", "#D95F02")
+    }else if(m == 4){
+      d.col <- c(NA, "#1B9E77", "#D95F02", "#7570B3", "#E7298A")
+    }else if(m == 6){
+      d.col <- c(NA, "#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02")
+    }else if(m == 8){
+      d.col <- c(NA, "#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02", "#A6761D", "#666666") 
+    } else d.col <- c(NA, gg_color_hue(m))
+    names(d.col) <- 0:m
     d.col[1]<-NA
     x <- map.info$map
     lab <- names(x)
-    zy <- seq(0, 0.5, length.out = map.info$m) + 1.5
+    zy <- seq(0, 0.5, length.out = m) + 1.5
     pp <- map.info$ph.p
     pq <- map.info$ph.q
     dp <- map.info$dp
@@ -750,7 +797,7 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
       x.control <- x.control * .8
     if(length(x1) < 25)
       x.control <- x.control * .8
-    for(i in 1:map.info$m)
+    for(i in 1:m)
     {
       lines(range(x1), c(zy[i], zy[i]), lwd=8, col = "lightgray")
       y1 <- rep(zy[i], length(curx))
@@ -761,12 +808,12 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
     for(i in 1:length(x1))
       lines(c(curx[i], x1[i]), c(0.575, zy[1]-.05), lwd=0.2)
     points(x = x1,
-           y = zy[map.info$m]+0.05+dq[id.left:id.right]/20,
+           y = zy[m]+0.05+dq[id.left:id.right]/20,
            col = d.col[as.character(dq[id.left:id.right])],
            pch = 19, cex = .7)
     #Parent 1
     zy<-zy + 1.1
-    for(i in 1:map.info$m)
+    for(i in 1:m)
     {
       lines(range(x1), c(zy[i], zy[i]), lwd=8, col = "gray")
       y1 <- rep(zy[i], length(curx))
@@ -774,13 +821,13 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
       rect(xleft = x1 - x.control, ybottom = y1 -.05, xright = x1 + x.control, ytop = y1 +.05, col = pal, border = NA)
     }
     points(x = x1,
-           y = zy[map.info$m]+0.05+dp[id.left:id.right]/20,
+           y = zy[m]+0.05+dp[id.left:id.right]/20,
            col = d.col[as.character(dp[id.left:id.right])],
            pch = 19, cex = .7)
    
     if(mrk.names)
       text(x = x1,
-           y = rep(zy[map.info$m]+0.05+.3, length(curx)),
+           y = rep(zy[m]+0.05+.3, length(curx)),
            labels = names(curx),
            srt=90, adj = 0, cex = cex)
     par(op)
@@ -794,12 +841,12 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
          ylim = c(.25, 4.5))
     zy <- zy - 1.1
     mtext(text = "Parent 2", side = 4, at = mean(zy), line = -1, font = 4)
-    for(i in 1:map.info$m)
-      mtext(letters[(map.info$m+1):(2*map.info$m)][i], line = 0, at = zy[i], side = 4)
+    for(i in 1:m)
+      mtext(letters[(m+1):(2*m)][i], line = 0, at = zy[i], side = 4)
     zy <- zy + 1.1
     mtext(text = "Parent 1", side = 4, at = mean(zy), line = -1, font = 4)
-    for(i in 1:map.info$m)
-      mtext(letters[1:map.info$m][i],  line = 0, at = zy[i], side = 4)
+    for(i in 1:m)
+      mtext(letters[1:m][i],  line = 0, at = zy[i], side = 4)
     par(op)
     op <- par(mar = c(0,1,2,4), xpd=FALSE)
     plot(x = curx,
@@ -818,7 +865,7 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
              box.lty=0, bg="transparent", ncol = 4)
     }
     legend("bottomright", legend=names(d.col)[-1], title = "Doses" ,
-           col = d.col[-1], ncol = map.info$m/2, pch = 19,
+           col = d.col[-1], ncol = m/2, pch = 19,
            box.lty=0)
     par(opar)
     #par(mfrow = c(1,1))
@@ -828,13 +875,13 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
 }
 
 #' prepare maps for plot 
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 prepare_map<-function(input.map, config = "best"){
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
   }
-  ## Choosing the liinkage phase configuration
+  ## Choosing the linkage phase configuration
   LOD.conf <- get_LOD(input.map, sorted = FALSE)
   if(config == "best") {
     i.lpc <- which.min(LOD.conf)
@@ -850,34 +897,32 @@ prepare_map<-function(input.map, config = "best"){
   ph.q <- ph_list_to_matrix(input.map$maps[[i.lpc]]$seq.ph$Q, input.map$info$m)
   dimnames(ph.p) <- list(names(map), letters[1:input.map$info$m])
   dimnames(ph.q) <- list(names(map), letters[(1+input.map$info$m):(2*input.map$info$m)])
-  dat<-get(input.map$info$data.name, pos = 1)
-  if(is.null(dat$seq.ref))
+  if(is.null(input.map$info$seq.alt))
   {
     ph.p[ph.p==1] <- ph.q[ph.q==1] <- "A"
     ph.p[ph.p==0] <- ph.q[ph.q==0] <- "B"  
   } else {
     for(i in input.map$info$mrk.names){
-      ph.p[i, ph.p[i,]==1] <- dat$seq.alt[i]
-      ph.p[i, ph.p[i,]==0] <- dat$seq.ref[i]
-      ph.q[i, ph.q[i,]==1] <- dat$seq.alt[i]
-      ph.q[i, ph.q[i,]==0] <- dat$seq.ref[i]
+      ph.p[i, ph.p[i,]==1] <- input.map$info$seq.alt[i]
+      ph.p[i, ph.p[i,]==0] <- input.map$info$seq.ref[i]
+      ph.q[i, ph.q[i,]==1] <- input.map$info$seq.alt[i]
+      ph.q[i, ph.q[i,]==0] <- input.map$info$seq.ref[i]
     }
   }
-  dp <- dat$dosage.p[input.map$info$mrk.names]
-  dq <- dat$dosage.q[input.map$info$mrk.names]
+  dp <- input.map$info$seq.dose.p
+  dq <- input.map$info$seq.dose.q
   list(m = input.map$info$m, map = map, ph.p = ph.p, ph.q = ph.q, dp = dp, dq = dq)
 }
 
 #' Get the tail of a marker sequence up to the point where the markers
-#' provide no additional infomation.
+#' provide no additional information.
 #'
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
-#' @export get_full_info_tail
 get_full_info_tail <- function(input.obj, extend = NULL) {
   ## checking for correct object
-  if (all(is.na(match(class(input.obj), c("mappoly.map", "mappoly.map.haplo")))))
-    stop(deparse(substitute(input.obj)), " is not an object of class 'mappoly.map' or 'mappoly.map.haplo'")
+  if(!inherits(input.obj, "mappoly.map"))
+    stop(deparse(substitute(input.obj)), " is not an object of class 'mappoly.map''")
   if (!is.null(extend))
     if (extend > input.obj$info$n.mrk)
       return(input.obj)
@@ -907,7 +952,7 @@ get_full_info_tail <- function(input.obj, extend = NULL) {
 }
 
 #' remove maps under a certain threshold
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 #' @export filter_map_at_hmm_thres
 filter_map_at_hmm_thres <- function(map, thres.hmm){
@@ -918,9 +963,8 @@ filter_map_at_hmm_thres <- function(map, thres.hmm){
 
 #' makes a phase list from map, selecting only 
 #' configurations under a certain threshold
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
-#' @export update_ph_list_at_hmm_thres
 update_ph_list_at_hmm_thres <- function(map, thres.hmm){
   temp.map <- filter_map_at_hmm_thres(map, thres.hmm)
   config.to.test <- lapply(temp.map$maps, function(x) x$seq.ph)
@@ -934,9 +978,8 @@ update_ph_list_at_hmm_thres <- function(map, thres.hmm){
 }
 
 #' subset of a linkage phase list
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
-#' @export get_ph_list_subset
 get_ph_list_subset<-function(ph.list, seq.num, conf){
   config.to.test <- list(lapply(ph.list$config.to.test[[conf]], function(x, seq.num) x[as.character(seq.num)], seq.num))
   rf.vec <- ph.list$rec.frac[conf, , drop = FALSE]
@@ -949,9 +992,8 @@ get_ph_list_subset<-function(ph.list, seq.num, conf){
 }
 
 #' concatenate two linkage phase lists
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
-#' @export concatenate_ph_list
 concatenate_ph_list<-function(ph.list.1, ph.list.2){
   if(length(ph.list.1)==0)
     return(ph.list.2)
@@ -966,9 +1008,8 @@ concatenate_ph_list<-function(ph.list.1, ph.list.2){
 }
 
 #' add a single marker at the tail of a linkage phase list
-#' @param void interfunction to be documented
+#' @param void internal function 
 #' @keywords internal
-#' @export add_mrk_at_tail_ph_list
 add_mrk_at_tail_ph_list <- function(ph.list.1, ph.list.2, cor.index){
   config.to.test <- vector("list", length = nrow(cor.index))
   for(i in 1:nrow(cor.index)){
@@ -982,11 +1023,10 @@ add_mrk_at_tail_ph_list <- function(ph.list.1, ph.list.2, cor.index){
             class = "two.pts.linkage.phases")
 }
 
-#' compare a list of linkage phases and return the 
+#' Compare a list of linkage phases and return the 
 #' markers for which they are different.
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
-#' @export check_ls_phase
 check_ls_phase<-function(ph){
   if(length(ph$config.to.test) == 1) return(0)
   id <- rep(1, length(ph$config.to.test[[1]]$P))
@@ -1001,9 +1041,8 @@ check_ls_phase<-function(ph){
   w
 }
 
-
 #' cat for graphical representation of the phases
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 print_ph<-function(input.ph){
   phs.P<-lapply(input.ph$config.to.test, 
@@ -1027,7 +1066,7 @@ print_ph<-function(input.ph){
 }
 
 #' cat for phase information
-#' @param void interfunction to be documented
+#' @param void internal function to be documented
 #' @keywords internal
 cat_phase <- function(input.seq,
                       input.ph,
@@ -1058,5 +1097,3 @@ cat_phase <- function(input.seq,
   x3 <- paste0(" -- tail: ", x31)
   cat(x1, x2, x3, print_ph(input.ph), "\n")
 }
-
-

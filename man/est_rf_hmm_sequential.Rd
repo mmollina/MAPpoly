@@ -60,7 +60,7 @@ of the chain (i.e. number of markers where all homologous
 (\eqn{ploidy x 2}) can be distinguished) to calculate the map likelihood}
 
 \item{reestimate.single.ph.configuration}{logical. If \code{FALSE} (default)
-returns a map without reestimating the map parameters in cases
+returns a map without re-estimating the map parameters in cases
 where there are only one possible linkage phase configuration}
 
 \item{tol}{the desired accuracy during the sequential phase (default = 10e-02)}
@@ -78,14 +78,37 @@ submap is shown;}
 which can take a long time to perform (default = FALSE)}
 }
 \value{
-An object of class \code{mappoly.map} with the following structure:
+A list of class \code{mappoly.map} with two elements: 
+
+i) info:  a list containing information about the map, regardless of the linkage phase configuration:
 \item{m}{the ploidy level}
-\item{mrk.names}{the names of markers present in the sequence}
+\item{n.mrk}{number of markers}
+\item{seq.num}{a vector containing the (ordered) indices of markers in the map, 
+               according to the input file}
+\item{mrk.names}{the names of markers in the map}
+\item{seq.dose.p}{a vector containing the dosage in parent 1 for all markers in the map}
+\item{seq.dose.q}{a vector containing the dosage in parent 2 for all markers in the map}
+\item{sequence}{a vector indicating the sequence (usually chromosome) each marker belongs 
+                as informed in the input file. If not available, 
+                \code{sequence = NULL}}
+\item{sequence.pos}{physical position (usually in megabase) of the markers into the sequence}
+\item{seq.ref}{reference base used for each marker (i.e. A, T, C, G). If not available, 
+                \code{seq.ref = NULL}}
+\item{seq.alt}{alternative base used for each marker (i.e. A, T, C, G). If not available, 
+                \code{seq.ref = NULL}}
+\item{chisq.pval}{a vector containing p-values of the chi-squared test of Mendelian 
+                  segregation for all markers in the map}
 \item{data.name}{name of the dataset of class \code{mappoly.data}}
 \item{ph.thres}{the LOD threshold used to define the linkage phase configurations to test}
-\item{maps}{a list containing the sequence of markers, their recombination fractions,
-the linkage phase configuration for all markers in both parents P and Q and the 
-map's joint likelihood}
+
+ii) a list of maps with possible linkage phase configuration. Each map in the list is also a 
+   list containing
+\item{seq.num}{a vector containing the (ordered) indices of markers in the map, 
+               according to the input file}
+\item{seq.rf}{a vector of size (\code{n.mrk - 1}) containing a sequence of recombination 
+              fraction between the adjacent markers in the map}
+\item{seq.ph}{linkage phase configuration for all markers in both parents}
+\item{loglike}{the hmm-based multipoint likelihood}
 }
 \description{
 Performs the multipoint analysis proposed by \cite{Mollinari and
@@ -102,14 +125,38 @@ the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
 }
 \examples{
  \dontrun{
-    data(hexafake)
+    #### Autotetraploid example
+    s1<-make_seq_mappoly(tetra.solcap, 'seq1')
+    red.mrk<-elim_redundant(s1)
+    s1.unique.mrks<-make_seq_mappoly(red.mrk)
+    s1.pairs<-est_pairwise_rf(input.seq = s1.unique.mrks,
+                                  ncpus = 7,
+                                  verbose=TRUE)
+    unique.gen.ord<-get_genomic_order(s1.unique.mrks)
+    ## Selecting a subset of 100 markers at the beginning of chromosome 1 
+    s1.gen.subset<-make_seq_mappoly(tetra.solcap, rownames(unique.gen.ord)[1:100])
+    s1.gen.subset.map <- est_rf_hmm_sequential(input.seq = s1.gen.subset,
+                                               start.set = 10,
+                                               thres.twopt = 10, 
+                                               thres.hmm = 10,
+                                               extend.tail = 30,
+                                               info.tail = TRUE, 
+                                               twopt = s1.pairs,
+                                               sub.map.size.diff.limit = 5, 
+                                               phase.number.limit = 40,
+                                               reestimate.single.ph.configuration = TRUE,
+                                               tol = 10e-3,
+                                               tol.final = 10e-5)
+     print(s1.gen.subset.map, detailed = TRUE)
+     plot(s1.gen.subset.map)
+     plot(s1.gen.subset.map, phase = FALSE)
+     
+    #### Autohexaploid example
     mrk.subset<-make_seq_mappoly(hexafake, 1:50)
     red.mrk<-elim_redundant(mrk.subset)
     unique.mrks<-make_seq_mappoly(red.mrk)
-    counts.web<-cache_counts_twopt(unique.mrks, cached = TRUE)
     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-                                  count.cache = counts.web,
-                                  n.clusters = 1,
+                                  ncpus = 1,
                                   verbose=TRUE)
     subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
                                         thres.twopt = 5,
@@ -121,6 +168,7 @@ the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
                                         verbose = TRUE)
      print(subset.map, detailed = TRUE)
      plot(subset.map)
+     plot(subset.map, left.lim = 0, right.lim = 1, mrk.names = TRUE)
      plot(subset.map, phase = FALSE)
      
      ## Retrieving simulated linkage phase
@@ -129,40 +177,8 @@ the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
      ## Estimated linkage phase
      ph.P.est <- subset.map$maps[[1]]$seq.ph$P
      ph.Q.est <- subset.map$maps[[1]]$seq.ph$Q
-     ##Notice that two estimated homologous in parent P are different
-     ##from the simulated ones
      compare_haplotypes(m = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
      compare_haplotypes(m = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
-     
-     
-     ############# Autotetraploid example
-    data(tetra.solcap)
-    s1<-make_seq_mappoly(tetra.solcap, 'seq1')
-    red.mrk<-elim_redundant(s1)
-    s1.unique.mrks<-make_seq_mappoly(red.mrk)
-    counts.web<-cache_counts_twopt(s1.unique.mrks, cached = TRUE)
-    s1.pairs<-est_pairwise_rf(input.seq = s1.unique.mrks,
-                                  count.cache = counts.web,
-                                  n.clusters = 10,
-                                  verbose=TRUE)
-    unique.gen.ord<-get_genomic_order(s1.unique.mrks)
-    ## Selecting a subset of 100 markers at the beginning of chromosome 1 
-    s1.gen.subset<-make_seq_mappoly(tetra.solcap, rownames(unique.gen.ord)[1:100])
-    s1.gen.subset.map <- est_rf_hmm_sequential(input.seq = s1.gen.subset,
-                                               start.set = 10,
-                                               thres.twopt = 10, 
-                                               thres.hmm = 10,
-                                               extend.tail = 50,
-                                               info.tail = TRUE, 
-                                               twopt = s1.pairs,
-                                               sub.map.size.diff.limit = 5, 
-                                               phase.number.limit = 40,
-                                               reestimate.single.ph.configuration = TRUE,
-                                               tol = 10e-3,
-                                               tol.final = 10e-5)
-     print(s1.gen.subset.map, detailed = TRUE)
-     plot(s1.gen.subset.map)
-     plot(s1.gen.subset.map, phase = FALSE)
    }
 
 }

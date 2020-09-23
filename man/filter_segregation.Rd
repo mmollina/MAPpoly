@@ -21,25 +21,20 @@ An object of class \code{mappoly.chitest.seq} which contains a list with the fol
 \item{data.name}{input dataset used to perform the chi-square tests}
 }
 \description{
-This function filter markers based on chi-square test p-values. 
-The chi-square tests assume that markers follow the expected segregation
- patterns under Mendelian inheritance, only random chromosome bivalent 
- pairing occurs and there is no double reduction.
+This function filter markers based on p-values of a chi-square test. 
+The chi-square test assumes that markers follow the expected segregation
+ patterns under Mendelian inheritance, random chromosome bivalent 
+ pairing and no double reduction.
 }
 \examples{
 \dontrun{
-    mydata <- filter_segregation(mydata, chisq.pval.thres = 0.05/mydata$n.mrk, inter = TRUE)
+    mrks.chi.filt <- filter_segregation(input.data = tetra.solcap, 
+                                        chisq.pval.thres = 0.05/tetra.solcap$n.mrk, 
+                                        inter = TRUE)
     seq.init<-make_seq_mappoly(mrks.chi.filt)
 }
 
 }
-\references{
-Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
-    analysis and haplotype phasing in experimental autopolyploid
-    populations with high ploidy level using hidden Markov
-    models, _submited_. \url{https://doi.org/10.1101/415232}
-}
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }
-\keyword{segregation}

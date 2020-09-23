@@ -3,15 +3,15 @@
 \name{poly_hmm_est}
 \alias{poly_hmm_est}
 \title{Estimate genetic map using as input the probability distribution of
-genotypes}
+genotypes (wrapper function to C++)}
 \usage{
 poly_hmm_est(m, n.mrk, n.ind, p, dp, q, dq, g, rf, verbose = TRUE, tol = 0.001)
 }
 \arguments{
-\item{void}{intern function to be documented}
+\item{void}{internal function to be documented}
 }
 \description{
 Estimate genetic map using as input the probability distribution of
-genotypes
+genotypes (wrapper function to C++)
 }
 \keyword{internal}

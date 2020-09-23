@@ -1,30 +1,26 @@
 #' Homolog probabilities 
 #' 
 #' Compute homolog probabilities for all individuals in the full-sib
-#' population given a map with the final genotype probabilities. 
+#' population given a map and conditional genotype probabilities. 
 #'
 #' @param input.genoprobs an object of class \code{mappoly.genoprob}
 #' 
-#' @param x an object of class \code{mappoly.homoprob}
-#' 
-#' @param stack logical. If \code{TRUE}, probability profiles of all homologs
-#'              are stacked in the plot (default = FALSE)
-#'              
-#' @param lg indicates which linkage group should be plotted. If \code{NULL} 
-#'           (default), the function plots the first linkage group. If 
-#'           \code{"all"}, the function plots all linkage groups
-#'           
-#' @param ind indicates which individuals should be plotted. It can be the 
-#'            position of the individuals in the data set or it's name. 
-#'            If \code{NULL} (default), the function plots the first 
-#'            individual
-#'            
-#' @param use.plotly if \code{TRUE} (default), it uses plotly interactive graphics
-#' 
-#' @param ... unused arguments
 #' 
 #'@examples
 #' \dontrun{
+#'   ## tetraploid solcap example
+#'   w2<-lapply(solcap.dose.map, calc_genoprob)
+#'   h.prob.solcap<-calc_homoprob(w2)
+#'   print(h.prob.solcap)
+#'   plot(h.prob.solcap, ind = "ind_10")
+#'   plot(h.prob.solcap, stack = TRUE, ind = 5)
+#'   plot(h.prob.solcap, stack = TRUE, ind = 5, lg = "all")
+#'   
+#'   w3<-lapply(solcap.err.map, calc_genoprob_error, error = 0.05)
+#'   h.prob.solcap.err<-calc_homoprob(w3)
+#'   plot(h.prob.solcap, lg = 1, ind = 100, use.plotly = FALSE)
+#'   plot(h.prob.solcap.err, lg = 1, ind = 100, use.plotly = FALSE)
+#'   
 #'   ## hexaploid example
 #'   w1 <- lapply(maps.hexafake, calc_genoprob)
 #'   h.prob <- calc_homoprob(w1)
@@ -34,40 +30,31 @@
 #'   plot(h.prob, lg = c(1,3), ind = 15, use.plotly = FALSE)
 #'   plot(h.prob, lg = "all")
 #'   
-#'   ## tetraploid solcap example
-#'   w2<-lapply(solcap.dose.map, calc_genoprob)
-#'   h.prob.solcap<-calc_homoprob(w2)
-#'   print(h.prob.solcap)
-#'   plot(h.prob.solcap, ind = "ind_10")
-#'   plot(h.prob.solcap, stack = TRUE, ind = 5)
-#'   
-#'   w3<-lapply(solcap.err.map, calc_genoprob_error, error = 0.05)
-#'   h.prob.solcap.err<-calc_homoprob(w3)
-#'   plot(h.prob.solcap, lg = 1, ind = 100, use.plotly = FALSE)
-#'   plot(h.prob.solcap.err, lg = 1, ind = 100, use.plotly = FALSE)
 #'}
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
 #'     Mollinari M., Olukolu B. A.,  Pereira G. da S., 
-#'     Khan A., Gemenet D., Yench G. C., Zeng Z-B. (2020), 
+#'     Khan A., Gemenet D., Yencho G. C., Zeng Z-B. (2020), 
 #'     Unraveling the Hexaploid Sweetpotato Inheritance 
 #'     Using Ultra-Dense Multilocus Mapping, 
 #'     _G3: Genes, Genomes, Genetics_. 
 #'     \url{https://doi.org/10.1534/g3.119.400620} 
 #'     
-#' @export
 #' @importFrom ggplot2 ggplot geom_density ggtitle facet_grid theme_minimal ylab xlab aes vars
 #' @importFrom plotly ggplotly
+#' @export calc_homoprob
 #' 
 calc_homoprob<-function(input.genoprobs){
-  if(class(input.genoprobs) == "mappoly.genoprob")
+  if(inherits(input.genoprobs, "mappoly.genoprob")) 
     input.genoprobs <- list(input.genoprobs)
-  if(class(input.genoprobs) == "list"){
-    if(!all(sapply(input.genoprobs, class) == "mappoly.genoprob"))
-      stop(deparse(substitute(input.genoprobs)), " is not an object of class 'mappoly.sequence' neither a list containing 'mappoly.sequence' objects.")
-  }
+  if(!inherits(input.genoprobs, "list"))
+    stop(deparse(substitute(input.genoprobs)), 
+         " is not an object of class 'mappoly.genoprob' neither a list containing 'mappoly.genoprob' objects.")
+  if (any(!sapply(input.genoprobs, inherits, "mappoly.genoprob"))) 
+    stop(deparse(substitute(input.genoprobs)), 
+         " is not an object of class 'mappoly.genoprob' neither a list containing 'mappoly.genoprob' objects.")
   df.res <- NULL
   for(j in 1:length(input.genoprobs)){
     cat("\nLinkage group ", j, "...")
@@ -81,7 +68,7 @@ calc_homoprob<-function(input.genoprobs){
     dimnames(hom.prob)<-list(letters[1:(2*m)], mrk.names, ind.names)
     for(i in letters[1:(2*m)])
       hom.prob[i,,] <- apply(input.genoprobs[[j]]$probs[grep(stt.names, pattern = i),,], c(2,3), function(x) round(sum(x, na.rm = TRUE),4))
-    df.hom<-reshape::melt(hom.prob)
+    df.hom<-reshape2::melt(hom.prob)
     map<-data.frame(map.position = input.genoprobs[[j]]$map, marker = names(input.genoprobs[[j]]$map))
     colnames(df.hom)<-c("homolog", "marker", "individual", "probability")
     df.hom<-merge(df.hom, map, sort = FALSE)
@@ -92,15 +79,30 @@ calc_homoprob<-function(input.genoprobs){
   structure(list(info = list(m = m, nind = length(ind.names)) , homoprob = df.res), class = "mappoly.homoprob")
 }
 
-#' @rdname calc_homoprob
-#' @keywords internal
 #' @export
 print.mappoly.homoprob<-function(x, ...){
   head(x$homoprob, 20)
 }
 
-#' @rdname calc_homoprob
-#' @keywords internal
+#' Plots mappoly.homoprob
+#' 
+#' @param x an object of class \code{mappoly.homoprob}
+#' 
+#' @param stack logical. If \code{TRUE}, probability profiles of all homologues
+#'              are stacked in the plot (default = FALSE)
+#'              
+#' @param lg indicates which linkage group should be plotted. If \code{NULL} 
+#'           (default), it plots the first linkage group. If 
+#'           \code{"all"}, it plots all linkage groups
+#'           
+#' @param ind indicates which individuals should be plotted. It can be the 
+#'            position of the individuals in the dataset or it's name. 
+#'            If \code{NULL} (default), the function plots the first 
+#'            individual
+#'            
+#' @param use.plotly if \code{TRUE} (default), it uses plotly interactive graphics
+#' 
+#' @param ... unused arguments
 #' @export
 plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL, 
                                 ind = NULL, use.plotly = TRUE, ...){

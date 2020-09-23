@@ -1,0 +1,32 @@
+Package: mappoly
+Type: Package
+Title: Construction of Genetic Linkage Maps in Autopolyploids
+Version: 0.2.0
+Authors@R: c(person("Marcelo", "Mollinari", role = c("aut", "cre"), email = "mmollin@ncsu.edu",comment=c(ORCID="0000-0002-7001-8498")),
+             person("Gabriel", "Gesteira", role = c("ctb"), email = "gabrielgesteira@usp.br",comment=c(ORCID="0000-0002-4106-7346")),
+             person("Guilhereme", "Pereira", role = c("ctb"), email = "gdasilv@ncsu.edu",comment=c(ORCID="0000-0002-7106-8630")),
+             person("Augusto", "Garcia", role = c("ctb"), email = "augusto.garcia@usp.br",comment=c(ORCID="0000-0003-0634-3277")),
+             person("Zhao-Bang", "Zeng", role = c("ctb"), email = "zeng@statgen.ncsu.edu",comment=c(ORCID="0000-0002-3115-1149")))
+Maintainer: Marcelo Mollinari <mmollin@ncsu.edu>
+Description: Software to construct genetic maps in autopolyploid full sib
+    populations.
+License: GPL-3 | file LICENSE
+LazyData: TRUE
+Depends: R (>= 3.5.0)
+Imports: Rcpp (>= 0.12.6), RCurl, plotly, fields, ggpubr, ggsci,
+        rstudioapi, plot3D, memuse, dplyr, crayon, cli, magrittr,
+        reshape, ggplot2, smacof, princurve, dendextend
+LinkingTo: Rcpp
+RoxygenNote: 7.1.1
+SystemRequirements: C++11
+Encoding: UTF-8
+Suggests: testthat, RColorBrewer, updog
+URL: https://github.com/mmollina/MAPpoly
+BugReports: https://github.com/mmollina/MAPpoly/issues
+NeedsCompilation: yes
+Packaged: 2020-09-14 15:12:37 UTC; marcelomollinari
+Author: Marcelo Mollinari [aut, cre] (<https://orcid.org/0000-0002-7001-8498>),
+  Gabriel Gesteira [ctb] (<https://orcid.org/0000-0002-4106-7346>),
+  Guilhereme Pereira [ctb] (<https://orcid.org/0000-0002-7106-8630>),
+  Augusto Garcia [ctb] (<https://orcid.org/0000-0003-0634-3277>),
+  Zhao-Bang Zeng [ctb] (<https://orcid.org/0000-0002-3115-1149>)

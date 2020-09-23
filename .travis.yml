@@ -1,8 +1,12 @@
 language: r
 cache: packages
+r: release
+
+env:
+  global: RGL_USE_NULL=TRUE
 
 r_build_args: --no-build-vignettes
-r_check_args: --no-vignettes
+r_check_args:  "--no-vignettes --as-cran --install-args=--build"
 
 notifications:
   email:
@@ -11,8 +15,36 @@ notifications:
 
 before_install:
   - sudo apt-get update
-  - sudo apt-get install -y libgsl0-dev libegl1-mesa libegl1-mesa-dev libglu1-mesa-dev freeglut3-dev mesa-common-dev python-pip
+  - sudo apt-get install -y libgsl0-dev libegl1-mesa libegl1-mesa-dev libglu1-mesa-dev freeglut3-dev mesa-common-dev python-pip  libblas-dev
   - pip install --user numpy
   - export RGL_USE_NULL=TRUE
-  
+
+r_packages:
+  - covr
+  - devtools
+  - Rcpp
+  - spam
+  - RCurl
+  - plotly
+  - fields
+  - RColorBrewer
+  - bitops
+  - ggpubr
+  - ggsci
+  - maps
+  - berryFunctions
+  - plot3D
+  - memuse
+  - dplyr
+  - reshape2
+  - ggplot2
+  - MDSMap
+  - smacof
+  - princurve
+  - dendextend
+  - polymapR
+  - updog
+
+after_success:
+  - Rscript -e 'library(covr); codecov()'
   

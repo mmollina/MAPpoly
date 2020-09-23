@@ -11,8 +11,6 @@
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @keywords internal
-#'
-#' @export elim_equiv
 elim_equiv <- function(Z) {
     a <- sapply(Z, function(x) paste(sort(apply(x, 2, paste, collapse = "")), collapse = ""))
     Z[which(!duplicated(a))]
@@ -27,7 +25,7 @@ elim_equiv <- function(Z) {
 get_ij <- function(w) as.numeric(unlist(strsplit(w, split = "-")))
 
 
-#' MAPpoly object conversion: phase configurations (matrix to list)
+#' Linkage phase format conversion: matrix to list
 #' 
 #' This function converts linkage phase configurations from matrix
 #' form to list
@@ -35,10 +33,9 @@ get_ij <- function(w) as.numeric(unlist(strsplit(w, split = "-")))
 #' @param M matrix whose columns represent homologous chromosomes and
 #'     the rows represent markers
 #' 
-#' @return a list of configuration phases
+#' @return a list of linkage phase configurations
 #' 
 #' @keywords internal
-#' 
 #' @export
 ph_matrix_to_list <- function(M) {
     w <- lapply(split(M, seq(NROW(M))), function(x, M) which(x == 1))
@@ -46,7 +43,7 @@ ph_matrix_to_list <- function(M) {
     w
 }
 
-#' MAPpoly object conversion: phase configurations (list to matrix)
+#' Linkage phase format conversion: list to matrix
 #' 
 #' This function converts linkage phase configurations from list
 #' to matrix form
@@ -59,7 +56,6 @@ ph_matrix_to_list <- function(M) {
 #'     the rows represent markers
 #' 
 #' @keywords internal
-#' 
 #' @export
 ph_list_to_matrix <- function(L, m) {
     M <- matrix(0, nrow = length(L), ncol = m)
@@ -73,14 +69,13 @@ ph_list_to_matrix <- function(L, m) {
 #' @param x a data frame containing information about two markers. In
 #'     this data frame, the lines indicate the possible configuration
 #'     phases and the columns indicate the LOD for configuration phase
-#'     (ph_LOD), the recombination fraction (rf), the LOD for
-#'     recombination fraction (rf_LOD) and the fisher information
-#'     (fisher.info)
+#'     (ph_LOD), the recombination fraction (rf), and the LOD for
+#'     recombination fraction (rf_LOD) 
+#'     
 #' @param thres a threshold from which the linkage phases can be
 #'     discarded (if abs(ph_LOD) > thres)
 #' @return a list of indices for both parents
 #' @keywords internal
-#' @export
 get_indices_from_selected_phases <- function(x, thres) {
     y <- rownames(x)[which(abs(x[, 1]) <= abs(thres))]
     y <- matrix(as.numeric(unlist(strsplit(y, split = "-"))), ncol = 2, byrow = TRUE)
@@ -125,22 +120,14 @@ generate_all_link_phase_elim_equivalent <- function(X, d, sh, m, k1, k2) {
 #'
 #' @param X a list of matrices whose columns represent homologous
 #'     chromosomes and the rows represent markers
-#' 
 #' @param d the dosage of the inserted marker
-#' 
 #' @param sh a list of shared alleles between all markers in the sequence
-#' 
 #' @param seq.num a vector of integers containing the number of each marker in the raw data file
-#' 
 #' @param m the ploidy level
-#' 
 #' @param mrk the marker to be inserted
-#' 
 #' @return a unique list of matrices representing linkage phases
 #'
 #' @keywords internal
-#' 
-#' @export
 concatenate_new_marker <- function(X = NULL, d, sh = NULL, seq.num = NULL, m, mrk = 1) {
     if (is.null(X) & is.null(sh) & mrk == 1 & is.null(seq.num)) {
         Y <- numeric(m)
@@ -180,19 +167,13 @@ concatenate_new_marker <- function(X = NULL, d, sh = NULL, seq.num = NULL, m, mr
 #' and a LOD threshold
 #'
 #' @param input.seq an object of class \code{mappoly.sequence}.
-#'
 #' @param twopt an object of class \code{poly.est.two.pts.pairwise}
-#'
 #' @param thres threshold from which the linkage phases can be
 #'     discarded (if abs(ph_LOD) > thres)
-#'
 #' @return a unique list of matrices representing linkage phases
-#'
 #' @keywords internal
-#'
-#' @export
 elim_conf_using_two_pts <- function(input.seq, twopt, thres) {
-    if (!class(input.seq) == "mappoly.sequence")
+    if (!inherits(input.seq, "mappoly.sequence"))
         stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
     dp <- input.seq$seq.dose.p
     dq <- input.seq$seq.dose.q
@@ -257,24 +238,23 @@ get_ph_conf_ret_sh <- function(M) {
 #' @param input.seq An object of class \code{mappoly.sequence}
 #' @param twopt An object of class \code{poly.est.two.pts.pairwise}
 #' @return If all pairwise combinations of elements of
-#'     \code{input.seq} are cointained in \code{twopt}, the function
-#'     returns 0. Otherewise, returns the missing pairs.
+#'     \code{input.seq} are contained in \code{twopt}, the function
+#'     returns 0. Otherwise, returns the missing pairs.
 #' @keywords internal
-#' @export
 check_pairwise <- function(input.seq, twopt) {
-    if (!(class(input.seq) == "mappoly.sequence" || class(input.seq) == "integer" || class(input.seq) == "numeric" || class(input.seq) == "character"))
+    if(!(inherits(input.seq, "mappoly.sequence") || is.integer(input.seq) || is.numeric(input.seq) || is.character(input.seq)))
         stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence', 'numeric' or 'integer'")
-    if (!(class(twopt) == "poly.est.two.pts.pairwise" || class(twopt) == "poly.haplo.est.two.pts.pairwise"))
+    if(!inherits(twopt, "poly.est.two.pts.pairwise"))
         stop(deparse(substitute(twopt)), " is not an object of class 'poly.est.two.pts.pairwise' or 'poly.haplo.est.two.pts.pairwise'")
     id.seq <- input.seq
-    if (class(input.seq) == "mappoly.sequence")
+    if(inherits(input.seq, "mappoly.sequence"))
         id.seq <- input.seq$seq.num
     dpl <- duplicated(id.seq)
-    if (any(dpl))
+    if(any(dpl))
         stop("There are duplicated markers in the sequence:\n Check markers: ", unique(id.seq[dpl]), " at position(s) ", which(dpl))
     index <- apply(apply(combn(id.seq, 2), 2, sort), 2, paste, collapse = "-")
     miss.pairs <- which(is.na(match(index, names(twopt$pairwise))))
-    if (length(miss.pairs) > 0)
+    if(length(miss.pairs) > 0)
         return(index[miss.pairs])
     return(0)
 }
@@ -294,16 +274,16 @@ check_pairwise <- function(input.seq, twopt) {
 #'     where x is the object of class \code{two.pts.linkage.phases}
 #'     and i is one of the possible configurations.
 #' @return a vector with the recombination fraction between markers
-#'     present in ph.list, for that spacific order.
+#'     present in ph.list, for that specific order.
 #' @keywords internal
 get_rf_from_list <- function(twopt, ph.list) {
     nm <- as.numeric(names(ph.list$P))
     rf <- numeric(length(nm) - 1)
     for (i in 1:(length(nm) - 1)) {
         id <- paste(sort(c(nm[i], nm[i + 1])), collapse = "-")
-        if (ph.list$P[[i]] == 0 || ph.list$P[[i + 1]] == 0)
+        if (all(ph.list$P[[i]] == 0) || all(ph.list$P[[i + 1]] == 0))
             id.ph.P <- "0" else id.ph.P <- sum(!is.na(match(ph.list$P[[i]], ph.list$P[[i + 1]])))
-        if (ph.list$Q[[i]] == 0 || ph.list$Q[[i + 1]] == 0)
+        if (all(ph.list$Q[[i]] == 0) || all(ph.list$Q[[i + 1]] == 0))
             id.ph.Q <- "0" else id.ph.Q <- sum(!is.na(match(ph.list$Q[[i]], ph.list$Q[[i + 1]])))
         rf[i] <- twopt$pairwise[[id]][paste(id.ph.P, id.ph.Q, sep = "-"), 2]
     }
@@ -351,9 +331,8 @@ get_rf_from_list <- function(twopt, ph.list) {
 #'   \dontrun{
 #'     seq.all.mrk <- make_seq_mappoly(hexafake, 'all')
 #'     id <- get_genomic_order(seq.all.mrk)
-#'     counts <- cache_counts_twopt(seq.all.mrk, cached = TRUE)
 #'     seq10 <- make_seq_mappoly(hexafake, rownames(id)[1:10])
-#'     twopt<-est_pairwise_rf(seq10, counts)
+#'     twopt<-est_pairwise_rf(seq10)
 #'     
 #'     ## Using the first 10 markers 
 #'     l10.seq.3.0 <- ls_linkage_phases(input.seq = seq10, thres = 3, twopt = twopt)
@@ -526,7 +505,7 @@ plot.two.pts.linkage.phases <- function(x, ...) {
 #'
 #' @param m ploidy level
 #' @param hom.allele.p a \code{list} of vectors containing linkage
-#'     phase configuration for paraent P. Each vector contains the
+#'     phase configuration for parent P. Each vector contains the
 #'     numbers of the homologous chromosomes in which the alleles are
 #'     located.
 #' @param hom.allele.q same for parent Q

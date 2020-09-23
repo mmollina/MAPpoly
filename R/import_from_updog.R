@@ -45,10 +45,10 @@
 #'       segregation ratio using function \code{\link[mappoly]{segreg_poly}}}
 #'     \item{n.phen}{number of phenotypic traits}
 #'     \item{phen}{a matrix containing the phenotypic data. The rows
-#'                 corespond to the trais and the columns correspond
+#'                 correspond to the traits and the columns correspond
 #'                 to the individuals}
 #'     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
-#'     test of mendelian segregation performed for all markers}
+#'     test of Mendelian segregation performed for all markers}
 #'     
 #' @examples
 #' \dontrun{
@@ -62,6 +62,11 @@
 #'                 p2_id = colnames(t(uitdewilligen$sizemat))[2],
 #'                 nc = 4)
 #' mydata = import_from_updog(mout)
+#' mydata
+#' plot(mydata)
+#' mydata = import_from_updog(mout, filter.non.conforming = TRUE)
+#' mydata
+#' plot(mydata)
 #'}
 #'
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
@@ -77,11 +82,11 @@
 #' 
 import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = FALSE){
   # Case 1: updog
-  if (class(object) == "multidog"){
+  if (inherits(object, "multidog")){
     m = object$snpdf$ploidy[1]
-    dosage.p = object$snpdf$p1geno
+    dosage.p = as.integer(object$snpdf$p1geno)
     names(dosage.p) <- object$snpdf$snp
-    dosage.q = object$snpdf$p2geno
+    dosage.q = as.integer(object$snpdf$p2geno)
     names(dosage.q) <- object$snpdf$snp
     if (is.null(prob.thres)) prob.thres = 0.95
     # Selecting conforming markers
@@ -96,8 +101,8 @@ import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = 
     geno <- geno[c(1,2,grep(pattern = "Pr_", colnames(geno)))]
     colnames(geno) <- c("mrk", "ind", 0:m)
     geno<-geno[order(geno$ind, geno$mrk, decreasing=TRUE),]
-    ind.names = unique(geno$ind)
-    mrk.names = unique(geno$mrk)
+    ind.names = as.character(unique(geno$ind))
+    mrk.names = as.character(unique(geno$mrk))
     n.ind = length(ind.names)
     n.mrk = length(mrk.names)
     if(n.ind * n.mrk != nrow(geno))
@@ -108,20 +113,29 @@ import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = 
     if(filter.non.conforming){
       geno.dose = matrix(NA,1,1)      
     } else {
-      geno.dose = dist_prob_to_class(geno = geno, prob.thres = prob.thres)
-      geno.dose[is.na(geno.dose)] = m + 1
+      geno.dose <- dist_prob_to_class(geno = geno, prob.thres = prob.thres)
+      if(geno.dose$flag)
+      {
+        geno <- geno.dose$geno
+        geno.dose <- geno.dose$geno.dose
+      } else {
+        geno.dose <- geno.dose$geno.dose
+      }
+      geno.dose[is.na(geno.dose)] <- m + 1
     }
+    mrk.names <- rownames(geno.dose)
+    ind.names <- colnames(geno.dose)
     nphen = 0
     phen = NULL
     res<-structure(list(m = m,
-                        n.ind = n.ind,
-                        n.mrk = sum(id),
+                        n.ind = length(ind.names),
+                        n.mrk = length(mrk.names),
                         ind.names = ind.names,
                         mrk.names = mrk.names,
                         dosage.p = dosage.p[mrk.names],
                         dosage.q = dosage.q[mrk.names],
-                        sequence = sequence,
-                        sequence.pos = sequence.pos,
+                        sequence = sequence[mrk.names],
+                        sequence.pos = sequence.pos[mrk.names],
                         prob.thres = prob.thres,
                         geno = geno,
                         geno.dose = geno.dose,
@@ -148,11 +162,11 @@ import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = 
     return(res)
   }
   # # Case 2: polyRAD
-  # else if (class(object) == 'RADdata'){
+  # else if (inherits(object, 'RADdata')){
   #   outfile = paste0(getwd(), '/import_temp')
   #   polyRAD::Export_MAPpoly(object, file = outfile)
-  #   res = read_geno_dist(outfile)
+  #   res = read_geno_prob(outfile)
   #   return(res)
   # }
-  else stop("You must provide an object of class 'multidog'(from package 'updog') in order to continue importing data. Please read the documentation and try again.")
+  else stop("You must provide an object of class 'multidog' (from package 'updog') in order to continue importing data.")
 }
