@@ -1,0 +1,3330 @@
+
+---------------
+/home/marcelo/repos/MAPpoly/man/add_marker.Rd -- 2020-09-23 16:03:06
+
+
+    You selected: reestimate.rf = FALSE
+    -----------------------------------------
+    The recombination fractions provided were
+    obtained using the marker positions in the 
+    input map; For accurate values, plese 
+    reestimate the map using functions 'reest_rf', 
+    'est_full_hmm_with_global_error' or 
+    'est_full_hmm_with_prior_prob'
+INFO: Going singlemode. Using one CPU for calculation.
+INFO: Going singlemode. Using one CPU.
+
+    INFO:
+    -----------------------------------------
+    The recombination fractions provided were
+    obtained using the marker positions in the 
+    input map; For accurate values, plese 
+    reestimate the map using functions 'reest_rf', 
+    'est_full_hmm_with_global_error' or 
+    'est_full_hmm_with_prior_prob'
+	Ploidy level: 6
+	Number of markers: 49
+	Number of individuals: 300
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	
+.
+
+    INFO:
+    -----------------------------------------
+    The recombination fractions provided were
+    obtained using the marker positions in the 
+    input map; For accurate values, plese 
+    reestimate the map using functions 'reest_rf', 
+    'est_full_hmm_with_global_error' or 
+    'est_full_hmm_with_prior_prob'
+	Ploidy level: 6
+	Number of markers: 49
+	Number of individuals: 300
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	
+.
+
+    INFO:
+    -----------------------------------------
+    The recombination fractions provided were
+    obtained using the marker positions in the 
+    input map; For accurate values, plese 
+    reestimate the map using functions 'reest_rf', 
+    'est_full_hmm_with_global_error' or 
+    'est_full_hmm_with_prior_prob'
+	Ploidy level: 6
+	Number of markers: 49
+	Number of individuals: 300
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	
+.
+
+---------------
+/home/marcelo/repos/MAPpoly/man/cache_counts_twopt.Rd -- 2020-09-23 16:03:21
+
+
+   Caching the following dosage combination: 
+         P.k P.k+1 Q.k Q.k+1
+Conf.1     0     0   1     1
+Conf.2     0     0   1     2
+Conf.3     0     0   1     3
+Conf.4     0     0   1     4
+Conf.5     0     0   1     5
+Conf.6     0     0   2     1
+Conf.7     0     0   2     2
+Conf.8     0     0   2     3
+Conf.9     0     0   2     4
+Conf.10    0     0   2     5
+Conf.11    0     0   3     1
+Conf.12    0     0   3     2
+Conf.13    0     0   3     3
+Conf.14    0     0   3     4
+Conf.15    0     0   3     5
+Conf.16    0     0   4     1
+Conf.17    0     0   4     2
+Conf.18    0     0   4     3
+Conf.19    0     0   4     4
+Conf.20    0     0   4     5
+Conf.21    0     0   5     1
+Conf.22    0     0   5     2
+Conf.23    0     0   5     3
+Conf.24    0     1   1     0
+Conf.25    0     1   1     1
+Conf.26    0     1   1     2
+Conf.27    0     1   1     3
+Conf.28    0     1   1     4
+Conf.29    0     1   1     5
+Conf.30    0     1   2     0
+Conf.31    0     1   2     1
+Conf.32    0     1   2     2
+Conf.33    0     1   2     3
+Conf.34    0     1   2     4
+Conf.35    0     1   2     5
+Conf.36    0     1   3     0
+Conf.37    0     1   3     1
+Conf.38    0     1   3     2
+Conf.39    0     1   3     3
+Conf.40    0     1   3     4
+Conf.41    0     1   3     5
+Conf.42    0     1   4     0
+Conf.43    0     1   4     1
+Conf.44    0     1   4     2
+Conf.45    0     1   4     3
+Conf.46    0     1   4     4
+Conf.47    0     1   4     5
+Conf.48    0     1   5     0
+Conf.49    0     1   5     1
+Conf.50    0     1   5     2
+Conf.51    0     1   5     3
+Conf.52    0     2   1     0
+Conf.53    0     2   1     1
+Conf.54    0     2   1     2
+Conf.55    0     2   1     3
+Conf.56    0     2   1     4
+Conf.57    0     2   2     0
+Conf.58    0     2   2     1
+Conf.59    0     2   2     2
+Conf.60    0     2   2     3
+Conf.61    0     2   2     4
+Conf.62    0     2   3     0
+Conf.63    0     2   3     1
+Conf.64    0     2   3     2
+Conf.65    0     2   3     3
+Conf.66    0     2   3     4
+Conf.67    0     2   4     0
+Conf.68    0     2   4     1
+Conf.69    0     2   4     2
+Conf.70    0     2   4     3
+Conf.71    0     2   4     4
+Conf.72    0     2   5     0
+Conf.73    0     2   5     1
+Conf.74    0     2   5     2
+Conf.75    0     2   5     3
+Conf.76    0     2   5     4
+Conf.77    0     3   1     0
+Conf.78    0     3   1     1
+Conf.79    0     3   1     2
+Conf.80    0     3   1     3
+Conf.81    0     3   2     0
+Conf.82    0     3   2     1
+Conf.83    0     3   2     2
+Conf.84    0     3   2     3
+Conf.85    0     3   3     0
+Conf.86    0     3   3     1
+Conf.87    0     3   3     2
+Conf.88    0     3   3     3
+Conf.89    0     3   4     0
+Conf.90    0     3   4     1
+Conf.91    0     3   4     2
+Conf.92    0     3   4     3
+Conf.93    0     3   5     0
+Conf.94    0     3   5     2
+Conf.95    0     4   1     0
+Conf.96    0     4   1     1
+Conf.97    0     4   1     2
+Conf.98    0     4   2     0
+Conf.99    0     4   2     1
+Conf.100   0     4   2     2
+Conf.101   0     4   3     0
+Conf.102   0     4   3     1
+Conf.103   0     4   3     2
+Conf.104   0     4   4     0
+Conf.105   0     4   4     1
+Conf.106   0     4   4     2
+Conf.107   0     4   5     1
+Conf.108   0     4   5     2
+Conf.109   0     5   1     0
+Conf.110   0     5   1     1
+Conf.111   0     5   2     0
+Conf.112   0     5   2     1
+Conf.113   0     5   3     0
+Conf.114   0     5   3     1
+Conf.115   0     5   4     0
+Conf.116   0     5   4     1
+Conf.117   1     0   0     1
+Conf.118   1     0   0     2
+Conf.119   1     0   0     3
+Conf.120   1     0   0     4
+Conf.121   1     0   0     5
+Conf.122   1     0   1     1
+Conf.123   1     0   1     2
+Conf.124   1     0   1     3
+Conf.125   1     0   1     4
+Conf.126   1     0   1     5
+Conf.127   1     0   2     1
+Conf.128   1     0   2     2
+Conf.129   1     0   2     3
+Conf.130   1     0   2     4
+Conf.131   1     0   2     5
+Conf.132   1     0   3     1
+Conf.133   1     0   3     2
+Conf.134   1     0   3     3
+Conf.135   1     0   3     4
+Conf.136   1     0   3     5
+Conf.137   1     0   4     1
+Conf.138   1     0   4     2
+Conf.139   1     0   4     3
+Conf.140   1     0   4     4
+Conf.141   1     0   4     5
+Conf.142   1     0   5     1
+Conf.143   1     0   5     2
+Conf.144   1     0   5     3
+Conf.145   1     0   5     4
+Conf.146   1     0   5     5
+Conf.147   1     1   0     0
+Conf.148   1     1   0     1
+Conf.149   1     1   0     2
+Conf.150   1     1   0     3
+Conf.151   1     1   0     4
+Conf.152   1     1   0     5
+Conf.153   1     1   1     0
+Conf.154   1     1   1     1
+Conf.155   1     1   1     2
+Conf.156   1     1   1     3
+Conf.157   1     1   1     4
+Conf.158   1     1   1     5
+Conf.159   1     1   2     0
+Conf.160   1     1   2     1
+Conf.161   1     1   2     2
+Conf.162   1     1   2     3
+Conf.163   1     1   2     4
+Conf.164   1     1   2     5
+Conf.165   1     1   3     0
+Conf.166   1     1   3     1
+Conf.167   1     1   3     2
+Conf.168   1     1   3     3
+Conf.169   1     1   3     4
+Conf.170   1     1   3     5
+Conf.171   1     1   4     0
+Conf.172   1     1   4     1
+Conf.173   1     1   4     2
+Conf.174   1     1   4     3
+Conf.175   1     1   4     4
+Conf.176   1     1   4     5
+Conf.177   1     1   5     0
+Conf.178   1     1   5     1
+Conf.179   1     1   5     2
+Conf.180   1     1   5     3
+Conf.181   1     1   5     4
+Conf.182   1     1   5     5
+Conf.183   1     2   0     0
+Conf.184   1     2   0     1
+Conf.185   1     2   0     2
+Conf.186   1     2   0     3
+Conf.187   1     2   0     4
+Conf.188   1     2   1     0
+Conf.189   1     2   1     1
+Conf.190   1     2   1     2
+Conf.191   1     2   1     3
+Conf.192   1     2   1     4
+Conf.193   1     2   2     0
+Conf.194   1     2   2     1
+Conf.195   1     2   2     2
+Conf.196   1     2   2     3
+Conf.197   1     2   2     4
+Conf.198   1     2   3     0
+Conf.199   1     2   3     1
+Conf.200   1     2   3     2
+Conf.201   1     2   3     3
+Conf.202   1     2   3     4
+Conf.203   1     2   4     0
+Conf.204   1     2   4     1
+Conf.205   1     2   4     2
+Conf.206   1     2   4     3
+Conf.207   1     2   4     4
+Conf.208   1     2   5     0
+Conf.209   1     2   5     1
+Conf.210   1     2   5     2
+Conf.211   1     2   5     3
+Conf.212   1     2   5     4
+Conf.213   1     3   0     0
+Conf.214   1     3   0     1
+Conf.215   1     3   0     2
+Conf.216   1     3   0     3
+Conf.217   1     3   1     0
+Conf.218   1     3   1     1
+Conf.219   1     3   1     2
+Conf.220   1     3   1     3
+Conf.221   1     3   2     0
+Conf.222   1     3   2     1
+Conf.223   1     3   2     2
+Conf.224   1     3   2     3
+Conf.225   1     3   3     0
+Conf.226   1     3   3     1
+Conf.227   1     3   3     2
+Conf.228   1     3   3     3
+Conf.229   1     3   4     0
+Conf.230   1     3   4     1
+Conf.231   1     3   4     2
+Conf.232   1     3   4     3
+Conf.233   1     3   5     0
+Conf.234   1     3   5     1
+Conf.235   1     3   5     2
+Conf.236   1     3   5     3
+Conf.237   1     4   0     0
+Conf.238   1     4   0     1
+Conf.239   1     4   0     2
+Conf.240   1     4   1     0
+Conf.241   1     4   1     1
+Conf.242   1     4   1     2
+Conf.243   1     4   2     0
+Conf.244   1     4   2     1
+Conf.245   1     4   2     2
+Conf.246   1     4   3     0
+Conf.247   1     4   3     1
+Conf.248   1     4   3     2
+Conf.249   1     4   4     0
+Conf.250   1     4   4     1
+ [ reached getOption("max.print") -- omitted 359 rows ]
+INFO: Using  8  CPU's for calculation.
+INFO: Done with 609 phase configurations
+INFO: Calculation took: 23.703 seconds
+
+---------------
+/home/marcelo/repos/MAPpoly/man/calc_genoprob_dist.Rd -- 2020-09-23 16:03:45
+
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:6
+Number of individuals:300
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	
+
+---------------
+/home/marcelo/repos/MAPpoly/man/calc_genoprob_error.Rd -- 2020-09-23 16:05:58
+
+	Ploidy level: 4
+	Number of markers: 373
+	Number of individuals: 160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+
+---------------
+/home/marcelo/repos/MAPpoly/man/calc_genoprob.Rd -- 2020-09-23 16:06:06
+
+	Ploidy level: 4
+	Number of markers: 373
+	Number of individuals: 160
+	..................................................
+	..................................................
+	..................................................
+	..........
+	Ploidy level: 6
+	Number of markers: 538
+	Number of individuals: 300
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	
+
+---------------
+/home/marcelo/repos/MAPpoly/man/calc_homoprob.Rd -- 2020-09-23 16:06:43
+
+	Ploidy level: 4
+	Number of markers: 373
+	Number of individuals: 160
+	..................................................
+	..................................................
+	..................................................
+	..........
+	Ploidy level: 4
+	Number of markers: 250
+	Number of individuals: 160
+	..................................................
+	..................................................
+	..................................................
+	..........
+	Ploidy level: 4
+	Number of markers: 272
+	Number of individuals: 160
+	..................................................
+	..................................................
+	..................................................
+	..........
+	Ploidy level: 4
+	Number of markers: 359
+	Number of individuals: 160
+	..................................................
+	..................................................
+	..................................................
+	..........
+	Ploidy level: 4
+	Number of markers: 245
+	Number of individuals: 160
+	..................................................
+	..................................................
+	..................................................
+	..........
+	Ploidy level: 4
+	Number of markers: 368
+	Number of individuals: 160
+	..................................................
+	..................................................
+	..................................................
+	..........
+	Ploidy level: 4
+	Number of markers: 328
+	Number of individuals: 160
+	..................................................
+	..................................................
+	..................................................
+	..........
+	Ploidy level: 4
+	Number of markers: 249
+	Number of individuals: 160
+	..................................................
+	..................................................
+	..................................................
+	..........
+	Ploidy level: 4
+	Number of markers: 262
+	Number of individuals: 160
+	..................................................
+	..................................................
+	..................................................
+	..........
+	Ploidy level: 4
+	Number of markers: 197
+	Number of individuals: 160
+	..................................................
+	..................................................
+	..................................................
+	..........
+	Ploidy level: 4
+	Number of markers: 237
+	Number of individuals: 160
+	..................................................
+	..................................................
+	..................................................
+	..........
+	Ploidy level: 4
+	Number of markers: 196
+	Number of individuals: 160
+	..................................................
+	..................................................
+	..................................................
+	..........
+
+Linkage group  1 ...
+Linkage group  2 ...
+Linkage group  3 ...
+Linkage group  4 ...
+Linkage group  5 ...
+Linkage group  6 ...
+Linkage group  7 ...
+Linkage group  8 ...
+Linkage group  9 ...
+Linkage group  10 ...
+Linkage group  11 ...
+Linkage group  12 ...
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+
+Linkage group  1 ...
+Linkage group  2 ...
+Linkage group  3 ...
+Linkage group  4 ...
+Linkage group  5 ...
+Linkage group  6 ...
+Linkage group  7 ...
+Linkage group  8 ...
+Linkage group  9 ...
+Linkage group  10 ...
+Linkage group  11 ...
+Linkage group  12 ...
+	Ploidy level: 6
+	Number of markers: 538
+	Number of individuals: 300
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	
+	Ploidy level: 6
+	Number of markers: 329
+	Number of individuals: 300
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	
+	Ploidy level: 6
+	Number of markers: 443
+	Number of individuals: 300
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	
+
+Linkage group  1 ...
+Linkage group  2 ...
+Linkage group  3 ...
+Warning in if (lg == "all") lg <- unique(x$homoprob$LG) :
+  the condition has length > 1 and only the first element will be used
+Using 'stack = TRUE' to plot multiple linkage groups
+Using 'stack = TRUE' to plot multiple linkage groups
+
+---------------
+/home/marcelo/repos/MAPpoly/man/calc_prefpair_profiles.Rd -- 2020-09-23 16:10:42
+
+	Ploidy level: 6
+	Number of markers: 538
+	Number of individuals: 300
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	
+	Ploidy level: 6
+	Number of markers: 329
+	Number of individuals: 300
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	
+	Ploidy level: 6
+	Number of markers: 443
+	Number of individuals: 300
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	..................................................
+	
+
+Linkage group  1 ...
+Linkage group  2 ...
+Linkage group  3 ...
+  This is an object of class 'mappoly.prefpair.profiles'
+  -----------------------------------------------------
+  No. positions:                             1310 in 3 LGs
+  No. individuals:                           300 
+  -----------------------------------------------------
+  Pairing configurations:
+     Parent 1:
+           ad/be/cf    af/bd/ce    ac/be/df    af/bc/de    ab/ce/df    
+           ad/bf/ce    ae/bf/cd    ac/bf/de    ac/bd/ef    ab/cf/de    
+           ae/bd/cf    af/be/cd    ae/bc/df    ad/bc/ef    ab/cd/ef    
+     Parent 2:
+           gk/hj/il    gl/hk/ij    gk/hi/jl    gj/hi/kl    gh/ij/kl    
+           gl/hj/ik    gi/hk/jl    gl/hi/jk    gh/ik/jl    gj/hl/ik    
+           gk/hl/ij    gi/hl/jk    gi/hj/kl    gh/il/jk    gj/hk/il    
+  -----------------------------------------------------
+  Homolog pairs:
+     Parent 1:
+           ab    ae    bd    cd    de    
+           ac    af    be    ce    df    
+           ad    bc    bf    cf    ef    
+     Parent 2:
+           gh    gk    hj    ij    jk    
+           gi    gl    hk    ik    jl    
+           gj    hi    hl    il    kl    
+  -----------------------------------------------------
+`geom_smooth()` using method = 'loess' and formula 'y ~ x'
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+Ploidy level:4
+Number of individuals:160
+	..................................................
+	..................................................
+	..................................................
+	..........
+
+Linkage group  1 ...
+Linkage group  2 ...
+Linkage group  3 ...
+Linkage group  4 ...
+Linkage group  5 ...
+Linkage group  6 ...
+Linkage group  7 ...
+Linkage group  8 ...
+Linkage group  9 ...
+Linkage group  10 ...
+Linkage group  11 ...
+Linkage group  12 ...
+  This is an object of class 'mappoly.prefpair.profiles'
+  -----------------------------------------------------
+  No. positions:                             3341 in 12 LGs
+  No. individuals:                           160 
+  -----------------------------------------------------
+  Pairing configurations:
+     Parent 1:
+           ac/bd    ad/bc    ab/cd    
+     Parent 2:
+           ef/gh    eg/fh    eh/fg    
+  -----------------------------------------------------
+  Homolog pairs:
+     Parent 1:
+           ab    ac    ad    bc    bd    cd    
+     Parent 2:
+           ef    eg    eh    fg    fh    gh    
+  -----------------------------------------------------
+`geom_smooth()` using method = 'loess' and formula 'y ~ x'
+`geom_smooth()` using method = 'loess' and formula 'y ~ x'
+`geom_smooth()` using method = 'loess' and formula 'y ~ x'
+
+---------------
+/home/marcelo/repos/MAPpoly/man/check_data_sanity.Rd -- 2020-09-23 16:13:29
+
+trying URL 'https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage'
+Content type 'text/plain; charset=utf-8' length 1445956 bytes (1.4 MB)
+==================================================
+downloaded 1.4 MB
+
+Reading the following data:
+    Ploidy level: 4
+    No. individuals:  160
+    No. markers:  4017
+    No. informative markers:  4017 (100%)
+    This dataset contains sequence information.
+    ...
+
+    Done with reading.
+    Filtering non-conforming markers.
+    ...
+    Performing chi-square test.
+    ...
+    Done.
+trying URL 'https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexafake'
+Content type 'text/plain; charset=utf-8' length 933619 bytes (911 KB)
+==================================================
+downloaded 911 KB
+
+Reading the following data:
+    Ploidy level: 6
+    No. individuals:  300
+    No. markers:  1500
+    No. informative markers:  1500 (100%)
+    This dataset contains sequence information.
+    ...
+
+    Done with reading.
+    Filtering non-conforming markers.
+    ...
+    Performing chi-square test.
+    ...
+    Done.
+
+---------------
+/home/marcelo/repos/MAPpoly/man/dist_prob_to_class.Rd -- 2020-09-23 16:13:43
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/drop_marker.Rd -- 2020-09-23 16:14:02
+
+
+    You selected: reestimate.rf = FALSE
+    -----------------------------------------
+    The recombination fractions provided were
+    obtained using the marker positions in the 
+    input map; For accurate values, plese 
+    reestimate the map using functions 'reest_rf', 
+    'est_full_hmm_with_global_error' or 
+    'est_full_hmm_with_prior_prob'
+
+    INFO:
+    -----------------------------------------
+    The recombination fractions provided were
+    obtained using the marker positions in the 
+    input map; For accurate values, plese 
+    reestimate the map using functions 'reest_rf', 
+    'est_full_hmm_with_global_error' or 
+    'est_full_hmm_with_prior_prob'
+
+---------------
+/home/marcelo/repos/MAPpoly/man/elim_redundant.Rd -- 2020-09-23 16:14:02
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/est_full_hmm_with_global_error.Rd -- 2020-09-23 16:14:02
+
+INFO: Going singlemode. Using one CPU for calculation.
+Number of markers: 20
+═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ Initial sequence ══
+4 markers...
+●    Trying sequence: 1 2 3 4 :
+       6 phase(s): . . . . . . 
+═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════ Done with initial sequence ══
+5 /5 :(25%)    5 : 1 ph     (1/1)       -- tail: 4  |||●|| ||||||                     
+6 /6 :(30%)    6 : 1 ph     (1/1)       -- tail: 5  |||●|| ||||||                     
+7 /7 :(35%)    7 : 4 ph     (1/4)       -- tail: 6  |●●||| ||●|||  ...  |●●||| ||||●| 
+8 /8 :(40%)    8 : 1 ph     (1/1)       -- tail: 7  ●||||| ●●||●●                     
+9 /9 :(45%)    9 : 2 ph     (1/2)       -- tail: 8  |●|||| ||||||       ||||●| |||||| 
+10/10:(50%)    10: 20 ph    (1/20)      -- tail: 9  ●●|||| ●●●|||  ...  ●●|||| ●●|●|| 
+11/11:(55%)    11: 1 ph     (1/1)       -- tail: 10 ||||●| ||||||                     
+12/12:(60%)    12: 1 ph     (1/1)       -- tail: 11 |●||●| ||●|||                     
+13/13:(65%)    13: 3 ph     (1/3)       -- tail: 12 |●|●|| ●|●●||  ...  |●|●|| |●●●|| 
+14/14:(70%)    14: 1 ph     (1/1)       -- tail: 13 ||●|●| ||||||                     
+15/15:(75%)    15: 4 ph     (1/4)       -- tail: 14 ●||||| ||||||  ...  |●|||| |||||| 
+16/16:(80%)    16: 1 ph     (1/1)       -- tail: 15 |||||| |||●||                     
+17/17:(85%)    17: 1 ph     (1/1)       -- tail: 16 ||||●| ||●|||                     
+18/18:(90%)    18: 1 ph     (1/1)       -- tail: 17 ||||●| ||●|||                     
+19/19:(95%)    19: 4 ph     (1/4)       -- tail: 18 ||●||| |●||||  ...  ||●||| ||||●| 
+20/20:(100%)   20: 1 ph     (1/1)       -- tail: 19 ||||●| ||●|||                     
+═══════════════════════════════════════════════════════════════════════════════════════════════════ Reestimating final recombination fractions ══
+Markers in the initial sequence: 20
+Mapped markers                  : 20 (100%)
+═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+
+ ----------------------------------------------
+ INFO: running HMM using full transition space:
+       this operation may take a while.
+-----------------------------------------------
+Ploidy level:6
+Number of individuals:300
+	
+0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.006 0.002 0.004 0.000 0.005 0.001 	
+0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.006 0.002 0.004 0.000 0.004 0.001 	
+0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.006 0.002 0.004 0.000 0.004 0.001 	
+0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.006 0.002 0.004 0.000 0.004 0.001 	
+0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.000 0.006 0.002 0.004 0.000 0.004 0.001 
+
+---------------
+/home/marcelo/repos/MAPpoly/man/est_full_hmm_with_prior_prob.Rd -- 2020-09-23 16:17:37
+
+Lg  1 ...
+ ----------------------------------------------
+ INFO: running HMM using full transition space:
+       this operation may take a while.
+-----------------------------------------------
+
+Lg  2 ...
+ ----------------------------------------------
+ INFO: running HMM using full transition space:
+       this operation may take a while.
+-----------------------------------------------
+
+Lg  3 ...
+ ----------------------------------------------
+ INFO: running HMM using full transition space:
+       this operation may take a while.
+-----------------------------------------------
+
+Lg  4 ...
+ ----------------------------------------------
+ INFO: running HMM using full transition space:
+       this operation may take a while.
+-----------------------------------------------
+
+Lg  5 ...
+ ----------------------------------------------
+ INFO: running HMM using full transition space:
+       this operation may take a while.
+-----------------------------------------------
+
+Lg  6 ...
+ ----------------------------------------------
+ INFO: running HMM using full transition space:
+       this operation may take a while.
+-----------------------------------------------
+
+Lg  7 ...
+ ----------------------------------------------
+ INFO: running HMM using full transition space:
+       this operation may take a while.
+-----------------------------------------------
+
+Lg  8 ...
+ ----------------------------------------------
+ INFO: running HMM using full transition space:
+       this operation may take a while.
+-----------------------------------------------
+
+Lg  9 ...
+ ----------------------------------------------
+ INFO: running HMM using full transition space:
+       this operation may take a while.
+-----------------------------------------------
+
+Lg  10 ...
+ ----------------------------------------------
+ INFO: running HMM using full transition space:
+       this operation may take a while.
+-----------------------------------------------
+
+Lg  11 ...
+ ----------------------------------------------
+ INFO: running HMM using full transition space:
+       this operation may take a while.
+-----------------------------------------------
+
+Lg  12 ...
+ ----------------------------------------------
+ INFO: running HMM using full transition space:
+       this operation may take a while.
+-----------------------------------------------
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/est_pairwise_rf.Rd -- 2020-09-23 16:26:46
+
+INFO: Using  7  CPUs for calculation.
+INFO: Done with 6765681  pairs of markers 
+INFO: Calculation took: 810.675 seconds
+INFO: Going singlemode. Using one CPU.
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr1.vcf.gz'
+Content type 'application/octet-stream' length 10644125 bytes (10.2 MB)
+==================================================
+downloaded 10.2 MB
+
+Reading data...
+Scanning file to determine attributes.
+File attributes:
+  meta lines: 8
+  header_line: 9
+  variant count: 7301
+  column count: 326
+
+Meta line 8 read in.
+All meta lines processed.
+gt matrix initialized.
+Character matrix gt created.
+  Character matrix gt rows: 7301
+  Character matrix gt cols: 326
+  skip: 0
+  nrows: 7301
+  row_num: 0
+
+Processed variant 1000
+Processed variant 2000
+Processed variant 3000
+Processed variant 4000
+Processed variant 5000
+Processed variant 6000
+Processed variant 7000
+Processed variant: 7301
+All variants processed
+Processing genotypes...Done!
+Selected ploidy: 6 
+Done!
+Read the following data:
+    Ploidy level: 6
+    No. individuals:  315
+    No. markers:  5514
+    No. informative markers:  5514 (100%)
+    This dataset contains sequence information.
+    ...
+    Done with reading.
+    Filtering non-conforming markers.
+    ...
+    Performing chi-square test.
+    ...
+    Done.
+
+---------------
+/home/marcelo/repos/MAPpoly/man/est_rf_hmm_sequential.Rd -- 2020-09-23 16:43:38
+
+INFO: Using  7  CPUs for calculation.
+INFO: Done with 76245  pairs of markers 
+INFO: Calculation took: 19.847 seconds
+Number of markers: 100
+═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ Initial sequence ══
+10 markers...
+●    Trying sequence: 1 2 3 4 5 6 7 8 9 10 :
+       6 phase(s): . . . . . . 
+═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════ Done with initial sequence ══
+11 /11 :(11%)    79 : 1 ph     (1/1)       -- tail: 10  ●●|| ●●●|                     
+12 /12 :(12%)    80 : 4 ph     (1/4)       -- tail: 11  ●|●● ●●|●  ...  ●|●● |●●● 
+13 /13 :(13%)    81 : 1 ph     (1/1)       -- tail: 12  |●●● ●●●●                     
+14 /14 :(14%)    82 : 1 ph     (1/1)       -- tail: 13  ●||| ●|||                     
+15 /15 :(15%)    83 : 1 ph     (1/1)       -- tail: 14  ●||| ●|||                     
+16 /16 :(16%)    84 : 1 ph     (1/1)       -- tail: 15  ●|●● ●||●                     
+17 /17 :(17%)    85 : 1 ph     (1/1)       -- tail: 16  |●●● ●●●●                     
+18 /18 :(18%)    86 : 1 ph     (1/1)       -- tail: 17  |||| |||●                     
+19 /19 :(19%)    87 : 1 ph     (1/1)       -- tail: 18  |●●| |●●|                     
+20 /20 :(20%)    88 : 1 ph     (1/1)       -- tail: 19  |●●| |●●|                     
+21 /21 :(21%)    89 : 1 ph     (1/1)       -- tail: 20  |●●| |●●|                     
+22 /22 :(22%)    90 : 1 ph     (1/1)       -- tail: 21  |●●| |●●|                     
+23 /23 :(23%)    91 : 4 ph     (1/4)       -- tail: 22  |●|| ●●●|  ...  |●|| |●●● 
+23: not included (map extension)
+23 /24 :(24%)    92 : 1 ph     (1/1)       -- tail: 22  |●●| |●●|                     
+24 /25 :(25%)    93 : 3 ph     (1/3)       -- tail: 23  ●●|| |●||  ...  |●●| |●|| 
+25 /26 :(26%)    94 : 2 ph     (1/2)       -- tail: 24  |●|| |●●|       ||●| |●●| 
+26 /27 :(27%)    95 : 1 ph     (1/1)       -- tail: 25  |●●● |●●|                     
+27 /28 :(28%)    96 : 3 ph     (1/3)       -- tail: 26  ●|●| |●●|  ...  |●●| |●●| 
+28 /29 :(29%)    97 : 1 ph     (1/1)       -- tail: 27  ||●| ||||                     
+29 /30 :(30%)    98 : 1 ph     (1/1)       -- tail: 28  ●●|● ●●●●                     
+30 /31 :(31%)    99 : 1 ph     (1/1)       -- tail: 29  |●|● ||||                     
+31 /32 :(32%)    100: 1 ph     (1/1)       -- tail: 30  |||| |||●                     
+32 /33 :(33%)    101: 2 ph     (1/2)       -- tail: 30  ●●●| ●●●●       ●|●● ●●●● 
+33 /34 :(34%)    102: 1 ph     (1/1)       -- tail: 30  |●●| ||||                     
+34 /35 :(35%)    103: 2 ph     (1/2)       -- tail: 30  ●●|● ●●●●       ●|●● ●●●● 
+35 /36 :(36%)    104: 2 ph     (1/2)       -- tail: 30  ●●|● ●|||       ●●|● |||● 
+36 /37 :(37%)    105: 2 ph     (1/2)       -- tail: 30  |||● ●●|●       |||● ●|●● 
+37: not included (map extension)
+36 /38 :(38%)    106: 1 ph     (1/1)       -- tail: 30  |●●| ||||                     
+37 /39 :(39%)    107: 4 ph     (1/4)       -- tail: 30  ●||● ●●●|  ...  ●||● ●●|● 
+38 /40 :(40%)    108: 1 ph     (1/1)       -- tail: 30  |||● ||||                     
+39 /41 :(41%)    109: 1 ph     (1/1)       -- tail: 30  ●●●| ●●●●                     
+40 /42 :(42%)    110: 1 ph     (1/1)       -- tail: 30  |||● ●|||                     
+41 /43 :(43%)    111: 1 ph     (1/1)       -- tail: 30  |●●● ●|||                     
+42 /44 :(44%)    112: 1 ph     (1/1)       -- tail: 30  |●●● ●|||                     
+43 /45 :(45%)    113: 1 ph     (1/1)       -- tail: 30  |||| |●●●                     
+44 /46 :(46%)    114: 2 ph     (1/2)       -- tail: 30  ●|●| |●●●       |●|● |●●● 
+45 /47 :(47%)    115: 1 ph     (1/1)       -- tail: 30  ●|●| ●|||                     
+46 /48 :(48%)    116: 1 ph     (1/1)       -- tail: 30  |●|● ||||                     
+47 /49 :(49%)    117: 1 ph     (1/1)       -- tail: 30  ●|●| ||||                     
+48 /50 :(50%)    118: 1 ph     (1/1)       -- tail: 30  |●|● |●●●                     
+49 /51 :(51%)    119: 1 ph     (1/1)       -- tail: 30  ●|●| |●●●                     
+50 /52 :(52%)    120: 1 ph     (1/1)       -- tail: 30  |●|● ||||                     
+51 /53 :(53%)    121: 1 ph     (1/1)       -- tail: 30  |●|● ||||                     
+52 /54 :(54%)    122: 1 ph     (1/1)       -- tail: 30  |●|● ||||                     
+53 /55 :(55%)    123: 1 ph     (1/1)       -- tail: 30  |●|● |●||                     
+54 /56 :(56%)    124: 1 ph     (1/1)       -- tail: 30  |||| ●|||                     
+55 /57 :(57%)    125: 1 ph     (1/1)       -- tail: 30  ●●●● |●●●                     
+56 /58 :(58%)    126: 1 ph     (1/1)       -- tail: 30  |||| ●|||                     
+57 /59 :(59%)    127: 16 ph    (1/16)      -- tail: 30  ●●●| ●|||  ...  ●●●| |●|| 
+59: not included (map extension)
+57 /60 :(60%)    128: 4 ph     (1/4)       -- tail: 30  |||| ●|||  ...  |||| |●|| 
+58 /61 :(61%)    129: 1 ph     (1/1)       -- tail: 30  ●●●● ●●|●                     
+59 /62 :(62%)    130: 1 ph     (1/1)       -- tail: 30  ●●●● |●●●                     
+60 /63 :(63%)    131: 1 ph     (1/1)       -- tail: 30  |||| ●|||                     
+61 /64 :(64%)    132: 1 ph     (1/1)       -- tail: 30  |||| ●|||                     
+62 /65 :(65%)    133: 3 ph     (1/3)       -- tail: 30  |●|● |●●|  ...  |●|● |●|● 
+63 /66 :(66%)    134: 1 ph     (1/1)       -- tail: 30  |||● ||||                     
+64 /67 :(67%)    135: 1 ph     (1/1)       -- tail: 30  ●|●| |●||                     
+65 /68 :(68%)    136: 4 ph     (1/4)       -- tail: 30  ●||| ||●|  ...  |●|| ||●| 
+66 /69 :(69%)    137: 1 ph     (1/1)       -- tail: 30  ●●●| |●●|                     
+67 /70 :(70%)    138: 1 ph     (1/1)       -- tail: 30  ●|●| |●||                     
+68 /71 :(71%)    139: 1 ph     (1/1)       -- tail: 30  ●|●| |●|●                     
+69 /72 :(72%)    140: 2 ph     (1/2)       -- tail: 30  |||| |●||       |||| |||● 
+70 /73 :(73%)    141: 1 ph     (1/1)       -- tail: 30  |●|● ||||                     
+71 /74 :(74%)    142: 1 ph     (1/1)       -- tail: 30  |||| ●|●●                     
+72 /75 :(75%)    143: 1 ph     (1/1)       -- tail: 30  |||| ●|||                     
+73 /76 :(76%)    144: 1 ph     (1/1)       -- tail: 31  |||| |||●                     
+74 /77 :(77%)    145: 1 ph     (1/1)       -- tail: 32  ●●●● |●●●                     
+75 /78 :(78%)    146: 1 ph     (1/1)       -- tail: 33  |||| ||●●                     
+76 /79 :(79%)    147: 1 ph     (1/1)       -- tail: 34  ●●●● ●|●●                     
+77 /80 :(80%)    148: 1 ph     (1/1)       -- tail: 35  |||| ●|●|                     
+78 /81 :(81%)    149: 1 ph     (1/1)       -- tail: 36  |||| ●|●|                     
+79 /82 :(82%)    150: 4 ph     (1/4)       -- tail: 37  ●||| ●●●●  ...  |●|| ●●●● 
+82: not included (map extension)
+79 /83 :(83%)    151: 1 ph     (1/1)       -- tail: 37  ●●●● |●●●                     
+80 /84 :(84%)    152: 1 ph     (1/1)       -- tail: 38  |||| ●|||                     
+81 /85 :(85%)    153: 1 ph     (1/1)       -- tail: 39  |||| ●|||                     
+82 /86 :(86%)    154: 1 ph     (1/1)       -- tail: 40  |||| ●|||                     
+83 /87 :(87%)    155: 1 ph     (1/1)       -- tail: 41  |||| ●|||                     
+84 /88 :(88%)    156: 1 ph     (1/1)       -- tail: 42  |||| |||●                     
+85 /89 :(89%)    157: 1 ph     (1/1)       -- tail: 43  ●●●● |●●●                     
+86 /90 :(90%)    158: 1 ph     (1/1)       -- tail: 44  |||| ●|||                     
+87 /91 :(91%)    159: 1 ph     (1/1)       -- tail: 45  |●|● ||||                     
+88 /92 :(92%)    160: 1 ph     (1/1)       -- tail: 46  |||| ●|●●                     
+89 /93 :(93%)    161: 1 ph     (1/1)       -- tail: 47  ●●●● ●●|●                     
+90 /94 :(94%)    162: 1 ph     (1/1)       -- tail: 48  |||| |||●                     
+91 /95 :(95%)    163: 1 ph     (1/1)       -- tail: 49  ●●●● |●||                     
+92 /96 :(96%)    164: 1 ph     (1/1)       -- tail: 50  ●●●● |●||                     
+93 /97 :(97%)    165: 1 ph     (1/1)       -- tail: 51  |●|● ||||                     
+94 /98 :(98%)    166: 1 ph     (1/1)       -- tail: 52  ●|●| |●||                     
+95 /99 :(99%)    167: 1 ph     (1/1)       -- tail: 53  ●|●| |●||                     
+96 /100:(100%)   168: 1 ph     (1/1)       -- tail: 54  |||| ●|||                     
+═══════════════════════════════════════════════════════════════════════════════════════════════════ Reestimating final recombination fractions ══
+Markers in the initial sequence: 100
+Mapped markers                  : 96 (96%)
+═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+This is an object of class 'mappoly.map'
+    Ploidy level:	 4 
+    No. individuals:	 160 
+    No. markers:	 96 
+    No. linkage phases:	 1 
+
+    ---------------------------------------------
+    Linkage phase configuration:  1
+       log-likelihood:	 -1099.254
+       LOD:		 0
+
+	                     	 a b c d         e f g h   
+ 	 solcap_snp_c2_51460 	 o o | |         o o o |       0 
+ 	 solcap_snp_c2_36608 	 o | o o         o | | o       3 
+ 	 solcap_snp_c2_36615 	 o | o o         o | | o       3 
+ 	 solcap_snp_c2_36658 	 | | o o         | | | o       3 
+ 	 solcap_snp_c1_10930 	 | | o o         | | | o       4 
+ 	 solcap_snp_c2_36629 	 | | o o         | | | o       5 
+ 	 solcap_snp_c1_10915 	 o o | |         o o o |       6 
+ 	 solcap_snp_c1_10918 	 | o | |         | o o |       6 
+ 	 solcap_snp_c2_36650 	 | o | |         | o o |       8 
+ 	 solcap_snp_c2_36643 	 | | o o         o | | o       9 
+ 	 solcap_snp_c2_36660 	 o o | |         o o o |       9 
+ 	 solcap_snp_c2_36664 	 | o o o         | o o o       9 
+ 	 solcap_snp_c2_36686 	 | o o o         o o o o       9 
+ 	 solcap_snp_c2_54803 	 o | | |         o | | |      10 
+ 	 solcap_snp_c2_54800 	 o | | |         o | | |      10 
+ 	 solcap_snp_c2_54797 	 o | o o         o | | o      10 
+ 	 solcap_snp_c2_56714 	 | o o o         o o o o      10 
+ 	 solcap_snp_c2_6865  	 | | | |         | | | o      13 
+ 	 solcap_snp_c2_6683  	 | o o |         | o o |      15 
+ 	 solcap_snp_c1_2417  	 | o o |         | o o |      15 
+ 	 solcap_snp_c2_6713  	 | o o |         | o o |      16 
+ 	 solcap_snp_c2_21098 	 | o o |         | o o |      18 
+ 	 solcap_snp_c2_21100 	 | o o |         | o o |      19 
+ 	 solcap_snp_c2_21233 	 | o | o         | o | |      21 
+ 	 solcap_snp_c1_6704  	 | | o |         | o o |      21 
+ 	 solcap_snp_c2_21236 	 | o o o         | o o |      22 
+ 	 solcap_snp_c1_6123  	 o | o |         | o o |      26 
+ 	 solcap_snp_c1_6114  	 | | o |         | | | |      26 
+ 	 solcap_snp_c1_6109  	 o o | o         o o o o      27 
+ 	 solcap_snp_c2_51810 	 | o | o         | | | |      30 
+ 	 solcap_snp_c2_51791 	 | | | |         | | | o      31 
+ 	 solcap_snp_c2_49938 	 o o o |         o o o o      31 
+ 	 solcap_snp_c2_56125 	 | o o |         | | | |      34 
+ 	 solcap_snp_c2_45058 	 o | o o         o o o o      35 
+ 	 solcap_snp_c2_45071 	 o o | o         o | | |      36 
+ 	 solcap_snp_c2_45064 	 | o o |         | | | |      36 
+ 	 solcap_snp_c1_13289 	 o | | o         | o o o      36 
+ 	 solcap_snp_c1_13293 	 | | | o         | | | |      36 
+ 	 solcap_snp_c2_27877 	 o o o |         o o o o      38 
+ 	 solcap_snp_c2_27878 	 | | | o         o | | |      38 
+ 	 solcap_snp_c2_27882 	 | o o o         o | | |      38 
+ 	 solcap_snp_c2_27884 	 | o o o         o | | |      38 
+ 	 solcap_snp_c2_27885 	 | | | |         | o o o      39 
+ 	 solcap_snp_c2_27903 	 | o | o         | o o o      40 
+ 	 solcap_snp_c2_27900 	 o | o |         o | | |      41 
+ 	 solcap_snp_c2_27918 	 | o | o         | | | |      41 
+ 	 solcap_snp_c2_48155 	 o | o |         | | | |      42 
+ 	 solcap_snp_c2_48154 	 | o | o         | o o o      42 
+ 	 solcap_snp_c2_50011 	 o | o |         | o o o      42 
+ 	 solcap_snp_c1_16312 	 | o | o         | | | |      44 
+ 	 solcap_snp_c2_52709 	 | o | o         | | | |      45 
+ 	 solcap_snp_c2_52712 	 | o | o         | | | |      45 
+ 	 solcap_snp_c2_52705 	 | o | o         | o | |      45 
+ 	 solcap_snp_c2_48549 	 | | | |         o | | |      53 
+ 	 solcap_snp_c2_48563 	 o o o o         | o o o      53 
+ 	 solcap_snp_c2_55639 	 | | | |         o | | |      53 
+ 	 solcap_snp_c2_56356 	 | | | |         | | o |      53 
+ 	 solcap_snp_c2_56359 	 o o o o         o o | o      53 
+ 	 solcap_snp_c2_57284 	 o o o o         | o o o      54 
+ 	 solcap_snp_c2_45637 	 | | | |         o | | |      54 
+ 	 solcap_snp_c2_55008 	 | | | |         o | | |      58 
+ 	 solcap_snp_c2_53521 	 | o | o         | | o o      58 
+ 	 solcap_snp_c2_43984 	 | | | o         | | | |      58 
+ 	 solcap_snp_c1_12938 	 o | o |         | o | |      59 
+ 	 solcap_snp_c2_43970 	 | o | |         | | o |      60 
+ 	 solcap_snp_c2_43973 	 o o o |         | o o |      61 
+ 	 solcap_snp_c1_8908  	 o | o |         | o | |      62 
+ 	 solcap_snp_c2_54355 	 o | o |         | o | o      65 
+ 	 solcap_snp_c2_54353 	 | | | |         | | | o      68 
+ 	 solcap_snp_c2_49867 	 | o | o         | | | |      68 
+ 	 solcap_snp_c2_48568 	 | | | |         o | o o      68 
+ 	 solcap_snp_c1_8593  	 | | | |         o | | |      68 
+ 	 solcap_snp_c2_53759 	 | | | |         | | | o      68 
+ 	 solcap_snp_c2_56842 	 o o o o         | o o o      68 
+ 	 solcap_snp_c1_16421 	 | | | |         | | o o      68 
+ 	 solcap_snp_c1_14663 	 o o o o         o | o o      68 
+ 	 solcap_snp_c2_49326 	 | | | |         o | o |      70 
+ 	 solcap_snp_c1_5477  	 | | | |         o | o |      70 
+ 	 solcap_snp_c2_43643 	 o o o o         | o o o      71 
+ 	 solcap_snp_c2_22549 	 | | | |         o | | |      71 
+ 	 solcap_snp_c2_22546 	 | | | |         o | | |      71 
+ 	 solcap_snp_c1_7136  	 | | | |         o | | |      71 
+ 	 solcap_snp_c1_11066 	 | | | |         o | | |      72 
+ 	 solcap_snp_c1_9378  	 | | | |         | | | o      72 
+ 	 solcap_snp_c2_27683 	 o o o o         | o o o      72 
+ 	 solcap_snp_c2_27677 	 | | | |         o | | |      72 
+ 	 solcap_snp_c2_42829 	 | o | o         | | | |      73 
+ 	 solcap_snp_c1_15714 	 | | | |         o | o o      73 
+ 	 solcap_snp_c2_45395 	 o o o o         o o | o      74 
+ 	 solcap_snp_c2_49732 	 | | | |         | | | o      76 
+ 	 solcap_snp_c1_14648 	 o o o o         | o | |      76 
+ 	 solcap_snp_c1_14654 	 o o o o         | o | |      76 
+ 	 solcap_snp_c2_32111 	 | o | o         | | | |      76 
+ 	 solcap_snp_c2_32112 	 o | o |         | o | |      77 
+ 	 solcap_snp_c2_50028 	 o | o |         | o | |      79 
+ 	 solcap_snp_c2_50023 	 | | | |         o | | |      79 
+ INFO: Going singlemode. Using one CPU for calculation.
+Number of markers: 47
+═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ Initial sequence ══
+4 markers...
+●    Trying sequence: 1 2 3 4 :
+       6 phase(s): . . . . . . 
+═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════ Done with initial sequence ══
+5 /5 :(10.6%)  5 : 1 ph     (1/1)       -- tail: 4  |||●|| ||||||                     
+6 /6 :(12.8%)  7 : 4 ph     (1/4)       -- tail: 5  |●●||| ||●|||  ...  |●●||| ||||●| 
+7 /7 :(14.9%)  8 : 1 ph     (1/1)       -- tail: 6  ●||||| ●●||●●                     
+8 /8 :(17%)    9 : 2 ph     (1/2)       -- tail: 7  |●|||| ||||||       ||||●| |||||| 
+9 /9 :(19.1%)  10: 20 ph    (1/20)      -- tail: 8  ●●|||| ●●●|||  ...  ●●|||| ●●|●|| 
+10/10:(21.3%)  12: 1 ph     (1/1)       -- tail: 9  |●||●| ||●|||                     
+11/11:(23.4%)  13: 3 ph     (1/3)       -- tail: 10 |●|●|| ●|●●||  ...  |●|●|| |●●●|| 
+12/12:(25.5%)  14: 1 ph     (1/1)       -- tail: 11 ||●|●| ||||||                     
+13/13:(27.7%)  15: 4 ph     (1/4)       -- tail: 12 ●||||| ||||||  ...  |●|||| |||||| 
+14/14:(29.8%)  16: 1 ph     (1/1)       -- tail: 13 |||||| |||●||                     
+15/15:(31.9%)  17: 1 ph     (1/1)       -- tail: 14 ||||●| ||●|||                     
+16/16:(34%)    19: 4 ph     (1/4)       -- tail: 15 ||●||| |●||||  ...  ||●||| ||||●| 
+17/17:(36.2%)  20: 1 ph     (1/1)       -- tail: 16 ||||●| ||●|||                     
+18/18:(38.3%)  21: 1 ph     (1/1)       -- tail: 17 ||●●|● |||●||                     
+19/19:(40.4%)  22: 1 ph     (1/1)       -- tail: 18 ●||||| ●|||●●                     
+20/20:(42.6%)  23: 1 ph     (1/1)       -- tail: 19 |●|||| ||||||                     
+21/21:(44.7%)  24: 1 ph     (1/1)       -- tail: 20 |||||● ||||||                     
+22/22:(46.8%)  25: 1 ph     (1/1)       -- tail: 21 |●||●| ||●|||                     
+23/23:(48.9%)  26: 1 ph     (1/1)       -- tail: 22 |||||● ||||||                     
+24/24:(51.1%)  27: 1 ph     (1/1)       -- tail: 23 ●|●|●| ●●||||                     
+25/25:(53.2%)  28: 1 ph     (1/1)       -- tail: 24 |||●|| |||●||                     
+26/26:(55.3%)  29: 1 ph     (1/1)       -- tail: 25 |||●|| |||●||                     
+27/27:(57.4%)  30: 1 ph     (1/1)       -- tail: 26 |||||| |●●|||                     
+28/28:(59.6%)  31: 1 ph     (1/1)       -- tail: 27 |●|||● |●●|||                     
+29/29:(61.7%)  32: 1 ph     (1/1)       -- tail: 28 |||||| |||●||                     
+30/30:(63.8%)  33: 1 ph     (1/1)       -- tail: 29 |||●|| ||||||                     
+31/31:(66%)    34: 1 ph     (1/1)       -- tail: 30 ||||●| ●|||||                     
+32/32:(68.1%)  35: 1 ph     (1/1)       -- tail: 31 |●|||| ||||||                     
+33/33:(70.2%)  36: 1 ph     (1/1)       -- tail: 32 |●|||| ||●|||                     
+34/34:(72.3%)  37: 1 ph     (1/1)       -- tail: 33 |||||| |||●||                     
+35/35:(74.5%)  38: 1 ph     (1/1)       -- tail: 34 ||●||| |●||||                     
+36/36:(76.6%)  39: 1 ph     (1/1)       -- tail: 35 |||●|● ||||||                     
+37/37:(78.7%)  40: 1 ph     (1/1)       -- tail: 36 |||●●| ●|||||                     
+38/38:(80.9%)  41: 1 ph     (1/1)       -- tail: 37 ||||●| ||||||                     
+39/39:(83%)    42: 1 ph     (1/1)       -- tail: 38 |||●|| ||||||                     
+40/40:(85.1%)  43: 1 ph     (1/1)       -- tail: 39 |||●|| ||||||                     
+41/41:(87.2%)  44: 1 ph     (1/1)       -- tail: 40 |||||| ||●|||                     
+42/42:(89.4%)  45: 1 ph     (1/1)       -- tail: 41 |||||● ||●|||                     
+43/43:(91.5%)  46: 1 ph     (1/1)       -- tail: 42 ||||●| |●||||                     
+44/44:(93.6%)  47: 1 ph     (1/1)       -- tail: 43 |||●|| ●|||||                     
+45/45:(95.7%)  48: 1 ph     (1/1)       -- tail: 44 |||||| |●||||                     
+46/46:(97.9%)  49: 1 ph     (1/1)       -- tail: 45 |||●|| |||●||                     
+47/47:(100%)   50: 1 ph     (1/1)       -- tail: 46 |||||● ||●|||                     
+═══════════════════════════════════════════════════════════════════════════════════════════════════ Reestimating final recombination fractions ══
+Markers in the initial sequence: 47
+Mapped markers                  : 47 (100%)
+═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+This is an object of class 'mappoly.map'
+    Ploidy level:	 6 
+    No. individuals:	 300 
+    No. markers:	 47 
+    No. linkage phases:	 1 
+
+    ---------------------------------------------
+    Linkage phase configuration:  1
+       log-likelihood:	 -1272.947
+       LOD:		 0
+
+	      	 a b c d e f         g h i j k l   
+ 	 M_1  	 o | | | | |         o o | | | |       0.0 
+ 	 M_2  	 | o | | | |         | | | | | |       0.1 
+ 	 M_3  	 | o o | | |         | | o | | |       0.1 
+ 	 M_4  	 | | | o | |         | | | o | |       0.2 
+ 	 M_5  	 | | | o | |         | | | | | |       0.2 
+ 	 M_7  	 | o | | o |         | | o | | |       0.3 
+ 	 M_8  	 o | | | | |         o o | | o o       0.3 
+ 	 M_9  	 | | | | o |         | | | | | |       0.3 
+ 	 M_10 	 o o | | | |         o | o o | |       0.3 
+ 	 M_12 	 | o | | o |         | | o | | |       0.4 
+ 	 M_13 	 | o | o | |         | o o o | |       0.5 
+ 	 M_14 	 | | o | o |         | | | | | |       0.7 
+ 	 M_15 	 | | | | | o         | | | | | |       1.1 
+ 	 M_16 	 | | | | | |         | | | o | |       1.4 
+ 	 M_17 	 | | | | o |         | | o | | |       1.7 
+ 	 M_19 	 | | o | | |         | o | | | |       2.1 
+ 	 M_20 	 | | | | o |         | | o | | |       2.3 
+ 	 M_21 	 | | o o | o         | | | o | |       2.4 
+ 	 M_22 	 o | | | | |         o | | | o o       2.5 
+ 	 M_23 	 | o | | | |         | | | | | |       2.7 
+ 	 M_24 	 | | | | | o         | | | | | |       2.9 
+ 	 M_25 	 | o | | o |         | | o | | |       3.1 
+ 	 M_26 	 | | | | | o         | | | | | |       3.5 
+ 	 M_27 	 o | o | o |         o o | | | |       4.0 
+ 	 M_28 	 | | | o | |         | | | o | |       4.4 
+ 	 M_29 	 | | | o | |         | | | o | |       5.1 
+ 	 M_30 	 | | | | | |         | o o | | |       5.4 
+ 	 M_31 	 | o | | | o         | o o | | |       5.8 
+ 	 M_32 	 | | | | | |         | | | o | |       6.0 
+ 	 M_33 	 | | | o | |         | | | | | |       6.2 
+ 	 M_34 	 | | | | o |         o | | | | |       6.4 
+ 	 M_35 	 | o | | | |         | | | | | |       6.7 
+ 	 M_36 	 | o | | | |         | | o | | |       7.0 
+ 	 M_37 	 | | | | | |         | | | o | |       7.5 
+ 	 M_38 	 | | o | | |         | o | | | |       8.0 
+ 	 M_39 	 | | | o | o         | | | | | |       8.6 
+ 	 M_40 	 | | | o o |         o | | | | |       9.1 
+ 	 M_41 	 | | | | o |         | | | | | |       9.4 
+ 	 M_42 	 | | | o | |         | | | | | |       9.7 
+ 	 M_43 	 | | | o | |         | | | | | |      10.0 
+ 	 M_44 	 | | | | | |         | | o | | |      10.2 
+ 	 M_45 	 | | | | | o         | | o | | |      10.4 
+ 	 M_46 	 | | | | o |         | o | | | |      10.5 
+ 	 M_47 	 | | | o | |         o | | | | |      10.6 
+ 	 M_48 	 | | | | | |         | o | | | |      10.7 
+ 	 M_49 	 | | | o | |         | | | o | |      10.9 
+ 	 M_50 	 | | | | | o         | | o | | |      10.9 
+ 
+
+---------------
+/home/marcelo/repos/MAPpoly/man/est_rf_hmm_single.Rd -- 2020-09-23 16:46:27
+
+INFO: Going singlemode. Using one CPU for calculation.
+Also, number of markers is too small to perform parallel computation.
+	Ploidy level: 6
+	Rec. Frac. Limit: 0.5
+	Number of markers: 5
+	Number of individuals: 300
+	
+ Init. values:	0.001 0.001 0.001 0.001 	
+ Iter: 1	0.018 0.037 0.071 0.005 	
+ Iter: 2	0.037 0.057 0.144 0.005 	
+ Iter: 3	0.058 0.068 0.209 0.005 	
+ Iter: 4	0.079 0.075 0.267 0.005 	
+ Iter: 5	0.101 0.078 0.318 0.005 	
+ Iter: 6	0.123 0.080 0.362 0.005 	
+ Iter: 7	0.146 0.080 0.401 0.005 	
+ Iter: 8	0.168 0.080 0.434 0.005 	
+ Iter: 9	0.190 0.079 0.463 0.005 	
+ Iter: 10	0.212 0.077 0.488 0.005 	
+ Iter: 11	0.233 0.076 0.500 0.004 	
+ Iter: 12	0.253 0.074 0.500 0.004 	
+ Iter: 13	0.272 0.073 0.500 0.004 	
+ Iter: 14	0.291 0.071 0.500 0.004 	
+ Iter: 15	0.309 0.070 0.500 0.004 	
+ Iter: 16	0.326 0.069 0.500 0.004 	
+ Iter: 17	0.342 0.067 0.500 0.004 	
+ Iter: 18	0.357 0.066 0.500 0.004 	
+ Iter: 19	0.371 0.065 0.500 0.004 	
+ Iter: 20	0.385 0.064 0.500 0.004 
+	Ploidy level: 6
+	Rec. Frac. Limit: 0.500
+	Number of markers: 5
+	Number of individuals: 300
+	
+ Init. values:	0.001 0.001 0.001 0.001 	
+ Iter: 1	0.018 0.041 0.063 0.001 	
+ Iter: 2	0.038 0.067 0.123 0.001 	
+ Iter: 3	0.059 0.084 0.177 0.001 	
+ Iter: 4	0.081 0.096 0.225 0.001 	
+ Iter: 5	0.104 0.103 0.266 0.001 	
+ Iter: 6	0.126 0.107 0.303 0.001 	
+ Iter: 7	0.149 0.109 0.335 0.001 	
+ Iter: 8	0.171 0.110 0.363 0.001 	
+ Iter: 9	0.193 0.110 0.388 0.001 	
+ Iter: 10	0.215 0.108 0.409 0.001 	
+ Iter: 11	0.236 0.107 0.428 0.001 	
+ Iter: 12	0.256 0.105 0.445 0.001 	
+ Iter: 13	0.275 0.102 0.460 0.001 	
+ Iter: 14	0.294 0.100 0.472 0.001 	
+ Iter: 15	0.312 0.097 0.484 0.001 	
+ Iter: 16	0.329 0.095 0.493 0.001 	
+ Iter: 17	0.345 0.093 0.500 0.001 	
+ Iter: 18	0.360 0.090 0.500 0.001 	
+ Iter: 19	0.374 0.088 0.500 0.001 	
+ Iter: 20	0.388 0.086 0.500 0.001 
+	Ploidy level: 6
+	Rec. Frac. Limit: 0.500
+	Number of markers: 5
+	Number of individuals: 300
+	
+ Init. values:	0.001 0.001 0.001 0.001 	
+ Iter: 1	0.021 0.014 0.040 0.002 	
+ Iter: 2	0.042 0.021 0.081 0.002 	
+ Iter: 3	0.065 0.026 0.118 0.002 	
+ Iter: 4	0.089 0.029 0.151 0.002 	
+ Iter: 5	0.113 0.032 0.180 0.002 	
+ Iter: 6	0.137 0.034 0.206 0.002 	
+ Iter: 7	0.160 0.035 0.230 0.002 	
+ Iter: 8	0.183 0.036 0.250 0.001 	
+ Iter: 9	0.205 0.037 0.268 0.001 	
+ Iter: 10	0.226 0.037 0.285 0.001 	
+ Iter: 11	0.247 0.038 0.300 0.001 	
+ Iter: 12	0.267 0.038 0.313 0.001 	
+ Iter: 13	0.286 0.038 0.325 0.001 	
+ Iter: 14	0.303 0.038 0.335 0.001 	
+ Iter: 15	0.320 0.038 0.345 0.001 	
+ Iter: 16	0.336 0.038 0.354 0.001 	
+ Iter: 17	0.351 0.037 0.362 0.001 	
+ Iter: 18	0.366 0.037 0.369 0.001 	
+ Iter: 19	0.379 0.037 0.376 0.001 
+	Ploidy level: 6
+	Rec. Frac. Limit: 0.500
+	Number of markers: 5
+	Number of individuals: 300
+	
+ Init. values:	0.001 0.001 0.001 0.001 	
+ Iter: 1	0.019 0.002 0.002 0.001 	
+ Iter: 2	0.039 0.004 0.002 0.002 	
+ Iter: 3	0.060 0.005 0.002 0.002 	
+ Iter: 4	0.082 0.007 0.003 0.002 	
+ Iter: 5	0.105 0.008 0.003 0.002 	
+ Iter: 6	0.127 0.009 0.003 0.002 	
+ Iter: 7	0.149 0.010 0.004 0.002 	
+ Iter: 8	0.170 0.012 0.004 0.002 	
+ Iter: 9	0.189 0.012 0.004 0.002 	
+ Iter: 10	0.208 0.013 0.004 0.002 	
+ Iter: 11	0.226 0.014 0.005 0.002 	
+ Iter: 12	0.242 0.015 0.005 0.002 	
+ Iter: 13	0.258 0.016 0.005 0.002 	
+ Iter: 14	0.272 0.017 0.005 0.002 	
+ Iter: 15	0.285 0.017 0.006 0.002 	
+ Iter: 16	0.298 0.018 0.006 0.002 
+	Ploidy level: 6
+	Rec. Frac. Limit: 0.500
+	Number of markers: 5
+	Number of individuals: 300
+	
+ Init. values:	0.001 0.001 0.001 0.001 	
+ Iter: 1	0.007 0.008 0.008 0.001 
+	Ploidy level: 6
+	Rec. Frac. Limit: 0.500
+	Number of markers: 5
+	Number of individuals: 300
+	
+ Init. values:	0.001 0.001 0.001 0.001 	
+ Iter: 1	0.001 0.035 0.073 0.005 	
+ Iter: 2	0.001 0.051 0.147 0.005 	
+ Iter: 3	0.001 0.058 0.213 0.005 	
+ Iter: 4	0.001 0.062 0.269 0.005 	
+ Iter: 5	0.001 0.064 0.318 0.005 	
+ Iter: 6	0.001 0.064 0.359 0.005 	
+ Iter: 7	0.001 0.063 0.393 0.005 	
+ Iter: 8	0.001 0.063 0.422 0.004 	
+ Iter: 9	0.001 0.062 0.447 0.004 	
+ Iter: 10	0.001 0.061 0.468 0.004 	
+ Iter: 11	0.001 0.060 0.485 0.004 	
+ Iter: 12	0.001 0.059 0.500 0.004 
+	Ploidy level: 6
+	Rec. Frac. Limit: 0.500
+	Number of markers: 5
+	Number of individuals: 300
+	
+ Init. values:	0.001 0.001 0.001 0.001 	
+ Iter: 1	0.001 0.036 0.068 0.001 	
+ Iter: 2	0.001 0.053 0.133 0.001 	
+ Iter: 3	0.001 0.063 0.190 0.001 	
+ Iter: 4	0.001 0.069 0.238 0.001 	
+ Iter: 5	0.001 0.072 0.278 0.001 	
+ Iter: 6	0.001 0.073 0.312 0.001 	
+ Iter: 7	0.001 0.073 0.341 0.001 	
+ Iter: 8	0.001 0.072 0.365 0.001 	
+ Iter: 9	0.001 0.071 0.385 0.001 	
+ Iter: 10	0.001 0.070 0.402 0.001 	
+ Iter: 11	0.001 0.069 0.417 0.001 	
+ Iter: 12	0.001 0.068 0.428 0.001 
+	Ploidy level: 6
+	Rec. Frac. Limit: 0.500
+	Number of markers: 5
+	Number of individuals: 300
+	
+ Init. values:	0.001 0.001 0.001 0.001 	
+ Iter: 1	0.001 0.014 0.037 0.001 	
+ Iter: 2	0.001 0.020 0.075 0.001 	
+ Iter: 3	0.001 0.024 0.109 0.001 	
+ Iter: 4	0.001 0.027 0.139 0.001 	
+ Iter: 5	0.001 0.029 0.166 0.001 	
+ Iter: 6	0.001 0.030 0.190 0.001 	
+ Iter: 7	0.001 0.031 0.210 0.001 	
+ Iter: 8	0.001 0.031 0.228 0.001 	
+ Iter: 9	0.001 0.031 0.244 0.001 	
+ Iter: 10	0.001 0.032 0.258 0.001 	
+ Iter: 11	0.001 0.032 0.270 0.001 
+	Ploidy level: 6
+	Rec. Frac. Limit: 0.500
+	Number of markers: 5
+	Number of individuals: 300
+	
+ Init. values:	0.001 0.001 0.001 0.001 	
+ Iter: 1	0.001 0.003 0.002 0.002 
+
+Listing all configurations under threshold 5 using two-point information...
+       9 phase(s): . . . . . . . . . 
+
+---------------
+/home/marcelo/repos/MAPpoly/man/est_rf_hmm.Rd -- 2020-09-23 16:48:11
+
+INFO: Going singlemode. Using one CPU for calculation.
+
+Listing all configurations under threshold 2 using two-point information...
+       8 phase(s): . . . . . . . . 
+	Ploidy level: 6
+	Rec. Frac. Limit: 0.500
+	Number of markers: 47
+	Number of individuals: 300
+	
+ Init. values:	0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 	
+ Iter: 1	0.001 0.001 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.001 0.002 0.004 0.003 0.003 0.003 0.002 0.001 0.001 0.001 0.002 0.003 0.004 0.005 0.004 0.006 0.004 0.004 0.002 0.002 0.002 0.003 0.003 0.005 0.006 0.006 0.005 0.003 0.002 0.004 0.002 0.001 0.001 0.001 0.002 0.001 0.001 
+
+---------------
+/home/marcelo/repos/MAPpoly/man/export_data_to_polymapR.Rd -- 2020-09-23 16:49:31
+
+Loading required package: polymapR
+
+---------------
+/home/marcelo/repos/MAPpoly/man/export_map_list.Rd -- 2020-09-23 16:50:09
+
+"Marker Name","LG","Ref Chrom","Ref Position","Ref Allele","Alt Allele","Map Position","Dosage in P","Dosage in Q","ph.P.a","ph.P.b","ph.P.c","ph.P.d","ph.Q.e","ph.Q.f","ph.Q.g","ph.Q.h"
+"solcap_snp_c2_51460",1,"1",  151147,NA,NA,  0.00,2,3,1,1,0,0,1,1,1,0
+"solcap_snp_c2_36608",1,"1",  251032,NA,NA,  3.18,3,2,1,0,1,1,1,0,0,1
+"solcap_snp_c2_36615",1,"1",  252977,NA,NA,  3.19,3,2,1,0,1,1,1,0,0,1
+"solcap_snp_c2_36658",1,"1",  269300,NA,NA,  3.20,2,1,0,0,1,1,0,0,0,1
+"solcap_snp_c1_10930",1,"1",  309242,NA,NA,  3.91,2,1,0,0,1,1,0,0,0,1
+"solcap_snp_c2_36629",1,"1",  433701,NA,NA,  4.61,2,1,0,0,1,1,0,0,0,1
+"solcap_snp_c1_10915",1,"1",  481195,NA,NA,  5.56,2,3,1,1,0,0,1,1,1,0
+"solcap_snp_c1_10918",1,"1",  496966,NA,NA,  6.16,1,2,0,1,0,0,0,1,1,0
+"solcap_snp_c2_36650",1,"1",  507322,NA,NA,  7.65,1,2,0,1,0,0,0,1,1,0
+"solcap_snp_c2_36643",1,"1",  508489,NA,NA,  8.70,2,2,0,0,1,1,1,0,0,1
+"solcap_snp_c2_36660",1,"1",  534726,NA,NA,  9.10,2,3,1,1,0,0,1,1,1,0
+"solcap_snp_c2_36664",1,"1",  535354,NA,NA,  9.39,3,3,0,1,1,1,0,1,1,1
+"solcap_snp_c2_36686",1,"1",  601257,NA,NA,  9.40,3,4,0,1,1,1,1,1,1,1
+"solcap_snp_c2_54803",1,"1",  811809,NA,NA,  9.92,1,1,1,0,0,0,1,0,0,0
+"solcap_snp_c2_54800",1,"1",  813297,NA,NA,  9.93,1,1,1,0,0,0,1,0,0,0
+"solcap_snp_c2_54797",1,"1",  817305,NA,NA, 10.42,3,2,1,0,1,1,1,0,0,1
+"solcap_snp_c2_56714",1,"1",  931273,NA,NA, 10.57,3,4,0,1,1,1,1,1,1,1
+"solcap_snp_c2_6865",1,"1", 1513756,NA,NA, 12.86,0,1,0,0,0,0,0,0,0,1
+"solcap_snp_c2_6683",1,"1", 1828357,NA,NA, 15.27,2,2,0,1,1,0,0,1,1,0
+"solcap_snp_c1_2417",1,"1", 1838764,NA,NA, 15.28,2,2,0,1,1,0,0,1,1,0
+"solcap_snp_c2_6713",1,"1", 2068205,NA,NA, 15.54,2,2,0,1,1,0,0,1,1,0
+"solcap_snp_c2_21098",1,"1", 2589396,NA,NA, 17.75,2,2,0,1,1,0,0,1,1,0
+"solcap_snp_c2_21100",1,"1", 2591241,NA,NA, 19.12,2,2,0,1,1,0,0,1,1,0
+"solcap_snp_c2_21233",1,"1", 2956217,NA,NA, 20.86,2,1,0,1,0,1,0,1,0,0
+"solcap_snp_c1_6704",1,"1", 2957498,NA,NA, 21.42,1,2,0,0,1,0,0,1,1,0
+"solcap_snp_c2_21236",1,"1", 2958510,NA,NA, 21.99,3,2,0,1,1,1,0,1,1,0
+"solcap_snp_c1_6123",1,"1", 3296081,NA,NA, 25.74,2,2,1,0,1,0,0,1,1,0
+"solcap_snp_c1_6114",1,"1", 3693321,NA,NA, 25.89,1,0,0,0,1,0,0,0,0,0
+"solcap_snp_c1_6109",1,"1", 3716835,NA,NA, 26.48,3,4,1,1,0,1,1,1,1,1
+"solcap_snp_c2_51791",1,"1", 4309511,NA,NA, 32.08,0,1,0,0,0,0,0,0,0,1
+"solcap_snp_c2_49938",1,"1", 4597936,NA,NA, 32.09,3,4,1,1,1,0,1,1,1,1
+"solcap_snp_c2_56125",1,"1", 5291666,NA,NA, 34.48,2,0,0,1,1,0,0,0,0,0
+"solcap_snp_c2_45058",1,"1", 5347412,NA,NA, 34.98,3,4,1,0,1,1,1,1,1,1
+"solcap_snp_c2_45071",1,"1", 5386765,NA,NA, 36.16,3,1,1,1,0,1,1,0,0,0
+"solcap_snp_c2_45064",1,"1", 5502148,NA,NA, 36.61,2,0,0,1,1,0,0,0,0,0
+"solcap_snp_c1_13289",1,"1", 5504921,NA,NA, 36.62,2,3,1,0,0,1,0,1,1,1
+"solcap_snp_c1_13293",1,"1", 5505413,NA,NA, 36.63,1,0,0,0,0,1,0,0,0,0
+"solcap_snp_c2_27877",1,"1", 6071274,NA,NA, 38.62,3,4,1,1,1,0,1,1,1,1
+"solcap_snp_c2_27878",1,"1", 6071298,NA,NA, 38.63,1,1,0,0,0,1,1,0,0,0
+"solcap_snp_c2_27882",1,"1", 6071676,NA,NA, 38.65,3,1,0,1,1,1,1,0,0,0
+"solcap_snp_c2_27884",1,"1", 6071778,NA,NA, 38.66,3,1,0,1,1,1,1,0,0,0
+"solcap_snp_c2_27885",1,"1", 6071817,NA,NA, 39.03,0,3,0,0,0,0,0,1,1,1
+"solcap_snp_c2_27903",1,"1", 6295642,NA,NA, 40.04,2,3,0,1,0,1,0,1,1,1
+"solcap_snp_c2_27918",1,"1", 6587772,NA,NA, 40.46,2,0,0,1,0,1,0,0,0,0
+"solcap_snp_c2_48155",1,"1", 7165330,NA,NA, 41.90,2,0,1,0,1,0,0,0,0,0
+"solcap_snp_c2_48154",1,"1", 7165840,NA,NA, 42.24,2,3,0,1,0,1,0,1,1,1
+"solcap_snp_c2_50011",1,"1", 7446981,NA,NA, 42.25,2,3,1,0,1,0,0,1,1,1
+"solcap_snp_c1_16312",1,"1", 7641280,NA,NA, 43.65,2,0,0,1,0,1,0,0,0,0
+"solcap_snp_c2_52709",1,"1", 8645609,NA,NA, 44.57,2,0,0,1,0,1,0,0,0,0
+"solcap_snp_c2_52712",1,"1", 8645693,NA,NA, 44.58,2,0,0,1,0,1,0,0,0,0
+"solcap_snp_c2_52705",1,"1", 8653609,NA,NA, 45.06,2,1,0,1,0,1,0,1,0,0
+"solcap_snp_c2_48549",1,"1",10570936,NA,NA, 52.46,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c2_48563",1,"1",10573573,NA,NA, 52.47,4,3,1,1,1,1,0,1,1,1
+"solcap_snp_c2_55639",1,"1",11235975,NA,NA, 52.48,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c2_56356",1,"1",11737675,NA,NA, 52.49,0,1,0,0,0,0,0,0,1,0
+"solcap_snp_c2_56359",1,"1",11742617,NA,NA, 52.73,4,3,1,1,1,1,1,1,0,1
+"solcap_snp_c2_57284",1,"1",11774518,NA,NA, 53.10,4,3,1,1,1,1,0,1,1,1
+"solcap_snp_c2_45637",1,"1",12022263,NA,NA, 53.47,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c2_55008",1,"1",12994177,NA,NA, 57.63,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c2_53521",1,"1",13266849,NA,NA, 57.64,2,2,0,1,0,1,0,0,1,1
+"solcap_snp_c2_43984",1,"1",13369857,NA,NA, 57.65,1,0,0,0,0,1,0,0,0,0
+"solcap_snp_c1_12938",1,"1",13392343,NA,NA, 58.28,2,1,1,0,1,0,0,1,0,0
+"solcap_snp_c2_43970",1,"1",13545289,NA,NA, 59.54,1,1,0,1,0,0,0,0,1,0
+"solcap_snp_c2_43973",1,"1",13547044,NA,NA, 60.01,3,2,1,1,1,0,0,1,1,0
+"solcap_snp_c1_8908",1,"1",13656016,NA,NA, 60.83,2,1,1,0,1,0,0,1,0,0
+"solcap_snp_c2_54355",1,"1",13740719,NA,NA, 63.89,2,2,1,0,1,0,0,1,0,1
+"solcap_snp_c2_54353",1,"1",13747285,NA,NA, 66.12,0,1,0,0,0,0,0,0,0,1
+"solcap_snp_c2_49867",1,"1",16399117,NA,NA, 66.13,2,0,0,1,0,1,0,0,0,0
+"solcap_snp_c2_48568",1,"1",17370536,NA,NA, 66.14,0,3,0,0,0,0,1,0,1,1
+"solcap_snp_c1_8593",1,"1",17664021,NA,NA, 66.15,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c2_53759",1,"1",18753871,NA,NA, 66.16,0,1,0,0,0,0,0,0,0,1
+"solcap_snp_c2_56842",1,"1",18925684,NA,NA, 66.17,4,3,1,1,1,1,0,1,1,1
+"solcap_snp_c1_16421",1,"1",18926984,NA,NA, 66.52,0,2,0,0,0,0,0,0,1,1
+"solcap_snp_c1_14663",1,"1",19664067,NA,NA, 66.64,4,3,1,1,1,1,1,0,1,1
+"solcap_snp_c2_49326",1,"1",20549734,NA,NA, 68.21,0,2,0,0,0,0,1,0,1,0
+"solcap_snp_c1_5477",1,"1",23657080,NA,NA, 68.22,0,2,0,0,0,0,1,0,1,0
+"solcap_snp_c2_43643",1,"1",29180891,NA,NA, 69.26,4,3,1,1,1,1,0,1,1,1
+"solcap_snp_c2_22549",1,"1",29678234,NA,NA, 69.27,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c2_22546",1,"1",29679750,NA,NA, 69.28,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c1_7136",1,"1",30125081,NA,NA, 69.61,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c1_11066",1,"1",32091982,NA,NA, 69.94,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c1_9378",1,"1",34098178,NA,NA, 70.08,0,1,0,0,0,0,0,0,0,1
+"solcap_snp_c2_27683",1,"1",37067385,NA,NA, 70.26,4,3,1,1,1,1,0,1,1,1
+"solcap_snp_c2_27677",1,"1",37071329,NA,NA, 70.57,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c2_42829",1,"1",38478335,NA,NA, 71.00,2,0,0,1,0,1,0,0,0,0
+"solcap_snp_c1_15714",1,"1",39325633,NA,NA, 71.41,0,3,0,0,0,0,1,0,1,1
+"solcap_snp_c2_45395",1,"1",39529256,NA,NA, 71.76,4,3,1,1,1,1,1,1,0,1
+"solcap_snp_c2_49732",1,"1",41859322,NA,NA, 73.63,0,1,0,0,0,0,0,0,0,1
+"solcap_snp_c1_14648",1,"1",41947283,NA,NA, 73.92,4,1,1,1,1,1,0,1,0,0
+"solcap_snp_c1_14654",1,"1",41979022,NA,NA, 73.94,4,1,1,1,1,1,0,1,0,0
+"solcap_snp_c2_32111",1,"1",42197632,NA,NA, 73.95,2,0,0,1,0,1,0,0,0,0
+"solcap_snp_c2_32112",1,"1",42197668,NA,NA, 75.00,2,1,1,0,1,0,0,1,0,0
+"solcap_snp_c2_50028",1,"1",43180567,NA,NA, 76.65,2,1,1,0,1,0,0,1,0,0
+"solcap_snp_c2_50023",1,"1",43196126,NA,NA, 76.76,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c2_49042",1,"1",43330828,NA,NA, 78.72,2,0,0,1,0,1,0,0,0,0
+"solcap_snp_c1_16169",1,"1",44194024,NA,NA, 81.80,4,2,1,1,1,1,0,1,0,1
+"solcap_snp_c1_14248",1,"1",44696488,NA,NA, 81.81,2,1,1,0,1,0,0,1,0,0
+"solcap_snp_c1_14249",1,"1",44696500,NA,NA, 82.31,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c1_14259",1,"1",44700858,NA,NA, 82.32,2,0,0,1,0,1,0,0,0,0
+"solcap_snp_c1_14261",1,"1",44702300,NA,NA, 82.33,4,2,1,1,1,1,0,1,0,1
+"solcap_snp_c2_53708",1,"1",44890351,NA,NA, 82.99,0,2,0,0,0,0,0,0,1,1
+"solcap_snp_c2_40131",1,"1",45751390,NA,NA, 83.00,0,2,0,0,0,0,1,0,1,0
+"solcap_snp_c2_54811",1,"1",46271054,NA,NA, 83.01,4,2,1,1,1,1,0,1,0,1
+"solcap_snp_c1_15855",1,"1",46323471,NA,NA, 83.02,2,0,0,1,0,1,0,0,0,0
+"solcap_snp_c2_35220",1,"1",47299682,NA,NA, 83.03,0,3,0,0,0,0,1,0,1,1
+"solcap_snp_c2_35218",1,"1",47300005,NA,NA, 83.04,0,3,0,0,0,0,1,0,1,1
+"solcap_snp_c2_35601",1,"1",50791085,NA,NA, 85.07,0,1,0,0,0,0,0,1,0,0
+"solcap_snp_c2_694",1,"1",51290105,NA,NA, 85.42,2,0,0,1,0,1,0,0,0,0
+"solcap_snp_c2_686",1,"1",51324458,NA,NA, 85.70,4,2,1,1,1,1,0,1,0,1
+"solcap_snp_c2_57898",1,"1",51736618,NA,NA, 85.71,0,1,0,0,0,0,0,0,0,1
+"solcap_snp_c1_880",1,"1",54480981,NA,NA, 86.08,4,3,1,1,1,1,1,1,1,0
+"solcap_snp_c2_55113",1,"1",54580381,NA,NA, 86.09,2,0,0,1,0,1,0,0,0,0
+"solcap_snp_c2_2874",1,"1",55163851,NA,NA, 86.10,2,0,0,1,0,1,0,0,0,0
+"solcap_snp_c2_55621",1,"1",55427211,NA,NA, 86.11,2,0,0,1,0,1,0,0,0,0
+"solcap_snp_c2_55618",1,"1",55427602,NA,NA, 86.15,0,2,0,0,0,0,1,0,1,0
+"solcap_snp_c1_14633",1,"1",57931788,NA,NA, 91.26,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c2_2721",1,"1",58197548,NA,NA, 91.27,1,1,0,0,0,1,1,0,0,0
+"solcap_snp_c2_2653",1,"1",58737622,NA,NA, 92.91,0,2,0,0,0,0,1,0,1,0
+"solcap_snp_c2_2591",1,"1",58985511,NA,NA, 93.63,1,0,0,0,0,1,0,0,0,0
+"solcap_snp_c1_13430",1,"1",59363361,NA,NA, 94.96,1,3,0,1,0,0,1,0,1,1
+"solcap_snp_c2_46523",1,"1",59973949,NA,NA, 95.71,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c2_46521",1,"1",59974282,NA,NA, 95.72,2,3,1,0,1,0,1,1,1,0
+"solcap_snp_c2_46520",1,"1",59974316,NA,NA, 95.73,4,3,1,1,1,1,0,1,1,1
+"solcap_snp_c2_53347",1,"1",60026944,NA,NA, 96.42,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c2_35511",1,"1",60433785,NA,NA, 96.43,4,3,1,1,1,1,0,1,1,1
+"solcap_snp_c2_35518",1,"1",60512480,NA,NA, 96.44,4,3,1,1,1,1,0,1,1,1
+"solcap_snp_c2_35520",1,"1",60513199,NA,NA, 96.45,4,3,1,1,1,1,0,1,1,1
+"solcap_snp_c2_35536",1,"1",60515867,NA,NA, 97.83,1,2,1,0,0,0,0,1,1,0
+"solcap_snp_c2_35537",1,"1",60516874,NA,NA, 97.84,1,2,1,0,0,0,0,1,1,0
+"solcap_snp_c2_43926",1,"1",60887837,NA,NA, 98.15,2,2,0,1,0,1,1,0,0,1
+"solcap_snp_c2_56267",1,"1",60919490,NA,NA, 98.96,3,2,1,1,1,0,0,1,1,0
+"solcap_snp_c2_20798",1,"1",60951573,NA,NA, 98.97,2,2,1,1,0,0,0,1,1,0
+"solcap_snp_c2_20799",1,"1",60951606,NA,NA, 99.17,2,2,0,0,1,1,1,0,0,1
+"solcap_snp_c2_20803",1,"1",60987155,NA,NA, 99.41,1,2,0,0,0,1,1,0,0,1
+"solcap_snp_c2_20890",1,"1",61310805,NA,NA,101.00,3,3,1,1,1,0,1,1,1,0
+"solcap_snp_c2_50903",1,"1",61774492,NA,NA,101.62,0,2,0,0,0,0,1,0,0,1
+"solcap_snp_c2_38428",1,"1",62058660,NA,NA,102.63,1,1,0,0,0,1,0,0,0,1
+"solcap_snp_c2_38406",1,"1",62144916,NA,NA,103.04,3,4,1,1,1,0,1,1,1,1
+"solcap_snp_c2_38404",1,"1",62148178,NA,NA,103.05,3,2,1,1,1,0,0,1,1,0
+"solcap_snp_c2_38448",1,"1",62289476,NA,NA,104.60,1,0,0,0,0,1,0,0,0,0
+"solcap_snp_c1_12106",1,"1",62802674,NA,NA,106.16,1,3,0,0,0,1,1,0,1,1
+"solcap_snp_c2_41337",1,"1",62930793,NA,NA,106.72,1,3,0,0,0,1,1,0,1,1
+"solcap_snp_c2_32359",1,"1",63208419,NA,NA,108.66,0,2,0,0,0,0,0,0,1,1
+"solcap_snp_c1_9679",1,"1",63338027,NA,NA,110.04,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c1_12057",1,"1",63596472,NA,NA,110.98,4,2,1,1,1,1,1,1,0,0
+"solcap_snp_c1_13686",1,"1",64120988,NA,NA,112.96,2,3,0,0,1,1,1,0,1,1
+"solcap_snp_c2_46195",1,"1",64259858,NA,NA,113.59,2,2,0,0,1,1,0,0,1,1
+"solcap_snp_c2_13751",1,"1",64614114,NA,NA,113.67,1,0,0,0,0,1,0,0,0,0
+"solcap_snp_c1_4415",1,"1",65036984,NA,NA,116.62,1,2,0,0,1,0,0,0,1,1
+"solcap_snp_c2_13675",1,"1",65036993,NA,NA,116.76,1,0,0,1,0,0,0,0,0,0
+"solcap_snp_c2_13676",1,"1",65054301,NA,NA,116.81,3,4,1,0,1,1,1,1,1,1
+"solcap_snp_c2_13671",1,"1",65062849,NA,NA,116.86,2,2,1,1,0,0,1,1,0,0
+"solcap_snp_c2_13653",1,"1",65270150,NA,NA,117.26,2,2,1,1,0,0,1,1,0,0
+"solcap_snp_c2_13650",1,"1",65277543,NA,NA,117.27,1,0,0,1,0,0,0,0,0,0
+"solcap_snp_c1_4744",1,"1",65472678,NA,NA,118.05,1,0,0,1,0,0,0,0,0,0
+"solcap_snp_c2_14467",1,"1",65694581,NA,NA,118.72,1,2,0,0,0,1,0,0,1,1
+"solcap_snp_c2_14470",1,"1",65697018,NA,NA,118.73,2,4,1,0,0,1,1,1,1,1
+"solcap_snp_c1_4706",1,"1",65780052,NA,NA,119.49,1,2,0,0,0,1,0,0,1,1
+"solcap_snp_c2_14487",1,"1",65780861,NA,NA,119.50,1,2,0,0,0,1,0,0,1,1
+"solcap_snp_c2_14489",1,"1",65781907,NA,NA,119.52,1,2,0,0,0,1,0,0,1,1
+"solcap_snp_c2_14491",1,"1",65782311,NA,NA,119.65,2,0,0,1,1,0,0,0,0,0
+"solcap_snp_c2_14492",1,"1",65782372,NA,NA,119.68,2,0,0,1,1,0,0,0,0,0
+"solcap_snp_c2_14493",1,"1",65782860,NA,NA,120.12,1,2,0,0,0,1,0,0,1,1
+"solcap_snp_c1_4745",1,"1",66094082,NA,NA,123.00,2,2,1,0,0,1,1,1,0,0
+"solcap_snp_c1_4748",1,"1",66259325,NA,NA,123.01,2,0,1,0,0,1,0,0,0,0
+"solcap_snp_c2_14589",1,"1",66283156,NA,NA,123.16,4,3,1,1,1,1,0,1,1,1
+"solcap_snp_c2_37564",1,"1",66307265,NA,NA,123.27,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c2_14595",1,"1",66307870,NA,NA,123.53,2,0,1,0,0,1,0,0,0,0
+"solcap_snp_c2_37566",1,"1",66307870,NA,NA,123.54,2,0,1,0,0,1,0,0,0,0
+"solcap_snp_c1_4752",1,"1",66336597,NA,NA,124.09,2,0,1,0,0,1,0,0,0,0
+"solcap_snp_c2_14608",1,"1",66349497,NA,NA,124.36,2,0,0,1,1,0,0,0,0,0
+"solcap_snp_c1_4757",1,"1",66354237,NA,NA,124.72,1,0,0,0,0,1,0,0,0,0
+"solcap_snp_c1_4763",1,"1",66376115,NA,NA,124.73,4,2,1,1,1,1,0,0,1,1
+"solcap_snp_c1_5150",1,"1",66675718,NA,NA,127.51,2,0,1,0,0,1,0,0,0,0
+"solcap_snp_c2_58099",1,"1",66845540,NA,NA,127.60,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c1_5145",1,"1",66904071,NA,NA,127.61,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c2_20569",1,"1",67013419,NA,NA,132.21,3,1,1,1,1,0,0,0,1,0
+"solcap_snp_c2_20501",1,"1",67211402,NA,NA,136.23,3,3,0,1,1,1,0,1,1,1
+"solcap_snp_c2_20502",1,"1",67221811,NA,NA,136.90,1,2,1,0,0,0,1,1,0,0
+"solcap_snp_c2_20505",1,"1",67223365,NA,NA,137.96,3,2,0,1,1,1,0,0,1,1
+"solcap_snp_c2_20506",1,"1",67223618,NA,NA,139.22,3,3,0,1,1,1,1,0,1,1
+"solcap_snp_c2_20508",1,"1",67224636,NA,NA,139.54,0,1,0,0,0,0,1,0,0,0
+"solcap_snp_c2_20513",1,"1",67277917,NA,NA,140.14,2,0,0,1,1,0,0,0,0,0
+"solcap_snp_c2_20521",1,"1",67293276,NA,NA,140.72,3,2,1,1,1,0,1,1,0,0
+"solcap_snp_c2_20522",1,"1",67294203,NA,NA,141.18,2,0,0,1,1,0,0,0,0,0
+"solcap_snp_c1_6501",1,"1",67459562,NA,NA,142.14,1,0,0,0,1,0,0,0,0,0
+"solcap_snp_c1_6518",1,"1",67605601,NA,NA,142.15,2,2,0,1,0,1,0,0,1,1
+"solcap_snp_c2_13766",1,"1",67896690,NA,NA,142.16,4,3,1,1,1,1,1,0,1,1
+"solcap_snp_c2_52492",1,"1",67969508,NA,NA,143.29,3,2,1,1,0,1,0,0,1,1
+"solcap_snp_c2_52484",1,"1",68069976,NA,NA,143.93,1,2,0,0,1,0,1,1,0,0
+"solcap_snp_c2_49451",1,"1",68416146,NA,NA,145.11,0,1,0,0,0,0,0,1,0,0
+"solcap_snp_c1_14044",1,"1",68529607,NA,NA,146.48,4,3,1,1,1,1,1,0,1,1
+"solcap_snp_c2_51055",1,"1",68950490,NA,NA,147.55,0,2,0,0,0,0,1,1,0,0
+"solcap_snp_c1_11769",1,"1",69200071,NA,NA,148.40,2,2,0,1,0,1,1,1,0,0
+"solcap_snp_c2_39834",1,"1",69381232,NA,NA,149.04,2,2,1,0,1,0,0,0,1,1
+"solcap_snp_c2_17592",1,"1",69809943,NA,NA,150.09,2,0,0,1,0,1,0,0,0,0
+"solcap_snp_c2_17529",1,"1",69902111,NA,NA,150.10,2,2,0,1,0,1,1,1,0,0
+"solcap_snp_c2_17531",1,"1",70016341,NA,NA,150.94,2,2,1,0,1,0,0,0,1,1
+"solcap_snp_c2_17537",1,"1",70097616,NA,NA,150.95,2,2,1,0,1,0,0,0,1,1
+"solcap_snp_c1_15579",1,"1",70341165,NA,NA,151.51,1,2,0,0,1,0,0,0,1,1
+"solcap_snp_c1_15580",1,"1",70341195,NA,NA,151.74,1,2,0,0,1,0,0,0,1,1
+"solcap_snp_c2_53380",1,"1",70371798,NA,NA,152.39,3,2,0,1,1,1,0,0,1,1
+"solcap_snp_c2_53381",1,"1",70372029,NA,NA,153.11,1,2,1,0,0,0,1,1,0,0
+"solcap_snp_c2_17191",1,"1",70474751,NA,NA,154.44,2,0,0,1,0,1,0,0,0,0
+"solcap_snp_c1_5657",1,"1",70560319,NA,NA,155.07,3,4,1,1,1,0,1,1,1,1
+"solcap_snp_c1_5656",1,"1",70562884,NA,NA,155.08,1,0,0,0,0,1,0,0,0,0
+"solcap_snp_c1_5653",1,"1",70697401,NA,NA,155.09,1,0,0,0,0,1,0,0,0,0
+"solcap_snp_c1_3860",1,"1",71009488,NA,NA,155.27,2,2,0,1,0,1,1,1,0,0
+"solcap_snp_c1_3863",1,"1",71009686,NA,NA,156.05,2,2,1,0,1,0,0,0,1,1
+"solcap_snp_c2_12076",1,"1",71090664,NA,NA,156.62,1,2,0,1,0,0,1,1,0,0
+"solcap_snp_c1_3867",1,"1",71239298,NA,NA,157.47,1,2,0,1,0,0,1,1,0,0
+"solcap_snp_c1_3868",1,"1",71239559,NA,NA,157.68,3,2,1,0,1,1,0,0,1,1
+"solcap_snp_c1_3876",1,"1",71278255,NA,NA,158.11,1,2,0,1,0,0,1,1,0,0
+"solcap_snp_c2_12106",1,"1",71298195,NA,NA,158.32,3,2,1,0,1,1,0,0,1,1
+"solcap_snp_c1_3894",1,"1",71421320,NA,NA,158.74,1,2,0,1,0,0,1,1,0,0
+"solcap_snp_c2_12126",1,"1",71450592,NA,NA,159.36,2,2,0,1,0,1,1,1,0,0
+"solcap_snp_c2_12216",1,"1",72051429,NA,NA,160.92,2,0,1,1,0,0,0,0,0,0
+"solcap_snp_c2_12217",1,"1",72051456,NA,NA,160.93,1,0,1,0,0,0,0,0,0,0
+"solcap_snp_c1_3848",1,"1",72108418,NA,NA,160.94,3,4,0,1,1,1,1,1,1,1
+"solcap_snp_c1_3851",1,"1",72112064,NA,NA,160.95,1,0,1,0,0,0,0,0,0,0
+"solcap_snp_c1_9565",1,"1",72320561,NA,NA,162.26,3,4,0,1,1,1,1,1,1,1
+"solcap_snp_c1_9566",1,"1",72320582,NA,NA,162.27,1,0,1,0,0,0,0,0,0,0
+"solcap_snp_c1_9573",1,"1",72504567,NA,NA,162.28,2,2,0,1,1,0,0,0,1,1
+"solcap_snp_c2_31820",1,"1",72528671,NA,NA,163.54,1,0,1,0,0,0,0,0,0,0
+"solcap_snp_c2_31821",1,"1",72531263,NA,NA,163.55,1,0,0,0,0,1,0,0,0,0
+"solcap_snp_c1_9583",1,"1",72540600,NA,NA,163.56,1,2,1,0,0,0,1,1,0,0
+"solcap_snp_c1_9587",1,"1",72541075,NA,NA,163.57,1,0,1,0,0,0,0,0,0,0
+"solcap_snp_c2_14274",1,"1",74061621,NA,NA,166.56,3,4,1,0,1,1,1,1,1,1
+"solcap_snp_c1_4617",1,"1",74355434,NA,NA,168.03,0,2,0,0,0,0,1,1,0,0
+"solcap_snp_c2_14365",1,"1",74688262,NA,NA,168.05,2,0,1,0,0,1,0,0,0,0
+"solcap_snp_c2_14366",1,"1",74688318,NA,NA,168.50,1,2,0,0,1,0,0,0,1,1
+"solcap_snp_c1_14931",1,"1",75007319,NA,NA,168.51,4,2,1,1,1,1,0,0,1,1
+"solcap_snp_c2_16369",1,"1",75164058,NA,NA,169.77,0,2,0,0,0,0,1,1,0,0
+"solcap_snp_c1_5267",1,"1",75333553,NA,NA,170.13,2,0,1,0,0,1,0,0,0,0
+"solcap_snp_c1_5281",1,"1",75441912,NA,NA,170.14,2,0,1,0,0,1,0,0,0,0
+"solcap_snp_c1_5286",1,"1",75477570,NA,NA,170.95,3,4,1,1,0,1,1,1,1,1
+"solcap_snp_c2_16424",1,"1",75478258,NA,NA,171.42,2,0,1,0,0,1,0,0,0,0
+"solcap_snp_c2_16425",1,"1",75485276,NA,NA,171.71,2,0,1,0,0,1,0,0,0,0
+"solcap_snp_c2_16466",1,"1",75749019,NA,NA,171.72,2,4,0,1,1,0,1,1,1,1
+"solcap_snp_c1_5346",1,"1",75789912,NA,NA,172.10,1,0,0,0,1,0,0,0,0,0
+"solcap_snp_c1_16435",1,"1",76304406,NA,NA,172.57,1,0,0,0,1,0,0,0,0,0
+"solcap_snp_c2_2509",1,"1",76406745,NA,NA,172.58,4,2,1,1,1,1,0,0,1,1
+"solcap_snp_c2_2291",1,"1",76480645,NA,NA,173.86,1,2,0,1,0,0,0,0,1,1
+"solcap_snp_c1_641",1,"1",76511147,NA,NA,173.87,2,0,1,0,0,1,0,0,0,0
+"solcap_snp_c2_2420",1,"1",76953005,NA,NA,174.97,3,2,1,0,1,1,1,1,0,0
+"solcap_snp_c2_2423",1,"1",76958677,NA,NA,175.29,2,3,0,1,1,0,0,1,1,1
+"solcap_snp_c2_2424",1,"1",76960116,NA,NA,177.14,0,1,0,0,0,0,0,1,0,0
+"solcap_snp_c2_2427",1,"1",76960344,NA,NA,177.50,1,0,0,0,1,0,0,0,0,0
+"solcap_snp_c2_2450",1,"1",77056087,NA,NA,177.93,2,2,0,1,1,0,1,1,0,0
+"solcap_snp_c2_2463",1,"1",77190863,NA,NA,178.90,2,2,0,1,1,0,1,1,0,0
+"solcap_snp_c2_2464",1,"1",77190891,NA,NA,178.91,2,2,0,1,1,0,1,1,0,0
+"solcap_snp_c2_2466",1,"1",77191250,NA,NA,179.13,2,2,0,1,1,0,1,1,0,0
+"solcap_snp_c2_2505",1,"1",77350779,NA,NA,179.60,0,1,0,0,0,0,0,1,0,0
+"solcap_snp_c2_2508",1,"1",77353050,NA,NA,180.11,2,2,0,1,1,0,1,1,0,0
+"solcap_snp_c1_758",1,"1",77526728,NA,NA,180.47,1,1,0,0,1,0,0,1,0,0
+"solcap_snp_c2_2201",1,"1",77738922,NA,NA,180.81,2,2,0,1,1,0,1,1,0,0
+"solcap_snp_c1_601",1,"1",78168030,NA,NA,182.54,3,4,0,1,1,1,1,1,1,1
+"solcap_snp_c1_607",1,"1",78176086,NA,NA,182.55,2,2,0,1,1,0,1,1,0,0
+"solcap_snp_c2_2299",1,"1",78192398,NA,NA,183.01,2,2,1,0,0,1,0,0,1,1
+"solcap_snp_c2_2354",1,"1",78430745,NA,NA,183.71,2,2,1,0,0,1,0,0,1,1
+"solcap_snp_c2_50486",1,"1",78756800,NA,NA,184.17,2,2,0,1,1,0,1,1,0,0
+"solcap_snp_c2_50484",1,"1",78757017,NA,NA,184.40,2,2,0,1,1,0,1,1,0,0
+"solcap_snp_c2_50483",1,"1",78757327,NA,NA,184.64,2,2,0,1,1,0,1,1,0,0
+"solcap_snp_c2_50502",1,"1",78809381,NA,NA,184.88,2,2,1,0,0,1,0,0,1,1
+"solcap_snp_c1_15872",1,"1",78928170,NA,NA,185.37,2,2,0,1,1,0,1,1,0,0
+"solcap_snp_c2_7007",1,"1",79083850,NA,NA,189.56,2,2,1,0,1,0,0,1,1,0
+"solcap_snp_c1_2484",1,"1",79157311,NA,NA,193.43,3,4,1,1,1,0,1,1,1,1
+"solcap_snp_c2_7094",1,"1",79187093,NA,NA,193.45,1,0,1,0,0,0,0,0,0,0
+"solcap_snp_c2_7193",1,"1",79391798,NA,NA,193.92,1,0,1,0,0,0,0,0,0,0
+"solcap_snp_c2_7208",1,"1",79456001,NA,NA,197.01,3,2,1,1,1,0,1,1,0,0
+"solcap_snp_c1_2519",1,"1",79487369,NA,NA,197.02,1,1,0,1,0,0,1,0,0,0
+"solcap_snp_c1_2520",1,"1",79487485,NA,NA,197.32,1,1,0,0,1,0,0,1,0,0
+"solcap_snp_c2_7241",1,"1",79678600,NA,NA,197.51,3,3,1,1,0,1,1,0,1,1
+"solcap_snp_c2_7242",1,"1",79679061,NA,NA,197.53,3,2,1,1,1,0,1,1,0,0
+"solcap_snp_c2_7245",1,"1",79679433,NA,NA,197.87,1,1,0,0,1,0,0,1,0,0
+"solcap_snp_c2_7246",1,"1",79679919,NA,NA,198.23,1,1,0,0,1,0,0,1,0,0
+"solcap_snp_c1_2531",1,"1",79711129,NA,NA,198.24,1,2,0,0,0,1,0,0,1,1
+"solcap_snp_c2_7328",1,"1",79955769,NA,NA,199.85,4,3,1,1,1,1,1,0,1,1
+"solcap_snp_c2_6990",1,"1",80077222,NA,NA,200.77,2,3,1,0,0,1,0,1,1,1
+"solcap_snp_c1_2458",1,"1",80121157,NA,NA,200.84,2,2,1,0,0,1,0,0,1,1
+"solcap_snp_c2_7053",1,"1",80228512,NA,NA,201.91,2,2,0,0,1,1,0,0,1,1
+"solcap_snp_c2_7055",1,"1",80229751,NA,NA,203.03,2,2,0,0,1,1,0,0,1,1
+"solcap_snp_c2_7056",1,"1",80229823,NA,NA,203.52,4,3,1,1,1,1,1,0,1,1
+"solcap_snp_c2_7061",1,"1",80230621,NA,NA,204.84,2,2,0,0,1,1,0,0,1,1
+"solcap_snp_c2_7062",1,"1",80230636,NA,NA,204.85,2,2,1,1,0,0,1,1,0,0
+"solcap_snp_c1_1853",1,"1",80429124,NA,NA,205.13,1,2,0,0,0,1,0,0,1,1
+"solcap_snp_c2_5091",1,"1",80558977,NA,NA,206.04,2,2,0,1,1,0,1,1,0,0
+"solcap_snp_c2_5077",1,"1",80591992,NA,NA,207.60,1,1,1,0,0,0,0,1,0,0
+"solcap_snp_c2_5078",1,"1",80592039,NA,NA,207.92,1,1,0,0,1,0,0,1,0,0
+"solcap_snp_c2_5039",1,"1",80669402,NA,NA,208.99,4,3,1,1,1,1,1,0,1,1
+"solcap_snp_c2_9727",1,"1",80833354,NA,NA,209.00,0,1,0,0,0,0,0,1,0,0
+"solcap_snp_c2_9726",1,"1",80833555,NA,NA,209.19,2,2,0,1,0,1,1,1,0,0
+"solcap_snp_c2_9722",1,"1",80835882,NA,NA,209.81,2,2,1,0,1,0,0,0,1,1
+"solcap_snp_c2_9988",1,"1",81013079,NA,NA,211.70,4,3,1,1,1,1,1,0,1,1
+"solcap_snp_c2_9925",1,"1",81410356,NA,NA,212.47,3,4,1,1,0,1,1,1,1,1
+"solcap_snp_c2_9892",1,"1",81567397,NA,NA,215.74,3,4,1,1,1,0,1,1,1,1
+"solcap_snp_c2_9864",1,"1",81615881,NA,NA,215.75,3,3,0,1,1,1,0,1,1,1
+"solcap_snp_c1_3275",1,"1",81750527,NA,NA,217.13,0,2,0,0,0,0,0,0,1,1
+"solcap_snp_c1_3255",1,"1",81795335,NA,NA,217.76,1,1,1,0,0,0,1,0,0,0
+"solcap_snp_c1_3241",1,"1",81924813,NA,NA,218.83,1,0,1,0,0,0,0,0,0,0
+"solcap_snp_c1_3234",1,"1",81927346,NA,NA,219.41,4,2,1,1,1,1,1,1,0,0
+"solcap_snp_c2_47360",1,"1",82220028,NA,NA,221.69,3,4,1,1,1,0,1,1,1,1
+"solcap_snp_c2_4896",1,"1",82628961,NA,NA,222.92,1,2,0,0,0,1,0,0,1,1
+"solcap_snp_c2_4799",1,"1",82927941,NA,NA,223.23,1,2,0,0,0,1,0,0,1,1
+"solcap_snp_c1_1638",1,"1",82935846,NA,NA,223.24,1,2,0,0,0,1,0,0,1,1
+"solcap_snp_c1_1653",1,"1",83012188,NA,NA,224.79,1,1,0,1,0,0,1,0,0,0
+"solcap_snp_c1_1683",1,"1",83059366,NA,NA,226.75,2,0,1,0,1,0,0,0,0,0
+"solcap_snp_c2_4844",1,"1",83060466,NA,NA,227.62,1,1,0,1,0,0,1,0,0,0
+"solcap_snp_c2_4845",1,"1",83060720,NA,NA,229.49,2,0,1,0,1,0,0,0,0,0
+"solcap_snp_c2_4860",1,"1",83130390,NA,NA,229.78,0,2,0,0,0,0,0,0,1,1
+"solcap_snp_c2_4864",1,"1",83138355,NA,NA,229.88,2,4,0,1,0,1,1,1,1,1
+"solcap_snp_c2_4875",1,"1",83177618,NA,NA,231.81,3,1,1,1,1,0,1,0,0,0
+"solcap_snp_c2_4884",1,"1",83186994,NA,NA,232.61,3,2,1,1,1,0,1,1,0,0
+"solcap_snp_c2_4885",1,"1",83187000,NA,NA,232.85,3,2,1,1,1,0,1,1,0,0
+"solcap_snp_c2_4898",1,"1",83283573,NA,NA,232.86,3,4,1,1,1,0,1,1,1,1
+"solcap_snp_c2_4904",1,"1",83416355,NA,NA,234.24,2,0,1,0,1,0,0,0,0,0
+"solcap_snp_c2_4907",1,"1",83418574,NA,NA,236.11,3,4,1,1,1,0,1,1,1,1
+"solcap_snp_c2_4910",1,"1",83419340,NA,NA,237.99,0,1,0,0,0,0,0,1,0,0
+"solcap_snp_c1_1737",1,"1",83602469,NA,NA,238.38,2,3,0,1,0,1,1,0,1,1
+"solcap_snp_c1_1739",1,"1",83608625,NA,NA,240.71,3,4,1,1,0,1,1,1,1,1
+"solcap_snp_c2_4614",1,"1",83843457,NA,NA,240.73,4,3,1,1,1,1,1,0,1,1
+"solcap_snp_c2_4664",1,"1",84062694,NA,NA,242.00,1,3,0,0,0,1,0,1,1,1
+"solcap_snp_c2_4708",1,"1",84214693,NA,NA,244.12,0,2,0,0,0,0,0,0,1,1
+"solcap_snp_c2_4713",1,"1",84217673,NA,NA,244.13,4,2,1,1,1,1,1,1,0,0
+"solcap_snp_c2_36495",1,"1",84457206,NA,NA,244.38,0,2,0,0,0,0,0,0,1,1
+"solcap_snp_c2_34546",1,"1",84727952,NA,NA,245.96,1,3,0,0,0,1,0,1,1,1
+"solcap_snp_c1_10354",1,"1",84979069,NA,NA,251.10,4,3,1,1,1,1,1,0,1,1
+"solcap_snp_c1_22",1,"1",85243830,NA,NA,251.59,0,1,0,0,0,0,0,1,0,0
+"solcap_snp_c2_24",1,"1",85323495,NA,NA,255.23,1,2,0,1,0,0,1,1,0,0
+"solcap_snp_c2_13385",1,"1",85715515,NA,NA,256.66,3,0,1,0,1,1,0,0,0,0
+"solcap_snp_c2_46448",1,"1",85760106,NA,NA,256.67,1,2,0,1,0,0,1,1,0,0
+"solcap_snp_c2_53075",1,"1",85902499,NA,NA,257.40,3,2,1,0,1,1,0,0,1,1
+"solcap_snp_c2_42943",1,"1",85953353,NA,NA,258.08,1,2,0,1,0,0,1,1,0,0
+"solcap_snp_c2_49917",1,"1",86090288,NA,NA,258.09,1,4,0,1,0,0,1,1,1,1
+"solcap_snp_c2_49911",1,"1",86095463,NA,NA,258.10,1,4,0,1,0,0,1,1,1,1
+"solcap_snp_c2_49910",1,"1",86095890,NA,NA,258.11,3,2,1,0,1,1,0,0,1,1
+"solcap_snp_c2_14839",1,"1",86328984,NA,NA,260.48,0,2,0,0,0,0,0,0,1,1
+"solcap_snp_c2_14707",1,"1",86355213,NA,NA,260.49,0,2,0,0,0,0,0,0,1,1
+"solcap_snp_c2_14708",1,"1",86356234,NA,NA,262.46,1,2,0,1,0,0,1,1,0,0
+"solcap_snp_c2_14709",1,"1",86356378,NA,NA,262.47,1,2,0,1,0,0,1,1,0,0
+"solcap_snp_c1_4796",1,"1",86388041,NA,NA,262.72,3,2,1,0,1,1,0,0,1,1
+"solcap_snp_c2_14730",1,"1",86441357,NA,NA,266.10,0,2,0,0,0,0,0,0,1,1
+"solcap_snp_c2_14733",1,"1",86527670,NA,NA,266.84,4,2,1,1,1,1,1,1,0,0
+"solcap_snp_c1_4799",1,"1",86663770,NA,NA,268.85,1,2,0,1,0,0,1,1,0,0
+"solcap_snp_c2_14761",1,"1",86750111,NA,NA,269.76,1,2,0,1,0,0,1,1,0,0
+"solcap_snp_c2_14762",1,"1",86750599,NA,NA,270.03,1,2,0,1,0,0,1,1,0,0
+"solcap_snp_c2_14763",1,"1",86847560,NA,NA,270.30,1,2,0,1,0,0,1,1,0,0
+"solcap_snp_c2_14764",1,"1",86847664,NA,NA,270.68,3,2,1,0,1,1,0,0,1,1
+"solcap_snp_c2_14772",1,"1",86877778,NA,NA,271.06,1,2,0,1,0,0,1,1,0,0
+"solcap_snp_c2_14779",1,"1",86887803,NA,NA,273.48,0,2,0,0,0,0,0,0,1,1
+"solcap_snp_c1_4803",1,"1",86942483,NA,NA,275.77,3,2,1,0,1,1,0,0,1,1
+"solcap_snp_c2_14827",1,"1",87096629,NA,NA,276.43,1,2,0,1,0,0,1,1,0,0
+"solcap_snp_c2_14840",1,"1",87161581,NA,NA,277.64,3,0,1,0,1,1,0,0,0,0
+"solcap_snp_c2_14841",1,"1",87161695,NA,NA,278.88,3,3,1,0,1,1,0,1,1,1
+"solcap_snp_c2_14848",1,"1",87196823,NA,NA,279.40,1,1,0,1,0,0,1,0,0,0
+"solcap_snp_c2_37836",1,"1",87392825,NA,NA,281.43,1,4,0,1,0,0,1,1,1,1
+"solcap_snp_c2_37820",1,"1",87463711,NA,NA,281.44,3,2,1,0,1,1,0,0,1,1
+"solcap_snp_c1_11288",1,"1",87558384,NA,NA,281.45,3,2,1,0,1,1,0,0,1,1
+"solcap_snp_c1_11308",1,"1",87663528,NA,NA,287.68,4,2,1,1,1,1,1,1,0,0
+"solcap_snp_c2_37850",1,"1",87731594,NA,NA,287.69,4,2,1,1,1,1,1,1,0,0
+"solcap_snp_c2_37816",1,"1",87746020,NA,NA,288.85,0,2,0,0,0,0,0,0,1,1
+"solcap_snp_c1_9428",1,"1",87944667,NA,NA,298.54,3,1,1,1,1,0,0,1,0,0
+"solcap_snp_c1_9430",1,"1",87965033,NA,NA,306.08,4,2,1,1,1,1,1,1,0,0
+"solcap_snp_c2_22105",1,"1",88057376,NA,NA,308.57,4,3,1,1,1,1,1,0,1,1
+"solcap_snp_c1_9413",1,"1",88294049,NA,NA,310.60,4,2,1,1,1,1,1,1,0,0
+"solcap_snp_c1_9406",1,"1",88347489,NA,NA,311.27,0,2,0,0,0,0,0,0,1,1
+"solcap_snp_c2_30963",1,"1",88362769,NA,NA,312.85,2,0,1,0,1,0,0,0,0,0
+"solcap_snp_c2_30961",1,"1",88389459,NA,NA,313.30,0,1,0,0,0,0,0,1,0,0
+"solcap_snp_c1_9397",1,"1",88409394,NA,NA,314.49,4,2,1,1,1,1,1,1,0,0
+"solcap_snp_c1_9392",1,"1",88434818,NA,NA,314.50,4,2,1,1,1,1,1,1,0,0
+"solcap_snp_c2_30958",1,"1",88451845,NA,NA,316.41,0,1,0,0,0,0,0,1,0,0
+"solcap_snp_c2_30956",1,"1",88452032,NA,NA,316.42,0,1,0,0,0,0,0,1,0,0
+"solcap_snp_c2_30955",1,"1",88452236,NA,NA,316.43,0,1,0,0,0,0,0,1,0,0
+
+---------------
+/home/marcelo/repos/MAPpoly/man/extract_map.Rd -- 2020-09-23 16:50:09
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/filter_missing.Rd -- 2020-09-23 16:50:09
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/filter_segregation.Rd -- 2020-09-23 17:07:36
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/get_genomic_order.Rd -- 2020-09-23 17:07:41
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/get_submap.Rd -- 2020-09-23 17:07:41
+
+	Ploidy level: 6
+	Rec. Frac. Limit: 0.500
+	Number of markers: 20
+	Number of individuals: 300
+	
+ Init. values:	0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 	
+ Iter: 1	0.001 0.001 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.001 0.002 0.004 0.003 0.003 0.003 0.002 0.001 0.001 0.001 
+
+Estimating pairwise recombination fraction for marker sequence ...done
+
+Estimating sequential map: 
+----------------------------------------
+Number of markers: 20
+═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════ Initial sequence ══
+4 markers...
+●    Trying sequence: 1 2 3 4 :
+       6 phase(s): . . . . . . 
+═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════ Done with initial sequence ══
+5 /5 :(25%)    5 : 1 ph     (1/1)       -- tail: 4  |||●|| ||||||                     
+6 /6 :(30%)    7 : 4 ph     (1/4)       -- tail: 5  |●●||| ||●|||  ...  |●●||| ||||●| 
+7 /7 :(35%)    8 : 1 ph     (1/1)       -- tail: 6  ●||||| ●●||●●                     
+8 /8 :(40%)    9 : 2 ph     (1/2)       -- tail: 7  |●|||| ||||||       ||||●| |||||| 
+9 /9 :(45%)    10: 20 ph    (1/20)      -- tail: 8  ●●|||| ●●●|||  ...  ●●|||| ●●|●|| 
+10/10:(50%)    12: 1 ph     (1/1)       -- tail: 9  |●||●| ||●|||                     
+11/11:(55%)    13: 3 ph     (1/3)       -- tail: 10 |●|●|| ●|●●||  ...  |●|●|| |●●●|| 
+12/12:(60%)    14: 1 ph     (1/1)       -- tail: 11 ||●|●| ||||||                     
+13/13:(65%)    15: 4 ph     (1/4)       -- tail: 12 ●||||| ||||||  ...  |●|||| |||||| 
+14/14:(70%)    16: 1 ph     (1/1)       -- tail: 13 |||||| |||●||                     
+15/15:(75%)    17: 1 ph     (1/1)       -- tail: 14 ||||●| ||●|||                     
+16/16:(80%)    19: 4 ph     (1/4)       -- tail: 15 ||●||| |●||||  ...  ||●||| ||||●| 
+17/17:(85%)    20: 1 ph     (1/1)       -- tail: 16 ||||●| ||●|||                     
+18/18:(90%)    21: 1 ph     (1/1)       -- tail: 17 ||●●|● |||●||                     
+19/19:(95%)    22: 1 ph     (1/1)       -- tail: 18 ●||||| ●|||●●                     
+20/20:(100%)   23: 1 ph     (1/1)       -- tail: 19 |●|||| ||||||                     
+═══════════════════════════════════════════════════════════════════════════════════════════════════ Reestimating final recombination fractions ══
+Markers in the initial sequence: 20
+Mapped markers                  : 20 (100%)
+═════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════
+
+    You selected: reestimate.rf = FALSE
+    -----------------------------------------
+    The recombination fractions provided were
+    obtained using the marker positions in the 
+    input map; For accurate values, plese 
+    reestimate the map using functions 'reest_rf', 
+    'est_full_hmm_with_global_error' or 
+    'est_full_hmm_with_prior_prob'
+
+---------------
+/home/marcelo/repos/MAPpoly/man/group_mappoly.Rd -- 2020-09-23 17:08:31
+
+INFO: Using  7  CPUs for calculation.
+INFO: Done with 857395  pairs of markers 
+INFO: Calculation took: 269.452 seconds
+INFO: Going singlemode. Using one CPU.
+
+---------------
+/home/marcelo/repos/MAPpoly/man/import_data_from_polymapR.Rd -- 2020-09-23 17:14:22
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/import_from_updog.Rd -- 2020-09-23 17:14:25
+
+    |                                   *.#,%    
+   |||                                 *******/  
+ |||||||    (**..#**.                  */   **/  
+|||||||||    */****************************/*%   
+   |||    &****..,*.************************/    
+   |||     (....,,,*,...****%********/(******    
+   |||                ,,****%////,,,,./.****/    
+   |||                  /**//         .*///....  
+   |||                  .*/*/%#         .,/   ., 
+   |||               , **/   #%         .*    .. 
+   |||                               ,,,*        
+
+Working on it...done!    Filtering non-conforming markers.
+    ...
+
+---------------
+/home/marcelo/repos/MAPpoly/man/import_phased_maplist_from_polymapR.Rd -- 2020-09-23 17:14:33
+
+
+The following P1 markers had less than 2 significant linkages:
+_______________________________________
+
+|_           |_           |_           |_           |
+|:-----------|:-----------|:-----------|:-----------|
+|Ac_ws037885 |Ac_ws041942 |Ap_ts070305 |Zm_ns067574 |
+|Ap_ts075300 |Ap_ns074397 |Ap_rs052672 |Ap_ws009328 |
+|Ls_ns084822 |Ps_ns097876 |Ps_rs020537 |Ps_ts037900 |
+|Zm_ts083135 |Zm_ts004298 |Zm_ns066194 |Zm_ws014166 |
+|Ls_ts088453 |Ps_ns038007 |Ps_ts070891 |St_ts053498 |
+|            |            |            |            |
+
+
+The following P2 markers had less than 2 significant linkages:
+_______________________________________
+
+|_           |_           |_           |_           |
+|:-----------|:-----------|:-----------|:-----------|
+|Ls_ns063052 |Ls_rs094027 |Ps_ws078864 |St_ws039972 |
+|Zm_rs092910 |Zm_ws037604 |Ls_rs086910 |Ps_ts054446 |
+|Ps_ts081649 |Zm_ns036680 |Ac_ns067500 |Ac_rs051869 |
+|Zm_rs004217 |            |            |            |
+
+
+
+The following markers did not have the expected assignment in P1:
+_______________________________________
+
+|_           |_           |_           |_           |
+|:-----------|:-----------|:-----------|:-----------|
+|Ac_ws075687 |Ps_ws055810 |St_rs092189 |Zm_rs020209 |
+|Zm_ts025575 |Zm_ws000975 |Ac_ns070094 |Ac_rs039298 |
+|Ac_ts072582 |Ac_ts086562 |Ac_ws046030 |Ap_ts006601 |
+|Ap_ws033898 |Ap_ws090446 |Ls_ns009578 |Ls_ns056381 |
+|Ls_rs034786 |Ls_ts033116 |Ps_ns004324 |Ps_ns011259 |
+|Ps_ns058881 |Ps_rs011148 |Ps_ws042725 |St_ns024128 |
+|St_ns062583 |St_rs064926 |St_ts039094 |St_ts041924 |
+|St_ws030944 |St_ws039119 |St_ws070920 |Zm_ns025423 |
+|Zm_ns029518 |Zm_ts044244 |Zm_ts069738 |Zm_ts079926 |
+|Ac_ws068755 |Ac_ws072122 |Ap_ts011409 |Ap_ts054001 |
+|Ap_ts091140 |Ap_ws040909 |Ap_ws077592 |Ls_rs082323 |
+|Ps_ns083739 |Ps_rs075426 |Ps_ws090199 |St_ns098458 |
+|St_ts015229 |St_ws087200 |Zm_rs037757 |Zm_ts002446 |
+|Zm_ts019711 |Zm_ws027219 |Zm_ws060259 |            |
+
+
+The following markers did not have the expected assignment in P2:
+_______________________________________
+
+|_           |_           |_           |_           |
+|:-----------|:-----------|:-----------|:-----------|
+|St_ws063767 |Zm_ts045853 |Ap_rs093377 |St_ns088154 |
+|Zm_rs086486 |Ac_ws097004 |Ls_ws040263 |St_ns001206 |
+|St_ns030561 |St_ws013665 |St_ws018280 |Zm_rs054641 |
+|Ac_ts007867 |Ac_ts048872 |Ac_ws080280 |Ap_ws040909 |
+|Ap_ws060705 |Ap_ws077592 |Ls_ns013729 |Ls_rs007694 |
+|Ls_rs080231 |Ls_ts028778 |Ps_ts082625 |Ps_ws015893 |
+|St_rs003957 |St_ts015229 |Zm_rs083409 |Zm_ws057795 |
+|            |            |            |            |
+
+
+
+The following markers did not have the expected assignment across both parents:
+_______________________________________
+
+|_           |_           |_           |_           |
+|:-----------|:-----------|:-----------|:-----------|
+|Ls_ns063052 |Ls_rs094027 |Ps_ts060971 |Ps_ws078864 |
+|St_ws039972 |St_ws063767 |Zm_rs092910 |Zm_ts045853 |
+|Zm_ws037604 |Ac_ns067500 |Ac_rs051869 |Ac_ws097004 |
+|Ls_ws040263 |St_ns001206 |St_ns030561 |St_ws013665 |
+|St_ws018280 |Zm_rs054641 |Ls_rs086910 |Ps_ts054446 |
+|Ps_ts081649 |Zm_ns036680 |Ac_ts007867 |Ac_ts048872 |
+|Ac_ws080280 |Ap_ws060705 |Ls_rs007694 |Ls_rs080231 |
+|Ls_ts028778 |Ps_ts082625 |Ps_ws015893 |St_rs003957 |
+|Zm_rs004217 |Zm_rs083409 |Zm_ws057795 |Ac_ws033297 |
+|Ac_ws037885 |Ac_ws041942 |Ap_ts070305 |Ap_ts089267 |
+|St_ns048176 |St_ts030296 |Zm_ns067574 |Zm_ws010615 |
+|Ac_ns070094 |Ac_rs039298 |Ac_ts072582 |Ac_ts086562 |
+|Ac_ws046030 |Ap_ts006601 |Ap_ws033898 |Ap_ws090446 |
+|Ls_ns009578 |Ls_ns056381 |Ls_rs034786 |Ls_ts033116 |
+|Ls_ts080875 |Ls_ws031541 |Ps_ns004324 |Ps_ns011259 |
+|Ps_ns058881 |Ps_rs011148 |Ps_ws042725 |St_ns024128 |
+|St_ns062583 |St_rs064926 |St_ts039094 |St_ts041924 |
+|St_ws030944 |St_ws039119 |St_ws070920 |Zm_ns025423 |
+|Zm_ns029518 |Zm_ns066194 |Zm_ts044244 |Zm_ts069738 |
+|Zm_ts079926 |Zm_ws014166 |Ls_ws066613 |St_ts061078 |
+|Zm_rs086341 |Zm_ts004298 |Zm_ts021292 |Ac_ts000182 |
+|Ac_ws097783 |Ap_ns074397 |Ap_rs052672 |Ap_ts018003 |
+|Ap_ws009328 |Ls_ns084822 |Ps_ns005543 |Ps_ns097876 |
+|Ps_rs020537 |Ps_rs063176 |Ps_ts037900 |Zm_ts004968 |
+|Zm_ts032170 |Zm_ts069324 |Zm_ts083135 |Ac_ws068755 |
+|Ac_ws072122 |Ap_ts011409 |Ap_ts053047 |Ap_ts054001 |
+|Ap_ts091140 |Ls_rs082323 |Ls_ts088453 |Ps_ns038007 |
+|Ps_ns083739 |Ps_rs075426 |Ps_ts033186 |Ps_ts070891 |
+|Ps_ws090199 |St_ns098458 |St_ts053498 |St_ws087200 |
+|Zm_rs037757 |Zm_ts002446 |Zm_ts019711 |Zm_ws027219 |
+|Zm_ws060259 |            |            |            |
+
+
+
+Phased marker breakdown:
+_______________________________________
+
+|     | P2_0| P2_1| P2_2| P2_3|
+|:----|----:|----:|----:|----:|
+|P1_0 |    0|  195|  101|    0|
+|P1_1 |  173|  302|  196|   61|
+|P1_2 |  111|  183|   88|    0|
+
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/loglike_hmm.Rd -- 2020-09-23 17:14:53
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/ls_linkage_phases.Rd -- 2020-09-23 17:15:12
+
+INFO: Going singlemode. Using one CPU for calculation.
+
+---------------
+/home/marcelo/repos/MAPpoly/man/make_mat_mappoly.Rd -- 2020-09-23 17:15:18
+
+INFO: Going singlemode. Using one CPU for calculation.
+INFO: Going singlemode. Using one CPU.
+
+---------------
+/home/marcelo/repos/MAPpoly/man/make_pairs_mappoly.Rd -- 2020-09-23 17:15:36
+
+INFO: Using  7  CPUs for calculation.
+INFO: Done with 18721  pairs of markers 
+INFO: Calculation took: 13.915 seconds
+INFO: Going singlemode. Using one CPU.
+INFO: Going singlemode. Using one CPU.
+INFO: Going singlemode. Using one CPU.
+INFO: Going singlemode. Using one CPU.
+
+---------------
+/home/marcelo/repos/MAPpoly/man/make_seq_mappoly.Rd -- 2020-09-23 17:20:37
+
+INFO: Using  7  CPUs for calculation.
+INFO: Done with 6765681  pairs of markers 
+INFO: Calculation took: 812.475 seconds
+INFO: Going singlemode. Using one CPU.
+
+---------------
+/home/marcelo/repos/MAPpoly/man/mds_mappoly.Rd -- 2020-09-23 17:53:18
+
+INFO: Using  7  CPUs for calculation.
+INFO: Done with 179700  pairs of markers 
+INFO: Calculation took: 69.587 seconds
+INFO: Going singlemode. Using one CPU.
+Stress: 0.2533
+Mean Nearest Neighbour Fit: 37.48064
+
+---------------
+/home/marcelo/repos/MAPpoly/man/merge_datasets.Rd -- 2020-09-23 17:54:44
+
+Loading chromosome 1 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr1.vcf.gz'
+Content type 'application/octet-stream' length 10644125 bytes (10.2 MB)
+==================================================
+downloaded 10.2 MB
+
+
+Loading chromosome 2 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr2.vcf.gz'
+Content type 'application/octet-stream' length 8008479 bytes (7.6 MB)
+==================================================
+downloaded 7.6 MB
+
+
+Loading chromosome 3 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr3.vcf.gz'
+Content type 'application/octet-stream' length 9559237 bytes (9.1 MB)
+==================================================
+downloaded 9.1 MB
+
+
+This is an object of class 'mappoly.data'
+    Ploidy level:                            6 
+    No. individuals:                         303 
+    No. markers:                             8770 
+    Missing data:                            0.86%
+    Redundant markers:                       16.5%
+
+    ----------
+    No. markers per sequence:
+      seq No.mrk
+        1   3280
+        2   2512
+        3   2978
+    ----------
+    Markers with no sequence information: 0
+    ----------
+    No. of markers per dosage combination in both parents:
+    P1 P2 freq
+     0  1 1343
+     0  2  484
+     0  3  175
+     0  4   32
+     1  0 1190
+     1  1  789
+     1  2  599
+     1  3  329
+     1  4   91
+     1  5   14
+     2  0  449
+     2  1  559
+     2  2  592
+     2  3  475
+     2  4  163
+     2  5    6
+     3  0  139
+     3  1  340
+     3  2  475
+     3  3  291
+     3  4    8
+     4  0   26
+     4  1  102
+     4  2   89
+     4  3    5
+     5  0    1
+     5  1    4
+
+---------------
+/home/marcelo/repos/MAPpoly/man/merge_maps.Rd -- 2020-09-23 17:56:57
+
+	Ploidy level: 4
+	Rec. Frac. Limit: 0.500
+	Number of markers: 5
+	Number of individuals: 160
+	
+ Init. values:	0.001 0.001 0.001 0.001 	
+ Iter: 1	0.016 0.001 0.001 0.005 	
+ Iter: 2	0.024 0.000 0.001 0.007 	
+ Iter: 3	0.028 0.000 0.000 0.008 	
+ Iter: 4	0.030 0.000 0.000 0.008 	
+ Iter: 5	0.030 0.000 0.000 0.008 	
+ Iter: 6	0.031 0.000 0.000 0.008 	
+ Iter: 7	0.031 0.000 0.000 0.008 	
+ Iter: 8	0.031 0.000 0.000 0.008 
+	Ploidy level: 4
+	Rec. Frac. Limit: 0.500
+	Number of markers: 10
+	Number of individuals: 160
+	
+ Init. values:	0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 	
+ Iter: 1	0.007 0.004 0.012 0.008 0.004 0.003 0.001 0.003 0.001 	
+ Iter: 2	0.009 0.005 0.015 0.009 0.005 0.004 0.001 0.004 0.000 	
+ Iter: 3	0.010 0.005 0.016 0.010 0.004 0.004 0.000 0.005 0.000 	
+ Iter: 4	0.011 0.005 0.016 0.010 0.004 0.004 0.000 0.006 0.000 	
+ Iter: 5	0.011 0.005 0.016 0.010 0.004 0.004 0.000 0.006 0.000 	
+ Iter: 6	0.011 0.005 0.016 0.010 0.004 0.005 0.000 0.006 0.000 	
+ Iter: 7	0.011 0.005 0.016 0.010 0.004 0.005 0.000 0.006 0.000 
+	Ploidy level: 4
+	Rec. Frac. Limit: 0.500
+	Number of markers: 15
+	Number of individuals: 160
+	
+ Init. values:	0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 	
+ Iter: 1	0.008 0.010 0.012 0.003 0.005 0.016 0.013 0.013 0.008 0.007 0.023 0.009 0.007 0.005 	
+ Iter: 2	0.010 0.013 0.017 0.001 0.004 0.021 0.015 0.019 0.008 0.007 0.031 0.013 0.009 0.007 	
+ Iter: 3	0.012 0.014 0.019 0.000 0.003 0.022 0.015 0.021 0.008 0.007 0.034 0.015 0.010 0.008 	
+ Iter: 4	0.012 0.015 0.020 0.000 0.003 0.022 0.014 0.023 0.007 0.007 0.034 0.017 0.010 0.010 	
+ Iter: 5	0.013 0.015 0.020 0.000 0.003 0.022 0.014 0.024 0.007 0.007 0.034 0.018 0.011 0.011 	
+ Iter: 6	0.013 0.014 0.020 0.000 0.003 0.022 0.014 0.024 0.006 0.007 0.034 0.018 0.011 0.012 	
+ Iter: 7	0.013 0.014 0.020 0.000 0.003 0.022 0.014 0.024 0.006 0.007 0.034 0.019 0.011 0.013 	
+ Iter: 8	0.014 0.014 0.020 0.000 0.003 0.022 0.014 0.025 0.006 0.007 0.034 0.019 0.011 0.014 	
+ Iter: 9	0.014 0.014 0.020 0.000 0.003 0.022 0.014 0.025 0.005 0.007 0.034 0.020 0.010 0.016 	
+ Iter: 10	0.014 0.014 0.020 0.000 0.003 0.022 0.014 0.025 0.005 0.007 0.033 0.020 0.010 0.017 	
+ Iter: 11	0.014 0.014 0.020 0.000 0.003 0.022 0.014 0.025 0.005 0.007 0.033 0.020 0.010 0.018 	
+ Iter: 12	0.015 0.013 0.020 0.000 0.003 0.022 0.014 0.025 0.005 0.007 0.033 0.020 0.010 0.020 	
+ Iter: 13	0.015 0.013 0.020 0.000 0.003 0.022 0.014 0.025 0.005 0.007 0.033 0.020 0.010 0.021 	
+ Iter: 14	0.015 0.013 0.020 0.000 0.003 0.022 0.014 0.025 0.005 0.007 0.033 0.020 0.009 0.022 	
+ Iter: 15	0.015 0.013 0.020 0.000 0.003 0.022 0.014 0.025 0.004 0.007 0.033 0.019 0.009 0.024 	
+ Iter: 16	0.016 0.013 0.020 0.000 0.003 0.022 0.014 0.025 0.004 0.007 0.033 0.019 0.009 0.025 	
+ Iter: 17	0.016 0.013 0.020 0.000 0.003 0.022 0.014 0.025 0.004 0.007 0.033 0.019 0.009 0.027 	
+ Iter: 18	0.016 0.012 0.020 0.000 0.003 0.022 0.014 0.025 0.004 0.007 0.033 0.018 0.009 0.028 	
+ Iter: 19	0.016 0.012 0.020 0.000 0.003 0.022 0.014 0.025 0.004 0.008 0.033 0.018 0.008 0.029 	
+ Iter: 20	0.016 0.012 0.020 0.000 0.003 0.022 0.014 0.025 0.004 0.008 0.033 0.018 0.008 0.031 	
+ Iter: 21	0.016 0.012 0.020 0.000 0.003 0.022 0.014 0.025 0.004 0.008 0.033 0.017 0.008 0.032 	
+ Iter: 22	0.017 0.012 0.020 0.000 0.003 0.022 0.014 0.025 0.004 0.008 0.033 0.017 0.008 0.034 	
+ Iter: 23	0.017 0.012 0.020 0.000 0.003 0.022 0.014 0.026 0.004 0.008 0.033 0.016 0.008 0.035 	
+ Iter: 24	0.017 0.012 0.020 0.000 0.003 0.022 0.014 0.026 0.004 0.008 0.033 0.016 0.008 0.036 	
+ Iter: 25	0.017 0.012 0.020 0.000 0.003 0.022 0.014 0.026 0.004 0.008 0.033 0.015 0.008 0.038 	
+ Iter: 26	0.017 0.012 0.020 0.000 0.003 0.022 0.014 0.026 0.003 0.008 0.033 0.015 0.008 0.039 	
+ Iter: 27	0.017 0.011 0.020 0.000 0.003 0.022 0.014 0.026 0.003 0.008 0.034 0.015 0.007 0.040 	
+ Iter: 28	0.017 0.011 0.020 0.000 0.003 0.022 0.014 0.026 0.003 0.008 0.034 0.014 0.007 0.041 	
+ Iter: 29	0.018 0.011 0.020 0.000 0.003 0.022 0.014 0.026 0.003 0.008 0.034 0.014 0.007 0.042 	
+ Iter: 30	0.018 0.011 0.020 0.000 0.003 0.022 0.014 0.026 0.003 0.008 0.034 0.013 0.007 0.044 	
+ Iter: 31	0.018 0.011 0.020 0.000 0.003 0.022 0.014 0.026 0.003 0.008 0.034 0.013 0.007 0.045 	
+ Iter: 32	0.018 0.011 0.020 0.000 0.003 0.022 0.014 0.026 0.003 0.008 0.034 0.013 0.007 0.046 	
+ Iter: 33	0.018 0.011 0.020 0.000 0.003 0.021 0.014 0.026 0.003 0.008 0.034 0.012 0.007 0.047 	
+ Iter: 34	0.018 0.011 0.020 0.000 0.003 0.021 0.014 0.026 0.003 0.008 0.034 0.012 0.007 0.048 	
+ Iter: 35	0.018 0.011 0.020 0.000 0.003 0.021 0.014 0.026 0.003 0.008 0.034 0.012 0.007 0.049 	
+ Iter: 36	0.018 0.011 0.020 0.000 0.003 0.021 0.014 0.026 0.003 0.008 0.034 0.011 0.007 0.049 	
+ Iter: 37	0.018 0.011 0.020 0.000 0.003 0.021 0.014 0.026 0.003 0.008 0.034 0.011 0.007 0.050 	
+ Iter: 38	0.018 0.011 0.020 0.000 0.003 0.021 0.014 0.026 0.003 0.008 0.034 0.011 0.007 0.051 	
+ Iter: 39	0.018 0.011 0.020 0.000 0.003 0.021 0.014 0.026 0.003 0.008 0.034 0.010 0.007 0.052 	
+ Iter: 40	0.019 0.011 0.020 0.000 0.003 0.021 0.014 0.026 0.003 0.008 0.034 0.010 0.007 0.052 	
+ Iter: 41	0.019 0.011 0.020 0.000 0.003 0.021 0.014 0.026 0.003 0.008 0.034 0.010 0.007 0.053 	
+ Iter: 42	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.003 0.008 0.034 0.010 0.007 0.054 	
+ Iter: 43	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.003 0.008 0.034 0.009 0.007 0.054 	
+ Iter: 44	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.003 0.008 0.034 0.009 0.007 0.055 	
+ Iter: 45	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.003 0.008 0.034 0.009 0.007 0.055 	
+ Iter: 46	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.003 0.008 0.034 0.009 0.007 0.056 	
+ Iter: 47	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.034 0.009 0.007 0.056 	
+ Iter: 48	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.035 0.008 0.006 0.057 	
+ Iter: 49	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.035 0.008 0.006 0.057 	
+ Iter: 50	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.035 0.008 0.006 0.057 	
+ Iter: 51	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.035 0.008 0.006 0.058 	
+ Iter: 52	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.035 0.008 0.006 0.058 	
+ Iter: 53	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.035 0.008 0.006 0.058 	
+ Iter: 54	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.035 0.007 0.006 0.059 	
+ Iter: 55	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.035 0.007 0.006 0.059 	
+ Iter: 56	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.035 0.007 0.006 0.059 	
+ Iter: 57	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.035 0.007 0.006 0.059 	
+ Iter: 58	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.035 0.007 0.006 0.060 	
+ Iter: 59	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.035 0.007 0.006 0.060 	
+ Iter: 60	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.035 0.007 0.006 0.060 	
+ Iter: 61	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.035 0.007 0.006 0.060 	
+ Iter: 62	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.035 0.006 0.006 0.060 	
+ Iter: 63	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.035 0.006 0.006 0.061 	
+ Iter: 64	0.019 0.010 0.020 0.000 0.003 0.021 0.014 0.026 0.002 0.008 0.035 0.006 0.006 0.061 
+	Ploidy level: 4
+	Rec. Frac. Limit: 0.500
+	Number of markers: 30
+	Number of individuals: 160
+	
+ Init. values:	0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 	
+ Iter: 1	0.016 0.001 0.002 0.006 0.006 0.007 0.006 0.011 0.008 0.004 0.003 0.001 0.004 0.001 0.003 0.009 0.012 0.014 0.003 0.006 0.017 0.013 0.013 0.007 0.007 0.023 0.009 0.007 0.005 	
+ Iter: 2	0.024 0.000 0.001 0.007 0.007 0.009 0.006 0.014 0.010 0.004 0.003 0.001 0.004 0.001 0.004 0.009 0.016 0.019 0.001 0.004 0.021 0.014 0.017 0.006 0.008 0.032 0.012 0.009 0.007 	
+ Iter: 3	0.028 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.001 0.004 0.008 0.017 0.022 0.000 0.003 0.022 0.014 0.019 0.006 0.008 0.035 0.014 0.010 0.009 	
+ Iter: 4	0.029 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.004 0.007 0.018 0.023 0.000 0.003 0.022 0.014 0.020 0.005 0.008 0.035 0.015 0.011 0.010 	
+ Iter: 5	0.030 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.004 0.006 0.018 0.024 0.000 0.003 0.022 0.014 0.020 0.004 0.008 0.035 0.016 0.011 0.011 	
+ Iter: 6	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.004 0.005 0.018 0.025 0.000 0.003 0.022 0.014 0.020 0.004 0.008 0.035 0.017 0.011 0.013 	
+ Iter: 7	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.004 0.005 0.018 0.025 0.000 0.003 0.022 0.014 0.020 0.004 0.008 0.035 0.017 0.011 0.014 	
+ Iter: 8	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.004 0.019 0.026 0.000 0.003 0.022 0.014 0.021 0.003 0.008 0.034 0.018 0.011 0.015 	
+ Iter: 9	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.004 0.019 0.026 0.000 0.003 0.022 0.014 0.021 0.003 0.008 0.034 0.018 0.011 0.017 	
+ Iter: 10	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.003 0.019 0.026 0.000 0.003 0.022 0.014 0.021 0.003 0.008 0.034 0.018 0.011 0.018 	
+ Iter: 11	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.003 0.019 0.026 0.000 0.003 0.022 0.014 0.021 0.003 0.009 0.034 0.018 0.010 0.020 	
+ Iter: 12	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.003 0.020 0.026 0.000 0.003 0.021 0.014 0.021 0.002 0.009 0.034 0.018 0.010 0.021 	
+ Iter: 13	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.003 0.020 0.026 0.000 0.003 0.021 0.014 0.021 0.002 0.009 0.034 0.018 0.010 0.023 	
+ Iter: 14	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.002 0.020 0.026 0.000 0.003 0.021 0.014 0.021 0.002 0.009 0.034 0.017 0.010 0.024 	
+ Iter: 15	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.002 0.020 0.026 0.000 0.003 0.021 0.013 0.021 0.002 0.009 0.034 0.017 0.009 0.026 	
+ Iter: 16	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.002 0.021 0.026 0.000 0.003 0.021 0.013 0.021 0.002 0.009 0.034 0.017 0.009 0.028 	
+ Iter: 17	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.002 0.021 0.026 0.000 0.003 0.021 0.013 0.021 0.002 0.009 0.034 0.016 0.009 0.029 	
+ Iter: 18	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.002 0.021 0.025 0.000 0.003 0.021 0.013 0.021 0.002 0.009 0.034 0.016 0.009 0.031 	
+ Iter: 19	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.001 0.021 0.025 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.034 0.016 0.009 0.033 	
+ Iter: 20	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.001 0.022 0.025 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.034 0.015 0.008 0.034 	
+ Iter: 21	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.001 0.022 0.025 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.034 0.015 0.008 0.036 	
+ Iter: 22	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.001 0.022 0.025 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.034 0.014 0.008 0.037 	
+ Iter: 23	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.001 0.022 0.025 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.034 0.014 0.008 0.039 	
+ Iter: 24	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.001 0.022 0.025 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.034 0.013 0.008 0.040 	
+ Iter: 25	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.001 0.022 0.025 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.034 0.013 0.008 0.042 	
+ Iter: 26	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.001 0.023 0.025 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.034 0.013 0.008 0.043 	
+ Iter: 27	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.001 0.023 0.024 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.034 0.012 0.007 0.044 	
+ Iter: 28	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.001 0.023 0.024 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.034 0.012 0.007 0.046 	
+ Iter: 29	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.001 0.023 0.024 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.034 0.011 0.007 0.047 	
+ Iter: 30	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.023 0.024 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.034 0.011 0.007 0.048 	
+ Iter: 31	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.023 0.024 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.034 0.011 0.007 0.049 	
+ Iter: 32	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.023 0.024 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.034 0.010 0.007 0.050 	
+ Iter: 33	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.023 0.024 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.034 0.010 0.007 0.051 	
+ Iter: 34	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.023 0.024 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.034 0.010 0.007 0.052 	
+ Iter: 35	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.024 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.035 0.009 0.007 0.053 	
+ Iter: 36	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.024 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.035 0.009 0.007 0.054 	
+ Iter: 37	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.024 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.035 0.009 0.007 0.055 	
+ Iter: 38	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.024 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.035 0.008 0.007 0.056 	
+ Iter: 39	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.035 0.008 0.007 0.056 	
+ Iter: 40	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.035 0.008 0.007 0.057 	
+ Iter: 41	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.001 0.009 0.035 0.008 0.007 0.058 	
+ Iter: 42	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.000 0.009 0.035 0.008 0.007 0.058 	
+ Iter: 43	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.000 0.009 0.035 0.007 0.007 0.059 	
+ Iter: 44	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.000 0.009 0.035 0.007 0.007 0.059 	
+ Iter: 45	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.000 0.009 0.035 0.007 0.007 0.060 	
+ Iter: 46	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.000 0.009 0.035 0.007 0.006 0.060 	
+ Iter: 47	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.000 0.009 0.035 0.007 0.006 0.061 	
+ Iter: 48	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.000 0.009 0.035 0.006 0.006 0.061 	
+ Iter: 49	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.000 0.009 0.035 0.006 0.006 0.061 	
+ Iter: 50	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.000 0.009 0.035 0.006 0.006 0.062 	
+ Iter: 51	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.000 0.009 0.035 0.006 0.006 0.062 	
+ Iter: 52	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.000 0.009 0.035 0.006 0.006 0.062 	
+ Iter: 53	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.000 0.009 0.035 0.006 0.006 0.063 	
+ Iter: 54	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.000 0.009 0.035 0.006 0.006 0.063 	
+ Iter: 55	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.000 0.009 0.035 0.005 0.006 0.063 	
+ Iter: 56	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.000 0.009 0.035 0.005 0.006 0.063 	
+ Iter: 57	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.000 0.009 0.035 0.005 0.006 0.064 	
+ Iter: 58	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.021 0.000 0.009 0.035 0.005 0.006 0.064 	
+ Iter: 59	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.022 0.000 0.010 0.035 0.005 0.006 0.064 	
+ Iter: 60	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.024 0.023 0.000 0.003 0.021 0.013 0.022 0.000 0.010 0.035 0.005 0.006 0.064 	
+ Iter: 61	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.025 0.023 0.000 0.003 0.021 0.013 0.022 0.000 0.010 0.035 0.005 0.006 0.064 	
+ Iter: 62	0.031 0.000 0.000 0.007 0.007 0.009 0.006 0.015 0.010 0.004 0.003 0.000 0.005 0.000 0.005 0.000 0.025 0.023 0.000 0.003 0.021 0.013 0.022 0.000 0.010 0.036 0.005 0.006 0.065 
+INFO: Going singlemode. Using one CPU for calculation.
+	Ploidy level: 6
+	Rec. Frac. Limit: 0.500
+	Number of markers: 5
+	Number of individuals: 300
+	
+ Init. values:	0.001 0.001 0.001 0.001 	
+ Iter: 1	0.001 0.001 0.001 0.001 
+	Ploidy level: 6
+	Rec. Frac. Limit: 0.500
+	Number of markers: 10
+	Number of individuals: 300
+	
+ Init. values:	0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 	
+ Iter: 1	0.001 0.001 0.000 0.001 0.001 0.001 0.002 0.002 0.002 	
+ Iter: 2	0.001 0.000 0.000 0.000 0.001 0.001 0.003 0.002 0.002 	
+ Iter: 3	0.000 0.000 0.000 0.000 0.001 0.001 0.003 0.002 0.002 	
+ Iter: 4	0.000 0.000 0.000 0.000 0.001 0.001 0.003 0.003 0.003 	
+ Iter: 5	0.000 0.000 0.000 0.000 0.001 0.001 0.004 0.003 0.003 	
+ Iter: 6	0.000 0.000 0.000 0.000 0.000 0.001 0.004 0.003 0.003 	
+ Iter: 7	0.000 0.000 0.000 0.000 0.000 0.001 0.004 0.003 0.003 	
+ Iter: 8	0.001 0.000 0.000 0.000 0.000 0.000 0.004 0.003 0.003 	
+ Iter: 9	0.001 0.000 0.000 0.000 0.000 0.000 0.004 0.003 0.003 	
+ Iter: 10	0.001 0.000 0.000 0.000 0.000 0.000 0.004 0.003 0.004 
+	Ploidy level: 6
+	Rec. Frac. Limit: 0.500
+	Number of markers: 15
+	Number of individuals: 300
+	
+ Init. values:	0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 	
+ Iter: 1	0.001 0.001 0.001 0.001 0.002 0.002 0.004 0.003 0.003 0.006 0.003 0.003 0.002 0.002 	
+ Iter: 2	0.001 0.000 0.000 0.001 0.003 0.002 0.005 0.005 0.004 0.008 0.003 0.003 0.002 0.002 	
+ Iter: 3	0.001 0.000 0.000 0.001 0.003 0.002 0.006 0.005 0.004 0.009 0.003 0.003 0.002 0.002 	
+ Iter: 4	0.001 0.000 0.000 0.000 0.003 0.002 0.006 0.005 0.004 0.009 0.003 0.003 0.003 0.002 	
+ Iter: 5	0.001 0.000 0.000 0.000 0.003 0.002 0.007 0.006 0.004 0.010 0.003 0.003 0.003 0.003 	
+ Iter: 6	0.001 0.000 0.000 0.000 0.003 0.002 0.007 0.006 0.004 0.010 0.003 0.002 0.003 0.003 	
+ Iter: 7	0.001 0.000 0.000 0.000 0.004 0.002 0.007 0.006 0.004 0.010 0.003 0.002 0.003 0.003 	
+ Iter: 8	0.001 0.000 0.000 0.000 0.004 0.002 0.007 0.006 0.003 0.010 0.003 0.002 0.003 0.004 	
+ Iter: 9	0.001 0.000 0.000 0.000 0.004 0.001 0.007 0.006 0.003 0.010 0.003 0.002 0.004 0.004 	
+ Iter: 10	0.000 0.000 0.000 0.000 0.004 0.001 0.007 0.006 0.003 0.010 0.003 0.002 0.004 0.004 	
+ Iter: 11	0.000 0.000 0.000 0.000 0.004 0.001 0.007 0.006 0.003 0.010 0.003 0.002 0.004 0.004 	
+ Iter: 12	0.000 0.000 0.000 0.000 0.004 0.001 0.008 0.006 0.003 0.010 0.003 0.002 0.004 0.005 	
+ Iter: 13	0.000 0.000 0.000 0.000 0.004 0.001 0.008 0.006 0.003 0.010 0.003 0.002 0.004 0.005 	
+ Iter: 14	0.000 0.000 0.000 0.000 0.004 0.001 0.008 0.006 0.003 0.010 0.003 0.002 0.004 0.005 	
+ Iter: 15	0.000 0.000 0.000 0.000 0.004 0.001 0.008 0.006 0.003 0.010 0.002 0.002 0.004 0.006 	
+ Iter: 16	0.000 0.000 0.000 0.000 0.004 0.001 0.008 0.006 0.003 0.011 0.002 0.002 0.004 0.006 	
+ Iter: 17	0.000 0.000 0.000 0.000 0.004 0.001 0.008 0.006 0.003 0.011 0.002 0.002 0.004 0.006 	
+ Iter: 18	0.000 0.000 0.000 0.000 0.004 0.001 0.008 0.006 0.003 0.011 0.002 0.002 0.004 0.006 	
+ Iter: 19	0.000 0.000 0.000 0.000 0.004 0.001 0.008 0.006 0.003 0.011 0.002 0.002 0.004 0.006 	
+ Iter: 20	0.000 0.000 0.000 0.000 0.004 0.001 0.008 0.006 0.003 0.011 0.002 0.002 0.004 0.007 	
+ Iter: 21	0.000 0.000 0.000 0.000 0.005 0.001 0.008 0.006 0.003 0.011 0.002 0.002 0.004 0.007 	
+ Iter: 22	0.000 0.000 0.000 0.000 0.005 0.001 0.008 0.006 0.003 0.011 0.002 0.001 0.004 0.007 	
+ Iter: 23	0.000 0.000 0.000 0.000 0.005 0.000 0.008 0.006 0.003 0.011 0.002 0.001 0.004 0.007 	
+ Iter: 24	0.000 0.000 0.000 0.000 0.005 0.000 0.008 0.006 0.003 0.011 0.002 0.001 0.004 0.008 	
+ Iter: 25	0.000 0.000 0.000 0.000 0.005 0.000 0.008 0.006 0.003 0.011 0.002 0.001 0.004 0.008 	
+ Iter: 26	0.000 0.000 0.000 0.000 0.005 0.000 0.008 0.006 0.003 0.011 0.002 0.001 0.004 0.008 	
+ Iter: 27	0.000 0.000 0.000 0.000 0.005 0.000 0.008 0.006 0.003 0.011 0.002 0.001 0.004 0.008 	
+ Iter: 28	0.000 0.000 0.000 0.000 0.005 0.000 0.008 0.006 0.003 0.011 0.002 0.001 0.004 0.008 	
+ Iter: 29	0.000 0.000 0.000 0.000 0.005 0.000 0.008 0.006 0.003 0.011 0.002 0.001 0.004 0.008 	
+ Iter: 30	0.000 0.000 0.000 0.000 0.005 0.000 0.008 0.006 0.003 0.011 0.002 0.001 0.003 0.009 	
+ Iter: 31	0.000 0.000 0.000 0.000 0.005 0.000 0.008 0.006 0.003 0.011 0.002 0.001 0.003 0.009 	
+ Iter: 32	0.000 0.000 0.000 0.000 0.005 0.000 0.008 0.006 0.003 0.011 0.002 0.001 0.003 0.009 	
+ Iter: 33	0.000 0.000 0.000 0.000 0.005 0.000 0.008 0.006 0.003 0.011 0.002 0.001 0.003 0.009 	
+ Iter: 34	0.000 0.000 0.000 0.000 0.005 0.000 0.008 0.006 0.003 0.011 0.002 0.001 0.003 0.009 	
+ Iter: 35	0.000 0.000 0.000 0.000 0.005 0.000 0.008 0.006 0.003 0.011 0.002 0.001 0.003 0.009 	
+ Iter: 36	0.000 0.000 0.000 0.000 0.005 0.000 0.008 0.006 0.003 0.011 0.002 0.001 0.003 0.009 	
+ Iter: 37	0.000 0.000 0.000 0.000 0.005 0.000 0.008 0.006 0.003 0.011 0.002 0.001 0.003 0.010 	
+ Iter: 38	0.000 0.000 0.000 0.000 0.005 0.000 0.008 0.006 0.003 0.011 0.002 0.001 0.003 0.010 	
+ Iter: 39	0.000 0.000 0.000 0.000 0.005 0.000 0.008 0.006 0.003 0.011 0.002 0.001 0.003 0.010 
+	Ploidy level: 6
+	Rec. Frac. Limit: 0.500
+	Number of markers: 30
+	Number of individuals: 300
+	
+ Init. values:	0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 0.001 	
+ Iter: 1	0.001 0.001 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.001 0.002 0.004 0.003 0.003 0.003 0.002 0.001 0.001 0.001 0.003 0.003 0.004 0.004 0.004 0.006 0.003 0.003 0.002 0.002 	
+ Iter: 2	0.001 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.002 0.005 0.004 0.004 0.004 0.002 0.001 0.001 0.001 0.003 0.003 0.005 0.005 0.004 0.008 0.004 0.003 0.002 0.002 	
+ Iter: 3	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.001 0.006 0.004 0.004 0.004 0.002 0.000 0.001 0.001 0.003 0.002 0.006 0.005 0.004 0.009 0.004 0.003 0.002 0.002 	
+ Iter: 4	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.001 0.006 0.004 0.004 0.004 0.001 0.000 0.000 0.000 0.003 0.002 0.006 0.005 0.004 0.010 0.004 0.003 0.003 0.002 	
+ Iter: 5	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.001 0.006 0.004 0.003 0.005 0.001 0.000 0.000 0.000 0.003 0.002 0.006 0.005 0.004 0.010 0.004 0.003 0.003 0.002 	
+ Iter: 6	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.001 0.007 0.004 0.003 0.005 0.001 0.000 0.000 0.000 0.003 0.002 0.006 0.005 0.004 0.010 0.004 0.003 0.003 0.002 	
+ Iter: 7	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.001 0.007 0.004 0.003 0.005 0.001 0.000 0.000 0.000 0.003 0.002 0.007 0.005 0.004 0.010 0.003 0.003 0.003 0.003 	
+ Iter: 8	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.001 0.007 0.004 0.003 0.005 0.001 0.000 0.000 0.000 0.003 0.002 0.007 0.005 0.004 0.011 0.003 0.002 0.003 0.003 	
+ Iter: 9	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.001 0.007 0.004 0.003 0.005 0.001 0.000 0.000 0.000 0.003 0.002 0.007 0.005 0.004 0.011 0.003 0.002 0.004 0.003 	
+ Iter: 10	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.001 0.007 0.004 0.003 0.005 0.001 0.000 0.000 0.000 0.003 0.002 0.007 0.005 0.004 0.011 0.003 0.002 0.004 0.003 	
+ Iter: 11	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.000 0.007 0.004 0.003 0.005 0.001 0.000 0.000 0.000 0.003 0.002 0.007 0.005 0.004 0.011 0.003 0.002 0.004 0.003 	
+ Iter: 12	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.000 0.007 0.004 0.003 0.005 0.001 0.000 0.000 0.000 0.003 0.002 0.007 0.005 0.004 0.011 0.003 0.002 0.004 0.004 	
+ Iter: 13	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.000 0.007 0.004 0.003 0.005 0.002 0.000 0.000 0.000 0.004 0.002 0.007 0.005 0.004 0.011 0.003 0.002 0.004 0.004 	
+ Iter: 14	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.000 0.007 0.004 0.003 0.005 0.002 0.000 0.000 0.000 0.004 0.002 0.007 0.005 0.003 0.011 0.003 0.002 0.004 0.004 	
+ Iter: 15	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.000 0.007 0.004 0.003 0.005 0.002 0.000 0.000 0.000 0.004 0.002 0.007 0.005 0.003 0.011 0.003 0.002 0.004 0.004 	
+ Iter: 16	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.000 0.007 0.004 0.003 0.005 0.002 0.000 0.000 0.000 0.004 0.002 0.007 0.005 0.003 0.011 0.003 0.002 0.004 0.004 	
+ Iter: 17	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.000 0.007 0.004 0.003 0.005 0.002 0.000 0.000 0.000 0.004 0.001 0.007 0.005 0.003 0.011 0.003 0.002 0.004 0.004 	
+ Iter: 18	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.000 0.007 0.004 0.003 0.005 0.002 0.000 0.000 0.000 0.004 0.001 0.007 0.005 0.003 0.011 0.003 0.002 0.004 0.004 	
+ Iter: 19	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.000 0.007 0.004 0.003 0.005 0.002 0.000 0.000 0.000 0.004 0.001 0.007 0.005 0.003 0.011 0.003 0.002 0.005 0.004 	
+ Iter: 20	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.000 0.007 0.004 0.003 0.005 0.002 0.000 0.000 0.000 0.004 0.001 0.007 0.005 0.003 0.011 0.003 0.002 0.005 0.005 	
+ Iter: 21	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.000 0.008 0.004 0.003 0.005 0.002 0.000 0.000 0.000 0.004 0.001 0.007 0.005 0.003 0.011 0.003 0.002 0.005 0.005 	
+ Iter: 22	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.000 0.008 0.004 0.003 0.005 0.002 0.000 0.000 0.000 0.004 0.001 0.007 0.005 0.003 0.011 0.003 0.002 0.005 0.005 	
+ Iter: 23	0.000 0.000 0.000 0.001 0.000 0.000 0.000 0.000 0.001 0.000 0.000 0.008 0.004 0.003 0.005 0.002 0.000 0.000 0.000 0.004 0.001 0.007 0.005 0.003 0.011 0.003 0.002 0.005 0.005 
+INFO: Going singlemode. Using one CPU for calculation.
+
+---------------
+/home/marcelo/repos/MAPpoly/man/plot_genome_vs_map.Rd -- 2020-09-23 17:59:48
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/plot_map_list.Rd -- 2020-09-23 17:59:48
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/plot_mrk_info.Rd -- 2020-09-23 17:59:51
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/poly_cross_simulate.Rd -- 2020-09-23 18:00:02
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/print_mrk.Rd -- 2020-09-23 18:00:15
+
+
+ solcap_snp_c2_41437
+----------------------------------
+ dosage P1:  3
+ dosage P2:  4
+----
+ dosage distribution
+  3   4 mis 
+ 81  79   0 
+----
+ expected polysomic segregation
+  0   1   2   3   4 
+0.0 0.0 0.0 0.5 0.5 
+----------------------------------
+
+ solcap_snp_c2_24258
+----------------------------------
+ dosage P1:  1
+ dosage P2:  1
+----
+ dosage distribution
+  0   1   2 mis 
+ 34  91  30   5 
+----
+ expected polysomic segregation
+   0    1    2    3    4 
+0.25 0.50 0.25 0.00 0.00 
+----------------------------------
+
+ solcap_snp_c2_4408
+----------------------------------
+ dosage P1:  4
+ dosage P2:  3
+----
+ dosage distribution
+  3   4 mis 
+ 65  76  19 
+----
+ expected polysomic segregation
+  0   1   2   3   4 
+0.0 0.0 0.0 0.5 0.5 
+----------------------------------
+
+ solcap_snp_c2_21332
+----------------------------------
+ dosage P1:  3
+ dosage P2:  2
+----
+ dosage distribution
+  1   2   3   4 mis 
+ 14  70  53  17   6 
+----
+ expected polysomic segregation
+         0          1          2          3          4 
+0.00000000 0.08333333 0.41666667 0.41666667 0.08333333 
+----------------------------------
+
+ solcap_snp_c2_21314
+----------------------------------
+ dosage P1:  4
+ dosage P2:  3
+----
+ dosage distribution
+  3   4 mis 
+ 80  80   0 
+----
+ expected polysomic segregation
+  0   1   2   3   4 
+0.0 0.0 0.0 0.5 0.5 
+----------------------------------
+
+ M_256
+----------------------------------
+ dosage P1:  2
+ dosage P2:  1
+----
+ dosage distribution
+  0   1   2   3 mis 
+ 28 127 118  27   0 
+----
+ expected polysomic segregation
+  0   1   2   3   4   5   6 
+0.1 0.4 0.4 0.1 0.0 0.0 0.0 
+----------------------------------
+
+---------------
+/home/marcelo/repos/MAPpoly/man/read_geno_csv.Rd -- 2020-09-23 18:00:15
+
+trying URL 'https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/tetra_solcap.csv'
+Content type 'text/plain; charset=utf-8' length 1448564 bytes (1.4 MB)
+==================================================
+downloaded 1.4 MB
+
+Reading the following data:
+    Ploidy level: 4
+    No. individuals:  160
+    No. markers:  4017
+    No. informative markers:  4017 (100%)
+    This dataset contains sequence information.
+    ...
+    Done with reading.
+    Filtering non-conforming markers.
+    ...
+    Done with filtering.
+This is an object of class 'mappoly.data'
+    Ploidy level:                            4 
+    No. individuals:                         160 
+    No. markers:                             3679 
+    Missing data:                            3.18%
+    Redundant markers:                       8.41%
+
+    ----------
+    No. markers per sequence:
+       seq No.mrk
+         1    391
+        10    224
+        11    252
+        12    215
+         2    269
+         3    290
+         4    387
+         5    275
+         6    394
+         7    345
+         8    263
+         9    282
+    ----------
+    Markers with no sequence information: 92
+    ----------
+    No. of markers per dosage combination in both parents:
+    P1 P2 freq
+     0  1  332
+     0  2  169
+     0  3   24
+     1  0  339
+     1  1  307
+     1  2  255
+     1  3  123
+     1  4   12
+     2  0  166
+     2  1  212
+     2  2  336
+     2  3  195
+     2  4   49
+     3  0   41
+     3  1  110
+     3  2  202
+     3  3  202
+     3  4  263
+     4  1    9
+     4  2   85
+     4  3  248
+
+---------------
+/home/marcelo/repos/MAPpoly/man/read_geno_prob.Rd -- 2020-09-23 18:00:29
+
+trying URL 'https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP'
+Content type 'text/plain; charset=utf-8' length 30401803 bytes (29.0 MB)
+==================================================
+downloaded 29.0 MB
+
+Reading the following data:
+    Ploidy level: 4
+    No. individuals:  160
+    No. markers:  4017
+    No. informative markers:  4017 (100%)
+    This dataset contains sequence information.
+    ...
+    Done with reading.
+    Filtering non-conforming markers.
+    ...
+    Performing chi-square test.
+    ...
+    Done.
+This is an object of class 'mappoly.data'
+    Ploidy level:                            4 
+    No. individuals:                         160 
+    No. markers:                             3679 
+    Missing data under 0.95 prob. threshold: 3.18%
+    Redundant markers:                       8.41%
+
+    ----------
+    No. markers per sequence:
+       seq No.mrk
+         1    391
+        10    224
+        11    252
+        12    215
+         2    269
+         3    290
+         4    387
+         5    275
+         6    394
+         7    345
+         8    263
+         9    282
+    ----------
+    Markers with no sequence information: 92
+    ----------
+    No. of markers per dosage combination in both parents:
+    P1 P2 freq
+     0  1  332
+     0  2  169
+     0  3   24
+     1  0  339
+     1  1  307
+     1  2  255
+     1  3  123
+     1  4   12
+     2  0  166
+     2  1  212
+     2  2  336
+     2  3  195
+     2  4   49
+     3  0   41
+     3  1  110
+     3  2  202
+     3  3  202
+     3  4  263
+     4  1    9
+     4  2   85
+     4  3  248
+trying URL 'https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexafake_geno_dist'
+Content type 'text/plain; charset=utf-8' length 12652519 bytes (12.1 MB)
+==================================================
+downloaded 12.1 MB
+
+Reading the following data:
+    Ploidy level: 6
+    No. individuals:  300
+    No. markers:  1500
+    No. informative markers:  1500 (100%)
+    This dataset contains sequence information.
+    ...
+    Done with reading.
+    Filtering non-conforming markers.
+    ...
+    Performing chi-square test.
+    ...
+    Done.
+This is an object of class 'mappoly.data'
+    Ploidy level:                            6 
+    No. individuals:                         300 
+    No. markers:                             1500 
+    Missing data under 0.8 prob. threshold: 2%
+
+    ----------
+    No. markers per sequence:
+      seq No.mrk
+        1    600
+        2    400
+        3    500
+    ----------
+    Markers with no sequence information: 0
+    ----------
+    No. of markers per dosage combination in both parents:
+    P1 P2 freq
+     0  1  361
+     0  2   83
+     0  3   19
+     0  4    5
+     0  5    1
+     1  0  394
+     1  1  147
+     1  2   67
+     1  3   20
+     1  4    6
+     1  5    3
+     2  0  107
+     2  1   66
+     2  2   54
+     2  3   40
+     2  4    9
+     3  0   22
+     3  1   24
+     3  2   26
+     3  3   16
+     4  0    3
+     4  1   14
+     4  2   10
+     5  0    2
+     5  1    1
+
+---------------
+/home/marcelo/repos/MAPpoly/man/read_geno.Rd -- 2020-09-23 18:02:59
+
+trying URL 'https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage'
+Content type 'text/plain; charset=utf-8' length 1445956 bytes (1.4 MB)
+==================================================
+downloaded 1.4 MB
+
+Reading the following data:
+    Ploidy level: 4
+    No. individuals:  160
+    No. markers:  4017
+    No. informative markers:  4017 (100%)
+    This dataset contains sequence information.
+    ...
+
+    Done with reading.
+    Filtering non-conforming markers.
+    ...
+    Performing chi-square test.
+    ...
+    Done.
+This is an object of class 'mappoly.data'
+    Ploidy level:                            4 
+    No. individuals:                         160 
+    No. markers:                             3679 
+    Missing data:                            3.18%
+    Redundant markers:                       8.41%
+
+    ----------
+    No. markers per sequence:
+       seq No.mrk
+         1    391
+        10    224
+        11    252
+        12    215
+         2    269
+         3    290
+         4    387
+         5    275
+         6    394
+         7    345
+         8    263
+         9    282
+    ----------
+    Markers with no sequence information: 92
+    ----------
+    No. of markers per dosage combination in both parents:
+    P1 P2 freq
+     0  1  332
+     0  2  169
+     0  3   24
+     1  0  339
+     1  1  307
+     1  2  255
+     1  3  123
+     1  4   12
+     2  0  166
+     2  1  212
+     2  2  336
+     2  3  195
+     2  4   49
+     3  0   41
+     3  1  110
+     3  2  202
+     3  3  202
+     3  4  263
+     4  1    9
+     4  2   85
+     4  3  248
+trying URL 'https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexafake'
+Content type 'text/plain; charset=utf-8' length 933619 bytes (911 KB)
+==================================================
+downloaded 911 KB
+
+Reading the following data:
+    Ploidy level: 6
+    No. individuals:  300
+    No. markers:  1500
+    No. informative markers:  1500 (100%)
+    This dataset contains sequence information.
+    ...
+
+    Done with reading.
+    Filtering non-conforming markers.
+    ...
+    Performing chi-square test.
+    ...
+    Done.
+This is an object of class 'mappoly.data'
+    Ploidy level:                            6 
+    No. individuals:                         300 
+    No. markers:                             1310 
+    Missing data:                            0%
+    Redundant markers:                       12.67%
+
+    ----------
+    No. markers per sequence:
+      seq No.mrk
+        1    538
+        2    329
+        3    443
+    ----------
+    Markers with no sequence information: 0
+    ----------
+    No. of markers per dosage combination in both parents:
+    P1 P2 freq
+     0  1  293
+     0  2   77
+     0  3   18
+     0  4    5
+     0  5    1
+     1  0  307
+     1  1  145
+     1  2   65
+     1  3   19
+     1  4    6
+     1  5    3
+     2  0  100
+     2  1   65
+     2  2   49
+     2  3   35
+     2  4    9
+     3  0   19
+     3  1   24
+     3  2   25
+     3  3   15
+     4  0    3
+     4  1   14
+     4  2   10
+     5  0    2
+     5  1    1
+
+---------------
+/home/marcelo/repos/MAPpoly/man/read_vcf.Rd -- 2020-09-23 18:03:36
+
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr1.vcf.gz'
+Content type 'application/octet-stream' length 10644125 bytes (10.2 MB)
+==================================================
+downloaded 10.2 MB
+
+Reading data...
+Scanning file to determine attributes.
+File attributes:
+  meta lines: 8
+  header_line: 9
+  variant count: 7301
+  column count: 326
+
+Meta line 8 read in.
+All meta lines processed.
+gt matrix initialized.
+Character matrix gt created.
+  Character matrix gt rows: 7301
+  Character matrix gt cols: 326
+  skip: 0
+  nrows: 7301
+  row_num: 0
+
+Processed variant 1000
+Processed variant 2000
+Processed variant 3000
+Processed variant 4000
+Processed variant 5000
+Processed variant 6000
+Processed variant 7000
+Processed variant: 7301
+All variants processed
+Processing genotypes...Done!
+Selected ploidy: 6 
+Done!
+Read the following data:
+    Ploidy level: 6
+    No. individuals:  315
+    No. markers:  5514
+    No. informative markers:  5514 (100%)
+    This dataset contains sequence information.
+    ...
+    Done with reading.
+    Filtering non-conforming markers.
+    ...
+    Performing chi-square test.
+    ...
+    Done.
+Loading chromosome 1 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr1.vcf.gz'
+Content type 'application/octet-stream' length 10644125 bytes (10.2 MB)
+==================================================
+downloaded 10.2 MB
+
+
+Loading chromosome 2 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr2.vcf.gz'
+Content type 'application/octet-stream' length 8008479 bytes (7.6 MB)
+==================================================
+downloaded 7.6 MB
+
+
+Loading chromosome 3 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr3.vcf.gz'
+Content type 'application/octet-stream' length 9559237 bytes (9.1 MB)
+==================================================
+downloaded 9.1 MB
+
+
+Loading chromosome 4 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr4.vcf.gz'
+Content type 'application/octet-stream' length 11225213 bytes (10.7 MB)
+==================================================
+downloaded 10.7 MB
+
+
+Loading chromosome 5 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr5.vcf.gz'
+Content type 'application/octet-stream' length 8080078 bytes (7.7 MB)
+==================================================
+downloaded 7.7 MB
+
+
+Loading chromosome 6 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr6.vcf.gz'
+Content type 'application/octet-stream' length 8173351 bytes (7.8 MB)
+==================================================
+downloaded 7.8 MB
+
+
+Loading chromosome 7 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr7.vcf.gz'
+Content type 'application/octet-stream' length 7737749 bytes (7.4 MB)
+==================================================
+downloaded 7.4 MB
+
+
+Loading chromosome 8 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr8.vcf.gz'
+Content type 'application/octet-stream' length 5505409 bytes (5.3 MB)
+==================================================
+downloaded 5.3 MB
+
+
+Loading chromosome 9 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr9.vcf.gz'
+Content type 'application/octet-stream' length 10069370 bytes (9.6 MB)
+==================================================
+downloaded 9.6 MB
+
+
+Loading chromosome 10 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr10.vcf.gz'
+Content type 'application/octet-stream' length 8371887 bytes (8.0 MB)
+==================================================
+downloaded 8.0 MB
+
+
+Loading chromosome 11 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr11.vcf.gz'
+Content type 'application/octet-stream' length 6493586 bytes (6.2 MB)
+==================================================
+downloaded 6.2 MB
+
+
+Loading chromosome 12 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr12.vcf.gz'
+Content type 'application/octet-stream' length 9730668 bytes (9.3 MB)
+==================================================
+downloaded 9.3 MB
+
+
+Loading chromosome 13 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr13.vcf.gz'
+Content type 'application/octet-stream' length 6576079 bytes (6.3 MB)
+==================================================
+downloaded 6.3 MB
+
+
+Loading chromosome 14 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr14.vcf.gz'
+Content type 'application/octet-stream' length 6808307 bytes (6.5 MB)
+==================================================
+downloaded 6.5 MB
+
+
+Loading chromosome 15 ...
+trying URL 'https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr15.vcf.gz'
+Content type 'application/octet-stream' length 8324620 bytes (7.9 MB)
+==================================================
+downloaded 7.9 MB
+
+
+This is an object of class 'mappoly.data'
+    Ploidy level:                            6 
+    No. individuals:                         303 
+    No. markers:                             38926 
+    Missing data:                            0.88%
+    Redundant markers:                       12.9%
+
+    ----------
+    No. markers per sequence:
+       seq No.mrk
+         1   3280
+        10   2572
+        11   1953
+        12   3071
+        13   2037
+        14   2051
+        15   2632
+         2   2512
+         3   2978
+         4   3544
+         5   2537
+         6   2480
+         7   2461
+         8   1736
+         9   3082
+    ----------
+    Markers with no sequence information: 0
+    ----------
+    No. of markers per dosage combination in both parents:
+    P1 P2 freq
+     0  1 6627
+     0  2 2111
+     0  3  630
+     0  4  112
+     0  5    8
+     1  0 5430
+     1  1 3465
+     1  2 2718
+     1  3 1435
+     1  4  373
+     1  5   54
+     2  0 1920
+     2  1 2493
+     2  2 2620
+     2  3 2097
+     2  4  615
+     2  5   19
+     3  0  579
+     3  1 1329
+     3  2 2129
+     3  3 1267
+     3  4   30
+     4  0  101
+     4  1  347
+     4  2  362
+     4  3   30
+     4  4    2
+     5  0    6
+     5  1   14
+     5  2    2
+     5  3    1
+
+---------------
+/home/marcelo/repos/MAPpoly/man/rev_map.Rd -- 2020-09-23 18:15:35
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/rf_list_to_matrix.Rd -- 2020-09-23 18:15:35
+
+INFO: Using  7  CPUs for calculation.
+INFO: Done with 857395  pairs of markers 
+INFO: Calculation took: 271.235 seconds
+INFO: Going singlemode. Using one CPU.
+INFO: Going singlemode. Using one CPU.
+
+---------------
+/home/marcelo/repos/MAPpoly/man/rf_snp_filter.Rd -- 2020-09-23 18:20:49
+
+INFO: Using  7  CPUs for calculation.
+INFO: Done with 857395  pairs of markers 
+INFO: Calculation took: 269.895 seconds
+INFO: Going singlemode. Using one CPU.
+INFO: Going singlemode. Using one CPU.
+INFO: Going singlemode. Using one CPU.
+INFO: Going singlemode. Using one CPU.
+The following markers were also removed, but presented one or more recombination fractions below 0.15 : M_1469 M_1475 M_1488 M_1493 M_1499 
+INFO: Going singlemode. Using one CPU.
+INFO: Going singlemode. Using one CPU.
+INFO: Going singlemode. Using one CPU.
+
+---------------
+/home/marcelo/repos/MAPpoly/man/segreg_poly.Rd -- 2020-09-23 18:57:22
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/sim_homologous.Rd -- 2020-09-23 18:57:24
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/split_and_rephase.Rd -- 2020-09-23 18:57:25
+
+INFO: Going singlemode. Using one CPU for calculation.
+8 submaps found ...
+Adding block 2 of 8 
+Adding block 3 of 8 
+Adding block 4 of 8 
+Adding block 5 of 8 
+Adding block 6 of 8 
+Adding block 7 of 8 
+Adding block 8 of 8 
+
+---------------
+/home/marcelo/repos/MAPpoly/man/summary_maps.Rd -- 2020-09-23 18:59:03
+
+
+Your dataset contains removed (redundant) markers. Once finished the map, remember to add the redundant ones with the function 'update_map'.
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/update_map.Rd -- 2020-09-23 18:59:04
+
+
+Your dataset contains removed (redundant) markers. Once finished the map, remember to add the redundant ones with the function 'update_map'.
+
+
+Your dataset contains removed (redundant) markers. Once finished the map, remember to add the redundant ones with the function 'update_map'.
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/update_missing.Rd -- 2020-09-23 18:59:14
+
+This is an object of class 'mappoly.data'
+    Ploidy level:                            4 
+    No. individuals:                         160 
+    No. markers:                             3679 
+    Missing data under 0.95 prob. threshold: 3.18%
+    Redundant markers:                       8.41%
+
+    This dataset contains sequence information.
+    ----------
+    No. of markers per dosage combination in both parents:
+    P1 P2 freq
+     0  1  332
+     0  2  169
+     0  3   24
+     1  0  339
+     1  1  307
+     1  2  255
+     1  3  123
+     1  4   12
+     2  0  166
+     2  1  212
+     2  2  336
+     2  3  195
+     2  4   49
+     3  0   41
+     3  1  110
+     3  2  202
+     3  3  202
+     3  4  263
+     4  1    9
+     4  2   85
+     4  3  248
+This is an object of class 'mappoly.data'
+    Ploidy level:                            4 
+    No. individuals:                         160 
+    No. markers:                             3679 
+    Missing data under 0.5 prob. threshold: 1.42%
+    Redundant markers:                       8.41%
+
+    This dataset contains sequence information.
+    ----------
+    No. of markers per dosage combination in both parents:
+    P1 P2 freq
+     0  1  332
+     0  2  169
+     0  3   24
+     1  0  339
+     1  1  307
+     1  2  255
+     1  3  123
+     1  4   12
+     2  0  166
+     2  1  212
+     2  2  336
+     2  3  195
+     2  4   49
+     3  0   41
+     3  1  110
+     3  2  202
+     3  3  202
+     3  4  263
+     4  1    9
+     4  2   85
+     4  3  248
+
+---------------
+/home/marcelo/repos/MAPpoly/man/dist_prob_to_class.Rd -- 2020-09-24 16:42:00
+
+
+---------------
+/home/marcelo/repos/MAPpoly/man/dist_prob_to_class.Rd -- 2020-09-24 17:07:33
+

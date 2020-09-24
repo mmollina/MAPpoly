@@ -9,6 +9,7 @@
 ^r-release$
 ^revdep$
 ^my_tests$
+^ExamplesTestLogs$
 ^.cran-comments\.md
 cran-comments.md
 ^CRAN-RELEASE$
