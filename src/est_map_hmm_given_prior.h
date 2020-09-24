@@ -5,20 +5,9 @@
 #include "combinatorial.h"
 #include <math.h>
 #include <algorithm>
+#include <new>
 #define TOL 0
 #define THRESHOLD 0.01
-
-/*
- * note : RcppExport is an alias to `extern "C"` defined by Rcpp.
- *
- * It gives C calling convention to the rcpp_hello_world function so that
- * it can be called from .Call in R. Otherwise, the C++ compiler mangles the
- * name of the function and .Call can't find it.
- *
- * It is only useful to use RcppExport when the function is intended to be called
- * by .Call. See the thread http://thread.gmane.org/gmane.comp.lang.r.rcpp/649/focus=672
- * on Rcpp-devel for a misuse of RcppExport
- */
 
 void setup_pre_calc_n_rec_cache(int m, int gam);
 

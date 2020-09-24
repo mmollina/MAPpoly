@@ -37,29 +37,6 @@ get_w_m <- function(m){
   1/factorial((m/2)) * prod(choose(seq(2, m, 2),2))
 }
 
-#' Get used memory (unix systems only)
-#'
-#' @param void internal function to be documented
-#' @keywords internal
-#' @export
-get_memory<-function(){
-  z<-strsplit(system("free --mega", intern = T)[2], " ")
-  mem<-as.numeric(z[[1]][z[[1]]!=""][3])
-  t.all<-Sys.time()
-  i<-0
-  while(1==1){
-    Sys.sleep(1)
-    z<-strsplit(system("free --mega", intern = T)[2], " ")
-    mem<-c(mem, as.numeric(z[[1]][z[[1]]!=""][3]))
-    pdf("memory_use.pdf", width = 14, height = 8)
-    plot(mem = cumsum(rep(.5, length(mem))), mem, type = "l", lwd = 2, col = 2, xlab = "time (s)", ylab = "memory (MB)")  
-    dev.off()
-    t.all<-c(t.all, Sys.time())
-    save(mem, t.all, file = "memory_use.RData")
-  }
-  return(list(mem = mem, t.all = t.all))
-}
-
 #' Reverse map
 #'
 #' Provides the reverse of a given map.
@@ -103,7 +80,7 @@ rev_map<-function(input.map)
 #' @examples
 #' \dontrun{
 #' geno.dose <- dist_prob_to_class(tetra.solcap.geno.dist$geno)
-#' geno.dose[1:10, 1:10]
+#' geno.dose$geno.dose[1:10,1:10]
 #'}   
 #' @importFrom magrittr "%>%"
 #' @importFrom reshape2 melt dcast
@@ -187,15 +164,11 @@ text_col <- function(x) {
   if (!rstudioapi::isAvailable()) {
     return(x)
   }
-  
   if (!rstudioapi::hasFun("getThemeInfo")) {
     return(x)
   }
-  
   theme <- rstudioapi::getThemeInfo()
-  
   if (isTRUE(theme$dark)) crayon::white(x) else crayon::black(x)
-  
 }
 
 #' Map functions

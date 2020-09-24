@@ -14,8 +14,8 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ For a copy of the GNU General Public License, please visit
+ <http://www.gnu.org/licenses/>.
  */
 
 /*
@@ -31,7 +31,7 @@
 
  Contact: mmollina@ncsu.edu
  First version: Dec 19, 2013
- Last update: Feb 15, 2018
+ Last update: Sep 24, 2020
  */
 
 #include <Rcpp.h>
@@ -39,6 +39,7 @@
 #include "combinatorial.h"
 #include <math.h>
 #include <algorithm>
+#include <new>
 #define TOL 0
 #define THRESHOLD 0.01
 
@@ -63,21 +64,22 @@ void setup_pre_calc_n_rec_cache(int m, int gam)
 /* Function: alpha_ai_dot
 
  pre_calc_n_rec_1           pre_calc_n_rec_2
- --         --              --         --
+          --         --              --         --
  l1 = 0  |0 1 1 1 1 2|     l2 = 0   |0 1 1 1 1 2|
  l1 = 1  |1 0 1 1 2 1|     l2 = 1   |1 0 1 1 2 1|
  l1 = 2  |1 1 0 2 1 1|     l2 = 2   |1 1 0 2 1 1|
  l1 = 3  |1 1 2 0 1 1|     l2 = 3   |1 1 2 0 1 1|
  l1 = 4  |1 2 1 1 0 1|     l2 = 4   |1 2 1 1 0 1|
  l1 = 5  |2 1 1 1 1 0|     l2 = 5   |2 1 1 1 1 0|
- --         --              --         --
+         --         --              --         --
 
- Given the number of recombinations provided by the two
+ Given the number of recombination provided by the two
  matrices above (tetraploid example), function
- pre_calc_prob returns Pr(pk+1|pk). For exemple, l1=0 and
- l2=0 --> function pre_calc_prob returns P(pk+1 = {*}|pk={1,2,3,4}),
+ pre_calc_prob returns Pr(pk+1|pk). 
+ 
+ For example, l1=0 and l2=0 --> function pre_calc_prob returns P(pk+1 = {*}|pk={1,2,3,4}),
  i.e.
- --                      --
+           --                      --
  1 2 3 4   |x x x x x x ....x x x x |  <-- l1=0, l2=0;
  1 2 3 5   |...                  ...|
             .
@@ -181,13 +183,18 @@ RcppExport SEXP poly_hmm_est_CPP(SEXP m_R,
   std::vector<long double> term(n_ind);
   std::fill(init.begin(), init.end(), 1.0/gam_pow_2);
   std::fill(a.begin(), a.end(), 0);
-  long double **alpha, **beta;
-  double *cur_rf;
-  allocate_alpha_long(n_mar, gam_pow_2, &alpha);
-  allocate_alpha_long(n_mar, gam_pow_2, &beta);
+  std::vector<double> cur_rf(rf.size());
   std::vector<double> pre_calc_prob_alpha((1+m/2)*(1+m/2));
   std::vector<double> pre_calc_prob_beta((1+m/2)*(1+m/2));
-  allocate_double(n_mar-1, &cur_rf);
+  //Dynamic memory allocation using operator new
+  long double** alpha = new long double*[gam_pow_2]; 
+  for(int i = 0; i < gam_pow_2; ++i){
+    alpha[i] = new long double[n_mar];
+  }
+  long double** beta = new long double*[gam_pow_2];
+  for(int i = 0; i < gam_pow_2; ++i){
+    beta[i] = new long double[n_mar];
+  }
   double maxit=400;
 
   //caching number of recombinations
@@ -328,7 +335,7 @@ RcppExport SEXP poly_hmm_est_CPP(SEXP m_R,
         term[ind] = term[ind] + alpha[j][n_mar-1];
       }
     }/* loop over individuals */
-  if(tol>=0.99) /*this is used to provide the likelihod given a vector of recomination fractions*/
+  if(tol>=0.99) /*this is used to provide the likelihood given a vector of recombination fractions*/
   {
     for(j=0; j < n_mar-1; j++)
     {
@@ -384,6 +391,12 @@ RcppExport SEXP poly_hmm_est_CPP(SEXP m_R,
   {
     loglike += log10(term[j]);
   }
+  // Cleaning up memory
+  for(int i = 0; i < gam_pow_2; ++i) {
+    delete [] alpha[i];
+    delete [] beta[i];
+  }
+  delete [] alpha;
   List z  = List::create(loglike, rf);
   return z ;
 }
@@ -423,9 +436,15 @@ RcppExport SEXP calc_genoprob_prior(SEXP m_R,
   std::vector<double> emit_beta(gam_pow_2);
   std::fill(init.begin(), init.end(), 1.0/gam_pow_2);
   std::fill(a.begin(), a.end(), 0);
-  long double **alpha, **beta;
-  allocate_alpha_long(n_mar, gam_pow_2, &alpha);
-  allocate_alpha_long(n_mar, gam_pow_2, &beta);
+  long double** alpha = new long double*[gam_pow_2]; 
+  for(int i = 0; i < gam_pow_2; ++i){
+    alpha[i] = new long double[n_mar];
+  }
+  long double** beta = new long double*[gam_pow_2];
+  for(int i = 0; i < gam_pow_2; ++i){
+    beta[i] = new long double[n_mar];
+  }
+  double maxit=400;
   std::vector<double> pre_calc_prob_alpha((1+m/2)*(1+m/2));
   std::vector<double> pre_calc_prob_beta((1+m/2)*(1+m/2));
   int count = 0;
@@ -529,6 +548,12 @@ RcppExport SEXP calc_genoprob_prior(SEXP m_R,
       }
     }
   }/* loop over individuals */
+  // Cleaning up memory
+  for(int i = 0; i < gam_pow_2; ++i) {
+    delete [] alpha[i];
+    delete [] beta[i];
+  }
+  delete [] alpha;
   List z  = List::create(probs);
   return z ;
 }

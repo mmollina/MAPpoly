@@ -24,13 +24,9 @@
 
   Functions mostly Written by Marcelo Mollinari.
 
-  Functions allocate_double and allocate_alpha were
-  written by Karl W Broman and can be found in the R package qtl
-  Copyright (c) 2001-10, Karl W Broman
-
   Contact: mmollin@ncsu.edu
   First version: Dec 19, 2013
-  Last update: Jul 31, 2014
+  Last update: Sep 24, 2020
 */
 
 #include <R.h>
@@ -42,92 +38,6 @@
 #include <Rmath.h>
 #include <R_ext/PrtUtil.h>
 #define THRESH 200.0
-
-/**********************************************************************
- *
- * allocate_double
- *
- * Allocate space for a vector of doubles
- *
- * Allocation done by R_alloc, so that R does the cleanup.
- *
- **********************************************************************/
-void allocate_double(int n, double **vector)
-{
-  *vector = (double *)R_alloc(n, sizeof(double));
-}
-
-/**********************************************************************
- *
- * allocate_alpha
- *
- * Allocate space for alpha and beta matrices
- *
- * Afterwards, indexed like alpha[gen][mar]
- *
- * Allocation done by R_alloc, so that R does the cleanup.
- *
- **********************************************************************/
-void allocate_alpha(int n_pos, int n_gen, double ***alpha)
-{
-    int i;
-
-    *alpha = (double **)R_alloc(n_gen, sizeof(double *));
-
-    (*alpha)[0] = (double *)R_alloc(n_gen*n_pos, sizeof(double));
-
-    for(i=1; i< n_gen; i++)
-        (*alpha)[i] = (*alpha)[i-1] + n_pos;
-}
-
-/**********************************************************************
- *
- * allocate_genoprob
- *
- * Allocate space for alpha and beta matrices
- *
- * Afterwards, indexed like Genoprob[gen][mar][ind]
- *
- * Allocation done by R_alloc, so that R does the cleanup.
- *
- **********************************************************************/
-void allocate_genoprob_long(int n_pos, int n_gen, int n_ind, long double ****Genoprob)
-{
-  int i;
-  long double **a;
-
-  *Genoprob = (long double ***)R_alloc(n_gen, sizeof(long double **));
-
-  a = (long double **)R_alloc(n_pos*n_gen, sizeof(long double *));
-
-  (*Genoprob)[0] = a;
-  for(i=1; i< n_gen; i++)
-    (*Genoprob)[i] = (*Genoprob)[i-1]+n_pos;
-}
-
-
-/**********************************************************************
- *
- * allocate_alpha_long
- *
- * Allocate space for alpha and beta matrices (long double version)
- *
- * Afterwards, indexed like alpha[gen][mar]
- *
- * Allocation done by R_alloc, so that R does the cleanup.
- *
- **********************************************************************/
-void allocate_alpha_long(int n_pos, int n_gen, long double ***alpha)
-{
-  int i;
-
-  *alpha = (long double **)R_alloc(n_gen, sizeof(long double *));
-
-  (*alpha)[0] = (long double *)R_alloc(n_gen*n_pos, sizeof(long double));
-
-  for(i=1; i< n_gen; i++)
-    (*alpha)[i] = (*alpha)[i-1] + n_pos;
-}
 
 /* FUNCTION: nChoosek
    -----------------------------------------------------

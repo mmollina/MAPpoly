@@ -1,10 +1,6 @@
 #ifndef COMBINATORIAL_FUNCTIONS_H
 #define COMBINATORIAL_FUNCTIONS_H
 
-void allocate_double(int n, double **vector);
-void allocate_alpha(int n_pos, int n_gen, double ***alpha);
-void allocate_alpha_long(int n_pos, int n_gen, long double ***alpha);
-void allocate_genoprob_long(int n_pos, int n_gen, int n_ind, long double ****Genoprob);
 int nChoosek(int n, int k);
 int n_rec_given_genk_and_k1(int ploidy, int index1, int index2);
 double prob_k1_given_k_lp_lq_m(int m, int lp, int lq, double rf);
