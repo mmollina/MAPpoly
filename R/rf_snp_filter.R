@@ -34,6 +34,9 @@
 #' 
 #' @param ncpus number of parallel processes (i.e. cores) to spawn (default = 1)
 #'
+#' @param verbose if \code{TRUE} (default), the current progress is shown; if
+#'     \code{FALSE}, no output is produced
+#' 
 #' @return A filtered object of class \code{mappoly.sequence}. 
 #' See \code{\link[mappoly]{make_seq_mappoly}} for details
 #' 
@@ -115,7 +118,8 @@ rf_snp_filter<-function(input.twopt,
                         thresh.rf = 0.15,
                         thresh.perc = 0.05,
                         remove.fp = NULL,
-                        ncpus = 1L)
+                        ncpus = 1L,
+                        verbose = TRUE)
 {
     ## checking for correct object
     input_classes <-c("poly.est.two.pts.pairwise")
@@ -152,9 +156,9 @@ rf_snp_filter<-function(input.twopt,
     rem = names(x)[!(names(x) %in% o)]
     remaining = rf_mat$rec.mat[rem,rem]
     ev.mrks = rownames(remaining[which(remaining[,ncol(remaining)] < thresh.rf),])
-    if (!is.null(remove.fp) && length(o2) > 0)
+    if (verbose && !is.null(remove.fp) && length(o2) > 0)
         cat('The following markers presented more than 90% of recombination fractions below', remove.fp, 'and were removed:', paste0(o2), '\n')
-    if (length(ev.mrks) > 0)
+    if (verbose && length(ev.mrks) > 0)
         cat('The following markers were also removed, but presented one or more recombination fractions below', thresh.rf,':', paste0(ev.mrks), '\n')
 
     ## Returning sequence object

@@ -4,13 +4,16 @@
 \alias{drop_marker}
 \title{Remove markers from a map}
 \usage{
-drop_marker(input.map, mrk)
+drop_marker(input.map, mrk, verbose = TRUE)
 }
 \arguments{
 \item{input.map}{an object of class \code{mappoly.map}}
 
 \item{mrk}{a vector containing markers to be removed from the input map, 
 identified by their names or positions}
+
+\item{verbose}{if \code{TRUE} (default), the current progress is shown; if
+\code{FALSE}, no output is produced}
 }
 \value{
 an object of class \code{mappoly.map}

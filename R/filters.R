@@ -136,6 +136,8 @@ filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
       text(x = input.data$n.mrk/2, y = filter.thres + 0.05, labels = paste0("Excluded mrks: ", sum(perc.na >= filter.thres)), adj = 0, col = "darkred")
       text(x = input.data$n.mrk/2, y = filter.thres - 0.05, labels = paste0("Included mrks: ", sum(perc.na < filter.thres)), adj = 0, col = "darkgreen")
       ANSWER <- readline("Enter 'Y/n' to proceed or update the filter threshold: ")
+      if(substr(ANSWER, 1, 1) == "n" | substr(ANSWER, 1, 1) == "no" | substr(ANSWER, 1, 1) == "N")
+          stop("You decided to stop the function.")
       if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
         filter.thres  <- as.numeric(ANSWER)
     }
@@ -210,6 +212,8 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
       text(x = input.data$n.ind/2, y = filter.thres + 0.05, labels = paste0("Excluded individuals: ", sum(perc.na >= filter.thres)), adj = 0, col = "darkred")
       text(x = input.data$n.ind/2, y = filter.thres - 0.05, labels = paste0("Included individuals: ", sum(perc.na < filter.thres)), adj = 0, col = "darkgreen")
       ANSWER <- readline("Enter 'Y/n' to proceed or update the filter threshold: ")
+      if(substr(ANSWER, 1, 1) == "n" | substr(ANSWER, 1, 1) == "no" | substr(ANSWER, 1, 1) == "N")
+          stop("You decided to stop the function.")
       if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
         filter.thres  <- as.numeric(ANSWER)
     }
@@ -305,15 +309,17 @@ filter_segregation<-function(input.data, chisq.pval.thres = 10e-5, inter = TRUE)
   }
   if(interactive() && inter)
   {
-    while(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
+    while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
     {
       plot(log10(sort(input.data$chisq.pval, decreasing = TRUE)), xlab = "markers", ylab = "log10(p.val)", axes=F)
       axis(1); axis(2)
       lines(x = c(0, input.data$n.mrk), y = rep(log10(chisq.pval.thres),2), col = 4, lty = 2)
       text(x = input.data$n.mrk/2, y = 5, labels = paste0("Included mrks: ", sum(input.data$chisq.pval >= chisq.pval.thres)), adj = .5, col = "darkgreen")
       text(x = input.data$n.mrk/2, y = log10(chisq.pval.thres) - 5, labels = paste0("Excluded mrks: ", sum(input.data$chisq.pval < chisq.pval.thres)), adj = .5, col = "darkred")
-      ANSWER <- readline("Enter 'y' to proceed or update the p value threshold: ")
-      if(substr(ANSWER, 1, 1) != "y" && ANSWER !="")
+      ANSWER <- readline("Enter 'Y/n' to proceed or update the p value threshold: ")
+      if(substr(ANSWER, 1, 1) == "n" | substr(ANSWER, 1, 1) == "no" | substr(ANSWER, 1, 1) == "N")
+          stop("You decided to stop the function.")
+      if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
         chisq.pval.thres  <- as.numeric(ANSWER)
     }
   }

@@ -75,20 +75,21 @@ cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL,
   if(input.seq$m==2)
   {
     cached <- FALSE
-    cat("INFO: Computing genotype frequencies ...\n")
+    if (verbose)
+        cat("INFO: Computing genotype frequencies ...\n")
   }
   if (cached){
     if (input.seq$m == 2) ploidy = 'diploid'
     else if (input.seq$m == 4) ploidy = 'tetraploid'
     else if (input.seq$m == 6) ploidy = 'hexaploid'
-    else return(get_cache_two_pts_from_web(input.seq$m))
+    else return(get_cache_two_pts_from_web(input.seq$m, verbose = verbose))
     return(structure(full_counts[[ploidy]], class = "cache.info"))
   }
   temp.count <- NULL
   if (joint.prob) {
     temp.count <- cache_counts_twopt(input.seq, cached = FALSE, cache.prev = cache.prev, ncpus = ncpus, verbose = verbose, joint.prob = FALSE)$cond
   }
-  if (input.seq$m >= 8)
+  if (verbose && input.seq$m >= 8)
     message("\nploidy level ", input.seq$m, ": this operation could take a very long time.
                  \ntry to use the option 'cached' instead.\n")
   dose.names <- sort(unique(apply(rbind(combn(input.seq$seq.dose.p, 2), combn(input.seq$seq.dose.q, 2)), 2, paste, collapse = "-")))
@@ -110,7 +111,8 @@ cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL,
     }
     remaining <- which(is.na(pmatch(dose.names, names(cache.prev))))
     if (length(remaining) == 0) {
-      cat("\n Nothing to add to 'cache.prev'. Returning original 'cache prev'.\n")
+        if (verbose)
+            cat("\n Nothing to add to 'cache.prev'. Returning original 'cache prev'.\n")
       return(cache.prev)
     }
     dose.names <- dose.names[remaining]

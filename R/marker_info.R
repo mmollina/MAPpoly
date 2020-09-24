@@ -39,7 +39,7 @@ plot_mrk_info<-function(input.data, mrk)
   }
   
   if(!mrk%in%input.data$mrk.names)
-    stop(deparse(substitute(mrk)), " is not presnet in ", deparse(substitute(input.data)), " dataset")
+    stop(deparse(substitute(mrk)), " is not present in ", deparse(substitute(input.data)), " dataset")
   ## Parents dosage
   dp<-input.data$dosage.p[input.data$mrk.names==mrk]
   dq<-input.data$dosage.q[input.data$mrk.names==mrk]

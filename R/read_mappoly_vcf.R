@@ -33,6 +33,9 @@
 #' @param elim.redundant logical. If \code{TRUE} (default), removes redundant markers
 #' during map construction, keeping them annotated to export to the final map.
 #'
+#' @param verbose if \code{TRUE} (default), the current progress is shown; if
+#'     \code{FALSE}, no output is produced
+#'
 #' @return An object of class \code{mappoly.data} which contains a
 #'     list with the following components:
 #'     \item{m}{ploidy level}
@@ -127,7 +130,7 @@
 read_vcf = function(file.in, parent.1, parent.2, ploidy = NA, 
                     filter.non.conforming = TRUE, thresh.line = 0.05, 
                     min.gt.depth = 0, min.av.depth = 0, max.missing = 1, 
-                    elim.redundant = TRUE) {
+                    elim.redundant = TRUE, verbose = TRUE) {
   # Checking even ploidy
   if(!is.na(ploidy) && (ploidy %% 2) != 0){
     stop("MAPpoly only supports even ploidy levels. Please check the 'ploidy' parameter and try again.")
@@ -137,36 +140,36 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
   if (input.size > 3000){
     warning("Your VCF file is greater than 3 GB. Check for available RAM memory.")
   }
-  cat("Reading data...\n")
-  input.data = .read.vcfR(file.in) # Reading file
-  ind.names = colnames(input.data$gt)[-1]
-  n.mrk = dim(input.data$gt)[1] # Getting number of markers
+  if (verbose) cat("Reading data...\n")
+  input.data = vcfR::read.vcfR(file.in, verbose = verbose) # Reading file
+  ind.names = colnames(input.data@gt)[-1]
+  n.mrk = dim(input.data@gt)[1] # Getting number of markers
   n.ind = length(ind.names) - 2 # Number of individuals excepting two parents
-  mrk.names = mrk.names.all = input.data$fix[,3] # Getting marker names
+  mrk.names = mrk.names.all = input.data@fix[,3] # Getting marker names
   if (any(is.na(unique(mrk.names)))){
-    cat("No named markers. Using integers instead.\n")
+    if (verbose) cat("No named markers. Using integers instead.\n")
     no_name = sum(is.na(mrk.names))
     mrk.names[which(is.na(mrk.names))] = paste0("no_name_", seq(1, no_name, 1))
   }
-  sequence = input.data$fix[,1] # Getting chromosome information
+  sequence = input.data@fix[,1] # Getting chromosome information
   names(sequence)  = mrk.names
-  sequence.pos = as.numeric(input.data$fix[,2]) # Getting positions
+  sequence.pos = as.numeric(input.data@fix[,2]) # Getting positions
   names(sequence.pos)  = mrk.names
-  seq.ref = input.data$fix[,4] # Getting reference alleles
+  seq.ref = input.data@fix[,4] # Getting reference alleles
   names(seq.ref)  = mrk.names
-  seq.alt = input.data$fix[,5] # Getting alternative alleles
+  seq.alt = input.data@fix[,5] # Getting alternative alleles
   names(seq.alt)  = mrk.names
-  cat("Processing genotypes...")
-  cname = which(unlist(strsplit(unique(input.data$gt[,1]), ":")) == "GT") # Defining GT position
-  dname = which(unlist(strsplit(unique(input.data$gt[,1]), ":")) == "DP") # Defining DP position
-  ## file.ploidy = length(unlist(strsplit(unique(input.data$gt[,2])[1], "/"))) # Checking ploidy (old)
-  geno.ploidy = .vcf_get_ploidy(input.data$gt[,-1], cname) # Getting all ploidy levels
-  geno.depth = .vcf_get_depth(input.data$gt[,-1], dname) # Getting all depths
+  if (verbose) cat("Processing genotypes...")
+  cname = which(unlist(strsplit(unique(input.data@gt[,1]), ":")) == "GT") # Defining GT position
+  dname = which(unlist(strsplit(unique(input.data@gt[,1]), ":")) == "DP") # Defining DP position
+  ## file.ploidy = length(unlist(strsplit(unique(input.data@gt[,2])[1], "/"))) # Checking ploidy (old)
+  geno.ploidy = .vcf_get_ploidy(input.data@gt[,-1], cname) # Getting all ploidy levels
+  geno.depth = .vcf_get_depth(input.data@gt[,-1], dname) # Getting all depths
   file.ploidy = unique(c(geno.ploidy)) # Getting different ploidy levels
-  geno.dose = .vcf_transform_dosage(input.data$gt[,-1], cname) # Accounting for allele dosages
+  geno.dose = .vcf_transform_dosage(input.data@gt[,-1], cname) # Accounting for allele dosages
   geno.dose[which(geno.dose == -1)] = NA # Filling NA values
-  cat("Done!\n")
-  # geno.dose = matrix(unlist(lapply(strsplit(input.data$gt[,-1], ":"), "[", cname)), nrow = n.mrk, byrow = F) # Selecting genotypes (time consuming step)
+  if (verbose) cat("Done!\n")
+  # geno.dose = matrix(unlist(lapply(strsplit(input.data@gt[,-1], ":"), "[", cname)), nrow = n.mrk, byrow = F) # Selecting genotypes (time consuming step)
   # if (sum(grepl("\\|", geno.dose)) > 0){ # Checking phased data
   #   input.phased = TRUE # Treat this in a different way when reading file
   #   warning("Phased genotypes detected. Should MAPpoly consider this information?")
@@ -185,7 +188,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
     } else { # Else, use the first ploidy level detected on file
         m = file.ploidy[1]
     }
-    cat("Selected ploidy:", m, "\n")
+    if (verbose) cat("Selected ploidy:", m, "\n")
   if (!(parent.1 %in% ind.names) | !(parent.2 %in% ind.names)){
     stop("Provided parents were not found in VCF file. Please check it and try again.")
   }
@@ -231,19 +234,21 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
   dq = abs(abs(dosage.q-(m/2))-(m/2))
   id = dp+dq!=0
   id[which(is.na(id))] = FALSE
-  
-  cat("Done!\n")
-  cat("Read the following data:")
-  cat("\n    Ploidy level:", m)
-  cat("\n    No. individuals: ", n.ind)
-  cat("\n    No. markers: ", n.mrk) 
-  cat("\n    No. informative markers:  ", sum(id), " (", round(100*sum(id)/n.mrk,1), "%)", sep = "")
-  # if (all(unique(nphen) != 0))
-  #   cat("\n    This dataset contains phenotypic information.")
-  
-  if (length(sequence) > 1)
-    cat("\n    This dataset contains sequence information.")
-  cat("\n    ...")
+
+  if (verbose){
+      cat("Done!\n")
+      cat("Read the following data:")
+      cat("\n    Ploidy level:", m)
+      cat("\n    No. individuals: ", n.ind)
+      cat("\n    No. markers: ", n.mrk) 
+      cat("\n    No. informative markers:  ", sum(id), " (", round(100*sum(id)/n.mrk,1), "%)", sep = "")
+      ## if (all(unique(nphen) != 0))
+      ##   cat("\n    This dataset contains phenotypic information.")        
+      if (length(sequence) > 1)
+          cat("\n    This dataset contains sequence information.")
+      cat("\n    ...")
+  }
+
   ## get genotypic info --------------------
   if(nrow(geno.dose)!=length(mrk.names))
     stop("\n\t\t-------------------------------------
@@ -260,7 +265,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
   dimnames(geno.dose)<-list(mrk.names, ind.names)
   geno.dose[is.na(geno.dose)] <- m + 1
   ## returning the 'mappoly.data' object
-  cat("\n    Done with reading.\n")
+  if (verbose) cat("\n    Done with reading.\n")
     
     res = structure(list(m = m,
                          n.ind = n.ind,
@@ -284,9 +289,9 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
                     class = "mappoly.data")
   
   if(filter.non.conforming){
-    cat("    Filtering non-conforming markers.\n    ...")
+    if (verbose) cat("    Filtering non-conforming markers.\n    ...")
     res<-filter_non_conforming_classes(res)
-    cat("\n    Performing chi-square test.\n    ...")
+    if (verbose) cat("\n    Performing chi-square test.\n    ...")
     ##Computing chi-square p.values
     Ds <- array(NA, dim = c(m+1, m+1, m+1))
     for(i in 0:m)
@@ -297,7 +302,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
     dimnames(M)<-list(res$mrk.names, c(0:m))
     M<-cbind(M, res$geno.dose)
     res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
-    cat("\n    Done.\n")
+    if (verbose) cat("\n    Done.\n")
   }
     if (elim.redundant){
       seqred = make_seq_mappoly(res, arg = 'all', data.name = res)
@@ -324,123 +329,4 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
       res$chisq.pval = res$chisq.pval[-c(mrks.rem)]
     }
   return(res)
-}
-
-#' Function read.vcfR adapted from package vcfR 
-#' @param void internal function to be documented
-#' @keywords internal
-#' 
-#' @importFrom memuse howbig
-.read.vcfR = function(file, limit = 1e+07, nrows = -1, skip = 0, cols = NULL, 
-                      convertNA = TRUE, checkFile = TRUE, verbose = TRUE) 
-{
-  if (!is.character(file)) {
-    stop("The parameter file is expected to be a character.")
-  }
-  if (grepl("^http://|^https://|^ftp://|^ftps://", file)) {
-    file_name <- unlist(strsplit(file, split = "/"))
-    file_name <- file_name[[length(file_name)]]
-    if (file.exists(file_name)) {
-      message(paste("Local file", file_name, "found."))
-      message("Using this local copy instead of retrieving a remote copy.")
-    }
-    else {
-      message(paste("Downloading remote file", file))
-      utils::download.file(url = file, destfile = file_name, 
-                           quiet = FALSE)
-      message("File downloaded.")
-      message("It will probably be faster to use this local file in the future instead of re-downloading it.")
-    }
-    file <- file_name
-  }
-  if (grepl("^~", file)) {
-    file <- path.expand(file)
-  }
-  if (file.access(file, mode = 0) != 0) {
-    stop(paste("File:", file, "does not appear to exist!"))
-  }
-  if (file.access(file, mode = 4) != 0) {
-    stop(paste("File:", file, "appears to exist but is not readable!"))
-  }
-  if (checkFile == TRUE) {
-    vcf <- scan(file = file, what = character(), nmax = 1, 
-                sep = "\n", quiet = TRUE, comment.char = "")
-    if (substr(vcf, start = 1, stop = 17) != "##fileformat=VCFv") {
-      msg <- paste("File:", file, "does not appear to be a VCF file.\n")
-      msg <- paste(msg, " First line of file:\n", file)
-      msg <- paste(msg, "\n")
-      msg <- paste(msg, " Should begin with:\n##fileformat=VCFv")
-      msg <- paste(msg, "\n")
-      stop(msg)
-    }
-  }
-  vcf <- list()
-  stats <- .vcf_stats_gz(file, nrows = nrows, skip = skip, 
-                         verbose = as.integer(verbose))
-  if (stats["columns"] > 0 & stats["last_line"] > 0 & stats["columns"] != 
-      stats["last_line"]) {
-    msg <- paste("Your file appears to have", stats["columns"], 
-                 "header elements")
-    msg <- paste(msg, "and", stats["last_line"], "columns in the body.\n")
-    msg <- paste(msg, "This should never happen!")
-    stop(msg)
-  }
-  if (stats["columns"] == 0 & stats["last_line"] > 0) {
-    stats["columns"] <- stats["last_line"]
-  }
-  if (verbose == TRUE) {
-    cat("File attributes:")
-    cat("\n")
-    cat(paste("  meta lines:", stats["meta"]))
-    cat("\n")
-    cat(paste("  header_line:", stats["header_line"]))
-    cat("\n")
-    cat(paste("  variant count:", stats["variants"]))
-    cat("\n")
-    cat(paste("  column count:", stats["columns"]))
-    cat("\n")
-  }
-  utils::flush.console()
-  if (stats["meta"] < 0) {
-    stop(paste("stats['meta'] less than zero:", stats["meta"], 
-               ", this should never happen."))
-  }
-  if (stats["header_line"] < 0) {
-    stop(paste("stats['header_line'] less than zero:", stats["header_line"], 
-               ", this should never happen."))
-  }
-  if (stats["variants"] < 0) {
-    stop(paste("stats['variants'] less than zero:", stats["variants"], 
-               ", this should never happen."))
-  }
-  if (stats["columns"] < 0) {
-    stop(paste("stats['columns'] less than zero:", stats["columns"], 
-               ", this should never happen."))
-  }
-  if (is.null(cols)) {
-    cols <- 1:stats["columns"]
-  }
-  cols <- sort(unique(c(1:8, cols)))
-  ram_est <- memuse::howbig(stats["variants"], stats["columns"])
-  if (ram_est@size > limit) {
-    message(paste("The number of variants in your file is:", 
-                  prettyNum(stats["variants"], big.mark = ",")))
-    message(paste("The number of samples in your file is:", 
-                  prettyNum(stats["columns"] - 1, big.mark = ",")))
-    message(paste("This will result in an object of approximately:", 
-                  ram_est, "in size"))
-    stop("Object size limit exceeded")
-  }
-  vcf$meta <- .read_meta_gz(file, stats, as.numeric(verbose))
-  body <- .read_body_gz(file, stats = stats, nrows = nrows, 
-                        skip = skip, cols = cols, convertNA = as.numeric(convertNA), 
-                        verbose = as.numeric(verbose))
-  vcf$fix <- body[, 1:8, drop = FALSE]
-  if (ncol(body) > 8) {
-    vcf$gt <- body[, -c(1:8), drop = FALSE]
-  }
-  else {
-    vcf$gt <- matrix("a", nrow = 0, ncol = 0)
-  }
-  return(vcf)
 }

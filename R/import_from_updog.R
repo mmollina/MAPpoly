@@ -14,6 +14,9 @@
 #' @param filter.non.conforming if \code{TRUE} (default) exclude samples with non 
 #'     expected genotypes under random chromosome pairing and no double reduction 
 #'
+#' @param verbose if \code{TRUE} (default), the current progress is shown; if
+#'     \code{FALSE}, no output is produced
+#' 
 #' @return An object of class \code{mappoly.data} which contains a
 #'     list with the following components:
 #'     \item{m}{ploidy level}
@@ -80,7 +83,7 @@
 #'     
 #' @export import_from_updog
 #' 
-import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = FALSE){
+import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = FALSE, verbose = TRUE){
   # Case 1: updog
   if (inherits(object, "multidog")){
     m = object$snpdf$ploidy[1]
@@ -144,9 +147,9 @@ import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = 
                         chisq.pval = NULL),
                    class = "mappoly.data")
     if(filter.non.conforming){
-      cat("    Filtering non-conforming markers.\n    ...")
+      if (verbose) cat("    Filtering non-conforming markers.\n    ...")
       res<-filter_non_conforming_classes(res)
-      cat("\n    Performing chi-square test.\n    ...")
+      if (verbose) cat("\n    Performing chi-square test.\n    ...")
       ##Computing chi-square p.values
       Ds <- array(NA, dim = c(m+1, m+1, m+1))
       for(i in 0:m)
@@ -157,7 +160,7 @@ import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = 
       dimnames(M)<-list(res$mrk.names, c(0:m))
       M<-cbind(M, res$geno.dose)
       res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
-      cat("\n    Done.\n")
+      if (verbose) cat("\n    Done.\n")
     }
     return(res)
   }

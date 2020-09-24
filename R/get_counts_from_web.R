@@ -4,7 +4,7 @@
 #' @keywords internal
 #' @import RCurl
 #' @export get_cache_two_pts_from_web
-get_cache_two_pts_from_web <- function(m, url.address = NULL, joint.prob = TRUE) {
+get_cache_two_pts_from_web <- function(m, url.address = NULL, joint.prob = TRUE, verbose = FALSE) {
     if (is.null(url.address)) {
         if (m == 2)
             pl <- "di" else if (m == 4)
@@ -20,7 +20,7 @@ get_cache_two_pts_from_web <- function(m, url.address = NULL, joint.prob = TRUE)
     prev.joint.cache.from.web <- prev.cache.from.web <- NULL
     ## checking internet connectivity
     if (try(url.exists(url.address.cond)) & try(url.exists(url.address.joint))) {
-        cat("Internet connectivity ok.\nLoading genotype counts from web\n")
+        if (verbose) cat("Internet connectivity ok.\nLoading genotype counts from web\n")
         load(url(url.address.cond, method = "libcurl"))
         if (!inherits(prev.cache.from.web, "cache.info"))
             stop(deparse(substitute(prev.cache.from.web)), " is not an object of class 'cache.info'\nTry to use function 'cache.two.pts'")

@@ -121,6 +121,8 @@ group_mappoly <- function(input.mat, expected.groups = NULL,
         points(x = xt, y = rep(yt, length(xt)), cex = 6, pch = 20, col = "lightgray")
         text(x = xt, y = yt, labels = match(xy, table(groups.snp, useNA = "ifany")), adj = .5)
         ANSWER <- readline("Enter 'Y/n' to proceed or update the number of expected groups: ")
+        if(substr(ANSWER, 1, 1) == "n" | substr(ANSWER, 1, 1) == "no" | substr(ANSWER, 1, 1) == "N")
+            stop("You decided to stop the function.")
         if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
           expected.groups <- as.numeric(ANSWER)
       }

@@ -4,10 +4,13 @@
 \alias{get_genomic_order}
 \title{Get the genomic position of markers in a sequence}
 \usage{
-get_genomic_order(input.seq)
+get_genomic_order(input.seq, verbose = TRUE)
 }
 \arguments{
 \item{input.seq}{a sequence object of class \code{mappoly.sequence}}
+
+\item{verbose}{if \code{TRUE} (default), the current progress is shown; if
+\code{FALSE}, no output is produced}
 }
 \description{
 This functions gets the genomic position of markers in a sequence and

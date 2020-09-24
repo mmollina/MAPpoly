@@ -14,7 +14,8 @@ read_vcf(
   min.gt.depth = 0,
   min.av.depth = 0,
   max.missing = 1,
-  elim.redundant = TRUE
+  elim.redundant = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -43,6 +44,9 @@ it will be replaced with NA (default = 0)}
 
 \item{elim.redundant}{logical. If \code{TRUE} (default), removes redundant markers
 during map construction, keeping them annotated to export to the final map.}
+
+\item{verbose}{if \code{TRUE} (default), the current progress is shown; if
+\code{FALSE}, no output is produced}
 }
 \value{
 An object of class \code{mappoly.data} which contains a

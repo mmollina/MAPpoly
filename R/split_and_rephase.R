@@ -20,7 +20,10 @@
 #'                     will choose the phase configuration associated with the
 #'                     maximum likelihood
 #' @param tol.final the desired accuracy for the final map (default = 10e-04)   
-#'                 
+#'
+#' @param verbose if \code{TRUE} (default), the current progress is shown; if
+#'     \code{FALSE}, no output is produced
+#' 
 #' @return An object of class \code{mappoly.map}
 #' 
 #' @examples
@@ -52,7 +55,8 @@ split_and_rephase<-function(input.map,
                             gap.threshold = 5, 
                             remove.single = TRUE,
                             phase.config = "best",
-                            tol.final = 10e-4){
+                            tol.final = 10e-4,
+                            verbose = TRUE){
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
   }
@@ -77,7 +81,7 @@ split_and_rephase<-function(input.map,
   id <- which(imf_h(input.map$maps[[1]]$seq.rf) > gap.threshold)
   id <- cbind(c(1, id+1), c(id, input.map$info$n.mrk))
   temp.maps <- vector("list", nrow(id))
-  cat(nrow(id), "submaps found ...\n")
+  if (verbose) cat(nrow(id), "submaps found ...\n")
   for(i in 1:length(temp.maps)){
     temp.id <- c(id[i, 1]:id[i, 2])
     if(length(temp.id) > 1)
@@ -88,7 +92,7 @@ split_and_rephase<-function(input.map,
   }
   newmap<-temp.maps[[1]]
   for(i in 2:length(temp.maps)){
-    cat("Adding block", i, "of", length(temp.maps), "\n")
+    if (verbose) cat("Adding block", i, "of", length(temp.maps), "\n")
     if(!is.character(temp.maps[[i]])){
       invisible(capture.output(suppressMessages(
         newmap<-merge_maps(list(newmap, temp.maps[[i]]), 
@@ -104,7 +108,8 @@ split_and_rephase<-function(input.map,
                               rf.matrix = rf_list_to_matrix(twopt,
                                                             thresh.LOD.ph = 5, 
                                                             thresh.LOD.rf = 5,
-                                                            shared.alleles = TRUE)))))
+                                                            shared.alleles = TRUE),
+                              verbose = verbose))))
       newmap <- filter_map_at_hmm_thres(maptemp, thres.hmm = 0.01)
     }
   }

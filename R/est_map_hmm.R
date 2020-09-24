@@ -497,8 +497,9 @@ est_rf_hmm_sequential<-function(input.seq,
   {
     cte<-cte+1
     if(length(rf.temp)==1) {
-      cat("Impossible build a map using the given thresholds\n")
-      stop()
+      ## cat("Impossible build a map using the given thresholds\n")
+      ## stop()
+      stop("Impossible build a map using the given thresholds\n")
     }
     if(verbose) cat(cli::symbol$bullet, "   Trying sequence:", cte:(start.set+cte-1), ":\n")
     cur.seq <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1), na.omit(input.seq$seq.num[cte:(start.set+cte-1)]), data.name = input.seq$data.name)
@@ -525,7 +526,7 @@ est_rf_hmm_sequential<-function(input.seq,
   ct <- start.set+cte
   all.ph <- update_ph_list_at_hmm_thres(cur.map, thres.hmm)
   if(sub.map.size.diff.limit!=Inf & !reestimate.single.ph.configuration){
-    message("Making 'reestimate.single.ph.configuration = TRUE' to use map expansion")
+    if (verbose) message("Making 'reestimate.single.ph.configuration = TRUE' to use map expansion")
     reestimate.single.ph.configuration <- TRUE
   }
   while(ct <= length(input.seq$seq.num))
@@ -659,8 +660,10 @@ est_rf_hmm_sequential<-function(input.seq,
                                 arg = as.numeric(names(all.ph$config.to.test[[1]]$P)), 
                                 data.name = input.seq$data.name)
   #msg(paste("Done phasing", length(seq.final$seq.num), "markers"))
-  msg("Reestimating final recombination fractions", line = 2)
-  cat("")
+  if (verbose){
+      msg("Reestimating final recombination fractions", line = 2)
+      cat("")
+  }
   final.map <- est_rf_hmm(input.seq = seq.final,
                           input.ph = all.ph,
                           twopt = twopt,

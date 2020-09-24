@@ -126,9 +126,9 @@ merge_maps<-function(map.list,
                            map.list[[1]]$info$data.name)
   check <- check_pairwise(s.temp, twopt)
   if (any(check != 0)){
-    cat("There is no information for pairs: \n")
-    print(check)
-    stop()
+    ## cat("There is no information for pairs: \n")
+    ## print(check)
+    stop("There is no information for pairs: \n", paste(capture.output(print(check)), collapse = "\n"))
   }
   ## For merging multiple maps 
   if(length(map.list) > 2)

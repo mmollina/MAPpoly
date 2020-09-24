@@ -24,6 +24,9 @@
 #' @param elim.redundant logical. If \code{TRUE} (default), removes redundant markers
 #'        during map construction, keeping them annotated to export to the final map.
 #'
+#' @param verbose if \code{TRUE} (default), the current progress is shown; if
+#'     \code{FALSE}, no output is produced
+#' 
 #' @return An object of class \code{mappoly.data} which contains a
 #'     list with the following components:
 #'     \item{m}{ploidy level}
@@ -82,7 +85,7 @@
 #'
 #' @export read_geno_csv
 
-read_geno_csv <- function(file.in, ploidy, filter.non.conforming = TRUE, elim.redundant = TRUE) {
+read_geno_csv <- function(file.in, ploidy, filter.non.conforming = TRUE, elim.redundant = TRUE, verbose = TRUE) {
   m <- ploidy
   dat<-read.csv(file = file.in, header = TRUE, stringsAsFactors = FALSE)
   ## get number of individuals -------------
@@ -108,23 +111,25 @@ read_geno_csv <- function(file.in, ploidy, filter.non.conforming = TRUE, elim.re
   names(sequencepos) <- names(sequence) <- names(dosage.q) <- names(dosage.p) <-  mrk.names
   nphen <- 0
   phen <- NULL
-  cat("Reading the following data:")
-  cat("\n    Ploidy level:", m)
-  cat("\n    No. individuals: ", n.ind)
-  cat("\n    No. markers: ", n.mrk) 
-  cat("\n    No. informative markers:  ", sum(id), " (", round(100*sum(id)/n.mrk,1), "%)", sep = "")
-  if (all(unique(nphen) != 0))
-    cat("\n    This dataset contains phenotypic information.")
-  
-  if (length(sequence) > 1)
-    cat("\n    This dataset contains sequence information.")
-  cat("\n    ...")
+  if (verbose){
+      cat("Reading the following data:")
+      cat("\n    Ploidy level:", m)
+      cat("\n    No. individuals: ", n.ind)
+      cat("\n    No. markers: ", n.mrk) 
+      cat("\n    No. informative markers:  ", sum(id), " (", round(100*sum(id)/n.mrk,1), "%)", sep = "")
+      if (all(unique(nphen) != 0))
+          cat("\n    This dataset contains phenotypic information.")      
+      if (length(sequence) > 1)
+          cat("\n    This dataset contains sequence information.")
+      cat("\n    ...")
+  }
+
   ## get genotypic info --------------------
   geno.dose <- dat[,-c(1:5)]
   dimnames(geno.dose)<-list(mrk.names, ind.names)
   geno.dose[is.na(geno.dose)] <- m + 1
   ## returning the 'mappoly.data' object
-  cat("\n    Done with reading.\n")
+  if (verbose) cat("\n    Done with reading.\n")
   geno.dose<-geno.dose[id,]
   res <- structure(list(m = m,
                         n.ind = n.ind,
@@ -147,7 +152,7 @@ read_geno_csv <- function(file.in, ploidy, filter.non.conforming = TRUE, elim.re
                    class = "mappoly.data")
   
   if(filter.non.conforming){
-    cat("    Filtering non-conforming markers.\n    ...")
+    if (verbose) cat("    Filtering non-conforming markers.\n    ...")
     res<-filter_non_conforming_classes(res)
     ##Computing chi-square p.values
     Ds <- array(NA, dim = c(m+1, m+1, m+1))
@@ -159,7 +164,7 @@ read_geno_csv <- function(file.in, ploidy, filter.non.conforming = TRUE, elim.re
     dimnames(M)<-list(res$mrk.names, c(0:m))
     M<-cbind(M, res$geno.dose)
     res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
-    cat("\n    Done with filtering.\n")
+    if (verbose) cat("\n    Done with filtering.\n")
   }
   if (elim.redundant){
     seqred = make_seq_mappoly(res, arg = 'all', data.name = res)

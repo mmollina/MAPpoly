@@ -41,50 +41,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// vcf_stats_gz
-Rcpp::NumericVector vcf_stats_gz(std::string x, int nrows, int skip, int verbose);
-RcppExport SEXP _mappoly_vcf_stats_gz(SEXP xSEXP, SEXP nrowsSEXP, SEXP skipSEXP, SEXP verboseSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    Rcpp::traits::input_parameter< int >::type nrows(nrowsSEXP);
-    Rcpp::traits::input_parameter< int >::type skip(skipSEXP);
-    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(vcf_stats_gz(x, nrows, skip, verbose));
-    return rcpp_result_gen;
-END_RCPP
-}
-// read_meta_gz
-Rcpp::StringVector read_meta_gz(std::string x, Rcpp::NumericVector stats, int verbose);
-RcppExport SEXP _mappoly_read_meta_gz(SEXP xSEXP, SEXP statsSEXP, SEXP verboseSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
-    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(read_meta_gz(x, stats, verbose));
-    return rcpp_result_gen;
-END_RCPP
-}
-// read_body_gz
-Rcpp::CharacterMatrix read_body_gz(std::string x, Rcpp::NumericVector stats, long int nrows, long int skip, Rcpp::IntegerVector cols, int convertNA, int verbose);
-RcppExport SEXP _mappoly_read_body_gz(SEXP xSEXP, SEXP statsSEXP, SEXP nrowsSEXP, SEXP skipSEXP, SEXP colsSEXP, SEXP convertNASEXP, SEXP verboseSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Rcpp::NumericVector >::type stats(statsSEXP);
-    Rcpp::traits::input_parameter< long int >::type nrows(nrowsSEXP);
-    Rcpp::traits::input_parameter< long int >::type skip(skipSEXP);
-    Rcpp::traits::input_parameter< Rcpp::IntegerVector >::type cols(colsSEXP);
-    Rcpp::traits::input_parameter< int >::type convertNA(convertNASEXP);
-    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(read_body_gz(x, stats, nrows, skip, cols, convertNA, verbose));
-    return rcpp_result_gen;
-END_RCPP
-}
 
 RcppExport SEXP calc_genoprob(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 RcppExport SEXP calc_genoprob_prior(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
@@ -101,9 +57,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_mappoly_vcf_transform_dosage", (DL_FUNC) &_mappoly_vcf_transform_dosage, 2},
     {"_mappoly_vcf_get_ploidy", (DL_FUNC) &_mappoly_vcf_get_ploidy, 2},
     {"_mappoly_vcf_get_depth", (DL_FUNC) &_mappoly_vcf_get_depth, 2},
-    {"_mappoly_vcf_stats_gz", (DL_FUNC) &_mappoly_vcf_stats_gz, 4},
-    {"_mappoly_read_meta_gz", (DL_FUNC) &_mappoly_read_meta_gz, 3},
-    {"_mappoly_read_body_gz", (DL_FUNC) &_mappoly_read_body_gz, 7},
     {"calc_genoprob",             (DL_FUNC) &calc_genoprob,              7},
     {"calc_genoprob_prior",       (DL_FUNC) &calc_genoprob_prior,       12},
     {"calc_genprob_haplo",        (DL_FUNC) &calc_genprob_haplo,         8},

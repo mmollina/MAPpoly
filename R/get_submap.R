@@ -88,7 +88,7 @@ get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf =
   if(!use.high.precision & length(mrk.pos) > 1000)
   {
     high.prec <- TRUE
-    message("Number of markers is greater than 1000: \nusing high precision estimation")
+    if (verbose) message("Number of markers is greater than 1000: \nusing high precision estimation")
   }
  ## choosing the linkage phase configuration
   LOD.conf <- get_LOD(input.map)
@@ -120,7 +120,7 @@ get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf =
   }
   else if(reestimate.phase)
   {
-    if(!reestimate.rf)
+    if(verbose && !reestimate.rf)
       message("
     The recombination fraction will be reestimated 
     since 'reestimate.phase = TRUE'")
@@ -148,7 +148,7 @@ get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf =
   output.map <- input.map
   z<-cumsum(c(0, imf_h(input.map$maps[[i.lpc]]$seq.rf)))[mrk.pos]
   rf.vec<-mf_h(abs(diff(z)))
-  message("
+  if (verbose) message("
     You selected: reestimate.rf = FALSE
     -----------------------------------------
     The recombination fractions provided were

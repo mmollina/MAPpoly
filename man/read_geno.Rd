@@ -6,7 +6,12 @@
 \alias{plot.mappoly.data}
 \title{Data Input}
 \usage{
-read_geno(file.in, filter.non.conforming = TRUE, elim.redundant = TRUE)
+read_geno(
+  file.in,
+  filter.non.conforming = TRUE,
+  elim.redundant = TRUE,
+  verbose = TRUE
+)
 
 \method{print}{mappoly.data}(x, detailed = FALSE, ...)
 
@@ -22,6 +27,9 @@ for information on expected classes and their respective frequencies.}
 
 \item{elim.redundant}{logical. If \code{TRUE} (default), removes redundant markers
 during map construction, keeping them annotated to export to the final map.}
+
+\item{verbose}{if \code{TRUE} (default), the current progress is shown; if
+\code{FALSE}, no output is produced}
 
 \item{x}{an object of class \code{mappoly.data}}
 

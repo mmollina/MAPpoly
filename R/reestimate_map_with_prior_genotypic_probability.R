@@ -125,7 +125,7 @@ est_full_hmm_with_prior_prob<-function(input.map, dat.prob = NULL, phase.config 
   for(i in unique(geno$ind))
     geno.new<-rbind(geno.new, geno[geno[,"ind"] == i, ][match(original.map.mrk, geno[,"mrk"]),])
   g <- as.double(t(geno.new[, -c(1:2)]))
-  cat("
+  if (verbose) cat("
  ----------------------------------------------
  INFO: running HMM using full transition space:
        this operation may take a while.

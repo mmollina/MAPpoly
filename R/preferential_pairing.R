@@ -5,6 +5,9 @@
 #' configurations in both parents.
 #'
 #' @param input.genoprobs an object of class \code{mappoly.genoprob}
+#'
+#' @param verbose if \code{TRUE} (default), the current progress is shown; if
+#'     \code{FALSE}, no output is produced
 #' 
 #'@examples
 #' \dontrun{
@@ -38,7 +41,7 @@
 #' @importFrom ggpubr ggarrange
 #' @importFrom ggsci scale_color_d3 pal_d3
 #' 
-calc_prefpair_profiles<-function(input.genoprobs){
+calc_prefpair_profiles<-function(input.genoprobs, verbose = TRUE){
   if(inherits(input.genoprobs, "mappoly.genoprob")) 
     input.genoprobs <- list(input.genoprobs)
   if(!inherits(input.genoprobs, "list"))
@@ -49,7 +52,7 @@ calc_prefpair_profiles<-function(input.genoprobs){
          " is not an object of class 'mappoly.genoprob' neither a list containing 'mappoly.genoprob' objects.")
   df.hompair.pval <- df.prefpair <- df.prefpair.pval <- NULL
   for(j in 1:length(input.genoprobs)){
-    cat("\nLinkage group ", j, "...")
+    if (verbose) cat("\nLinkage group ", j, "...")
     # get names for all states
     Gnames<-dimnames(input.genoprobs[[j]]$probs)[[1]]
     x<-dim(input.genoprobs[[j]]$probs)
@@ -147,7 +150,7 @@ calc_prefpair_profiles<-function(input.genoprobs){
     df.hompair.pval <- rbind(df.hompair.pval, df.hom.pair)
     df.prefpair.pval <- rbind(df.prefpair.pval, df.prefpair.pval.temp)
   }
-  cat("\n")
+  if (verbose) cat("\n")
   structure(list(info = list(m = m, nind = nind), 
                  prefpair.psi = df.prefpair, 
                  prefpair.psi.pval = df.prefpair.pval,
