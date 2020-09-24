@@ -168,7 +168,7 @@ calc_genoprob_error<-function(input.map,  step = 0, phase.config = "best", error
       as.numeric(verbose),
       PACKAGE = "mappoly"
     )
-  cat("\n")
+  if (verbose) cat("\n")
   dim(res.temp[[1]])<-c(choose(m,m/2)^2,n.mrk,n.ind)
   dimnames(res.temp[[1]])<-list(kronecker(apply(combn(letters[1:m],m/2),2, paste, collapse=""),
                                           apply(combn(letters[(m+1):(2*m)],m/2),2, paste, collapse=""), paste, sep=":"),

@@ -4,7 +4,12 @@
 \alias{import_from_updog}
 \title{Import from updog}
 \usage{
-import_from_updog(object, prob.thres = NULL, filter.non.conforming = FALSE)
+import_from_updog(
+  object,
+  prob.thres = NULL,
+  filter.non.conforming = FALSE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{object}{the name of the object of class \code{multidog}}
@@ -15,6 +20,9 @@ are considered as missing data for the dosage calling purposes}
 
 \item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
 expected genotypes under random chromosome pairing and no double reduction}
+
+\item{verbose}{if \code{TRUE} (default), the current progress is shown; if
+\code{FALSE}, no output is produced}
 }
 \value{
 An object of class \code{mappoly.data} which contains a

@@ -4,7 +4,9 @@
 #' population given a map and conditional genotype probabilities. 
 #'
 #' @param input.genoprobs an object of class \code{mappoly.genoprob}
-#' 
+#'
+#' @param verbose if \code{TRUE} (default), the current progress is shown; if
+#'     \code{FALSE}, no output is produced
 #' 
 #'@examples
 #' \dontrun{
@@ -46,7 +48,7 @@
 #' @importFrom plotly ggplotly
 #' @export calc_homoprob
 #' 
-calc_homoprob<-function(input.genoprobs){
+calc_homoprob<-function(input.genoprobs, verbose = TRUE){
   if(inherits(input.genoprobs, "mappoly.genoprob")) 
     input.genoprobs <- list(input.genoprobs)
   if(!inherits(input.genoprobs, "list"))
@@ -57,7 +59,7 @@ calc_homoprob<-function(input.genoprobs){
          " is not an object of class 'mappoly.genoprob' neither a list containing 'mappoly.genoprob' objects.")
   df.res <- NULL
   for(j in 1:length(input.genoprobs)){
-    cat("\nLinkage group ", j, "...")
+    if (verbose) cat("\nLinkage group ", j, "...")
     stt.names<-dimnames(input.genoprobs[[j]]$probs)[[1]] ## state names
     mrk.names<-dimnames(input.genoprobs[[j]]$probs)[[2]] ## mrk names
     ind.names<-dimnames(input.genoprobs[[j]]$probs)[[3]] ## individual names
@@ -75,7 +77,7 @@ calc_homoprob<-function(input.genoprobs){
     df.hom$LG <- j
     df.res<-rbind(df.res, df.hom)
   }
-  cat("\n")
+  if (verbose) cat("\n")
   structure(list(info = list(m = m, nind = length(ind.names)) , homoprob = df.res), class = "mappoly.homoprob")
 }
 
@@ -132,7 +134,7 @@ plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL,
   LG<-individual<-map.position<-probability<-homolog<-NULL
   if(length(lg) > 1 & !stack)
   {
-    message("Using 'stack = TRUE' to plot multiple linkage groups")
+    warning("Using 'stack = TRUE' to plot multiple linkage groups")
     stack <- TRUE
   }
   if(stack){

@@ -123,7 +123,7 @@ genotyping_global_error<-function(x, m, restricted = TRUE,  error=0.01, th.prob=
 #' @export est_full_hmm_with_global_error
 est_full_hmm_with_global_error <- function(input.map, error=NULL, tol=10e-4, 
                                            restricted = TRUE, 
-                                           th.prob=0.95, verbose = FALSE)
+                                           th.prob=0.95, verbose = TRUE)
 {
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
@@ -188,7 +188,7 @@ est_full_hmm_with_global_error <- function(input.map, error=NULL, tol=10e-4,
       gen[[i]]<-a.temp
     }
   }
-  cat("
+  if (verbose) cat("
  ----------------------------------------------
  INFO: running HMM using full transition space:
        this operation may take a while.

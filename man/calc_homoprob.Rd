@@ -4,10 +4,13 @@
 \alias{calc_homoprob}
 \title{Homolog probabilities}
 \usage{
-calc_homoprob(input.genoprobs)
+calc_homoprob(input.genoprobs, verbose = TRUE)
 }
 \arguments{
 \item{input.genoprobs}{an object of class \code{mappoly.genoprob}}
+
+\item{verbose}{if \code{TRUE} (default), the current progress is shown; if
+\code{FALSE}, no output is produced}
 }
 \description{
 Compute homolog probabilities for all individuals in the full-sib

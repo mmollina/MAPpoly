@@ -4,10 +4,13 @@
 \alias{calc_prefpair_profiles}
 \title{Preferential pairing profiles}
 \usage{
-calc_prefpair_profiles(input.genoprobs)
+calc_prefpair_profiles(input.genoprobs, verbose = TRUE)
 }
 \arguments{
 \item{input.genoprobs}{an object of class \code{mappoly.genoprob}}
+
+\item{verbose}{if \code{TRUE} (default), the current progress is shown; if
+\code{FALSE}, no output is produced}
 }
 \description{
 Given the genotype conditional probabilities for a map, this function

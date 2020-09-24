@@ -86,7 +86,7 @@ int get_dosage(std::string mystring, int gt_pos){
   // Checking other formats
   if(mystring[0] == '0' || mystring[0] == '1'){flag = 0;} else {flag = 1;}
   if(flag == 1){
-    Rcpp::Rcout << "Warning: GT field does not have the expected format, please check your file. Returning NA instead.\n";
+    // Rcpp::Rcout << "Warning: GT field does not have the expected format, please check your file. Returning NA instead.\n";
     return -1;
   }
   // Accounting allele dosages
@@ -134,7 +134,7 @@ int get_ploidy(std::string mystring, int gt_pos){
   // Checking other formats
   if(mystring[0] == '0' || mystring[0] == '1' || mystring[0] == '.'){flag = 0;} else {flag = 1;}
   if(flag == 1){
-    Rcpp::Rcout << "Warning: GT field does not have the expected format, please check your file. Returning NA instead.\n";
+    // Rcpp::Rcout << "Warning: GT field does not have the expected format, please check your file. Returning NA instead.\n";
     return -1;
   }
   // Looping through string2

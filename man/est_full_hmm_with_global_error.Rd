@@ -10,7 +10,7 @@ est_full_hmm_with_global_error(
   tol = 0.001,
   restricted = TRUE,
   th.prob = 0.95,
-  verbose = FALSE
+  verbose = TRUE
 )
 }
 \arguments{

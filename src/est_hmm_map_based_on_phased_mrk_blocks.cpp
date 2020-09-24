@@ -247,7 +247,7 @@ RcppExport SEXP est_haplotype_map(SEXP ploidyR,
     }
     if(!flag) break;
   }//end of EM algorithm
-  if(flag) Rcpp::Rcout << "Didn't converge!\n";
+  if(flag && verbose) Rcpp::Rcout << "Didn't converge!\n";
   
   //Loglike computation
   for(int i=0; (unsigned)i < alpha.size(); i++)

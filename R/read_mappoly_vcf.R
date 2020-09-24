@@ -33,6 +33,9 @@
 #' @param elim.redundant logical. If \code{TRUE} (default), removes redundant markers
 #' during map construction, keeping them annotated to export to the final map.
 #'
+#' @param verbose if \code{TRUE} (default), the current progress is shown; if
+#'     \code{FALSE}, no output is produced
+#'
 #' @return An object of class \code{mappoly.data} which contains a
 #'     list with the following components:
 #'     \item{m}{ploidy level}
@@ -127,7 +130,7 @@
 read_vcf = function(file.in, parent.1, parent.2, ploidy = NA, 
                     filter.non.conforming = TRUE, thresh.line = 0.05, 
                     min.gt.depth = 0, min.av.depth = 0, max.missing = 1, 
-                    elim.redundant = TRUE) {
+                    elim.redundant = TRUE, verbose = TRUE) {
   # Checking even ploidy
   if(!is.na(ploidy) && (ploidy %% 2) != 0){
     stop("MAPpoly only supports even ploidy levels. Please check the 'ploidy' parameter and try again.")
@@ -137,14 +140,14 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
   if (input.size > 3000){
     warning("Your VCF file is greater than 3 GB. Check for available RAM memory.")
   }
-  cat("Reading data...\n")
-  input.data = vcfR::read.vcfR(file.in, verbose = F) # Reading file
+  if (verbose) cat("Reading data...\n")
+  input.data = vcfR::read.vcfR(file.in, verbose = verbose) # Reading file
   ind.names = colnames(input.data@gt)[-1]
   n.mrk = dim(input.data@gt)[1] # Getting number of markers
   n.ind = length(ind.names) - 2 # Number of individuals excepting two parents
   mrk.names = mrk.names.all = input.data@fix[,3] # Getting marker names
   if (any(is.na(unique(mrk.names)))){
-    cat("No named markers. Using integers instead.\n")
+    if (verbose) cat("No named markers. Using integers instead.\n")
     no_name = sum(is.na(mrk.names))
     mrk.names[which(is.na(mrk.names))] = paste0("no_name_", seq(1, no_name, 1))
   }
@@ -156,7 +159,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
   names(seq.ref)  = mrk.names
   seq.alt = input.data@fix[,5] # Getting alternative alleles
   names(seq.alt)  = mrk.names
-  cat("Processing genotypes...")
+  if (verbose) cat("Processing genotypes...")
   cname = which(unlist(strsplit(unique(input.data@gt[,1]), ":")) == "GT") # Defining GT position
   dname = which(unlist(strsplit(unique(input.data@gt[,1]), ":")) == "DP") # Defining DP position
   ## file.ploidy = length(unlist(strsplit(unique(input.data@gt[,2])[1], "/"))) # Checking ploidy (old)
@@ -165,7 +168,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
   file.ploidy = unique(c(geno.ploidy)) # Getting different ploidy levels
   geno.dose = .vcf_transform_dosage(input.data@gt[,-1], cname) # Accounting for allele dosages
   geno.dose[which(geno.dose == -1)] = NA # Filling NA values
-  cat("Done!\n")
+  if (verbose) cat("Done!\n")
   # geno.dose = matrix(unlist(lapply(strsplit(input.data@gt[,-1], ":"), "[", cname)), nrow = n.mrk, byrow = F) # Selecting genotypes (time consuming step)
   # if (sum(grepl("\\|", geno.dose)) > 0){ # Checking phased data
   #   input.phased = TRUE # Treat this in a different way when reading file
@@ -185,7 +188,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
     } else { # Else, use the first ploidy level detected on file
         m = file.ploidy[1]
     }
-    cat("Selected ploidy:", m, "\n")
+    if (verbose) cat("Selected ploidy:", m, "\n")
   if (!(parent.1 %in% ind.names) | !(parent.2 %in% ind.names)){
     stop("Provided parents were not found in VCF file. Please check it and try again.")
   }
@@ -231,19 +234,21 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
   dq = abs(abs(dosage.q-(m/2))-(m/2))
   id = dp+dq!=0
   id[which(is.na(id))] = FALSE
-  
-  cat("Done!\n")
-  cat("Read the following data:")
-  cat("\n    Ploidy level:", m)
-  cat("\n    No. individuals: ", n.ind)
-  cat("\n    No. markers: ", n.mrk) 
-  cat("\n    No. informative markers:  ", sum(id), " (", round(100*sum(id)/n.mrk,1), "%)", sep = "")
-  # if (all(unique(nphen) != 0))
-  #   cat("\n    This dataset contains phenotypic information.")
-  
-  if (length(sequence) > 1)
-    cat("\n    This dataset contains sequence information.")
-  cat("\n    ...")
+
+  if (verbose){
+      cat("Done!\n")
+      cat("Read the following data:")
+      cat("\n    Ploidy level:", m)
+      cat("\n    No. individuals: ", n.ind)
+      cat("\n    No. markers: ", n.mrk) 
+      cat("\n    No. informative markers:  ", sum(id), " (", round(100*sum(id)/n.mrk,1), "%)", sep = "")
+      ## if (all(unique(nphen) != 0))
+      ##   cat("\n    This dataset contains phenotypic information.")        
+      if (length(sequence) > 1)
+          cat("\n    This dataset contains sequence information.")
+      cat("\n    ...")
+  }
+
   ## get genotypic info --------------------
   if(nrow(geno.dose)!=length(mrk.names))
     stop("\n\t\t-------------------------------------
@@ -260,7 +265,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
   dimnames(geno.dose)<-list(mrk.names, ind.names)
   geno.dose[is.na(geno.dose)] <- m + 1
   ## returning the 'mappoly.data' object
-  cat("\n    Done with reading.\n")
+  if (verbose) cat("\n    Done with reading.\n")
     
     res = structure(list(m = m,
                          n.ind = n.ind,
@@ -284,9 +289,9 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
                     class = "mappoly.data")
   
   if(filter.non.conforming){
-    cat("    Filtering non-conforming markers.\n    ...")
+    if (verbose) cat("    Filtering non-conforming markers.\n    ...")
     res<-filter_non_conforming_classes(res)
-    cat("\n    Performing chi-square test.\n    ...")
+    if (verbose) cat("\n    Performing chi-square test.\n    ...")
     ##Computing chi-square p.values
     Ds <- array(NA, dim = c(m+1, m+1, m+1))
     for(i in 0:m)
@@ -297,7 +302,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
     dimnames(M)<-list(res$mrk.names, c(0:m))
     M<-cbind(M, res$geno.dose)
     res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
-    cat("\n    Done.\n")
+    if (verbose) cat("\n    Done.\n")
   }
     if (elim.redundant){
       seqred = make_seq_mappoly(res, arg = 'all', data.name = res)

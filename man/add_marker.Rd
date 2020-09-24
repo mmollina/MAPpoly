@@ -12,7 +12,8 @@ add_marker(
   genoprob = NULL,
   phase.config = "best",
   tol = 0.001,
-  r.test = NULL
+  r.test = NULL,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -39,6 +40,9 @@ will choose the maximum likelihood configuration}
 \item{tol}{the desired accuracy (default = 10e-04)}
 
 \item{r.test}{for internal use only}
+
+\item{verbose}{if \code{TRUE} (default), the current progress is shown; if
+\code{FALSE}, no output is produced}
 }
 \value{
 A list of class \code{mappoly.map} with two elements: 

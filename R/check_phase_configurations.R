@@ -179,9 +179,9 @@ elim_conf_using_two_pts <- function(input.seq, twopt, thres) {
     dq <- input.seq$seq.dose.q
     check <- check_pairwise(input.seq, twopt)
     if (any(check != 0)){
-        cat("There is no information for pairs: \n")
-        print(check)
-        stop()
+        ## cat("There is no information for pairs: \n")
+        ## print(check)
+        stop("There is no information for pairs: \n", paste(capture.output(print(check)), collapse = "\n"))
     }
     index <- apply(apply(combn(input.seq$seq.num, 2), 2, sort), 2, paste, collapse = "-")
     w <- twopt$pairwise[index]
@@ -394,9 +394,9 @@ ls_linkage_phases <- function(input.seq, thres, twopt, mrk.to.add = NULL, prev.i
         dq <- get(input.seq$data.name)$dosage.q[seq.temp]
         check <- check_pairwise(input.seq, twopt)
         if (any(check != 0)){
-            cat("There is no information for pairs: \n")
-            print(check)
-            stop()
+            ## cat("There is no information for pairs: \n")
+            ## print(check)
+            stop("There is no information for pairs: \n", paste(capture.output(print(check)), collapse = "\n"))
         }
         index <- apply(apply(combn(seq.temp, 2), 2, sort), 2, paste, collapse = "-")
         w <- twopt$pairwise[index]
@@ -424,9 +424,9 @@ ls_linkage_phases <- function(input.seq, thres, twopt, mrk.to.add = NULL, prev.i
     rownames(cQ) <- apply(apply(sapply(nC, get_ij), 2, sort), 2, paste, collapse = "-")
     check <- check_pairwise(input.seq, twopt)
     if (any(check != 0)){
-        cat("There is no information for pairs: \n")
-        print(check)
-        stop()
+        ## cat("There is no information for pairs: \n")
+        ## print(check)
+        stop("There is no information for pairs: \n", paste(capture.output(print(check)), collapse = "\n"))
     }
     y <- combn(input.seq$seq.num, 2)
     y <- apply(y, 2, sort)

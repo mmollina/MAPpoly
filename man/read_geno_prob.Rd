@@ -8,7 +8,8 @@ read_geno_prob(
   file.in,
   prob.thres = 0.95,
   filter.non.conforming = TRUE,
-  elim.redundant = TRUE
+  elim.redundant = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -25,6 +26,9 @@ for information on expected classes and their respective frequencies.}
 
 \item{elim.redundant}{logical. If \code{TRUE} (default), removes redundant markers
 during map construction, keeping them annotated to export to the final map.}
+
+\item{verbose}{if \code{TRUE} (default), the current progress is shown; if
+\code{FALSE}, no output is produced}
 }
 \value{
 an object of class \code{mappoly.data} which contains a

@@ -494,7 +494,9 @@ mrk_chisq_test<-function(x, m){
 #'
 #' This functions gets the genomic position of markers in a sequence and
 #' return an ordered data frame with the name and position of each marker
-#' @param input.seq a sequence object of class \code{mappoly.sequence} 
+#' @param input.seq a sequence object of class \code{mappoly.sequence}
+#' @param verbose if \code{TRUE} (default), the current progress is shown; if
+#'     \code{FALSE}, no output is produced
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' @examples
 #' \dontrun{
@@ -503,7 +505,7 @@ mrk_chisq_test<-function(x, m){
 #' head(o1)
 #' }
 #' @export
-get_genomic_order<-function(input.seq){
+get_genomic_order<-function(input.seq, verbose = TRUE){
   if (!inherits(input.seq, "mappoly.sequence")) {
     stop(deparse(substitute(input.seq)), 
          " is not an object of class 'mappoly.sequence'")
@@ -512,7 +514,7 @@ get_genomic_order<-function(input.seq){
     if(all(is.na(input.seq$sequence))) 
       stop("No sequence or sequence position information found.")
     else{
-      message("Ordering markers based on sequence information")
+      if (verbose) message("Ordering markers based on sequence information")
       M<-data.frame(seq = input.seq$sequence, row.names = input.seq$seq.mrk.names)
       return(M[order(M[,1]),])
     }
@@ -520,7 +522,7 @@ get_genomic_order<-function(input.seq){
     if(all(is.na(input.seq$sequence.pos))) 
       stop("No sequence or sequence position information found.")
     else{
-      message("Ordering markers based on sequence position information")
+      if (verbose) message("Ordering markers based on sequence position information")
       M<-data.frame(seq.pos = input.seq$sequence.pos, row.names = input.seq$seq.mrk.names)
       return(M[order(as.numeric(M[,1])),])
     }
@@ -540,7 +542,10 @@ get_genomic_order<-function(input.seq){
 #' @param mrk a vector containing markers to be removed from the input map, 
 #'            identified by their names or positions
 #' @return an object of class \code{mappoly.map}
-#' 
+#'
+#' @param verbose if \code{TRUE} (default), the current progress is shown; if
+#'     \code{FALSE}, no output is produced
+#'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' 
 #' @examples
@@ -553,7 +558,7 @@ get_genomic_order<-function(input.seq){
 #'}
 #' 
 #' @export
-drop_marker<-function(input.map, mrk)
+drop_marker<-function(input.map, mrk, verbose = TRUE)
 {
   ## Checking class of arguments
   if (!inherits(input.map, "mappoly.map")) {
@@ -584,7 +589,7 @@ drop_marker<-function(input.map, mrk)
       output.map$maps[[i]] <- temp.map$maps[[1]]
     }
   }
-  message("
+  if (verbose) message("
     INFO:
     -----------------------------------------
     The recombination fractions provided were
@@ -628,6 +633,9 @@ drop_marker<-function(input.map, mrk)
 #' @param tol the desired accuracy (default = 10e-04)
 #' 
 #' @param r.test for internal use only
+#'
+#' @param verbose if \code{TRUE} (default), the current progress is shown; if
+#'     \code{FALSE}, no output is produced
 #' 
 #' @return A list of class \code{mappoly.map} with two elements: 
 #' 
@@ -738,7 +746,7 @@ drop_marker<-function(input.map, mrk)
 #' }
 #' @export
 add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL, 
-                       phase.config = "best", tol = 10e-4, r.test = NULL){
+                       phase.config = "best", tol = 10e-4, r.test = NULL, verbose = TRUE){
   ## Checking class of arguments
   if(!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
@@ -765,7 +773,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
   
   ## Checking genoprob
   if(is.null(genoprob)){
-    message("Calculating genoprob.")
+    if (verbose) message("Calculating genoprob.")
     genoprob <- calc_genoprob(input.map, phase.config = i.lpc)
   }
   if(!inherits(genoprob, "mappoly.genoprob")) {
@@ -912,7 +920,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
   res<-matrix(NA, nrow = length(h), ncol = 3, dimnames = list(names(configs), c("log_like", "rf1", "rf2")))
   ## Computing three-point multiallelic map using HMM
   for(i in 1:length(h)){
-    cat(".")
+    if (verbose) cat(".")
     if(pos == 0){
       h.test<-c(h[i], list(h.right))
       names(h.test) <- c("hap1", "hap2")
@@ -986,7 +994,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
       configs[[i]]<-list(P = P, Q = Q)
     }
   }
-  cat("\n")
+  if (verbose) cat("\n")
   res<-res[order(res[,"log_like"], decreasing = TRUE),,drop = FALSE]
   
   
@@ -1299,7 +1307,7 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
   if (!all(dat.1$ind.names %in% dat.2$ind.names)){
     nmi.1 = dat.1$ind.names[!(dat.1$ind.names %in% dat.2$ind.names)]
     nmi.2 = dat.2$ind.names[!(dat.2$ind.names %in% dat.1$ind.names)]
-    cat("Some individual's names doesn't match:\n")
+    cat("Some individuals' names don't match:\n")
     cat("Dataset 1\tDataset 2\n")
     for (i in 1:length(nmi.1)) cat(nmi.1[i], "\t\t", nmi.2[i], "\n")
     stop("Your datasets have the same number of individuals, but some of them are not the same. Please check the list above, fix your files and try again.")
@@ -1312,7 +1320,8 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
   dat.1$geno.dose = rbind(dat.1$geno.dose, dat.2$geno.dose)
   dat.1$dosage.p = c(dat.1$dosage.p, dat.2$dosage.p)
   dat.1$dosage.q = c(dat.1$dosage.q, dat.2$dosage.q)
-  dat.1$mrk.names = c(dat.1$mrk.names, dat.2$mrk.names)
+  ##dat.1$mrk.names = c(dat.1$mrk.names, dat.2$mrk.names) ## Fixing possible name incompatibilities  
+  dat.1$mrk.names = rownames(dat.1$geno.dose) ## Fixing possible name incompatibilities  
   dat.1$n.mrk = dat.1$n.mrk + dat.2$n.mrk
   dat.1$sequence = c(dat.1$sequence, dat.2$sequence)
   dat.1$sequence.pos = c(dat.1$sequence.pos, dat.2$sequence.pos)
@@ -1379,6 +1388,8 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
   } else dat.1$geno = NULL
   if(!is.null(dat.1$chisq.pval) | !any(is.na(dat.1$chisq.pval)))
     dat.1$chisq.pval <- dat.1$chisq.pval[dat.1$mrk.names]
+  ## Fixing possible issues with marker names
+  names(dat.1$dosage.p) = names(dat.1$dosage.q) = names(dat.1$sequence.pos) = names(dat.1$sequence) = names(dat.1$chisq.pval) = dat.1$mrk.names
   return(dat.1)
 }
 
@@ -1413,7 +1424,7 @@ summary_maps = function(map.list){
                        check.names = FALSE, stringsAsFactors = F)
   results = rbind(results, c('Total', NA, sum(as.numeric(results$`Map size (cM)`)), round(mean(as.numeric(results$`Markers/cM`)),2), sum(as.numeric(results$Simplex)), sum(as.numeric(results$`Double-simplex`)), sum(as.numeric(results$Multiplex)), sum(as.numeric(results$Total)), round(mean(as.numeric(results$`Max gap`)),2)))
   if (!is.null(get(map.list[[1]]$info$data.name, pos = 1)$elim.correspondence)){
-    cat("\nYour dataset contains removed (redundant) markers. Once finished the map, remember to add the redundant ones with the function 'update_map'.\n\n")
+    warning("\nYour dataset contains removed (redundant) markers. Once finished the map, remember to add the redundant ones with the function 'update_map'.\n\n")
   }
   return(results)
 }

@@ -4,7 +4,12 @@
 \alias{get_cache_two_pts_from_web}
 \title{Access a remote server to get Counts for recombinant classes}
 \usage{
-get_cache_two_pts_from_web(m, url.address = NULL, joint.prob = TRUE)
+get_cache_two_pts_from_web(
+  m,
+  url.address = NULL,
+  joint.prob = TRUE,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{void}{internal function to be documented}

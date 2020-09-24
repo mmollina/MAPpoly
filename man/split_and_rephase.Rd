@@ -10,7 +10,8 @@ split_and_rephase(
   gap.threshold = 5,
   remove.single = TRUE,
   phase.config = "best",
-  tol.final = 0.001
+  tol.final = 0.001,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -31,6 +32,9 @@ will choose the phase configuration associated with the
 maximum likelihood}
 
 \item{tol.final}{the desired accuracy for the final map (default = 10e-04)}
+
+\item{verbose}{if \code{TRUE} (default), the current progress is shown; if
+\code{FALSE}, no output is produced}
 }
 \value{
 An object of class \code{mappoly.map}

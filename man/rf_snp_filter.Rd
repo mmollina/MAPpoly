@@ -11,7 +11,8 @@ rf_snp_filter(
   thresh.rf = 0.15,
   thresh.perc = 0.05,
   remove.fp = NULL,
-  ncpus = 1L
+  ncpus = 1L,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -37,6 +38,9 @@ of its pairwise recombination fractions below \code{remove.fp} value throughout
 the linkage group}
 
 \item{ncpus}{number of parallel processes (i.e. cores) to spawn (default = 1)}
+
+\item{verbose}{if \code{TRUE} (default), the current progress is shown; if
+\code{FALSE}, no output is produced}
 }
 \value{
 A filtered object of class \code{mappoly.sequence}. 

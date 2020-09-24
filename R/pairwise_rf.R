@@ -144,7 +144,7 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
   This requires high-performance computing resources.
   Do you want to proceed? (Y/n): ")
         ANSWER <- readline("")
-        if (substr(ANSWER, 1, 1) == "n" || substr(ANSWER, 1, 1) == "no") 
+        if (substr(ANSWER, 1, 1) == "n" | substr(ANSWER, 1, 1) == "no" | substr(ANSWER, 1, 1) == "N") 
           stop("  You decided to stop 'est_pairwise_rf'.")
       }
     } 
@@ -157,7 +157,7 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
   This requires high-performance computing resources.
   Do you want to proceed? (Y/n): ")
         ANSWER <- readline("")
-        if (substr(ANSWER, 1, 1) == "n" || substr(ANSWER, 1, 1) == "no") 
+        if (substr(ANSWER, 1, 1) == "n" | substr(ANSWER, 1, 1) == "no" | substr(ANSWER, 1, 1) == "N") 
           stop("  You decided to stop 'est_pairwise_rf'.")
       }
     } 

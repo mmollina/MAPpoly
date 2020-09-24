@@ -231,7 +231,7 @@ RcppExport SEXP est_map_hmm(SEXP ploidyR,
     }
     if(!flag) break;
   }//*end of EM algorithm
-  if(flag) Rcpp::Rcout << "Didn't converge!\n";
+  if(flag && verbose) Rcpp::Rcout << "Didn't converge!\n";
   //*Loglike computation
 
   for(int i=0; (unsigned)i < alpha.size(); i++)
@@ -439,7 +439,7 @@ RcppExport SEXP est_map_hmm_highprec(SEXP ploidyR,
     }
     if(!flag) break;
   }//*end of EM algorithm
-  if(flag) Rcpp::Rcout << "Didn't converge!\n";
+  if(flag && verbose) Rcpp::Rcout << "Didn't converge!\n";
   //*Loglike computation
 
   for(int i=0; (unsigned)i < alpha.size(); i++)

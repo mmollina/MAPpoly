@@ -32,7 +32,10 @@
 #'
 #' @param elim.redundant logical. If \code{TRUE} (default), removes redundant markers
 #' during map construction, keeping them annotated to export to the final map.
-#'     
+#'
+#' @param verbose if \code{TRUE} (default), the current progress is shown; if
+#'     \code{FALSE}, no output is produced
+#' 
 #' @param x an object of class \code{mappoly.data}
 #'
 #' @param detailed if available, print the number of markers per sequence (default = FALSE)
@@ -108,7 +111,7 @@
 #'
 #' @export read_geno
 
-read_geno <- function(file.in, filter.non.conforming = TRUE, elim.redundant = TRUE) {
+read_geno <- function(file.in, filter.non.conforming = TRUE, elim.redundant = TRUE, verbose = TRUE) {
   ## get ploidy level ----------------------
   temp <- scan(file.in , what = character(), sep = " ", nlines = 1, quiet = TRUE)
   m <- na.omit(as.numeric(temp[2]))
@@ -191,17 +194,19 @@ read_geno <- function(file.in, filter.non.conforming = TRUE, elim.redundant = TR
     phen <- read.table(file.in , skip = 11, row.names = 1, col.names = c("mrk", ind.names), colClasses = c("character", rep("numeric", n.ind)), nrows = nphen,
                        comment.char = "")
   }
-  cat("Reading the following data:")
-  cat("\n    Ploidy level:", m)
-  cat("\n    No. individuals: ", n.ind)
-  cat("\n    No. markers: ", n.mrk) 
-  cat("\n    No. informative markers:  ", sum(id), " (", round(100*sum(id)/n.mrk,1), "%)", sep = "")
-  if (all(unique(nphen) != 0))
-    cat("\n    This dataset contains phenotypic information.")
-  
-  if (length(sequence) > 1)
-    cat("\n    This dataset contains sequence information.")
-  cat("\n    ...\n")
+  if (verbose){
+      cat("Reading the following data:")
+      cat("\n    Ploidy level:", m)
+      cat("\n    No. individuals: ", n.ind)
+      cat("\n    No. markers: ", n.mrk) 
+      cat("\n    No. informative markers:  ", sum(id), " (", round(100*sum(id)/n.mrk,1), "%)", sep = "")
+      if (all(unique(nphen) != 0))
+          cat("\n    This dataset contains phenotypic information.")
+      if (length(sequence) > 1)
+          cat("\n    This dataset contains sequence information.")
+      cat("\n    ...\n")
+  }
+
   ## get genotypic info --------------------
   geno.dose <- read.table(file.in , skip = 12 + nphen)
   if(nrow(geno.dose)!=length(mrk.names))
@@ -219,7 +224,7 @@ read_geno <- function(file.in, filter.non.conforming = TRUE, elim.redundant = TR
   dimnames(geno.dose)<-list(mrk.names, ind.names)
   geno.dose[is.na(geno.dose)] <- m + 1
   ## returning the 'mappoly.data' object
-  cat("\n    Done with reading.\n")
+  if (verbose) cat("\n    Done with reading.\n")
   geno.dose<-geno.dose[id,]
   
   res <- structure(list(m = m,
@@ -243,9 +248,9 @@ read_geno <- function(file.in, filter.non.conforming = TRUE, elim.redundant = TR
                    class = "mappoly.data")
   
   if(filter.non.conforming){
-    cat("    Filtering non-conforming markers.\n    ...")
+    if (verbose) cat("    Filtering non-conforming markers.\n    ...")
     res<-filter_non_conforming_classes(res)
-    cat("\n    Performing chi-square test.\n    ...")
+    if (verbose) cat("\n    Performing chi-square test.\n    ...")
     ##Computing chi-square p.values
     Ds <- array(NA, dim = c(m+1, m+1, m+1))
     for(i in 0:m)
@@ -256,7 +261,7 @@ read_geno <- function(file.in, filter.non.conforming = TRUE, elim.redundant = TR
     dimnames(M)<-list(res$mrk.names, c(0:m))
     M<-cbind(M, res$geno.dose)
     res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
-    cat("\n    Done.\n")
+    if (verbose) cat("\n    Done.\n")
   }
   if (elim.redundant){
     seqred = make_seq_mappoly(res, arg = 'all', data.name = res)
