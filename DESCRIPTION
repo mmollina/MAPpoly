@@ -33,7 +33,8 @@ Imports:
     ggplot2,
     smacof,
     princurve,
-    dendextend
+    dendextend,
+    vcfR
 LinkingTo: Rcpp
 RoxygenNote: 7.1.1
 SystemRequirements: C++11

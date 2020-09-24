@@ -16,18 +16,3 @@
     .Call('_mappoly_vcf_get_depth', PACKAGE = 'mappoly', mat, dp_pos)
 }
 
-#' @export
-.vcf_stats_gz <- function(x, nrows = -1L, skip = 0L, verbose = 1L) {
-    .Call('_mappoly_vcf_stats_gz', PACKAGE = 'mappoly', x, nrows, skip, verbose)
-}
-
-#' @export
-.read_meta_gz <- function(x, stats, verbose) {
-    .Call('_mappoly_read_meta_gz', PACKAGE = 'mappoly', x, stats, verbose)
-}
-
-#' @export
-.read_body_gz <- function(x, stats, nrows = -1L, skip = 0L, cols = 0L, convertNA = 1L, verbose = 1L) {
-    .Call('_mappoly_read_body_gz', PACKAGE = 'mappoly', x, stats, nrows, skip, cols, convertNA, verbose)
-}
-
