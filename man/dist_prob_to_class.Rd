@@ -26,7 +26,7 @@ a genotype probability distribution
 \examples{
 \dontrun{
 geno.dose <- dist_prob_to_class(tetra.solcap.geno.dist$geno)
-geno.dose[1:10, 1:10]
+geno.dose$geno.dose[1:10,1:10]
 }   
 }
 \keyword{internal}
