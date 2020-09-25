@@ -79,6 +79,7 @@
 #'
 #' @importFrom graphics abline pie
 #' @importFrom stats as.dendrogram as.dist cutree hclust lm predict quantile rect.hclust
+#' @importFrom dendextend color_branches
 #' @export group_mappoly
 
 group_mappoly <- function(input.mat, expected.groups = NULL,

@@ -166,6 +166,8 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
   ## all possible pairs
   if (is.null(mrk.pairs)) {
     mrk.pairs <- combn(sort(input.seq$seq.num), 2) - 1
+  } else {
+    mrk.pairs <- mrk.pairs - 1
   }
   batch.size <- NULL
   if(n.batches > 1)
@@ -205,7 +207,8 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
                   digits = 3),
             "seconds\n")
       }
-    } else {
+    } 
+    else {
       if (verbose) {
         cat("INFO: Going singlemode. Using one CPU for calculation.\n")
         if (length(input.seq$seq.num) < 10)

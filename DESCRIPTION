@@ -3,7 +3,7 @@ Type: Package
 Title: Construction of Genetic Linkage Maps in Autopolyploids
 Version: 0.2.0
 Authors@R: c(person("Marcelo", "Mollinari", role = c("aut", "cre"), email = "mmollin@ncsu.edu",comment=c(ORCID="0000-0002-7001-8498")),
-             person("Gabriel", "Gesteira", role = "ctb", email = "gabrielgesteira@usp.br",comment=c(ORCID="0000-0002-4106-7346")),
+             person("Gabriel", "Gesteira", role = "aut", email = "gabrielgesteira@usp.br",comment=c(ORCID="0000-0002-4106-7346")),
              person("Guilhereme", "Pereira", role = "ctb", email = "gdasilv@ncsu.edu",comment=c(ORCID="0000-0002-7106-8630")),
              person("Katharine F. Preedy", role = "ctb", comment = "Implementation of the original MDS ordering algorithm"),
              person("Augusto", "Garcia", role = "ctb", email = "augusto.garcia@usp.br",comment=c(ORCID="0000-0003-0634-3277")),
