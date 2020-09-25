@@ -444,7 +444,6 @@ RcppExport SEXP calc_genoprob_prior(SEXP m_R,
   for(int i = 0; i < gam_pow_2; ++i){
     beta[i] = new long double[n_mar];
   }
-  double maxit=400;
   std::vector<double> pre_calc_prob_alpha((1+m/2)*(1+m/2));
   std::vector<double> pre_calc_prob_beta((1+m/2)*(1+m/2));
   int count = 0;
