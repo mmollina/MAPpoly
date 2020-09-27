@@ -18,8 +18,8 @@ test_that("map contructed correctly", {
                     list(P=list('3' = c(1, 2, 3, 4), '4' = c(1, 2, 3), '5' = c(1, 2, 3, 4), '6' = c(1, 2, 3), '7' = 0), 
                          Q=list('3' = c(1, 2, 3), '4' = c(1, 2), '5' = c(1, 2, 3), '6' = c(1, 2), '7' = 4)))
   expect_output(print(map), "This is an object of class 'mappoly.map'\\n    Ploidy level:\\t 4 \\n    No. individuals:\\t 160 \\n    No. markers:\\t 5 \\n    No. linkage phases:\\t 1 \\n\\n    ---------------------------------------------\\n    Number of linkage phase configurations:  1\\n    ---------------------------------------------\\n    Linkage phase configuration:  1\\n       map length:\\t 0.93\\n       log-likelihood:\\t -123.7\\n       LOD:\\t\\t 0\\n    ~~~~~~~~~~~~~~~~~~") 
-  expect_length(plot(map), 66)
-  expect_length(plot(map, left.lim = .2, right.lim = .9), 66)
+  expect_length(plot(map), 2)
+  expect_length(plot(map, left.lim = .2, right.lim = .9), 2)
   expect_equal(round(mean(plot_map_list(list(map, map))[,3]),6), 0.669977)
   expect_equal(round(mean(plot_map_list(list(map, map), horiz = F, col = "ggstyle")[,3]),6), 0.669977)
   expect_is(plot_genome_vs_map(list(map, map)), "ggplot")

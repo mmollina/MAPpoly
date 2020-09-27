@@ -26,6 +26,15 @@ get_rf_from_mat <- function(M){
   r
 }
 
+
+#' Is it a probability dataset?
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+is.prob.data <- function(x){
+  exists('geno', where = x)
+}
+
 #' Get the number of bivalent configurations
 #'
 #' @param void internal function to be documented
@@ -247,7 +256,8 @@ compare_haplotypes <- function(m, h1, h2) {
 #' @export plot_compare_haplotypes
 plot_compare_haplotypes <- function(m, hom.allele.p1, hom.allele.q1, hom.allele.p2 = NULL, hom.allele.q2 = NULL) {
   nmmrk<-names(hom.allele.p1)
-  op <- par(mar = c(5.1, 4.1, 4.1, 2.1))
+  oldpar <- par(mar = c(5.1, 4.1, 4.1, 2.1))
+  on.exit(par(oldpar))
   o1 <- order(apply(ph_list_to_matrix(hom.allele.p1, m), 2, paste, collapse = ""), decreasing = TRUE)
   hom.allele.p1 <- ph_matrix_to_list(ph_list_to_matrix(hom.allele.p1, m)[, o1])
   o2 <- order(apply(ph_list_to_matrix(hom.allele.q1, m), 2, paste, collapse = ""), decreasing = TRUE)
@@ -291,7 +301,6 @@ plot_compare_haplotypes <- function(m, hom.allele.p1, hom.allele.q1, hom.allele.
   }
   text(x = pos.q, y = rep(-(m+1) , length(pos.q)), labels = nmmrk, cex = .5)
   text(x = 11, y = -(m + 1)/2, labels = "X", cex = 1)
-  par(op)
 }
 
 

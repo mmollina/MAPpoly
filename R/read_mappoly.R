@@ -339,7 +339,8 @@ plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
   w <- c("#FFFFFF", "#F0F0F0", "#D9D9D9", "#BDBDBD", "#969696",
          "#737373", "#525252", "#252525", "#000000")
   pal<-colorRampPalette(w)(length(type.names))
-  op <- par(mar = c(5,4,1,2))
+  oldpar <- par(mar = c(5,4,1,2))
+  on.exit(par(oldpar))
   layout(matrix(c(1,1,1,2,3,3,6,4,5), 3, 3), widths = c(1.2,3,.5), heights = c(1.5,2,3))
   barplot(mrk.dist, las = 2, col = pal[match(type, type.names)], 
           xlab = "Number of markers", 
@@ -396,7 +397,6 @@ plot.mappoly.data <- function(x, thresh.line=10e-6, ...)
     text(w, c((100-red)/2,   100 - red/2),  c(paste0(100 - red, " %"), paste0(red, " %")))
     mtext(text = "Unique vs. Redundant", line = -1, side = 4, cex = .8)
   }
-  par(op)
   par(mfrow=c(1,1))
 }
 

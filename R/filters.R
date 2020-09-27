@@ -21,7 +21,7 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
   M[M!=0]<-1
   dimnames(M)<-list(input.data$mrk.names, 0:m)
   ##if no prior probabilities
-  if(nrow(input.data$geno)==input.data$n.mrk){
+  if(!is.prob.data(input.data)){
     for(i in 1:nrow(M)){
       id0<-!as.numeric(input.data$geno.dose[i,])%in%(which(M[i,]==1)-1)
       if(any(id0))
@@ -146,7 +146,7 @@ filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
       return(input.data)
     } 
     rm.mrks<-names(rm.mrks.id)
-    if(nrow(input.data$geno)!=input.data$n.mrk)
+    if(is.prob.data(input.data))
       input.data$geno <-  input.data$geno %>%
       dplyr::filter(!mrk%in%rm.mrks)
     input.data$geno.dose<-input.data$geno.dose[-rm.mrks.id,]
@@ -165,7 +165,7 @@ filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
     rm.mrks.id<-which(perc.na > filter.thres)
     if(length(rm.mrks.id)==0) return(input.data)
     rm.mrks<-names(rm.mrks.id)
-    if(nrow(input.data$geno)!=input.data$n.mrk)
+    if(is.prob.data(input.data))
       input.data$geno <-  input.data$geno %>%
       dplyr::filter(!mrk%in%rm.mrks)
     input.data$geno.dose<-input.data$geno.dose[-rm.mrks.id,]

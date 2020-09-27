@@ -491,12 +491,11 @@ plot.two.pts.linkage.phases <- function(x, ...) {
     } else {
         n.col <- ceiling(sqrt(length(x$config.to.test)))
         n.row <- ceiling(length(x$config.to.test)/n.col)
-        ## layout(matrix(c(1:(n.col*n.row)), ncol=n.col))
-        op <- par(xaxt = "n", bty = "n", mar = c(2, 2, 2, 2), mfrow = c(max(n.row, n.col), max(n.row, n.col)))
+        oldpar <- par(xaxt = "n", bty = "n", mar = c(2, 2, 2, 2), mfrow = c(max(n.row, n.col), max(n.row, n.col)))
+        on.exit(par(oldpar))
         for (k in names(x$config.to.test)) {
             draw_phases(m = get(x$data.name)$m, hom.allele.p = x$config.to.test[k][[1]]$P, hom.allele.q = x$config.to.test[k][[1]]$Q)
         }
-        par(op)
     }
 
 }
