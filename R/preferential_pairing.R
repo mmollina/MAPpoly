@@ -10,7 +10,7 @@
 #'     \code{FALSE}, no output is produced
 #' 
 #'@examples
-#' \dontrun{
+#' \donttest{
 #'   ## hexaploid example
 #'   w1 <- lapply(maps.hexafake, calc_genoprob)
 #'   x1 <- calc_prefpair_profiles(w1)

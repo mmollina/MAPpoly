@@ -14,7 +14,7 @@
 #' See \code{\link[mappoly]{rf_list_to_matrix}} for details
 #'     
 #' @examples
-#'  \dontrun{
+#'  \donttest{
 #'     # sequence with 100 markers
 #'     mrk.seq<-make_seq_mappoly(hexafake, 1:100)
 #'     mrk.pairs<-est_pairwise_rf(input.seq = mrk.seq,

@@ -51,7 +51,7 @@
 #'         estimates were not computed}
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #'     all.mrk<-make_seq_mappoly(hexafake, 'all')
 #'     seq1.mrk<-make_seq_mappoly(hexafake, 'seq1')
 #'     plot(seq1.mrk)
@@ -63,19 +63,9 @@
 #'     some.mrk.2<-make_seq_mappoly(hexafake, some.mrk.names)
 #'     identical(some.mrk.1, some.mrk.2)
 #'
-#'     ## Removing redundant markers and makeing a new sequence
+#'     ## Removing redundant markers and making a new sequence
 #'     red.mrk<-elim_redundant(all.mrk)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
-#'     
-#'     ## Making a sequence using the intersection between groups and genomic information
-#'     s <- make_seq_mappoly(tetra.solcap, 'all')
-#'     tpt <- est_pairwise_rf(input.seq = s, 
-#'                            ncpus = 7)
-#'    mat <- rf_list_to_matrix(tpt)
-#'    grs <- group_mappoly(input.mat = mat,
-#'                         expected.groups = 12,
-#'                         comp.mat = FALSE)
-#'    seq1 = make_seq_mappoly(grs, arg = 1, genomic.info = 1)
 #' }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}, with modifications by Gabriel Gesteira, \email{gabrielgesteira@usp.br}

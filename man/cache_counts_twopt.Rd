@@ -57,10 +57,10 @@ of dimensionality. The frequency is calculated for all pairwise
 combinations and for all possible linkage phase configurations.
 }
 \examples{
-  \dontrun{
+  \donttest{
     all.mrk<-make_seq_mappoly(hexafake, 'all')
     ## local computation
-    counts<-cache_counts_twopt(all.mrk, ncpus = 8)
+    counts<-cache_counts_twopt(all.mrk, ncpus = 1)
     ## load from internal file of web-stored counts (especially important for high ploidy levels)
     counts.cached<-cache_counts_twopt(all.mrk, cached = TRUE)
     }

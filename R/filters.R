@@ -80,14 +80,12 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
 #' @param inter if \code{TRUE} (default), it plots markers or individuals vs. frequency of missing data
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
-#'@examples
-#' \dontrun{
-#'     plot(tetra.solcap)
-#'     dat.filt.mrk <- filter_missing(input.data = tetra.solcap,
-#'                                    type = "marker", 
-#'                                    filter.thres = 0.1)
-#'     plot(dat.filt.mrk)
-#'}
+#' @examples
+#' plot(tetra.solcap)
+#' dat.filt.mrk <- filter_missing(input.data = tetra.solcap,
+#'                                type = "marker", 
+#'                                filter.thres = 0.1)
+#' plot(dat.filt.mrk)
 #' @export
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
@@ -291,12 +289,11 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
 #' \item{data.name}{input dataset used to perform the chi-square tests}
 #' 
 #'@examples
-#' \dontrun{
-#'     mrks.chi.filt <- filter_segregation(input.data = tetra.solcap, 
-#'                                         chisq.pval.thres = 0.05/tetra.solcap$n.mrk, 
-#'                                         inter = TRUE)
-#'     seq.init<-make_seq_mappoly(mrks.chi.filt)
-#'}
+#' 
+#' mrks.chi.filt <- filter_segregation(input.data = tetra.solcap,
+#'                                     chisq.pval.thres = 0.05/tetra.solcap$n.mrk,
+#'                                     inter = TRUE)
+#' seq.init<-make_seq_mappoly(mrks.chi.filt)
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' 

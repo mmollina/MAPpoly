@@ -42,7 +42,7 @@
 #'     \code{FALSE}, no output is produced
 #'     
 #' @examples
-#'  \dontrun{
+#'  \donttest{
 #'     ## selecting the 20 first markers in linkage group 1
 #'     ####
 #'     ## re-estimating recombination fractions     
@@ -60,9 +60,9 @@
 #'                            verbose = TRUE, 
 #'                            tol.final = 10e-3)                      
 #'   plot(maps.hexafake[[1]])
-#'   plot(submap1.lg1, mrk.names = T, cex = .8)
-#'   plot(submap2.lg1, mrk.names = T, cex = .8)
-#'   plot(submap3.lg1, mrk.names = T, cex = .8)
+#'   plot(submap1.lg1, mrk.names = TRUE, cex = .8)
+#'   plot(submap2.lg1, mrk.names = TRUE, cex = .8)
+#'   plot(submap3.lg1, mrk.names = TRUE, cex = .8)
 #'   }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}

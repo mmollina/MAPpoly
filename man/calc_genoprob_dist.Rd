@@ -35,7 +35,7 @@ position and each individual given a map. In this function,
 the probabilities are not calculated between markers.
 }
 \examples{
- \dontrun{
+ \donttest{
  ## tetraploid example
  probs.t<-calc_genoprob_dist(input.map = solcap.prior.map[[1]],
                            dat.prob = tetra.solcap.geno.dist,

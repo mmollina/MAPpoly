@@ -11,7 +11,7 @@
 #'     \code{FALSE}(default), no output is produced
 #'     
 #' @examples
-#'  \dontrun{
+#'  \donttest{
 #'   hexa.map1<-reest_rf(solcap.dose.map[[1]], verbose = FALSE, tol = 10e-4)
 #'   hexa.map2<-loglike_hmm(hexa.map1)
 #'   hexa.map1;hexa.map2

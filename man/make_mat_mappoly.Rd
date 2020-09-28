@@ -23,7 +23,7 @@ Get a subset of an object of class \code{mappoly.rf.matrix}, i.e.
  sequence of markers.
 }
 \examples{
- \dontrun{
+ \donttest{
     # sequence with 100 markers
     mrk.seq<-make_seq_mappoly(hexafake, 1:100)
     mrk.pairs<-est_pairwise_rf(input.seq = mrk.seq,

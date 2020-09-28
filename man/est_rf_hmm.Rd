@@ -136,7 +136,7 @@ This function first enumerates a set of linkage phase configurations
  For a large number of markers, please see \code{\link[mappoly]{est_rf_hmm_sequential}}.
 }
 \examples{
- \dontrun{
+ \donttest{
     mrk.subset<-make_seq_mappoly(hexafake, 1:50)
     red.mrk<-elim_redundant(mrk.subset)
     unique.mrks<-make_seq_mappoly(red.mrk)

@@ -3,7 +3,7 @@
 #' @param void internal function to be documented
 #' @keywords internal
 #' @examples
-#'   \dontrun{
+#'   \donttest{
 #'     seq.all.mrk <- make_seq_mappoly(hexafake, 'all')
 #'     id <- get_genomic_order(seq.all.mrk)
 #'     counts <- cache_counts_twopt(seq.all.mrk, cached=TRUE)

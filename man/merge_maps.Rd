@@ -79,7 +79,7 @@ linkage phase search space. The remaining linkage phases are tested using the ge
 probabilities.
 }
 \examples{
-\dontrun{
+\donttest{
 #### Tetraploid example #####
 map1<-get_submap(solcap.dose.map[[1]], 1:5)
 map2<-get_submap(solcap.dose.map[[1]], 6:15)

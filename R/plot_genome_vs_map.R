@@ -14,15 +14,13 @@
 #'   chromosomes and linkage groups with the same number. Default is \code{FALSE}.   
 #'    
 #' @examples
-#'  \dontrun{
-#'  ## tetraploid example
-#'  plot_genome_vs_map(solcap.mds.map)
-#'  plot_genome_vs_map(solcap.mds.map, same.ch.lg = TRUE)
-#'  
-#'  ## hexaploid example
-#'  plot_genome_vs_map(maps.hexafake)
-#'  plot_genome_vs_map(maps.hexafake, same.ch.lg = TRUE)
-#'  } 
+#'   ## tetraploid example
+#'   plot_genome_vs_map(solcap.mds.map)
+#'   plot_genome_vs_map(solcap.mds.map, same.ch.lg = TRUE)
+#'   
+#'   ## hexaploid example
+#'   plot_genome_vs_map(maps.hexafake)
+#'   plot_genome_vs_map(maps.hexafake, same.ch.lg = TRUE)
 #'  
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'

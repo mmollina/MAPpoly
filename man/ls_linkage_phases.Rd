@@ -50,35 +50,34 @@ the two-point information contained in the object \code{poly.est.two.pts.pairwis
 as elimination criteria
 }
 \examples{
-  \dontrun{
-    seq.all.mrk <- make_seq_mappoly(hexafake, 'all')
-    id <- get_genomic_order(seq.all.mrk)
-    seq10 <- make_seq_mappoly(hexafake, rownames(id)[1:10])
-    twopt<-est_pairwise_rf(seq10)
-    
-    ## Using the first 10 markers 
-    l10.seq.3.0 <- ls_linkage_phases(input.seq = seq10, thres = 3, twopt = twopt)
-    l10.seq.3.0
-    plot(l10.seq.3.0)
-    l10.seq.2.0 <- ls_linkage_phases(input.seq = seq10, thres = 2.0, twopt = twopt)
-    l10.seq.2.0
-    plot(l10.seq.2.0)
-    l10.seq.1.0 <- ls_linkage_phases(input.seq = seq10, thres = 1.0, twopt = twopt)
-    l10.seq.1.0
-    plot(l10.seq.1.0)
-    
-    ## Using the first 5 markers 
-    seq5 <- make_seq_mappoly(hexafake, rownames(id)[1:5])
-    l5.seq.5.0 <- ls_linkage_phases(input.seq = seq5, thres = 5, twopt = twopt)
-    l5.seq.5.0
-    plot(l5.seq.5.0)
-    l5.seq.3.0 <- ls_linkage_phases(input.seq = seq5, thres = 3, twopt = twopt)
-    l5.seq.3.0
-    plot(l5.seq.3.0)
-    l5.seq.1.0 <- ls_linkage_phases(input.seq = seq5, thres = 1, twopt = twopt)
-    l5.seq.1.0
-    plot(l5.seq.1.0)
-    }
+
+seq.all.mrk <- make_seq_mappoly(hexafake, 'all')
+id <- get_genomic_order(seq.all.mrk)
+seq10 <- make_seq_mappoly(hexafake, rownames(id)[1:10])
+twopt<-est_pairwise_rf(seq10)
+
+## Using the first 10 markers 
+l10.seq.3.0 <- ls_linkage_phases(input.seq = seq10, thres = 3, twopt = twopt)
+l10.seq.3.0
+plot(l10.seq.3.0)
+l10.seq.2.0 <- ls_linkage_phases(input.seq = seq10, thres = 2.0, twopt = twopt)
+l10.seq.2.0
+plot(l10.seq.2.0)
+l10.seq.1.0 <- ls_linkage_phases(input.seq = seq10, thres = 1.0, twopt = twopt)
+l10.seq.1.0
+plot(l10.seq.1.0)
+
+## Using the first 5 markers 
+seq5 <- make_seq_mappoly(hexafake, rownames(id)[1:5])
+l5.seq.5.0 <- ls_linkage_phases(input.seq = seq5, thres = 5, twopt = twopt)
+l5.seq.5.0
+plot(l5.seq.5.0)
+l5.seq.3.0 <- ls_linkage_phases(input.seq = seq5, thres = 3, twopt = twopt)
+l5.seq.3.0
+plot(l5.seq.3.0)
+l5.seq.1.0 <- ls_linkage_phases(input.seq = seq5, thres = 1, twopt = twopt)
+l5.seq.1.0
+plot(l5.seq.1.0)
     
 }
 \references{

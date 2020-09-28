@@ -13,10 +13,8 @@ rev_map(input.map)
 Provides the reverse of a given map.
 }
 \examples{
-\dontrun{
-    plot_genome_vs_map(solcap.mds.map[[1]])
-    plot_genome_vs_map(rev_map(solcap.mds.map[[1]]))
-}
+plot_genome_vs_map(solcap.mds.map[[1]])
+plot_genome_vs_map(rev_map(solcap.mds.map[[1]]))
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

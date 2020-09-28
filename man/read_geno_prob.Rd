@@ -101,7 +101,7 @@ represent the marker and the offspring, respectively. The remaining elements rep
 associated with each one of the possible dosages. \code{NA} represents missing data.
 }
 \examples{
-\dontrun{
+\donttest{
 #### Tetraploid Example
 ft="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP"
 tempfl <- tempfile()

@@ -22,7 +22,7 @@
 #' in each marker position; and the marker sequence with it's recombination frequencies
 #' 
 #' @examples
-#'  \dontrun{
+#'  \donttest{
 #'  ## tetraploid example
 #'  probs.t<-calc_genoprob_dist(input.map = solcap.prior.map[[1]],
 #'                            dat.prob = tetra.solcap.geno.dist,

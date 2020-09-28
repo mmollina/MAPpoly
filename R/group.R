@@ -31,7 +31,7 @@
 #'     \item{chisq.pval}{the p-values associated with the segregation test for all markers in the sequence}
 #'
 #' @examples
-#'  \dontrun{
+#'  \donttest{
 #'     all.mrk <- make_seq_mappoly(hexafake, 'all')
 #'     red.mrk <- elim_redundant(all.mrk)
 #'     unique.mrks <- make_seq_mappoly(red.mrk)
@@ -39,7 +39,7 @@
 #'     ##will take ~ 7 minutes
 #'     all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
 #'                                  count.cache = counts,
-#'                                  ncpus = 7,
+#'                                  ncpus = 1,
 #'                                  verbose=TRUE)
 #'
 #'     ## Full recombination fraction matrix

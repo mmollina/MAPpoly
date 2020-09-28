@@ -47,7 +47,7 @@ Conditional genotype probabilities are calculated for each marker
 position and each individual given a map.
 }
 \examples{
- \dontrun{
+ \donttest{
      probs<-calc_genoprob(input.map = solcap.dose.map[[1]],
                                 verbose = TRUE)
      probs.error<-calc_genoprob_error(input.map = solcap.err.map[[1]],

@@ -124,13 +124,13 @@ remaining configurations, the HMM-based likelihood is computed and
 the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
 }
 \examples{
- \dontrun{
+ \donttest{
     #### Autotetraploid example
     s1<-make_seq_mappoly(tetra.solcap, 'seq1')
     red.mrk<-elim_redundant(s1)
     s1.unique.mrks<-make_seq_mappoly(red.mrk)
     s1.pairs<-est_pairwise_rf(input.seq = s1.unique.mrks,
-                                  ncpus = 7,
+                                  ncpus = 1,
                                   verbose=TRUE)
     unique.gen.ord<-get_genomic_order(s1.unique.mrks)
     ## Selecting a subset of 100 markers at the beginning of chromosome 1 

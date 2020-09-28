@@ -65,7 +65,7 @@ This function considers dosage prior distribution when re-estimating
 a genetic map using Hidden Markov models
 }
 \examples{
-  \dontrun{
+  \donttest{
  solcap.p<-vector("list", 12)
  names(solcap.p)<-names(solcap.dose.map)
  for(i in 1:12){
