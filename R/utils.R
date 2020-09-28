@@ -26,6 +26,15 @@ get_rf_from_mat <- function(M){
   r
 }
 
+
+#' Is it a probability dataset?
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+is.prob.data <- function(x){
+  exists('geno', where = x)
+}
+
 #' Get the number of bivalent configurations
 #'
 #' @param void internal function to be documented
@@ -247,7 +256,8 @@ compare_haplotypes <- function(m, h1, h2) {
 #' @export plot_compare_haplotypes
 plot_compare_haplotypes <- function(m, hom.allele.p1, hom.allele.q1, hom.allele.p2 = NULL, hom.allele.q2 = NULL) {
   nmmrk<-names(hom.allele.p1)
-  op <- par(mar = c(5.1, 4.1, 4.1, 2.1))
+  oldpar <- par(mar = c(5.1, 4.1, 4.1, 2.1))
+  on.exit(par(oldpar))
   o1 <- order(apply(ph_list_to_matrix(hom.allele.p1, m), 2, paste, collapse = ""), decreasing = TRUE)
   hom.allele.p1 <- ph_matrix_to_list(ph_list_to_matrix(hom.allele.p1, m)[, o1])
   o2 <- order(apply(ph_list_to_matrix(hom.allele.q1, m), 2, paste, collapse = ""), decreasing = TRUE)
@@ -291,7 +301,6 @@ plot_compare_haplotypes <- function(m, hom.allele.p1, hom.allele.q1, hom.allele.
   }
   text(x = pos.q, y = rep(-(m+1) , length(pos.q)), labels = nmmrk, cex = .5)
   text(x = 11, y = -(m + 1)/2, labels = "X", cex = 1)
-  par(op)
 }
 
 
@@ -747,14 +756,14 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
   ## Checking genoprob
   if(is.null(genoprob)){
     if (verbose) message("Calculating genoprob.")
-    genoprob <- calc_genoprob(input.map, phase.config = i.lpc)
+    genoprob <- calc_genoprob(input.map, phase.config = i.lpc, verbose = FALSE)
   }
   if(!inherits(genoprob, "mappoly.genoprob")) {
     stop("'", deparse(substitute(genoprob)), "' is not an object of class 'mappoly.genoprob'")
   }
   if(!identical(names(genoprob$map), input.map$info$mrk.names)){
     warning("'", deparse(substitute(genoprob)), "' is inconsistent with 'input.map'.\n  Recalculating genoprob.")
-    genoprob <- calc_genoprob(input.map, phase.config = i.lpc)
+    genoprob <- calc_genoprob(input.map, phase.config = i.lpc, verbose = FALSE)
   }
   ## ploidy
   m <- input.map$info$m
@@ -974,26 +983,33 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
   ## Updating map
   output.map <- input.map
   seq.num<-as.numeric(names(configs[[1]]$P))
+  output.map$info$seq.num <- seq.num
   output.map$info$mrk.names <- colnames(rf.matrix$rec.mat)[match(seq.num, colnames(rf.matrix$ShP))]
   output.map$info$n.mrk <- length(output.map$info$mrk.names)
   output.map$maps <- vector("list", nrow(res))
   for(i in 1:nrow(res))
   {
-    ## Updating recombination fractions (aproximated)
+    ## Updating recombination fractions (approximated)
     if(pos == 0){
-      seq.rf <- c(res[i, "rf1"], input.map$maps[[i.lpc]]$seq.rf)
+      seq.rf <- as.numeric(c(res[i, "rf1"], input.map$maps[[i.lpc]]$seq.rf))
     } else if(pos > 0 & pos < nmrk){
-      seq.rf <- c(head(input.map$maps[[i.lpc]]$seq.rf, n = pos - 1),
+      seq.rf <- as.numeric(c(head(input.map$maps[[i.lpc]]$seq.rf, n = pos - 1),
                   res[i, c("rf1", "rf2")], 
-                  tail(input.map$maps[[i.lpc]]$seq.rf, n = input.map$info$n.mrk - pos - 1))
+                  tail(input.map$maps[[i.lpc]]$seq.rf, n = input.map$info$n.mrk - pos - 1)))
     } else if(pos == nmrk){
-      seq.rf <- c(input.map$maps[[i.lpc]]$seq.rf, res[i, "rf1"])
+      seq.rf <- as.numeric(c(input.map$maps[[i.lpc]]$seq.rf, res[i, "rf1"]))
     }
     output.map$maps[[i]] <- list(seq.num = seq.num, 
                                  seq.rf = seq.rf, 
                                  seq.ph = configs[[rownames(res)[i]]],
                                  loglike = res[i, "log_like"])
   }
+  dat<-get(input.map$info$data.name, pos = 1)
+  output.map$info$seq.dose.p <- dat$dosage.p[output.map$info$mrk.names]
+  output.map$info$seq.dose.q <- dat$dosage.q[output.map$info$mrk.names]
+  output.map$info$sequence <- dat$sequence[output.map$info$mrk.names]
+  output.map$info$sequence.pos <- dat$sequence.pos[output.map$info$mrk.names]
+  output.map$info$chisq.pval <- dat$chisq.pval[output.map$info$mrk.names]
   return(output.map)
 }
 

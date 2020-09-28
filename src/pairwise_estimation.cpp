@@ -135,8 +135,8 @@ RcppExport SEXP pairwise_rf_estimation(SEXP m_R,
 		}
 	      //an approximation  x  to the point where  f  attains a minimum  on
 	      //the interval  (a,b)  is determined.
-	      // Addapteed from Brent_fmin funcion, which can be found in R/src/library/stats/src/optimize.c
-	      //  Copyright (C) 1995, 1996  Robert Gentleman and Ross Ihaka
+	      // Adapted from Brent_fmin function, which can be found in R/src/library/stats/src/optimize.c
+	      //   Copyright (C) 1995, 1996  Robert Gentleman and Ross Ihaka
 	      //   Copyright (C) 2003-2004  The R Foundation
 	      //   Copyright (C) 1998--2014-2018 The R Core Team
 	      // This function subprogram is a slightly modified  version  of  the

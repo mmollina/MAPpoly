@@ -166,7 +166,8 @@ print.mappoly.pcmap3d<-function(x, ...)
 #' @export
 plot.mappoly.pcmap<-function (x, D1lim = NULL, D2lim = NULL, displaytext = FALSE, ...) 
 {
-  op<-graphics::par(mfrow = c(1, 2))
+  oldpar <- par(mfrow = c(1, 2))
+  on.exit(par(oldpar))
   with(x, {
     if (displaytext == TRUE) {
       labels = locikey$locus
@@ -188,14 +189,14 @@ plot.mappoly.pcmap<-function (x, D1lim = NULL, D2lim = NULL, displaytext = FALSE
                    xlab = "Position", ylab = "nnfit", main = "nearest neighbour fits")
     text(locimap$position, locimap$nnfit, labels1)
   })
-  par(op)
 }
 
 #' @author Katharine F. Preedy, \email{katharine.preedy@bioss.ac.uk}
 #' @export
 plot.mappoly.pcmap3d<-function(x, D1lim = NULL, D2lim = NULL, D3lim = NULL, displaytext = FALSE, ...) 
 {
-  op <- graphics::par(mfrow = c(2, 2))
+  oldpar <- par(mfrow = c(2, 2))
+  on.exit(par(oldpar))
   with(x, {
     if (displaytext == TRUE) {
       labels = locikey$locus
@@ -235,7 +236,6 @@ plot.mappoly.pcmap3d<-function(x, D1lim = NULL, D2lim = NULL, D3lim = NULL, disp
                    xlab = "Position", ylab = "nnfit", main = "nearest neighbour fits")
     text(locimap$position, locimap$nnfit, labels1)
   })
-  par(op)
 }
 
 #'@author Katharine F. Preedy, \email{katharine.preedy@bioss.ac.uk}

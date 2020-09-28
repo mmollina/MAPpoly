@@ -121,7 +121,8 @@ sim_cross_two_informative_parents<-function(m,
 draw_cross<-function(m,rf.vec=NULL,hom.allele.p,hom.allele.q, file=NULL, width=12, height=6){
     if(!is.null(file))
         pdf(file, width=width, height=height)
-    par(xaxt="n")
+    oldpar <- par(xaxt="n")
+    on.exit(par(oldpar))
     plot(c(0,22), c(0,-(m+10)), type="n", axes=FALSE, xlab="Partental homology groups", main=paste("Ploidy: ", m), ylab="")
     for(i in -(1:m)){
         lines(c(0,10), c(i,i))
