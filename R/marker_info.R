@@ -35,7 +35,8 @@ plot_mrk_info<-function(input.data, mrk)
       stop(mrk, " exceeds the number of markers in the dataset")
     mrk<-input.data$mrk.names[mrk]
   }
-  
+  oldpar <- par(mar = c(2,2,5,2))
+  on.exit(par(oldpar))
   if(!mrk%in%input.data$mrk.names)
     stop(deparse(substitute(mrk)), " is not present in ", deparse(substitute(input.data)), " dataset")
   ## Parents dosage
@@ -43,7 +44,7 @@ plot_mrk_info<-function(input.data, mrk)
   dq<-input.data$dosage.q[input.data$mrk.names==mrk]
   suppressWarnings({
     ## if no probabilities
-    if(nrow(input.data$geno)==input.data$n.mrk){
+    if(!is.prob.data(input.data)){
       layout(matrix(c(1,2), ncol = 2), widths = c(1, 2))
       ## Genotype frequencies
       x<-input.data$geno.dose[mrk, ]
@@ -51,7 +52,6 @@ plot_mrk_info<-function(input.data, mrk)
       x<-table(as.numeric(x), useNA = "always")
       names(x)<-c(names(x)[-length(x)], "NA") 
       ## empty plot area
-      op<-par(mar = c(2,2,5,2))
       plot(0:100, type = "n", axes = FALSE, xlab = "", ylab = "")
       mtext(side = 3, text = mrk, adj = 0, cex = 1.2, font = 3)
       text(x = 0, y = 90 , labels = paste0("marker #: ", which(input.data$mrk.names==mrk)), adj = 0)
@@ -73,9 +73,9 @@ plot_mrk_info<-function(input.data, mrk)
       ##genomic position and sequence
       text(x = 0, y = 40 , labels = paste0("sequence: ", input.data$sequence[input.data$mrk.names==mrk]), adj = 0)
       text(x = 0, y = 30 , labels = paste0("seq. position: ", input.data$sequence.pos[input.data$mrk.names==mrk]), adj = 0)
-      par(op)
       barplot(x, col = c(gg_color_hue(input.data$m + 1)[1:(length(x)-1)], "#404040"))
-    } else if(nrow(input.data$geno)!=input.data$n.mrk){ ## if genotype probabilities are available
+    } 
+    else { ## if genotype probabilities are available
       layout(matrix(c(1,2,3,3), ncol = 2, nrow = 2), widths = c(1, 2))
       ## Genotype frequencies
       x<-input.data$geno.dose[mrk, ]
@@ -83,7 +83,6 @@ plot_mrk_info<-function(input.data, mrk)
       x<-table(x, useNA = "always")
       names(x)<-c(names(x)[-length(x)], "NA") 
       ## empty plot area
-      op<-par(mar = c(2,2,5,2))
       plot(0:100, type = "n", axes = FALSE, xlab = "", ylab = "")
       mtext(side = 3, text = mrk, adj = 0, cex = 1.2, font = 3)
       text(x = 0, y = 90 , labels = paste0("marker #: ", which(input.data$mrk.names==mrk)), adj = 0)
@@ -109,12 +108,10 @@ plot_mrk_info<-function(input.data, mrk)
       text(x = 0, y = 40 , labels = paste0("sequence: ", input.data$sequence[input.data$mrk.names==mrk]), adj = 0)
       text(x = 0, y = 30 , labels = paste0("seq. position: ", input.data$sequence.pos[input.data$mrk.names==mrk]), adj = 0)
       text(x = 0, y = 20 , labels = paste0("prob. threshold: ", input.data$prob.thres), adj = 0)
-      par(op)
       pal<-gg_color_hue(input.data$m + 1)
       names(pal)<-0:input.data$m 
       op<-par(mar = c(5,3,0,2), cex = .7)
       barplot(x, col = c(na.omit(pal[names(x)]), "#404040"))
-      par(op)
       ## probability distribution of the genotypes
       mrk.name<-mrk
       df<-subset(input.data$geno, 
@@ -137,8 +134,6 @@ plot_mrk_info<-function(input.data, mrk)
                         ylab ="Dose", 
                         zlab = "Genotype probability", 
                         cex.axis = .7, cex.lab = .7, clab = )
-      par(op)
-      par(mfrow=c(1,1))
-    } else stop("Shouldn't get here.")
+    } 
   })
 }

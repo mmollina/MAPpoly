@@ -254,6 +254,8 @@ print.mappoly.sequence <- function(x, ...) {
 #' @importFrom grDevices colorRampPalette
 plot.mappoly.sequence <- function(x, ...)
 {
+  oldpar <- par(mar = c(5,4,1,2))
+  on.exit(par(oldpar))
   m<-x$m
   freq <- table(paste(x$seq.dose.p, x$seq.dose.q, sep = "-"))
   d.temp <- matrix(unlist(strsplit(names(freq), "-")), ncol = 2, byrow = TRUE)
@@ -264,7 +266,6 @@ plot.mappoly.sequence <- function(x, ...)
   w <- c("#FFFFFF", "#F0F0F0", "#D9D9D9", "#BDBDBD", "#969696",
          "#737373", "#525252", "#252525", "#000000")
   pal<-colorRampPalette(w)(length(type.names))
-  op <- par(mar = c(5,4,1,2))
   layout(matrix(c(1,1,1,2,3,3,6,4,5), 3, 3), widths = c(1.2,3,.5), heights = c(1.5,4.5,.5))
   barplot(mrk.dist, las = 2, col = pal[match(type, type.names)], 
           xlab = "Number of markers", 
@@ -310,6 +311,5 @@ plot.mappoly.sequence <- function(x, ...)
          pt.cex = 3,
          pt.bg=pal, pt.lwd = 0,
          bty = "n", xpd=TRUE)
-  par(op)
   par(mfrow=c(1,1))
 }

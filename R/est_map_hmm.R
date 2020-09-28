@@ -736,7 +736,8 @@ print.mappoly.map <- function(x, detailed = FALSE, ...) {
 plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
                              phase = TRUE, mrk.names = FALSE, 
                              cex = 1, config = "best", ...) {
-  opar <- par(no.readonly = TRUE)
+  oldpar <- par(no.readonly = TRUE)
+  on.exit(par(oldpar))
   if(phase){
     map.info <- prepare_map(x, config)
     if(any(map.info$ph.p=="B")){
@@ -770,7 +771,7 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
     x2<-abs(right.lim - x)
     id.left<-which(x1==min(x1))[1]
     id.right<-rev(which(x2==min(x2)))[1]
-    op<-par(mai = c(1,0.15,0,0), mar=c(4.5,2,1,2))
+    par(mai = c(1,0.15,0,0), mar=c(4.5,2,1,2))
     curx<-x[id.left:id.right]
     layout(mat =matrix(c(4,2,3, 1), ncol = 2), heights = c(2, 10), widths = c(1, 10))
     plot(x = curx,
@@ -833,8 +834,7 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
            y = rep(zy[m]+0.05+.3, length(curx)),
            labels = names(curx),
            srt=90, adj = 0, cex = cex)
-    par(op)
-    op<-par(mar = c(4.5,1,1,0), xpd = TRUE) 
+    par(mar = c(4.5,1,1,0), xpd = TRUE) 
     plot(x = 0,
          y = 0,
          type = "n" ,
@@ -850,8 +850,7 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
     mtext(text = "Parent 1", side = 4, at = mean(zy), line = -1, font = 4)
     for(i in 1:m)
       mtext(letters[1:m][i],  line = 0, at = zy[i], side = 4)
-    par(op)
-    op <- par(mar = c(0,1,2,4), xpd=FALSE)
+    par(mar = c(0,1,2,4), xpd=FALSE)
     plot(x = curx,
          y = rep(.5,length(curx)),
          type = "n" , 
@@ -870,8 +869,6 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
     legend("bottomright", legend=names(d.col)[-1], title = "Doses" ,
            col = d.col[-1], ncol = m/2, pch = 19,
            box.lty=0)
-    par(opar)
-    #par(mfrow = c(1,1))
   } else {
     plot_map_list(x) 
   }
