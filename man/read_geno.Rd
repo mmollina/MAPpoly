@@ -96,7 +96,7 @@ followed by the phenotypic values. The number of lines should be the same number
 containing the dosage for each marker (rows) for each individual (columns). \code{NA} represents missing values.
 }
 \examples{
-\dontrun{
+\donttest{
 
 #### Tetraploid Example
 fl1 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage"

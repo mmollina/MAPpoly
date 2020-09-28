@@ -18,7 +18,6 @@
 #' # respectively
 #' seg<-segreg_poly(m=6, dP=2, dQ=3)
 #' barplot(seg, las=2)
-#' 
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'

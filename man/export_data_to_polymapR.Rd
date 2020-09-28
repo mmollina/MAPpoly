@@ -16,7 +16,7 @@ a dosage \code{matrix}
 Export data to \code{polymapR}
 }
 \examples{
-\dontrun{
+\donttest{
 require(polymapR)
 dat<-export_data_to_polymapR(hexafake)
 F1checked <- checkF1(dosage_matrix = dat, 

@@ -4,7 +4,15 @@
 \alias{plot.mappoly.homoprob}
 \title{Plots mappoly.homoprob}
 \usage{
-\method{plot}{mappoly.homoprob}(x, stack = FALSE, lg = NULL, ind = NULL, use.plotly = TRUE, ...)
+\method{plot}{mappoly.homoprob}(
+  x,
+  stack = FALSE,
+  lg = NULL,
+  ind = NULL,
+  use.plotly = TRUE,
+  verbose = TRUE,
+  ...
+)
 }
 \arguments{
 \item{x}{an object of class \code{mappoly.homoprob}}
@@ -22,6 +30,9 @@ If \code{NULL} (default), the function plots the first
 individual}
 
 \item{use.plotly}{if \code{TRUE} (default), it uses plotly interactive graphics}
+
+\item{verbose}{if \code{TRUE} (default), the current progress is shown; if
+\code{FALSE}, no output is produced}
 
 \item{...}{unused arguments}
 }

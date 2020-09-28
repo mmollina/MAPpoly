@@ -86,7 +86,7 @@
 #' its equivalence to the redundant ones}
 #'     
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' #### Tetraploid Example
 #' ft="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP"
 #' tempfl <- tempfile()

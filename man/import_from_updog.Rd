@@ -68,7 +68,7 @@ Currently this function supports output objects created with the
 This function creates an object of class \code{mappoly.data}
 }
 \examples{
-\dontrun{
+\donttest{
 library("updog")
 data("uitdewilligen")
 mout = multidog(refmat = t(uitdewilligen$refmat), 
@@ -77,11 +77,8 @@ mout = multidog(refmat = t(uitdewilligen$refmat),
                 model = "f1",
                 p1_id = colnames(t(uitdewilligen$sizemat))[1],
                 p2_id = colnames(t(uitdewilligen$sizemat))[2],
-                nc = 4)
+                nc = 1)
 mydata = import_from_updog(mout)
-mydata
-plot(mydata)
-mydata = import_from_updog(mout, filter.non.conforming = TRUE)
 mydata
 plot(mydata)
 }

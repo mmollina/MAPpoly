@@ -28,7 +28,6 @@ double reduction.
 seg<-segreg_poly(m=6, dP=2, dQ=3)
 barplot(seg, las=2)
 
-
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

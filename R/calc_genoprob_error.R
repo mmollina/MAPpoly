@@ -29,7 +29,7 @@
 #' in each marker position; and the marker sequence with it's recombination frequencies
 #' 
 #' @examples
-#'  \dontrun{
+#'  \donttest{
 #'      probs<-calc_genoprob(input.map = solcap.dose.map[[1]],
 #'                                 verbose = TRUE)
 #'      probs.error<-calc_genoprob_error(input.map = solcap.err.map[[1]],

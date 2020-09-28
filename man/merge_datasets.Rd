@@ -58,7 +58,7 @@ in both datasets  (e.g. \code{Ind_1} in both datasets, not \code{Ind_1}
 in one dataset and \code{ind_1} or \code{Ind.1} in the other).
 }
 \examples{
-\dontrun{
+\donttest{
 ## Loading three chromosomes of sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
 dat <- NULL
 for(i in 1:3){

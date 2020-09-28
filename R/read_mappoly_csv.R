@@ -57,7 +57,7 @@
 #'     \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
 #' its equivalence to the redundant ones}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' #### Tetraploid Example
 #' ft="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/tetra_solcap.csv"
 #' tempfl <- tempfile()

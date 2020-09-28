@@ -43,11 +43,9 @@ get_w_m <- function(m){
 #'
 #' @param input.map an object of class \code{mappoly.map}
 #' 
-#'@examples
-#' \dontrun{
-#'     plot_genome_vs_map(solcap.mds.map[[1]])
-#'     plot_genome_vs_map(rev_map(solcap.mds.map[[1]]))
-#'}
+#' @examples
+#' plot_genome_vs_map(solcap.mds.map[[1]])
+#' plot_genome_vs_map(rev_map(solcap.mds.map[[1]]))
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #'@export
@@ -78,7 +76,7 @@ rev_map<-function(input.map)
 #'     disposed in columns. Missing data are represented by NAs
 #' @keywords internal
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' geno.dose <- dist_prob_to_class(tetra.solcap.geno.dist$geno)
 #' geno.dose$geno.dose[1:10,1:10]
 #'}   
@@ -120,7 +118,7 @@ dist_prob_to_class <- function(geno, prob.thres = 0.9) {
 #' @return a dosage \code{matrix} 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' require(polymapR)
 #' dat<-export_data_to_polymapR(hexafake)
 #' F1checked <- checkF1(dosage_matrix = dat, 
@@ -302,10 +300,8 @@ plot_compare_haplotypes <- function(m, hom.allele.p1, hom.allele.q1, hom.allele.
 #' @param input.data an object \code{'mappoly.data'}
 #' @param mrks marker sequence index (integer vector)
 #' @examples
-#'  \dontrun{
 #'  print_mrk(tetra.solcap.geno.dist, 1:5)
 #'  print_mrk(hexafake, 256)
-#'  }  
 #' @export
 print_mrk<-function(input.data, mrks){
   for(i in 1:length(mrks))
@@ -424,7 +420,7 @@ gg_color_hue <- function(n) {
 #'     dosage. Markers with maximum genotype probability smaller than 'prob.thres' 
 #'     are considered as missing data for the dosage calling purposes
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' data.updated = update_missing(tetra.solcap.geno.dist, prob.thres = 0.5)
 #' print(tetra.solcap.geno.dist)
 #' print(data.updated)
@@ -472,11 +468,9 @@ mrk_chisq_test<-function(x, m){
 #'     \code{FALSE}, no output is produced
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' @examples
-#' \dontrun{
-#' s1<-make_seq_mappoly(tetra.solcap, "all")
-#' o1<-get_genomic_order(s1)
-#' head(o1)
-#' }
+#'  s1<-make_seq_mappoly(tetra.solcap, "all")
+#'  o1<-get_genomic_order(s1)
+#'  head(o1)
 #' @export
 get_genomic_order<-function(input.seq, verbose = TRUE){
   if (!inherits(input.seq, "mappoly.sequence")) {
@@ -522,13 +516,11 @@ get_genomic_order<-function(input.seq, verbose = TRUE){
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' 
 #' @examples
-#' \dontrun{
-#' sub.map<-get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
-#' plot(sub.map, mrk.names = TRUE)
-#' mrk.to.remove <- c("M_1", "M_23", "M_34")
-#' red.map <- drop_marker(sub.map, mrk.to.remove)
-#' plot(red.map, mrk.names = TRUE)
-#'}
+#'  sub.map<-get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
+#'  plot(sub.map, mrk.names = TRUE)
+#'  mrk.to.remove <- c("M_1", "M_23", "M_34")
+#'  red.map <- drop_marker(sub.map, mrk.to.remove)
+#'  plot(red.map, mrk.names = TRUE)
 #' 
 #' @export
 drop_marker<-function(input.map, mrk, verbose = TRUE)
@@ -645,7 +637,7 @@ drop_marker<-function(input.map, mrk, verbose = TRUE)
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' sub.map<-get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
 #' plot(sub.map, mrk.names = TRUE)
 #' s<-make_seq_mappoly(hexafake, sub.map$info$mrk.names)
@@ -1008,7 +1000,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
 #'         a failed test.
 #' 
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' #### Tetraploid example
 #' fl1 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage"
 #' tempfl <- tempfile()
@@ -1207,7 +1199,7 @@ check_data_dist_sanity <- function(x){
 #' 
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' ## Loading three chromosomes of sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
 #' dat <- NULL
 #' for(i in 1:3){
@@ -1370,17 +1362,16 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
 #'
 #' This function generates a brief summary table of a list of \code{mappoly.map} objects
 #' @param map.list a list of objects of class \code{mappoly.map}
+#' @param verbose if \code{TRUE} (default), the current progress is shown; if
+#'     \code{FALSE}, no output is produced
 #' @return a data frame containing a brief summary of all maps contained in \code{map.list}
 #' @examples
-#'  \dontrun{
-#' (tetra.sum <- summary_maps(solcap.err.map))
-#' formattable::formattable(tetra.sum)
-#' (hexa.sum <- summary_maps(maps.hexafake))
-#' formattable::formattable(hexa.sum)
-#' }
+#' tetra.sum <- summary_maps(solcap.err.map)
+#' tetra.sum
+#' hexa.sum <- summary_maps(maps.hexafake)
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' @export summary_maps
-summary_maps = function(map.list){
+summary_maps = function(map.list, verbose = TRUE){
   ## Check data
   if (any(!sapply(map.list, inherits, "mappoly.map"))) 
     stop(deparse(substitute(map.list)), 
@@ -1396,8 +1387,8 @@ summary_maps = function(map.list){
                        "Max gap" = unlist(lapply(map.list, function(x) round(imf_h(max(x$maps[[1]]$seq.rf)),2))),
                        check.names = FALSE, stringsAsFactors = F)
   results = rbind(results, c('Total', NA, sum(as.numeric(results$`Map size (cM)`)), round(mean(as.numeric(results$`Markers/cM`)),2), sum(as.numeric(results$Simplex)), sum(as.numeric(results$`Double-simplex`)), sum(as.numeric(results$Multiplex)), sum(as.numeric(results$Total)), round(mean(as.numeric(results$`Max gap`)),2)))
-  if (!is.null(get(map.list[[1]]$info$data.name, pos = 1)$elim.correspondence)){
-    warning("\nYour dataset contains removed (redundant) markers. Once finished the map, remember to add the redundant ones with the function 'update_map'.\n\n")
+  if (verbose && !is.null(get(map.list[[1]]$info$data.name, pos = 1)$elim.correspondence)){
+    message("\nYour dataset contains removed (redundant) markers. Once finished the map, remember to add them back with the function 'update_map'.\n")
   }
   return(results)
 }
@@ -1440,14 +1431,11 @@ get_tab_mrks = function(x){
 #' @param input.map an map object of class \code{mappoly.map}
 #' @return an updated object of class \code{mappoly.map}, containing the original map plus redundant markers
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
-#' @examples 
-#'  \dontrun{
-#'  orig.map   <- solcap.err.map
-#'  up.map <- lapply(solcap.err.map, update_map)
-#'  formattable::formattable(summary_maps(orig.map))
-#'  formattable::formattable(summary_maps(up.map))
-#' }
-#' 
+#' @examples
+#' orig.map <- solcap.err.map
+#' up.map <- lapply(solcap.err.map, update_map)
+#' summary_maps(orig.map)
+#' summary_maps(up.map)
 #' @export update_map
 #' 
 update_map = function(input.map){

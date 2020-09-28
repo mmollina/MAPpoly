@@ -7,10 +7,8 @@
 #' @param mrk marker name or position in the dataset
 #'     
 #' @examples
-#'  \dontrun{
 #'  plot_mrk_info(tetra.solcap.geno.dist, 2680)
 #'  plot_mrk_info(tetra.solcap.geno.dist, "solcap_snp_c2_23828")
-#'  }   
 #'     
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'

@@ -15,10 +15,8 @@ plot_mrk_info(input.data, mrk)
 Plots summary statistics for a given marker
 }
 \examples{
- \dontrun{
  plot_mrk_info(tetra.solcap.geno.dist, 2680)
  plot_mrk_info(tetra.solcap.geno.dist, "solcap_snp_c2_23828")
- }   
     
 }
 \references{

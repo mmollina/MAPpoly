@@ -17,11 +17,9 @@ This functions gets the genomic position of markers in a sequence and
 return an ordered data frame with the name and position of each marker
 }
 \examples{
-\dontrun{
-s1<-make_seq_mappoly(tetra.solcap, "all")
-o1<-get_genomic_order(s1)
-head(o1)
-}
+ s1<-make_seq_mappoly(tetra.solcap, "all")
+ o1<-get_genomic_order(s1)
+ head(o1)
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

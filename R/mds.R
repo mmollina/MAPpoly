@@ -41,9 +41,9 @@
 #' with each number on the MDS configuration plots}
 #'
 #' @examples
-#'  \dontrun{
+#'  \donttest{
 #'     s1 <- make_seq_mappoly(hexafake, 'seq1')
-#'     t1 <- est_pairwise_rf(s1, ncpus = 7)
+#'     t1 <- est_pairwise_rf(s1, ncpus = 1)
 #'     m1 <- rf_list_to_matrix(t1)
 #'     plot(m1, ord = rownames(get_genomic_order(s1)))
 #'     

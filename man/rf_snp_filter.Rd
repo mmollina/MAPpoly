@@ -61,12 +61,12 @@ Remove markers that do not meet a LOD and recombination fraction
     set of analyzed markers.
 }
 \examples{
- \dontrun{
+ \donttest{
     all.mrk<-make_seq_mappoly(hexafake, 'all')
     red.mrk<-elim_redundant(all.mrk)
     unique.mrks<-make_seq_mappoly(red.mrk)
     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-                               ncpus = 7,
+                               ncpus = 1,
                                verbose=TRUE)
 
     ## Full recombination fraction matrix

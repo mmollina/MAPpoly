@@ -87,7 +87,7 @@ the log-likelihood of all possible linkage phases under a two-point threshold
 inherited from function \code{\link[mappoly]{rf_list_to_matrix}}.
 }
 \examples{
-\dontrun{
+\donttest{
 sub.map<-get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
 plot(sub.map, mrk.names = TRUE)
 s<-make_seq_mappoly(hexafake, sub.map$info$mrk.names)

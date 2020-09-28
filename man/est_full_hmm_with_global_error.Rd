@@ -70,7 +70,7 @@ uses the whole transition space in the HMM, its computation
 can take a while, especially for hexaploid maps.
 }
 \examples{
-  \dontrun{
+  \donttest{
     seq1.20<-make_seq_mappoly(hexafake, 1:20)
     counts<-cache_counts_twopt(seq1.20, cached = TRUE)
     subset.pairs<-est_pairwise_rf(seq1.20, counts)

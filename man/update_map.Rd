@@ -19,13 +19,10 @@ are found, they are re-added to the map in their respective equivalent positions
 and another HMM round is performed.
 }
 \examples{
- \dontrun{
- orig.map   <- solcap.err.map
- up.map <- lapply(solcap.err.map, update_map)
- formattable::formattable(summary_maps(orig.map))
- formattable::formattable(summary_maps(up.map))
-}
-
+orig.map <- solcap.err.map
+up.map <- lapply(solcap.err.map, update_map)
+summary_maps(orig.map)
+summary_maps(up.map)
 }
 \author{
 Gabriel Gesteira, \email{gabrielgesteira@usp.br}

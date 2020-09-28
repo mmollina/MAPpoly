@@ -90,7 +90,7 @@ inform it to check for mismatches. All individual and marker names
 will be kept as they are in the .vcf file.
 }
 \examples{
-\dontrun{
+\donttest{
 fl = "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr1.vcf.gz"
 tempfl <- tempfile(pattern = 'chr1_', fileext = '.vcf.gz')
 download.file(fl, destfile = tempfl)

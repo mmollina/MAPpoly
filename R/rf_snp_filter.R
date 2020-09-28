@@ -41,12 +41,12 @@
 #' See \code{\link[mappoly]{make_seq_mappoly}} for details
 #' 
 #' @examples
-#'  \dontrun{
+#'  \donttest{
 #'     all.mrk<-make_seq_mappoly(hexafake, 'all')
 #'     red.mrk<-elim_redundant(all.mrk)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-#'                                ncpus = 7,
+#'                                ncpus = 1,
 #'                                verbose=TRUE)
 #'
 #'     ## Full recombination fraction matrix

@@ -74,7 +74,7 @@
 #'     \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
 #' its equivalence to the redundant ones}
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' 
 #' #### Tetraploid Example
 #' fl1 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage"

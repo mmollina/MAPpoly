@@ -10,7 +10,7 @@
 #'     expected genotypes under no double reduction
 #'     
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' require(polymapR)
 #' data("screened_data3")
 #' mappoly.data <- import_data_from_polymapR(screened_data3, 4)
@@ -84,7 +84,7 @@ import_data_from_polymapR <- function(input.data,
 #' @param ploidy the ploidy level     
 #'     
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' require(polymapR)
 #' ## Loading polymapR example
 #' data("integrated.maplist", "screened_data3", "marker_assignments_P1","marker_assignments_P2")
@@ -103,7 +103,7 @@ import_data_from_polymapR <- function(input.data,
 #'  ## plot phased map
 #'  plot(mappoly.maplist[[1]])
 #'  ## plot a segment of phased map (from 0 to 20 cM)
-#'  plot(mappoly.maplist[[1]], mrk.names = T, left.lim = 0, right.lim = 20, cex = .7)
+#'  plot(mappoly.maplist[[1]], mrk.names = TRUE, left.lim = 0, right.lim = 20, cex = .7)
 #'  plot(mappoly.maplist[[2]])
 #'  plot(mappoly.maplist[[3]])
 #'  plot(mappoly.maplist[[4]])
@@ -130,15 +130,10 @@ import_data_from_polymapR <- function(input.data,
 #'  ## Computing homolog probabilities
 #'  h.prob1<-calc_homoprob(genoprob1)
 #'  plot(h.prob1, ind = "F1_030") ## plot haplotype of individual "F1_030" 
-#'  
-#'  #### Reestimating recombination fractions using HMM
-#'  cl <- parallel::makeCluster(5)
-#'  parallel::clusterEvalQ(cl, require(mappoly))
-#'  parallel::clusterExport(cl,  "mappoly.data")
-#'  reest.maps <- parallel::parLapply(cl, mappoly.maplist, 
-#'                                    est_full_hmm_with_global_error, 
-#'                                    error = 0.05)
-#'  parallel::stopCluster(cl)
+#'
+#' reest.maps <- lapply(mappoly.maplist,
+#'                      est_full_hmm_with_global_error, 
+#'                      error = 0.05)
 #'  
 #'  ## Computing conditional genotype probabilities
 #'  genoprob2 <- lapply(reest.maps, calc_genoprob_error, step = 1, error = 0.05)
@@ -153,7 +148,7 @@ import_data_from_polymapR <- function(input.data,
 #'  
 #'  #### Reconstructing the map using MAPpoly
 #'  s <- make_seq_mappoly(mappoly.data, "all")
-#'  tpt <- est_pairwise_rf(input.seq = s, ncpus = 7)
+#'  tpt <- est_pairwise_rf(input.seq = s, ncpus = 1)
 #'  mat <- rf_list_to_matrix(make_pairs_mappoly(tpt, s))
 #'  grs <- group_mappoly(input.mat = mat,
 #'                       expected.groups = 5,
@@ -192,14 +187,11 @@ import_data_from_polymapR <- function(input.data,
 #'                                     info.tail = TRUE,
 #'                                     reestimate.single.ph.configuration = TRUE)
 #'  }
-#'  cl <- parallel::makeCluster(5)
-#'  parallel::clusterEvalQ(cl, require(mappoly))
-#'  parallel::clusterExport(cl,  "mappoly.data")
-#'  recons.maps <- parallel::parLapply(cl, MAPs, 
-#'                                     est_full_hmm_with_global_error, 
-#'                                     error = 0.05)
-#'  parallel::stopCluster(cl)
-#'  
+#'
+#' recons.maps <- lapply(MAPs, 
+#'                       est_full_hmm_with_global_error, 
+#'                       error = 0.05)
+#' 
 #'  ## Comparing resulting maps
 #'  ## polymapR
 #'  summary_maps(mappoly.maplist) 

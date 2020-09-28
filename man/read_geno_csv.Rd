@@ -74,7 +74,7 @@ This is an alternative and a somewhat more straightforward version of the functi
  can be found in the \code{Examples} section.
 }
 \examples{
-\dontrun{
+\donttest{
 #### Tetraploid Example
 ft="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/tetra_solcap.csv"
 tempfl <- tempfile()

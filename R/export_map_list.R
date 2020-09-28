@@ -9,10 +9,9 @@
 #'    "" indicates output to the console.
 #' 
 #' @examples
-#'  \dontrun{
 #'  export_map_list(solcap.err.map[[1]], file = "")
-#'  export_map_list(maps.hexafake)
-#'  }
+#'  export_map_list(maps.hexafake, file = "")
+#'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references

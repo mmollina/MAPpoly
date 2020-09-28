@@ -18,7 +18,7 @@ if consistent, returns 0. If not consistent, returns a
 Checks the consistency of a dataset
 }
 \examples{
-\dontrun{
+\donttest{
 #### Tetraploid example
 fl1 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage"
 tempfl <- tempfile()

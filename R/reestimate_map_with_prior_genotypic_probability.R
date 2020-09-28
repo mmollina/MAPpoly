@@ -49,7 +49,7 @@
 #' \item{loglike}{the hmm-based multipoint likelihood}
 #'
 #' @examples
-#'   \dontrun{
+#'   \donttest{
 #'  solcap.p<-vector("list", 12)
 #'  names(solcap.p)<-names(solcap.dose.map)
 #'  for(i in 1:12){

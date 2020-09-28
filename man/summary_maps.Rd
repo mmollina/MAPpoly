@@ -4,10 +4,13 @@
 \alias{summary_maps}
 \title{Summary map}
 \usage{
-summary_maps(map.list)
+summary_maps(map.list, verbose = TRUE)
 }
 \arguments{
 \item{map.list}{a list of objects of class \code{mappoly.map}}
+
+\item{verbose}{if \code{TRUE} (default), the current progress is shown; if
+\code{FALSE}, no output is produced}
 }
 \value{
 a data frame containing a brief summary of all maps contained in \code{map.list}
@@ -16,12 +19,9 @@ a data frame containing a brief summary of all maps contained in \code{map.list}
 This function generates a brief summary table of a list of \code{mappoly.map} objects
 }
 \examples{
- \dontrun{
-(tetra.sum <- summary_maps(solcap.err.map))
-formattable::formattable(tetra.sum)
-(hexa.sum <- summary_maps(maps.hexafake))
-formattable::formattable(hexa.sum)
-}
+tetra.sum <- summary_maps(solcap.err.map)
+tetra.sum
+hexa.sum <- summary_maps(maps.hexafake)
 }
 \author{
 Gabriel Gesteira, \email{gabrielgesteira@usp.br}

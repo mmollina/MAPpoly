@@ -47,12 +47,12 @@
 #'     information matrix
 #'
 #' @examples
-#'   \dontrun{
-#'     all.mrk<-make_seq_mappoly(hexafake, 'all')
+#'   \donttest{
+#'     all.mrk<-make_seq_mappoly(hexafake, 'seq1')
 #'     red.mrk<-elim_redundant(all.mrk)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-#'                                ncpus = 7,
+#'                                ncpus = 1,
 #'                                verbose=TRUE)
 #'
 #'     ## Full recombination fraction matrix

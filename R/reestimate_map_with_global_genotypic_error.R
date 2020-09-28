@@ -89,7 +89,7 @@ genotyping_global_error<-function(x, m, restricted = TRUE,  error=0.01, th.prob=
 #' \item{loglike}{the hmm-based multipoint likelihood}
 #'
 #' @examples
-#'   \dontrun{
+#'   \donttest{
 #'     seq1.20<-make_seq_mappoly(hexafake, 1:20)
 #'     counts<-cache_counts_twopt(seq1.20, cached = TRUE)
 #'     subset.pairs<-est_pairwise_rf(seq1.20, counts)

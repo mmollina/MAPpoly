@@ -29,13 +29,11 @@ So be careful when removing individuals.}
 Excludes markers or individuals based on their proportion of missing data
 }
 \examples{
-\dontrun{
-    plot(tetra.solcap)
-    dat.filt.mrk <- filter_missing(input.data = tetra.solcap,
-                                   type = "marker", 
-                                   filter.thres = 0.1)
-    plot(dat.filt.mrk)
-}
+plot(tetra.solcap)
+dat.filt.mrk <- filter_missing(input.data = tetra.solcap,
+                               type = "marker", 
+                               filter.thres = 0.1)
+plot(dat.filt.mrk)
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

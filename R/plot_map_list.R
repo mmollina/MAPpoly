@@ -16,7 +16,7 @@
 #' @return A \code{data.frame} object containing the name of the markers and their genetic position
 #' 
 #' @examples
-#'  \dontrun{
+#'  \donttest{
 #'  ## hexafake map
 #'  plot_map_list(maps.hexafake, horiz = FALSE)
 #'  plot_map_list(maps.hexafake, col = c("#999999", "#E69F00", "#56B4E9"))
@@ -109,11 +109,9 @@ plot_map_list<-function(map.list, horiz = TRUE, col = "lightgray", title = "Link
 #' @param phase.config which phase configuration should be used. "best" (default) 
 #'                     will choose the maximum likelihood configuration
 #' @examples
-#'  \dontrun{
 #'  x <- maps.hexafake[[1]]$info$sequence.pos/1e6
 #'  y <- extract_map(maps.hexafake[[1]])
 #'  plot(y~x, ylab = "Map position (cM)", xlab = "Genome Position (Mbp)")
-#'  }
 #' @export
 extract_map<-function(input.map, phase.config = "best")
 {

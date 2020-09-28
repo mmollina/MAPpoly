@@ -63,7 +63,7 @@ sequence of marker positions. Optionally, it can update the linkage phase
 configurations and respective recombination fractions.
 }
 \examples{
- \dontrun{
+ \donttest{
     ## selecting the 20 first markers in linkage group 1
     ####
     ## re-estimating recombination fractions     
@@ -81,9 +81,9 @@ configurations and respective recombination fractions.
                            verbose = TRUE, 
                            tol.final = 10e-3)                      
   plot(maps.hexafake[[1]])
-  plot(submap1.lg1, mrk.names = T, cex = .8)
-  plot(submap2.lg1, mrk.names = T, cex = .8)
-  plot(submap3.lg1, mrk.names = T, cex = .8)
+  plot(submap1.lg1, mrk.names = TRUE, cex = .8)
+  plot(submap2.lg1, mrk.names = TRUE, cex = .8)
+  plot(submap3.lg1, mrk.names = TRUE, cex = .8)
   }
 
 }

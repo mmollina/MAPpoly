@@ -73,54 +73,17 @@ For each pair, the function estimates the recombination fraction for all
 possible linkage phase configurations and associated LOD Scores.
 }
 \examples{
-  \dontrun{
+  \donttest{
   ## Tetraploid example: 
-  all.mrk <- make_seq_mappoly(tetra.solcap, 'all')
+  all.mrk <- make_seq_mappoly(tetra.solcap, 'seq1')
   red.mrk <- elim_redundant(all.mrk)
   unique.mrks <- make_seq_mappoly(red.mrk)
-  # will take ~ 13 min
   all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
-                               ncpus = 7, 
+                               ncpus = 1, 
                                verbose=TRUE)
    all.pairs
    plot(all.pairs, 90, 91)
    mat <- rf_list_to_matrix(all.pairs)
-   plot(mat)
-   
-   ## Hexaploid example
-   fl = "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr1.vcf.gz"
-   tempfl <- tempfile(pattern = 'chr1_', fileext = '.vcf.gz')
-   download.file(fl, destfile = tempfl)
-   dat.dose.vcf = read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2")
-   
-   ## Filtering dataset by marker
-   dat.filt.mrk <- filter_missing(input.data = dat.dose.vcf, 
-                                  type = "marker", 
-                                  filter.thres = 0.10, 
-                                  inter = FALSE)
-   ## Filtering dataset by individual
-   dat.filt.ind <- filter_missing(input.data = dat.filt.mrk, 
-                                  type = "individual", 
-                                  filter.thres = 0.10, 
-                                  inter = FALSE)
-  ## Segregation test
-  pval.bonf <- 0.05/dat.filt.ind$n.mrk
-  mrks.chi.filt <- filter_segregation(dat.filt.ind,
-                                      chisq.pval.thres =  pval.bonf, 
-                                      inter = FALSE)
-  seq.ch1<-make_seq_mappoly(mrks.chi.filt)
-  plot(seq.ch1)
-  ## will take ~  19 min / peak of memory usage ~ 10GB
-  all.pairs.1 <- est_pairwise_rf(input.seq = seq.ch1,
-                                 ncpus = 7, 
-                                 verbose=TRUE)
-  ## same thing, but it will take ~  21 min / peak of memory usage ~ 6GB
-  all.pairs.2 <- est_pairwise_rf(input.seq = seq.ch1,
-                                 ncpus = 7, 
-                                 n.batch = 10,
-                                 verbose=TRUE)   
-   plot(all.pairs.1, 161, 162)
-   mat <- rf_list_to_matrix(all.pairs.1)
    plot(mat)
    }
 }

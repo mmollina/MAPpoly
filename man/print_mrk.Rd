@@ -15,8 +15,6 @@ print_mrk(input.data, mrks)
 Returns information related to a given set of markers
 }
 \examples{
- \dontrun{
  print_mrk(tetra.solcap.geno.dist, 1:5)
  print_mrk(hexafake, 256)
- }  
 }
