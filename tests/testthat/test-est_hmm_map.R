@@ -1,6 +1,13 @@
 context("Estimate HMM map")
 test_that("map contructed correctly", {
   ##### Tetraploid
+  s<-make_seq_mappoly(tetra.solcap, 1:2)
+  map <- est_rf_hmm(input.seq = make_seq_mappoly(tetra.solcap, 1:2), 
+                    twopt =est_pairwise_rf(s),
+                    thres = 2, tol = 10e-4)
+  map <- loglike_hmm(map)
+  map <- est_full_hmm_with_global_error(map, error = .05)
+  map <- est_full_hmm_with_prior_prob(map, dat.prob = tetra.solcap.geno.dist)
   s<-make_seq_mappoly(tetra.solcap, 3:7)
   expect_is(s, "mappoly.sequence")
   expect_output(str(s), "List of 14")
@@ -8,7 +15,9 @@ test_that("map contructed correctly", {
   expect_is(tpt, "poly.est.two.pts.pairwise")
   expect_output(str(tpt), "List of 7")
   expect_output(str(tpt$pairwise), "List of 10")
+  expect_is(map, "mappoly.map")
   map <- est_rf_hmm(input.seq = s, twopt = tpt, thres = 2, tol = 10e-4)
+  print(map, detailed = TRUE)
   expect_is(map, "mappoly.map")
   map <- loglike_hmm(map)
   expect_output(str(map), "List of 13")
@@ -27,6 +36,10 @@ test_that("map contructed correctly", {
   expect_equivalent(summary_maps(list(map, map))[,3], c("0.93", "0.93", "1.86"))
 })
 test_that("sequential map contructed correctly", {
+  s<-make_seq_mappoly(tetra.solcap, 1:2)
+  map <- est_rf_hmm_sequential(input.seq = s, 
+                               twopt = est_pairwise_rf(s), 
+                               verbose = FALSE)
   ##### Tetraploid
   s<-make_seq_mappoly(tetra.solcap, 3:7)
   expect_is(s, "mappoly.sequence")
@@ -35,7 +48,8 @@ test_that("sequential map contructed correctly", {
   expect_is(tpt, "poly.est.two.pts.pairwise")
   expect_output(str(tpt), "List of 7")
   expect_output(str(tpt$pairwise), "List of 10")
-  map <- est_rf_hmm_sequential(input.seq = s, twopt = tpt, thres.twopt = 2, tol.final = 10e-4)
+  map <- est_rf_hmm_sequential(input.seq = s, twopt = tpt, thres.twopt = 2, tol.final = 10e-4, detailed.verbose = TRUE)
+  map <- est_rf_hmm_sequential(input.seq = s, twopt = tpt, thres.twopt = 2, tol.final = 10e-4, high.prec = TRUE)
   expect_is(map, "mappoly.map")
   expect_output(str(map), "List of 13")
   expect_equivalent(map$maps[[1]]$seq.rf, 
