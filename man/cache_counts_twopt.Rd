@@ -58,7 +58,7 @@ combinations and for all possible linkage phase configurations.
 }
 \examples{
   \donttest{
-    all.mrk<-make_seq_mappoly(tetra.solcap, 'seq1')
+    all.mrk<-make_seq_mappoly(tetra.solcap, 1:20)
     ## local computation
     counts<-cache_counts_twopt(all.mrk, ncpus = 1)
     ## load from internal file or web-stored counts (especially important for high ploidy levels)

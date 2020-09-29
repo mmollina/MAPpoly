@@ -15,7 +15,7 @@
 #'     
 #' @examples
 #'  \donttest{
-#'     # sequence with 50 markers
+#'     # sequence with 20 markers
 #'     mrk.seq<-make_seq_mappoly(hexafake, 1:20)
 #'     mrk.pairs<-est_pairwise_rf(input.seq = mrk.seq,
 #'                                verbose=TRUE)

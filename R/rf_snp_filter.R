@@ -54,7 +54,7 @@
 #'     plot(mat.full)
 #'
 #'     ## Removing disruptive SNPs
-#'     tpt.filt<-rf_snp_filter(all.pairs, 5, 5, 0.15, thresh.perc = 0.05)
+#'     tpt.filt<-rf_snp_filter(all.pairs, 2, 2, 0.07, thresh.perc = 0.1)
 #'     p1.filt<-make_pairs_mappoly(input.seq = tpt.filt, input.twopt = all.pairs)
 #'     m1.filt<-rf_list_to_matrix(input.twopt = p1.filt)
 #'     plot(mat.full, main.text = "LG1")

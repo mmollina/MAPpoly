@@ -28,9 +28,6 @@ F1checked <- checkF1(dosage_matrix = dat,
                      mixed = FALSE, 
                      ploidy = 6)
  head(F1checked$checked_F1)
- PCA_progeny(dosage_matrix = dat, 
-             highlight = list(c("P1", "P2")), 
-             colors = "red")
 }  
 }
 \author{

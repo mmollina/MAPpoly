@@ -16,7 +16,7 @@
 #' @examples
 #'  \donttest{
 #'     set.seed(123)
-#'     all.mrk<-make_seq_mappoly(hexafake, sort(sample(1:1500, 20)))
+#'     all.mrk<-make_seq_mappoly(hexafake, 1:20)
 #'     red.mrk<-elim_redundant(all.mrk)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,

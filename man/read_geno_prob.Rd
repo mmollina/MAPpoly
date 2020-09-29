@@ -109,14 +109,6 @@ download.file(ft, destfile = tempfl)
 SolCAP.dose.prob <- read_geno_prob(file.in  = tempfl)
 print(SolCAP.dose.prob, detailed = TRUE)
 plot(SolCAP.dose.prob)
-
-#### Hexaploid example
-fh="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexafake_geno_dist"
-tempfl <- tempfile()
-download.file(fh, destfile = tempfl)
-hexa.dose.prob <- read_geno_prob(file.in  = tempfl, prob.thres = 0.8)
-print(hexa.dose.prob, detailed = TRUE)
-plot(hexa.dose.prob)
 }
 
 }

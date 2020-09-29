@@ -23,7 +23,7 @@ Multipoint analysis using Hidden Markov Models (single phase)
 }
 \examples{
   \donttest{
-    seq.all.mrk <- make_seq_mappoly(hexafake, 1:50)
+    seq.all.mrk <- make_seq_mappoly(hexafake, 1:20)
     id <- get_genomic_order(seq.all.mrk)
     counts <- cache_counts_twopt(seq.all.mrk, cached=TRUE)
     seq5 <- make_seq_mappoly(hexafake, rownames(id)[1:5])

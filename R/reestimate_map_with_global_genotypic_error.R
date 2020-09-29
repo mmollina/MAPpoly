@@ -90,7 +90,7 @@ genotyping_global_error<-function(x, m, restricted = TRUE,  error=0.01, th.prob=
 #'
 #' @examples
 #'   \donttest{
-#'     subset.map.reest<-est_full_hmm_with_global_error(maps.hexafake[[1]], 
+#'     subset.map.reest<-est_full_hmm_with_global_error(solcap.dose.map[[1]], 
 #'                                                      error=0.01, 
 #'                                                      tol=10e-4, 
 #'                                                      verbose = TRUE)

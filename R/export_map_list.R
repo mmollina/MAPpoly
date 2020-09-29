@@ -10,7 +10,6 @@
 #' 
 #' @examples
 #'  export_map_list(solcap.err.map[[1]], file = "")
-#'  export_map_list(maps.hexafake, file = "")
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'

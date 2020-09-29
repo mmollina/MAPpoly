@@ -673,47 +673,26 @@ drop_marker<-function(input.map, mrk, verbose = TRUE)
 #'                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
 #'                          hom.allele.q2 = sub.map$maps[[1]]$seq.ph$Q[names.id])
 #'                          
-#' ###### Removing marker "M_20" (middle) #######
-#' mrk.to.remove <- "M_20"
+#' ###### Removing marker "M_10" (middle or last) #######
+#' mrk.to.remove <- "M_10"
 #' input.map <- drop_marker(sub.map, mrk.to.remove)
 #' plot(input.map, mrk.names = TRUE)
 #' # Computing conditional probabilities using the resulting map
 #' genoprob <- calc_genoprob(input.map)
-#' res.add.M_20<-add_marker(input.map = input.map,
-#'                         mrk = "M_20",
-#'                         pos = "M_19",
+#' res.add.M_10<-add_marker(input.map = input.map,
+#'                         mrk = "M_10",
+#'                         pos = "M_9",
 #'                         rf.matrix = rf.matrix,
 #'                         genoprob = genoprob,
 #'                         tol = 10e-4)  
-#'  plot(res.add.M_20, mrk.names = TRUE)                       
-#'  best.phase <- res.add.M_20$maps[[1]]$seq.ph
+#'  plot(res.add.M_10, mrk.names = TRUE)                       
+#'  best.phase <- res.add.M_10$maps[[1]]$seq.ph
 #'  names.id<-names(best.phase$P)
 #'  plot_compare_haplotypes(m = 6,
 #'                          hom.allele.p1 = best.phase$P[names.id],
 #'                          hom.allele.q1 = best.phase$Q[names.id],
 #'                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
 #'                          hom.allele.q2 = sub.map$maps[[1]]$seq.ph$Q[names.id]) 
-#'                          
-#' ###### Removing marker "M_53" (last) #######
-#' mrk.to.remove <- "M_53"
-#' input.map <- drop_marker(sub.map, mrk.to.remove)
-#' plot(input.map, mrk.names = TRUE)
-#' # Computing conditional probabilities using the resulting map
-#' genoprob <- calc_genoprob(input.map)
-#' res.add.M_53<-add_marker(input.map = input.map,
-#'                         mrk = "M_53",
-#'                         pos = "M_52",
-#'                         rf.matrix = rf.matrix,
-#'                         genoprob = genoprob,
-#'                         tol = 10e-4)  
-#'  plot(res.add.M_53, mrk.names = TRUE)                       
-#'  best.phase <- res.add.M_53$maps[[1]]$seq.ph
-#'  names.id<-names(best.phase$P)
-#'  plot_compare_haplotypes(m = 6,
-#'                          hom.allele.p1 = best.phase$P[names.id],
-#'                          hom.allele.q1 = best.phase$Q[names.id],
-#'                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
-#'                          hom.allele.q2 = sub.map$maps[[1]]$seq.ph$Q[names.id])                
 #' }
 #' @export
 add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL, 
@@ -1201,7 +1180,7 @@ check_data_dist_sanity <- function(x){
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' @examples
 #' \donttest{
-#' ## Loading three chromosomes of sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
+#' ## Loading two chromosomes of sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
 #' dat <- NULL
 #' for(i in 1:2){
 #'   cat("Loading chromosome", i, "...\n")
@@ -1353,8 +1332,6 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
 #' @examples
 #' tetra.sum <- summary_maps(solcap.err.map)
 #' tetra.sum
-#' hexa.sum <- summary_maps(maps.hexafake)
-#' hexa.sum
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' @export summary_maps
 summary_maps = function(map.list, verbose = TRUE){

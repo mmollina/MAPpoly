@@ -105,14 +105,6 @@ download.file(fl1, destfile = tempfl)
 SolCAP.dose <- read_geno(file.in  = tempfl)
 print(SolCAP.dose, detailed = TRUE)
 plot(SolCAP.dose)
-
-#### Hexaploid example
-fl2 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexafake"
-tempfl <- tempfile()
-download.file(fl2, destfile = tempfl)
-hexa.dose <- read_geno(file.in  = tempfl)
-print(hexa.dose, detailed = TRUE)
-plot(hexa.dose)
 }
 }
 \references{

@@ -24,8 +24,8 @@ Get a subset of an object of class \code{mappoly.rf.matrix}, i.e.
 }
 \examples{
  \donttest{
-    # sequence with 50 markers
-    mrk.seq<-make_seq_mappoly(hexafake, 1:50)
+    # sequence with 20 markers
+    mrk.seq<-make_seq_mappoly(hexafake, 1:20)
     mrk.pairs<-est_pairwise_rf(input.seq = mrk.seq,
                                verbose=TRUE)
     ## Full recombination fraction matrix

@@ -19,12 +19,7 @@ Checks the consistency of a dataset
 }
 \examples{
 \donttest{
-#### Tetraploid example
-fl1 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage"
-tempfl <- tempfile()
-download.file(fl1, destfile = tempfl)
-SolCAP.dose <- read_geno(file.in  = tempfl)
-check_data_sanity(SolCAP.dose)
+check_data_sanity(tetra.solcap)
 }
 }
 \references{

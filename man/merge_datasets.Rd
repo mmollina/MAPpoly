@@ -59,9 +59,9 @@ in one dataset and \code{ind_1} or \code{Ind.1} in the other).
 }
 \examples{
 \donttest{
-## Loading three chromosomes of sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
+## Loading two chromosomes of sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
 dat <- NULL
-for(i in 1:3){
+for(i in 1:2){
   cat("Loading chromosome", i, "...\n")
   invisible(capture.output(y <- {
     tempfl <- tempfile(pattern = paste0("ch", i), fileext = ".vcf.gz")

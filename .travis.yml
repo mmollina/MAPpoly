@@ -6,7 +6,7 @@ env:
   global: RGL_USE_NULL=TRUE
 
 r_build_args: --no-build-vignettes
-r_check_args:  "--no-vignettes --as-cran --install-args=--build"
+r_check_args: travis_wait 30  "--no-vignettes --as-cran --install-args=--build"
 
 notifications:
   email:

@@ -21,7 +21,6 @@ This function generates a brief summary table of a list of \code{mappoly.map} ob
 \examples{
 tetra.sum <- summary_maps(solcap.err.map)
 tetra.sum
-hexa.sum <- summary_maps(maps.hexafake)
 }
 \author{
 Gabriel Gesteira, \email{gabrielgesteira@usp.br}

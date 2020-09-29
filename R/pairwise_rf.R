@@ -63,7 +63,7 @@
 #'                                ncpus = 1, 
 #'                                verbose=TRUE)
 #'    all.pairs
-#'    plot(all.pairs, 30, 31)
+#'    plot(all.pairs, 20, 21)
 #'    mat <- rf_list_to_matrix(all.pairs)
 #'    plot(mat)
 #'    }
