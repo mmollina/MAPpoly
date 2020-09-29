@@ -102,7 +102,7 @@
 #'
 #' @examples
 #'  \donttest{
-#'     mrk.subset<-make_seq_mappoly(hexafake, 1:50)
+#'     mrk.subset<-make_seq_mappoly(hexafake, 1:20)
 #'     red.mrk<-elim_redundant(mrk.subset)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
@@ -356,7 +356,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #' @examples
 #'  \donttest{
 #'     #### Autohexaploid example
-#'     mrk.subset<-make_seq_mappoly(hexafake, 1:50)
+#'     mrk.subset<-make_seq_mappoly(hexafake, 1:20)
 #'     red.mrk<-elim_redundant(mrk.subset)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,

@@ -47,8 +47,8 @@ Identifies linkage groups of markers using the results of two-point
 }
 \examples{
  \donttest{
-    ## Getting first 50 markers from two linkage groups
-    all.mrk <- make_seq_mappoly(hexafake, c(1:50,601:650))
+    ## Getting first 30 markers from two linkage groups
+    all.mrk <- make_seq_mappoly(hexafake, c(1:30,601:630))
     red.mrk <- elim_redundant(all.mrk)
     unique.mrks <- make_seq_mappoly(red.mrk)
     counts <- cache_counts_twopt(unique.mrks, cached = TRUE)
