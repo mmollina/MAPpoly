@@ -55,8 +55,8 @@
 #'
 #' @examples
 #'   \donttest{
-#'   ## Tetraploid example (first 50 markers) 
-#'   all.mrk <- make_seq_mappoly(tetra.solcap, 1:50)
+#'   ## Tetraploid example (first 30 markers) 
+#'   all.mrk <- make_seq_mappoly(tetra.solcap, 1:30)
 #'   red.mrk <- elim_redundant(all.mrk)
 #'   unique.mrks <- make_seq_mappoly(red.mrk)
 #'   all.pairs <- est_pairwise_rf(input.seq = unique.mrks,

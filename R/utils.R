@@ -139,9 +139,6 @@ dist_prob_to_class <- function(geno, prob.thres = 0.9) {
 #'                      mixed = FALSE, 
 #'                      ploidy = 6)
 #'  head(F1checked$checked_F1)
-#'  PCA_progeny(dosage_matrix = dat, 
-#'              highlight = list(c("P1", "P2")), 
-#'              colors = "red")
 #'}  
 #' @export export_data_to_polymapR
 export_data_to_polymapR <- function(data.in)
@@ -647,7 +644,7 @@ drop_marker<-function(input.map, mrk, verbose = TRUE)
 #' 
 #' @examples
 #' \donttest{
-#' sub.map<-get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
+#' sub.map<-get_submap(maps.hexafake[[1]], 1:20, reestimate.rf = FALSE)
 #' plot(sub.map, mrk.names = TRUE)
 #' s<-make_seq_mappoly(hexafake, sub.map$info$mrk.names)
 #' tpt <- est_pairwise_rf(s)
@@ -1017,12 +1014,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
 #' 
 #' @examples
 #' \donttest{
-#' #### Tetraploid example
-#' fl1 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage"
-#' tempfl <- tempfile()
-#' download.file(fl1, destfile = tempfl)
-#' SolCAP.dose <- read_geno(file.in  = tempfl)
-#' check_data_sanity(SolCAP.dose)
+#' check_data_sanity(tetra.solcap)
 #'}
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
@@ -1211,7 +1203,7 @@ check_data_dist_sanity <- function(x){
 #' \donttest{
 #' ## Loading three chromosomes of sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
 #' dat <- NULL
-#' for(i in 1:3){
+#' for(i in 1:2){
 #'   cat("Loading chromosome", i, "...\n")
 #'   invisible(capture.output(y <- {
 #'     tempfl <- tempfile(pattern = paste0("ch", i), fileext = ".vcf.gz")
@@ -1362,6 +1354,7 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
 #' tetra.sum <- summary_maps(solcap.err.map)
 #' tetra.sum
 #' hexa.sum <- summary_maps(maps.hexafake)
+#' hexa.sum
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' @export summary_maps
 summary_maps = function(map.list, verbose = TRUE){

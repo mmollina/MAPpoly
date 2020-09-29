@@ -12,7 +12,7 @@
 #'@examples
 #' \donttest{
 #'   ## hexaploid example
-#'   w1 <- lapply(maps.hexafake, calc_genoprob)
+#'   w1 <- lapply(maps.hexafake[c(1,2)], calc_genoprob)
 #'   x1 <- calc_prefpair_profiles(w1)
 #'   print(x1)
 #'   plot(x1, min.y.prof = 0.05, max.y.prof = .15, thresh = 0.01)

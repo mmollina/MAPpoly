@@ -28,7 +28,7 @@
 #' 
 #' @examples
 #'  \donttest{
-#'  map <- solcap.err.map[[1]]
+#'  map <- solcap.dose.map[[1]]
 #'  tpt <- est_pairwise_rf(make_seq_mappoly(map))
 #'  new.map <- split_and_rephase(map, tpt, 5)
 #'  map

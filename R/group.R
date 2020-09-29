@@ -32,12 +32,11 @@
 #'
 #' @examples
 #'  \donttest{
-#'     ## Getting first 30 markers from two linkage groups
-#'     all.mrk <- make_seq_mappoly(hexafake, c(1:30,601:630))
+#'     ## Getting first 20 markers from two linkage groups
+#'     all.mrk <- make_seq_mappoly(hexafake, c(1:20,601:620))
 #'     red.mrk <- elim_redundant(all.mrk)
 #'     unique.mrks <- make_seq_mappoly(red.mrk)
 #'     counts <- cache_counts_twopt(unique.mrks, cached = TRUE)
-#'     ##will take ~ 7 minutes
 #'     all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
 #'                                  count.cache = counts,
 #'                                  ncpus = 1,
@@ -54,16 +53,6 @@
 #'                          verbose = TRUE)
 #'     lgs
 #'     plot(lgs)
-#'     lg1 <- make_seq_mappoly(lgs, 1)
-#'     lg2 <- make_seq_mappoly(lgs, 2)
-#'
-#'     ##Plot matrices
-#'     m1<-make_mat_mappoly(input.seq = lg1, input.mat = mat.full)
-#'     m2<-make_mat_mappoly(input.seq = lg2, input.mat = mat.full)
-#'     op<-par(mfrow = c(1,2), pty = "s")
-#'     plot(m1, main.text = "LG1", index = FALSE)
-#'     plot(m2, main.text = "LG2", index = FALSE)
-#'     par(op)
 #'    }
 #'    
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}

@@ -16,7 +16,7 @@
 #' @examples
 #'  \donttest{
 #'     set.seed(123)
-#'     all.mrk<-make_seq_mappoly(hexafake, sort(sample(1:1500, 50)))
+#'     all.mrk<-make_seq_mappoly(hexafake, sort(sample(1:1500, 20)))
 #'     red.mrk<-elim_redundant(all.mrk)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
@@ -27,29 +27,11 @@
 #'     mat.full<-rf_list_to_matrix(input.twopt = all.pairs)
 #'     plot(mat.full)
 #'
-#'     lgs <- group_mappoly(input.mat = mat.full,
-#'                          expected.groups = 3,
-#'                          verbose=TRUE)
-#'     lgs
-#'     plot(lgs)
-#'     lg1 <- make_seq_mappoly(lgs, 1)
-#'     lg2 <- make_seq_mappoly(lgs, 2)
-#'     lg3 <- make_seq_mappoly(lgs, 3)
-#'
 #'     ##Plot matrices
-#'     p1<-make_pairs_mappoly(input.seq = lg1, input.twopt = all.pairs)
-#'     p2<-make_pairs_mappoly(input.seq = lg2, input.twopt = all.pairs)
-#'     p3<-make_pairs_mappoly(input.seq = lg3, input.twopt = all.pairs)
-#'
+#'     mrks.2<-make_seq_mappoly(red.mrk, c(1:10))
+#'     p1<-make_pairs_mappoly(input.seq = mrks.2, input.twopt = all.pairs)
 #'     m1<-rf_list_to_matrix(input.twopt = p1)
-#'     m2<-rf_list_to_matrix(input.twopt = p2)
-#'     m3<-rf_list_to_matrix(input.twopt = p3)
-#'
-#'     op<-par(mfrow = c(1,3), pty = "s")
 #'     plot(m1, main.text = "LG1")
-#'     plot(m2, main.text = "LG2")
-#'     plot(m3, main.text = "LG3")
-#'     par(op)
 #'    }
 #'    
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
