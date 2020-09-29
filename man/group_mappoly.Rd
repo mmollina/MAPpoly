@@ -47,7 +47,8 @@ Identifies linkage groups of markers using the results of two-point
 }
 \examples{
  \donttest{
-    all.mrk <- make_seq_mappoly(hexafake, 'all')
+    ## Getting first 50 markers from two linkage groups
+    all.mrk <- make_seq_mappoly(hexafake, c(1:50,601:650))
     red.mrk <- elim_redundant(all.mrk)
     unique.mrks <- make_seq_mappoly(red.mrk)
     counts <- cache_counts_twopt(unique.mrks, cached = TRUE)
@@ -62,7 +63,7 @@ Identifies linkage groups of markers using the results of two-point
     plot(mat.full, index = FALSE)
 
     lgs <- group_mappoly(input.mat = mat.full,
-                         expected.groups = 3,
+                         expected.groups = 2,
                          inter = TRUE,
                          comp.mat = TRUE, #this data has physical information
                          verbose = TRUE)
@@ -70,16 +71,13 @@ Identifies linkage groups of markers using the results of two-point
     plot(lgs)
     lg1 <- make_seq_mappoly(lgs, 1)
     lg2 <- make_seq_mappoly(lgs, 2)
-    lg3 <- make_seq_mappoly(lgs, 3)
 
     ##Plot matrices
     m1<-make_mat_mappoly(input.seq = lg1, input.mat = mat.full)
     m2<-make_mat_mappoly(input.seq = lg2, input.mat = mat.full)
-    m3<-make_mat_mappoly(input.seq = lg3, input.mat = mat.full)
-    op<-par(mfrow = c(1,3), pty = "s")
+    op<-par(mfrow = c(1,2), pty = "s")
     plot(m1, main.text = "LG1", index = FALSE)
     plot(m2, main.text = "LG2", index = FALSE)
-    plot(m3, main.text = "LG3", index = FALSE)
     par(op)
    }
    

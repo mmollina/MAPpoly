@@ -48,7 +48,7 @@
 #'
 #' @examples
 #'   \donttest{
-#'     all.mrk<-make_seq_mappoly(hexafake, 'seq1')
+#'     all.mrk<-make_seq_mappoly(hexafake, 1:100)
 #'     red.mrk<-elim_redundant(all.mrk)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,

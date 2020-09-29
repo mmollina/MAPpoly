@@ -58,10 +58,10 @@ combinations and for all possible linkage phase configurations.
 }
 \examples{
   \donttest{
-    all.mrk<-make_seq_mappoly(hexafake, 'all')
+    all.mrk<-make_seq_mappoly(hexafake, 'seq1')
     ## local computation
     counts<-cache_counts_twopt(all.mrk, ncpus = 1)
-    ## load from internal file of web-stored counts (especially important for high ploidy levels)
+    ## load from internal file or web-stored counts (especially important for high ploidy levels)
     counts.cached<-cache_counts_twopt(all.mrk, cached = TRUE)
     }
 

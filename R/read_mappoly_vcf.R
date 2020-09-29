@@ -68,45 +68,13 @@
 #' its equivalence to the redundant ones}
 #' @examples
 #' \donttest{
+#' ## Hexaploid sweetpotato: Chromosome 1
 #' fl = "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr1.vcf.gz"
 #' tempfl <- tempfile(pattern = 'chr1_', fileext = '.vcf.gz')
 #' download.file(fl, destfile = tempfl)
 #' dat.dose.vcf = read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2")
+#' print(dat.dose.vcf)
 #' plot(dat.dose.vcf)
-#' 
-#' ## Loading full sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
-#' ## Needs ~ 3GB
-#' dat <- NULL
-#' for(i in 1:15){
-#'   cat("Loading chromosome", i, "...\n")
-#'   invisible(capture.output(y <- {
-#'     tempfl <- tempfile(pattern = paste0("ch", i), fileext = ".vcf.gz")
-#'     x <- "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr"
-#'     address <- paste0(x, i, ".vcf.gz")
-#'     download.file(url = address, destfile = tempfl)
-#'     dattemp <- read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2", ploidy = 6)
-#'     dat <- merge_datasets(dat, dattemp)
-#'   }))
-#'   cat("\n")
-#' }
-#' ## Filtering dataset by marker
-#' dat <- filter_missing(input.data = dat, type = "marker", 
-#'                       filter.thres = 0.05, inter = TRUE)
-#' 
-#' ## Filtering dataset by individual
-#' dat <- filter_missing(input.data = dat, type = "individual", 
-#'                       filter.thres = 0.05, inter = TRUE)
-#' print(dat, detailed = TRUE)
-#' 
-#' ## Segregation test
-#' pval.bonf <- 0.05/dat$n.mrk
-#' mrks.chi.filt <- filter_segregation(dat, 
-#'                                     chisq.pval.thres =  pval.bonf, 
-#'                                     inter = TRUE)
-#' seq.init<-make_seq_mappoly(mrks.chi.filt)
-#' length(seq.init$seq.mrk.names)
-#' plot(seq.init)
-#' print(seq.init, detailed = TRUE)
 #'}
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'

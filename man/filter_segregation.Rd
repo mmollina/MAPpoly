@@ -27,7 +27,6 @@ The chi-square test assumes that markers follow the expected segregation
  pairing and no double reduction.
 }
 \examples{
-
 mrks.chi.filt <- filter_segregation(input.data = tetra.solcap,
                                     chisq.pval.thres = 0.05/tetra.solcap$n.mrk,
                                     inter = TRUE)

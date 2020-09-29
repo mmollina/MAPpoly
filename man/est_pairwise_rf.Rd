@@ -74,8 +74,8 @@ possible linkage phase configurations and associated LOD Scores.
 }
 \examples{
   \donttest{
-  ## Tetraploid example: 
-  all.mrk <- make_seq_mappoly(tetra.solcap, 'seq1')
+  ## Tetraploid example (first 100 markers) 
+  all.mrk <- make_seq_mappoly(tetra.solcap, 1:100)
   red.mrk <- elim_redundant(all.mrk)
   unique.mrks <- make_seq_mappoly(red.mrk)
   all.pairs <- est_pairwise_rf(input.seq = unique.mrks,

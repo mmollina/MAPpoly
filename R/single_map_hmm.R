@@ -4,13 +4,13 @@
 #' @keywords internal
 #' @examples
 #'   \donttest{
-#'     seq.all.mrk <- make_seq_mappoly(hexafake, 'all')
+#'     seq.all.mrk <- make_seq_mappoly(hexafake, 1:50)
 #'     id <- get_genomic_order(seq.all.mrk)
 #'     counts <- cache_counts_twopt(seq.all.mrk, cached=TRUE)
 #'     seq5 <- make_seq_mappoly(hexafake, rownames(id)[1:5])
 #'     twopt<-est_pairwise_rf(seq5, counts)
 #'     
-#'     ## Using the first 10 markers 
+#'     ## Using the first 5 markers 
 #'     l5 <- ls_linkage_phases(input.seq = seq5, thres = 5, twopt = twopt)
 #'     plot(l5)
 #'     

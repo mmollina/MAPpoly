@@ -289,7 +289,6 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
 #' \item{data.name}{input dataset used to perform the chi-square tests}
 #' 
 #'@examples
-#' 
 #' mrks.chi.filt <- filter_segregation(input.data = tetra.solcap,
 #'                                     chisq.pval.thres = 0.05/tetra.solcap$n.mrk,
 #'                                     inter = TRUE)

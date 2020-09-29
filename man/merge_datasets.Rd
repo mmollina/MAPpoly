@@ -73,24 +73,8 @@ for(i in 1:3){
   }))
   cat("\n")
 }
-## Filtering dataset by marker
-dat <- filter_missing(input.data = dat, type = "marker", 
-                      filter.thres = 0.05, inter = FALSE)
-
-## Filtering dataset by individual
-dat <- filter_missing(input.data = dat, type = "individual", 
-                      filter.thres = 0.05, inter = TRUE)
-print(dat, detailed = TRUE)
-
-## Segregation test
-pval.bonf <- 0.05/dat$n.mrk
-mrks.chi.filt <- filter_segregation(dat, 
-                                    chisq.pval.thres =  pval.bonf, 
-                                    inter = TRUE)
-seq.init<-make_seq_mappoly(mrks.chi.filt)
-length(seq.init$seq.mrk.names)
-plot(seq.init)
-print(seq.init, detailed = TRUE)
+dat
+plot(dat)
 }
 
 }

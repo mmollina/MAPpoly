@@ -51,22 +51,12 @@
 #'         estimates were not computed}
 #'
 #' @examples
-#' \donttest{
 #'     all.mrk<-make_seq_mappoly(hexafake, 'all')
 #'     seq1.mrk<-make_seq_mappoly(hexafake, 'seq1')
 #'     plot(seq1.mrk)
 #'     some.mrk.pos<-c(1,4,28,32,45)
 #'     (some.mrk.1<-make_seq_mappoly(hexafake, some.mrk.pos))
 #'     plot(some.mrk.1)
-#'     #same thing
-#'     (some.mrk.names<-hexafake$mrk.names[c(1,4,28,32,45)])
-#'     some.mrk.2<-make_seq_mappoly(hexafake, some.mrk.names)
-#'     identical(some.mrk.1, some.mrk.2)
-#'
-#'     ## Removing redundant markers and making a new sequence
-#'     red.mrk<-elim_redundant(all.mrk)
-#'     unique.mrks<-make_seq_mappoly(red.mrk)
-#' }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}, with modifications by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'

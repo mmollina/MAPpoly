@@ -15,8 +15,8 @@
 #'     
 #' @examples
 #'  \donttest{
-#'     # sequence with 100 markers
-#'     mrk.seq<-make_seq_mappoly(hexafake, 1:100)
+#'     # sequence with 50 markers
+#'     mrk.seq<-make_seq_mappoly(hexafake, 1:50)
 #'     mrk.pairs<-est_pairwise_rf(input.seq = mrk.seq,
 #'                                verbose=TRUE)
 #'     ## Full recombination fraction matrix

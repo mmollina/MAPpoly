@@ -125,32 +125,6 @@ the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
 }
 \examples{
  \donttest{
-    #### Autotetraploid example
-    s1<-make_seq_mappoly(tetra.solcap, 'seq1')
-    red.mrk<-elim_redundant(s1)
-    s1.unique.mrks<-make_seq_mappoly(red.mrk)
-    s1.pairs<-est_pairwise_rf(input.seq = s1.unique.mrks,
-                                  ncpus = 1,
-                                  verbose=TRUE)
-    unique.gen.ord<-get_genomic_order(s1.unique.mrks)
-    ## Selecting a subset of 100 markers at the beginning of chromosome 1 
-    s1.gen.subset<-make_seq_mappoly(tetra.solcap, rownames(unique.gen.ord)[1:100])
-    s1.gen.subset.map <- est_rf_hmm_sequential(input.seq = s1.gen.subset,
-                                               start.set = 10,
-                                               thres.twopt = 10, 
-                                               thres.hmm = 10,
-                                               extend.tail = 30,
-                                               info.tail = TRUE, 
-                                               twopt = s1.pairs,
-                                               sub.map.size.diff.limit = 5, 
-                                               phase.number.limit = 40,
-                                               reestimate.single.ph.configuration = TRUE,
-                                               tol = 10e-3,
-                                               tol.final = 10e-5)
-     print(s1.gen.subset.map, detailed = TRUE)
-     plot(s1.gen.subset.map)
-     plot(s1.gen.subset.map, phase = FALSE)
-     
     #### Autohexaploid example
     mrk.subset<-make_seq_mappoly(hexafake, 1:50)
     red.mrk<-elim_redundant(mrk.subset)

@@ -31,7 +31,6 @@
 #'  map <- solcap.err.map[[1]]
 #'  tpt <- est_pairwise_rf(make_seq_mappoly(map))
 #'  new.map <- split_and_rephase(map, tpt, 5)
-#'  plot_map_list(list(map, new.map))
 #'  map
 #'  new.map
 #'  plot_map_list(list(old.map = map, new.map = new.map))

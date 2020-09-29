@@ -98,25 +98,6 @@ compare_haplotypes(m = 4, best.phase$P[names.id],
                    full.map$maps[[1]]$seq.ph$P[names.id]) 
 compare_haplotypes(m = 4, best.phase$Q[names.id], 
                    full.map$maps[[1]]$seq.ph$Q[names.id])
-                    
-#### Hexaploid example #####
-map1<-get_submap(maps.hexafake[[1]], 1:5)
-map2<-get_submap(maps.hexafake[[1]], 6:15)
-map3<-get_submap(maps.hexafake[[1]], 16:30)
-full.map<-get_submap(maps.hexafake[[1]], 1:30)
-s<-make_seq_mappoly(hexafake, full.map$maps[[1]]$seq.num)
-twopt <- est_pairwise_rf(input.seq = s)
-merged.maps<-merge_maps(map.list = list(map1, map2, map3), 
-                        twopt = twopt,
-                        thres.twopt = 3)
-plot(merged.maps, mrk.names = TRUE)                       
-plot(full.map, mrk.names = TRUE)                       
-best.phase <- merged.maps$maps[[1]]$seq.ph
-names.id<-names(best.phase$P)
-compare_haplotypes(m = 6, best.phase$P[names.id], 
-                   full.map$maps[[1]]$seq.ph$P[names.id]) 
-compare_haplotypes(m = 6, best.phase$Q[names.id], 
-                   full.map$maps[[1]]$seq.ph$Q[names.id])
 }
 
 }

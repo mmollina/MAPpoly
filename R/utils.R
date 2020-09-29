@@ -1023,13 +1023,6 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
 #' download.file(fl1, destfile = tempfl)
 #' SolCAP.dose <- read_geno(file.in  = tempfl)
 #' check_data_sanity(SolCAP.dose)
-#' 
-#' #### Hexaploid example
-#' fl2 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexafake"
-#' tempfl <- tempfile()
-#' download.file(fl2, destfile = tempfl)
-#' hexa.dose <- read_geno(file.in  = tempfl)
-#' check_data_sanity(hexa.dose)
 #'}
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
@@ -1230,24 +1223,8 @@ check_data_dist_sanity <- function(x){
 #'   }))
 #'   cat("\n")
 #' }
-#' ## Filtering dataset by marker
-#' dat <- filter_missing(input.data = dat, type = "marker", 
-#'                       filter.thres = 0.05, inter = FALSE)
-#' 
-#' ## Filtering dataset by individual
-#' dat <- filter_missing(input.data = dat, type = "individual", 
-#'                       filter.thres = 0.05, inter = TRUE)
-#' print(dat, detailed = TRUE)
-#' 
-#' ## Segregation test
-#' pval.bonf <- 0.05/dat$n.mrk
-#' mrks.chi.filt <- filter_segregation(dat, 
-#'                                     chisq.pval.thres =  pval.bonf, 
-#'                                     inter = TRUE)
-#' seq.init<-make_seq_mappoly(mrks.chi.filt)
-#' length(seq.init$seq.mrk.names)
-#' plot(seq.init)
-#' print(seq.init, detailed = TRUE)
+#' dat
+#' plot(dat)
 #'}
 #'
 #' @references
