@@ -90,20 +90,7 @@ genotyping_global_error<-function(x, m, restricted = TRUE,  error=0.01, th.prob=
 #'
 #' @examples
 #'   \donttest{
-#'     seq1.20<-make_seq_mappoly(hexafake, 1:20)
-#'     counts<-cache_counts_twopt(seq1.20, cached = TRUE)
-#'     subset.pairs<-est_pairwise_rf(seq1.20, counts)
-#'     subset.map <- est_rf_hmm_sequential(input.seq  = seq1.20,
-#'                                         thres.twopt = 5,
-#'                                         thres.hmm = 10,
-#'                                         extend.tail = 10,
-#'                                         tol = 0.1,
-#'                                         tol.final = 10e-4,
-#'                                         twopt = subset.pairs,
-#'                                         verbose = TRUE)
-#'     subset.map
-#'     plot(subset.map)      
-#'     subset.map.reest<-est_full_hmm_with_global_error(subset.map, 
+#'     subset.map.reest<-est_full_hmm_with_global_error(solcap.dose.map[[1]], 
 #'                                                      error=0.01, 
 #'                                                      tol=10e-4, 
 #'                                                      verbose = TRUE)

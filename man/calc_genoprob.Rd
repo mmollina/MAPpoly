@@ -39,14 +39,6 @@ position and each individual given a map.
  ## displaying individual 1, 36 genotypic states
  ## (rows) across linkage group 1 (columns)                          
  image(t(probs.t$probs[,,1]))
- 
- ## hexaploid example
- probs.h<-calc_genoprob(input.map = maps.hexafake[[1]],
-                             verbose = TRUE)
- probs.h
- ## displaying individual 1, 400 genotypic states
- ## (rows) across linkage group 1 (columns)                               
- image(t(probs.h$probs[,,1]))
  }
 
 }

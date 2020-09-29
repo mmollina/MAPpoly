@@ -139,9 +139,6 @@ dist_prob_to_class <- function(geno, prob.thres = 0.9) {
 #'                      mixed = FALSE, 
 #'                      ploidy = 6)
 #'  head(F1checked$checked_F1)
-#'  PCA_progeny(dosage_matrix = dat, 
-#'              highlight = list(c("P1", "P2")), 
-#'              colors = "red")
 #'}  
 #' @export export_data_to_polymapR
 export_data_to_polymapR <- function(data.in)
@@ -647,7 +644,7 @@ drop_marker<-function(input.map, mrk, verbose = TRUE)
 #' 
 #' @examples
 #' \donttest{
-#' sub.map<-get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
+#' sub.map<-get_submap(maps.hexafake[[1]], 1:20, reestimate.rf = FALSE)
 #' plot(sub.map, mrk.names = TRUE)
 #' s<-make_seq_mappoly(hexafake, sub.map$info$mrk.names)
 #' tpt <- est_pairwise_rf(s)
@@ -676,47 +673,26 @@ drop_marker<-function(input.map, mrk, verbose = TRUE)
 #'                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
 #'                          hom.allele.q2 = sub.map$maps[[1]]$seq.ph$Q[names.id])
 #'                          
-#' ###### Removing marker "M_20" (middle) #######
-#' mrk.to.remove <- "M_20"
+#' ###### Removing marker "M_10" (middle or last) #######
+#' mrk.to.remove <- "M_10"
 #' input.map <- drop_marker(sub.map, mrk.to.remove)
 #' plot(input.map, mrk.names = TRUE)
 #' # Computing conditional probabilities using the resulting map
 #' genoprob <- calc_genoprob(input.map)
-#' res.add.M_20<-add_marker(input.map = input.map,
-#'                         mrk = "M_20",
-#'                         pos = "M_19",
+#' res.add.M_10<-add_marker(input.map = input.map,
+#'                         mrk = "M_10",
+#'                         pos = "M_9",
 #'                         rf.matrix = rf.matrix,
 #'                         genoprob = genoprob,
 #'                         tol = 10e-4)  
-#'  plot(res.add.M_20, mrk.names = TRUE)                       
-#'  best.phase <- res.add.M_20$maps[[1]]$seq.ph
+#'  plot(res.add.M_10, mrk.names = TRUE)                       
+#'  best.phase <- res.add.M_10$maps[[1]]$seq.ph
 #'  names.id<-names(best.phase$P)
 #'  plot_compare_haplotypes(m = 6,
 #'                          hom.allele.p1 = best.phase$P[names.id],
 #'                          hom.allele.q1 = best.phase$Q[names.id],
 #'                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
 #'                          hom.allele.q2 = sub.map$maps[[1]]$seq.ph$Q[names.id]) 
-#'                          
-#' ###### Removing marker "M_53" (last) #######
-#' mrk.to.remove <- "M_53"
-#' input.map <- drop_marker(sub.map, mrk.to.remove)
-#' plot(input.map, mrk.names = TRUE)
-#' # Computing conditional probabilities using the resulting map
-#' genoprob <- calc_genoprob(input.map)
-#' res.add.M_53<-add_marker(input.map = input.map,
-#'                         mrk = "M_53",
-#'                         pos = "M_52",
-#'                         rf.matrix = rf.matrix,
-#'                         genoprob = genoprob,
-#'                         tol = 10e-4)  
-#'  plot(res.add.M_53, mrk.names = TRUE)                       
-#'  best.phase <- res.add.M_53$maps[[1]]$seq.ph
-#'  names.id<-names(best.phase$P)
-#'  plot_compare_haplotypes(m = 6,
-#'                          hom.allele.p1 = best.phase$P[names.id],
-#'                          hom.allele.q1 = best.phase$Q[names.id],
-#'                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
-#'                          hom.allele.q2 = sub.map$maps[[1]]$seq.ph$Q[names.id])                
 #' }
 #' @export
 add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL, 
@@ -1017,19 +993,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
 #' 
 #' @examples
 #' \donttest{
-#' #### Tetraploid example
-#' fl1 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage"
-#' tempfl <- tempfile()
-#' download.file(fl1, destfile = tempfl)
-#' SolCAP.dose <- read_geno(file.in  = tempfl)
-#' check_data_sanity(SolCAP.dose)
-#' 
-#' #### Hexaploid example
-#' fl2 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexafake"
-#' tempfl <- tempfile()
-#' download.file(fl2, destfile = tempfl)
-#' hexa.dose <- read_geno(file.in  = tempfl)
-#' check_data_sanity(hexa.dose)
+#' check_data_sanity(tetra.solcap)
 #'}
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
@@ -1216,9 +1180,9 @@ check_data_dist_sanity <- function(x){
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' @examples
 #' \donttest{
-#' ## Loading three chromosomes of sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
+#' ## Loading two chromosomes of sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
 #' dat <- NULL
-#' for(i in 1:3){
+#' for(i in 1:2){
 #'   cat("Loading chromosome", i, "...\n")
 #'   invisible(capture.output(y <- {
 #'     tempfl <- tempfile(pattern = paste0("ch", i), fileext = ".vcf.gz")
@@ -1230,24 +1194,8 @@ check_data_dist_sanity <- function(x){
 #'   }))
 #'   cat("\n")
 #' }
-#' ## Filtering dataset by marker
-#' dat <- filter_missing(input.data = dat, type = "marker", 
-#'                       filter.thres = 0.05, inter = FALSE)
-#' 
-#' ## Filtering dataset by individual
-#' dat <- filter_missing(input.data = dat, type = "individual", 
-#'                       filter.thres = 0.05, inter = TRUE)
-#' print(dat, detailed = TRUE)
-#' 
-#' ## Segregation test
-#' pval.bonf <- 0.05/dat$n.mrk
-#' mrks.chi.filt <- filter_segregation(dat, 
-#'                                     chisq.pval.thres =  pval.bonf, 
-#'                                     inter = TRUE)
-#' seq.init<-make_seq_mappoly(mrks.chi.filt)
-#' length(seq.init$seq.mrk.names)
-#' plot(seq.init)
-#' print(seq.init, detailed = TRUE)
+#' dat
+#' plot(dat)
 #'}
 #'
 #' @references
@@ -1384,7 +1332,6 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
 #' @examples
 #' tetra.sum <- summary_maps(solcap.err.map)
 #' tetra.sum
-#' hexa.sum <- summary_maps(maps.hexafake)
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' @export summary_maps
 summary_maps = function(map.list, verbose = TRUE){

@@ -48,7 +48,7 @@
 #'
 #' @examples
 #'   \donttest{
-#'     all.mrk<-make_seq_mappoly(hexafake, 'seq1')
+#'     all.mrk<-make_seq_mappoly(hexafake, 1:20)
 #'     red.mrk<-elim_redundant(all.mrk)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
@@ -59,15 +59,6 @@
 #'     mat.full<-rf_list_to_matrix(input.twopt=all.pairs)
 #'     plot(mat.full)
 #'     plot(mat.full, type = "lod")
-#'
-#'     ## Filtered matrix
-#'     mat.filt<-rf_list_to_matrix(input.twopt=all.pairs,
-#'                                 thresh.LOD.ph = 5,
-#'                                 thresh.LOD.rf = 5,
-#'                                 thresh.rf = 0.5,
-#'                                 verbose = TRUE)
-#'     plot(mat.filt)
-#'     plot(mat.filt, type = "lod")
 #'  }
 #'  
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}

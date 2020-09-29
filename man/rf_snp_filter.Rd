@@ -62,7 +62,7 @@ Remove markers that do not meet a LOD and recombination fraction
 }
 \examples{
  \donttest{
-    all.mrk<-make_seq_mappoly(hexafake, 'all')
+    all.mrk<-make_seq_mappoly(hexafake, 1:20)
     red.mrk<-elim_redundant(all.mrk)
     unique.mrks<-make_seq_mappoly(red.mrk)
     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
@@ -72,53 +72,13 @@ Remove markers that do not meet a LOD and recombination fraction
     ## Full recombination fraction matrix
     mat.full<-rf_list_to_matrix(input.twopt=all.pairs)
     plot(mat.full)
-    lgs <- group_mappoly(input.mat = mat.full,
-                         expected.groups = 3,
-                         inter = TRUE,
-                         comp.mat = TRUE, #this data has physical information
-                         verbose=TRUE)
-    lgs
-    plot(lgs)
-    lg1 <- make_seq_mappoly(lgs, 1)
-    lg2 <- make_seq_mappoly(lgs, 2)
-    lg3 <- make_seq_mappoly(lgs, 3)
-
-    ##Plot matrices
-    p1<-make_pairs_mappoly(input.seq = lg1, input.twopt = all.pairs)
-    p2<-make_pairs_mappoly(input.seq = lg2, input.twopt = all.pairs)
-    p3<-make_pairs_mappoly(input.seq = lg3, input.twopt = all.pairs)
-
-    m1<-rf_list_to_matrix(input.twopt = p1)
-    m2<-rf_list_to_matrix(input.twopt = p2)
-    m3<-rf_list_to_matrix(input.twopt = p3)
-
-    op<-par(mfrow = c(1,3), pty = "s")
-    plot(m1, main.text = "LG1")
-    plot(m2, main.text = "LG2")
-    plot(m3, main.text = "LG3")
-    par(op)
 
     ## Removing disruptive SNPs
-    lg1.filt<-rf_snp_filter(p1, 5, 5, 0.15, thresh.perc = 0.05)
-    lg2.filt<-rf_snp_filter(p2, 5, 5, 0.15, thresh.perc = 0.05)
-    lg3.filt<-rf_snp_filter(p3, 5, 5, 0.15, thresh.perc = 0.05)
-
-    p1.filt<-make_pairs_mappoly(input.seq = lg1.filt, input.twopt = all.pairs)
-    p2.filt<-make_pairs_mappoly(input.seq = lg2.filt, input.twopt = all.pairs)
-    p3.filt<-make_pairs_mappoly(input.seq = lg3.filt, input.twopt = all.pairs)
-
+    tpt.filt<-rf_snp_filter(all.pairs, 2, 2, 0.07, thresh.perc = 0.1)
+    p1.filt<-make_pairs_mappoly(input.seq = tpt.filt, input.twopt = all.pairs)
     m1.filt<-rf_list_to_matrix(input.twopt = p1.filt)
-    m2.filt<-rf_list_to_matrix(input.twopt = p2.filt)
-    m3.filt<-rf_list_to_matrix(input.twopt = p3.filt)
-
-    op<-par(mfrow = c(2,3), pty = "s")
-    plot(m1, main.text = "LG1")
-    plot(m2, main.text = "LG2")
-    plot(m3, main.text = "LG3")
+    plot(mat.full, main.text = "LG1")
     plot(m1.filt, main.text = "LG1.filt")
-    plot(m2.filt, main.text = "LG2.filt")
-    plot(m3.filt, main.text = "LG3.filt")
-    par(op)
    }
    
 }

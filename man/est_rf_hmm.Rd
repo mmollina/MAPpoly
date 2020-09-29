@@ -137,7 +137,7 @@ This function first enumerates a set of linkage phase configurations
 }
 \examples{
  \donttest{
-    mrk.subset<-make_seq_mappoly(hexafake, 1:50)
+    mrk.subset<-make_seq_mappoly(hexafake, 1:20)
     red.mrk<-elim_redundant(mrk.subset)
     unique.mrks<-make_seq_mappoly(red.mrk)
     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
@@ -151,27 +151,8 @@ This function first enumerates a set of linkage phase configurations
                              verbose = TRUE,
                              tol = 0.1,
                              est.given.0.rf = FALSE)
-
-    ## Re-estimating the map with the most likely configuration
-    subset.map1 <- est_rf_hmm_single(input.seq = unique.mrks,
-                                    input.ph.single = subset.map$maps[[1]]$seq.ph,
-                                    tol = 10e-3,
-                                    verbose = TRUE)
-
-    subset.map$maps[[1]]$seq.ph <- subset.map1$seq.ph
     
     plot(subset.map)
-
-     ## Retrieving simulated linkage phase
-     ph.P <- maps.hexafake[[1]]$maps[[1]]$seq.ph$P
-     ph.Q <- maps.hexafake[[1]]$maps[[1]]$seq.ph$Q
-
-     ## Estimated linkage phase
-     ph.P.est <- subset.map$maps[[1]]$seq.ph$P
-     ph.Q.est <- subset.map$maps[[1]]$seq.ph$Q
-
-     compare_haplotypes(m = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
-     compare_haplotypes(m = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
    }
 
 }

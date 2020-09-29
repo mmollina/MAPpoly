@@ -12,17 +12,10 @@
 #'@examples
 #' \donttest{
 #'   ## hexaploid example
-#'   w1 <- lapply(maps.hexafake, calc_genoprob)
+#'   w1 <- calc_genoprob(maps.hexafake[[1]])
 #'   x1 <- calc_prefpair_profiles(w1)
 #'   print(x1)
-#'   plot(x1, min.y.prof = 0.05, max.y.prof = .15, thresh = 0.01)
-#'   
-#'   ## tetraploid example
-#'   w2 <- lapply(solcap.err.map, calc_genoprob_error, error = 0.05)
-#'   x2 <- calc_prefpair_profiles(w2)
-#'   print(x2)
-#'   plot(x2, min.y.prof = 0.15, max.y.prof = .50)
-#'   plot(x2, type = "hom.pairs", min.y.prof = 0.15, max.y.prof = .50)
+#'   plot(x1)
 #'}
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} and Guilherme Pereira, \email{g.pereira@cgiar.org}

@@ -94,20 +94,6 @@
 #' SolCAP.dose.prob <- read_geno_prob(file.in  = tempfl)
 #' print(SolCAP.dose.prob, detailed = TRUE)
 #' plot(SolCAP.dose.prob)
-#' ## save dataset for future uses
-#' saveRDS(SolCAP.dose.prob, file = "solcap.rds")
-#' SolCAP.dose.prob <- readRDS("solcap.rds")
-#' 
-#' #### Hexaploid example
-#' fh="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexafake_geno_dist"
-#' tempfl <- tempfile()
-#' download.file(fh, destfile = tempfl)
-#' hexa.dose.prob <- read_geno_prob(file.in  = tempfl, prob.thres = 0.8)
-#' print(hexa.dose.prob, detailed = TRUE)
-#' plot(hexa.dose.prob)
-#' ## save dataset for future uses
-#' saveRDS(hexa.dose.prob, file = "hexa.rds")
-#' hexa.dose.prob <- readRDS("hexa.rds")
 #'}
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}

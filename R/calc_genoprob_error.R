@@ -30,42 +30,9 @@
 #' 
 #' @examples
 #'  \donttest{
-#'      probs<-calc_genoprob(input.map = solcap.dose.map[[1]],
-#'                                 verbose = TRUE)
 #'      probs.error<-calc_genoprob_error(input.map = solcap.err.map[[1]],
 #'                                 error = 0.05,
 #'                                 verbose = TRUE)
-#'    op<-par(mfrow = c(2,1))
-#'    ## Example: individual 11
-#'    ind<-11   
-#'    ## posterior probabilities with no error modeling
-#'    pr1<-probs$probs[,,ind]
-#'    d1<-probs$map
-#'    image(t(pr1),
-#'          col = RColorBrewer::brewer.pal(n=9 , name = "YlOrRd"),
-#'          axes=FALSE,
-#'          xlab = "Markers",
-#'          ylab = " ",
-#'          main = paste("LG_1, ind ", ind))
-#'    axis(side = 1, at = d1/max(d1),
-#'         labels =rep("", length(d1)), las=2)
-#'    axis(side = 2, at = seq(0,1,length.out = nrow(pr1)),
-#'         labels = rownames(pr1), las=2, cex.axis=.5)
-#'    
-#'    ## posterior probabilities with error modeling
-#'    pr2<-probs.error$probs[,,ind]
-#'    d2<-probs.error$map
-#'    image(t(pr2),
-#'          col=RColorBrewer::brewer.pal(n=9 , name = "YlOrRd"),
-#'          axes=FALSE,
-#'          xlab = "Markers",
-#'          ylab = " ",
-#'          main = paste("LG_1, ind ", ind, " - w/ error"))
-#'    axis(side = 1, at = d2/max(d2),
-#'         labels =rep("", length(d2)), las=2)
-#'    axis(side = 2, at = seq(0,1,length.out = nrow(pr2)),
-#'         labels = rownames(pr2), las=2, cex.axis=.5)
-#'    par(op)
 #'  }
 #' 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}

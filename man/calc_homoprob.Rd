@@ -18,27 +18,11 @@ population given a map and conditional genotype probabilities.
 }
 \examples{
    \donttest{
-     ## tetraploid solcap example
-     w2<-lapply(solcap.dose.map, calc_genoprob)
-     h.prob.solcap<-calc_homoprob(w2)
-     print(h.prob.solcap)
-     plot(h.prob.solcap, ind = "ind_10")
-     plot(h.prob.solcap, stack = TRUE, ind = 5)
-     plot(h.prob.solcap, stack = TRUE, ind = 5, lg = "all")
-     
-     w3<-lapply(solcap.err.map, calc_genoprob_error, error = 0.05)
-     h.prob.solcap.err<-calc_homoprob(w3)
-     plot(h.prob.solcap, lg = 1, ind = 100, use.plotly = FALSE)
-     plot(h.prob.solcap.err, lg = 1, ind = 100, use.plotly = FALSE)
-     
      ## hexaploid example
-     w1 <- lapply(maps.hexafake[c(1,3)], calc_genoprob)
+     w1 <- calc_genoprob(maps.hexafake[[1]])
      h.prob <- calc_homoprob(w1)
      print(h.prob)
-     plot(h.prob)
      plot(h.prob, lg = 1, ind = 5, use.plotly = FALSE)
-     plot(h.prob, lg = c(1,3), ind = 15, use.plotly = FALSE)
-     plot(h.prob, lg = "all")
   }
 
 }

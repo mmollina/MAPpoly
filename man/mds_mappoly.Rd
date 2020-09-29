@@ -64,18 +64,14 @@ Version 3, at
 }
 \examples{
  \donttest{
-    s1 <- make_seq_mappoly(hexafake, 'seq1')
+    s1 <- make_seq_mappoly(hexafake, 1:20)
     t1 <- est_pairwise_rf(s1, ncpus = 1)
     m1 <- rf_list_to_matrix(t1)
     plot(m1, ord = rownames(get_genomic_order(s1)))
-    
-    ## Removing disruptive SNPs
-    s1f <- rf_snp_filter(t1, 5, 5, 0.15, thresh.perc = 0.05)
-    m1f <- make_mat_mappoly(m1, s1f)
-    mds.ord <- mds_mappoly(m1f)
+    mds.ord <- mds_mappoly(m1)
     plot(mds.ord)
     so <- make_seq_mappoly(mds.ord)
-    plot(m1f, ord = rownames(get_genomic_order(so)))
+    plot(m1, ord = rownames(get_genomic_order(so)))
     plot(so$seq.num ~ I(so$sequence.pos/1e6), 
          xlab = "Genome Position",
          ylab = "MDS position")

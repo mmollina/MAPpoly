@@ -12,9 +12,8 @@
 #'     
 #' @examples
 #'  \donttest{
-#'   hexa.map1<-reest_rf(solcap.dose.map[[1]], verbose = FALSE, tol = 10e-4)
-#'   hexa.map2<-loglike_hmm(hexa.map1)
-#'   hexa.map1;hexa.map2
+#'   hexa.map<-loglike_hmm(maps.hexafake[[1]])
+#'   hexa.map
 #'  }
 #'  
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}

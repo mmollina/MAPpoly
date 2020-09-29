@@ -66,9 +66,10 @@ a genetic map using Hidden Markov models
 }
 \examples{
   \donttest{
- solcap.p<-vector("list", 12)
+ ## Example with first 2 chromosomes of tetraploid potato
+ solcap.p<-vector("list", 2)
  names(solcap.p)<-names(solcap.dose.map)
- for(i in 1:12){
+ for(i in 1:2){
     cat("Lg ", i, "...")
     solcap.p[[i]] <- est_full_hmm_with_prior_prob(solcap.dose.map[[i]], 
                                                   dat.prob = tetra.solcap.geno.dist, 
@@ -76,14 +77,14 @@ a genetic map using Hidden Markov models
     cat("\n")
  }
  w<-NULL
- for(i in 1:12)
+ for(i in 1:2)
    w<-c(w, c(solcap.dose.map[i], 
              solcap.p[i]))
- names(w) <- apply(expand.grid(c("dose", "prior"), paste0("LG_", 1:12), 
+ names(w) <- apply(expand.grid(c("dose", "prior"), paste0("LG_", 1:2), 
                              stringsAsFactors = FALSE)[,2:1], 1, paste, 
                  collapse = "_")
  op <- par(cex.axis = .7)
- plot_map_list(w, horiz = FALSE, col = rep(gg_color_hue(2), 12))
+ plot_map_list(w, horiz = FALSE, col = rep(gg_color_hue(2), 2))
  par(op)
  legend("bottomright", legend = c("Dosage based", "Prob. based"), 
          pch=15, col = rep(gg_color_hue(2)))
