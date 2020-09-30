@@ -2,7 +2,7 @@
 % Please edit documentation in R/rf_list_to_matrix.R
 \name{select_rf}
 \alias{select_rf}
-\title{Select rf adn lod based on thresholds}
+\title{Select rf and lod based on thresholds}
 \usage{
 select_rf(x, thresh.LOD.ph, thresh.LOD.rf, thresh.rf, shared.alleles = FALSE)
 }
@@ -10,6 +10,6 @@ select_rf(x, thresh.LOD.ph, thresh.LOD.rf, thresh.rf, shared.alleles = FALSE)
 \item{void}{internal function to be documented}
 }
 \description{
-Select rf adn lod based on thresholds
+Select rf and lod based on thresholds
 }
 \keyword{internal}

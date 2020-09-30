@@ -1,6 +1,6 @@
 /*
  MAPpoly: a package to construct genetic maps in autopolyploids
- Copyright (C) 2014-2018 Marcelo Mollinari
+ Copyright (C) 2014-2020 Marcelo Mollinari
 
  This file is part of MAPpoly.
 
@@ -29,7 +29,10 @@
 
  Functions Written by Marcelo Mollinari.
 
- Contact: mmollina@ncsu.edu
+ Bioinformatics Research Center
+ Department of Horticultural Science
+ North Carolina State University
+ Contact: mmollin@ncsu.edu
  First version: Dec 19, 2013
  Last update: Sep 24, 2020
  */

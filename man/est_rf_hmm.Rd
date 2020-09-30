@@ -151,8 +151,7 @@ This function first enumerates a set of linkage phase configurations
                              verbose = TRUE,
                              tol = 0.1,
                              est.given.0.rf = FALSE)
-    
-    plot(subset.map)
+    plot(subset.map, mrk.names = TRUE)
    }
 
 }

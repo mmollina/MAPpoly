@@ -247,7 +247,7 @@ plot.mappoly.rf.matrix <- function(x, type = c("rf", "lod"), ord = NULL, rem = N
 }
 
 
-#' Select rf adn lod based on thresholds
+#' Select rf and lod based on thresholds
 #'
 #' @param void internal function to be documented
 #' @keywords internal

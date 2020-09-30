@@ -116,8 +116,7 @@
 #'                              verbose = TRUE,
 #'                              tol = 0.1,
 #'                              est.given.0.rf = FALSE)
-#'     
-#'     plot(subset.map)
+#'     plot(subset.map, mrk.names = TRUE)
 #'    }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}

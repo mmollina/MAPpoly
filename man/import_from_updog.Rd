@@ -77,7 +77,7 @@ mout = multidog(refmat = t(uitdewilligen$refmat),
                 model = "f1",
                 p1_id = colnames(t(uitdewilligen$sizemat))[1],
                 p2_id = colnames(t(uitdewilligen$sizemat))[2],
-                nc = 1)
+                nc = 2)
 mydata = import_from_updog(mout)
 mydata
 plot(mydata)

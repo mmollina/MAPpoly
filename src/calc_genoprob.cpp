@@ -1,6 +1,6 @@
 /*
  MAPpoly: a package to construct genetic maps in autopolyploids
- Copyright (C) 2014-2018 Marcelo Mollinari
+ Copyright (C) 2014-2020 Marcelo Mollinari
 
  This file is part of MAPpoly.
 
@@ -14,12 +14,12 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
 
- You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ For a copy of the GNU General Public License, please visit
+ <http://www.gnu.org/licenses/>.
  */
 
 /*
- File: est_map_hmm_given_dose.cpp
+ File: calc_genoprob.cpp
 
  Description: Set of functions to be used with software R
 
@@ -29,7 +29,10 @@
 
  Functions Written by Marcelo Mollinari.
 
- Contact: mmollina@ncsu.edu
+ Bioinformatics Research Center
+ Department of Horticultural Science
+ North Carolina State University
+ Contact: mmollin@ncsu.edu
  First version:       2014
  Last update: Oct 16, 2017
  */
