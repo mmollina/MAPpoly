@@ -47,8 +47,6 @@ r_packages:
   - polymapR
   - updog
 
-install: travis_wait 30
-
 after_success:
   - Rscript -e 'library(covr); codecov()'
   
