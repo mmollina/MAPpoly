@@ -63,7 +63,6 @@ Version 3, at
 \url{ https://CRAN.R-project.org/package=MDSMap}
 }
 \examples{
- \donttest{
     s1 <- make_seq_mappoly(hexafake, 1:20)
     t1 <- est_pairwise_rf(s1, ncpus = 1)
     m1 <- rf_list_to_matrix(t1)
@@ -75,7 +74,6 @@ Version 3, at
     plot(so$seq.num ~ I(so$sequence.pos/1e6), 
          xlab = "Genome Position",
          ylab = "MDS position")
-   }
 
 }
 \references{

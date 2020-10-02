@@ -70,7 +70,6 @@ uses the whole transition space in the HMM, its computation
 can take a while, especially for hexaploid maps.
 }
 \examples{
-  \donttest{
     submap <- get_submap(solcap.dose.map[[1]], mrk.pos = 1:20, verbose = FALSE)
     err.submap <- est_full_hmm_with_global_error(submap, 
                                                  error=0.01, 
@@ -79,7 +78,6 @@ can take a while, especially for hexaploid maps.
     err.submap
     plot_map_list(list(dose = submap, err = err.submap), 
                   title = "estimation procedure")
-    }
 
 }
 \references{

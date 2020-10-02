@@ -65,7 +65,6 @@ This function considers dosage prior distribution when re-estimating
 a genetic map using Hidden Markov models
 }
 \examples{
-  \donttest{
     submap <- get_submap(solcap.dose.map[[1]], mrk.pos = 1:20, verbose = FALSE)
     prob.submap <- est_full_hmm_with_prior_prob(submap,
                                                 dat.prob = tetra.solcap.geno.dist,
@@ -74,7 +73,6 @@ a genetic map using Hidden Markov models
     prob.submap
     plot_map_list(list(dose = submap, prob = prob.submap), 
                   title = "estimation procedure")
-    }
 
 }
 \references{

@@ -54,9 +54,8 @@
 #'     \code{chisq.pval}{p-values associated with the performed segregation tests}
 #'
 #' @examples
-#'   \donttest{
-#'   ## Tetraploid example (first 30 markers) 
-#'   all.mrk <- make_seq_mappoly(tetra.solcap, 1:30)
+#'   ## Tetraploid example (first 50 markers) 
+#'   all.mrk <- make_seq_mappoly(tetra.solcap, 1:50)
 #'   red.mrk <- elim_redundant(all.mrk)
 #'   unique.mrks <- make_seq_mappoly(red.mrk)
 #'   all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
@@ -66,7 +65,6 @@
 #'    plot(all.pairs, 20, 21)
 #'    mat <- rf_list_to_matrix(all.pairs)
 #'    plot(mat)
-#'    }
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references

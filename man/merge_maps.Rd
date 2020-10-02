@@ -79,6 +79,7 @@ linkage phase search space. The remaining linkage phases are tested using the ge
 probabilities.
 }
 \examples{
+\donttest{
 #### Tetraploid example #####
 map1<-get_submap(solcap.dose.map[[1]], 1:5)
 map2<-get_submap(solcap.dose.map[[1]], 6:15)
@@ -97,7 +98,7 @@ compare_haplotypes(m = 4, best.phase$P[names.id],
                    full.map$maps[[1]]$seq.ph$P[names.id]) 
 compare_haplotypes(m = 4, best.phase$Q[names.id], 
                    full.map$maps[[1]]$seq.ph$Q[names.id])
-
+}
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

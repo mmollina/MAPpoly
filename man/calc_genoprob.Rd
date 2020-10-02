@@ -31,7 +31,6 @@ Conditional genotype probabilities are calculated for each marker
 position and each individual given a map.
 }
 \examples{
- \donttest{
  ## tetraploid example
  probs.t<-calc_genoprob(input.map = solcap.dose.map[[1]],
                         verbose = TRUE)
@@ -39,7 +38,6 @@ position and each individual given a map.
  ## displaying individual 1, 36 genotypic states
  ## (rows) across linkage group 1 (columns)                          
  image(t(probs.t$probs[,,1]))
- }
 
 }
 \references{

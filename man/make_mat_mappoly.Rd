@@ -23,7 +23,6 @@ Get a subset of an object of class \code{mappoly.rf.matrix}, i.e.
  sequence of markers.
 }
 \examples{
- \donttest{
     # sequence with 20 markers
     mrk.seq<-make_seq_mappoly(hexafake, 1:20)
     mrk.pairs<-est_pairwise_rf(input.seq = mrk.seq,
@@ -35,7 +34,6 @@ Get a subset of an object of class \code{mappoly.rf.matrix}, i.e.
     id <- make_seq_mappoly(hexafake, 1:10)
     mat.sub<-make_mat_mappoly(mat, id)
     plot(mat.sub)
-   }
    
 }
 \references{

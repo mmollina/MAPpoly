@@ -50,7 +50,6 @@ the two-point information contained in the object \code{poly.est.two.pts.pairwis
 as elimination criteria
 }
 \examples{
-
 seq.all.mrk <- make_seq_mappoly(hexafake, 'all')
 id <- get_genomic_order(seq.all.mrk)
 seq10 <- make_seq_mappoly(hexafake, rownames(id)[1:10])
@@ -78,7 +77,6 @@ plot(l5.seq.3.0)
 l5.seq.1.0 <- ls_linkage_phases(input.seq = seq5, thres = 1, twopt = twopt)
 l5.seq.1.0
 plot(l5.seq.1.0)
-    
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

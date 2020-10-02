@@ -992,9 +992,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
 #'         a failed test.
 #' 
 #' @examples
-#' \donttest{
 #' check_data_sanity(tetra.solcap)
-#'}
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references

@@ -10,12 +10,10 @@
 #'     expected genotypes under no double reduction
 #'     
 #' @examples
-#' \donttest{
 #' require(polymapR)
 #' data("screened_data3")
 #' mappoly.data <- import_data_from_polymapR(screened_data3, 4)
 #' plot(mappoly.data)
-#'}
 #'
 #' @author Marcelo Mollinari \email{mmollin@ncsu.edu}
 #'
@@ -84,7 +82,6 @@ import_data_from_polymapR <- function(input.data,
 #' @param ploidy the ploidy level     
 #'     
 #' @examples
-#' \donttest{
 #' require(polymapR)
 #' ## Loading polymapR example
 #' data("integrated.maplist", "screened_data3", "marker_assignments_P1","marker_assignments_P2")
@@ -104,7 +101,6 @@ import_data_from_polymapR <- function(input.data,
 #'  plot(mappoly.maplist[[1]])
 #'  ## plot a segment of phased map (from 0 to 20 cM)
 #'  plot(mappoly.maplist[[1]], mrk.names = TRUE, left.lim = 0, right.lim = 20, cex = .7)
-#'}
 #'
 #' @author Marcelo Mollinari \email{mmollin@ncsu.edu}
 #'

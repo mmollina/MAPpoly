@@ -328,7 +328,6 @@ get_rf_from_list <- function(twopt, ph.list) {
 #'     \item{data.name}{the dataset name}
 #'
 #' @examples
-#' 
 #' seq.all.mrk <- make_seq_mappoly(hexafake, 'all')
 #' id <- get_genomic_order(seq.all.mrk)
 #' seq10 <- make_seq_mappoly(hexafake, rownames(id)[1:10])
@@ -356,7 +355,6 @@ get_rf_from_list <- function(twopt, ph.list) {
 #' l5.seq.1.0 <- ls_linkage_phases(input.seq = seq5, thres = 1, twopt = twopt)
 #' l5.seq.1.0
 #' plot(l5.seq.1.0)
-#'     
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references

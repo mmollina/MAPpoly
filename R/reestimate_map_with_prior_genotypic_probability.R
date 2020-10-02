@@ -49,7 +49,6 @@
 #' \item{loglike}{the hmm-based multipoint likelihood}
 #'
 #' @examples
-#'   \donttest{
 #'     submap <- get_submap(solcap.dose.map[[1]], mrk.pos = 1:20, verbose = FALSE)
 #'     prob.submap <- est_full_hmm_with_prior_prob(submap,
 #'                                                 dat.prob = tetra.solcap.geno.dist,
@@ -58,7 +57,6 @@
 #'     prob.submap
 #'     plot_map_list(list(dose = submap, prob = prob.submap), 
 #'                   title = "estimation procedure")
-#'     }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'

@@ -14,7 +14,6 @@
 #' See \code{\link[mappoly]{rf_list_to_matrix}} for details
 #'     
 #' @examples
-#'  \donttest{
 #'     # sequence with 20 markers
 #'     mrk.seq<-make_seq_mappoly(hexafake, 1:20)
 #'     mrk.pairs<-est_pairwise_rf(input.seq = mrk.seq,
@@ -26,7 +25,6 @@
 #'     id <- make_seq_mappoly(hexafake, 1:10)
 #'     mat.sub<-make_mat_mappoly(mat, id)
 #'     plot(mat.sub)
-#'    }
 #'    
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'

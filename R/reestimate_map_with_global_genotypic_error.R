@@ -89,7 +89,6 @@ genotyping_global_error<-function(x, m, restricted = TRUE,  error=0.01, th.prob=
 #' \item{loglike}{the hmm-based multipoint likelihood}
 #'
 #' @examples
-#'   \donttest{
 #'     submap <- get_submap(solcap.dose.map[[1]], mrk.pos = 1:20, verbose = FALSE)
 #'     err.submap <- est_full_hmm_with_global_error(submap, 
 #'                                                  error=0.01, 
@@ -98,7 +97,6 @@ genotyping_global_error<-function(x, m, restricted = TRUE,  error=0.01, th.prob=
 #'     err.submap
 #'     plot_map_list(list(dose = submap, err = err.submap), 
 #'                   title = "estimation procedure")
-#'     }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
