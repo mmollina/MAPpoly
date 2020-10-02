@@ -11,8 +11,8 @@
 #' 
 #'@examples
 #' \donttest{
-#'   ## hexaploid example
-#'   w1 <- calc_genoprob(maps.hexafake[[1]])
+#'   ## tetraploid example
+#'   w1 <- lapply(solcap.dose.map[1:12], calc_genoprob)
 #'   x1 <- calc_prefpair_profiles(w1)
 #'   print(x1)
 #'   plot(x1)

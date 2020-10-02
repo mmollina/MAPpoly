@@ -10,11 +10,16 @@
 #' 
 #'@examples
 #'    \donttest{
-#'      ## hexaploid example
-#'      w1 <- calc_genoprob(maps.hexafake[[1]])
+#'      ## tetraploid example
+#'      w1 <- calc_genoprob(solcap.dose.map[[1]])
 #'      h.prob <- calc_homoprob(w1)
 #'      print(h.prob)
-#'      plot(h.prob, lg = 1, ind = 5, use.plotly = FALSE)
+#'      plot(h.prob, ind = 5, use.plotly = FALSE)
+#'      ## using error modeling (removing noise)
+#'      w2 <- calc_genoprob_error(solcap.err.map[[1]])
+#'      h.prob2 <- calc_homoprob(w2)
+#'      print(h.prob2)
+#'      plot(h.prob2, ind = 5, use.plotly = FALSE)
 #'   }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}

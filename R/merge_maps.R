@@ -64,7 +64,6 @@
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' 
 #' @examples
-#' \donttest{
 #' #### Tetraploid example #####
 #' map1<-get_submap(solcap.dose.map[[1]], 1:5)
 #' map2<-get_submap(solcap.dose.map[[1]], 6:15)
@@ -83,7 +82,6 @@
 #'                    full.map$maps[[1]]$seq.ph$P[names.id]) 
 #' compare_haplotypes(m = 4, best.phase$Q[names.id], 
 #'                    full.map$maps[[1]]$seq.ph$Q[names.id])
-#'}
 #' 
 #' @export
 merge_maps<-function(map.list, 

@@ -32,7 +32,8 @@ Excludes markers or individuals based on their proportion of missing data
 plot(tetra.solcap)
 dat.filt.mrk <- filter_missing(input.data = tetra.solcap,
                                type = "marker", 
-                               filter.thres = 0.1)
+                               filter.thres = 0.1,
+                               inter = TRUE)
 plot(dat.filt.mrk)
 }
 \author{

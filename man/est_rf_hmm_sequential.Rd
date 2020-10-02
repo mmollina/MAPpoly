@@ -138,6 +138,7 @@ the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
                                         extend.tail = 10,
                                         tol = 0.1,
                                         tol.final = 10e-3,
+                                        phase.number.limit = 20,
                                         twopt = subset.pairs,
                                         verbose = TRUE)
      print(subset.map, detailed = TRUE)

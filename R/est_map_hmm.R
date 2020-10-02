@@ -101,8 +101,7 @@
 #' \item{loglike}{the hmm-based multipoint likelihood}
 #'
 #' @examples
-#'  \donttest{
-#'     mrk.subset<-make_seq_mappoly(hexafake, 1:20)
+#'     mrk.subset<-make_seq_mappoly(hexafake, 1:10)
 #'     red.mrk<-elim_redundant(mrk.subset)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
 #'     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
@@ -110,15 +109,19 @@
 #'                                   verbose=TRUE)
 #'
 #'     ## Estimating subset map with a low tolerance for the E.M. procedure
+#'     ## for CRAN testing purposes
 #'     subset.map <- est_rf_hmm(input.seq = unique.mrks,
 #'                              thres = 2,
 #'                              twopt = subset.pairs,
 #'                              verbose = TRUE,
 #'                              tol = 0.1,
 #'                              est.given.0.rf = FALSE)
-#'     plot(subset.map, mrk.names = TRUE)
-#'    }
-#'
+#'     subset.map
+#'     ## linkage phase configuration with highest likelihood
+#'     plot(subset.map, mrk.names = TRUE, config = "best")
+#'     ## the second one
+#'     plot(subset.map, mrk.names = TRUE, config = 2)
+#' 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
@@ -367,6 +370,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'                                         extend.tail = 10,
 #'                                         tol = 0.1,
 #'                                         tol.final = 10e-3,
+#'                                         phase.number.limit = 20,
 #'                                         twopt = subset.pairs,
 #'                                         verbose = TRUE)
 #'      print(subset.map, detailed = TRUE)

@@ -43,7 +43,7 @@ Authors@R: c(person(given = "Marcelo",
                     role = "cph",
                     comment = "C code for MLE optimization in src/pairwise_estimation.cpp"))
 Maintainer: Marcelo Mollinari <mmollin@ncsu.edu>
-Description: Constructs genetic maps in autopolyploid full-sib populations. 
+Description: Construction of genetic maps in autopolyploid full-sib populations. 
              Uses pairwise recombination fraction estimation as the first 
              source of information to sequentially position allelic variants 
              in specific homologs. For situations where pairwise analysis has 

@@ -1,7 +1,23 @@
-## Resubmission
+## Second resubmission
+
+  1. **Win-builder** reported:
+  
+     ````markdown
+     Flavor: r-devel-windows-ix86+x86_64
+     Check: Overall checktime, Result: NOTE
+     Overall checktime 11 min > 10 min
+     ````
+     **Uwe Ligges** asked: Pls reduce the overall check time a  bit.
+    
+     - **ACTION:** we reduced the check time to 538 seconds (~9 min.) according to 
+                **Win-builder** <https://win-builder.r-project.org/>
+
+Thank you for reviewing our submission!
+
+## Fisrt resubmission
 
 This is a first resubmission of a new package, responding to feedback from 
-  Gregor Seyer on initial submission.
+  **Gregor Seyer** on initial submission.
 
 ---
 

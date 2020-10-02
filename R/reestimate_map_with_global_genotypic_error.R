@@ -90,12 +90,14 @@ genotyping_global_error<-function(x, m, restricted = TRUE,  error=0.01, th.prob=
 #'
 #' @examples
 #'   \donttest{
-#'     subset.map.reest<-est_full_hmm_with_global_error(solcap.dose.map[[1]], 
-#'                                                      error=0.01, 
-#'                                                      tol=10e-4, 
-#'                                                      verbose = TRUE)
-#'     subset.map.reest
-#'     plot(subset.map.reest)
+#'     submap <- get_submap(solcap.dose.map[[1]], mrk.pos = 1:20, verbose = FALSE)
+#'     err.submap <- est_full_hmm_with_global_error(submap, 
+#'                                                  error=0.01, 
+#'                                                  tol=10e-4, 
+#'                                                  verbose = TRUE)
+#'     err.submap
+#'     plot_map_list(list(dose = submap, err = err.submap), 
+#'                   title = "estimation procedure")
 #'     }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -110,7 +112,8 @@ genotyping_global_error<-function(x, m, restricted = TRUE,  error=0.01, th.prob=
 #' @export est_full_hmm_with_global_error
 est_full_hmm_with_global_error <- function(input.map, error=NULL, tol=10e-4, 
                                            restricted = TRUE, 
-                                           th.prob=0.95, verbose = TRUE)
+                                           th.prob=0.95, 
+                                           verbose = FALSE)
 {
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
