@@ -1189,7 +1189,8 @@ check_data_dist_sanity <- function(x){
 #'     x <- "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/sweet_sample_ch"
 #'     address <- paste0(x, i, ".vcf.gz")
 #'     download.file(url = address, destfile = tempfl)
-#'     dattemp <- read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2", ploidy = 6, verbose = FALSE)
+#'     dattemp <- read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2",
+#'                         ploidy = 6, verbose = FALSE)
 #'     dat <- merge_datasets(dat, dattemp)
 #'   cat("\n")
 #' }
