@@ -1180,18 +1180,17 @@ check_data_dist_sanity <- function(x){
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' @examples
 #' \donttest{
-#' ## Loading two chromosomes of sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
+#' ## Loading a subset of SNPs from chromosomes 3 and 12 of sweetpotato dataset 
+#' ## (SNPs anchored to Ipomoea trifida genome)
 #' dat <- NULL
-#' for(i in 1:2){
+#' for(i in c(3, 12)){
 #'   cat("Loading chromosome", i, "...\n")
-#'   invisible(capture.output(y <- {
 #'     tempfl <- tempfile(pattern = paste0("ch", i), fileext = ".vcf.gz")
-#'     x <- "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr"
+#'     x <- "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/sweet_sample_ch"
 #'     address <- paste0(x, i, ".vcf.gz")
 #'     download.file(url = address, destfile = tempfl)
-#'     dattemp <- read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2", ploidy = 6)
+#'     dattemp <- read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2", ploidy = 6, verbose = FALSE)
 #'     dat <- merge_datasets(dat, dattemp)
-#'   }))
 #'   cat("\n")
 #' }
 #' dat

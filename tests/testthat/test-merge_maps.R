@@ -1,10 +1,10 @@
 context("Merge maps")
 test_that("merging maps correctly", {
   ##### Tetraploid
-  map1<-get_submap(solcap.dose.map[[1]], 1:5, tol = 10e-3)
-  map2<-get_submap(solcap.dose.map[[1]], 6:15, tol = 10e-3)
-  map3<-get_submap(solcap.dose.map[[1]], 16:30, tol = 10e-3)
-  full.map<-get_submap(solcap.dose.map[[1]], 1:30, tol = 10e-3)
+  map1<-get_submap(solcap.dose.map[[1]], 1:5, reestimate.rf = FALSE, verbose = FALSE)
+  map2<-get_submap(solcap.dose.map[[1]], 6:15, reestimate.rf = FALSE, verbose = FALSE)
+  map3<-get_submap(solcap.dose.map[[1]], 16:30, reestimate.rf = FALSE, verbose = FALSE)
+  full.map<-get_submap(solcap.dose.map[[1]], 1:30, reestimate.rf = FALSE, verbose = FALSE)
   s<-make_seq_mappoly(tetra.solcap, full.map$maps[[1]]$seq.num)
   twopt <- est_pairwise_rf(input.seq = s)
   merged.maps<-merge_maps(map.list = list(map1, map2, map3), 

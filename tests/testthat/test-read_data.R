@@ -1,6 +1,6 @@
 context("Read data")
 test_that("read data from VCF file correctly", {
-  fl = "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr1.vcf.gz"
+  fl = "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/sweet_sample_ch3.vcf.gz"
   tempfl <- tempfile(pattern = 'chr1_', fileext = '.vcf.gz')
   download.file(fl, destfile = tempfl)
   dat.dose.vcf = read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2")
