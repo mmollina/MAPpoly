@@ -75,7 +75,6 @@
 #' its equivalence to the redundant ones}
 #' @examples
 #' \donttest{
-#' 
 #' #### Tetraploid Example
 #' fl1 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage"
 #' tempfl <- tempfile()

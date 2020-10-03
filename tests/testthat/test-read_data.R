@@ -5,6 +5,7 @@ test_that("read data from VCF file correctly", {
   download.file(fl, destfile = tempfl)
   dat.dose.vcf = read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2")
   expect_equal(check_data_sanity(dat.dose.vcf), 0)
+  expect_null(print(dat.dose.vcf, detailed = TRUE))
 })
 test_that("read data from dosage file correctly", {
   fl1 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage"

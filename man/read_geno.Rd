@@ -97,7 +97,6 @@ containing the dosage for each marker (rows) for each individual (columns). \cod
 }
 \examples{
 \donttest{
-
 #### Tetraploid Example
 fl1 = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP_dosage"
 tempfl <- tempfile()
