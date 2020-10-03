@@ -133,16 +133,16 @@ Thank you for reviewing our submission!
 * Windows Server x64 (on appveyor), R 4.0.2
 * Win-builder (3.6.3, 4.0.2, and devel)
 
-## R CMD check results 
+## R CMD check results (on local macOS)
 
 0 errors | 0 warnings | 2 note
 
 * This is a new submission 
 
-* installed size is 12.3Mb
+* installed size is 11.5Mb
   sub-directories of 1Mb or more:
     * R:      2.6Mb
-    * data:   9.0Mb
+    * data:   8.2Mb
     
 ## Downstream dependencies
 
