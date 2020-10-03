@@ -291,15 +291,15 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'     it uses at least \code{extend.tail} as the tail length
 #'     
 #' @param phase.number.limit the maximum number of linkage phases of the sub-maps defined 
-#'     by arguments \code{info.tail} and \code{extend.tail}. If the
+#'     by arguments \code{info.tail} and \code{extend.tail}. Default is 20. If the
 #'     size exceeds this limit, the marker will not be inserted. If
-#'     \code{NULL}, then it will insert all markers (default = Inf)
+#'     \code{Inf}, then it will insert all markers.
 #'     
 #' @param sub.map.size.diff.limit the maximum accepted length
 #'     difference between the current and the previous sub-map defined 
 #'     by arguments \code{info.tail} and \code{extend.tail}. If the
 #'     size exceeds this limit, the marker will not be inserted. If
-#'     \code{NULL}, then it will insert all markers (default = Inf)
+#'     \code{NULL}(default), then it will insert all markers.
 #'     
 #' @param info.tail if \code{TRUE} (default), it uses the complete informative tail
 #'     of the chain (i.e. number of markers where all homologous 
@@ -357,7 +357,6 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'
 #' @examples
 #'  \donttest{
-#'     #### Autohexaploid example
 #'     mrk.subset<-make_seq_mappoly(hexafake, 1:20)
 #'     red.mrk<-elim_redundant(mrk.subset)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
@@ -370,7 +369,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'                                         extend.tail = 10,
 #'                                         tol = 0.1,
 #'                                         tol.final = 10e-3,
-#'                                         phase.number.limit = 20,
+#'                                         phase.number.limit = 5,
 #'                                         twopt = subset.pairs,
 #'                                         verbose = TRUE)
 #'      print(subset.map, detailed = TRUE)
@@ -406,7 +405,7 @@ est_rf_hmm_sequential<-function(input.seq,
                                 thres.twopt = 5,
                                 thres.hmm = 50,
                                 extend.tail = NULL,
-                                phase.number.limit = Inf,
+                                phase.number.limit = 20,
                                 sub.map.size.diff.limit = Inf,
                                 info.tail = TRUE,
                                 reestimate.single.ph.configuration = FALSE,

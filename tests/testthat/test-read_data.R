@@ -15,7 +15,7 @@ test_that("read data from dosage file correctly", {
   expect_equal(check_data_sanity(SolCAP.dose), 0)
 })
 test_that("read data from probability file correctly", {
-  ft="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP"
+  ft="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexa_sample"
   tempfl <- tempfile()
   download.file(ft, destfile = tempfl)
   SolCAP.dose.prob <- read_geno_prob(file.in  = tempfl)
