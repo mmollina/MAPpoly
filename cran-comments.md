@@ -127,20 +127,22 @@ Other changes since first submission.
 Thank you for reviewing our submission!
 
 ## Test environments
-* local R installation (macOS - 10.15.6), R 4.1.0
+* local R installation (macOS 10.15.6), R 4.1.0
+* local R installation (Ubuntu 18.04), R 3.6.3
 * Ubuntu 16.04 (on travis-ci), R 4.0.2
+* Windows Server x64 (on appveyor), R 4.0.2
 * Win-builder (3.6.3, 4.0.2, and devel)
 
-## R CMD check results
+## R CMD check results 
 
 0 errors | 0 warnings | 2 note
 
 * This is a new submission 
 
-* installed size is 11.4Mb
+* installed size is 12.3Mb
   sub-directories of 1Mb or more:
-    * R:      2.7Mb
-    * data:   8.1Mb
+    * R:      2.6Mb
+    * data:   9.0Mb
     
 ## Downstream dependencies
 

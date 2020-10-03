@@ -86,7 +86,7 @@ rev_map<-function(input.map)
 #' @keywords internal
 #' @examples
 #' \donttest{
-#' geno.dose <- dist_prob_to_class(tetra.solcap.geno.dist$geno)
+#' geno.dose <- dist_prob_to_class(hexafake.geno.dist$geno)
 #' geno.dose$geno.dose[1:10,1:10]
 #'}   
 #' @importFrom magrittr "%>%"
@@ -427,8 +427,8 @@ gg_color_hue <- function(n) {
 #'     are considered as missing data for the dosage calling purposes
 #' @examples
 #' \donttest{
-#' data.updated = update_missing(tetra.solcap.geno.dist, prob.thres = 0.5)
-#' print(tetra.solcap.geno.dist)
+#' data.updated = update_missing(hexafake.geno.dist, prob.thres = 0.5)
+#' print(hexafake.geno.dist)
 #' print(data.updated)
 #' }
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
