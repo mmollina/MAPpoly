@@ -6,7 +6,7 @@
 
 ![](https://raw.githubusercontent.com/mmollina/MAPpoly/master/mappoly_hexsticker.png)
 
-MAPpoly (v. 0.2.0) is an R package to construct genetic maps in autopolyploids with even ploidy levels. In its current version, MAPpoly can handle ploidy levels up to 8 when using hidden Markov models (HMM), and up to 12 when using the two-point simplification. All the two-point based functions are fast enough to run on standard computers. However, we strongly recommend to use high-performance computation for HMM-based analysis, especially for ploidy levels higher than 4. 
+MAPpoly (v. 0.2.0) is an R package to construct genetic maps in autopolyploids with even ploidy levels. In its current version, MAPpoly can handle ploidy levels up to 8 when using hidden Markov models (HMM), and up to 12 when using the two-point simplification. When dealing with large numbers of markers (> 10,000), we strongly recommend using high-performance computation. 
 
 ![](https://raw.githubusercontent.com/mmollina/MAPpoly/master/mappoly.gif)
 
@@ -19,7 +19,7 @@ In its current version, MAPpoly can handle three different types of datasets:
   - Probability based
 3. VCF files
 
-The derivation of the HMM used in MAPpoly can be found in [Mollinari and Garcia, 2019](https://doi.org/10.1534/g3.119.400378). Recently, we used MAPpoly to build an ultra-dense multilocus integrated genetic map containing ~30k SNPs and characterized the inheritance system in a sweetpotato full-sib family ([Mollinari et al., 2020](https://doi.org/10.1534/g3.119.400620)).
+The mapping strategy is based on using pairwise recombination fraction estimation as the first source of information to position allelic variants in specific homologs sequentially. For situations where pairwise analysis has limited power, the algorithm relies on the multilocus likelihood obtained through a hidden Markov model (HMM). The derivation of the HMM used in MAPpoly can be found in [Mollinari and Garcia, 2019](https://doi.org/10.1534/g3.119.400378). Recently, we used MAPpoly to build an ultra-dense multilocus integrated genetic map containing ~30k SNPs and characterized the inheritance system in a sweetpotato full-sib family ([Mollinari et al., 2020](https://doi.org/10.1534/g3.119.400620)). See the resulting map [here](https://gt4sp-genetic-map.shinyapps.io/bt_map/) and the haplotype composition of all individuals in the full-sib population [here](https://gt4sp-genetic-map.shinyapps.io/offspring_haplotype_BT_population/).
 
 # Installation
 
