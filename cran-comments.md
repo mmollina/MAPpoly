@@ -9,8 +9,8 @@
      ````
      **Uwe Ligges** asked: Pls reduce the overall check time a  bit.
     
-     - **ACTION:** we reduced the check time to 538 seconds (~9 min.) according to 
-                **Win-builder** <https://win-builder.r-project.org/>
+     - **ACTION:** we reduced the check time to 273 seconds (~4.7 min.) according to 
+                **rhub** <https://builder.r-hub.io/>
 
 Thank you for reviewing our submission!
 
