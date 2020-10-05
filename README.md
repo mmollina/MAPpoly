@@ -92,6 +92,6 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
 * [Workshop: Polyploid Genetic Data Analysis: From Dosage Calling to Linkage and QTL Analysis](http://152.1.45.19/esalq_2019.html)
 * [Miscellaneous scripts](https://github.com/mmollina/MAPpoly_vignettes/blob/master/README.md)
 
-# Acknowledgment 
+# Acknowledgment
 
 This package has been developed as part of the [Genomic Tools for Sweetpotato Improvement project](https://sweetpotatogenomics.cals.ncsu.edu/) (GT4SP) and [SweetGAINS](https://cgspace.cgiar.org/handle/10568/106838), both funded by [Bill & Melinda Gates Foundation](https://www.gatesfoundation.org/).
