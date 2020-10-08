@@ -86,7 +86,7 @@ rev_map<-function(input.map)
 #' @keywords internal
 #' @examples
 #' \donttest{
-#' geno.dose <- dist_prob_to_class(tetra.solcap.geno.dist$geno)
+#' geno.dose <- dist_prob_to_class(hexafake.geno.dist$geno)
 #' geno.dose$geno.dose[1:10,1:10]
 #'}   
 #' @importFrom magrittr "%>%"
@@ -427,8 +427,8 @@ gg_color_hue <- function(n) {
 #'     are considered as missing data for the dosage calling purposes
 #' @examples
 #' \donttest{
-#' data.updated = update_missing(tetra.solcap.geno.dist, prob.thres = 0.5)
-#' print(tetra.solcap.geno.dist)
+#' data.updated = update_missing(hexafake.geno.dist, prob.thres = 0.5)
+#' print(hexafake.geno.dist)
 #' print(data.updated)
 #' }
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -992,9 +992,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
 #'         a failed test.
 #' 
 #' @examples
-#' \donttest{
 #' check_data_sanity(tetra.solcap)
-#'}
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
 #' @references
@@ -1180,18 +1178,18 @@ check_data_dist_sanity <- function(x){
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' @examples
 #' \donttest{
-#' ## Loading two chromosomes of sweetpotato dataset (SNPs anchored to Ipomoea trifida genome)
+#' ## Loading a subset of SNPs from chromosomes 3 and 12 of sweetpotato dataset 
+#' ## (SNPs anchored to Ipomoea trifida genome)
 #' dat <- NULL
-#' for(i in 1:2){
+#' for(i in c(3, 12)){
 #'   cat("Loading chromosome", i, "...\n")
-#'   invisible(capture.output(y <- {
 #'     tempfl <- tempfile(pattern = paste0("ch", i), fileext = ".vcf.gz")
-#'     x <- "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr"
+#'     x <- "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/sweet_sample_ch"
 #'     address <- paste0(x, i, ".vcf.gz")
 #'     download.file(url = address, destfile = tempfl)
-#'     dattemp <- read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2", ploidy = 6)
+#'     dattemp <- read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2",
+#'                         ploidy = 6, verbose = FALSE)
 #'     dat <- merge_datasets(dat, dattemp)
-#'   }))
 #'   cat("\n")
 #' }
 #' dat
@@ -1455,20 +1453,30 @@ update_map = function(input.map){
 #' @param n number of individuals or markers to be sampled
 #' @param percentage if \code{n==NULL}, the percentage of individuals or markers to be sampled
 #' @param type should sample individuals or markers?
+#' @param selected.ind a vector containing the name of the individuals to select. Only has effect 
+#' if \code{type = "individual"}, \code{n = NULL} and \code{percentage = NULL}
+#' @param selected.mrk a vector containing the name of the markers to select. Only has effect 
+#' if \code{type = "marker"}, \code{n = NULL} and \code{percentage = NULL}
 #' @return an object  of class \code{mappoly.data}
 #' @keywords internal
 #' @export
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
-sample_data <- function(input.data, n = NULL, percentage = NULL, type = c("individual", "marker")){
+sample_data <- function(input.data, n = NULL, 
+                        percentage = NULL, 
+                        type = c("individual", "marker"),
+                        selected.ind = NULL,
+                        selected.mrk = NULL){
   type <- match.arg(type)
   if(type == "individual"){
     if(!is.null(n)){
       selected.ind.id <- sort(sample(input.data$n.ind, n))
     } else if(!is.null(percentage)){
       selected.ind.id <- sample(input.data$n.ind, ceiling(input.data$n.ind * percentage/100))
+    } else if(!is.null(selected.ind)){
+      selected.ind.id <- match(selected.ind, input.data$ind.names)
     } else {
-      stop("Inform 'n' or 'percentage'.")
+      stop("Inform 'n', 'percentage' or selected.ind.")
     }
     ind <- mrk <- NULL
     selected.ind <- input.data$ind.names[selected.ind.id]
@@ -1496,27 +1504,29 @@ sample_data <- function(input.data, n = NULL, percentage = NULL, type = c("indiv
   } 
   else if(type == "marker"){
     if(!is.null(n)){
-      selected.mrks.id <- sort(sample(input.data$n.mrk, n))
+      selected.mrk.id <- sort(sample(input.data$n.mrk, n))
     } else if(!is.null(percentage)){
-      selected.mrks.id <- sort(sample(input.data$n.mrk, ceiling(input.data$n.mrk * percentage/100)))
-    } else {
-      stop("Inform 'n' or 'percentage'.")
+      selected.mrk.id <- sort(sample(input.data$n.mrk, ceiling(input.data$n.mrk * percentage/100)))
+    } else if(!is.null(selected.ind)){
+      selected.mrk.id <- match(selected.mrk, input.data$mrk.names)
+    } else{
+      stop("Inform 'n', 'percentage' or selected.mrk.")
     }
-    selected.mrks <- input.data$mrk.names[selected.mrks.id]
-    if(length(selected.mrks.id) >= input.data$n.mrk) return(input.data)
+    selected.mrk <- input.data$mrk.names[selected.mrk.id]
+    if(length(selected.mrk.id) >= input.data$n.mrk) return(input.data)
     if(nrow(input.data$geno)!=input.data$n.mrk)
       input.data$geno <-  input.data$geno %>%
-      dplyr::filter(mrk%in%selected.mrks)
-    input.data$geno.dose<-input.data$geno.dose[selected.mrks.id,]
+      dplyr::filter(mrk%in%selected.mrk)
+    input.data$geno.dose<-input.data$geno.dose[selected.mrk.id,]
     input.data$n.mrk <- nrow(input.data$geno.dose)
-    input.data$mrk.names <- input.data$mrk.names[selected.mrks.id]
-    input.data$dosage.p <- input.data$dosage.p[selected.mrks.id]
-    input.data$dosage.q <- input.data$dosage.q[selected.mrks.id]
-    input.data$sequence <- input.data$sequence[selected.mrks.id]
-    input.data$sequence.pos <- input.data$sequence.pos[selected.mrks.id]
-    input.data$seq.ref <- input.data$seq.ref[selected.mrks.id]
-    input.data$seq.alt <- input.data$seq.alt[selected.mrks.id]
-    input.data$all.mrk.depth <- input.data$all.mrk.depth[selected.mrks.id]
+    input.data$mrk.names <- input.data$mrk.names[selected.mrk.id]
+    input.data$dosage.p <- input.data$dosage.p[selected.mrk.id]
+    input.data$dosage.q <- input.data$dosage.q[selected.mrk.id]
+    input.data$sequence <- input.data$sequence[selected.mrk.id]
+    input.data$sequence.pos <- input.data$sequence.pos[selected.mrk.id]
+    input.data$seq.ref <- input.data$seq.ref[selected.mrk.id]
+    input.data$seq.alt <- input.data$seq.alt[selected.mrk.id]
+    input.data$all.mrk.depth <- input.data$all.mrk.depth[selected.mrk.id]
     input.data$kept <- intersect(input.data$mrk.names, input.data$kept)
     input.data$elim.correspondence <- input.data$elim.correspondence[input.data$elim.correspondence$kept%in%input.data$mrk.names,]
     input.data$chisq.pval <- input.data$chisq.pval[names(input.data$chisq.pval)%in%input.data$mrk.names]

@@ -91,14 +91,15 @@ will be kept as they are in the .vcf file.
 }
 \examples{
 \donttest{
-## Hexaploid sweetpotato: Chromosome 1
-fl = "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/BT/sweetpotato_chr1.vcf.gz"
-tempfl <- tempfile(pattern = 'chr1_', fileext = '.vcf.gz')
+## Hexaploid sweetpotato: Subset of chromosome 3
+fl = "https://github.com/mmollina/MAPpoly_vignettes/raw/master/data/sweet_sample_ch3.vcf.gz"
+tempfl <- tempfile(pattern = 'chr3_', fileext = '.vcf.gz')
 download.file(fl, destfile = tempfl)
 dat.dose.vcf = read_vcf(file = tempfl, parent.1 = "PARENT1", parent.2 = "PARENT2")
 print(dat.dose.vcf)
 plot(dat.dose.vcf)
 }
+
 }
 \references{
 Mollinari M., Olukolu B. A.,  Pereira G. da S., 

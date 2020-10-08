@@ -46,7 +46,6 @@ Identifies linkage groups of markers using the results of two-point
 (pairwise) analysis.
 }
 \examples{
- \donttest{
     ## Getting first 20 markers from two linkage groups
     all.mrk <- make_seq_mappoly(hexafake, c(1:20,601:620))
     red.mrk <- elim_redundant(all.mrk)
@@ -68,7 +67,6 @@ Identifies linkage groups of markers using the results of two-point
                          verbose = TRUE)
     lgs
     plot(lgs)
-   }
    
 }
 \references{

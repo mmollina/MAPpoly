@@ -8,7 +8,9 @@ sample_data(
   input.data,
   n = NULL,
   percentage = NULL,
-  type = c("individual", "marker")
+  type = c("individual", "marker"),
+  selected.ind = NULL,
+  selected.mrk = NULL
 )
 }
 \arguments{
@@ -17,6 +19,12 @@ sample_data(
 \item{percentage}{if \code{n==NULL}, the percentage of individuals or markers to be sampled}
 
 \item{type}{should sample individuals or markers?}
+
+\item{selected.ind}{a vector containing the name of the individuals to select. Only has effect 
+if \code{type = "individual"}, \code{n = NULL} and \code{percentage = NULL}}
+
+\item{selected.mrk}{a vector containing the name of the markers to select. Only has effect 
+if \code{type = "marker"}, \code{n = NULL} and \code{percentage = NULL}}
 
 \item{x}{an object  of class \code{mappoly.data}}
 }

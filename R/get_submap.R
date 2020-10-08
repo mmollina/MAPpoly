@@ -43,17 +43,17 @@
 #'     
 #' @examples
 #'  \donttest{
-#'     ## selecting the 20 first markers in linkage group 1
+#'     ## selecting the six first markers in linkage group 1
 #'     ## re-estimating the recombination fractions and linkage phases
 #'     submap1.lg1<-get_submap(input.map = maps.hexafake[[1]], 
-#'                            mrk.pos = 1:20, verbose = TRUE,
-#'                            reestimate.phase = TRUE, 
+#'                            mrk.pos = 1:6, verbose = TRUE,
+#'                            reestimate.phase = TRUE,  
 #'                            tol.final = 10e-3)
-#'    ## no recombination fraction re-estimation                                                     
+#'    ## no recombination fraction re-estimation: first 20 markers
 #'    submap2.lg1<-get_submap(input.map = maps.hexafake[[1]], 
 #'                            mrk.pos = 1:20, reestimate.rf = FALSE,
 #'                            verbose = TRUE, 
-#'                            tol.final = 10e-3)                      
+#'                            tol.final = 10e-3)
 #'   plot(maps.hexafake[[1]])
 #'   plot(submap1.lg1, mrk.names = TRUE, cex = .8)
 #'   plot(submap2.lg1, mrk.names = TRUE, cex = .8)

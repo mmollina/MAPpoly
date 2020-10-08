@@ -41,13 +41,11 @@
 #'     S3 Appendix in Mollinari and Garcia (2019) for an example.
 #'
 #' @examples
-#'   \donttest{
 #'     all.mrk<-make_seq_mappoly(tetra.solcap, 1:20)
 #'     ## local computation
 #'     counts<-cache_counts_twopt(all.mrk, ncpus = 1)
 #'     ## load from internal file or web-stored counts (especially important for high ploidy levels)
 #'     counts.cached<-cache_counts_twopt(all.mrk, cached = TRUE)
-#'     }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} with updates by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'

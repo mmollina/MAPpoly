@@ -23,25 +23,17 @@ Get a subset of an object of class \code{poly.est.two.pts.pairwise} (i.e.
  phase combinations based on a sequence of markers.
 }
 \examples{
- \donttest{
-    set.seed(123)
-    all.mrk<-make_seq_mappoly(hexafake, 1:20)
-    red.mrk<-elim_redundant(all.mrk)
-    unique.mrks<-make_seq_mappoly(red.mrk)
-    all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
-                               ncpus = 1,
-                               verbose=TRUE)
-
-    ## Full recombination fraction matrix
+    ## selecting some markers along the genome
+    some.mrk<-make_seq_mappoly(hexafake, seq(1, 1500, 30))
+    all.pairs<-est_pairwise_rf(input.seq = some.mrk)
     mat.full<-rf_list_to_matrix(input.twopt = all.pairs)
     plot(mat.full)
-
-    ##Plot matrices
-    mrks.2<-make_seq_mappoly(red.mrk, c(1:10))
-    p1<-make_pairs_mappoly(input.seq = mrks.2, input.twopt = all.pairs)
+    
+    ## selecting two-point information for chromosome 1
+    mrks.1<-make_seq_mappoly(hexafake, names(which(some.mrk$sequence==1)))
+    p1<-make_pairs_mappoly(input.seq = mrks.1, input.twopt = all.pairs)
     m1<-rf_list_to_matrix(input.twopt = p1)
     plot(m1, main.text = "LG1")
-   }
    
 }
 \references{

@@ -88,7 +88,7 @@
 #' @examples
 #' \donttest{
 #' #### Tetraploid Example
-#' ft="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP"
+#' ft="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexa_sample"
 #' tempfl <- tempfile()
 #' download.file(ft, destfile = tempfl)
 #' SolCAP.dose.prob <- read_geno_prob(file.in  = tempfl)

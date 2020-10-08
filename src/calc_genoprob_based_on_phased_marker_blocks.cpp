@@ -1,10 +1,10 @@
 /*
- Polymap: a package to construct genetic maps in autopolyploids
- Copyright (C) 2014-2016 Marcelo Mollinari
+ MAPpoly: a package to construct genetic maps in autopolyploids
+ Copyright (C) 2014-2020 Marcelo Mollinari
  
- This file is part of Polymap.
+ This file is part of MAPpoly.
  
- Polymap is free software: you can redistribute it and/or modify
+ MAPpoly is free software: you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
  the Free Software Foundation, either version 3 of the License, or
  (at your option) any later version.
@@ -14,12 +14,12 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
  
- You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ For a copy of the GNU General Public License, please visit
+ <http://www.gnu.org/licenses/>.
  */
 
 /*
- File: est_map_hmm.cpp
+ File: calc_genoprob_based_on_phased_marker_blocks.cpp
  
  Description: Set of functions to be used with software R
  
@@ -29,10 +29,14 @@
  
  Functions Written by Marcelo Mollinari.
  
- Contact: mmollina@ncsu.edu
- First version:       Dec 6, 2019
- Last update: Dec 6, 2019
+ Bioinformatics Research Center
+ Department of Horticultural Science
+ North Carolina State University
+ Contact: mmollin@ncsu.edu
+ First version:       2014
+ Last update: 6 Dec,  2019
  */
+
 
 #include <Rcpp.h>
 #include <algorithm>

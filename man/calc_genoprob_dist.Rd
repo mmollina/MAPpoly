@@ -35,7 +35,6 @@ position and each individual given a map. In this function,
 the probabilities are not calculated between markers.
 }
 \examples{
- \donttest{
  ## tetraploid example
  probs.t<-calc_genoprob_dist(input.map = solcap.prior.map[[1]],
                            dat.prob = tetra.solcap.geno.dist,
@@ -44,7 +43,6 @@ the probabilities are not calculated between markers.
  ## displaying individual 1, 36 genotypic states 
  ## (rows) across linkage group 1 (columns)                          
  image(t(probs.t$probs[,,1]))
- }
 
 }
 \references{

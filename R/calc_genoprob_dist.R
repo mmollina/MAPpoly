@@ -22,7 +22,6 @@
 #' in each marker position; and the marker sequence with it's recombination frequencies
 #' 
 #' @examples
-#'  \donttest{
 #'  ## tetraploid example
 #'  probs.t<-calc_genoprob_dist(input.map = solcap.prior.map[[1]],
 #'                            dat.prob = tetra.solcap.geno.dist,
@@ -31,7 +30,6 @@
 #'  ## displaying individual 1, 36 genotypic states 
 #'  ## (rows) across linkage group 1 (columns)                          
 #'  image(t(probs.t$probs[,,1]))
-#'  }
 #' 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'

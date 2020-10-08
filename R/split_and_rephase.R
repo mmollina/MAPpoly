@@ -27,14 +27,12 @@
 #' @return An object of class \code{mappoly.map}
 #' 
 #' @examples
-#'  \donttest{
 #'  map <- get_submap(maps.hexafake[[1]], 1:20, reestimate.rf = FALSE, reestimate.phase = FALSE)
 #'  tpt <- est_pairwise_rf(make_seq_mappoly(map))
 #'  new.map <- split_and_rephase(map, tpt, 5)
 #'  map
 #'  new.map
 #'  plot_map_list(list(old.map = map, new.map = new.map))
-#'  }
 #' 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'

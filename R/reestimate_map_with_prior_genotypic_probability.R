@@ -49,30 +49,14 @@
 #' \item{loglike}{the hmm-based multipoint likelihood}
 #'
 #' @examples
-#'   \donttest{
-#'  ## Example with first 2 chromosomes of tetraploid potato
-#'  solcap.p<-vector("list", 2)
-#'  names(solcap.p)<-names(solcap.dose.map)
-#'  for(i in 1:2){
-#'     cat("Lg ", i, "...")
-#'     solcap.p[[i]] <- est_full_hmm_with_prior_prob(solcap.dose.map[[i]], 
-#'                                                   dat.prob = tetra.solcap.geno.dist, 
-#'                                                   verbose = FALSE)
-#'     cat("\n")
-#'  }
-#'  w<-NULL
-#'  for(i in 1:2)
-#'    w<-c(w, c(solcap.dose.map[i], 
-#'              solcap.p[i]))
-#'  names(w) <- apply(expand.grid(c("dose", "prior"), paste0("LG_", 1:2), 
-#'                              stringsAsFactors = FALSE)[,2:1], 1, paste, 
-#'                  collapse = "_")
-#'  op <- par(cex.axis = .7)
-#'  plot_map_list(w, horiz = FALSE, col = rep(gg_color_hue(2), 2))
-#'  par(op)
-#'  legend("bottomright", legend = c("Dosage based", "Prob. based"), 
-#'          pch=15, col = rep(gg_color_hue(2)))
-#' }
+#'     submap <- get_submap(solcap.dose.map[[1]], mrk.pos = 1:20, verbose = FALSE)
+#'     prob.submap <- est_full_hmm_with_prior_prob(submap,
+#'                                                 dat.prob = tetra.solcap.geno.dist,
+#'                                                 tol=10e-4, 
+#'                                                 verbose = TRUE)
+#'     prob.submap
+#'     plot_map_list(list(dose = submap, prob = prob.submap), 
+#'                   title = "estimation procedure")
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
@@ -86,7 +70,7 @@
 #' @export est_full_hmm_with_prior_prob
 #'
 est_full_hmm_with_prior_prob<-function(input.map, dat.prob = NULL, phase.config = "best", 
-                                       tol = 10e-4, verbose = TRUE)
+                                       tol = 10e-4, verbose = FALSE)
 {
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")

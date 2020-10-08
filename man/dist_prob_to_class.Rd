@@ -25,7 +25,7 @@ a genotype probability distribution
 }
 \examples{
 \donttest{
-geno.dose <- dist_prob_to_class(tetra.solcap.geno.dist$geno)
+geno.dose <- dist_prob_to_class(hexafake.geno.dist$geno)
 geno.dose$geno.dose[1:10,1:10]
 }   
 }

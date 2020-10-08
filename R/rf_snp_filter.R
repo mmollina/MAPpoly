@@ -41,7 +41,6 @@
 #' See \code{\link[mappoly]{make_seq_mappoly}} for details
 #' 
 #' @examples
-#'  \donttest{
 #'     all.mrk<-make_seq_mappoly(hexafake, 1:20)
 #'     red.mrk<-elim_redundant(all.mrk)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
@@ -59,7 +58,6 @@
 #'     m1.filt<-rf_list_to_matrix(input.twopt = p1.filt)
 #'     plot(mat.full, main.text = "LG1")
 #'     plot(m1.filt, main.text = "LG1.filt")
-#'    }
 #'    
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} with updates by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'

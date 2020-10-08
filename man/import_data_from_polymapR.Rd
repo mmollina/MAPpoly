@@ -28,12 +28,10 @@ expected genotypes under no double reduction}
 Function to import datasets from polymapR
 }
 \examples{
-\donttest{
 require(polymapR)
 data("screened_data3")
 mappoly.data <- import_data_from_polymapR(screened_data3, 4)
 plot(mappoly.data)
-}
 
 }
 \references{

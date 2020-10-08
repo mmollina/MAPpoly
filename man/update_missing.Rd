@@ -19,8 +19,8 @@ Updates the missing data in the dosage matrix of an object of class
 }
 \examples{
 \donttest{
-data.updated = update_missing(tetra.solcap.geno.dist, prob.thres = 0.5)
-print(tetra.solcap.geno.dist)
+data.updated = update_missing(hexafake.geno.dist, prob.thres = 0.5)
+print(hexafake.geno.dist)
 print(data.updated)
 }
 }

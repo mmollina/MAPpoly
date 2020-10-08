@@ -99,7 +99,6 @@ compare_haplotypes(m = 4, best.phase$P[names.id],
 compare_haplotypes(m = 4, best.phase$Q[names.id], 
                    full.map$maps[[1]]$seq.ph$Q[names.id])
 }
-
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

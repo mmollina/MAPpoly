@@ -16,14 +16,12 @@
 #' @return A \code{data.frame} object containing the name of the markers and their genetic position
 #' 
 #' @examples
-#'  \donttest{
 #'  ## hexafake map
 #'  plot_map_list(maps.hexafake, horiz = FALSE)
 #'  plot_map_list(maps.hexafake, col = c("#999999", "#E69F00", "#56B4E9"))
 #'  
 #'  ## solcap map
 #'  plot_map_list(solcap.dose.map, col = "ggstyle")
-#'  }
 #'  
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'

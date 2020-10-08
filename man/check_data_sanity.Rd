@@ -18,9 +18,7 @@ if consistent, returns 0. If not consistent, returns a
 Checks the consistency of a dataset
 }
 \examples{
-\donttest{
 check_data_sanity(tetra.solcap)
-}
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

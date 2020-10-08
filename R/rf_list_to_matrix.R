@@ -47,7 +47,6 @@
 #'     information matrix
 #'
 #' @examples
-#'   \donttest{
 #'     all.mrk<-make_seq_mappoly(hexafake, 1:20)
 #'     red.mrk<-elim_redundant(all.mrk)
 #'     unique.mrks<-make_seq_mappoly(red.mrk)
@@ -59,7 +58,6 @@
 #'     mat.full<-rf_list_to_matrix(input.twopt=all.pairs)
 #'     plot(mat.full)
 #'     plot(mat.full, type = "lod")
-#'  }
 #'  
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
@@ -247,7 +245,7 @@ plot.mappoly.rf.matrix <- function(x, type = c("rf", "lod"), ord = NULL, rem = N
 }
 
 
-#' Select rf adn lod based on thresholds
+#' Select rf and lod based on thresholds
 #'
 #' @param void internal function to be documented
 #' @keywords internal

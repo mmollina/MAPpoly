@@ -1,21 +1,14 @@
 context("Estimate map with probabilities")
 test_that("map estimated correctly", {
-  map <- get_submap(solcap.prior.map[[1]], 1:10, reestimate.rf = FALSE)
-  mape <- est_full_hmm_with_global_error(map)
-  mapp <- est_full_hmm_with_prior_prob(map)
+  map <- get_submap(solcap.prior.map[[1]], c(1,3,5,7,9))
+  mape <- est_full_hmm_with_global_error(map, to = 10e-4)
+  mapp <- est_full_hmm_with_prior_prob(map, to = 10e-4)
   expect_equivalent(map$maps[[1]]$seq.rf, 
-                    c(0.030928345, 0.000100000, 0.000100000, 0.006987686, 0.006978596,
-                      0.009314603, 0.006089064, 0.014675723, 0.010374833))
+                    c(0.037783070, 0.001634628, 0.015620733, 0.016022936))
   expect_equivalent(mape$maps[[1]]$seq.rf, 
-                    c(0.022411061, 0.000010000, 0.000010000, 0.007022810, 0.007013837,
-                      0.008713443, 0.005086579, 0.015316109, 0.003529484))
+                    c(0.02923187, 0.00162774, 0.01649081, 0.01506356))
   expect_equivalent(mapp$maps[[1]]$seq.rf, 
-                    c(0.022411061, 0.000010000, 0.000010000, 0.007022810, 0.007013837,
-                      0.008713443, 0.005086579, 0.015316109, 0.003529484))
-  map <- get_submap(solcap.dose.map[[1]], 1:10, reestimate.rf = FALSE)
-  mape <- est_full_hmm_with_global_error(map)
-  expect_equivalent(map$maps[[1]]$seq.rf, 
-                    c(0.030964644, 0.000100000, 0.000100000, 0.006987554, 0.006978459,
-                      0.009315223, 0.006088936, 0.014674755, 0.010377167))
+                    c(0.02923187, 0.00162774, 0.01649081, 0.01506356))
+  map <- get_submap(solcap.dose.map[[1]], 1:5)
   expect_error(est_full_hmm_with_prior_prob(map))
 })

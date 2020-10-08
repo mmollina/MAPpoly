@@ -1,6 +1,6 @@
 /*
  MAPpoly: a package to construct genetic maps in autopolyploids
- Copyright (C) 2014-2018 Marcelo Mollinari
+ Copyright (C) 2014-2020 Marcelo Mollinari
  
  This file is part of MAPpoly.
  
@@ -14,8 +14,8 @@
  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  GNU General Public License for more details.
  
- You should have received a copy of the GNU General Public License
- along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ For a copy of the GNU General Public License, please visit
+ <http://www.gnu.org/licenses/>.
  */
 
 /*
@@ -27,7 +27,10 @@
  
  Function Written by Marcelo Mollinari.
  
- Contact: mmollina@ncsu.edu
+ Bioinformatics Research Center
+ Department of Horticultural Science
+ North Carolina State University
+ Contact: mmollin@ncsu.edu
  First version: Feb 04, 2020
  Last update:   Feb 04, 2020
  */

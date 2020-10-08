@@ -103,7 +103,7 @@ associated with each one of the possible dosages. \code{NA} represents missing d
 \examples{
 \donttest{
 #### Tetraploid Example
-ft="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/SolCAP"
+ft="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/hexa_sample"
 tempfl <- tempfile()
 download.file(ft, destfile = tempfl)
 SolCAP.dose.prob <- read_geno_prob(file.in  = tempfl)

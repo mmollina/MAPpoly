@@ -41,7 +41,6 @@
 #' with each number on the MDS configuration plots}
 #'
 #' @examples
-#'  \donttest{
 #'     s1 <- make_seq_mappoly(hexafake, 1:20)
 #'     t1 <- est_pairwise_rf(s1, ncpus = 1)
 #'     m1 <- rf_list_to_matrix(t1)
@@ -53,7 +52,6 @@
 #'     plot(so$seq.num ~ I(so$sequence.pos/1e6), 
 #'          xlab = "Genome Position",
 #'          ylab = "MDS position")
-#'    }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} mostly adapted from MDSmap 
 #'         codes, written by Katharine F. Preedy, \email{katharine.preedy@bioss.ac.uk}

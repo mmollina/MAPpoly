@@ -61,7 +61,6 @@ Remove markers that do not meet a LOD and recombination fraction
     set of analyzed markers.
 }
 \examples{
- \donttest{
     all.mrk<-make_seq_mappoly(hexafake, 1:20)
     red.mrk<-elim_redundant(all.mrk)
     unique.mrks<-make_seq_mappoly(red.mrk)
@@ -79,7 +78,6 @@ Remove markers that do not meet a LOD and recombination fraction
     m1.filt<-rf_list_to_matrix(input.twopt = p1.filt)
     plot(mat.full, main.text = "LG1")
     plot(m1.filt, main.text = "LG1.filt")
-   }
    
 }
 \references{
