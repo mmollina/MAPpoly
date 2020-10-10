@@ -23,7 +23,7 @@ The mapping strategy is based on using pairwise recombination fraction estimatio
 
 # Installation
 
-## From CRAN (stable version - not available yet)
+## From CRAN (stable version)
 
 To install MAPpoly from the The Comprehensive R Archive Network (CRAN) use
 
