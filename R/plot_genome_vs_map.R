@@ -62,6 +62,7 @@ plot_genome_vs_map<-function(map.list, phase.config = "best", same.ch.lg = FALSE
                                   LG = as.factor(i),
                                   chr = as.factor(map.list[[i]]$info$sequence)))
   }
+  geno.vs.map$chr <- factor(geno.vs.map$chr, levels = sort(levels(geno.vs.map$chr))) 
   if(same.ch.lg){
     p<-ggplot2::ggplot(geno.vs.map, ggplot2::aes(genomic.pos, map.pos)) +
       ggplot2::geom_point(alpha = 1/5, ggplot2::aes(colour = LG)) +
@@ -73,7 +74,7 @@ plot_genome_vs_map<-function(map.list, phase.config = "best", same.ch.lg = FALSE
   } else {
     p<-ggplot2::ggplot(geno.vs.map, ggplot2::aes(genomic.pos, map.pos)) +
       ggplot2::geom_point(alpha = 1/5, ggplot2::aes(colour = LG)) +
-      ggplot2::facet_grid(chr~LG) + 
+      ggplot2::facet_grid(LG~chr) + 
       ggplot2::labs(x = "Genome position (Mbp)", y = "Map position (cM)") +
       ggplot2::theme_bw() +
       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1), legend.position="none") 
