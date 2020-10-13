@@ -169,7 +169,13 @@ int get_depth(std::string mystring, int dp_pos){
   std::string temp = mystring.substr(start, i - start);
   vec_o_strings.push_back(temp);
   // Returning DP
-  start = stoi(vec_o_strings[dp_pos-1]);
+  if (vec_o_strings.size() < dp_pos) {
+    start = 0;
+  } else if (vec_o_strings[dp_pos-1] == ".") {
+    start = 0;
+  } else {
+    start = stoi(vec_o_strings[dp_pos-1]);
+  }
   return start;
 }
 

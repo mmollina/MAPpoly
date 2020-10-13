@@ -129,8 +129,8 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
   seq.alt = input.data@fix[,5] # Getting alternative alleles
   names(seq.alt)  = mrk.names
   if (verbose) cat("Processing genotypes...")
-  cname = which(unlist(strsplit(unique(input.data@gt[,1]), ":")) == "GT") # Defining GT position
-  dname = which(unlist(strsplit(unique(input.data@gt[,1]), ":")) == "DP") # Defining DP position
+  cname = which(unlist(strsplit(unique(input.data@gt[,1]), ":")) == "GT")[1] # Defining GT position
+  dname = which(unlist(strsplit(unique(input.data@gt[,1]), ":")) == "DP")[1] # Defining DP position
   ## file.ploidy = length(unlist(strsplit(unique(input.data@gt[,2])[1], "/"))) # Checking ploidy (old)
   geno.ploidy = .vcf_get_ploidy(input.data@gt[,-1], cname) # Getting all ploidy levels
   geno.depth = .vcf_get_depth(input.data@gt[,-1], dname) # Getting all depths
