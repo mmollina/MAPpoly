@@ -1507,7 +1507,7 @@ sample_data <- function(input.data, n = NULL,
       selected.mrk.id <- sort(sample(input.data$n.mrk, n))
     } else if(!is.null(percentage)){
       selected.mrk.id <- sort(sample(input.data$n.mrk, ceiling(input.data$n.mrk * percentage/100)))
-    } else if(!is.null(selected.ind)){
+    } else if(!is.null(selected.mrk)){
       selected.mrk.id <- match(selected.mrk, input.data$mrk.names)
     } else{
       stop("Inform 'n', 'percentage' or selected.mrk.")
@@ -1536,4 +1536,3 @@ sample_data <- function(input.data, n = NULL,
   }
   else stop("Inform type")
 }
-
