@@ -1338,7 +1338,7 @@ summary_maps = function(map.list, verbose = TRUE){
     stop(deparse(substitute(map.list)), 
          " is not a list containing 'mappoly.map' objects.")
   results = data.frame("LG" = as.character(seq(1,length(map.list),1)),
-                       "Genomic sequence" = as.character(unlist(lapply(map.list, function(x) unique(get(x$info$data.name, pos = 1)$sequence[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)])))),
+                       "Genomic sequence" = as.character(unlist(lapply(map.list, function(x) paste(unique(x$info$sequence), collapse = "-")))),
                        "Map size (cM)" = unlist(lapply(map.list, function(x) round(sum(c(0, imf_h(x$maps[[1]]$seq.rf))), 2))),
                        "Markers/cM" = round(unlist(lapply(map.list, function(x) x$info$n.mrk/(round(sum(c(0, imf_h(x$maps[[1]]$seq.rf))), 2)))),2),
                        "Simplex" = unlist(lapply(map.list, function(x) sum(get_tab_mrks(x)[rbind(c(1,2),c(2,1),c(x$info$m,(x$info$m+1)),c((x$info$m+1),x$info$m))]))),
