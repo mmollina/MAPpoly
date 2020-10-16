@@ -115,14 +115,15 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
   n.mrk = dim(input.data@gt)[1] # Getting number of markers
   n.ind = length(ind.names) - 2 # Number of individuals excepting two parents
   mrk.names = mrk.names.all = input.data@fix[,3] # Getting marker names
-  if (any(is.na(unique(mrk.names)))){
-    if (verbose) cat("No named markers. Using integers instead.\n")
-    no_name = sum(is.na(mrk.names))
-    mrk.names[which(is.na(mrk.names))] = paste0("no_name_", seq(1, no_name, 1))
-  }
   sequence = input.data@fix[,1] # Getting chromosome information
-  names(sequence)  = mrk.names
   sequence.pos = as.numeric(input.data@fix[,2]) # Getting positions
+  if (any(is.na(unique(mrk.names)))){
+      if (verbose) cat("No named markers. Using integers instead.\n")
+      no_name = sum(is.na(mrk.names))
+      ##mrk.names[which(is.na(mrk.names))] = paste0("no_name_", seq(1, no_name, 1))
+      mrk.names[which(is.na(mrk.names))] = paste0(sequence[which(is.na(mrk.names))], sequence.pos[which(is.na(mrk.names))])
+  }
+  names(sequence)  = mrk.names
   names(sequence.pos)  = mrk.names
   seq.ref = input.data@fix[,4] # Getting reference alleles
   names(seq.ref)  = mrk.names
