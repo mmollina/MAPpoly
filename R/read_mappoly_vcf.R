@@ -121,7 +121,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
       if (verbose) cat("No named markers. Using integers instead.\n")
       no_name = sum(is.na(mrk.names))
       ##mrk.names[which(is.na(mrk.names))] = paste0("no_name_", seq(1, no_name, 1))
-      mrk.names[which(is.na(mrk.names))] = paste0(sequence[which(is.na(mrk.names))], sequence.pos[which(is.na(mrk.names))])
+      mrk.names[which(is.na(mrk.names))] = paste0(sequence[which(is.na(mrk.names))],"_", sequence.pos[which(is.na(mrk.names))])
   }
   names(sequence)  = mrk.names
   names(sequence.pos)  = mrk.names
