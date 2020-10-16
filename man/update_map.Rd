@@ -4,13 +4,15 @@
 \alias{update_map}
 \title{Update map}
 \usage{
-update_map(input.map)
+update_map(input.maps, verbose = TRUE)
 }
 \arguments{
-\item{input.map}{an map object of class \code{mappoly.map}}
+\item{input.maps}{a single map or a list of maps of class \code{mappoly.map}}
+
+\item{verbose}{if TRUE (default), shows information about each map update}
 }
 \value{
-an updated object of class \code{mappoly.map}, containing the original map plus redundant markers
+an updated map (or list of maps) of class \code{mappoly.map}, containing the original map(s) plus redundant markers
 }
 \description{
 This function takes an object of class \code{mappoly.map} and checks for
