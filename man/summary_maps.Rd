@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{summary_maps}
 \alias{summary_maps}
-\title{Summary map}
+\title{Summary maps}
 \usage{
 summary_maps(map.list, verbose = TRUE)
 }

@@ -1320,7 +1320,7 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
   return(dat.1)
 }
 
-#' Summary map
+#' Summary maps
 #'
 #' This function generates a brief summary table of a list of \code{mappoly.map} objects
 #' @param map.list a list of objects of class \code{mappoly.map}
@@ -1348,8 +1348,10 @@ summary_maps = function(map.list, verbose = TRUE){
                        "Max gap" = unlist(lapply(map.list, function(x) round(imf_h(max(x$maps[[1]]$seq.rf)),2))),
                        check.names = FALSE, stringsAsFactors = F)
   results = rbind(results, c('Total', NA, sum(as.numeric(results$`Map size (cM)`)), round(mean(as.numeric(results$`Markers/cM`)),2), sum(as.numeric(results$Simplex)), sum(as.numeric(results$`Double-simplex`)), sum(as.numeric(results$Multiplex)), sum(as.numeric(results$Total)), round(mean(as.numeric(results$`Max gap`)),2)))
-  if (verbose && !is.null(get(map.list[[1]]$info$data.name, pos = 1)$elim.correspondence)){
-    message("\nYour dataset contains removed (redundant) markers. Once finished the map, remember to add them back with the function 'update_map'.\n")
+  if (verbose){
+    all.mrks = unlist(lapply(map.list, function(x) return(x$info$mrk.names)))
+    if (!any(get(map.list[[1]]$info$data.name, pos = 1)$elim.correspondence$elim %in% all.mrks))
+      message("\nYour dataset contains removed (redundant) markers. Once finished the maps, remember to add them back with the function 'update_map'.\n")
   }
   return(results)
 }
@@ -1389,8 +1391,9 @@ get_tab_mrks = function(x){
 #' are found, they are re-added to the map in their respective equivalent positions
 #' and another HMM round is performed.
 #' 
-#' @param input.map an map object of class \code{mappoly.map}
-#' @return an updated object of class \code{mappoly.map}, containing the original map plus redundant markers
+#' @param input.maps a single map or a list of maps of class \code{mappoly.map}
+#' @param verbose if TRUE (default), shows information about each map update
+#' @return an updated map (or list of maps) of class \code{mappoly.map}, containing the original map(s) plus redundant markers
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' @examples
 #' orig.map <- solcap.err.map
@@ -1399,53 +1402,104 @@ get_tab_mrks = function(x){
 #' summary_maps(up.map)
 #' @export update_map
 #' 
-update_map = function(input.map){
+update_map = function(input.maps, verbose = TRUE){
   ## Checking object
-  if (!inherits(input.map, "mappoly.map")) {
-    stop(deparse(substitute(input.map)), 
-         " is not an object of class 'mappoly.map'")
+  if (inherits(input.maps, "mappoly.map"))
+    input.maps = list(input.maps)
+  if(!inherits(input.maps, "list"))
+    stop(deparse(substitute(input.maps)), 
+         " is not an object of class 'mappoly.map' neither a list containing 'mappoly.map' objects.")
+  if (any(!sapply(input.maps, inherits, "mappoly.map"))) 
+    stop(deparse(substitute(input.maps)), 
+         " is not an object of class 'mappoly.map' neither a list containing 'mappoly.map' objects.")
+
+  ## Creating list to handle results
+  results = list()
+  for (i in 1:length(input.maps)){
+    if (verbose) cat("Updating map", i , "\n")    
+    input.map = input.maps[[i]]
+    ## Checking the existence of redundant markers
+    if (is.null(get(input.map$info$data.name, pos = 1)$elim.correspondence))
+      stop('Your dataset does not contain redundant markers. Please check it and try again.')
+    ## Checking if redundant markers belong to the informed map
+    map.kept.mrks = which(as.character(get(input.map$info$data.name, pos = 1)$elim.correspondence$kept) %in% input.map$info$mrk.names)
+    if (is.null(map.kept.mrks))
+      stop("The redundant markers do not belong to the informed map. Please check it and try again.")
+    corresp = get(input.map$info$data.name, pos = 1)$elim.correspondence[which(as.character(get(input.map$info$data.name, pos = 1)$elim.correspondence$kept) %in% input.map$info$mrk.names),]
+    
+    ## Check if redundant markers were not already added to the map
+    if (any(corresp$elim %in% input.map$info$mrk.names)) {
+      warning("Some redundant markers were already added to the map. These markers will be skipped.")
+      corresp = corresp[!(corresp$elim %in% input.map$info$mrk.names),]
+    }
+    
+    ## Updating number of markers
+    input.map$info$n.mrk = input.map$info$n.mrk + nrow(corresp)
+    
+    ## Adding markers to the sequence
+    mrk.old = input.map$info$mrk.names
+    chrom.old = input.map$info$sequence
+    pos.old = input.map$info$sequence.pos
+    seq.ref.old = input.map$info$seq.ref
+    seq.alt.old = input.map$info$seq.alt
+    chisq.old = input.map$info$chisq.pval
+    seq.dose.p.old = input.map$info$seq.dose.p
+    seq.dose.q.old = input.map$info$seq.dose.q
+    seq.old = input.map$maps[[1]]$seq.num
+    rf.old = input.map$maps[[1]]$seq.rf
+    phase.P = input.map$maps[[1]]$seq.ph$P
+    phase.Q = input.map$maps[[1]]$seq.ph$Q
+    while (nrow(corresp) > 0){
+      pos.kep = match(as.character(corresp$kept), get(input.map$info$data.name, pos = 1)$mrk.names)
+      ##pos.red = which(get(input.map$info$data.name, pos = 1)$mrk.names %in% as.character(corresp$elim)) # Not needed anymore
+      seq.old = append(seq.old, NA, after = which(seq.old == pos.kep[1]))
+      chisq.old = append(chisq.old, chisq.old[which(seq.old == pos.kep[1])], after = which(seq.old == pos.kep[1]))
+      seq.dose.p.old = append(seq.dose.p.old, seq.dose.p.old[which(seq.old == pos.kep[1])], after = which(seq.old == pos.kep[1]))
+      seq.dose.q.old = append(seq.dose.q.old, seq.dose.q.old[which(seq.old == pos.kep[1])], after = which(seq.old == pos.kep[1]))
+      chrom.old = append(chrom.old, as.character(corresp$sequence[1]), after = which(seq.old == pos.kep[1]))
+      pos.old = append(pos.old, as.character(corresp$sequence.pos[1]), after = which(seq.old == pos.kep[1]))
+      if (!is.null(seq.ref.old))
+          seq.ref.old = append(seq.ref.old, as.character(corresp$seq.ref[1]), after = which(seq.old == pos.kep[1]))
+      if (!is.null(seq.alt.old))
+          seq.alt.old = append(seq.alt.old, as.character(corresp$seq.alt[1]), after = which(seq.old == pos.kep[1]))
+      rf.old = append(rf.old, 0.000, after = which(seq.old == pos.kep[1]))
+      mrk.old = append(mrk.old, as.character(corresp$elim[1]), after = which(mrk.old == as.character(corresp$kept[1])))
+
+      phase.P = append(phase.P, phase.P[paste0(pos.kep[1])], after = which(seq.old == pos.kep[1]))
+      phase.Q = append(phase.Q, phase.Q[paste0(pos.kep[1])], after = which(seq.old == pos.kep[1]))
+      ##phase.P[[paste0(pos.red[1])]] = phase.P[[paste0(pos.kep[1])]]
+      ##phase.Q[[paste0(pos.red[1])]] = phase.Q[[paste0(pos.kep[1])]]
+      corresp = corresp[-1,]
+    }
+    ##phase.P = phase.P[as.character(seq.old)]
+    ##phase.Q = phase.Q[as.character(seq.old)]
+
+    ## Renaming vectors
+    names(chrom.old) = names(pos.old) = names(chisq.old) = names(seq.dose.p.old) = names(seq.dose.q.old) = names(seq.old) = mrk.old
+    names(phase.P) = names(phase.Q) = as.character(seq.old)
+    if (!is.null(seq.ref.old) && !is.null(seq.ref.old))
+      names(seq.ref.old) = names(seq.alt.old) = mrk.old
+
+    ## Updating map information
+    input.map$info$mrk.names = mrk.old
+    input.map$info$sequence = chrom.old
+    input.map$info$sequence.pos = pos.old
+    input.map$info$seq.dose.p = seq.dose.p.old
+    input.map$info$seq.dose.q = seq.dose.q.old
+    input.map$info$chisq.pval = chisq.old
+    if (!is.null(seq.ref.old) && !is.null(seq.ref.old)){
+      input.map$info$seq.ref = seq.ref.old
+      input.map$info$seq.alt = seq.alt.old
+    }
+    input.map$maps[[1]]$seq.num = input.map$info$seq.num = seq.old
+    input.map$maps[[1]]$seq.rf = rf.old
+    input.map$maps[[1]]$seq.ph$P = phase.P
+    input.map$maps[[1]]$seq.ph$Q = phase.Q
+    results[[i]] = input.map
   }
-  ## Checking the existence of redundant markers
-  if (is.null(get(input.map$info$data.name, pos = 1)$elim.correspondence)) stop('Your dataset does not contain redundant markers. Please check it and try again.')
-  ## Checking if redundant markers belong to the informed map
-  map.kept.mrks = which(as.character(get(input.map$info$data.name, pos = 1)$elim.correspondence$kept) %in% input.map$info$mrk.names)
-  if (is.null(map.kept.mrks)) stop("The redundant markers does not belong to the informed map. Please check it and try again.")
-  corresp = get(input.map$info$data.name, pos = 1)$elim.correspondence[which(as.character(get(input.map$info$data.name, pos = 1)$elim.correspondence$kept) %in% input.map$info$mrk.names),]
-  
-  ## Check if redundant markers were not already added to the map
-  if (any(corresp$elim %in% input.map$info$mrk.names)) {
-    warning("Some redundant markers were already added to the map. These markers will be skipped.")
-    corresp = corresp[!(corresp$elim %in% input.map$info$mrk.names),]
-  }
-  
-  ## Updating number of markers
-  input.map$info$n.mrk = input.map$info$n.mrk + nrow(corresp)
-  
-  ## Adding markers to the sequence
-  mrk.old = input.map$info$mrk.names
-  seq.old = input.map$maps[[1]]$seq.num
-  rf.old = input.map$maps[[1]]$seq.rf
-  phase.P = input.map$maps[[1]]$seq.ph$P
-  phase.Q = input.map$maps[[1]]$seq.ph$Q
-  while (nrow(corresp) > 0){
-    pos.kep = match(as.character(corresp$kept), get(input.map$info$data.name, pos = 1)$mrk.names)
-    pos.red = which(get(input.map$info$data.name, pos = 1)$mrk.names %in% as.character(corresp$elim))
-    seq.old = append(seq.old, pos.red[1], after = which(seq.old == pos.kep[1]))
-    rf.old = append(rf.old, 0.000, after = which(seq.old == pos.kep[1]))
-    mrk.old = append(mrk.old, as.character(corresp$elim[1]), after = which(mrk.old == as.character(corresp$kept[1])))
-    phase.P[[paste0(pos.red[1])]] = phase.P[[paste0(pos.kep[1])]]
-    phase.Q[[paste0(pos.red[1])]] = phase.Q[[paste0(pos.kep[1])]]
-    corresp = corresp[-1,]
-  }
-  phase.P = phase.P[as.character(seq.old)]
-  phase.Q = phase.Q[as.character(seq.old)]
-  
-  input.map$info$mrk.names = mrk.old
-  input.map$maps[[1]]$seq.num = seq.old
-  input.map$maps[[1]]$seq.rf = rf.old
-  input.map$maps[[1]]$seq.ph$P = phase.P
-  input.map$maps[[1]]$seq.ph$Q = phase.Q
-  return(input.map)
+  if (length(results) == 1)
+    return(results[[1]])
+  else return(results)
 }
 
 #' Random sampling of dataset
