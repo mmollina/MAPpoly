@@ -9,7 +9,7 @@ update_map(input.maps, verbose = TRUE)
 \arguments{
 \item{input.maps}{a single map or a list of maps of class \code{mappoly.map}}
 
-\item{verbose}{if TRUE (default), shows information about each map update}
+\item{verbose}{if TRUE (default), shows information about each update process}
 }
 \value{
 an updated map (or list of maps) of class \code{mappoly.map}, containing the original map(s) plus redundant markers

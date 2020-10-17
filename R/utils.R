@@ -1392,7 +1392,7 @@ get_tab_mrks = function(x){
 #' and another HMM round is performed.
 #' 
 #' @param input.maps a single map or a list of maps of class \code{mappoly.map}
-#' @param verbose if TRUE (default), shows information about each map update
+#' @param verbose if TRUE (default), shows information about each update process
 #' @return an updated map (or list of maps) of class \code{mappoly.map}, containing the original map(s) plus redundant markers
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #' @examples
@@ -1412,93 +1412,60 @@ update_map = function(input.maps, verbose = TRUE){
   if (any(!sapply(input.maps, inherits, "mappoly.map"))) 
     stop(deparse(substitute(input.maps)), 
          " is not an object of class 'mappoly.map' neither a list containing 'mappoly.map' objects.")
-
+  ## Checking the existence of redundant markers
+  if (is.null(get(input.maps[[1]]$info$data.name, pos = 1)$elim.correspondence))
+    stop('Your dataset does not contain redundant markers. Please check it and try again.')
   ## Creating list to handle results
   results = list()
   for (i in 1:length(input.maps)){
     if (verbose) cat("Updating map", i , "\n")    
     input.map = input.maps[[i]]
-    ## Checking the existence of redundant markers
-    if (is.null(get(input.map$info$data.name, pos = 1)$elim.correspondence))
-      stop('Your dataset does not contain redundant markers. Please check it and try again.')
     ## Checking if redundant markers belong to the informed map
     map.kept.mrks = which(as.character(get(input.map$info$data.name, pos = 1)$elim.correspondence$kept) %in% input.map$info$mrk.names)
-    if (is.null(map.kept.mrks))
-      stop("The redundant markers do not belong to the informed map. Please check it and try again.")
+    if (is.null(map.kept.mrks)){
+      if (verbose) cat("There is no redundant marker on map ",i,". Skipping it.\n")
+      next
+    }
     corresp = get(input.map$info$data.name, pos = 1)$elim.correspondence[which(as.character(get(input.map$info$data.name, pos = 1)$elim.correspondence$kept) %in% input.map$info$mrk.names),]
-    
     ## Check if redundant markers were not already added to the map
     if (any(corresp$elim %in% input.map$info$mrk.names)) {
-      warning("Some redundant markers were already added to the map. These markers will be skipped.")
+      if (verbose) cat("Some redundant markers were already added to the map ", i,". These markers will be skipped.\n")
       corresp = corresp[!(corresp$elim %in% input.map$info$mrk.names),]
     }
-    
     ## Updating number of markers
     input.map$info$n.mrk = input.map$info$n.mrk + nrow(corresp)
-    
     ## Adding markers to the sequence
-    mrk.old = input.map$info$mrk.names
-    chrom.old = input.map$info$sequence
-    pos.old = input.map$info$sequence.pos
-    seq.ref.old = input.map$info$seq.ref
-    seq.alt.old = input.map$info$seq.alt
-    chisq.old = input.map$info$chisq.pval
-    seq.dose.p.old = input.map$info$seq.dose.p
-    seq.dose.q.old = input.map$info$seq.dose.q
-    seq.old = input.map$maps[[1]]$seq.num
-    rf.old = input.map$maps[[1]]$seq.rf
-    phase.P = input.map$maps[[1]]$seq.ph$P
-    phase.Q = input.map$maps[[1]]$seq.ph$Q
     while (nrow(corresp) > 0){
       pos.kep = match(as.character(corresp$kept), get(input.map$info$data.name, pos = 1)$mrk.names)
-      ##pos.red = which(get(input.map$info$data.name, pos = 1)$mrk.names %in% as.character(corresp$elim)) # Not needed anymore
-      seq.old = append(seq.old, NA, after = which(seq.old == pos.kep[1]))
-      chisq.old = append(chisq.old, chisq.old[which(seq.old == pos.kep[1])], after = which(seq.old == pos.kep[1]))
-      seq.dose.p.old = append(seq.dose.p.old, seq.dose.p.old[which(seq.old == pos.kep[1])], after = which(seq.old == pos.kep[1]))
-      seq.dose.q.old = append(seq.dose.q.old, seq.dose.q.old[which(seq.old == pos.kep[1])], after = which(seq.old == pos.kep[1]))
-      chrom.old = append(chrom.old, as.character(corresp$sequence[1]), after = which(seq.old == pos.kep[1]))
-      pos.old = append(pos.old, as.character(corresp$sequence.pos[1]), after = which(seq.old == pos.kep[1]))
-      if (!is.null(seq.ref.old))
-          seq.ref.old = append(seq.ref.old, as.character(corresp$seq.ref[1]), after = which(seq.old == pos.kep[1]))
-      if (!is.null(seq.alt.old))
-          seq.alt.old = append(seq.alt.old, as.character(corresp$seq.alt[1]), after = which(seq.old == pos.kep[1]))
-      rf.old = append(rf.old, 0.000, after = which(seq.old == pos.kep[1]))
-      mrk.old = append(mrk.old, as.character(corresp$elim[1]), after = which(mrk.old == as.character(corresp$kept[1])))
-
-      phase.P = append(phase.P, phase.P[paste0(pos.kep[1])], after = which(seq.old == pos.kep[1]))
-      phase.Q = append(phase.Q, phase.Q[paste0(pos.kep[1])], after = which(seq.old == pos.kep[1]))
-      ##phase.P[[paste0(pos.red[1])]] = phase.P[[paste0(pos.kep[1])]]
-      ##phase.Q[[paste0(pos.red[1])]] = phase.Q[[paste0(pos.kep[1])]]
+      input.map$info$seq.num = append(input.map$info$seq.num, NA, after = which(input.map$info$seq.num == pos.kep[1]))
+      input.map$info$chisq.pval = append(input.map$info$chisq.pval, input.map$info$chisq.pval[which(input.map$info$seq.num == pos.kep[1])], after = which(input.map$info$seq.num == pos.kep[1]))
+      input.map$info$seq.dose.p = append(input.map$info$seq.dose.p, input.map$info$seq.dose.p[which(input.map$info$seq.num == pos.kep[1])], after = which(input.map$info$seq.num == pos.kep[1]))
+      input.map$info$seq.dose.q = append(input.map$info$seq.dose.q, input.map$info$seq.dose.q[which(input.map$info$seq.num == pos.kep[1])], after = which(input.map$info$seq.num == pos.kep[1]))
+      input.map$info$sequence = append(input.map$info$sequence, as.character(corresp$sequence[1]), after = which(input.map$info$seq.num == pos.kep[1]))
+      input.map$info$sequence.pos = append(input.map$info$sequence.pos, as.character(corresp$sequence.pos[1]), after = which(input.map$info$seq.num == pos.kep[1]))
+      input.map$info$mrk.names = append(input.map$info$mrk.names, as.character(corresp$elim[1]), after = which(input.map$info$mrk.names == as.character(corresp$kept[1])))
+      if (!is.null(input.map$info$seq.ref) && !is.null(input.map$info$seq.alt)){
+        input.map$info$seq.ref = append(input.map$info$seq.ref, as.character(corresp$seq.ref[1]), after = which(input.map$info$seq.num == pos.kep[1]))
+        input.map$info$seq.alt = append(input.map$info$seq.alt, as.character(corresp$seq.alt[1]), after = which(input.map$info$seq.num == pos.kep[1]))
+      }
+      for (j in 1:length(input.map$maps)){
+        input.map$maps[[j]]$seq.rf = append(input.map$maps[[j]]$seq.rf, 0.000001, after = which(input.map$info$seq.num == pos.kep[1]))
+        input.map$maps[[j]]$seq.ph$P = append(input.map$maps[[j]]$seq.ph$P, input.map$maps[[j]]$seq.ph$P[paste0(pos.kep[1])], after = which(input.map$info$seq.num == pos.kep[1]))
+        input.map$maps[[j]]$seq.ph$Q = append(input.map$maps[[j]]$seq.ph$Q, input.map$maps[[j]]$seq.ph$Q[paste0(pos.kep[1])], after = which(input.map$info$seq.num == pos.kep[1]))
+      }
       corresp = corresp[-1,]
     }
-    ##phase.P = phase.P[as.character(seq.old)]
-    ##phase.Q = phase.Q[as.character(seq.old)]
-
-    ## Renaming vectors
-    names(chrom.old) = names(pos.old) = names(chisq.old) = names(seq.dose.p.old) = names(seq.dose.q.old) = names(seq.old) = mrk.old
-    names(phase.P) = names(phase.Q) = as.character(seq.old)
-    if (!is.null(seq.ref.old) && !is.null(seq.ref.old))
-      names(seq.ref.old) = names(seq.alt.old) = mrk.old
-
-    ## Updating map information
-    input.map$info$mrk.names = mrk.old
-    input.map$info$sequence = chrom.old
-    input.map$info$sequence.pos = pos.old
-    input.map$info$seq.dose.p = seq.dose.p.old
-    input.map$info$seq.dose.q = seq.dose.q.old
-    input.map$info$chisq.pval = chisq.old
-    if (!is.null(seq.ref.old) && !is.null(seq.ref.old)){
-      input.map$info$seq.ref = seq.ref.old
-      input.map$info$seq.alt = seq.alt.old
+    ## Renaming objects and updating map information
+    names(input.map$info$sequence) = names(input.map$info$sequence.pos) = names(input.map$info$chisq.pval) = names(input.map$info$seq.dose.p) = names(input.map$info$seq.dose.q) = names(input.map$info$seq.num) = input.map$info$mrk.names
+    for (j in 1:length(input.map$maps)){
+      names(input.map$maps[[j]]$seq.ph$P) = names(input.map$maps[[j]]$seq.ph$Q) = as.character(input.map$info$seq.num)
+      input.map$maps[[j]]$seq.num = input.map$info$seq.num
     }
-    input.map$maps[[1]]$seq.num = input.map$info$seq.num = seq.old
-    input.map$maps[[1]]$seq.rf = rf.old
-    input.map$maps[[1]]$seq.ph$P = phase.P
-    input.map$maps[[1]]$seq.ph$Q = phase.Q
+    if (!is.null(input.map$info$seq.ref) && !is.null(input.map$info$seq.alt))
+      names(input.map$info$seq.ref) = names(input.map$info$seq.alt) = input.map$info$mrk.names
     results[[i]] = input.map
   }
-  if (length(results) == 1)
-    return(results[[1]])
+  if (length(results) == 1) return(results[[1]])
   else return(results)
 }
 
