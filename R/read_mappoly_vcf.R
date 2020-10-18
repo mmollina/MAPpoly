@@ -118,7 +118,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
   sequence = input.data@fix[,1] # Getting chromosome information
   sequence.pos = as.numeric(input.data@fix[,2]) # Getting positions
   if (any(is.na(unique(mrk.names)))){
-      if (verbose) cat("No named markers. Using integers instead.\n")
+      if (verbose) cat("No named markers. Using genome information instead.\n")
       no_name = sum(is.na(mrk.names))
       ##mrk.names[which(is.na(mrk.names))] = paste0("no_name_", seq(1, no_name, 1))
       mrk.names[which(is.na(mrk.names))] = paste0(sequence[which(is.na(mrk.names))],"_", sequence.pos[which(is.na(mrk.names))])
