@@ -1442,7 +1442,7 @@ update_map = function(input.maps, verbose = TRUE){
       input.map$info$seq.dose.p = append(input.map$info$seq.dose.p, input.map$info$seq.dose.p[which(input.map$info$seq.num == pos.kep[1])], after = which(input.map$info$seq.num == pos.kep[1]))
       input.map$info$seq.dose.q = append(input.map$info$seq.dose.q, input.map$info$seq.dose.q[which(input.map$info$seq.num == pos.kep[1])], after = which(input.map$info$seq.num == pos.kep[1]))
       input.map$info$sequence = as.numeric(append(input.map$info$sequence, as.character(corresp$sequence[1]), after = which(input.map$info$seq.num == pos.kep[1])))
-      input.map$info$sequence.pos = as.numeirc(append(input.map$info$sequence.pos, as.character(corresp$sequence.pos[1]), after = which(input.map$info$seq.num == pos.kep[1])))
+      input.map$info$sequence.pos = as.numeric(append(input.map$info$sequence.pos, as.character(corresp$sequence.pos[1]), after = which(input.map$info$seq.num == pos.kep[1])))
       input.map$info$mrk.names = append(input.map$info$mrk.names, as.character(corresp$elim[1]), after = which(input.map$info$mrk.names == as.character(corresp$kept[1])))
       if (!is.null(input.map$info$seq.ref) && !is.null(input.map$info$seq.alt)){
         input.map$info$seq.ref = append(input.map$info$seq.ref, as.character(corresp$seq.ref[1]), after = which(input.map$info$seq.num == pos.kep[1]))
