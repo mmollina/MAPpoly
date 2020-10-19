@@ -240,7 +240,7 @@ merge_maps<-function(map.list,
     return(output.map)
   } else { 
     ##sequential phasing
-    ## FIXME: instead of computing genoprob for each round of block insetion$
+    ## FIXME: instead of computing genoprob for each round of block insertion$
     ## Inherit from previous rounds
     out.map <- map.list[[1]]
     for(i in 2:length(map.list)){
@@ -255,7 +255,7 @@ merge_maps<-function(map.list,
     out.map$info$sequence <- unlist(sapply(map.list, function(x) x$info$sequence))
     out.map$info$sequence.pos <- unlist(sapply(map.list, function(x) x$info$sequence.pos))
     out.map$info$chisq.pval <- unlist(sapply(map.list, function(x) x$info$chisq.pval))
-    ##spliting to reestimate
+    ##splitting to reestimate
     map.list2 <- vector("list", length(map.list))
     for(i in 1:length(map.list)){
       suppressMessages(map.list2[[i]] <- get_submap(out.map, mrk.pos = match(map.list[[i]]$info$mrk.names, out.map$info$mrk.names), reestimate.rf = FALSE))

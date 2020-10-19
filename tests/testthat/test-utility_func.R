@@ -21,7 +21,7 @@ test_that("test several utility functions", {
   expect_error(get_w_m(0))
   expect_error(get_w_m(3))
   rm<-rev_map(maps.hexafake[[1]])
-  expect_identical(sum(rm$maps[[1]]$seq.rf), sum(maps.hexafake[[1]]$maps[[1]]$seq.rf))
+  expect_equal(sum(rm$maps[[1]]$seq.rf), sum(maps.hexafake[[1]]$maps[[1]]$seq.rf), tolerance = 10e-5)
   a1<-sample_data(tetra.solcap.geno.dist, n = 20, type = "marker")
   a2<-sample_data(a1, n = 20, type = "individual")
   plot(a2)
