@@ -805,11 +805,11 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
          xlab = "",
          ylim = c(.25, 4.5))
     zy <- zy - 1.1
-    mtext(text = P, side = 4, at = mean(zy), line = -1, font = 4)
+    mtext(text = Q, side = 4, at = mean(zy), line = -1, font = 4)
     for(i in 1:m)
       mtext(letters[(m+1):(2*m)][i], line = 0, at = zy[i], side = 4)
     zy <- zy + 1.1
-    mtext(text = Q, side = 4, at = mean(zy), line = -1, font = 4)
+    mtext(text = P, side = 4, at = mean(zy), line = -1, font = 4)
     for(i in 1:m)
       mtext(letters[1:m][i],  line = 0, at = zy[i], side = 4)
     par(mar = c(0,1,2,4), xpd=FALSE)
