@@ -130,7 +130,7 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
   }
   est.type = match.arg(est.type)
   ## Checking for genotype probability 
-  if(!exists('geno', where = get(input.seq$data.name, pos=1))){
+  if(!exists('geno', where = get(input.seq$data.name, pos=1)) & est.type != "disc"){
     warning("There is no probabilistic dosage scoring in the dataset. Using est.type = 'disc'")
     est.type <- "disc"
   }
