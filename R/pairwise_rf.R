@@ -20,6 +20,9 @@
 #' @param n.batches The number of batches of marker pairs that should be analyzed 
 #'    in parallel. Using \code{n.batches > 1}, will usually result in more processing 
 #'    time. However, it will require less memory. See examples.
+#'    
+#' @param est.type  Indicates whether to use the discrete or the probabilistic dosage scoring 
+#'                  when estimating the two-point recombination fractions. 
 #'
 #' @param verbose If \code{TRUE} (default), current progress is shown; if
 #'     \code{FALSE}, no output is produced
@@ -77,9 +80,11 @@
 #' @export est_pairwise_rf
 #' @importFrom parallel makeCluster clusterEvalQ stopCluster parLapply
 #' @importFrom Rcpp sourceCpp
-#' 
+#' @importFrom reshape2 melt acast
+#' @importFrom dplyr filter
 est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
                             mrk.pairs = NULL, n.batches = 1L,
+                            est.type = c("disc","prob"),
                             verbose = TRUE, memory.warning = TRUE, 
                             parallelization.type = c("PSOCK", "FORK"), 
                             tol = .Machine$double.eps^0.25)
@@ -123,7 +128,21 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
       }
     } 
   }
-  geno <- get(input.seq$data.name, pos=1)$geno.dose
+  est.type = match.arg(est.type)
+  ## Checking for genotype probability 
+  if(!exists('geno', where = get(input.seq$data.name, pos=1))){
+    warning("There is no probabilistic dosage scoring in the dataset. Using est.type = 'disc'")
+    est.type <- "disc"
+  }
+  ## get genotypes
+  if(est.type == "disc"){
+    geno <- as.matrix(get(input.seq$data.name, pos=1)$geno.dose)
+  } else {
+    d1 <- get(input.seq$data.name, pos=1)$geno 
+    d2 <- reshape2::melt(d1, id.vars = c("mrk", "ind"))
+    geno <- reshape2::acast(d2, mrk ~ variable ~ ind)
+    geno <- geno[get(input.seq$data.name, pos=1)$mrk.names,,get(input.seq$data.name, pos=1)$ind.names]
+  }
   ## all possible pairs
   if (is.null(mrk.pairs)) {
     mrk.pairs <- combn(sort(input.seq$seq.num), 2) - 1
@@ -146,18 +165,33 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
       if (verbose)
         cat("INFO: Using ", ncpus, " CPUs for calculation.\n")
       cl = parallel::makeCluster(ncpus, type = parallelization.type)
-      #parallel::clusterEvalQ(cl, require(mappoly))
-      parallel::clusterExport(cl, "paralell_pairwise")
+      if(est.type == "disc")
+        parallel::clusterExport(cl, "paralell_pairwise_discrete")
+      if(est.type == "prob")
+        parallel::clusterExport(cl, "paralell_pairwise_probability")
       on.exit(parallel::stopCluster(cl))
-      res <- parallel::parLapply(cl,
-                                 input.list,
-                                 paralell_pairwise,
-                                 input.seq = input.seq,
-                                 geno = geno,
-                                 dP = get(input.seq$data.name)$dosage.p,
-                                 dQ = get(input.seq$data.name)$dosage.q,
-                                 count.cache = count.cache,
-                                 tol = tol)
+      if(est.type == "disc"){
+        res <- parallel::parLapply(cl,
+                                   input.list,
+                                   paralell_pairwise_discrete,
+                                   input.seq = input.seq,
+                                   geno = geno,
+                                   dP = get(input.seq$data.name)$dosage.p,
+                                   dQ = get(input.seq$data.name)$dosage.q,
+                                   count.cache = count.cache,
+                                   tol = tol)
+      } 
+      else if(est.type == "prob") {
+        res <- parallel::parLapply(cl,
+                                   input.list,
+                                   paralell_pairwise_probability,
+                                   input.seq = input.seq,
+                                   geno = geno,
+                                   dP = get(input.seq$data.name)$dosage.p,
+                                   dQ = get(input.seq$data.name)$dosage.q,
+                                   count.cache = count.cache,
+                                   tol = tol)
+      } 
       end <- proc.time()
       if (verbose) {
         cat("INFO: Done with",
@@ -175,14 +209,26 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
         if (length(input.seq$seq.num) < 10)
           cat("Also, number of markers is too small to perform parallel computation.\n")
       }
-      res <- lapply(input.list,
-                    paralell_pairwise,
-                    input.seq = input.seq,
-                    geno = geno,
-                    dP = get(input.seq$data.name)$dosage.p,
-                    dQ = get(input.seq$data.name)$dosage.q,
-                    count.cache = count.cache,
-                    tol = tol)
+      if(est.type == "disc"){
+        res <- lapply(input.list,
+                      paralell_pairwise_discrete,
+                      input.seq = input.seq,
+                      geno = geno,
+                      dP = get(input.seq$data.name)$dosage.p,
+                      dQ = get(input.seq$data.name)$dosage.q,
+                      count.cache = count.cache,
+                      tol = tol)
+      } 
+      else if(est.type == "prob") {
+        res <- lapply(input.list,
+                      paralell_pairwise_probability,
+                      input.seq = input.seq,
+                      geno = geno,
+                      dP = get(input.seq$data.name)$dosage.p,
+                      dQ = get(input.seq$data.name)$dosage.q,
+                      count.cache = count.cache,
+                      tol = tol)
+      } 
     }
     res <- unlist(res,
                   recursive = FALSE)
@@ -222,6 +268,7 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
                                                                          tol = tol,
                                                                          parallelization.type = parallelization.type,
                                                                          mrk.pairs = mrk.pairs[,id.batch[1,1]:id.batch[1,2]],
+                                                                         est.type = est.type,
                                                                          verbose = FALSE,
                                                                          memory.warning = TRUE)$pairwise)
     if (verbose) {
@@ -246,6 +293,7 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
                                                           ncpus = ncpus,
                                                           tol = tol,
                                                           mrk.pairs = mrk.pairs[,id.batch[i,1]:id.batch[i,2]],
+                                                          est.type = est.type,
                                                           verbose = FALSE, 
                                                           memory.warning = TRUE, 
                                                           parallelization.type = parallelization.type)$pairwise
@@ -263,20 +311,20 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
                    class = "poly.est.two.pts.pairwise"))
 }
 
-#' Wrapper function to pairwise two-point estimation in C++
+#' Wrapper function to discrete-based pairwise two-point estimation in C++
 #'
 #' @param void internal function to be documented
 #' @keywords internal
 #' @export
-paralell_pairwise <- function(mrk.pairs,
-                              input.seq,
-                              geno,
-                              dP,
-                              dQ,
-                              count.cache,
-                              tol = .Machine$double.eps^0.25)
+paralell_pairwise_discrete <- function(mrk.pairs,
+                                       input.seq,
+                                       geno,
+                                       dP,
+                                       dQ,
+                                       count.cache,
+                                       tol = .Machine$double.eps^0.25)
 {
-  res <- .Call("pairwise_rf_estimation",
+  res <- .Call("pairwise_rf_estimation_disc",
                input.seq$m,
                as.matrix(mrk.pairs),
                as.matrix(geno),
@@ -287,6 +335,42 @@ paralell_pairwise <- function(mrk.pairs,
                PACKAGE = "mappoly")
   return(lapply(res, format_rf))
 }
+
+#' Wrapper function to probability-based pairwise two-point estimation in C++
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @export
+paralell_pairwise_probability <- function(mrk.pairs,
+                                          input.seq,
+                                          geno,
+                                          dP,
+                                          dQ,
+                                          count.cache,
+                                          tol = .Machine$double.eps^0.25)
+{
+  print(dim(geno))
+  print(geno[1:4,1:4,1:4])
+  res <- .Call("pairwise_rf_estimation_prob",
+               input.seq$m,
+               as.matrix(mrk.pairs),
+               as.integer(dim(geno)),
+               as.double(geno),
+               as.vector(dP),
+               as.vector(dQ),
+               count.cache$cond,
+               tol = tol,
+               PACKAGE = "mappoly")
+  return(lapply(res, format_rf))
+}
+
+
+
+
+
+
+
+
 
 #' Format results from pairwise two-point estimation in C++
 #'

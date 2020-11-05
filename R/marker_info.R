@@ -136,4 +136,5 @@ plot_mrk_info<-function(input.data, mrk)
                         cex.axis = .7, cex.lab = .7, clab = )
     } 
   })
+  par(mfrow=c(1,1))
 }
