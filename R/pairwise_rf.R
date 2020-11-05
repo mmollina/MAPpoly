@@ -349,8 +349,6 @@ paralell_pairwise_probability <- function(mrk.pairs,
                                           count.cache,
                                           tol = .Machine$double.eps^0.25)
 {
-  print(dim(geno))
-  print(geno[1:4,1:4,1:4])
   res <- .Call("pairwise_rf_estimation_prob",
                input.seq$m,
                as.matrix(mrk.pairs),
