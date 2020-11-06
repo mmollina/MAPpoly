@@ -92,8 +92,7 @@ mds_mappoly<-function(input.mat,
     r<-lodrf$rf
     lod<-lodrf$lod
   }
-  #M <- MDSMap::dmap(r,"haldane")
-  M <- imf_h(r)
+  M <- imf_h(r)/100
   nloci=length(confplotno)
   smacofsym<-smacof::smacofSym(M,ndim=ndim,weightmat=lod,itmax=100000)
   pc1<-princurve::principal_curve(smacofsym$conf,maxit=150,spar=p,smoother="smooth_spline")
