@@ -32,6 +32,9 @@
 #' @param prob.thres threshold probability to assign a dosage to offspring. If the probability 
 #'        is smaller than \code{thresh.parent.geno}, the data point is converted to 'NA'.
 #' 
+#' @param  file.type indicates whether the characters in the input file are separated by 
+#'                  'white spaces' ("table") or by commas ("csv").
+#' 
 #' @param verbose if \code{TRUE} (default), the current progress is shown; if
 #'     \code{FALSE}, no output is produced
 #' 
@@ -94,8 +97,12 @@
 read_fitpoly <- function(file.in, ploidy, parent.1, parent.2, offspring = NULL, 
                          filter.non.conforming = TRUE, elim.redundant = TRUE, 
                          parent.geno = c("joint", "max"), thresh.parent.geno = 0.95,
-                         prob.thres = 0.95, verbose = TRUE) {
-  dat <- read.delim(file = file.in, header = TRUE, stringsAsFactors = FALSE)
+                         prob.thres = 0.95, file.type = c("table", "csv"), verbose = TRUE) {
+  file.type <- match.arg(file.type)
+  if(file.type == "table")
+    dat <- read.delim(file = file.in, header = TRUE, stringsAsFactors = FALSE)
+  else if(file.type == "csv")
+    dat <- read.csv(file = file.in, header = TRUE, stringsAsFactors = FALSE)
   p1 <- unique(grep(pattern = parent.1, dat[,"SampleName"], value = TRUE))
   p2 <- unique(grep(pattern = parent.2, dat[,"SampleName"], value = TRUE))
   if(is.null(offspring)){

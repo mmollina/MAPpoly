@@ -35,7 +35,7 @@ considered}
 in parallel. Using \code{n.batches > 1}, will usually result in more processing 
 time. However, it will require less memory. See examples.}
 
-\item{est.type}{Indicates whether to use the discrete or the probabilistic dosage scoring 
+\item{est.type}{Indicates whether to use the discrete ("disc") or the probabilistic ("prob") dosage scoring 
 when estimating the two-point recombination fractions.}
 
 \item{verbose}{If \code{TRUE} (default), current progress is shown; if

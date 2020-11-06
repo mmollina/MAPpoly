@@ -105,7 +105,7 @@ group_mappoly <- function(input.mat, expected.groups = NULL,
         xt<-as.numeric(cumsum(xy)-ceiling(xy/2))
         yt<-.1
         points(x = xt, y = rep(yt, length(xt)), cex = 6, pch = 20, col = "lightgray")
-        text(x = xt, y = yt, labels = match(xy, table(groups.snp, useNA = "ifany")), adj = .5)
+        text(x = xt, y = yt, labels = pmatch(xy, table(groups.snp, useNA = "ifany")), adj = .5)
         ANSWER <- readline("Enter 'Y/n' to proceed or update the number of expected groups: ")
         if(substr(ANSWER, 1, 1) == "n" | substr(ANSWER, 1, 1) == "no" | substr(ANSWER, 1, 1) == "N")
             stop("You decided to stop the function.")
@@ -182,6 +182,5 @@ plot.mappoly.group <- function(x, ...) {
   xt<-as.numeric(cumsum(xy)-ceiling(xy/2))
   yt<-.1
   points(x = xt, y = rep(yt, length(xt)), cex = 6, pch = 20, col = "lightgray")
-  text(x = xt, y = yt, labels = match(xy, table(x$groups.snp, useNA = "ifany")), adj = .5)
+  text(x = xt, y = yt, labels = pmatch(xy, table(x$groups.snp, useNA = "ifany")), adj = .5)
 }
-

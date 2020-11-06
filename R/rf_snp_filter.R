@@ -106,7 +106,7 @@ rf_snp_filter<-function(input.twopt,
     if (!is.null(remove.fp))
         rf_mat$rec.mat = rf_mat$rec.mat[o1,o1]
 
-    ## Removing markers that presented too many values above threshold 
+    ## Removing markers with more than 90% of the LOD values above threshold 
     x <- apply(rf_mat$rec.mat, 1, function(x) sum(is.na(x)))
     o <- names(which(x < quantile(x, probs = thresh.missing)))
 

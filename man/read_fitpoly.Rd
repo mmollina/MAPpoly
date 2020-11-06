@@ -15,6 +15,7 @@ read_fitpoly(
   parent.geno = c("joint", "max"),
   thresh.parent.geno = 0.95,
   prob.thres = 0.95,
+  file.type = c("table", "csv"),
   verbose = TRUE
 )
 }
@@ -47,6 +48,9 @@ is smaller than \code{thresh.parent.geno}, the marker is discarded.}
 
 \item{prob.thres}{threshold probability to assign a dosage to offspring. If the probability 
 is smaller than \code{thresh.parent.geno}, the data point is converted to 'NA'.}
+
+\item{file.type}{indicates whether the characters in the input file are separated by 
+'white spaces' ("table") or by commas ("csv").}
 
 \item{verbose}{if \code{TRUE} (default), the current progress is shown; if
 \code{FALSE}, no output is produced}

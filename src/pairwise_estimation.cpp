@@ -117,7 +117,6 @@ double twopt_likelihood_probability(double rf, int m, int n_ind,
     }
     count2++;
   }
-  double temp0 = 0;
   for(int i = 0; i < n_ind; i++){
     double temp1 = 0;
     for(int j = 0; j <= m; j++){
