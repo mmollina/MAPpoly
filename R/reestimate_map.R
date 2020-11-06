@@ -11,8 +11,10 @@
 #' @param phase.config which phase configuration should be used. "best" (default) 
 #'                     will choose the maximum likelihood configuration
 #'                     
-#' @param method indicates whether to use \code{'hmm'} (Hidden Markov Models) 
-#' or \code{'ols'} (Ordinary Least Squares) to re-estimate the recombination fractions
+#' @param method indicates whether to use \code{'hmm'} (Hidden Markov Models), 
+#'  \code{'ols'} (Ordinary Least Squares) or \code{'wMDS_to_1D_pc'} (weighted MDS 
+#'  followed by fitting a one dimensional principal curve) to re-estimate the 
+#'  recombination fractions.
 #'     
 #' @param weight if \code{TRUE} (default), it uses the LOD scores to perform a weighted
 #'    regression when the Ordinary Least Squares is chosen
@@ -26,7 +28,10 @@
 #'    
 #' @param max.rf.to.break.EM for internal use only.   
 #'     
-#' @return An updated object of class \code{mappoly.map}
+#' @param input.mds An object of class \code{mappoly.map}
+#'      
+#' @return An updated object of class \code{mappoly.pcmap} whose 
+#'         order was used in the \code{input.map}
 #'     
 #' @references
 #'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
@@ -42,8 +47,8 @@
 #' @export reest_rf
 #' 
 reest_rf<-function(input.map, input.mat = NULL, tol = 10e-3,  phase.config = "all",
-                    method = c("hmm", "ols"), weight = TRUE, verbose = TRUE, 
-                   high.prec = FALSE, max.rf.to.break.EM = 0.5)
+                   method = c("hmm", "ols", "wMDS_to_1D_pc"), weight = TRUE, verbose = TRUE, 
+                   high.prec = FALSE, max.rf.to.break.EM = 0.5, input.mds = NULL)
 {
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
@@ -55,8 +60,8 @@ reest_rf<-function(input.map, input.mat = NULL, tol = 10e-3,  phase.config = "al
     i.lpc <- which.min(LOD.conf)
   } else if(phase.config == "all"){
     i.lpc <- seq_along(LOD.conf) } else if (phase.config > length(LOD.conf)) {
-    stop("invalid linkage phase configuration")
-  } else i.lpc <- phase.config
+      stop("invalid linkage phase configuration")
+    } else i.lpc <- phase.config
   if(is.null(input.mat) & method == "ols")
     stop("'input.mat' is expected when 'method = ols'")
   output.map<-input.map
@@ -80,8 +85,8 @@ reest_rf<-function(input.map, input.mat = NULL, tol = 10e-3,  phase.config = "al
       new <- data.frame(x = z)
       u<-predict(model, new)
       output.map$maps[[j]]$seq.rf<-mf_h(diff(u))
-      output.map$maps[[j]]$loglike<-0
     }
+    output.map <- loglike_hmm(output.map)
   }
   else if(method == "hmm")
   {
@@ -89,14 +94,26 @@ reest_rf<-function(input.map, input.mat = NULL, tol = 10e-3,  phase.config = "al
                         arg = input.map$info$mrk.names,
                         data.name = input.map$info$data.name)
     for(j in i.lpc){
-    mtemp<-est_rf_hmm_single(input.seq = s,
-                             input.ph.single = input.map$maps[[j]]$seq.ph,
-                             rf.temp = input.map$maps[[j]]$seq.rf,
-                             tol = tol, verbose = verbose, 
-                             high.prec = high.prec,
-                             max.rf.to.break.EM = max.rf.to.break.EM)
-    output.map$maps[[j]]<-mtemp
+      mtemp<-est_rf_hmm_single(input.seq = s,
+                               input.ph.single = input.map$maps[[j]]$seq.ph,
+                               rf.temp = input.map$maps[[j]]$seq.rf,
+                               tol = tol, verbose = verbose, 
+                               high.prec = high.prec,
+                               max.rf.to.break.EM = max.rf.to.break.EM)
+      output.map$maps[[j]]<-mtemp
     }
+  } else if(method == "wMDS_to_1D_pc")
+  {
+    if(is.null(input.mds))
+      stop("Provide 'mds.mappoly' object.")
+    if (!inherits(input.mds, "mappoly.pcmap")) {
+      stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.pcmap'")
+    }
+    pos <- input.mds$locimap[match(input.map$info$mrk.names, input.mds$locimap$locus), "position"]
+    for(j in i.lpc){
+      output.map$maps[[j]]$seq.rf <- mf_h(diff(pos))
+    }
+    output.map <- loglike_hmm(output.map)
   }
   return(output.map)
 }
