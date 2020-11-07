@@ -9,11 +9,12 @@ reest_rf(
   input.mat = NULL,
   tol = 0.01,
   phase.config = "all",
-  method = c("hmm", "ols"),
+  method = c("hmm", "ols", "wMDS_to_1D_pc"),
   weight = TRUE,
   verbose = TRUE,
   high.prec = FALSE,
-  max.rf.to.break.EM = 0.5
+  max.rf.to.break.EM = 0.5,
+  input.mds = NULL
 )
 }
 \arguments{
@@ -26,8 +27,10 @@ reest_rf(
 \item{phase.config}{which phase configuration should be used. "best" (default) 
 will choose the maximum likelihood configuration}
 
-\item{method}{indicates whether to use \code{'hmm'} (Hidden Markov Models) 
-or \code{'ols'} (Ordinary Least Squares) to re-estimate the recombination fractions}
+\item{method}{indicates whether to use \code{'hmm'} (Hidden Markov Models), 
+\code{'ols'} (Ordinary Least Squares) or \code{'wMDS_to_1D_pc'} (weighted MDS 
+followed by fitting a one dimensional principal curve) to re-estimate the 
+recombination fractions.}
 
 \item{weight}{if \code{TRUE} (default), it uses the LOD scores to perform a weighted
 regression when the Ordinary Least Squares is chosen}
@@ -40,9 +43,12 @@ regression when the Ordinary Least Squares is chosen}
 which can take a long time to perform (default = FALSE)}
 
 \item{max.rf.to.break.EM}{for internal use only.}
+
+\item{input.mds}{An object of class \code{mappoly.map}}
 }
 \value{
-An updated object of class \code{mappoly.map}
+An updated object of class \code{mappoly.pcmap} whose 
+        order was used in the \code{input.map}
 }
 \description{
 This function re-estimates the recombination fractions between all markers in a given map.
