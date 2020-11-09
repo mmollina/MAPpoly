@@ -66,6 +66,10 @@
 #'     configuration to be plotted. If \code{'best'}, plot the configuration
 #'     with the highest likelihood
 #'
+#' @param P a string containing the name of parent P
+#' 
+#' @param Q a string containing the name of parent Q
+#' 
 #' @param ... currently ignored
 #'
 #' @return A list of class \code{mappoly.map} with two elements: 
@@ -692,7 +696,8 @@ print.mappoly.map <- function(x, detailed = FALSE, ...) {
 #' @export 
 plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
                              phase = TRUE, mrk.names = FALSE, 
-                             cex = 1, config = "best", ...) {
+                             cex = 1, config = "best", P = "Parent 1",
+                             Q = "Parent 2", ...) {
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))
   if(phase){
@@ -800,11 +805,11 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
          xlab = "",
          ylim = c(.25, 4.5))
     zy <- zy - 1.1
-    mtext(text = "Parent 2", side = 4, at = mean(zy), line = -1, font = 4)
+    mtext(text = Q, side = 4, at = mean(zy), line = -1, font = 4)
     for(i in 1:m)
       mtext(letters[(m+1):(2*m)][i], line = 0, at = zy[i], side = 4)
     zy <- zy + 1.1
-    mtext(text = "Parent 1", side = 4, at = mean(zy), line = -1, font = 4)
+    mtext(text = P, side = 4, at = mean(zy), line = -1, font = 4)
     for(i in 1:m)
       mtext(letters[1:m][i],  line = 0, at = zy[i], side = 4)
     par(mar = c(0,1,2,4), xpd=FALSE)

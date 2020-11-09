@@ -28,3 +28,13 @@ test_that("read data from CSV file correctly", {
   SolCAP.dose <- read_geno_csv(file.in  = tempfl, ploidy = 4)
   expect_equal(check_data_sanity(SolCAP.dose), 0)
 })
+test_that("read data from fitpoly file correctly", {
+  fl <- "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/fitpoly.dat"
+  tempfl <- tempfile()
+  download.file(fl, destfile = tempfl)
+  fitpoly.dat <- read_fitpoly(file.in = tempfl, ploidy = 4, 
+                               parent.1 = "P1", parent.2 = "P2", 
+                               verbose = TRUE)
+  expect_equal(check_data_sanity(fitpoly.dat), 0)
+  expect_null(print(fitpoly.dat, detailed = TRUE))
+})

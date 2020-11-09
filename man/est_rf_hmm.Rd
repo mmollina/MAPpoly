@@ -28,6 +28,8 @@ est_rf_hmm(
   mrk.names = FALSE,
   cex = 1,
   config = "best",
+  P = "Parent 1",
+  Q = "Parent 2",
   ...
 )
 }
@@ -84,6 +86,10 @@ for both parents}
 \item{config}{should be \code{'best'} or the position of the
 configuration to be plotted. If \code{'best'}, plot the configuration
 with the highest likelihood}
+
+\item{P}{a string containing the name of parent P}
+
+\item{Q}{a string containing the name of parent Q}
 }
 \value{
 A list of class \code{mappoly.map} with two elements: 

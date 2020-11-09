@@ -178,7 +178,7 @@ read_geno_prob <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
                 markers do not match\n.
                 Please, check data.
                 --------------------------------------------------\n")
-    sequence <- as.character(temp[-1])
+    sequence <- as.integer(temp[-1])
     ## get sequence position info ------------
     temp <- scan(file.in, what = character(), sep = " ", skip = 8, nlines = 1, quiet = TRUE)
     temp <- temp[!temp == ""]

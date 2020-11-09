@@ -165,7 +165,7 @@ read_geno <- function(file.in, filter.non.conforming = TRUE, elim.redundant = TR
          markers do not match.
          Please, check data.
          ------------------------------------------\n")
-  sequence <- as.character(temp[-1])
+  sequence <- as.integer(temp[-1])
   ## get sequence position info ------------
   temp <- scan(file.in , what = character(), sep = " ", skip = 8, nlines = 1, quiet = TRUE)
   temp <- temp[!temp == ""]
@@ -299,7 +299,7 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
     cat("    Redundant markers:                       ", redundant, "%\n", sep = "")  
   }
   w <- table(x$sequence)
-  if (length(x$sequence) <= 1)
+  if (length(w) <= 1)
     cat("\n    No. markers per sequence: not available") else if (detailed) {
       cat("\n    ----------\n    No. markers per sequence:\n")
       print(data.frame(seq = paste0("       ", names(w)), No.mrk = as.numeric(w)), row.names = FALSE)
