@@ -842,6 +842,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
     suppressMessages(hap.temp <- get_submap(input.map, 
                                             c(1,1), 
                                             reestimate.rf = FALSE))
+    hap.temp <- filter_map_at_hmm_thres(hap.temp, thres.hmm = 10e-10)
     hap.temp$maps[[1]]$seq.num<-rep(mrk.id, 2)
     hap.temp$maps[[1]]$seq.ph <- list(P = c(r.test[[i]]$P, r.test[[i]]$P),
                                       Q = c(r.test[[i]]$Q, r.test[[i]]$Q))
@@ -1557,3 +1558,61 @@ sample_data <- function(input.data, n = NULL,
   }
   else stop("Inform type")
 }
+
+
+#' Get weighted ordinary least squared map give a sequence and rf matrix
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @export
+#' @importFrom zoo na.approx
+get_ols_map <- function(input.seq, input.map, weight = TRUE){
+  id <- input.seq$seq.mrk.names
+  y <- as.numeric((imf_h(as.dist(input.map$rec.mat[id,id]))))
+  w <- as.numeric((imf_h(as.dist(input.map$lod.mat[id,id]))))
+  v <- t(combn(id,2))
+  rf <- get_rf_from_mat(input.map$rec.mat[id,id])
+  rf <- zoo::na.approx(rf)
+  z<-cumsum(imf_h(c(0,rf)))
+  names(z)<-id
+  x<-numeric(nrow(v))
+  names(x)<-names(y)<-apply(v, 1, paste0, collapse="-")
+  for(i in 1:nrow(v))
+    x[i]<-z[v[i,2]]-z[v[i,1]]
+  if(weight)
+    model <- lm(y ~ x-1, weights=w)
+  else
+    model <- lm(y ~ x-1)
+  new <- data.frame(x = z)
+  u<-predict(model, new)
+  d <- cumsum(imf_h(c(0, mf_h(diff(u)))))
+  names(d) <- id
+  d
+}
+
+#' Get dosage type in a sequence
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @export
+get_dosage_type <- function(input.seq){
+  p <- abs(abs(input.seq$seq.dose.p - input.seq$m/2) - input.seq$m/2)
+  q <- abs(abs(input.seq$seq.dose.q - input.seq$m/2) - input.seq$m/2)
+  s.p <- p == 1 & q == 0
+  s.q <- p == 0 & q == 1
+  ds <- p == 1 & q == 1
+  list(simplex.p = input.seq$seq.mrk.names[s.p],
+       simplex.p = input.seq$seq.mrk.names[s.q], 
+       double.simplex = input.seq$seq.mrk.names[ds],
+       multiplex = input.seq$seq.mrk.names[!(s.p | s.q | ds)])
+}
+
+
+
+
+
+
+
+
+
+
