@@ -9,7 +9,12 @@ import_data_from_polymapR(
   ploidy,
   parent1 = "P1",
   parent2 = "P2",
-  filter.non.conforming = TRUE
+  input.type = c("discrete", "probabilistic"),
+  prob.thres = 0.95,
+  pardose = NULL,
+  offspring = NULL,
+  filter.non.conforming = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -17,12 +22,28 @@ import_data_from_polymapR(
 
 \item{ploidy}{the ploidy level}
 
-\item{parent1}{name of parent 1}
+\item{parent1}{a character string containing the name (or pattern of genotype IDs) of parent 1}
 
-\item{parent2}{name of parent 2}
+\item{parent2}{a character string containing the name (or pattern of genotype IDs) of parent 2}
 
-\item{filter.non.conforming}{if \code{TRUE} (default) exclude samples with non 
-expected genotypes under no double reduction}
+\item{input.type}{Indicates whether the input is discrete ("disc") or probabilistic ("prob")}
+
+\item{prob.thres}{threshold probability to assign a dosage to offspring. If the probability 
+is smaller than \code{thresh.parent.geno}, the data point is converted to 'NA'.}
+
+\item{pardose}{matrix of dimensions (n.mrk x 3) cointaining the name of the markers in the first column, and the 
+dosage of parents 1 and 2 in columns 2 and 3. (see polymapR vignette)}
+
+\item{offspring}{a character string containing the name (or pattern of genotype IDs) of the offspring 
+individuals. If \code{NULL} (default) it considers all individuals as offsprings, except 
+\code{parent1} and \code{parent2}.}
+
+\item{filter.non.conforming}{if \code{TRUE} exclude samples with non 
+expected genotypes under no double reduction. Since markers were alredy filtered in polymapR, the default is 
+\code{FALSE}.}
+
+\item{verbose}{if \code{TRUE} (default), the current progress is shown; if
+\code{FALSE}, no output is produced}
 }
 \description{
 Function to import datasets from polymapR

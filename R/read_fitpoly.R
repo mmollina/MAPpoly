@@ -7,13 +7,13 @@
 #' 
 #' @param ploidy the ploidy level
 #' 
-#' @param parent.1 a character string containing the name (or pattern of genotype IDs) of parent 1
+#' @param parent1 a character string containing the name (or pattern of genotype IDs) of parent 1
 #' 
-#' @param parent.2 a character string containing the name (or pattern of genotype IDs) of parent 2
+#' @param parent2 a character string containing the name (or pattern of genotype IDs) of parent 2
 #' 
 #' @param offspring a character string containing the name (or pattern of genotype IDs) of the offspring 
 #'                  individuals. If \code{NULL} (default) it considers all individuals as offsprings, except 
-#'                  \code{parent.1} and \code{parent.2}.
+#'                  \code{parent1} and \code{parent2}.
 #'
 #' @param filter.non.conforming if \code{TRUE} (default) converts data points with unexpected 
 #'        genotypes (i.e. no double reduction) to 'NA'. See function \code{\link[mappoly]{segreg_poly}} 
@@ -74,7 +74,7 @@
 #' tempfl <- tempfile()
 #' download.file(ft, destfile = tempfl)
 #' fitpoly.dat <- read_fitpoly(file.in = tempfl, ploidy = 4, 
-#'                             parent.1 = "P1", parent.2 = "P2", 
+#'                             parent1 = "P1", parent2 = "P2", 
 #'                             verbose = TRUE)
 #' print(fitpoly.dat, detailed = TRUE)
 #' plot(fitpoly.dat)
@@ -94,7 +94,7 @@
 #' @importFrom dplyr filter group_by summarise across
 #' @importFrom utils read.delim
 
-read_fitpoly <- function(file.in, ploidy, parent.1, parent.2, offspring = NULL, 
+read_fitpoly <- function(file.in, ploidy, parent1, parent2, offspring = NULL, 
                          filter.non.conforming = TRUE, elim.redundant = TRUE, 
                          parent.geno = c("joint", "max"), thresh.parent.geno = 0.95,
                          prob.thres = 0.95, file.type = c("table", "csv"), verbose = TRUE) {
@@ -103,8 +103,8 @@ read_fitpoly <- function(file.in, ploidy, parent.1, parent.2, offspring = NULL,
     dat <- read.delim(file = file.in, header = TRUE, stringsAsFactors = FALSE)
   else if(file.type == "csv")
     dat <- read.csv(file = file.in, header = TRUE, stringsAsFactors = FALSE)
-  p1 <- unique(grep(pattern = parent.1, dat[,"SampleName"], value = TRUE))
-  p2 <- unique(grep(pattern = parent.2, dat[,"SampleName"], value = TRUE))
+  p1 <- unique(grep(pattern = parent1, dat[,"SampleName"], value = TRUE))
+  p2 <- unique(grep(pattern = parent2, dat[,"SampleName"], value = TRUE))
   if(is.null(offspring)){
     offspring <- setdiff(unique(dat[,"SampleName"]), c(p1, p2))    
   } else {

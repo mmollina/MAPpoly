@@ -81,7 +81,7 @@
 #' @importFrom parallel makeCluster clusterEvalQ stopCluster parLapply
 #' @importFrom Rcpp sourceCpp
 #' @importFrom reshape2 melt acast
-#' @importFrom dplyr filter
+#' @importFrom dplyr filter arrange
 est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
                             mrk.pairs = NULL, n.batches = 1L,
                             est.type = c("disc","prob"),

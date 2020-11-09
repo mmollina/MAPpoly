@@ -4,10 +4,21 @@
 #'
 #' @param input.data  a \code{polymapR} dataset
 #' @param ploidy the ploidy level     
-#' @param parent1 name of parent 1
-#' @param parent2 name of parent 2
-#' @param filter.non.conforming if \code{TRUE} (default) exclude samples with non 
-#'     expected genotypes under no double reduction
+#' @param parent1 a character string containing the name (or pattern of genotype IDs) of parent 1
+#' @param parent2 a character string containing the name (or pattern of genotype IDs) of parent 2
+#' @param input.type Indicates whether the input is discrete ("disc") or probabilistic ("prob") 
+#' @param prob.thres threshold probability to assign a dosage to offspring. If the probability 
+#'        is smaller than \code{thresh.parent.geno}, the data point is converted to 'NA'.
+#' @param pardose matrix of dimensions (n.mrk x 3) cointaining the name of the markers in the first column, and the 
+#'        dosage of parents 1 and 2 in columns 2 and 3. (see polymapR vignette)      
+#' @param offspring a character string containing the name (or pattern of genotype IDs) of the offspring 
+#'                  individuals. If \code{NULL} (default) it considers all individuals as offsprings, except 
+#'                  \code{parent1} and \code{parent2}.  
+#' @param filter.non.conforming if \code{TRUE} exclude samples with non 
+#'     expected genotypes under no double reduction. Since markers were alredy filtered in polymapR, the default is 
+#'     \code{FALSE}.
+#' @param verbose if \code{TRUE} (default), the current progress is shown; if
+#'     \code{FALSE}, no output is produced
 #'     
 #' @examples
 #' require(polymapR)
@@ -30,31 +41,146 @@
 #'     \url{https://doi.org/10.1534/g3.119.400378}
 #'     
 #' @export import_data_from_polymapR
+#' @importFrom reshape2 acast
+#' @importFrom dplyr filter arrange
 import_data_from_polymapR <- function(input.data, 
                                       ploidy, 
                                       parent1 = "P1", 
-                                      parent2 = "P2", 
-                                      filter.non.conforming = TRUE){
-  geno.dose <- input.data[,-match(c(parent1, parent2), colnames(input.data)), drop = FALSE]
-  mappoly.data <- structure(list(m = ploidy,
-                                 n.ind = ncol(geno.dose),
-                                 n.mrk = nrow(geno.dose),
-                                 ind.names = colnames(geno.dose),
-                                 mrk.names = rownames(geno.dose),
-                                 dosage.p = input.data[,parent1],
-                                 dosage.q = input.data[,parent2],
-                                 sequence = NA,
-                                 sequence.pos = NA,
-                                 seq.ref = NULL,
-                                 seq.alt = NULL,
-                                 all.mrk.depth = NULL,
-                                 prob.thres = NULL,
-                                 geno.dose = geno.dose,
-                                 nphen = 0,
-                                 phen = NULL,
-                                 kept = NULL,
-                                 elim.correspondence = NULL),
-                            class = "mappoly.data")
+                                      parent2 = "P2",
+                                      input.type = c("discrete", "probabilistic"),
+                                      prob.thres = 0.95,
+                                      pardose = NULL, 
+                                      offspring = NULL,
+                                      filter.non.conforming = TRUE,
+                                      verbose = TRUE){
+  input.type <- match.arg(input.type)
+  if(input.type == "discrete"){
+    geno.dose <- input.data[,-match(c(parent1, parent2), colnames(input.data)), drop = FALSE]
+    mappoly.data <- structure(list(m = ploidy,
+                                   n.ind = ncol(geno.dose),
+                                   n.mrk = nrow(geno.dose),
+                                   ind.names = colnames(geno.dose),
+                                   mrk.names = rownames(geno.dose),
+                                   dosage.p = input.data[,parent1],
+                                   dosage.q = input.data[,parent2],
+                                   sequence = NA,
+                                   sequence.pos = NA,
+                                   seq.ref = NULL,
+                                   seq.alt = NULL,
+                                   all.mrk.depth = NULL,
+                                   prob.thres = NULL,
+                                   geno.dose = geno.dose,
+                                   nphen = 0,
+                                   phen = NULL,
+                                   kept = NULL,
+                                   elim.correspondence = NULL),
+                              class = "mappoly.data")
+  } 
+  else {
+    if(is.null(pardose)) 
+      stop("provide parental dosage.")
+    rownames(pardose) <- pardose$MarkerName
+    dat<-input.data[c(2,3,5:(5 + ploidy))]
+    p1 <- unique(grep(pattern = parent1, dat[,"SampleName"], value = TRUE))
+    p2 <- unique(grep(pattern = parent2, dat[,"SampleName"], value = TRUE))
+    if(is.null(offspring)){
+      offspring <- setdiff(unique(dat[,"SampleName"]), c(p1, p2))    
+    } else {
+      offspring <- unique(grep(pattern = offspring, dat[,"SampleName"], value = TRUE))
+    }
+    d1 <- input.data[,c("MarkerName", "SampleName", "geno")]
+    geno.dose <- reshape2::acast(d1, MarkerName ~ SampleName, value.var = "geno")
+    ## get marker names ----------------------
+    mrk.names <- rownames(geno.dose)
+    ## get number of individuals -------------
+    n.ind <- length(offspring)
+    ## get number of markers -----------------
+    n.mrk <- length(mrk.names)
+    ## get individual names ------------------
+    ind.names <- offspring
+    ## get dosage in parent P ----------------
+    dosage.p <- as.integer(pardose[mrk.names,"parent1"])
+    names(dosage.p)<-mrk.names
+    ## get dosage in parent Q ----------------
+    dosage.q <- as.integer(pardose[mrk.names,"parent2"])
+    names(dosage.q)<-mrk.names
+    ## monomorphic markers
+    dp<-abs(abs(dosage.p-(ploidy/2))-(ploidy/2))
+    dq<-abs(abs(dosage.q-(ploidy/2))-(ploidy/2))
+    mrk.names<-names(which(dp+dq!=0))
+    dosage.p <- dosage.p[mrk.names]
+    dosage.q <- dosage.q[mrk.names]
+    nphen <- 0
+    phen <- NULL
+    if (verbose){
+      cat("Reading the following data:")
+      cat("\n    Ploidy level:", ploidy)
+      cat("\n    No. individuals: ", n.ind)
+      cat("\n    No. markers: ", n.mrk) 
+      cat("\n    No. informative markers:  ", length(mrk.names), " (", round(100*length(mrk.names)/n.mrk,1), "%)", sep = "")
+      cat("\n    ...")
+    }
+    ## get genotypic info --------------------
+    MarkerName <- SampleName <- NULL
+    geno <- dat %>%
+      dplyr::filter(SampleName %in% offspring)  %>%
+      dplyr::filter(MarkerName %in% mrk.names) %>%
+      dplyr::arrange(SampleName, MarkerName)
+    
+    colnames(geno) <- c("mrk", "ind", as.character(0:ploidy))
+    ind.names <- unique(geno$ind)
+    mrk.names <- unique(geno$mrk)
+    dosage.p <- dosage.p[mrk.names]
+    dosage.q <- dosage.q[mrk.names]
+    
+    ## transforming na's in expected genotypes using Mendelian segregation
+    i.na <- which(apply(geno, 1, function(x) any(is.na(x))))
+    if (length(i.na) > 0) {
+      m.na <- match(geno[i.na, 1], mrk.names)
+      dp.na <- dosage.p[m.na]
+      dq.na <- dosage.q[m.na]
+      for (i in 1:length(m.na)) geno[i.na[i], -c(1, 2)] <- segreg_poly(ploidy, dp.na[i], dq.na[i])
+    }
+    ## dosage info
+    if(filter.non.conforming){
+      geno.dose <- geno.dose[mrk.names,offspring]  
+    } else {
+      geno.dose <- dist_prob_to_class(geno = geno, prob.thres = prob.thres)
+      if(geno.dose$flag)
+      {
+        geno <- geno.dose$geno
+        geno.dose <- geno.dose$geno.dose
+        n.ind <- ncol(geno.dose)
+        ind.names <- colnames(geno.dose)
+      } else {
+        geno.dose <- geno.dose$geno.dose
+      }
+      geno.dose[is.na(geno.dose)] <- ploidy + 1
+    }
+    ## returning the 'mappoly.data' object
+    if (verbose) cat("\n    Done with reading.\n")
+    mappoly.data <- structure(list(m = ploidy,
+                                   n.ind = n.ind,
+                                   n.mrk = length(mrk.names),
+                                   ind.names = ind.names,
+                                   mrk.names = mrk.names,
+                                   dosage.p = dosage.p,
+                                   dosage.q = dosage.q,
+                                   sequence = rep(NA, length(mrk.names)),
+                                   sequence.pos = rep(NA, length(mrk.names)),
+                                   seq.ref = NULL,
+                                   seq.alt = NULL,
+                                   all.mrk.depth = NULL,
+                                   prob.thres = prob.thres,
+                                   geno = geno,
+                                   geno.dose = geno.dose,
+                                   nphen = nphen,
+                                   phen = phen,
+                                   chisq.pval = NULL,
+                                   kept = NULL,
+                                   elim.correspondence = NULL),
+                              class = "mappoly.data")
+  }
   if(filter.non.conforming){
     mappoly.data<-filter_non_conforming_classes(mappoly.data)
     Ds <- array(NA, dim = c(ploidy+1, ploidy+1, ploidy+1))
@@ -156,5 +282,5 @@ import_phased_maplist_from_polymapR <- function(maplist,
                            class = "mappoly.map")
     MAPs[[i]] <- loglike_hmm(MAPs[[i]], mappoly.data)
   }
-   MAPs
+  MAPs
 }

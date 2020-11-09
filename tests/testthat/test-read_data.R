@@ -33,7 +33,7 @@ test_that("read data from fitpoly file correctly", {
   tempfl <- tempfile()
   download.file(fl, destfile = tempfl)
   fitpoly.dat <- read_fitpoly(file.in = tempfl, ploidy = 4, 
-                               parent.1 = "P1", parent.2 = "P2", 
+                               parent1 = "P1", parent2 = "P2", 
                                verbose = TRUE)
   expect_equal(check_data_sanity(fitpoly.dat), 0)
   expect_null(print(fitpoly.dat, detailed = TRUE))
