@@ -313,9 +313,9 @@ RcppExport SEXP pairwise_rf_estimation_prob(SEXP m_R,
   Rcpp::NumericMatrix mrk_pairs = Rcpp::as<Rcpp::NumericMatrix>(mrk_pairs_R);
   Rcpp::NumericVector geno_dim = Rcpp::as<Rcpp::NumericVector>(geno_dim_R);
   Rcpp::NumericVector geno_prob = Rcpp::as<Rcpp::NumericVector>(geno_prob_R);
-  const int n_mrk = geno_dim[0]; //n.mrk
-  const int n_dos = geno_dim[1]; //m +1
-  const int n_ind = geno_dim[2]; //n.ind
+  int n_mrk = geno_dim[0]; //n.mrk
+  int n_dos = geno_dim[1]; //m +1
+  int n_ind = geno_dim[2]; //n.ind
   int l = 0;
   double ***G = new double**[n_mrk];
   for(int i = 0; (unsigned)i < n_mrk; i++){
