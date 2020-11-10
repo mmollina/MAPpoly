@@ -16,6 +16,10 @@ poly_hmm_est <-
            rf,
            verbose = TRUE,
            tol = 0.001) {
+      ## Checking capabilities
+      if (verbose && !capabilities("long.double")){
+        cat("This function uses high precision calculations, but your system's architecture doesn't support long double allocation ('capabilities('long.double') = FALSE'). Running in low precision mode.\n")
+      }
     res <-
       .Call(
         "poly_hmm_est_CPP",

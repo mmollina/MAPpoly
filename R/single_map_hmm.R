@@ -45,6 +45,9 @@ est_rf_hmm_single<-function(input.seq,
   }
   if(length(input.seq$seq.num) == 1)
     stop("Input sequence contains only one marker.", call. = FALSE)
+  if (verbose && !capabilities("long.double") && high.prec){
+    cat("You've requested high precision calculations ('high.prec = TRUE'), but your system's architecture doesn't support long double allocation ('capabilities('long.double') = FALSE'). Running in low precision mode.\n")
+  }
   if(is.null(rf.temp))
     rf.temp<-rep(0.001, length(input.seq$seq.num)-1)
   if(!ret.map.no.rf.estimation)

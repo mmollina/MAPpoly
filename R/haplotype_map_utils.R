@@ -163,6 +163,10 @@ est_haplo_hmm <-
 est_map_haplo_given_genoprob<-function(map.list,
                                        genoprob.list,
                                        tol = 10e-5){
+  ## Checking capabilities
+  if (!capabilities("long.double")){
+    message("This function uses high precision calculations, but your system's architecture doesn't support long double allocation ('capabilities('long.double') = FALSE'). Running in low precision mode.\n")
+  }  
   m<-map.list[[1]]$info$m
   ## number of genotipic states
   ngam <- choose(m, m/2)
@@ -219,6 +223,10 @@ est_map_haplo_given_genoprob<-function(map.list,
 #' @keywords internal
 calc_genoprob_haplo <- function(m, n.mrk, n.ind, haplo, emit = NULL, 
                                 rf_vec, indnames, verbose=TRUE) {
+  ## Checking capabilities
+  if (verbose && !capabilities("long.double")){
+    cat("This function uses high precision calculations, but your system's architecture doesn't support long double allocation ('capabilities('long.double') = FALSE'). Running in low precision mode.\n")
+  }
   ## In case no genotypic probabilities distrubutions are provided
   if(is.null(emit)){
     emit <- vector("list", length(haplo))
