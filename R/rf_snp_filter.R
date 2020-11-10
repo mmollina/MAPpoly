@@ -14,28 +14,17 @@
 #'
 #' @param input.twopt an object of class \code{poly.est.two.pts.pairwise}
 #'
-#' @param thresh.LOD.ph LOD score threshold for linkage phase
-#'     configuration (default = 5)
+#' @param thresh.LOD.ph LOD score threshold for linkage phase configuration (default = 5)
 #'
 #' @param thresh.LOD.rf LOD score threshold for recombination fraction (default = 5)
 #'
 #' @param thresh.rf threshold for recombination fractions (default = 0.15) 
-#'#'
-#' @param thresh.perc threshold for the percentage of the pairwise marker
-#'  combinations that should be considered in order to
-#'  keep the marker. For example, \code{thresh.perc = 0.05} means that at least
-#'  5\% of the pairwise combinations should be present in order to
-#'  keep the marker (default = 0.05)
 #'
-#' @param remove.fp numeric value from 0.0 to 0.5 (default = NULL). When defined,
-#' this parameter identifies and removes markers that presented more than 90\%
-#' of its pairwise recombination fractions below \code{remove.fp} value throughout
-#' the linkage group
+#' @param probs indicates the probability corresponding to the filtering quantiles. (defaul = c(0.05, 1))
 #' 
 #' @param ncpus number of parallel processes (i.e. cores) to spawn (default = 1)
-#'
-#' @param verbose if \code{TRUE} (default), the current progress is shown; if
-#'     \code{FALSE}, no output is produced
+#' 
+#' @param diagnostic.plot if \code{TRUE} produces a diagnostic plot
 #' 
 #' @return A filtered object of class \code{mappoly.sequence}. 
 #' See \code{\link[mappoly]{make_seq_mappoly}} for details
@@ -53,7 +42,7 @@
 #'     plot(mat.full)
 #'
 #'     ## Removing disruptive SNPs
-#'     tpt.filt<-rf_snp_filter(all.pairs, 2, 2, 0.07, thresh.perc = 0.1)
+#'     tpt.filt<-rf_snp_filter(all.pairs, 2, 2, 0.07, probs = c(0.15, 1))
 #'     p1.filt<-make_pairs_mappoly(input.seq = tpt.filt, input.twopt = all.pairs)
 #'     m1.filt<-rf_list_to_matrix(input.twopt = p1.filt)
 #'     plot(mat.full, main.text = "LG1")
@@ -69,15 +58,15 @@
 #'     \url{https://doi.org/10.1534/g3.119.400378}
 #'
 #' @export rf_snp_filter
-#'
+#' @importFrom ggplot2 ggplot geom_histogram aes scale_fill_manual xlab ggtitle
+#' 
 rf_snp_filter<-function(input.twopt,
                         thresh.LOD.ph = 5,
                         thresh.LOD.rf = 5,
                         thresh.rf = 0.15,
-                        thresh.perc = 0.05,
-                        remove.fp = NULL,
+                        probs = c(0.05, 1),
                         ncpus = 1L,
-                        verbose = TRUE)
+                        diagnostic.plot = TRUE)
 {
     ## checking for correct object
     input_classes <-c("poly.est.two.pts.pairwise")
@@ -85,41 +74,28 @@ rf_snp_filter<-function(input.twopt,
         stop(deparse(substitute(input.twopt)),
              " is not an object of class 'poly.est.two.pts.pairwise'")
     }
-
-    ## Identifying false positives
-    if (!is.null(remove.fp)){
-        if (remove.fp < 0.0 || remove.fp > 0.5)
-            stop("'remove.fp' value should be defined between 0.0 and 0.5.")
-        rf_mat_fp = rf_list_to_matrix(input.twopt = input.twopt, ncpus = ncpus, verbose = FALSE)
-        xo = apply(rf_mat_fp$rec.mat, 2, function(x) sum(x < remove.fp, na.rm = T))
-        o2 = names(which(xo > 0.90*(length(xo))))
-        o1 = !(names(xo) %in% o2)
-    }
-
+    probs <- range(probs)
     ## Getting filtered rf matrix
-    thresh.missing<-1-thresh.perc
     rf_mat<- rf_list_to_matrix(input.twopt = input.twopt, thresh.LOD.ph = thresh.LOD.ph,
                                thresh.LOD.rf = thresh.LOD.rf, thresh.rf = thresh.rf,
                                ncpus = ncpus, verbose = FALSE)
-
-    ## Removing false positives
-    if (!is.null(remove.fp))
-        rf_mat$rec.mat = rf_mat$rec.mat[o1,o1]
-
-    ## Removing markers with more than 90% of the LOD values above threshold 
-    x <- apply(rf_mat$rec.mat, 1, function(x) sum(is.na(x)))
-    o <- names(which(x < quantile(x, probs = thresh.missing)))
-
-    ## Checking for remaining markers with rfs below threshold
-    rem = names(x)[!(names(x) %in% o)]
-    remaining = rf_mat$rec.mat[rem,rem]
-    ev.mrks = rownames(remaining[which(remaining[,ncol(remaining)] < thresh.rf),])
-    if (verbose && !is.null(remove.fp) && length(o2) > 0)
-        cat('The following markers presented more than 90% of recombination fractions below', remove.fp, 'and were removed:', paste0(o2), '\n')
-    if (verbose && length(ev.mrks) > 0)
-        cat('The following markers were also removed, but presented one or more recombination fractions below', thresh.rf,':', paste0(ev.mrks), '\n')
-
+    x <- apply(rf_mat$rec.mat, 1, function(x) sum(!is.na(x)))
+    th <- quantile(x, probs = probs)
+    rem <- c(which(x < th[1]), which(x > th[2]))
+    ids <- names(which(x >= th[1] & x <= th[2]))
+    value <- type <- NULL
+    if(diagnostic.plot){
+        d<-rbind(data.frame(type = "original", value = x),
+                 data.frame(type = "filtered", value = x[ids]))
+        p<-ggplot2::ggplot(d, ggplot2::aes(value)) +
+            ggplot2::geom_histogram(ggplot2::aes(fill = type),
+                                    alpha = 0.4, position = "identity") +
+            ggplot2::scale_fill_manual(values = c("#00AFBB", "#E7B800")) +
+            ggplot2::ggtitle( paste0("Filtering probs: [", probs[1], " : ", probs[2], "]")) +
+            ggplot2::xlab(paste0("Non 'NA' values at LOD.ph = ", thresh.LOD.ph, ", LOD.rf = ", thresh.LOD.rf, ", and thresh.rf = ", thresh.rf))
+        print(p)
+    }
     ## Returning sequence object
-    ch_filt<-make_seq_mappoly(input.obj = get(input.twopt$data.name), arg = o, data.name = input.twopt$data.name)
+    ch_filt<-make_seq_mappoly(input.obj = get(input.twopt$data.name, pos = 1), arg = ids, data.name = input.twopt$data.name)
     ch_filt
 }

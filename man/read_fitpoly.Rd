@@ -7,8 +7,8 @@
 read_fitpoly(
   file.in,
   ploidy,
-  parent.1,
-  parent.2,
+  parent1,
+  parent2,
   offspring = NULL,
   filter.non.conforming = TRUE,
   elim.redundant = TRUE,
@@ -24,13 +24,13 @@ read_fitpoly(
 
 \item{ploidy}{the ploidy level}
 
-\item{parent.1}{a character string containing the name (or pattern of genotype IDs) of parent 1}
+\item{parent1}{a character string containing the name (or pattern of genotype IDs) of parent 1}
 
-\item{parent.2}{a character string containing the name (or pattern of genotype IDs) of parent 2}
+\item{parent2}{a character string containing the name (or pattern of genotype IDs) of parent 2}
 
 \item{offspring}{a character string containing the name (or pattern of genotype IDs) of the offspring 
 individuals. If \code{NULL} (default) it considers all individuals as offsprings, except 
-\code{parent.1} and \code{parent.2}.}
+\code{parent1} and \code{parent2}.}
 
 \item{filter.non.conforming}{if \code{TRUE} (default) converts data points with unexpected 
 genotypes (i.e. no double reduction) to 'NA'. See function \code{\link[mappoly]{segreg_poly}} 
@@ -97,7 +97,7 @@ ft <- "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/
 tempfl <- tempfile()
 download.file(ft, destfile = tempfl)
 fitpoly.dat <- read_fitpoly(file.in = tempfl, ploidy = 4, 
-                            parent.1 = "P1", parent.2 = "P2", 
+                            parent1 = "P1", parent2 = "P2", 
                             verbose = TRUE)
 print(fitpoly.dat, detailed = TRUE)
 plot(fitpoly.dat)

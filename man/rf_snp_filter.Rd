@@ -9,38 +9,25 @@ rf_snp_filter(
   thresh.LOD.ph = 5,
   thresh.LOD.rf = 5,
   thresh.rf = 0.15,
-  thresh.perc = 0.05,
-  remove.fp = NULL,
+  probs = c(0.05, 1),
   ncpus = 1L,
-  verbose = TRUE
+  diagnostic.plot = TRUE
 )
 }
 \arguments{
 \item{input.twopt}{an object of class \code{poly.est.two.pts.pairwise}}
 
-\item{thresh.LOD.ph}{LOD score threshold for linkage phase
-configuration (default = 5)}
+\item{thresh.LOD.ph}{LOD score threshold for linkage phase configuration (default = 5)}
 
 \item{thresh.LOD.rf}{LOD score threshold for recombination fraction (default = 5)}
 
-\item{thresh.rf}{threshold for recombination fractions (default = 0.15) 
-#'}
+\item{thresh.rf}{threshold for recombination fractions (default = 0.15)}
 
-\item{thresh.perc}{threshold for the percentage of the pairwise marker
-combinations that should be considered in order to
-keep the marker. For example, \code{thresh.perc = 0.05} means that at least
-5\% of the pairwise combinations should be present in order to
-keep the marker (default = 0.05)}
-
-\item{remove.fp}{numeric value from 0.0 to 0.5 (default = NULL). When defined,
-this parameter identifies and removes markers that presented more than 90\%
-of its pairwise recombination fractions below \code{remove.fp} value throughout
-the linkage group}
+\item{probs}{indicates the probability corresponding to the filtering quantiles. (defaul = c(0.05, 1))}
 
 \item{ncpus}{number of parallel processes (i.e. cores) to spawn (default = 1)}
 
-\item{verbose}{if \code{TRUE} (default), the current progress is shown; if
-\code{FALSE}, no output is produced}
+\item{diagnostic.plot}{if \code{TRUE} produces a diagnostic plot}
 }
 \value{
 A filtered object of class \code{mappoly.sequence}. 
@@ -73,7 +60,7 @@ Remove markers that do not meet a LOD and recombination fraction
     plot(mat.full)
 
     ## Removing disruptive SNPs
-    tpt.filt<-rf_snp_filter(all.pairs, 2, 2, 0.07, thresh.perc = 0.1)
+    tpt.filt<-rf_snp_filter(all.pairs, 2, 2, 0.07, probs = c(0.15, 1))
     p1.filt<-make_pairs_mappoly(input.seq = tpt.filt, input.twopt = all.pairs)
     m1.filt<-rf_list_to_matrix(input.twopt = p1.filt)
     plot(mat.full, main.text = "LG1")

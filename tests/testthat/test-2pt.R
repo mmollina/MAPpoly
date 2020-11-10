@@ -31,6 +31,6 @@ test_that("estimate two-points rf correctly", {
   sf2<-rf_snp_filter(tpt13)
   expect_is(sf, "mappoly.sequence")
   expect_is(sf2, "mappoly.sequence")
-  expect_equal(sum(sf$seq.num), 51417)
-  expect_equal(sum(sf2$seq.num), 57419)
+  expect_equal(sum(sf$seq.num), 135208)
+  expect_equal(sum(sf2$seq.num), 135208)
 })
