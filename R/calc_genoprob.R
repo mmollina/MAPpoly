@@ -45,6 +45,9 @@ calc_genoprob<-function(input.map, step = 0,  phase.config = "best", verbose = T
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
   }
+  if (verbose && !capabilities("long.double")){
+    cat("This function uses high precision calculations, but your system's architecture doesn't support long double allocation ('capabilities('long.double') = FALSE'). Running in low precision mode.\n")
+  }
   ## choosing the linkage phase configuration
   LOD.conf <- get_LOD(input.map, sorted = FALSE)
   if(phase.config == "best") {
