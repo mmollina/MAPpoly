@@ -113,7 +113,7 @@ import_data_from_polymapR <- function(input.data,
     nphen <- 0
     phen <- NULL
     if (verbose){
-      cat("Reading the following data:")
+      cat("Importing the following data:")
       cat("\n    Ploidy level:", ploidy)
       cat("\n    No. individuals: ", n.ind)
       cat("\n    No. markers: ", n.mrk) 

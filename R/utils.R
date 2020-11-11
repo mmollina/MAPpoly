@@ -1602,7 +1602,7 @@ get_dosage_type <- function(input.seq){
   s.q <- p == 0 & q == 1
   ds <- p == 1 & q == 1
   list(simplex.p = input.seq$seq.mrk.names[s.p],
-       simplex.p = input.seq$seq.mrk.names[s.q], 
+       simplex.q = input.seq$seq.mrk.names[s.q], 
        double.simplex = input.seq$seq.mrk.names[ds],
        multiplex = input.seq$seq.mrk.names[!(s.p | s.q | ds)])
 }
