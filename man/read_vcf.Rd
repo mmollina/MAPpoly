@@ -15,7 +15,8 @@ read_vcf(
   min.av.depth = 0,
   max.missing = 1,
   elim.redundant = TRUE,
-  verbose = TRUE
+  verbose = TRUE,
+  read.geno.prob = FALSE
 )
 }
 \arguments{
@@ -47,6 +48,9 @@ during map construction, keeping them annotated to export to the final map.}
 
 \item{verbose}{if \code{TRUE} (default), the current progress is shown; if
 \code{FALSE}, no output is produced}
+
+\item{read.geno.prob}{If genotypic probabilities are available (PL field),
+generates a probability-based dataframe (default = \code{FALSE}).}
 }
 \value{
 An object of class \code{mappoly.data} which contains a
@@ -70,6 +74,9 @@ An object of class \code{mappoly.data} which contains a
     \item{prob.thres}{(unused field)}
     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
       for each individual (columns). Missing data are represented by 
+      \code{ploidy_level + 1}}
+    \item{geno}{a dataframe containing all genotypic probabilities columns for each
+      marker and individual combination (rows). Missing data are represented by 
       \code{ploidy_level + 1}}
     \item{nphen}{(unused field)}
     \item{phen}{(unused field)}
