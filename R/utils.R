@@ -1602,12 +1602,27 @@ get_dosage_type <- function(input.seq){
   s.q <- p == 0 & q == 1
   ds <- p == 1 & q == 1
   list(simplex.p = input.seq$seq.mrk.names[s.p],
-       simplex.p = input.seq$seq.mrk.names[s.q], 
+       simplex.q = input.seq$seq.mrk.names[s.q], 
        double.simplex = input.seq$seq.mrk.names[ds],
        multiplex = input.seq$seq.mrk.names[!(s.p | s.q | ds)])
 }
 
-
+#' Aggregate matrix cells (lower the resolution by a factor)
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @export
+aggregate_matrix <- function(M, fact){
+  id <- seq(1,ncol(M), by = fact)
+  id <- cbind(id, c(id[-1]-1, ncol(M)))
+  R<-matrix(NA, nrow(id), nrow(id))
+  for(i in 1:(nrow(id)-1)){
+    for(j in (i+1):nrow(id)){
+      R[j,i] <-  R[i,j] <- mean(M[id[i,1]:id[i,2], id[j,1]:id[j,2]], na.rm = TRUE)
+    }
+  }
+  R
+}
 
 
 
