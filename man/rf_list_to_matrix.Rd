@@ -25,6 +25,7 @@ rf_list_to_matrix(
   rem = NULL,
   main.text = NULL,
   index = FALSE,
+  fact = 1,
   ...
 )
 }
@@ -61,6 +62,9 @@ for LOD Score}
 
 \item{index}{\code{logical} should the name of the markers be printed in the 
 diagonal of the heatmap? (default = FALSE)}
+
+\item{fact}{positive integer. factor expressed as number of cells to be aggregated 
+(default = 1, no aggregation)}
 }
 \value{
 A list containing two matrices. The first one contains the

@@ -39,7 +39,10 @@
 #'
 #' @param index \code{logical} should the name of the markers be printed in the 
 #' diagonal of the heatmap? (default = FALSE)
-#'
+#' 
+#' @param fact positive integer. factor expressed as number of cells to be aggregated 
+#' (default = 1, no aggregation)
+#' 
 #' @param ... currently ignored
 #'
 #' @return A list containing two matrices. The first one contains the
@@ -196,10 +199,21 @@ print.mappoly.rf.matrix <- function(x, ...) {
 #' @rdname rf_list_to_matrix
 #' @export
 plot.mappoly.rf.matrix <- function(x, type = c("rf", "lod"), ord = NULL, rem = NULL, 
-                                   main.text = NULL, index = FALSE, ...){
+                                   main.text = NULL, index = FALSE, fact = 1, ...){
   type<-match.arg(type)
   if(type == "rf"){
     w<-x$rec.mat
+    if(!is.null(ord))
+    {
+      w<-w[ord,ord]
+    }
+    if(!(is.null(rem) || sum(colnames(x$rec.mat)%in%rem) == 0))
+    {
+      o<-which(colnames(x$rec.mat)%in%rem)
+      w<-w[-o,-o]
+    }
+    if(fact > 1)
+      w <- aggregate_matrix(w, fact)
     if(is.null(main.text))
       main.text<-"Recombination fraction matrix"
     col.range <-
@@ -208,6 +222,17 @@ plot.mappoly.rf.matrix <- function(x, type = c("rf", "lod"), ord = NULL, rem = N
   } else if(type == "lod")
   {
     w<-x$lod.mat
+    if(!is.null(ord))
+    {
+      w<-w[ord,ord]
+    }
+    if(!(is.null(rem) || sum(colnames(x$rec.mat)%in%rem) == 0))
+    {
+      o<-which(colnames(x$rec.mat)%in%rem)
+      w<-w[-o,-o]
+    }
+    if(fact > 1)
+      w <- aggregate_matrix(w, fact)
     w[w < 1e-4]<-1e-4
     w<-log10(w)
     if(is.null(main.text))
@@ -217,15 +242,6 @@ plot.mappoly.rf.matrix <- function(x, type = c("rf", "lod"), ord = NULL, rem = N
     brks<-seq(min(w, na.rm = TRUE), max(w, na.rm = TRUE), length.out = 11)
     brks<-round(exp(brks/log10(exp(1))),1)
   } else stop("Invalid matrix type.")
-  if(!is.null(ord))
-  {
-    w<-w[ord,ord]
-  }
-  if(!(is.null(rem) || sum(colnames(x$rec.mat)%in%rem) == 0))
-  {
-    o<-which(colnames(x$rec.mat)%in%rem)
-    w<-w[-o,-o]
-  }
   
   fields::image.plot(
     w,

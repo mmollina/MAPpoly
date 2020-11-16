@@ -89,7 +89,7 @@ rf_snp_filter<-function(input.twopt,
                  data.frame(type = "filtered", value = x[ids]))
         p<-ggplot2::ggplot(d, ggplot2::aes(value)) +
             ggplot2::geom_histogram(ggplot2::aes(fill = type),
-                                    alpha = 0.4, position = "identity") +
+                                    alpha = 0.4, position = "identity", binwidth = 30) +
             ggplot2::scale_fill_manual(values = c("#00AFBB", "#E7B800")) +
             ggplot2::ggtitle( paste0("Filtering probs: [", probs[1], " : ", probs[2], "]")) +
             ggplot2::xlab(paste0("Non 'NA' values at LOD.ph = ", thresh.LOD.ph, ", LOD.rf = ", thresh.LOD.rf, ", and thresh.rf = ", thresh.rf))
