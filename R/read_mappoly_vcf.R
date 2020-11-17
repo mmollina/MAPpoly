@@ -345,8 +345,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
     res$elim.correspondence$all.mrk.depth = res$all.mrk.depth[c(mrks.rem)]
     res$n.mrk = length(res$kept)
     res$mrk.names = res$mrk.names[-c(mrks.rem)]
-    res$geno = subset(res$geno, mrk%in%res$mrk.names)
-    if (exists('geno')) res$geno = res$geno[-c(mrks.rem)]
+    if (exists('geno')) res$geno = subset(res$geno, mrk%in%res$mrk.names) ## res$geno = res$geno[-c(mrks.rem)]
     res$geno.dose = res$geno.dose[-c(mrks.rem),]
     res$dosage.p = res$dosage.p[-c(mrks.rem)]
     res$dosage.q = res$dosage.q[-c(mrks.rem)]
