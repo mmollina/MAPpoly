@@ -213,6 +213,8 @@ std::vector<double> get_probabilities(std::string mystring, int pl_pos){
   std::string test = vec_o_strings[pl_pos-1];
   if(test.size() > 2){
     mystring = vec_o_strings[pl_pos-1];
+  } else {
+    mystring = "0,0";
   }
   // Looping through selected PL string
   start = 0;
@@ -232,7 +234,7 @@ std::vector<double> get_probabilities(std::string mystring, int pl_pos){
   std::vector<double> final_vec_out(size);
   // Converting to double and transforming scale (from phred to probabilities)
   for (s=0; s < size; s++){
-    final_vec[s] = stod(vec_o_strings2[s]);
+    final_vec[s] = stod(vec_o_strings2(s));
     final_vec[s] = final_vec[s]/(-10);
     final_vec[s] = exp(final_vec[s]);
     sum += final_vec[s];
@@ -271,9 +273,15 @@ Rcpp::List vcf_get_probabilities(Rcpp::StringMatrix& mat, int pl_pos){
     for (l=0; l < colmat; l++){
       // Rcout << "The value of l : " << l << "\n";
       out = get_probabilities(as<std::string>(mat(k,l)), pl_pos);
-      for (s=0; s < size; s++){
-        // Rcout << "The value of s : " << s << "\n";
-        partial_results(l,s) = out[s];
+      if (out.size() == size){
+        for (s=0; s < size; s++){
+          // Rcout << "The value of s : " << s << "\n";
+          partial_results(l,s) = out[s];
+        }
+      } else {
+        for (s=0; s < size; s++){
+          partial_results(l,s) = -1.0;
+        }
       }
       s=0;
     }
