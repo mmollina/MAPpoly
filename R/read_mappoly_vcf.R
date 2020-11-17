@@ -271,6 +271,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
                        seq.ref = seq.ref[id],
                        seq.alt = seq.alt[id],
                        prob.thres = NULL,
+                       geno = geno[[id]],
                        geno.dose = geno.dose[id,],
                        nphen = 0,
                        phen = NULL,
@@ -310,6 +311,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
     res$elim.correspondence$all.mrk.depth = res$all.mrk.depth[c(mrks.rem)]
     res$n.mrk = length(res$kept)
     res$mrk.names = res$mrk.names[-c(mrks.rem)]
+    res$geno = res$geno[[-c(mrks.rem)]]
     res$geno.dose = res$geno.dose[-c(mrks.rem),]
     res$dosage.p = res$dosage.p[-c(mrks.rem)]
     res$dosage.q = res$dosage.q[-c(mrks.rem)]
