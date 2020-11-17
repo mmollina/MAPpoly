@@ -15,3 +15,4 @@ cran-comments.md
 ^CRAN-RELEASE$
 ^appveyor\.yml$
 ^tests/testthat/Rplots\.pdf
+^old_cran-comments$

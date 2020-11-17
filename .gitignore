@@ -15,5 +15,7 @@ new_functions.R
 *.pptx
 r-release/
 tests/testthat/Rplots.pdf
+my_tests/*.rd*
+my_tests/*.RData
 my_tests/
 old_cran-comments/
