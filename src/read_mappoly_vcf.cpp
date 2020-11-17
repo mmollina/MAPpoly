@@ -234,7 +234,7 @@ std::vector<double> get_probabilities(std::string mystring, int pl_pos){
   std::vector<double> final_vec_out(size);
   // Converting to double and transforming scale (from phred to probabilities)
   for (s=0; s < size; s++){
-    final_vec[s] = stod(vec_o_strings2(s));
+    final_vec[s] = stod(vec_o_strings2[s]);
     final_vec[s] = final_vec[s]/(-10);
     final_vec[s] = exp(final_vec[s]);
     sum += final_vec[s];
