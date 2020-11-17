@@ -16,3 +16,4 @@ new_functions.R
 r-release/
 tests/testthat/Rplots.pdf
 my_tests/
+old_cran-comments/

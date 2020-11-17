@@ -318,19 +318,19 @@ RcppExport SEXP pairwise_rf_estimation_prob(SEXP m_R,
   int n_ind = geno_dim[2]; //n.ind
   int l = 0;
   double ***G = new double**[n_mrk];
-  for(int i = 0; (unsigned)i < n_mrk; i++){
+  for(int i = 0; i < n_mrk; i++){
     G[i] = new double*[n_dos];
-    for(int j = 0; (unsigned)j < n_dos; j++){
+    for(int j = 0; j < n_dos; j++){
       G[i][j] = new double[n_ind];
-      for(int k = 0; (unsigned)k < n_ind; k++){
+      for(int k = 0; k < n_ind; k++){
         G[i][j][k] = 0;
       }
     }
   }
   
-  for(int k = 0; (unsigned)k < n_ind; k++){
-    for(int j = 0; (unsigned)j < n_dos; j++){
-      for(int i = 0; (unsigned)i < n_mrk; i++){
+  for(int k = 0; k < n_ind; k++){
+    for(int j = 0; j < n_dos; j++){
+      for(int i = 0; i < n_mrk; i++){
         G[i][j][k] = geno_prob[l];
         l++;
       }
