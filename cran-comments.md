@@ -1,4 +1,4 @@
-## Re-submission of an archived package
+## Re-submission of archived package
 
 This is a re-submission of an archived package. The package was archived on Nov-16-2020 because we did not correct an error detected by extra checks with long doubles disabled in the required time.
 
