@@ -39,6 +39,10 @@
 #' @param read.geno.prob If genotypic probabilities are available (PL field),
 #' generates a probability-based dataframe (default = \code{FALSE}).
 #'
+#' @param prob.thres probability threshold to associate a marker call to a 
+#'     dosage. Markers with maximum genotype probability smaller than \code{prob.thres} 
+#'     are considered as missing data for the dosage calling purposes (default = 0.95)
+#' 
 #' @return An object of class \code{mappoly.data} which contains a
 #'     list with the following components:
 #'     \item{m}{ploidy level}
@@ -105,14 +109,14 @@
 read_vcf = function(file.in, parent.1, parent.2, ploidy = NA, 
                     filter.non.conforming = TRUE, thresh.line = 0.05, 
                     min.gt.depth = 0, min.av.depth = 0, max.missing = 1, 
-                    elim.redundant = TRUE, verbose = TRUE, read.geno.prob=FALSE) {
+                    elim.redundant = TRUE, verbose = TRUE, read.geno.prob = FALSE, prob.thres = 0.95) {
   # Checking even ploidy
   if(!is.na(ploidy) && (ploidy %% 2) != 0){
     stop("MAPpoly only supports even ploidy levels. Please check the 'ploidy' parameter and try again.")
   }
   input.file = normalizePath(file.in) # Getting full input file path
   input.size = file.size(file.in) / 1024000 # Getting input file size in MB
-  if (input.size > 3000){
+  if (verbose && input.size > 3000){
     warning("Your VCF file is greater than 3 GB. Check for available RAM memory.")
   }
   if (verbose) cat("Reading data...\n")
@@ -126,7 +130,6 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
   if (any(is.na(unique(mrk.names)))){
     if (verbose) cat("No named markers. Using genome information instead.\n")
     no_name = sum(is.na(mrk.names))
-    ##mrk.names[which(is.na(mrk.names))] = paste0("no_name_", seq(1, no_name, 1))
     mrk.names[which(is.na(mrk.names))] = paste0(sequence[which(is.na(mrk.names))],"_", sequence.pos[which(is.na(mrk.names))])
   }
   names(sequence)  = mrk.names
@@ -138,7 +141,6 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
   if (verbose) cat("Processing genotypes...")
   cname = which(unlist(strsplit(unique(input.data@gt[,1]), ":")) == "GT")[1] # Defining GT position
   dname = which(unlist(strsplit(unique(input.data@gt[,1]), ":")) == "DP")[1] # Defining DP position
-  ## file.ploidy = length(unlist(strsplit(unique(input.data@gt[,2])[1], "/"))) # Checking ploidy (old)
   geno.ploidy = .vcf_get_ploidy(input.data@gt[,-1], cname) # Getting all ploidy levels
   geno.depth = .vcf_get_depth(input.data@gt[,-1], dname) # Getting all depths
   file.ploidy = unique(c(geno.ploidy)) # Getting different ploidy levels
@@ -178,20 +180,20 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
   if (!(parent.1 %in% ind.names) | !(parent.2 %in% ind.names)){
     stop("Provided parents were not found in VCF file. Please check it and try again.")
   }
-  # lost.data = paste(c(rep("./", (m-1)), "."), collapse = "")
-  #     for (i in 1:length(geno.dose)){
-  #         if (geno.dose[i] == lost.data){
-  #           geno.dose[i] = NA
-  #       } else {geno.dose[i] = length(which(unlist(strsplit(geno.dose[i], "/")) == 0))} # Transforming dosages (time consuming step)
-  #      }
-  # geno.dose = matrix(as.numeric(geno.dose), nrow = n.mrk, byrow = F)
 
   ## Updating some info
   dif_ploidy = which(rowSums(geno.ploidy == m) == (n.ind+2)) # Markers with different ploidy levels
   all_mrk_depth = rowMeans(geno.depth)
   av_depth = which(all_mrk_depth >= min.av.depth) # Markers with average depths below threshold
   max_miss = which(rowSums(is.na(geno.dose))/dim(geno.dose)[2] <= max.missing) # Markers with missing data above the threshold
-  selected_markers = intersect(intersect(dif_ploidy,av_depth),max_miss) # Selecting markers that passed all thresholds
+  ## Filtering non-biallelic markers
+  if (exists('geno')) {
+    biallelic = unlist(lapply(geno, ncol))
+    biallelic = which(biallelic == (m+1))
+    selected_markers = intersect(intersect(intersect(dif_ploidy,av_depth),max_miss),biallelic) # Selecting markers that passed all thresholds
+  } else {
+    selected_markers = intersect(intersect(dif_ploidy,av_depth),max_miss) # Selecting markers that passed all thresholds
+  }
   geno.dose = geno.dose[selected_markers,] # Selecting markers
   geno.dose[which(geno.dose < min.gt.depth)] = NA # removing genotypes with depths below the threshold
   all_mrk_depth = all_mrk_depth[selected_markers]
@@ -213,10 +215,17 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
   names(dosage.p) <- names(dosage.q) <- mrk.names
   geno.dose = geno.dose[, -c(which(colnames(geno.dose) %in% c(parent.1, parent.2)))] # Updating geno.dose matrix
   if (exists('geno')){
-    geno = geno[selected_markers] # Selecting markers
-    for (i in 1:length(geno)){
-      geno[[i]] = geno[[i]][-c(which(rownames(geno[[i]]) %in% c(parent.1,parent.2))),]
+    geno2 = geno[c(selected_markers)] # Selecting markers
+    geno2 = lapply(geno2, as.data.frame)
+    for (i in 1:length(geno2)){
+      geno2[[i]] = geno2[[i]][-c(which(rownames(geno2[[i]]) %in% c(parent.1,parent.2))),]
+      geno2[[i]] = cbind(names(geno2)[i], rownames(geno2[[i]]), geno2[[i]])
     }
+    geno2 = do.call(rbind.data.frame, geno2)
+    colnames(geno2) = c('mrk','ind', as.character(seq(0,(m),1)))
+    geno2 = geno2[order(geno2$ind),]
+    rownames(geno2) = seq(1,nrow(geno2),1)
+    geno = geno2
   }
   ind.names = ind.names[-c(which(ind.names %in% c(parent.1, parent.2)))] # Updating individual names
   geno.dose = data.frame(geno.dose)
@@ -258,8 +267,32 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
   geno.dose[is.na(geno.dose)] <- m + 1
   ## returning the 'mappoly.data' object
   if (verbose) cat("\n    Done with reading.\n")
-  
-  res = structure(list(m = m,
+
+  if (exists('geno')){
+    res = structure(list(m = m,
+                       n.ind = n.ind,
+                       n.mrk = sum(id),
+                       ind.names = ind.names,
+                       mrk.names = mrk.names[id],
+                       dosage.p = dosage.p[id],
+                       dosage.q = dosage.q[id],
+                       sequence = sequence[id],
+                       sequence.pos = sequence.pos[id],
+                       seq.ref = seq.ref[id],
+                       seq.alt = seq.alt[id],
+                       prob.thres = prob.thres,
+                       geno = subset(geno, mrk%in%mrk.names[id]),
+                       geno.dose = geno.dose[id,],
+                       nphen = 0,
+                       phen = NULL,
+                       all.mrk.depth = all_mrk_depth[id],
+                       chisq.pval = NULL,
+                       kept = NULL,
+                       elim.correspondence = NULL
+                       ),
+                  class = "mappoly.data")
+  } else {
+    res = structure(list(m = m,
                        n.ind = n.ind,
                        n.mrk = sum(id),
                        ind.names = ind.names,
@@ -271,16 +304,17 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
                        seq.ref = seq.ref[id],
                        seq.alt = seq.alt[id],
                        prob.thres = NULL,
-                       geno = geno, ##geno = geno[id],
                        geno.dose = geno.dose[id,],
                        nphen = 0,
                        phen = NULL,
                        all.mrk.depth = all_mrk_depth[id],
+                       chisq.pval = NULL,
                        kept = NULL,
                        elim.correspondence = NULL
                        ),
                   class = "mappoly.data")
-  
+  }
+    
   if(filter.non.conforming){
     if (verbose) cat("    Filtering non-conforming markers.\n    ...")
     res<-filter_non_conforming_classes(res)
@@ -294,7 +328,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
     M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
     dimnames(M)<-list(res$mrk.names, c(0:m))
     M<-cbind(M, res$geno.dose)
-    res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
+    res$chisq.pval<-apply(M, 1, mappoly:::mrk_chisq_test, m = m)
     if (verbose) cat("\n    Done.\n")
   }
   if (elim.redundant){
@@ -311,7 +345,8 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
     res$elim.correspondence$all.mrk.depth = res$all.mrk.depth[c(mrks.rem)]
     res$n.mrk = length(res$kept)
     res$mrk.names = res$mrk.names[-c(mrks.rem)]
-    ##res$geno = res$geno[-c(mrks.rem)]
+    res$geno = subset(res$geno, mrk%in%res$mrk.names)
+    res$geno = res$geno[-c(mrks.rem)]
     res$geno.dose = res$geno.dose[-c(mrks.rem),]
     res$dosage.p = res$dosage.p[-c(mrks.rem)]
     res$dosage.q = res$dosage.q[-c(mrks.rem)]
