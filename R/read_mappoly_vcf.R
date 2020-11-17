@@ -212,7 +212,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
   dosage.q = as.integer(geno.dose[,which(colnames(geno.dose) == parent.2)]) # Selecting dosages for parent 2
   names(dosage.p) <- names(dosage.q) <- mrk.names
   geno.dose = geno.dose[, -c(which(colnames(geno.dose) %in% c(parent.1, parent.2)))] # Updating geno.dose matrix
-  if (exists(geno)){
+  if (exists('geno')){
     geno = geno[selected_markers] # Selecting markers
     for (i in 1:length(geno)){
       geno[[i]] = geno[[i]][-c(which(rownames(geno[[i]]) %in% c(parent.1,parent.2))),]
