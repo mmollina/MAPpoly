@@ -22,6 +22,7 @@
 #' @export
 #' @importFrom graphics barplot layout mtext legend 
 #' @importFrom stats chisq.test
+#' @importFrom scatterplot3d scatterplot3d
 plot_mrk_info<-function(input.data, mrk)
   {
   input_classes <- c("mappoly.data")
