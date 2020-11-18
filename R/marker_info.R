@@ -126,14 +126,11 @@ plot_mrk_info<-function(input.data, mrk)
       pal<-rep(gg_color_hue(input.data$m + 1), each = nrow(z))
       pal[as.numeric(as.matrix(z[,1:(input.data$m + 1)])) < input.data$prob.thres] <- "#404040"
       op<-par(mar = c(2,2,2,2))
-      plot3D::scatter3D(x,y, as.matrix(z[,1:(input.data$m + 1)]),  theta = 30, phi = 30, bty = "g",  type = "h", lwd = .3 ,
-                        ticktype = "detailed", pch = 19, cex = 0.5, 
-                        colvar = NULL, 
-                        col = pal,
-                        xlab = "Offspring",
-                        ylab ="Dose", 
-                        zlab = "Genotype probability", 
-                        cex.axis = .7, cex.lab = .7, clab = )
+      scatterplot3d::scatterplot3d(cbind(x,y, as.double(as.matrix(z[,1:(input.data$m + 1)]))), 
+                                   type='h', color = pal, xlab = "Offspring",
+                                   ylab ="Dose", pch = 20,
+                                   zlab = "Genotype probability", angle=55,
+                                   xlim = c(0, input.data$n.ind))
     } 
   })
   par(mfrow=c(1,1))

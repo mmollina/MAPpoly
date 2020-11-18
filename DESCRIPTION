@@ -63,7 +63,7 @@ Imports:
     ggpubr, 
     ggsci,
     rstudioapi,
-    plot3D,
+    scatterplot3d,
     dplyr,
     crayon,
     cli,
