@@ -438,12 +438,16 @@ mrk_chisq_test<-function(x, m){
 #' @param input.seq a sequence object of class \code{mappoly.sequence}
 #' @param verbose if \code{TRUE} (default), the current progress is shown; if
 #'     \code{FALSE}, no output is produced
+#' @param x 	an object of the class mappoly.geno.ord
+#' @param ... 	currently ignored   
+#'   
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' @examples
-#'  s1<-make_seq_mappoly(tetra.solcap, "all")
-#'  o1<-get_genomic_order(s1)
-#'  head(o1)
-#' @export
+#' s1<-make_seq_mappoly(tetra.solcap, "all")
+#' o1<-get_genomic_order(s1)
+#' plot(o1)
+#' s.geno.ord <- make_seq_mappoly(o1)
+#' @export get_genomic_order
 get_genomic_order<-function(input.seq, verbose = TRUE){
   if (!inherits(input.seq, "mappoly.sequence")) {
     stop(deparse(substitute(input.seq)), 
@@ -454,23 +458,43 @@ get_genomic_order<-function(input.seq, verbose = TRUE){
       stop("No sequence or sequence position information found.")
     else{
       if (verbose) message("Ordering markers based on sequence information")
-      M<-data.frame(seq = input.seq$sequence, row.names = input.seq$seq.mrk.names)
-      return(M[order(M[,1]),])
+      M <- data.frame(seq = input.seq$sequence, row.names = input.seq$seq.mrk.names)
+      M.out <- M[order(M[,1]),]
     }
   } else if(all(is.na(input.seq$sequence))){
     if(all(is.na(input.seq$sequence.pos))) 
       stop("No sequence or sequence position information found.")
     else{
       if (verbose) message("Ordering markers based on sequence position information")
-      M<-data.frame(seq.pos = input.seq$sequence.pos, row.names = input.seq$seq.mrk.names)
-      return(M[order(as.numeric(M[,1])),])
+      M <- data.frame(seq.pos = input.seq$sequence.pos, row.names = input.seq$seq.mrk.names)
+      M.out <- M[order(as.numeric(M[,1])),]
     }
   } else{
     M<-data.frame(seq = input.seq$sequence, 
                   seq.pos = input.seq$sequence.pos, 
                   row.names = input.seq$seq.mrk.names)
-    return(M[order(as.numeric(M[,1]), as.numeric(M[,2])),])
+    M.out <- M[order(as.numeric(M[,1]), as.numeric(M[,2])),]
   }
+  structure(list(data.name = input.seq$data.name, ord = M.out), class = "mappoly.geno.ord")
+}
+
+#' @rdname get_genomic_order
+#' @export
+print.mappoly.geno.ord <- function(x, ...){
+  print(head(x$ord))
+}
+
+#' @rdname get_genomic_order
+#' @export
+#' @importFrom ggplot2 ggplot aes geom_point xlab ylab theme
+plot.mappoly.geno.ord <- function(x, ...){
+  seq <- seq.pos <- NULL
+  ggplot2::ggplot(as.data.frame(x$ord), 
+                  ggplot2::aes(x=seq.pos, y=seq, group=as.factor(seq))) +
+    ggplot2::geom_point(ggplot2::aes(color=as.factor(seq)), shape = 108) +
+    ggplot2::xlab("position") + 
+    ggplot2::ylab("sequence") + 
+    ggplot2::theme(legend.position = "none") 
 }
 
 #' Remove markers from a map

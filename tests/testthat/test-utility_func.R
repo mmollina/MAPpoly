@@ -51,9 +51,10 @@ test_that("test several utility functions", {
   a<-sample_data(a, n=30)
   w<-update_missing(a, prob.thres = .7)
   expect_is(w, "mappoly.data")
-  w2<-get_genomic_order(make_seq_mappoly(hexafake, "all"))
-  w3<-round(as.numeric(crossprod(w2$seq.pos)/10e17),3)
-  expect_equal(w3, 0.495)
+  w2 <- get_genomic_order(make_seq_mappoly(hexafake, "all"))
+  w3 <- as.numeric(crossprod(w2$ord$seq.pos)/10e17)
+  expect_is(plot(w2), "ggplot")
+  expect_equal(w3, 0.4952, tolerance = 1e-3)
   ##test drop
   w4<-get_submap(solcap.dose.map[[1]], 1:10, reestimate.rf = FALSE)
   s4<-make_seq_mappoly(w4)
