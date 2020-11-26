@@ -379,8 +379,11 @@ perm_pars <- function(v) {
 #' @export
 #' @importFrom grDevices hcl
 gg_color_hue <- function(n) {
-  hues = seq(15, 375, length = n + 1)
-  hcl(h = hues, l = 65, c = 100)[1:n]
+  x<-rgb2hsv(col2rgb("steelblue"))[, 1]
+  cols = seq(x[1], x[1] + 1, by = 1/n)
+  cols = cols[1:n]
+  cols[cols > 1] <- cols[cols > 1] - 1
+  return(hsv(cols, x[2], x[3]))
 }
 
 #' Update missing information
