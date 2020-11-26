@@ -5,7 +5,6 @@
 [![codecov](https://codecov.io/github/mmollina/MAPpoly/branch/master/graphs/badge.svg)](https://codecov.io/github/mmollina/MAPpoly)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/mappoly)](https://cran.r-project.org/package=mappoly)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/mappoly)](https://cran.r-project.org/package=mappoly)
-[![](http://cranlogs.r-pkg.org/badges/mappoly)](https://cran.r-project.org/package=mappoly)
 
 ![](https://raw.githubusercontent.com/mmollina/MAPpoly/master/mappoly_hexsticker.png)
 
