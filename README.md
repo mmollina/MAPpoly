@@ -63,14 +63,18 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
 # Vignettes
 * [Building a genetic map using potato genotype data from SolCAP](https://mmollina.github.io/MAPpoly_vignettes/vignette_tetraploid/vignette_tetraploid.html)
 * [Building a genetic map in an hexaploid full-sib population using MAPpoly](https://mmollina.github.io/tutorials/hexa_fake/haxaploid_map_construction.html)
-* Dataset examples
+* Real datasets
   * [Hexaploid sweetpotato VCF dataset (Beauregard x Tanzania) obtained using VCF2SM](https://github.com/mmollina/MAPpoly_vignettes/tree/master/data/BT)
-  * [Hexaploid simulation with dosage call in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/blob/master/data/hexafake)
-  * [Hexaploid simulation with dosage probabilities in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/blob/master/data/hexafake_geno_dist)
   * [Tetraploid potato with dosage call in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/blob/master/data/SolCAP_dosage)
   * [Tetraploid potato with dosage call in CSV format](https://github.com/mmollina/MAPpoly_vignettes/blob/master/data/tetra_solcap.csv)
   * [Tetraploid potato with dosage probabilities in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/blob/master/data/SolCAP)
-
+  * [Tetraploid potato obtained using ClusterCall](https://raw.githubusercontent.com/mmollina/B2721_map/master/cluster_call/B2721_CC.csv)
+  * [Compressed tetraploid potato with dosage probabilities obtained using fitPoly](https://github.com/mmollina/SCRI/raw/main/data/fitpoly_tetra_call/B2721_scores.zip)
+* Simulated datasets
+   * [Hexaploid simulation with dosage call in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/blob/master/data/hexafake)
+   * [Hexaploid simulation with dosage probabilities in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/blob/master/data/hexafake_geno_dist)
+   
+  
 # Related software
 
 * Simulations
