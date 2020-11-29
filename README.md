@@ -71,7 +71,7 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
   * [Tetraploid potato with dosage call in CSV format](https://github.com/mmollina/MAPpoly_vignettes/blob/master/data/tetra_solcap.csv)
   * [Tetraploid potato with dosage probabilities in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/blob/master/data/SolCAP)
 
-# Articles referenciong and using MAPpoly
+# Articles referencing MAPpoly
 
 1. High-Resolution Linkage Map and QTL Analyses of Fruit Firmness in Autotetraploid Blueberry ([Cappai et al., 2020](https://doi.org/10.3389/fpls.2020.562171))
 2. Quantitative trait locus mapping for common scab resistance in a tetraploid potato full-sib population. ([Pereira et al., 2020](https://doi.org/10.1101/2020.10.24.353557))
