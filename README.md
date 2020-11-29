@@ -68,7 +68,7 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
   * [Tetraploid potato with dosage call in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/blob/master/data/SolCAP_dosage)
   * [Tetraploid potato with dosage call in CSV format](https://github.com/mmollina/MAPpoly_vignettes/blob/master/data/tetra_solcap.csv)
   * [Tetraploid potato with dosage probabilities in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/blob/master/data/SolCAP)
-  * [Tetraploid potato obtained using ClusterCall](https://raw.githubusercontent.com/mmollina/B2721_map/master/cluster_call/B2721_CC.csv)
+  * [Tetraploid potato in CSV format obtained using ClusterCall](https://raw.githubusercontent.com/mmollina/B2721_map/master/cluster_call/B2721_CC.csv)
   * [Compressed tetraploid potato with dosage probabilities obtained using fitPoly](https://github.com/mmollina/SCRI/raw/main/data/fitpoly_tetra_call/B2721_scores.zip)
 * Simulated datasets
    * [Hexaploid simulation with dosage call in MAPpoly format](https://github.com/mmollina/MAPpoly_vignettes/blob/master/data/hexafake)
