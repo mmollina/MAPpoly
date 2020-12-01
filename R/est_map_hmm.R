@@ -70,6 +70,9 @@
 #' 
 #' @param Q a string containing the name of parent Q
 #' 
+#' @param xlim range of the x-axis. If \code{xlim = NULL} (default) it uses the 
+#'             map range. 
+#' 
 #' @param ... currently ignored
 #'
 #' @return A list of class \code{mappoly.map} with two elements: 
@@ -258,7 +261,6 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
                  maps = maps),
             class = "mappoly.map")
 }
-
 
 #' Multipoint analysis using Hidden Markov Models: Sequential phase elimination
 #'
@@ -644,7 +646,6 @@ est_rf_hmm_sequential<-function(input.seq,
 
 #' @rdname est_rf_hmm
 #' @export 
-
 print.mappoly.map <- function(x, detailed = FALSE, ...) {
   cat("This is an object of class 'mappoly.map'\n")
   cat("    Ploidy level:\t", x$info$m, "\n")
@@ -697,7 +698,7 @@ print.mappoly.map <- function(x, detailed = FALSE, ...) {
 plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
                              phase = TRUE, mrk.names = FALSE, 
                              cex = 1, config = "best", P = "Parent 1",
-                             Q = "Parent 2", ...) {
+                             Q = "Parent 2", xlim = NULL, ...) {
   oldpar <- par(no.readonly = TRUE)
   on.exit(par(oldpar))
   if(phase){
@@ -736,13 +737,16 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
     par(mai = c(1,0.15,0,0), mar=c(4.5,2,1,2))
     curx<-x[id.left:id.right]
     layout(mat =matrix(c(4,2,3, 1), ncol = 2), heights = c(2, 10), widths = c(1, 10))
+    if(is.null(xlim))
+      xlim <- range(curx)
     plot(x = curx,
          y = rep(.5,length(curx)),
          type = "n" , 
          ylim = c(.25, 4.5), 
          axes = FALSE, 
          xlab = "Distance (cM)", 
-         ylab = "")
+         ylab = "",
+         xlim = xlim)
     lines(c(x[id.left], x[id.right]), c(.5, .5), lwd=15, col = "gray")
     points(x = curx,
            y = rep(.5,length(curx)),
