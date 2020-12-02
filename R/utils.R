@@ -1341,7 +1341,7 @@ summary_maps = function(map.list, verbose = TRUE){
                        "Total" = unlist(lapply(map.list, function(x) x$info$n.mrk)),
                        "Max gap" = unlist(lapply(map.list, function(x) round(imf_h(max(x$maps[[1]]$seq.rf)),2))),
                        check.names = FALSE, stringsAsFactors = F)
-  results = rbind(results, c('Total', NA, sum(as.numeric(results$`Map size (cM)`)), round(mean(as.numeric(results$`Markers/cM`)),2), sum(as.numeric(results$Simplex)), sum(as.numeric(results$`Double-simplex`)), sum(as.numeric(results$Multiplex)), sum(as.numeric(results$Total)), round(mean(as.numeric(results$`Max gap`)),2)))
+  results = rbind(results, c('Total', NA, sum(as.numeric(results$`Map length (cM)`)), round(mean(as.numeric(results$`Markers/cM`)),2), sum(as.numeric(results$Simplex)), sum(as.numeric(results$`Double-simplex`)), sum(as.numeric(results$Multiplex)), sum(as.numeric(results$Total)), round(mean(as.numeric(results$`Max gap`)),2)))
   if (verbose){
     all.mrks = unlist(lapply(map.list, function(x) return(x$info$mrk.names)))
     if (!any(get(map.list[[1]]$info$data.name, pos = 1)$elim.correspondence$elim %in% all.mrks))

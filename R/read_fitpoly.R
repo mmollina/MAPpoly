@@ -30,7 +30,7 @@
 #'        is smaller than \code{thresh.parent.geno}, the marker is discarded.
 #' 
 #' @param prob.thres threshold probability to assign a dosage to offspring. If the probability 
-#'        is smaller than \code{thresh.parent.geno}, the data point is converted to 'NA'.
+#'        is smaller than \code{prob.thres}, the data point is converted to 'NA'.
 #' 
 #' @param  file.type indicates whether the characters in the input file are separated by 
 #'                  'white spaces' ("table") or by commas ("csv").
