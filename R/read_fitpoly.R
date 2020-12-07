@@ -103,15 +103,15 @@ read_fitpoly <- function(file.in, ploidy, parent1, parent2, offspring = NULL,
     dat <- read.delim(file = file.in, header = TRUE, stringsAsFactors = FALSE)
   else if(file.type == "csv")
     dat <- read.csv(file = file.in, header = TRUE, stringsAsFactors = FALSE)
-  p1 <- unique(grep(pattern = parent1, dat[,"SampleName"], value = TRUE))
-  p2 <- unique(grep(pattern = parent2, dat[,"SampleName"], value = TRUE))
+  p1 <- unique(sapply(parent1, function(x) unique(grep(pattern = x, dat[,"SampleName"], value = TRUE))))
+  p2 <- unique(sapply(parent2, function(x) unique(grep(pattern = x, dat[,"SampleName"], value = TRUE))))
   if(is.null(offspring)){
     offspring <- setdiff(unique(dat[,"SampleName"]), c(p1, p2))    
   } else {
     offspring <- unique(grep(pattern = offspring, dat[,"SampleName"], value = TRUE))
   }
   parent.geno <- match.arg(parent.geno)
-  dat<-dat[c(2,3,5:(5 + ploidy))]
+  dat<-dat[,c("MarkerName", "SampleName",paste0("P", 0:ploidy))] 
   if(parent.geno == "joint"){
     dat.p1 <- dat %>%
       filter(SampleName %in% p1) %>%

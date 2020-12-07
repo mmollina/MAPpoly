@@ -80,11 +80,11 @@ import_data_from_polymapR <- function(input.data,
     if(is.null(pardose)) 
       stop("provide parental dosage.")
     rownames(pardose) <- pardose$MarkerName
-    dat<-input.data[c(2,3,5:(5 + ploidy))]
-    p1 <- unique(grep(pattern = parent1, dat[,"SampleName"], value = TRUE))
-    p2 <- unique(grep(pattern = parent2, dat[,"SampleName"], value = TRUE))
+    dat<-input.data[,c("MarkerName", "SampleName",paste0("P", 0:ploidy))]
+    p1 <- unique(sapply(parent1, function(x) unique(grep(pattern = x, dat[,"SampleName"], value = TRUE))))
+    p2 <- unique(sapply(parent2, function(x) unique(grep(pattern = x, dat[,"SampleName"], value = TRUE))))
     if(is.null(offspring)){
-      offspring <- setdiff(unique(dat[,"SampleName"]), c(p1, p2))    
+      offspring <- setdiff(as.character(unique(dat[,"SampleName"])), c(p1, p2))    
     } else {
       offspring <- unique(grep(pattern = offspring, dat[,"SampleName"], value = TRUE))
     }

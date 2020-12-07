@@ -377,7 +377,7 @@ perm_pars <- function(v) {
 #' @param void internal function to be documented
 #' @keywords internal
 #' @export
-#' @importFrom grDevices hcl
+#' @importFrom grDevices hcl col2rgb hsv rgb2hsv
 gg_color_hue <- function(n) {
   x<-rgb2hsv(col2rgb("steelblue"))[, 1]
   cols = seq(x[1], x[1] + 1, by = 1/n)
