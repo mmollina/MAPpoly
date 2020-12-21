@@ -298,40 +298,6 @@ plot_compare_haplotypes <- function(m, hom.allele.p1, hom.allele.q1, hom.allele.
   text(x = 11, y = -(m + 1)/2, labels = "X", cex = 1)
 }
 
-
-#' Summary of a set of markers
-#' 
-#' Returns information related to a given set of markers
-#'
-#' @param input.data an object \code{'mappoly.data'}
-#' @param mrks marker sequence index (integer vector)
-#' @examples
-#'  print_mrk(tetra.solcap.geno.dist, 1:5)
-#'  print_mrk(hexafake, 256)
-#' @export
-print_mrk<-function(input.data, mrks){
-  for(i in 1:length(mrks))
-  {
-    x<-input.data$geno.dose[mrks[i], ]
-    x[x==input.data$m+1]<-NA
-    cat("\n", input.data$mrk.names[mrks[i]])
-    cat("\n----------------------------------")
-    cat("\n dosage P1: ", input.data$dosage.p[mrks[i]])
-    cat("\n dosage P2: ", input.data$dosage.q[mrks[i]])
-    cat("\n----")
-    cat("\n dosage distribution\n")
-    z<-table(as.numeric(x), useNA = "always")
-    names(z)[is.na(names(z))]<-"mis"
-    print(z)
-    cat("----")
-    cat("\n expected polysomic segregation\n")
-    y<-segreg_poly(input.data$m, dP = input.data$dosage.p[mrks[i]], input.data$dosage.q[mrks[i]])
-    names(y)<-0:input.data$m
-    print(y)
-    cat("----------------------------------\n")
-  }
-}
-
 #' Check if it is possible to estimate the recombination
 #' fraction between neighbor markers using two-point
 #' estimation
@@ -411,10 +377,13 @@ perm_pars <- function(v) {
 #' @param void internal function to be documented
 #' @keywords internal
 #' @export
-#' @importFrom grDevices hcl
+#' @importFrom grDevices hcl col2rgb hsv rgb2hsv
 gg_color_hue <- function(n) {
-  hues = seq(15, 375, length = n + 1)
-  hcl(h = hues, l = 65, c = 100)[1:n]
+  x<-rgb2hsv(col2rgb("steelblue"))[, 1]
+  cols = seq(x[1], x[1] + 1, by = 1/n)
+  cols = cols[1:n]
+  cols[cols > 1] <- cols[cols > 1] - 1
+  return(hsv(cols, x[2], x[3]))
 }
 
 #' Update missing information
@@ -472,12 +441,16 @@ mrk_chisq_test<-function(x, m){
 #' @param input.seq a sequence object of class \code{mappoly.sequence}
 #' @param verbose if \code{TRUE} (default), the current progress is shown; if
 #'     \code{FALSE}, no output is produced
+#' @param x 	an object of the class mappoly.geno.ord
+#' @param ... 	currently ignored   
+#'   
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' @examples
-#'  s1<-make_seq_mappoly(tetra.solcap, "all")
-#'  o1<-get_genomic_order(s1)
-#'  head(o1)
-#' @export
+#' s1<-make_seq_mappoly(tetra.solcap, "all")
+#' o1<-get_genomic_order(s1)
+#' plot(o1)
+#' s.geno.ord <- make_seq_mappoly(o1)
+#' @export get_genomic_order
 get_genomic_order<-function(input.seq, verbose = TRUE){
   if (!inherits(input.seq, "mappoly.sequence")) {
     stop(deparse(substitute(input.seq)), 
@@ -488,23 +461,43 @@ get_genomic_order<-function(input.seq, verbose = TRUE){
       stop("No sequence or sequence position information found.")
     else{
       if (verbose) message("Ordering markers based on sequence information")
-      M<-data.frame(seq = input.seq$sequence, row.names = input.seq$seq.mrk.names)
-      return(M[order(M[,1]),])
+      M <- data.frame(seq = input.seq$sequence, row.names = input.seq$seq.mrk.names)
+      M.out <- M[order(M[,1]),]
     }
   } else if(all(is.na(input.seq$sequence))){
     if(all(is.na(input.seq$sequence.pos))) 
       stop("No sequence or sequence position information found.")
     else{
       if (verbose) message("Ordering markers based on sequence position information")
-      M<-data.frame(seq.pos = input.seq$sequence.pos, row.names = input.seq$seq.mrk.names)
-      return(M[order(as.numeric(M[,1])),])
+      M <- data.frame(seq.pos = input.seq$sequence.pos, row.names = input.seq$seq.mrk.names)
+      M.out <- M[order(as.numeric(M[,1])),]
     }
   } else{
     M<-data.frame(seq = input.seq$sequence, 
                   seq.pos = input.seq$sequence.pos, 
                   row.names = input.seq$seq.mrk.names)
-    return(M[order(as.numeric(M[,1]), as.numeric(M[,2])),])
+    M.out <- M[order(as.numeric(M[,1]), as.numeric(M[,2])),]
   }
+  structure(list(data.name = input.seq$data.name, ord = M.out), class = "mappoly.geno.ord")
+}
+
+#' @rdname get_genomic_order
+#' @export
+print.mappoly.geno.ord <- function(x, ...){
+  print(head(x$ord))
+}
+
+#' @rdname get_genomic_order
+#' @export
+#' @importFrom ggplot2 ggplot aes geom_point xlab ylab theme
+plot.mappoly.geno.ord <- function(x, ...){
+  seq <- seq.pos <- NULL
+  ggplot2::ggplot(as.data.frame(x$ord), 
+                  ggplot2::aes(x=seq.pos, y=seq, group=as.factor(seq))) +
+    ggplot2::geom_point(ggplot2::aes(color=as.factor(seq)), shape = 108) +
+    ggplot2::xlab("position") + 
+    ggplot2::ylab("sequence") + 
+    ggplot2::theme(legend.position = "none") 
 }
 
 #' Remove markers from a map
@@ -1340,7 +1333,7 @@ summary_maps = function(map.list, verbose = TRUE){
          " is not a list containing 'mappoly.map' objects.")
   results = data.frame("LG" = as.character(seq(1,length(map.list),1)),
                        "Genomic sequence" = as.character(unlist(lapply(map.list, function(x) paste(unique(x$info$sequence), collapse = "-")))),
-                       "Map size (cM)" = unlist(lapply(map.list, function(x) round(sum(c(0, imf_h(x$maps[[1]]$seq.rf))), 2))),
+                       "Map length (cM)" = unlist(lapply(map.list, function(x) round(sum(c(0, imf_h(x$maps[[1]]$seq.rf))), 2))),
                        "Markers/cM" = round(unlist(lapply(map.list, function(x) x$info$n.mrk/(round(sum(c(0, imf_h(x$maps[[1]]$seq.rf))), 2)))),2),
                        "Simplex" = unlist(lapply(map.list, function(x) sum(get_tab_mrks(x)[rbind(c(1,2),c(2,1),c(x$info$m,(x$info$m+1)),c((x$info$m+1),x$info$m))]))),
                        "Double-simplex" = unlist(lapply(map.list, function(x) sum(get_tab_mrks(x)[rbind(c(2,2),c(x$info$m,x$info$m))]))),
@@ -1348,7 +1341,7 @@ summary_maps = function(map.list, verbose = TRUE){
                        "Total" = unlist(lapply(map.list, function(x) x$info$n.mrk)),
                        "Max gap" = unlist(lapply(map.list, function(x) round(imf_h(max(x$maps[[1]]$seq.rf)),2))),
                        check.names = FALSE, stringsAsFactors = F)
-  results = rbind(results, c('Total', NA, sum(as.numeric(results$`Map size (cM)`)), round(mean(as.numeric(results$`Markers/cM`)),2), sum(as.numeric(results$Simplex)), sum(as.numeric(results$`Double-simplex`)), sum(as.numeric(results$Multiplex)), sum(as.numeric(results$Total)), round(mean(as.numeric(results$`Max gap`)),2)))
+  results = rbind(results, c('Total', NA, sum(as.numeric(results$`Map length (cM)`)), round(mean(as.numeric(results$`Markers/cM`)),2), sum(as.numeric(results$Simplex)), sum(as.numeric(results$`Double-simplex`)), sum(as.numeric(results$Multiplex)), sum(as.numeric(results$Total)), round(mean(as.numeric(results$`Max gap`)),2)))
   if (verbose){
     all.mrks = unlist(lapply(map.list, function(x) return(x$info$mrk.names)))
     if (!any(get(map.list[[1]]$info$data.name, pos = 1)$elim.correspondence$elim %in% all.mrks))

@@ -22,6 +22,7 @@
 #' @export
 #' @importFrom graphics barplot layout mtext legend 
 #' @importFrom stats chisq.test
+#' @importFrom scatterplot3d scatterplot3d
 plot_mrk_info<-function(input.data, mrk)
   {
   input_classes <- c("mappoly.data")
@@ -35,7 +36,7 @@ plot_mrk_info<-function(input.data, mrk)
       stop(mrk, " exceeds the number of markers in the dataset")
     mrk<-input.data$mrk.names[mrk]
   }
-  oldpar <- par(mar = c(2,2,5,2))
+  oldpar <- par(mar = c(2,2,5,2), bg = "lightgray")
   on.exit(par(oldpar))
   if(!mrk%in%input.data$mrk.names)
     stop(deparse(substitute(mrk)), " is not present in ", deparse(substitute(input.data)), " dataset")
@@ -126,15 +127,48 @@ plot_mrk_info<-function(input.data, mrk)
       pal<-rep(gg_color_hue(input.data$m + 1), each = nrow(z))
       pal[as.numeric(as.matrix(z[,1:(input.data$m + 1)])) < input.data$prob.thres] <- "#404040"
       op<-par(mar = c(2,2,2,2))
-      plot3D::scatter3D(x,y, as.matrix(z[,1:(input.data$m + 1)]),  theta = 30, phi = 30, bty = "g",  type = "h", lwd = .3 ,
-                        ticktype = "detailed", pch = 19, cex = 0.5, 
-                        colvar = NULL, 
-                        col = pal,
-                        xlab = "Offspring",
-                        ylab ="Dose", 
-                        zlab = "Genotype probability", 
-                        cex.axis = .7, cex.lab = .7, clab = )
+      scatterplot3d::scatterplot3d(cbind(x,y, as.double(as.matrix(z[,1:(input.data$m + 1)]))), 
+                                   type='h', color = pal, xlab = "Offspring",
+                                   ylab ="Dose", pch = 20,
+                                   zlab = "Genotype probability", angle=55,
+                                   xlim = c(0, input.data$n.ind))
     } 
   })
   par(mfrow=c(1,1))
+}
+
+#' Summary of a set of markers
+#' 
+#' Returns information related to a given set of markers
+#'
+#' @param input.data an object \code{'mappoly.data'}
+#' @param mrks marker sequence index (integer vector)
+#' @examples
+#'  print_mrk(tetra.solcap.geno.dist, 1:5)
+#'  print_mrk(hexafake, 256)
+#' @export
+print_mrk<-function(input.data, mrks){
+  for(i in 1:length(mrks))
+  {
+    x<-input.data$geno.dose[mrks[i], ]
+    x[x==input.data$m+1]<-NA
+    if(is.character(mrks[i]))
+      cat("\n", mrks[i])
+    else
+      cat("\n", input.data$mrk.names[mrks[i]])
+    cat("\n----------------------------------")
+    cat("\n dosage P1: ", input.data$dosage.p[mrks[i]])
+    cat("\n dosage P2: ", input.data$dosage.q[mrks[i]])
+    cat("\n----")
+    cat("\n dosage distribution\n")
+    z<-table(as.numeric(x), useNA = "always")
+    names(z)[is.na(names(z))]<-"mis"
+    print(z)
+    cat("----")
+    cat("\n expected polysomic segregation\n")
+    y<-segreg_poly(input.data$m, dP = input.data$dosage.p[mrks[i]], input.data$dosage.q[mrks[i]])
+    names(y)<-0:input.data$m
+    print(y)
+    cat("----------------------------------\n")
+  }
 }

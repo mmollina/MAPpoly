@@ -30,6 +30,7 @@ est_rf_hmm(
   config = "best",
   P = "Parent 1",
   Q = "Parent 2",
+  xlim = NULL,
   ...
 )
 }
@@ -90,6 +91,9 @@ with the highest likelihood}
 \item{P}{a string containing the name of parent P}
 
 \item{Q}{a string containing the name of parent Q}
+
+\item{xlim}{range of the x-axis. If \code{xlim = NULL} (default) it uses the 
+map range.}
 }
 \value{
 A list of class \code{mappoly.map} with two elements: 

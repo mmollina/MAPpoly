@@ -106,8 +106,6 @@ merge_maps<-function(map.list,
                            map.list[[1]]$info$data.name)
   check <- check_pairwise(s.temp, twopt)
   if (any(check != 0)){
-    ## cat("There is no information for pairs: \n")
-    ## print(check)
     stop("There is no information for pairs: \n", paste(capture.output(print(check)), collapse = "\n"))
   }
   ## For merging multiple maps 
@@ -126,7 +124,7 @@ merge_maps<-function(map.list,
       r <- map.list[[i]]$maps[[1]]$seq.rf
       r[r<1e-5] <- 1e-5
       map.list[[i]]$maps[[1]]$seq.rf <- r
-      suppressMessages(genoprob.list[[i]] <- calc_genoprob(map.list[[i]], phase.config = i.lpc[[i]], verbose = FALSE))
+      genoprob.list[[i]] <- calc_genoprob(map.list[[i]], phase.config = i.lpc[[i]], verbose = FALSE)
     }
   }
   ## checking ploidy level consistency
@@ -224,8 +222,13 @@ merge_maps<-function(map.list,
     ## Updating map
     output.map<-map.list[[1]]
     seq.num<-as.numeric(names(configs[[1]]$P))
-    output.map$info$mrk.names <- c(map.list[[1]]$info$mrk.names, map.list[[2]]$info$mrk.names) 
+    output.map$info$mrk.names <- c(map.list[[1]]$info$mrk.names, map.list[[2]]$info$mrk.names)
     output.map$info$n.mrk <- length(output.map$info$mrk.names)
+    output.map$info$seq.dose.p <- c(map.list[[1]]$info$seq.dose.p, map.list[[2]]$info$seq.dose.p)
+    output.map$info$seq.dose.q <- c(map.list[[1]]$info$seq.dose.q, map.list[[2]]$info$seq.dose.q)
+    output.map$info$sequence <- c(map.list[[1]]$info$sequence, map.list[[2]]$info$sequence)
+    output.map$info$sequence.pos <- c(map.list[[1]]$info$sequence.pos, map.list[[2]]$info$sequence.pos)
+    output.map$info$chisq.pval <- c(map.list[[1]]$info$chisq.pval, map.list[[2]]$info$chisq.pval)
     for(i in 1:nrow(res))
     {
       seq.rf <- c(map.list[[1]]$maps[[i.lpc[1]]]$seq.rf, res[i, "rf"], map.list[[2]]$maps[[i.lpc[2]]]$seq.rf)

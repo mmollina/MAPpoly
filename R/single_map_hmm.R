@@ -6,9 +6,9 @@
 #'   \donttest{
 #'     seq.all.mrk <- make_seq_mappoly(hexafake, 1:20)
 #'     id <- get_genomic_order(seq.all.mrk)
-#'     
+#'     s.go <- make_seq_mappoly(id)
 #'     ## Using the 5 contiguous markers
-#'     seq5 <- make_seq_mappoly(hexafake, rownames(id)[6:10])
+#'     seq5 <- make_seq_mappoly(hexafake, s.go$seq.mrk.names[6:10])
 #'     twopt<-est_pairwise_rf(seq5)
 #'     l5 <- ls_linkage_phases(input.seq = seq5, thres = 2, twopt = twopt)
 #'     plot(l5)

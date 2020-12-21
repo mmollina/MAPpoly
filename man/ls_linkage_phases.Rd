@@ -52,7 +52,8 @@ as elimination criteria
 \examples{
 seq.all.mrk <- make_seq_mappoly(hexafake, 'all')
 id <- get_genomic_order(seq.all.mrk)
-seq10 <- make_seq_mappoly(hexafake, rownames(id)[1:10])
+s <- make_seq_mappoly(id)
+seq10 <- make_seq_mappoly(hexafake, s$seq.mrk.names[1:10])
 twopt<-est_pairwise_rf(seq10)
 
 ## Using the first 10 markers 
@@ -67,7 +68,7 @@ l10.seq.1.0
 plot(l10.seq.1.0)
 
 ## Using the first 5 markers 
-seq5 <- make_seq_mappoly(hexafake, rownames(id)[1:5])
+seq5 <- make_seq_mappoly(hexafake, s$seq.mrk.names[1:5])
 l5.seq.5.0 <- ls_linkage_phases(input.seq = seq5, thres = 5, twopt = twopt)
 l5.seq.5.0
 plot(l5.seq.5.0)

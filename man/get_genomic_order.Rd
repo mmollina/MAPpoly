@@ -2,24 +2,35 @@
 % Please edit documentation in R/utils.R
 \name{get_genomic_order}
 \alias{get_genomic_order}
+\alias{print.mappoly.geno.ord}
+\alias{plot.mappoly.geno.ord}
 \title{Get the genomic position of markers in a sequence}
 \usage{
 get_genomic_order(input.seq, verbose = TRUE)
+
+\method{print}{mappoly.geno.ord}(x, ...)
+
+\method{plot}{mappoly.geno.ord}(x, ...)
 }
 \arguments{
 \item{input.seq}{a sequence object of class \code{mappoly.sequence}}
 
 \item{verbose}{if \code{TRUE} (default), the current progress is shown; if
 \code{FALSE}, no output is produced}
+
+\item{x}{an object of the class mappoly.geno.ord}
+
+\item{...}{currently ignored}
 }
 \description{
 This functions gets the genomic position of markers in a sequence and
 return an ordered data frame with the name and position of each marker
 }
 \examples{
- s1<-make_seq_mappoly(tetra.solcap, "all")
- o1<-get_genomic_order(s1)
- head(o1)
+s1<-make_seq_mappoly(tetra.solcap, "all")
+o1<-get_genomic_order(s1)
+plot(o1)
+s.geno.ord <- make_seq_mappoly(o1)
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

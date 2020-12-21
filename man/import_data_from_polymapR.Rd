@@ -31,7 +31,7 @@ import_data_from_polymapR(
 \item{prob.thres}{threshold probability to assign a dosage to offspring. If the probability 
 is smaller than \code{thresh.parent.geno}, the data point is converted to 'NA'.}
 
-\item{pardose}{matrix of dimensions (n.mrk x 3) cointaining the name of the markers in the first column, and the 
+\item{pardose}{matrix of dimensions (n.mrk x 3) containing the name of the markers in the first column, and the 
 dosage of parents 1 and 2 in columns 2 and 3. (see polymapR vignette)}
 
 \item{offspring}{a character string containing the name (or pattern of genotype IDs) of the offspring 
@@ -39,7 +39,7 @@ individuals. If \code{NULL} (default) it considers all individuals as offsprings
 \code{parent1} and \code{parent2}.}
 
 \item{filter.non.conforming}{if \code{TRUE} exclude samples with non 
-expected genotypes under no double reduction. Since markers were alredy filtered in polymapR, the default is 
+expected genotypes under no double reduction. Since markers were already filtered in polymapR, the default is 
 \code{FALSE}.}
 
 \item{verbose}{if \code{TRUE} (default), the current progress is shown; if
