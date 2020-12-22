@@ -128,7 +128,7 @@ dist_prob_to_class <- function(geno, prob.thres = 0.9) {
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' @examples
 #' \donttest{
-#' if(requireNamespace("polymapR", quietly = T)){
+#' if(requireNamespace("polymapR", quietly = TRUE)){
 #' require(polymapR)
 #' dat<-export_data_to_polymapR(hexafake)
 #' F1checked <- checkF1(dosage_matrix = dat, 

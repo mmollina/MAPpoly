@@ -81,6 +81,7 @@ SystemRequirements: C++11
 Encoding: UTF-8
 Suggests:
     testthat,
+    covr,
     updog,
     polymapR
 URL: https://github.com/mmollina/MAPpoly

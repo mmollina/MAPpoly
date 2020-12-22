@@ -29,13 +29,10 @@ r_packages:
   - RCurl
   - plotly
   - fields
-  - RColorBrewer
   - bitops
   - ggpubr
   - ggsci
   - maps
-  - berryFunctions
-  - plot3D
   - memuse
   - dplyr
   - reshape2
@@ -44,6 +41,14 @@ r_packages:
   - smacof
   - princurve
   - dendextend
+  - rstudioapi
+  - scatterplot3d
+  - crayon
+  - cli
+  - magrittr
+  - vcfR
+  - zoo
+  - testthat
   - polymapR
   - updog
 

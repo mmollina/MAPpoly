@@ -19,7 +19,7 @@ converted into class \code{mappoly.data}}
 Function to import phased map lists from polymapR
 }
 \examples{
-if(requireNamespace("polymapR", quietly = T)){
+if(requireNamespace("polymapR", quietly = TRUE)){
 require(polymapR)
 ## Loading polymapR example
 data("integrated.maplist", "screened_data3", "marker_assignments_P1","marker_assignments_P2")

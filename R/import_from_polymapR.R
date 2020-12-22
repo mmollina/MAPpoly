@@ -21,7 +21,7 @@
 #'     \code{FALSE}, no output is produced
 #'     
 #' @examples
-#' if(requireNamespace("polymapR", quietly = T)){
+#' if(requireNamespace("polymapR", quietly = TRUE)){
 #' require(polymapR)
 #' data("screened_data3")
 #' mappoly.data <- import_data_from_polymapR(screened_data3, 4)
@@ -210,7 +210,7 @@ import_data_from_polymapR <- function(input.data,
 #' @param ploidy the ploidy level     
 #'     
 #' @examples
-#' if(requireNamespace("polymapR", quietly = T)){
+#' if(requireNamespace("polymapR", quietly = TRUE)){
 #' require(polymapR)
 #' ## Loading polymapR example
 #' data("integrated.maplist", "screened_data3", "marker_assignments_P1","marker_assignments_P2")

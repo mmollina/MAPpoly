@@ -49,7 +49,7 @@ expected genotypes under no double reduction. Since markers were already filtere
 Function to import datasets from polymapR
 }
 \examples{
-if(requireNamespace("polymapR", quietly = T)){
+if(requireNamespace("polymapR", quietly = TRUE)){
 require(polymapR)
 data("screened_data3")
 mappoly.data <- import_data_from_polymapR(screened_data3, 4)
