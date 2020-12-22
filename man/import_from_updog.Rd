@@ -69,6 +69,7 @@ This function creates an object of class \code{mappoly.data}
 }
 \examples{
 \donttest{
+if(requireNamespace("updog", quietly = T)){
 library("updog")
 data("uitdewilligen")
 mout = multidog(refmat = t(uitdewilligen$refmat), 
@@ -81,6 +82,7 @@ mout = multidog(refmat = t(uitdewilligen$refmat),
 mydata = import_from_updog(mout)
 mydata
 plot(mydata)
+}
 }
 
 }

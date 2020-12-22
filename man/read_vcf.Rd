@@ -16,7 +16,8 @@ read_vcf(
   max.missing = 1,
   elim.redundant = TRUE,
   verbose = TRUE,
-  read.geno.prob = FALSE
+  read.geno.prob = FALSE,
+  prob.thres = 0.95
 )
 }
 \arguments{
@@ -51,6 +52,10 @@ during map construction, keeping them annotated to export to the final map.}
 
 \item{read.geno.prob}{If genotypic probabilities are available (PL field),
 generates a probability-based dataframe (default = \code{FALSE}).}
+
+\item{prob.thres}{probability threshold to associate a marker call to a 
+dosage. Markers with maximum genotype probability smaller than \code{prob.thres} 
+are considered as missing data for the dosage calling purposes (default = 0.95)}
 }
 \value{
 An object of class \code{mappoly.data} which contains a

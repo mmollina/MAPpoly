@@ -1,7 +1,7 @@
 Package: mappoly
 Type: Package
 Title: Genetic Linkage Maps in Autopolyploids
-Version: 0.2.1.004
+Version: 0.2.1.005
 Authors@R: c(person(given = "Marcelo",
                     family = "Mollinari",
                     role = c("aut", "cre"),
@@ -81,10 +81,7 @@ SystemRequirements: C++11
 Encoding: UTF-8
 Suggests:
     testthat,
-    RColorBrewer,
     updog,
-    covr,
-    polymapR,
-    fitPoly
+    polymapR
 URL: https://github.com/mmollina/MAPpoly
 BugReports: https://github.com/mmollina/MAPpoly/issues
