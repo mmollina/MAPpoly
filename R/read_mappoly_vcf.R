@@ -281,7 +281,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
                        seq.ref = seq.ref[id],
                        seq.alt = seq.alt[id],
                        prob.thres = prob.thres,
-                       geno = subset(geno, mrk%in%mrk.names[id]),
+                       geno = subset(geno, geno$mrk%in%mrk.names[id]),
                        geno.dose = geno.dose[id,],
                        nphen = 0,
                        phen = NULL,
@@ -328,7 +328,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
     M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
     dimnames(M)<-list(res$mrk.names, c(0:m))
     M<-cbind(M, res$geno.dose)
-    res$chisq.pval<-apply(M, 1, mappoly:::mrk_chisq_test, m = m)
+    res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
     if (verbose) cat("\n    Done.\n")
   }
   if (elim.redundant){
@@ -345,7 +345,7 @@ read_vcf = function(file.in, parent.1, parent.2, ploidy = NA,
     res$elim.correspondence$all.mrk.depth = res$all.mrk.depth[c(mrks.rem)]
     res$n.mrk = length(res$kept)
     res$mrk.names = res$mrk.names[-c(mrks.rem)]
-    if (exists('geno')) res$geno = subset(res$geno, mrk%in%res$mrk.names) ## res$geno = res$geno[-c(mrks.rem)]
+    if (exists('geno')) res$geno = subset(res$geno, res$geno$mrk%in%res$mrk.names) ## res$geno = res$geno[-c(mrks.rem)]
     res$geno.dose = res$geno.dose[-c(mrks.rem),]
     res$dosage.p = res$dosage.p[-c(mrks.rem)]
     res$dosage.q = res$dosage.q[-c(mrks.rem)]
