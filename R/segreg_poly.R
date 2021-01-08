@@ -31,7 +31,7 @@
 #'     Serang O, Mollinari M, Garcia AAF (2012) Efficient Exact 
 #'     Maximum a Posteriori Computation for Bayesian SNP 
 #'     Genotyping in Polyploids. _PLoS ONE_ 7(2): 
-#'     e30906. \url{https://doi.org/10.1371/journal.pone.0030906}
+#'     e30906.
 #'     
 #'
 #' @importFrom stats dhyper

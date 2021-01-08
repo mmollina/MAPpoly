@@ -104,7 +104,6 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
 
 # Miscellaneous
 * [Supplementary scripts for Mollinari and Garcia (2019)](https://github.com/mmollina/Autopolyploid_Linkage)
-* [Workshop: Polyploid Genetic Data Analysis: From Dosage Calling to Linkage and QTL Analysis](http://152.1.45.19/esalq_2019.html)
 * [Miscellaneous scripts](https://github.com/mmollina/MAPpoly_vignettes/blob/master/README.md)
 
 # Articles referencing MAPpoly

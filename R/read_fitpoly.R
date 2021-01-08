@@ -101,9 +101,9 @@ read_fitpoly <- function(file.in, ploidy, parent1, parent2, offspring = NULL,
 {
   file.type <- match.arg(file.type)
   if(file.type == "table")
-    dat <- read.delim(file = file.in, header = TRUE)
+    dat <- read.delim(file = file.in, header = TRUE, stringsAsFactors = FALSE)
   else if(file.type == "csv")
-    dat <- read.csv(file = file.in, header = TRUE)
+    dat <- read.csv(file = file.in, header = TRUE, stringsAsFactors = FALSE)
   p1 <- unique(sapply(parent1, function(x) unique(grep(pattern = x, dat[,"SampleName"], value = TRUE))))
   p2 <- unique(sapply(parent2, function(x) unique(grep(pattern = x, dat[,"SampleName"], value = TRUE))))
   if(is.null(offspring)){
