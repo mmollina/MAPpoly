@@ -5,6 +5,18 @@
 
 using namespace Rcpp;
 
+// vcf_get_probabilities
+Rcpp::List vcf_get_probabilities(Rcpp::StringMatrix& mat, int pl_pos);
+RcppExport SEXP _mappoly_vcf_get_probabilities(SEXP matSEXP, SEXP pl_posSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::StringMatrix& >::type mat(matSEXP);
+    Rcpp::traits::input_parameter< int >::type pl_pos(pl_posSEXP);
+    rcpp_result_gen = Rcpp::wrap(vcf_get_probabilities(mat, pl_pos));
+    return rcpp_result_gen;
+END_RCPP
+}
 // vcf_transform_dosage
 Rcpp::NumericMatrix vcf_transform_dosage(Rcpp::StringMatrix& mat, int gt_pos);
 RcppExport SEXP _mappoly_vcf_transform_dosage(SEXP matSEXP, SEXP gt_posSEXP) {
@@ -55,6 +67,7 @@ RcppExport SEXP pairwise_rf_estimation_prob(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, 
 RcppExport SEXP poly_hmm_est_CPP(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_mappoly_vcf_get_probabilities", (DL_FUNC) &_mappoly_vcf_get_probabilities, 2},
     {"_mappoly_vcf_transform_dosage", (DL_FUNC) &_mappoly_vcf_transform_dosage, 2},
     {"_mappoly_vcf_get_ploidy", (DL_FUNC) &_mappoly_vcf_get_ploidy, 2},
     {"_mappoly_vcf_get_depth", (DL_FUNC) &_mappoly_vcf_get_depth, 2},

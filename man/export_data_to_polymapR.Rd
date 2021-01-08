@@ -17,6 +17,7 @@ Export data to \code{polymapR}
 }
 \examples{
 \donttest{
+if(requireNamespace("polymapR", quietly = TRUE)){
 require(polymapR)
 dat<-export_data_to_polymapR(hexafake)
 F1checked <- checkF1(dosage_matrix = dat, 
@@ -28,6 +29,7 @@ F1checked <- checkF1(dosage_matrix = dat,
                      mixed = FALSE, 
                      ploidy = 6)
  head(F1checked$checked_F1)
+}
 }  
 }
 \author{

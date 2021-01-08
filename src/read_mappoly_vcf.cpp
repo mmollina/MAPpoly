@@ -179,6 +179,117 @@ int get_depth(std::string mystring, int dp_pos){
   return start;
 }
 
+// Getting PL information
+std::vector<double> get_probabilities(std::string mystring, int pl_pos){
+  // mystring is a string containing vcf genotypes
+  // gt_pos is the GT position on vcf file
+  //  Rcpp::Rcout << "In strsplit" << std::endl;
+  char split = ':';
+  char split2 = ',';
+  std::vector<std::string> vec_o_strings;
+  std::vector<std::string> vec_o_strings2;
+  std::vector<double> final_vec_out2(1);
+  int start = 0, size = 0, s = 0;
+  double sum = 0.0;
+  unsigned int i=0;
+  // Looping through string
+  for(i = 1; i < mystring.size(); i++){
+    if( mystring[i] == split){
+      std::string temp = mystring.substr(start, i - start);
+      vec_o_strings.push_back(temp);
+      start = i+1;
+      i = i+1;
+    }
+  }
+  // Handle the last element
+  std::string temp = mystring.substr(start, i - start);
+  vec_o_strings.push_back(temp);
+  // Checking PL information
+  if (vec_o_strings.size() < pl_pos){
+    final_vec_out2[0] = -1.0;
+    return final_vec_out2;
+  }
+  // Testing for correct separation
+  std::string test = vec_o_strings[pl_pos-1];
+  if(test.size() > 2){
+    mystring = vec_o_strings[pl_pos-1];
+  } else {
+    mystring = "0,0";
+  }
+  // Looping through selected PL string
+  start = 0;
+  for(i = 1; i < mystring.size(); i++){
+    if( mystring[i] == split2){
+      std::string temp = mystring.substr(start, i - start);
+      vec_o_strings2.push_back(temp);
+      start = i+1;
+      i = i+1;
+    }
+  }
+  // Handle the last element
+  temp = mystring.substr(start, i - start);
+  vec_o_strings2.push_back(temp);
+  size = vec_o_strings2.size();
+  std::vector<double> final_vec(size);
+  std::vector<double> final_vec_out(size);
+  // Converting to double and transforming scale (from phred to probabilities)
+  for (s=0; s < size; s++){
+    final_vec[s] = stod(vec_o_strings2[s]);
+    final_vec[s] = final_vec[s]/(-10);
+    final_vec[s] = exp(final_vec[s]);
+    sum += final_vec[s];
+  }
+  // Rescale PLs to sum=1
+  if (sum > 0.001){
+    for (s=0; s < size; s++){
+      final_vec_out[s] = final_vec[s]/sum;
+    }
+  } else {
+    for (s=0; s < size; s++){
+      final_vec_out[s] = final_vec[s];
+    }
+  }
+  sum = 0.0;
+  return final_vec_out;
+}
+
+// Getting PL for all markers and all individuals
+//' @export
+// [[Rcpp::export(name=".vcf_get_probabilities")]]
+Rcpp::List vcf_get_probabilities(Rcpp::StringMatrix& mat, int pl_pos){
+  int rowmat = mat.nrow();
+  int colmat = mat.ncol();
+  int k, l, s, size;
+  Rcpp::List results(rowmat);
+  Rcpp::NumericMatrix partial_results;
+  std::vector<double> first, out;
+  std::vector<double> get_probabilities(std::string mystring, int pl_pos);
+  // Looping through matrix
+  for (k=0; k < rowmat; k++){
+    // Rcout << "The value of k : " << k << "\n";
+    first = get_probabilities(as<std::string>(mat(k,0)), pl_pos);
+    size = first.size();
+    Rcpp::NumericMatrix partial_results(colmat,size);
+    for (l=0; l < colmat; l++){
+      // Rcout << "The value of l : " << l << "\n";
+      out = get_probabilities(as<std::string>(mat(k,l)), pl_pos);
+      if (out.size() == size){
+        for (s=0; s < size; s++){
+          // Rcout << "The value of s : " << s << "\n";
+          partial_results(l,s) = out[s];
+        }
+      } else {
+        for (s=0; s < size; s++){
+          partial_results(l,s) = -1.0;
+        }
+      }
+      s=0;
+    }
+    results(k) = partial_results;
+  }
+  return results;
+}
+
 // Getting dosages for all markers and all individuals
 //' @export
 // [[Rcpp::export(name=".vcf_transform_dosage")]]
