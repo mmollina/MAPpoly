@@ -33,7 +33,6 @@
 #'     \url{https://doi.org/10.1534/g3.119.400620} 
 #'     
 #' @importFrom ggplot2 ggplot geom_density ggtitle facet_grid theme_minimal ylab xlab aes vars
-#' @importFrom plotly ggplotly
 #' @export calc_homoprob
 #' 
 calc_homoprob<-function(input.genoprobs, verbose = TRUE){
@@ -90,7 +89,8 @@ print.mappoly.homoprob<-function(x, ...){
 #'            If \code{NULL} (default), the function plots the first 
 #'            individual
 #'            
-#' @param use.plotly if \code{TRUE} (default), it uses plotly interactive graphics
+#' @param use.plotly if \code{TRUE} (default), it uses plotly interactive graphics 
+#'                   (deactivated in version 0.2.2 due to plotly being orphaned by CRAN)
 #'
 #' @param verbose if \code{TRUE} (default), the current progress is shown; if
 #'     \code{FALSE}, no output is produced
@@ -98,7 +98,8 @@ print.mappoly.homoprob<-function(x, ...){
 #' @param ... unused arguments
 #' @export
 plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL, 
-                                ind = NULL, use.plotly = TRUE, verbose = TRUE,  ...){
+                                ind = NULL, use.plotly = FALSE, 
+                                verbose = TRUE,  ...){
   all.ind<-as.character(unique(x$homoprob$individual))
   #### Individual handling ####
   if(length(ind) > 1){
@@ -157,6 +158,8 @@ plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL,
       ggplot2::xlab(label = "Map position")
   }
   if(use.plotly)
-    p <- plotly::ggplotly(p)
+    if(verbose)
+      message("'use.plotly' has been deactivated\n in version 0.2.2: 'plotly' orphaned\n by CRAN. Using 'ggplot' instead.")
+  #  p <- plotly::ggplotly(p)
   return(p)
 }

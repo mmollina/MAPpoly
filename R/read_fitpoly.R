@@ -269,8 +269,7 @@ read_fitpoly <- function(file.in, ploidy, parent1, parent2, offspring = NULL,
     M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
     dimnames(M)<-list(res$mrk.names, c(0:ploidy))
     M<-cbind(M, res$geno.dose)
-    #res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = ploidy)
-    res$chisq.pval<-apply(M, 1, mappoly:::mrk_chisq_test, m = ploidy)
+    res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = ploidy)
     if (verbose) cat("\n    Done.\n")
   }
   if (elim.redundant){
