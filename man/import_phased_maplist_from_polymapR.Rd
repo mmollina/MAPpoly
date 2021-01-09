@@ -46,13 +46,13 @@ maplist <- create_phased_maplist(maplist = integrated.maplist,
 Bourke PM et al: (2019) PolymapR — linkage analysis and genetic map 
     construction from F1 populations of outcrossing polyploids. 
     _Bioinformatics_ 34:3496–3502.
-    \url{https://doi.org/10.1093/bioinformatics/bty1002}
+    \doi{10.1093/bioinformatics/bty1002}
 
     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     analysis and haplotype phasing in experimental autopolyploid
     populations with high ploidy level using hidden Markov
     models, _G3: Genes, Genomes, Genetics_. 
-    \url{https://doi.org/10.1534/g3.119.400378}
+    \doi{10.1534/g3.119.400378}
 }
 \author{
 Marcelo Mollinari \email{mmollin@ncsu.edu}

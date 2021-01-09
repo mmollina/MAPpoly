@@ -58,9 +58,9 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     analysis and haplotype phasing in experimental autopolyploid
     populations with high ploidy level using hidden Markov
     models, _G3: Genes, Genomes, Genetics_. 
-    \url{https://doi.org/10.1534/g3.119.400378}     
+    \doi{10.1534/g3.119.400378}     
     
     Stam P (1993) Construction of integrated genetic-linkage maps 
     by means of a new computer package: Joinmap. _Plant J_ 3:739–744
-    \url{https://doi.org/10.1111/j.1365-313X.1993.00739.x}
+    \doi{10.1111/j.1365-313X.1993.00739.x}
 }
