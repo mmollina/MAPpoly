@@ -400,7 +400,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
 #'     models, _G3: Genes, Genomes, Genetics_. 
-#'     \url{https://doi.org/10.1534/g3.119.400378} 
+#'     \doi{10.1534/g3.119.400378} 
 #'
 #' @importFrom utils head
 #' @importFrom cli rule

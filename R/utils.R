@@ -996,7 +996,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
 #'     models, _G3: Genes, Genomes, Genetics_. 
-#'     \url{https://doi.org/10.1534/g3.119.400378}
+#'     \doi{10.1534/g3.119.400378}
 #'     
 #' @export check_data_sanity
 check_data_sanity<-function(x){
@@ -1197,7 +1197,7 @@ check_data_dist_sanity <- function(x){
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
 #'     models, _G3: Genes, Genomes, Genetics_. 
-#'     \url{https://doi.org/10.1534/g3.119.400378} 
+#'     \doi{10.1534/g3.119.400378} 
 #'
 #' @export merge_datasets
 #' @importFrom dplyr bind_rows arrange

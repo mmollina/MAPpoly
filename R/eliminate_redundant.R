@@ -26,7 +26,7 @@
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
 #'     models, _G3: Genes, Genomes, Genetics_. 
-#'     \url{https://doi.org/10.1534/g3.119.400378} 
+#'     \doi{10.1534/g3.119.400378} 
 #'
 #' @export elim_redundant
 elim_redundant<-function(input.seq, data = NULL)

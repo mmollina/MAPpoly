@@ -55,7 +55,7 @@
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
 #'     models, _G3: Genes, Genomes, Genetics_. 
-#'     \url{https://doi.org/10.1534/g3.119.400378}
+#'     \doi{10.1534/g3.119.400378}
 #'
 #' @export rf_snp_filter
 #' @importFrom ggplot2 ggplot geom_histogram aes scale_fill_manual xlab ggtitle

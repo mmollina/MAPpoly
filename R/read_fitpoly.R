@@ -88,7 +88,7 @@
 #'     Voorrips, R.E., Gort, G. & Vosman, B. (2011) Genotype calling 
 #'     in tetraploid species from bi-allelic marker data using mixture 
 #'     models. _BMC Bioinformatics_.
-#'     \url{https://doi.org/10.1186/1471-2105-12-172}
+#'     \doi{10.1186/1471-2105-12-172}
 #'
 #' @export read_fitpoly
 #' @importFrom dplyr filter group_by summarise across
