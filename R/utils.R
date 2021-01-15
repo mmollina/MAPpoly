@@ -246,6 +246,51 @@ compare_haplotypes <- function(m, h1, h2) {
   list(is.same.haplo = !any(is.na(haplo.ord)), haplo.ord = haplo.ord)
 }
 
+#' Genotypic information content 
+#' 
+#' This function plots the enotypic information content given 
+#' an object of class \code{mappoly.homoprob}.
+#' 
+#' @param hprobs an object of class \code{mappoly.homoprob}
+#' 
+#' @param P a string containing the name of parent P
+#' 
+#' @param Q a string containing the name of parent Q
+#' 
+
+#' 
+#' @examples
+#' \donttest{
+#'      w <- lapply(solcap.err.map[1:3], calc_genoprob)
+#'      h.prob <- calc_homoprob(w)
+#'      plot_GIC(h.prob)
+#' }
+#' 
+#' @importFrom dplyr mutate 
+#' @importFrom ggplot2 facet_wrap element_text ylim scale_color_discrete
+
+#' @export plot_GIC 
+plot_GIC <- function(hprobs, P = "P1", Q = "P2"){
+  if(!inherits(hprobs, "mappoly.homoprob"))
+    stop(" 'hprobs' should be of class 'mappoly.homoprob'")
+  LG <- map.position <- GIC <- p1 <- m1 <- homolog <- marker <- probability <- NULL
+  DF <- hprobs$homoprob %>% 
+    dplyr::mutate(p1 = probability * (1-probability)) %>%
+    group_by(marker, homolog, map.position, LG) %>%
+    summarise(m1 = sum(p1)) %>%
+    mutate(GIC = 1-(4/hprobs$info$nind)*m1 , parent = ifelse(homolog%in%letters[1:hprobs$info$m], P, Q))
+  head(as.data.frame(DF))
+  
+ print(ggplot(DF, aes(map.position, GIC, colour = homolog)) +
+    geom_smooth(alpha = .8, se = FALSE) + facet_wrap(~LG, nrow = 3, ncol = 5) +
+    facet_grid(parent~LG, scales = "free_x", space = "free_x") +
+    geom_hline(yintercept = .8, linetype="dashed") + ylim(0,1) +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    scale_color_discrete(name = "Homologs") +
+    ylab("Genotypic Information Content") + xlab("Distance (cM)"))
+  return(invisible(DF))
+}
+
 #' Plot two overlapped haplotypes
 #'
 #' @param void internal function to be documented
