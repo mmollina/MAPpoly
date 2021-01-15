@@ -89,16 +89,16 @@ print.mappoly.homoprob<-function(x, ...){
 #'            If \code{NULL} (default), the function plots the first 
 #'            individual
 #'            
-#' @param use.plotly if \code{TRUE} (default), it uses plotly interactive graphics 
-#'                   (deactivated in version 0.2.2 due to plotly being orphaned by CRAN)
+#' @param use.plotly if \code{TRUE} (default), it uses plotly interactive graphic
 #'
 #' @param verbose if \code{TRUE} (default), the current progress is shown; if
 #'     \code{FALSE}, no output is produced
 #' 
 #' @param ... unused arguments
+#' @importFrom plotly ggplotly
 #' @export
 plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL, 
-                                ind = NULL, use.plotly = FALSE, 
+                                ind = NULL, use.plotly = TRUE, 
                                 verbose = TRUE,  ...){
   all.ind<-as.character(unique(x$homoprob$individual))
   #### Individual handling ####
@@ -158,8 +158,6 @@ plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL,
       ggplot2::xlab(label = "Map position")
   }
   if(use.plotly)
-    if(verbose)
-      message("'use.plotly' has been deactivated\n in version 0.2.2: 'plotly' orphaned\n by CRAN. Using 'ggplot' instead.")
-  #  p <- plotly::ggplotly(p)
+    p <- plotly::ggplotly(p)
   return(p)
 }
