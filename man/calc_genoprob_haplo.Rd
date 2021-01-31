@@ -13,7 +13,8 @@ calc_genoprob_haplo(
   emit = NULL,
   rf_vec,
   indnames,
-  verbose = TRUE
+  verbose = TRUE,
+  highprec = FALSE
 )
 }
 \arguments{
