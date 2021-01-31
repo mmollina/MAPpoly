@@ -72,7 +72,7 @@ RcppExport SEXP calc_genprob_haplo(SEXP ploidyR,
   
   //Initializing some variables
   int g = nChoosek(m, m/2), k, k1, count = 0;
-  std::vector<double> term(n_ind);
+  std::vector<long double> term(n_ind);
   std::fill(term.begin(), term.end(), 0.0);
   
   if(verbose)
@@ -281,7 +281,7 @@ RcppExport SEXP calc_genprob_haplo_highprec(SEXP ploidyR,
   } // loop over individuals
   for(int ind=0; ind < n_ind; ind++)
   {
-    std::vector<double> gamma(g*g);
+    std::vector<long double> gamma(g*g);
     for(int k=0; k < n_mrk; k++)
     {
       std::fill(gamma.begin(), gamma.end(), 0);
