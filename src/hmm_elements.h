@@ -68,6 +68,20 @@ std::vector<long double> backward_highprec(int m,
 				      std::vector<int>& ik1,
 				      std::vector<std::vector<double> >& T);
 
+
+std::vector<long double> forward_emit_highprec(int m,
+                                               std::vector<long double>& fk,
+                                               std::vector<int>& ik,
+                                               std::vector<int>& ik1,
+                                               std::vector<double>& emit,
+                                               std::vector<std::vector<double> >& T);
+std::vector<long double> backward_emit_highprec(int m,
+                                                std::vector<long double>& fk1,
+                                                std::vector<int>& ik,
+                                                std::vector<int>& ik1,
+                                                std::vector<double>& emit,
+                                                std::vector<std::vector<double> >& T);
+
 std::vector<std::vector<int> > index_func(int m,
                                              std::vector<int>& p,
                                              std::vector<int>& q);

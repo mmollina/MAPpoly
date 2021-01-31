@@ -128,8 +128,14 @@ generate_all_link_phases_elim_equivalent_haplo <-
 #' @keywords internal
 est_haplo_hmm <-
   function(m, n.mrk, n.ind, haplo, emit = NULL, 
-           rf_vec, verbose, use_H0 = FALSE, tol) {
-    ## In case no genotypic probabilities distrubutions are provided
+           rf_vec, verbose = TRUE, use_H0 = FALSE, 
+           highprec = FALSE, tol = 10e-4) {
+    ## Checking capabilities
+    if (verbose && !capabilities("long.double") && highprec){
+      cat("This function uses high precision calculations, but your system's architecture doesn't support long double allocation ('capabilities('long.double') = FALSE'). Running in low precision mode.\n")
+      highprec = FALSE
+    }
+    ## In case no genotypic probabilities distributions are provided
     if(is.null(emit)){
       emit <- vector("list", length(haplo))
       for(i in  1:length(haplo)){
@@ -140,19 +146,36 @@ est_haplo_hmm <-
         emit[[i]] <- tempemit
       }
     }
-    res.temp <-
-      .Call("est_haplotype_map",
-            m,
-            n.mrk,
-            n.ind,
-            haplo,
-            emit,
-            rf_vec,
-            verbose,
-            tol,
-            use_H0,
-            PACKAGE = "mappoly")
-    res.temp
+    if(highprec){
+      res.temp <-
+        .Call("est_haplotype_map_highprec",
+              m,
+              n.mrk,
+              n.ind,
+              haplo,
+              emit,
+              rf_vec,
+              verbose,
+              tol,
+              use_H0,
+              PACKAGE = "mappoly")
+      return(res.temp)
+      
+    } else {
+      res.temp <-
+        .Call("est_haplotype_map",
+              m,
+              n.mrk,
+              n.ind,
+              haplo,
+              emit,
+              rf_vec,
+              verbose,
+              tol,
+              use_H0,
+              PACKAGE = "mappoly")
+      return(res.temp)
+    }
   }
 
 #' Estimate a genetic map given a sequence of block markers 
@@ -222,12 +245,14 @@ est_map_haplo_given_genoprob<-function(map.list,
 #' @param void internal function to be documented
 #' @keywords internal
 calc_genoprob_haplo <- function(m, n.mrk, n.ind, haplo, emit = NULL, 
-                                rf_vec, indnames, verbose=TRUE) {
+                                rf_vec, indnames, verbose = TRUE, 
+                                highprec = FALSE) {
   ## Checking capabilities
-  if (verbose && !capabilities("long.double")){
+  if (verbose && !capabilities("long.double") && highprec){
     cat("This function uses high precision calculations, but your system's architecture doesn't support long double allocation ('capabilities('long.double') = FALSE'). Running in low precision mode.\n")
+    highprec = FALSE
   }
-  ## In case no genotypic probabilities distrubutions are provided
+  ## In case no genotypic probabilities distributions are provided
   if(is.null(emit)){
     emit <- vector("list", length(haplo))
     for(i in  1:length(haplo)){
@@ -239,16 +264,29 @@ calc_genoprob_haplo <- function(m, n.mrk, n.ind, haplo, emit = NULL,
     }
   }
   mrknames<-names(haplo)
-  res.temp <- .Call("calc_genprob_haplo",
-                    m,
-                    n.mrk,
-                    n.ind,
-                    haplo,
-                    emit,
-                    rf_vec,
-                    as.numeric(rep(0, choose(m, m/2)^2 * n.mrk * n.ind)),
-                    verbose,
-                    PACKAGE = "mappoly")
+  if(highprec){
+    res.temp <- .Call("calc_genprob_haplo_highprec",
+                      m,
+                      n.mrk,
+                      n.ind,
+                      haplo,
+                      emit,
+                      rf_vec,
+                      as.numeric(rep(0, choose(m, m/2)^2 * n.mrk * n.ind)),
+                      verbose,
+                      PACKAGE = "mappoly")
+  } else{
+    res.temp <- .Call("calc_genprob_haplo",
+                      m,
+                      n.mrk,
+                      n.ind,
+                      haplo,
+                      emit,
+                      rf_vec,
+                      as.numeric(rep(0, choose(m, m/2)^2 * n.mrk * n.ind)),
+                      verbose,
+                      PACKAGE = "mappoly")
+  }
   if(verbose) cat("\n")
   dim(res.temp[[1]])<-c(choose(m,m/2)^2,n.mrk,n.ind)
   dimnames(res.temp[[1]])<-list(kronecker(apply(combn(letters[1:m],m/2),2, paste, collapse=""),
