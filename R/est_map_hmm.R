@@ -514,7 +514,7 @@ est_rf_hmm_sequential<-function(input.seq,
         seq.num <- tail.temp$maps[[i]]$seq.num 
       if(length(seq.num) < extend.tail)
         seq.num <- tail(cur.map$maps[[i]]$seq.num, extend.tail)
-      ## If the tail do not contain the marker responsable for carrying 
+      ## If the tail do not contain the marker responsible for carrying 
       ## multiple linkage phases through the rounds of insertion,
       ## extend the tail so it contains that marker
       if(max(check_ls_phase(all.ph)) >= length(seq.num)){
@@ -537,7 +537,7 @@ est_rf_hmm_sequential<-function(input.seq,
     ## information obtained in the current round
     twopt.phase.number<-length(input.ph$config.to.test)
     ## If this number is higher than phase.number.limit,
-    ## procede to the next iteration
+    ## proceed to the next iteration
     if(length(input.ph$config.to.test) > phase.number.limit) {
       if(verbose)
         cat(crayon::italic$yellow(paste0(ct ,": not included (linkage phases)\n", sep = "")))
@@ -545,7 +545,7 @@ est_rf_hmm_sequential<-function(input.seq,
       next()
     }
     ## Appending the marker to the numeric 
-    ## sequence and makeing a new sequence
+    ## sequence and making a new sequence
     seq.num <- c(seq.num, input.seq$seq.num[ct])
     seq.cur <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1),
                                 arg = seq.num,
@@ -613,12 +613,14 @@ est_rf_hmm_sequential<-function(input.seq,
     } else { selected.map <- LOD < thres.hmm }
     all.ph.temp <- update_ph_list_at_hmm_thres(cur.map.temp, Inf)
     cur.map.temp$maps <- cur.map.temp$maps[selected.map]
+    id <- !sapply(cur.map.temp$maps, is.null)
+    cur.map.temp$maps <- cur.map.temp$maps[id]
     cur.map <- cur.map.temp
-    all.ph <- add_mrk_at_tail_ph_list(all.ph, all.ph.temp, M[selected.map,,drop=FALSE])
+    all.ph <- add_mrk_at_tail_ph_list(all.ph, all.ph.temp, M[id,,drop=FALSE])
     ct <- ct + 1
   }
-  ##### Reestimating final map ####
-  ## Reestimating final map with higher tolerance
+  ##### Re-estimating final map ####
+  ## Re-estimating final map with higher tolerance
   seq.final <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1), 
                                 arg = as.numeric(names(all.ph$config.to.test[[1]]$P)), 
                                 data.name = input.seq$data.name)
