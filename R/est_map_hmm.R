@@ -613,7 +613,7 @@ est_rf_hmm_sequential<-function(input.seq,
     } else { selected.map <- LOD < thres.hmm }
     all.ph.temp <- update_ph_list_at_hmm_thres(cur.map.temp, Inf)
     cur.map.temp$maps <- cur.map.temp$maps[selected.map]
-    id <- !sapply(cur.map.temp$maps, is.null)
+    id <- which(!sapply(cur.map.temp$maps, is.null))
     cur.map.temp$maps <- cur.map.temp$maps[id]
     cur.map <- cur.map.temp
     all.ph <- add_mrk_at_tail_ph_list(all.ph, all.ph.temp, M[id,,drop=FALSE])
