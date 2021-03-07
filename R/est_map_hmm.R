@@ -211,7 +211,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
     ret.map.no.rf.estimation <- TRUE
   #if (verbose) {
   #  cat("\n    Number of linkage phase configurations: ")
-    #cat("\n---------------------------------------------\n|\n|--->")
+  #cat("\n---------------------------------------------\n|\n|--->")
   #}
   maps <- vector("list", n.ph)
   if (verbose){
@@ -616,7 +616,10 @@ est_rf_hmm_sequential<-function(input.seq,
     id <- which(!sapply(cur.map.temp$maps, is.null))
     cur.map.temp$maps <- cur.map.temp$maps[id]
     cur.map <- cur.map.temp
-    all.ph <- add_mrk_at_tail_ph_list(all.ph, all.ph.temp, M[id,,drop=FALSE])
+    if(length(id) > nrow(M))
+      all.ph <- add_mrk_at_tail_ph_list(all.ph, all.ph.temp, M[,,drop=FALSE])
+    else
+      all.ph <- add_mrk_at_tail_ph_list(all.ph, all.ph.temp, M[id,,drop=FALSE])
     ct <- ct + 1
   }
   ##### Re-estimating final map ####
@@ -626,8 +629,8 @@ est_rf_hmm_sequential<-function(input.seq,
                                 data.name = input.seq$data.name)
   #msg(paste("Done phasing", length(seq.final$seq.num), "markers"))
   if (verbose){
-      msg("Reestimating final recombination fractions", line = 2)
-      cat("")
+    msg("Reestimating final recombination fractions", line = 2)
+    cat("")
   }
   final.map <- est_rf_hmm(input.seq = seq.final,
                           input.ph = all.ph,
@@ -796,7 +799,7 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
            y = zy[m]+0.05+dp[id.left:id.right]/20,
            col = d.col[as.character(dp[id.left:id.right])],
            pch = 19, cex = .7)
-   
+    
     if(mrk.names)
       text(x = x1,
            y = rep(zy[m]+0.05+.3, length(curx)),
