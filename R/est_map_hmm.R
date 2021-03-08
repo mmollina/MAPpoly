@@ -540,7 +540,7 @@ est_rf_hmm_sequential<-function(input.seq,
     ## proceed to the next iteration
     if(length(input.ph$config.to.test) > phase.number.limit) {
       if(verbose)
-        cat(crayon::italic$yellow(paste0(ct ,": not included (linkage phases)\n", sep = "")))
+        cat(crayon::italic$yellow(paste0(ct ,": not included (*linkage phases*)\n", sep = "")))
       ct <- ct + 1
       next()
     }
@@ -581,6 +581,7 @@ est_rf_hmm_sequential<-function(input.seq,
     }
     M<-which(MP & MQ, arr.ind = TRUE)
     colnames(M)<-c("old", "new")
+    
     ## Checking for quality (map size and LOD Score)
     submap.length.old <- sapply(cur.map$maps, function(x) sum(imf_h(x$seq.rf)))
     last.dist.old <- sapply(cur.map$maps, function(x) tail(imf_h(x$seq.rf),1))
@@ -592,6 +593,11 @@ est_rf_hmm_sequential<-function(input.seq,
       last.mrk.expansion[j1] <- last.dist.new[M[j1,2]] - last.dist.old[M[j1,1]]
     }
     LOD <- get_LOD(cur.map.temp, sorted = FALSE)
+    if(length(LOD) != length(submap.expansion)){
+      if(verbose) cat(crayon::italic$yellow(paste0(ct ,": not included (-linkage phases-)\n", sep = "")))
+      ct <- ct + 1
+      next()
+    }
     if(sub.map.size.diff.limit!=Inf){
       selected.map <- submap.expansion < sub.map.size.diff.limit & LOD < thres.hmm
       if(detailed.verbose){
@@ -606,7 +612,7 @@ est_rf_hmm_sequential<-function(input.seq,
         else cat(paste0(crayon::green(cli::symbol$tick), "\n"))
       }
       if(all(!selected.map)){
-        if(verbose) cat(crayon::italic$yellow(paste0(ct ,": not included (map extension)\n", sep = "")))
+        if(verbose) cat(crayon::italic$yellow(paste0(ct ,": not included (~map extension~)\n", sep = "")))
         ct <- ct + 1
         next()
       }
@@ -616,7 +622,7 @@ est_rf_hmm_sequential<-function(input.seq,
     id <- which(!sapply(cur.map.temp$maps, is.null))
     cur.map.temp$maps <- cur.map.temp$maps[id]
     cur.map <- cur.map.temp
-    if(length(id) > nrow(M))
+    if(length(id) >= nrow(M))
       all.ph <- add_mrk_at_tail_ph_list(all.ph, all.ph.temp, M[,,drop=FALSE])
     else
       all.ph <- add_mrk_at_tail_ph_list(all.ph, all.ph.temp, M[id,,drop=FALSE])
