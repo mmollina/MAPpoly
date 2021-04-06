@@ -1,7 +1,7 @@
 Package: mappoly
 Type: Package
 Title: Genetic Linkage Maps in Autopolyploids
-Version: 0.2.1.005
+Version: 0.2.2.006
 Authors@R: c(person(given = "Marcelo",
                     family = "Mollinari",
                     role = c("aut", "cre"),
@@ -58,7 +58,6 @@ Depends:
 Imports:
     Rcpp (>= 0.12.6),
     RCurl,
-    plotly,
     fields,
     ggpubr, 
     ggsci,
@@ -74,14 +73,14 @@ Imports:
     princurve,
     dendextend,
     vcfR,
-    zoo
+    zoo,
+    plotly
 LinkingTo: Rcpp
 RoxygenNote: 7.1.1
 SystemRequirements: C++11
 Encoding: UTF-8
 Suggests:
     testthat,
-    covr,
     updog,
     polymapR
 URL: https://github.com/mmollina/MAPpoly

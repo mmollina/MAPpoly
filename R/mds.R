@@ -62,7 +62,7 @@
 #'  Preedy, K. F., & Hackett, C. A. (2016). A rapid marker ordering approach for
 #'  high-density genetic linkage maps in experimental autotetraploid populations
 #'  using multidimensional scaling. _Theoretical and Applied Genetics_, 129(11),
-#'  2117-2132. \url{https://doi.org/10.1007/s00122-016-2761-8}
+#'  2117-2132. \doi{10.1007/s00122-016-2761-8}
 #'
 #' @importFrom smacof smacofSym
 #' @importFrom princurve principal.curve

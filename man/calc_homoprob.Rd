@@ -37,7 +37,7 @@ Mollinari M., Olukolu B. A.,  Pereira G. da S.,
     Unraveling the Hexaploid Sweetpotato Inheritance 
     Using Ultra-Dense Multilocus Mapping, 
     _G3: Genes, Genomes, Genetics_. 
-    \url{https://doi.org/10.1534/g3.119.400620}
+    \doi{10.1534/g3.119.400620}
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

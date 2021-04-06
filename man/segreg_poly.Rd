@@ -34,12 +34,12 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     analysis and haplotype phasing in experimental autopolyploid
     populations with high ploidy level using hidden Markov
     models, _G3: Genes, Genomes, Genetics_. 
-    \url{https://doi.org/10.1534/g3.119.400378}
+    \doi{10.1534/g3.119.400378}
     
     Serang O, Mollinari M, Garcia AAF (2012) Efficient Exact 
     Maximum a Posteriori Computation for Bayesian SNP 
     Genotyping in Polyploids. _PLoS ONE_ 7(2): 
-    e30906. \url{https://doi.org/10.1371/journal.pone.0030906}
+    e30906.
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

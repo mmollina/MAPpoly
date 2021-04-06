@@ -105,7 +105,7 @@ genotyping_global_error<-function(x, m, restricted = TRUE,  error=0.01, th.prob=
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
 #'     models, _G3: Genes, Genomes, Genetics_. 
-#'     \url{https://doi.org/10.1534/g3.119.400378}
+#'     \doi{10.1534/g3.119.400378}
 #'
 #' @export est_full_hmm_with_global_error
 est_full_hmm_with_global_error <- function(input.map, error=NULL, tol=10e-4, 

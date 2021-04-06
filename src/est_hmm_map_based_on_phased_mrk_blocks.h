@@ -41,4 +41,13 @@ RcppExport SEXP est_haplotype_map(SEXP ploidyR,
                                   SEXP tolR,
                                   SEXP ret_H0R);
 
+RcppExport SEXP est_haplotype_map_highprec(SEXP ploidyR,
+                                           SEXP n_marR,
+                                           SEXP n_indR,
+                                           SEXP haploR,
+                                           SEXP emitR,
+                                           SEXP rfR,
+                                           SEXP verboseR,
+                                           SEXP tolR,
+                                           SEXP ret_H0R);
 

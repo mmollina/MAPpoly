@@ -14,13 +14,8 @@
 #'   chromosomes and linkage groups with the same number. Default is \code{FALSE}.   
 #'    
 #' @examples
-#'   ## tetraploid example
 #'   plot_genome_vs_map(solcap.mds.map)
 #'   plot_genome_vs_map(solcap.mds.map, same.ch.lg = TRUE)
-#'   
-#'   ## hexaploid example
-#'   plot_genome_vs_map(maps.hexafake)
-#'   plot_genome_vs_map(maps.hexafake, same.ch.lg = TRUE)
 #'  
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
@@ -29,7 +24,7 @@
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
 #'     models, _G3: Genes, Genomes, Genetics_. 
-#'     \url{https://doi.org/10.1534/g3.119.400378}
+#'     \doi{10.1534/g3.119.400378}
 #'
 #' @export plot_genome_vs_map
 plot_genome_vs_map<-function(map.list, phase.config = "best", same.ch.lg = FALSE){

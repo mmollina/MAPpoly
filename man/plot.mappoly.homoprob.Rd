@@ -29,7 +29,7 @@ position of the individuals in the dataset or it's name.
 If \code{NULL} (default), the function plots the first 
 individual}
 
-\item{use.plotly}{if \code{TRUE} (default), it uses plotly interactive graphics}
+\item{use.plotly}{if \code{TRUE} (default), it uses plotly interactive graphic}
 
 \item{verbose}{if \code{TRUE} (default), the current progress is shown; if
 \code{FALSE}, no output is produced}

@@ -39,3 +39,12 @@ RcppExport SEXP calc_genprob_haplo(SEXP ploidyR,
                                    SEXP rfR,
                                    SEXP probsR,
                                    SEXP verboseR);
+
+RcppExport SEXP calc_genprob_haplo_highprec(SEXP ploidyR,
+                                            SEXP n_mrkR,
+                                            SEXP n_indR,
+                                            SEXP haploR,
+                                            SEXP emitR,
+                                            SEXP rfR,
+                                            SEXP probsR,
+                                            SEXP verboseR);

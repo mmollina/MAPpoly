@@ -11,9 +11,10 @@ est_haplo_hmm(
   haplo,
   emit = NULL,
   rf_vec,
-  verbose,
+  verbose = TRUE,
   use_H0 = FALSE,
-  tol
+  highprec = FALSE,
+  tol = 0.001
 )
 }
 \arguments{

@@ -30,10 +30,9 @@
 #'     Unraveling the Hexaploid Sweetpotato Inheritance 
 #'     Using Ultra-Dense Multilocus Mapping, 
 #'     _G3: Genes, Genomes, Genetics_. 
-#'     \url{https://doi.org/10.1534/g3.119.400620} 
+#'     \doi{10.1534/g3.119.400620} 
 #'     
 #' @importFrom ggplot2 ggplot geom_density ggtitle facet_grid theme_minimal ylab xlab aes vars
-#' @importFrom plotly ggplotly
 #' @export calc_homoprob
 #' 
 calc_homoprob<-function(input.genoprobs, verbose = TRUE){
@@ -90,15 +89,17 @@ print.mappoly.homoprob<-function(x, ...){
 #'            If \code{NULL} (default), the function plots the first 
 #'            individual
 #'            
-#' @param use.plotly if \code{TRUE} (default), it uses plotly interactive graphics
+#' @param use.plotly if \code{TRUE} (default), it uses plotly interactive graphic
 #'
 #' @param verbose if \code{TRUE} (default), the current progress is shown; if
 #'     \code{FALSE}, no output is produced
 #' 
 #' @param ... unused arguments
+#' @importFrom plotly ggplotly
 #' @export
 plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL, 
-                                ind = NULL, use.plotly = TRUE, verbose = TRUE,  ...){
+                                ind = NULL, use.plotly = TRUE, 
+                                verbose = TRUE,  ...){
   all.ind<-as.character(unique(x$homoprob$individual))
   #### Individual handling ####
   if(length(ind) > 1){

@@ -109,7 +109,7 @@ plot_mrk_info(fitpoly.dat, 37)
 Voorrips, R.E., Gort, G. & Vosman, B. (2011) Genotype calling 
     in tetraploid species from bi-allelic marker data using mixture 
     models. _BMC Bioinformatics_.
-    \url{https://doi.org/10.1186/1471-2105-12-172}
+    \doi{10.1186/1471-2105-12-172}
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

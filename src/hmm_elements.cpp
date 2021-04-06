@@ -24,9 +24,9 @@
  
  Description: This file contains the functions used 
  in a hidden Markov model (HMM).
-
+ 
  Functions Written by Marcelo Mollinari.
-
+ 
  Bioinformatics Research Center
  Department of Horticultural Science
  North Carolina State University
@@ -49,21 +49,21 @@ using namespace std;
 using namespace Rcpp;
 
 /* FUNCTION: emit_poly
-
+ 
  Emission distribution (equation 8 on the paper):
  Computes the probability of observing a molecular phenotype
  given the multialleleic genotype, i.e. P(Observation|Genotype)
-
+ 
  m: ploidy
-
+ 
  cte: Argument to get the adequate position  on the molecular phenotype (g).
  It aims to position the function in one of the columns of the list "g"
  presented bellow.
-
+ 
  ip_k: start position for reading the genotypes of the parent P
-
+ 
  ip_k1: end position for reading the genotypes of the parent P
-
+ 
  p: Genotype of parent P, i.e. which homologous have the allele in P.
  For example, if an octaploid P has 4 alleles in homologous 1,3,6,7,
  as shown above,
@@ -75,14 +75,14 @@ using namespace Rcpp;
  ---A---
  ---A---
  ---a---
-
+ 
  p[ip_k:ip_k1] =(1,3,6,7)
-
+ 
  iq_k, iq_k1, q: Analogously for parent Q
-
+ 
  g: probability vector for marker genotypes (doses). For instance,
  octaploid, 3 markers, 2 individuals:
-
+ 
  $Ind1
  M1  M2  M3
  0 0.0 0.9 0.8
@@ -94,7 +94,7 @@ using namespace Rcpp;
  6 0.0 0.0 0.0
  7 0.0 0.0 0.0
  8 0.0 0.0 0.0
-
+ 
  $Ind2
  M1  M2  M3
  0 0.0 0.9 0.8
@@ -106,12 +106,12 @@ using namespace Rcpp;
  6 0.0 0.0 0.0
  7 0.0 0.0 0.0
  8 0.0 0.0 0.0
-
+ 
  In this case, g would be:
  [1] 0.0 0.8 0.2 0.0 0.0 0.0 0.0 0.0 0.0 0.9 0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.8
  [20] 0.1 0.1 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.8 0.2 0.0 0.0 0.0 0.0 0.0 0.0 0.9 0.1
  [39] 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.8 0.1 0.1 0.0 0.0 0.0 0.0 0.0 0.0
-
+ 
  ----------------------------------------------------- */
 
 std::vector <double>  emit_poly(int m, int cte, int ip_k, int ip_k1,
@@ -243,8 +243,8 @@ std::vector<std::vector<double> > transition(int m, double rf)
  */
 
 std::vector<std::vector<int> > index_func(int m,
-                                             std::vector<int>& p,
-                                             std::vector<int>& q)
+                                          std::vector<int>& p,
+                                          std::vector<int>& q)
 {
   int s, ip=0, iq=0;
   //int g = nChoosek(m, m/2);
@@ -261,13 +261,13 @@ std::vector<std::vector<int> > index_func(int m,
       s=0;
       for(int j=0; (unsigned)j < p.size(); j++)
         if(p[j]>=0) s=s+vp[p[j]];
-      for(int j=0; (unsigned)j < q.size(); j++)
-        if(q[j]>=0) s=s+vq[q[j]];
-      v1[s].push_back(ip);
-      v2[s].push_back(iq);
-      v1[v1.size()-1].push_back(ip);
-      v2[v2.size()-1].push_back(iq);
-      iq++;
+        for(int j=0; (unsigned)j < q.size(); j++)
+          if(q[j]>=0) s=s+vq[q[j]];
+          v1[s].push_back(ip);
+          v2[s].push_back(iq);
+          v1[v1.size()-1].push_back(ip);
+          v2[v2.size()-1].push_back(iq);
+          iq++;
     }
     while (std::prev_permutation(vq.begin(), vq.end()));
     ip++;
@@ -298,7 +298,7 @@ double init_poly(int m, int dP, int dQ, int dG)
 
 /* FUNCTION: forward
  -----------------------------------------------------
-  Classical forward equation presented in Rabiner 1989.
+ Classical forward equation presented in Rabiner 1989.
  */
 std::vector<double> forward(int m,
                             std::vector<double>& fk,
@@ -368,9 +368,9 @@ std::vector<double> forward_emit(int m,
   return(fk1);
 }
 /* FUNCTION: backward
------------------------------------------------------
-Classical backward equation presented in Rabiner 1989.
-*/
+ -----------------------------------------------------
+ Classical backward equation presented in Rabiner 1989.
+ */
 std::vector<double> backward_emit(int m,
                                   std::vector<double>& fk1,
                                   std::vector<int>& ik,
@@ -399,10 +399,10 @@ std::vector<double> backward_emit(int m,
  This is using high precision long double variable.
  */
 std::vector<long double> forward_highprec(int m,
-				     std::vector<long double>& fk,
-				     std::vector<int>& ik,
-				     std::vector<int>& ik1,
-				     std::vector<std::vector<double> >& T)
+                                          std::vector<long double>& fk,
+                                          std::vector<int>& ik,
+                                          std::vector<int>& ik1,
+                                          std::vector<std::vector<double> >& T)
 {
   int ngenk = ik.size()/2;
   int ngenk1 = ik1.size()/2;
@@ -423,10 +423,10 @@ std::vector<long double> forward_highprec(int m,
  This is using high precision long double variable.
  */
 std::vector<long double> backward_highprec(int m,
-				      std::vector<long double>& fk1,
-				      std::vector<int>& ik,
-				      std::vector<int>& ik1,
-				      std::vector<std::vector<double> >& T)
+                                           std::vector<long double>& fk1,
+                                           std::vector<int>& ik,
+                                           std::vector<int>& ik1,
+                                           std::vector<std::vector<double> >& T)
 {
   int ngenk = ik.size()/2;
   int ngenk1 = ik1.size()/2;
@@ -443,3 +443,56 @@ std::vector<long double> backward_highprec(int m,
 }
 
 
+/* FUNCTION: forward_emit_highprec
+ -----------------------------------------------------
+ Classical forward equation presented in Rabiner 1989.
+ Multiallelic implementation
+ Using high precision long double variable.
+ */
+std::vector<long double> forward_emit_highprec(int m,
+                                               std::vector<long double>& fk,
+                                               std::vector<int>& ik,
+                                               std::vector<int>& ik1,
+                                               std::vector<double>& emit,
+                                               std::vector<std::vector<double> >& T)
+{
+  int ngenk = ik.size()/2;
+  int ngenk1 = ik1.size()/2;
+  std::vector<long double> fk1(ngenk1);
+  std::fill(fk1.begin(), fk1.end(), 0.0);
+  for(int k1 = 0; k1 < ngenk1; k1++ )
+  {
+    for(int k = 0; k < ngenk; k++ )
+    {
+      fk1[k1] = fk1[k1] + fk[k] * T[ik[k]][ik1[k1]] * T[ik[k+ngenk]][ik1[k1+ngenk1]];
+    }
+    fk1[k1] = fk1[k1] * emit[k1];
+  }
+  return(fk1);
+}
+/* FUNCTION: backward_emit_highprec
+ -----------------------------------------------------
+ Classical backward equation presented in Rabiner 1989.
+ Multiallelic implementation
+ Using high precision long double variable.
+ */
+std::vector<long double> backward_emit_highprec(int m,
+                                                std::vector<long double>& fk1,
+                                                std::vector<int>& ik,
+                                                std::vector<int>& ik1,
+                                                std::vector<double>& emit,
+                                                std::vector<std::vector<double> >& T)
+{
+  int ngenk = ik.size()/2;
+  int ngenk1 = ik1.size()/2;
+  std::vector<long double> fk(ngenk);
+  std::fill(fk.begin(), fk.end(), 0.0);
+  for(int k = 0; k < ngenk; k++ )
+  {
+    for(int k1 = 0; k1 < ngenk1; k1++ )
+    {
+      fk[k] =  fk[k] + fk1[k1] * T[ik[k]][ik1[k1]] * T[ik[k+ngenk]][ik1[k1+ngenk1]] * emit[k1]; 
+    }
+  }
+  return(fk);
+}

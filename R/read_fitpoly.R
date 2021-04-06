@@ -88,7 +88,7 @@
 #'     Voorrips, R.E., Gort, G. & Vosman, B. (2011) Genotype calling 
 #'     in tetraploid species from bi-allelic marker data using mixture 
 #'     models. _BMC Bioinformatics_.
-#'     \url{https://doi.org/10.1186/1471-2105-12-172}
+#'     \doi{10.1186/1471-2105-12-172}
 #'
 #' @export read_fitpoly
 #' @importFrom dplyr filter group_by summarise across
@@ -97,7 +97,8 @@
 read_fitpoly <- function(file.in, ploidy, parent1, parent2, offspring = NULL, 
                          filter.non.conforming = TRUE, elim.redundant = TRUE, 
                          parent.geno = c("joint", "max"), thresh.parent.geno = 0.95,
-                         prob.thres = 0.95, file.type = c("table", "csv"), verbose = TRUE) {
+                         prob.thres = 0.95, file.type = c("table", "csv"), verbose = TRUE) 
+{
   file.type <- match.arg(file.type)
   if(file.type == "table")
     dat <- read.delim(file = file.in, header = TRUE, stringsAsFactors = FALSE)
@@ -108,7 +109,8 @@ read_fitpoly <- function(file.in, ploidy, parent1, parent2, offspring = NULL,
   if(is.null(offspring)){
     offspring <- setdiff(unique(dat[,"SampleName"]), c(p1, p2))    
   } else {
-    offspring <- unique(grep(pattern = offspring, dat[,"SampleName"], value = TRUE))
+    if(length(offspring) == 1)
+      offspring <- unique(grep(pattern = offspring, dat[,"SampleName"], value = TRUE))
   }
   parent.geno <- match.arg(parent.geno)
   dat<-dat[,c("MarkerName", "SampleName",paste0("P", 0:ploidy))] 
@@ -185,21 +187,21 @@ read_fitpoly <- function(file.in, ploidy, parent1, parent2, offspring = NULL,
   nphen <- 0
   phen <- NULL
   if (verbose){
-      cat("Reading the following data:")
-      cat("\n    Ploidy level:", ploidy)
-      cat("\n    No. individuals: ", n.ind)
-      cat("\n    No. markers: ", n.mrk) 
-      cat("\n    No. informative markers:  ", length(mrk.names), " (", round(100*length(mrk.names)/n.mrk,1), "%)", sep = "")
-      cat("\n    ...")
+    cat("Reading the following data:")
+    cat("\n    Ploidy level:", ploidy)
+    cat("\n    No. individuals: ", n.ind)
+    cat("\n    No. markers: ", n.mrk) 
+    cat("\n    No. informative markers:  ", length(mrk.names), " (", round(100*length(mrk.names)/n.mrk,1), "%)", sep = "")
+    cat("\n    ...")
   }
-
+  
   ## get genotypic info --------------------
   MarkerName <- SampleName <- NULL
   geno <- dat %>%
     filter(SampleName %in% offspring)  %>%
     filter(MarkerName %in% mrk.names) %>%
     arrange(SampleName, MarkerName)
-
+  
   colnames(geno) <- c("mrk", "ind", as.character(0:ploidy))
   ind.names <- unique(geno$ind)
   mrk.names <- unique(geno$mrk)
@@ -267,7 +269,6 @@ read_fitpoly <- function(file.in, ploidy, parent1, parent2, offspring = NULL,
     M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
     dimnames(M)<-list(res$mrk.names, c(0:ploidy))
     M<-cbind(M, res$geno.dose)
-    #res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = ploidy)
     res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = ploidy)
     if (verbose) cat("\n    Done.\n")
   }
