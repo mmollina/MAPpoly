@@ -1,7 +1,7 @@
 Package: mappoly
 Type: Package
 Title: Genetic Linkage Maps in Autopolyploids
-Version: 0.2.2.006
+Version: 0.2.2.007
 Authors@R: c(person(given = "Marcelo",
                     family = "Mollinari",
                     role = c("aut", "cre"),
@@ -53,6 +53,7 @@ Description: Construction of genetic maps in autopolyploid full-sib populations.
              and Mollinari et al. (2020) <doi:10.1534/g3.119.400620>.
 License: GPL-3
 LazyData: TRUE
+LazyDataCompression: xz
 Depends:
     R (>= 3.5.0)
 Imports:
