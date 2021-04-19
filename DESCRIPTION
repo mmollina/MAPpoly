@@ -82,6 +82,7 @@ SystemRequirements: C++11
 Encoding: UTF-8
 Suggests:
     testthat,
-    updog
+    updog,
+    fitPoly
 URL: https://github.com/mmollina/MAPpoly
 BugReports: https://github.com/mmollina/MAPpoly/issues
