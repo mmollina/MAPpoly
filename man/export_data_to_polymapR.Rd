@@ -13,24 +13,7 @@ export_data_to_polymapR(data.in)
 a dosage \code{matrix}
 }
 \description{
-Export data to \code{polymapR}
-}
-\examples{
-\donttest{
-if(requireNamespace("polymapR", quietly = TRUE)){
-require(polymapR)
-dat<-export_data_to_polymapR(hexafake)
-F1checked <- checkF1(dosage_matrix = dat, 
-                     parent1 = "P1",
-                     parent2 = "P2",
-                     F1 = colnames(dat)[-c(1:2)],
-                     polysomic = TRUE, 
-                     disomic = FALSE, 
-                     mixed = FALSE, 
-                     ploidy = 6)
- head(F1checked$checked_F1)
-}
-}  
+See examples at \url{https://rpubs.com/mmollin/tetra_mappoly_vignette}.
 }
 \author{
 Marcelo Mollinari, \email{mmollin@ncsu.edu}

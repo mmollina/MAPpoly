@@ -13,7 +13,7 @@ Other changes since version 0.2.1
 Thank you for reviewing our re-submission!
 
 ## Test environments
-* local R installation (macOS 10.15.6), R 3.6.3 and 4.1.0
+* local R installation (macOS 11.2.3), R 4.0.5
 * local R installation (Ubuntu 20.04), R 4.0.5
 * local R installation compiled without long double support (Ubuntu 20.04), R 4.0.3
 * Ubuntu 16.04 (on travis-ci), R 4.0.2
@@ -24,11 +24,11 @@ Thank you for reviewing our re-submission!
 
 0 errors | 0 warnings | 1 note
 
-* installed size is 12.3Mb
+* installed size is 6.5Mb
   sub-directories of 1Mb or more:
-    * R:      2.6Mb
-    * data:   9.0Mb
-    
+    * R:      2.7Mb
+    * data:   3.1Mb
+
 ## Downstream dependencies
 
  There are currently no downstream dependencies for this package

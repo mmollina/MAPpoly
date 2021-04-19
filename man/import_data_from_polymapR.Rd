@@ -46,16 +46,10 @@ expected genotypes under no double reduction. Since markers were already filtere
 \code{FALSE}, no output is produced}
 }
 \description{
-Function to import datasets from polymapR
+Function to import datasets from polymapR.
 }
-\examples{
-if(requireNamespace("polymapR", quietly = TRUE)){
-require(polymapR)
-data("screened_data3")
-mappoly.data <- import_data_from_polymapR(screened_data3, 4)
-plot(mappoly.data)
-}
-
+\details{
+See examples at \url{https://rpubs.com/mmollin/tetra_mappoly_vignette}.
 }
 \references{
 Bourke PM et al: (2019) PolymapR — linkage analysis and genetic map 

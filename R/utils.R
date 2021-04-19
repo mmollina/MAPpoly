@@ -123,25 +123,12 @@ dist_prob_to_class <- function(geno, prob.thres = 0.9) {
 }
 
 #' Export data to \code{polymapR}
+#' 
+#' See examples at \url{https://rpubs.com/mmollin/tetra_mappoly_vignette}.
+#' 
 #' @param data.in an object of class \code{mappoly.data}
 #' @return a dosage \code{matrix} 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
-#' @examples
-#' \donttest{
-#' if(requireNamespace("polymapR", quietly = TRUE)){
-#' require(polymapR)
-#' dat<-export_data_to_polymapR(hexafake)
-#' F1checked <- checkF1(dosage_matrix = dat, 
-#'                      parent1 = "P1",
-#'                      parent2 = "P2",
-#'                      F1 = colnames(dat)[-c(1:2)],
-#'                      polysomic = TRUE, 
-#'                      disomic = FALSE, 
-#'                      mixed = FALSE, 
-#'                      ploidy = 6)
-#'  head(F1checked$checked_F1)
-#' }
-#'}  
 #' @export export_data_to_polymapR
 export_data_to_polymapR <- function(data.in)
 {
@@ -248,7 +235,7 @@ compare_haplotypes <- function(m, h1, h2) {
 
 #' Genotypic information content 
 #' 
-#' This function plots the enotypic information content given 
+#' This function plots the genotypic information content given 
 #' an object of class \code{mappoly.homoprob}.
 #' 
 #' @param hprobs an object of class \code{mappoly.homoprob}

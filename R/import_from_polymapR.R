@@ -1,6 +1,8 @@
 #' Import data from polymapR
 #'
-#' Function to import datasets from polymapR
+#' Function to import datasets from polymapR. 
+#' 
+#' See examples at \url{https://rpubs.com/mmollin/tetra_mappoly_vignette}.
 #'
 #' @param input.data  a \code{polymapR} dataset
 #' @param ploidy the ploidy level     
@@ -19,14 +21,6 @@
 #'     \code{FALSE}.
 #' @param verbose if \code{TRUE} (default), the current progress is shown; if
 #'     \code{FALSE}, no output is produced
-#'     
-#' @examples
-#' if(requireNamespace("polymapR", quietly = TRUE)){
-#' require(polymapR)
-#' data("screened_data3")
-#' mappoly.data <- import_data_from_polymapR(screened_data3, 4)
-#' plot(mappoly.data)
-#' }
 #'
 #' @author Marcelo Mollinari \email{mmollin@ncsu.edu}
 #'
@@ -203,34 +197,13 @@ import_data_from_polymapR <- function(input.data,
 #'
 #' Function to import phased map lists from polymapR
 #' 
+#' See examples at \url{https://rpubs.com/mmollin/tetra_mappoly_vignette}.
+#' 
 #' @param maplist a list of phased maps obtained using function 
 #' \code{create_phased_maplist} from package \code{polymapR} 
 #' @param mappoly.data a dataset used to obtain \code{maplist}, 
 #' converted into class \code{mappoly.data}
 #' @param ploidy the ploidy level     
-#'     
-#' @examples
-#' if(requireNamespace("polymapR", quietly = TRUE)){
-#' require(polymapR)
-#' ## Loading polymapR example
-#' data("integrated.maplist", "screened_data3", "marker_assignments_P1","marker_assignments_P2")
-#' maplist <- create_phased_maplist(maplist = integrated.maplist,
-#'                                  dosage_matrix.conv = screened_data3,
-#'                                  marker_assignment.1=marker_assignments_P1,
-#'                                  marker_assignment.2=marker_assignments_P2,
-#'                                  ploidy = 4)
-#'  ## Importing polymapR dataset                                
-#'  mappoly.data <- import_data_from_polymapR(screened_data3, 4)
-#'  plot(mappoly.data) 
-#'  
-#'  ## Importing polymapR phased maplist
-#'  mappoly.maplist <- import_phased_maplist_from_polymapR(maplist, mappoly.data)
-#'  plot_map_list(mappoly.maplist)
-#'  ## plot phased map
-#'  plot(mappoly.maplist[[1]])
-#'  ## plot a segment of phased map (from 0 to 20 cM)
-#'  plot(mappoly.maplist[[1]], mrk.names = TRUE, left.lim = 0, right.lim = 20, cex = .7)
-#' }
 #'
 #' @author Marcelo Mollinari \email{mmollin@ncsu.edu}
 #'

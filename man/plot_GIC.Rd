@@ -14,7 +14,7 @@ plot_GIC(hprobs, P = "P1", Q = "P2")
 \item{Q}{a string containing the name of parent Q}
 }
 \description{
-This function plots the enotypic information content given 
+This function plots the genotypic information content given 
 an object of class \code{mappoly.homoprob}.
 }
 \examples{

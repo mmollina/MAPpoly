@@ -18,29 +18,8 @@ converted into class \code{mappoly.data}}
 \description{
 Function to import phased map lists from polymapR
 }
-\examples{
-if(requireNamespace("polymapR", quietly = TRUE)){
-require(polymapR)
-## Loading polymapR example
-data("integrated.maplist", "screened_data3", "marker_assignments_P1","marker_assignments_P2")
-maplist <- create_phased_maplist(maplist = integrated.maplist,
-                                 dosage_matrix.conv = screened_data3,
-                                 marker_assignment.1=marker_assignments_P1,
-                                 marker_assignment.2=marker_assignments_P2,
-                                 ploidy = 4)
- ## Importing polymapR dataset                                
- mappoly.data <- import_data_from_polymapR(screened_data3, 4)
- plot(mappoly.data) 
- 
- ## Importing polymapR phased maplist
- mappoly.maplist <- import_phased_maplist_from_polymapR(maplist, mappoly.data)
- plot_map_list(mappoly.maplist)
- ## plot phased map
- plot(mappoly.maplist[[1]])
- ## plot a segment of phased map (from 0 to 20 cM)
- plot(mappoly.maplist[[1]], mrk.names = TRUE, left.lim = 0, right.lim = 20, cex = .7)
-}
-
+\details{
+See examples at \url{https://rpubs.com/mmollin/tetra_mappoly_vignette}.
 }
 \references{
 Bourke PM et al: (2019) PolymapR — linkage analysis and genetic map 

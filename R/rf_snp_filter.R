@@ -20,7 +20,7 @@
 #'
 #' @param thresh.rf threshold for recombination fractions (default = 0.15) 
 #'
-#' @param probs indicates the probability corresponding to the filtering quantiles. (defaul = c(0.05, 1))
+#' @param probs indicates the probability corresponding to the filtering quantiles. (default = c(0.05, 1))
 #' 
 #' @param ncpus number of parallel processes (i.e. cores) to spawn (default = 1)
 #' 

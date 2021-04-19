@@ -23,7 +23,7 @@ rf_snp_filter(
 
 \item{thresh.rf}{threshold for recombination fractions (default = 0.15)}
 
-\item{probs}{indicates the probability corresponding to the filtering quantiles. (defaul = c(0.05, 1))}
+\item{probs}{indicates the probability corresponding to the filtering quantiles. (default = c(0.05, 1))}
 
 \item{ncpus}{number of parallel processes (i.e. cores) to spawn (default = 1)}
 
