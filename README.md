@@ -101,7 +101,7 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
 * QTL mapping
   * [QTLpoly: QTL mapping in full-sib families of outcrossing autopolyploid species based on a random-effect multiple QTL model](https://github.com/guilherme-pereira/QTLpoly)
   * [diaQTL: QTL analysis of diploid and autotetraploid diallel populations](https://github.com/jendelman/diaQTL)
-  * [Quantitative trait loci (QTL) analysis and exploration of meiotic patterns in autopolyploid bi-parental F1 populations. ](https://cran.r-project.org/web/packages/polyqtlR/index.html)
+  * [polyqtlR: QTL analysis and exploration of meiotic patterns in autopolyploid bi-parental F1 populations.](https://cran.r-project.org/web/packages/polyqtlR/index.html)
 
 # Miscellaneous
 * [Supplementary scripts for Mollinari and Garcia (2019)](https://github.com/mmollina/Autopolyploid_Linkage)
