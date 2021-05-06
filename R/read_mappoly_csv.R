@@ -66,7 +66,7 @@
 #' print(SolCAP.dose, detailed = TRUE)
 #' plot(SolCAP.dose)
 #'}
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}, with minor changes by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'
 #' @references
 #' 
@@ -88,6 +88,8 @@
 read_geno_csv <- function(file.in, ploidy, filter.non.conforming = TRUE, elim.redundant = TRUE, verbose = TRUE) {
   m <- ploidy
   dat<-read.csv(file = file.in, header = TRUE, stringsAsFactors = FALSE)
+  ## Removing markers with missing datapoints for parents
+  dat = dat[which(!is.na(dat$P1) & !is.na(dat$P2)),]
   ## get number of individuals -------------
   n.ind <- ncol(dat) - 5
   ## get number of markers -----------------
