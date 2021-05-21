@@ -141,7 +141,7 @@ int get_ploidy(std::string mystring, int gt_pos){
   // Looping through string2
   start = 0;
   for(i = 0; i < mystring.size(); i++){
-    if( mystring[i] != split2 & mystring[i] != split3){
+    if( mystring[i] != split2 && mystring[i] != split3){
       start += 1;
     }
   }  
