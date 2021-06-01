@@ -110,15 +110,15 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
 
 # Articles referencing MAPpoly
 
-
-1. Discovery of a major QTL for root-knot nematode *Meloidogyne incognita* resistance in cultivated sweetpotato *Ipomoea batatas*. ([Oloka, et al., 2021](https://doi.org/10.1007/s00122-021-03797-z))
-2. Quantitative trait locus mapping for common scab resistance in a tetraploid potato full-sib population. ([Pereira et al., 2021](https://doi.org/10.1094/PDIS-10-20-2270-RE))
-3. The recombination landscape and multiple QTL mapping in a Solanum tuberosum cv.'Atlantic'-derived F1 population. ([Pereira et al., 2021](https://doi.org/10.1101/2020.08.24.265397))
-4. High-Resolution Linkage Map and QTL Analyses of Fruit Firmness in Autotetraploid Blueberry ([Cappai et al., 2020](https://doi.org/10.3389/fpls.2020.562171))
-5. When a phenotype is not the genotype: Implications of phenotype misclassification and pedigree errors in genomics-assisted breeding of sweetpotato *Ipomoea batatas* (L.) Lam.([Gemenet et al., 2020](https://doi.org/10.1101/747469 ))
-6. Quantitative trait loci and differential gene expression analyses reveal the genetic basis for negatively associated beta-carotene and starch content in hexaploid sweetpotato [*Ipomoea batatas* (L.) Lam.] ([Gemenet et al., 2020](https://doi.org/10.1007/s00122-019-03437-7))
-7. Multiple QTL Mapping in Autopolyploids: A Random-Effect Model Approach with Application in a Hexaploid Sweetpotato Full-Sib Population. ([Pereira et al., 2020](https://doi.org/10.1534/genetics.120.303080))
-8. Unraveling the Hexaploid Sweetpotato Inheritance Using Ultra-Dense Multilocus Mapping. ([Mollinari et al., 2020](https://doi.org/10.1534/g3.119.400620)).
+1. Using probabilistic genotypes in linkage analysis of polyploids. ([Liao et al., 2021](https://doi.org/10.1007/s00122-021-03834-x))
+2. Discovery of a major QTL for root-knot nematode *Meloidogyne incognita* resistance in cultivated sweetpotato *Ipomoea batatas*. ([Oloka, et al., 2021](https://doi.org/10.1007/s00122-021-03797-z))
+3. Quantitative trait locus mapping for common scab resistance in a tetraploid potato full-sib population. ([Pereira et al., 2021](https://doi.org/10.1094/PDIS-10-20-2270-RE))
+4. The recombination landscape and multiple QTL mapping in a Solanum tuberosum cv.'Atlantic'-derived F1 population. ([Pereira et al., 2021](https://doi.org/10.1101/2020.08.24.265397))
+5. High-Resolution Linkage Map and QTL Analyses of Fruit Firmness in Autotetraploid Blueberry ([Cappai et al., 2020](https://doi.org/10.3389/fpls.2020.562171))
+6. When a phenotype is not the genotype: Implications of phenotype misclassification and pedigree errors in genomics-assisted breeding of sweetpotato *Ipomoea batatas* (L.) Lam.([Gemenet et al., 2020](https://doi.org/10.1101/747469 ))
+7. Quantitative trait loci and differential gene expression analyses reveal the genetic basis for negatively associated beta-carotene and starch content in hexaploid sweetpotato [*Ipomoea batatas* (L.) Lam.] ([Gemenet et al., 2020](https://doi.org/10.1007/s00122-019-03437-7))
+8. Multiple QTL Mapping in Autopolyploids: A Random-Effect Model Approach with Application in a Hexaploid Sweetpotato Full-Sib Population. ([Pereira et al., 2020](https://doi.org/10.1534/genetics.120.303080))
+9. Unraveling the Hexaploid Sweetpotato Inheritance Using Ultra-Dense Multilocus Mapping. ([Mollinari et al., 2020](https://doi.org/10.1534/g3.119.400620)).
 
 # Acknowledgment
 
