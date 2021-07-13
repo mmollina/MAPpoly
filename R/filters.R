@@ -340,13 +340,13 @@ filter_segregation<-function(input.data, chisq.pval.thres = 10e-5, inter = TRUE)
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' 
 #' @export
-#' @importFrom AGHmatrix Gmatrix
-#' @importFrom gatepoints fhs
 #' 
 filter_contaminats <- function(input.data, ind.to.remove = NULL, inter = TRUE){
   if (!inherits(input.data, "mappoly.data")) {
     stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
   }
+ # if (!require(AGHmatrix))
+#    stop("Please install package 'AGHmatrix' to proceed")
   D <- t(input.data$geno.dose)
   D[D==input.data$m+1] <- NA
   D <- rbind(input.data$dosage.p, input.data$dosage.q, D)
@@ -365,6 +365,8 @@ filter_contaminats <- function(input.data, ind.to.remove = NULL, inter = TRUE){
   }
   if(interactive() && inter)
   {
+ #   if (!require(gatepoints))
+ #     stop("Please install package 'gatepoints' to proceed")
     ANSWER <- readline("Enter 'Y/n' to proceed with interactive filtering or quit: ")
     if(substr(ANSWER, 1, 1) == "y" | substr(ANSWER, 1, 1) == "yes" | substr(ANSWER, 1, 1) == "Y" | ANSWER =="")
     {
