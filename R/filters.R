@@ -336,12 +336,14 @@ filter_segregation<-function(input.data, chisq.pval.thres = 10e-5, inter = TRUE)
 #'                      an interactive graphic to proceed with the individual 
 #'                      selection
 #' @param inter if \code{TRUE}, expects user-input to proceed with filtering
+#' 
+#' @param verbose if \code{TRUE} (default), shows the filtered out individuals 
 #'                      
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' 
 #' @export
 #' 
-filter_contaminats <- function(input.data, ind.to.remove = NULL, inter = TRUE){
+filter_contaminats <- function(input.data, ind.to.remove = NULL, inter = TRUE, verbose = TRUE){
   if (!inherits(input.data, "mappoly.data")) {
     stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
   }
@@ -371,6 +373,11 @@ filter_contaminats <- function(input.data, ind.to.remove = NULL, inter = TRUE){
     if(substr(ANSWER, 1, 1) == "y" | substr(ANSWER, 1, 1) == "yes" | substr(ANSWER, 1, 1) == "Y" | ANSWER =="")
     {
       ind.to.remove <- gatepoints::fhs(df, mark = TRUE)
+      if(verbose){
+        cat("Removing individual(s): \n")
+        print(ind.to.remove)
+        cat("...\n")
+      }
       ind.to.remove <- setdiff(rownames(df)[-c(1:2)], ind.to.remove)
       out.data <- sample_data(input.data, selected.ind = ind.to.remove)
       return(out.data)
