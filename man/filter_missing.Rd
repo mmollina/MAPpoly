@@ -23,7 +23,7 @@ So be careful when removing individuals.}
 
 \item{filter.thres}{maximum percentage of missing data (default = 0.2)}
 
-\item{inter}{if \code{TRUE} (default), it plots markers or individuals vs. frequency of missing data}
+\item{inter}{if \code{TRUE}, expects user-input to proceed with filtering}
 }
 \description{
 Excludes markers or individuals based on their proportion of missing data

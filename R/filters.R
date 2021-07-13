@@ -77,7 +77,7 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
 #' 
 #' @param filter.thres maximum percentage of missing data (default = 0.2)
 #' 
-#' @param inter if \code{TRUE} (default), it plots markers or individuals vs. frequency of missing data
+#' @param inter if \code{TRUE}, expects user-input to proceed with filtering
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' @examples
@@ -114,7 +114,7 @@ filter_missing<-function(input.data,
 #'
 #' @param input.data an object of class \code{"mappoly.data"} 
 #' @param filter.thres maximum percentage of missing data
-#' @param inter if \code{TRUE}, plots markers vs. frequency of genotyped individuals
+#' @param inter if \code{TRUE}, expects user-input to proceed with filtering
 #' @keywords internal
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
@@ -190,7 +190,7 @@ filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
 #'
 #' @param input.data an object of class \code{"mappoly.data"} 
 #' @param filter.thres maximum percentage of missing data
-#' @param inter if \code{TRUE}, plots markers vs. frequency of genotyped individuals
+#' @param inter if \code{TRUE}, expects user-input to proceed with filtering
 #' @keywords internal
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
@@ -323,4 +323,58 @@ filter_segregation<-function(input.data, chisq.pval.thres = 10e-5, inter = TRUE)
   keep<-names(which(input.data$chisq.pval >= chisq.pval.thres))
   exclude<-names(which(input.data$chisq.pval < chisq.pval.thres))
   structure(list(keep = keep, exclude = exclude, chisq.pval.thres = chisq.pval.thres, data.name = as.character(sys.call())[2]), class = "mappoly.chitest.seq")
+}
+
+#' Filter contaminant individuals
+#'
+#' This function removes individuals from the data set. Individuals can be 
+#' user-defined or can be accessed via interactive kinship analysis. 
+#'
+#' @param input.data name of input object (class \code{mappoly.data})
+#' 
+#' @param ind.to.remove individuals to be removed. If \code{NULL} it opens 
+#'                      an interactive graphic to proceed with the individual 
+#'                      selection
+#' @param inter if \code{TRUE}, expects user-input to proceed with filtering
+#'                      
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
+#' 
+#' @export
+#' @importFrom AGHmatrix Gmatrix
+#' @importFrom gatepoints fhs
+#' 
+filter_contaminats <- function(input.data, ind.to.remove = NULL, inter = TRUE){
+  if (!inherits(input.data, "mappoly.data")) {
+    stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
+  }
+  D <- t(input.data$geno.dose)
+  D[D==input.data$m+1] <- NA
+  D <- rbind(input.data$dosage.p, input.data$dosage.q, D)
+  rownames(D)[1:2] <- c("P1", "P2")
+  G <-AGHmatrix::Gmatrix(D, method="VanRaden",ploidy=input.data$m)
+  x <- G[1,]
+  y <- G[2,]
+  a <- 2*atan(y/x)/pi
+  b <- sqrt(x^2 + y^2)
+  df <- data.frame(x = a, y = b, type = c(2, 2, rep(4, length(a)-2)))
+  plot(df[,1:2], col = df$type, pch = 19)
+  legend("topright",  c("Parents", "Offspring") , col = c(2,4), pch = 19)
+  if(!is.null(ind.to.remove)){
+    out.data <- sample_data(input.data, selected.ind = ind.to.remove)
+    return(out.data)
+  }
+  if(interactive() && inter)
+  {
+    ANSWER <- readline("Enter 'Y/n' to proceed with interactive filtering or quit: ")
+    if(substr(ANSWER, 1, 1) == "y" | substr(ANSWER, 1, 1) == "yes" | substr(ANSWER, 1, 1) == "Y" | ANSWER =="")
+    {
+      ind.to.remove <- gatepoints::fhs(df, mark = TRUE)
+      ind.to.remove <- setdiff(rownames(df)[-c(1:2)], ind.to.remove)
+      out.data <- sample_data(input.data, selected.ind = ind.to.remove)
+      return(out.data)
+    } else{
+      warning("No individuals removed. Returning original data set.")
+      return(input.data)
+    } 
+  }
 }

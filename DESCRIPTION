@@ -75,7 +75,9 @@ Imports:
     dendextend,
     vcfR,
     zoo,
-    plotly
+    plotly,
+    AGHmatrix,
+    gatepoints
 LinkingTo: Rcpp
 RoxygenNote: 7.1.1
 SystemRequirements: C++11
@@ -83,6 +85,7 @@ Encoding: UTF-8
 Suggests:
     testthat,
     updog,
-    fitPoly
+    fitPoly,
+    polymapR
 URL: https://github.com/mmollina/MAPpoly
 BugReports: https://github.com/mmollina/MAPpoly/issues

@@ -11,7 +11,7 @@ filter_missing_mrk(input.data, filter.thres = 0.2, inter = TRUE)
 
 \item{filter.thres}{maximum percentage of missing data}
 
-\item{inter}{if \code{TRUE}, plots markers vs. frequency of genotyped individuals}
+\item{inter}{if \code{TRUE}, expects user-input to proceed with filtering}
 }
 \description{
 Filter markers based on missing genotypes
