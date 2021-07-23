@@ -4,7 +4,12 @@
 \alias{filter_contaminats}
 \title{Filter contaminant individuals}
 \usage{
-filter_contaminats(input.data, ind.to.remove = NULL, inter = TRUE)
+filter_contaminats(
+  input.data,
+  ind.to.remove = NULL,
+  inter = TRUE,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{input.data}{name of input object (class \code{mappoly.data})}
@@ -14,6 +19,8 @@ an interactive graphic to proceed with the individual
 selection}
 
 \item{inter}{if \code{TRUE}, expects user-input to proceed with filtering}
+
+\item{verbose}{if \code{TRUE} (default), shows the filtered out individuals}
 }
 \description{
 This function removes individuals from the data set. Individuals can be 
