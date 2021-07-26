@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // vcf_get_probabilities
 Rcpp::List vcf_get_probabilities(Rcpp::StringMatrix& mat, int pl_pos);
 RcppExport SEXP _mappoly_vcf_get_probabilities(SEXP matSEXP, SEXP pl_posSEXP) {
