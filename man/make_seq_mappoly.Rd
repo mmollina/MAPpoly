@@ -20,7 +20,7 @@ make_seq_mappoly(input.obj, arg = NULL, data.name = NULL, genomic.info = NULL)
 \item{arg}{can be one of the following objects: i) a string 'all',
 resulting in a sequence with all markers in the raw data; ii) a
 string or a vector of strings \code{'seqx'}, where \code{x}
-is the sequence (\code{x=0} indicates unassigned markers); iii) a
+is the sequence (\code{x = 0} indicates unassigned markers); iii) a
 \code{vector} of integers specifying which markers comprise the
 sequence; iv) an integer representing linkage group if 
 \code{input.object} has class \code{mappoly.group}; or v) NULL if 
@@ -66,11 +66,11 @@ An object of class \code{mappoly.sequence}, which is a
 Makes a sequence of markers based on an object of another class.
 }
 \examples{
-    all.mrk<-make_seq_mappoly(hexafake, 'all')
-    seq1.mrk<-make_seq_mappoly(hexafake, 'seq1')
+    all.mrk <- make_seq_mappoly(hexafake, 'all')
+    seq1.mrk <- make_seq_mappoly(hexafake, 'seq1')
     plot(seq1.mrk)
-    some.mrk.pos<-c(1,4,28,32,45)
-    (some.mrk.1<-make_seq_mappoly(hexafake, some.mrk.pos))
+    some.mrk.pos <- c(1,4,28,32,45)
+    (some.mrk.1 <- make_seq_mappoly(hexafake, some.mrk.pos))
     plot(some.mrk.1)
 
 }

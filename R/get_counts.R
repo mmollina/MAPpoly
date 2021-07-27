@@ -47,9 +47,9 @@ get_counts_two_parents <- function(x = c(2, 2), ploidy, p.k, p.k1, q.k, q.k1, ve
     ## Combining dosages from P and Q (locus k+1)
     comb.all.gam.k1 <- expand.grid(dpk1, dqk1)
     ## Combination of gametes that have x[1] doses in k
-    pos.k <- comb.all.gam.k[apply(comb.all.gam.k, 1, sum) == x[1], ]
+    pos.k <- comb.all.gam.k[apply(comb.all.gam.k, 1, sum)  ==  x[1], ]
     ## Combintation of gametes that have x[2] doses in k+1
-    pos.k1 <- comb.all.gam.k1[apply(comb.all.gam.k1, 1, sum) == x[2], ]
+    pos.k1 <- comb.all.gam.k1[apply(comb.all.gam.k1, 1, sum)  ==  x[2], ]
     r <- NULL
     den <- 0
     for (i in 1:nrow(pos.k)) {
@@ -66,7 +66,7 @@ get_counts_two_parents <- function(x = c(2, 2), ploidy, p.k, p.k1, q.k, q.k1, ve
     y <- apply(expand.grid(0:(ploidy/2), 0:(ploidy/2)), 1, function(x) paste(sort(x), collapse = ""))
     names(r) <- y
     res <- NULL
-    for (i in sort(unique(y))) res <- c(res, sum(r[names(r) == i]))
+    for (i in sort(unique(y))) res <- c(res, sum(r[names(r)  ==  i]))
     if (!joint.prob) 
         res <- res/den
     names(res) <- sort(unique(y))
@@ -77,10 +77,10 @@ get_counts_two_parents <- function(x = c(2, 2), ploidy, p.k, p.k1, q.k, q.k1, ve
 #'
 #' @param void internal function to be documented
 #' @keywords internal
-get_counts <- function(m, P.k = NULL, P.k1 = NULL, Q.k = NULL, Q.k1 = NULL, verbose = FALSE, make.names = FALSE, joint.prob = FALSE) {
+get_counts <- function(ploidy, P.k = NULL, P.k1 = NULL, Q.k = NULL, Q.k1 = NULL, verbose = FALSE, make.names = FALSE, joint.prob = FALSE) {
     if (verbose) {
-        cat("Ploidy: ", m, "\n")
-        M <- matrix(rep(letters[1:2], 2), m, 4, byrow = TRUE)
+        cat("Ploidy: ", ploidy, "\n")
+        M <- matrix(rep(letters[1:2], 2), ploidy, 4, byrow = TRUE)
         M[1 + P.k, 1] <- "A"
         M[1 + P.k1, 2] <- "B"
         M[1 + Q.k, 3] <- "A"
@@ -90,32 +90,32 @@ get_counts <- function(m, P.k = NULL, P.k1 = NULL, Q.k = NULL, Q.k1 = NULL, verb
     }
     
     if (all(is.null(P.k))) 
-        dP.k <- 0 else if (length(P.k) > m/2) 
-        dP.k <- (m/2):(m/2 + length(P.k) - m) else dP.k <- 0:length(P.k)
+        dP.k <- 0 else if (length(P.k) > ploidy/2) 
+        dP.k <- (ploidy/2):(ploidy/2 + length(P.k) - ploidy) else dP.k <- 0:length(P.k)
     if (all(is.null(P.k1))) 
-        dP.k1 <- 0 else if (length(P.k1) > m/2) 
-        dP.k1 <- (m/2):(m/2 + length(P.k1) - m) else dP.k1 <- 0:length(P.k1)
+        dP.k1 <- 0 else if (length(P.k1) > ploidy/2) 
+        dP.k1 <- (ploidy/2):(ploidy/2 + length(P.k1) - ploidy) else dP.k1 <- 0:length(P.k1)
     
     if (all(is.null(Q.k))) 
-        dQ.k <- 0 else if (length(Q.k) > m/2) 
-        dQ.k <- (m/2):(m/2 + length(Q.k) - m) else dQ.k <- 0:length(Q.k)
+        dQ.k <- 0 else if (length(Q.k) > ploidy/2) 
+        dQ.k <- (ploidy/2):(ploidy/2 + length(Q.k) - ploidy) else dQ.k <- 0:length(Q.k)
     
     if (all(is.null(Q.k1))) 
-        dQ.k1 <- 0 else if (length(Q.k1) > m/2) 
-        dQ.k1 <- (m/2):(m/2 + length(Q.k1) - m) else dQ.k1 <- 0:length(Q.k1)
+        dQ.k1 <- 0 else if (length(Q.k1) > ploidy/2) 
+        dQ.k1 <- (ploidy/2):(ploidy/2 + length(Q.k1) - ploidy) else dQ.k1 <- 0:length(Q.k1)
     counts <- NULL
     bla <- sort(unique(kronecker(dP.k, dQ.k, "+")))
     ble <- sort(unique(kronecker(dP.k1, dQ.k1, "+")))
     bli <- expand.grid(ble, bla)[, 2:1]
     blo <- bli[1:ceiling(nrow(bli)/2), ]
-    if (make.names == TRUE) 
+    if (make.names  ==  TRUE) 
         counts <- matrix(NA, nrow = nrow(bli)) else {
-        counts <- t(apply(blo, 1, get_counts_two_parents, ploidy = m, p.k = P.k, p.k1 = P.k1, q.k = Q.k, q.k1 = Q.k1, joint.prob = joint.prob))
-        if (nrow(bli) == 1) {
+        counts <- t(apply(blo, 1, get_counts_two_parents, ploidy = ploidy, p.k = P.k, p.k1 = P.k1, q.k = Q.k, q.k1 = Q.k1, joint.prob = joint.prob))
+        if (nrow(bli)  ==  1) {
             rownames(counts) <- apply(bli, 1, paste, collapse = " ")
             return(counts)
         }
-        if (nrow(bli)%%2 == 1) {
+        if (nrow(bli)%%2  ==  1) {
             counts <- rbind(counts, counts[(nrow(counts) - 1):1, ])
         } else {
             counts <- rbind(counts, counts[nrow(counts):1, ])
@@ -136,32 +136,32 @@ get_counts <- function(m, P.k = NULL, P.k1 = NULL, Q.k = NULL, Q.k1 = NULL, verb
 #'
 #' @param void internal function to be documented
 #' @keywords internal
-get_counts_all_phases <- function(x, m, verbose = FALSE, make.names = FALSE, joint.prob = FALSE) {
+get_counts_all_phases <- function(x, ploidy, verbose = FALSE, make.names = FALSE, joint.prob = FALSE) {
     pk <- x[1]
     pk1 <- x[2]
     qk <- x[3]
     qk1 <- x[4]
-    if (any(is.na(c(m, pk, pk1, qk, qk1)))) 
+    if (any(is.na(c(ploidy, pk, pk1, qk, qk1)))) 
         return(NULL)
-    if (any(c(pk, pk1) == 0)) 
+    if (any(c(pk, pk1)  ==  0)) 
         sh.p <- 0 else {
         sh.p <- min(pk, pk1):0
-        if (length(sh.p) > m - max(pk, pk1)) 
-            sh.p <- sh.p[1:(m - max(pk, pk1) + 1)]
+        if (length(sh.p) > ploidy - max(pk, pk1)) 
+            sh.p <- sh.p[1:(ploidy - max(pk, pk1) + 1)]
     }
-    if (any(c(qk, qk1) == 0)) 
+    if (any(c(qk, qk1)  ==  0)) 
         sh.q <- 0 else {
         sh.q <- min(qk, qk1):0
-        if (length(sh.q) > m - max(qk, qk1)) 
-            sh.q <- sh.q[1:(m - max(qk, qk1) + 1)]
+        if (length(sh.q) > ploidy - max(qk, qk1)) 
+            sh.q <- sh.q[1:(ploidy - max(qk, qk1) + 1)]
     }
-    if (pk == 0) 
+    if (pk  ==  0) 
         pk <- NULL else pk <- 0:(pk - 1)
-    if (pk1 == 0) 
+    if (pk1  ==  0) 
         pk1 <- NULL else pk1 <- 0:(pk1 - 1)
-    if (qk == 0) 
+    if (qk  ==  0) 
         qk <- NULL else qk <- 0:(qk - 1)
-    if (qk1 == 0) 
+    if (qk1  ==  0) 
         qk1 <- NULL else qk1 <- 0:(qk1 - 1)
     pk.ph <- NULL
     pk1.ph <- NULL
@@ -208,7 +208,7 @@ get_counts_all_phases <- function(x, m, verbose = FALSE, make.names = FALSE, joi
         for (j in 1:length(qk.num)) {
             if (verbose) 
                 print(names(a)[(i - 1) * length(qk.num) + j])
-            a[[(i - 1) * length(qk.num) + j]] <- get_counts(m, pk.ph[i, ], pk1.ph[i, ], qk.ph[j, ], qk1.ph[j, ], verbose = verbose, make.names = make.names, 
+            a[[(i - 1) * length(qk.num) + j]] <- get_counts(ploidy, pk.ph[i, ], pk1.ph[i, ], qk.ph[j, ], qk1.ph[j, ], verbose = verbose, make.names = make.names, 
                 joint.prob = joint.prob)
         }
     }

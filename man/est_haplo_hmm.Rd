@@ -5,7 +5,7 @@
 \title{Estimate a genetic map given a sequence of block markers}
 \usage{
 est_haplo_hmm(
-  m,
+  ploidy,
   n.mrk,
   n.ind,
   haplo,

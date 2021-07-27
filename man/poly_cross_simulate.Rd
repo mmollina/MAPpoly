@@ -5,7 +5,7 @@
 \title{Simulate an autopolyploid full-sib population}
 \usage{
 poly_cross_simulate(
-  m,
+  ploidy,
   rf.vec,
   n.mrk,
   n.ind,
@@ -20,7 +20,7 @@ poly_cross_simulate(
 )
 }
 \arguments{
-\item{m}{ploidy level. Must be an even number}
+\item{ploidy}{ploidy level. Must be an even number}
 
 \item{rf.vec}{vector containing the recombination fractions between
 adjacent markers. If a single recombination fraction is
@@ -70,9 +70,9 @@ informative parents under random chromosome segregation.
  \url{https://www.wur.nl/en/show/Software-PedigreeSim.htm}
 }
 \examples{
-    h.temp<-sim_homologous(m=6, n.mrk=20, max.d=3, max.ph=3, seed=123)
-    fake.poly.dat<-poly_cross_simulate(m=6, rf.vec=.05, n.mrk=20,
-                                  n.ind=200, h.temp, seed=123)
+    h.temp <- sim_homologous(ploidy = 6, n.mrk = 20, max.d = 3, max.ph = 3, seed = 123)
+    fake.poly.dat <- poly_cross_simulate(ploidy = 6, rf.vec = .05, n.mrk = 20,
+                                  n.ind = 200, h.temp, seed = 123)
     plot(fake.poly.dat)
                                    
                                   

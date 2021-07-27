@@ -4,7 +4,7 @@
 \alias{concatenate_new_marker}
 \title{Concatenate new marker}
 \usage{
-concatenate_new_marker(X = NULL, d, sh = NULL, seq.num = NULL, m, mrk = 1)
+concatenate_new_marker(X = NULL, d, sh = NULL, seq.num = NULL, ploidy, mrk = 1)
 }
 \arguments{
 \item{X}{a list of matrices whose columns represent homologous
@@ -16,7 +16,7 @@ chromosomes and the rows represent markers}
 
 \item{seq.num}{a vector of integers containing the number of each marker in the raw data file}
 
-\item{m}{the ploidy level}
+\item{ploidy}{the ploidy level}
 
 \item{mrk}{the marker to be inserted}
 }

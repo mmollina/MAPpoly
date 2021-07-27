@@ -23,7 +23,7 @@
 #'
 #' @examples
 #'  ## tetraploid example
-#'  probs.t<-calc_genoprob(input.map = solcap.dose.map[[1]],
+#'  probs.t <- calc_genoprob(input.map = solcap.dose.map[[1]],
 #'                         verbose = TRUE)
 #'  probs.t
 #'  ## displaying individual 1, 36 genotypic states
@@ -40,7 +40,7 @@
 #'     \doi{10.1534/g3.119.400378} 
 #'
 #' @export calc_genoprob
-calc_genoprob<-function(input.map, step = 0,  phase.config = "best", verbose = TRUE)
+calc_genoprob <- function(input.map, step = 0,  phase.config = "best", verbose = TRUE)
 {
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
@@ -50,69 +50,69 @@ calc_genoprob<-function(input.map, step = 0,  phase.config = "best", verbose = T
   }
   ## choosing the linkage phase configuration
   LOD.conf <- get_LOD(input.map, sorted = FALSE)
-  if(phase.config == "best") {
+  if(phase.config  ==  "best") {
     i.lpc <- which.min(LOD.conf)
   } else if (phase.config > length(LOD.conf)) {
     stop("invalid linkage phase configuration")
   } else i.lpc <- phase.config
-  m<-input.map$info$m
-  n.ind<-get(input.map$info$data.name, pos=1)$n.ind
+  ploidy <- input.map$info$ploidy
+  n.ind <- get(input.map$info$data.name, pos = 1)$n.ind
   ## This is used to calculate genoprobs for 'add_marker' function
-  if(length(input.map$info$mrk.names)==2 & input.map$info$mrk.names[1] == input.map$info$mrk.names[2]){
-    D<-get(input.map$info$data.name, pos=1)$geno.dose[input.map$maps[[1]]$seq.num,]
+  if(length(input.map$info$mrk.names) == 2 & input.map$info$mrk.names[1]  ==  input.map$info$mrk.names[2]){
+    D <- get(input.map$info$data.name, pos = 1)$geno.dose[input.map$maps[[1]]$seq.num,]
     map.pseudo <- create_map(input.map, step, phase.config = i.lpc)
-    mrknames<-names(map.pseudo)
-    n.mrk<-length(map.pseudo)
-    indnames<-colnames(D)
-    dp <- get(input.map$info$data.name)$dosage.p[input.map$maps[[i.lpc]]$seq.num]
-    dq <- get(input.map$info$data.name)$dosage.q[input.map$maps[[i.lpc]]$seq.num]
+    mrk.names <- names(map.pseudo)
+    n.mrk <- length(map.pseudo)
+    ind.names <- colnames(D)
+    dp <- get(input.map$info$data.name)$dosage.p1[input.map$maps[[i.lpc]]$seq.num]
+    dq <- get(input.map$info$data.name)$dosage.p2[input.map$maps[[i.lpc]]$seq.num]
     phP <- lapply(input.map$maps[[i.lpc]]$seq.ph$P, function(x) x-1)
     phQ <- lapply(input.map$maps[[i.lpc]]$seq.ph$Q, function(x) x-1)
     seq.rf.pseudo <- input.map$maps[[i.lpc]]$seq.rf
   }
   else {
-    Dtemp<-get(input.map$info$data.name, pos=1)$geno.dose[input.map$info$mrk.names,]
+    Dtemp <- get(input.map$info$data.name, pos = 1)$geno.dose[input.map$info$mrk.names,]
     map.pseudo <- create_map(input.map, step, phase.config = i.lpc)
-    mrknames<-names(map.pseudo)
-    n.mrk<-length(map.pseudo)
-    indnames<-colnames(Dtemp)
-    D<-matrix(m+1, nrow = length(map.pseudo), ncol = ncol(Dtemp), 
-              dimnames = list(mrknames, indnames))
+    mrk.names <- names(map.pseudo)
+    n.mrk <- length(map.pseudo)
+    ind.names <- colnames(Dtemp)
+    D <- matrix(ploidy+1, nrow = length(map.pseudo), ncol = ncol(Dtemp), 
+              dimnames = list(mrk.names, ind.names))
     D[rownames(Dtemp), ] <- as.matrix(Dtemp)
-    dptemp <- get(input.map$info$data.name)$dosage.p[input.map$maps[[i.lpc]]$seq.num]
-    dqtemp <- get(input.map$info$data.name)$dosage.q[input.map$maps[[i.lpc]]$seq.num]
-    dq<-dp<-rep(m/2, length(mrknames))
-    names(dp)<-names(dq)<-mrknames
-    dp[names(dptemp)]<-dptemp
-    dq[names(dqtemp)]<-dqtemp
+    dptemp <- get(input.map$info$data.name)$dosage.p1[input.map$maps[[i.lpc]]$seq.num]
+    dqtemp <- get(input.map$info$data.name)$dosage.p2[input.map$maps[[i.lpc]]$seq.num]
+    dq <- dp <- rep(ploidy/2, length(mrk.names))
+    names(dp) <- names(dq) <- mrk.names
+    dp[names(dptemp)] <- dptemp
+    dq[names(dqtemp)] <- dqtemp
     phPtemp <- lapply(input.map$maps[[i.lpc]]$seq.ph$P, function(x) x-1)
     phQtemp <- lapply(input.map$maps[[i.lpc]]$seq.ph$Q, function(x) x-1)
     phP <- phQ <- vector("list", n.mrk)
     for(i in 1:length(phP)){
-      phP[[i]] <- phQ[[i]] <- c(0:(m/2 - 1))
+      phP[[i]] <- phQ[[i]] <- c(0:(ploidy/2 - 1))
     }
-    names(phP) <- names(phQ) <- mrknames
+    names(phP) <- names(phQ) <- mrk.names
     phP[rownames(Dtemp)] <- phPtemp
     phQ[rownames(Dtemp)] <- phQtemp
     seq.rf.pseudo <- mf_h(diff(map.pseudo))
   }
   for (j in 1:nrow(D))
-    D[j, D[j, ] == input.map$info$m + 1] <- dp[j] + dq[j] + 1 + as.numeric(dp[j]==0 || dq[j]==0)
-  res.temp<-.Call("calc_genoprob",
-                  m,
+    D[j, D[j, ]  ==  input.map$info$ploidy + 1] <- dp[j] + dq[j] + 1 + as.numeric(dp[j] == 0 || dq[j] == 0)
+  res.temp <- .Call("calc_genoprob",
+                  ploidy,
                   t(D),
                   phP,
                   phQ,
                   seq.rf.pseudo,
-                  as.numeric(rep(0, choose(m, m/2)^2 * n.mrk * n.ind)),
-                  verbose=verbose,
+                  as.numeric(rep(0, choose(ploidy, ploidy/2)^2 * n.mrk * n.ind)),
+                  verbose = verbose,
                   PACKAGE = "mappoly")
   if(verbose) cat("\n")
-  dim(res.temp[[1]])<-c(choose(m,m/2)^2,n.mrk,n.ind)
-  dimnames(res.temp[[1]])<-list(kronecker(apply(combn(letters[1:m],m/2),2, paste, collapse=""),
-                                          apply(combn(letters[(m+1):(2*m)],m/2),2, paste, collapse=""), paste, sep=":"),
-                                  mrknames, indnames)
-  structure(list(probs = res.temp[[1]], map = map.pseudo), class="mappoly.genoprob")
+  dim(res.temp[[1]]) <- c(choose(ploidy,ploidy/2)^2,n.mrk,n.ind)
+  dimnames(res.temp[[1]]) <- list(kronecker(apply(combn(letters[1:ploidy],ploidy/2),2, paste, collapse = ""),
+                                          apply(combn(letters[(ploidy+1):(2*ploidy)],ploidy/2),2, paste, collapse = ""), paste, sep = ":"),
+                                  mrk.names, ind.names)
+  structure(list(probs = res.temp[[1]], map = map.pseudo), class = "mappoly.genoprob")
 }
 
 #' @export
@@ -130,25 +130,25 @@ cat("\n  No. genotypic classes:                    ", dim(x$probs)[1], "\n")
 #'
 #' @param void internal function to be documented
 #' @keywords internal
-create_map<-function(input.map, step = 0,
+create_map <- function(input.map, step = 0,
                      phase.config = "best")
 {
   ## choosing the linkage phase configuration
   LOD.conf <- get_LOD(input.map)
-  if(phase.config == "best") {
+  if(phase.config  ==  "best") {
     i.lpc <- which.min(LOD.conf)
   } else if (phase.config > length(LOD.conf)) {
     stop("invalid linkage phase configuration")
   } else i.lpc <- phase.config
-  mrknames <- get(input.map$info$data.name, pos=1)$mrk.names[input.map$maps[[i.lpc]]$seq.num]
-  if(length(unique(input.map$maps[[1]]$seq.num)) == 1){
-    a<-rep(0,input.map$info$n.mrk)
-    names(a)<-mrknames
+  mrk.names <- get(input.map$info$data.name, pos = 1)$mrk.names[input.map$maps[[i.lpc]]$seq.num]
+  if(length(unique(input.map$maps[[1]]$seq.num))  ==  1){
+    a <- rep(0,input.map$info$n.mrk)
+    names(a) <- mrk.names
     return(a)
   }
   map <- c(0, cumsum(imf_h(input.map$maps[[i.lpc]]$seq.rf)))
-  names(map)<-mrknames
-  if(round(step, 1) == 0)
+  names(map) <- mrk.names
+  if(round(step, 1)  ==  0)
     return(map)
   minloc <- min(map)
   map <- map-minloc

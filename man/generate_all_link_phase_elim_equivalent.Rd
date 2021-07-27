@@ -6,7 +6,7 @@
 and the number of shared alleles between a inserted marker and a
 pre-computed linkage configuration.}
 \usage{
-generate_all_link_phase_elim_equivalent(X, d, sh, m, k1, k2)
+generate_all_link_phase_elim_equivalent(X, d, sh, ploidy, k1, k2)
 }
 \arguments{
 \item{X}{a list of matrices whose columns represent homologous
@@ -18,7 +18,7 @@ list represents a linkage phase configuration.}
 \item{sh}{the number of shared alleles between k1 (marker already
 present on the sequence) and k2 (the inserted marker)}
 
-\item{m}{the ploidy level}
+\item{ploidy}{the ploidy level}
 
 \item{k1}{marker already present on the sequence}
 

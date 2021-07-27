@@ -38,8 +38,8 @@ get_ij <- function(w) as.numeric(unlist(strsplit(w, split = "-")))
 #' @keywords internal
 #' @export
 ph_matrix_to_list <- function(M) {
-    w <- lapply(split(M, seq(NROW(M))), function(x, M) which(x == 1))
-    w[sapply(w, function(x) length(x) == 0)] <- 0
+    w <- lapply(split(M, seq(NROW(M))), function(x, M) which(x  ==  1))
+    w[sapply(w, function(x) length(x)  ==  0)] <- 0
     w
 }
 
@@ -50,15 +50,15 @@ ph_matrix_to_list <- function(M) {
 #'
 #' @param L a list of configuration phases
 #' 
-#' @param m ploidy level
+#' @param ploidy ploidy level
 #' 
 #' @return a matrix whose columns represent homologous chromosomes and
 #'     the rows represent markers
 #' 
 #' @keywords internal
 #' @export
-ph_list_to_matrix <- function(L, m) {
-    M <- matrix(0, nrow = length(L), ncol = m)
+ph_list_to_matrix <- function(L, ploidy) {
+    M <- matrix(0, nrow = length(L), ncol = ploidy)
     for (i in 1:nrow(M)) if (all(L[[i]] != 0))
         M[i, L[[i]]] <- 1
     M
@@ -92,22 +92,22 @@ get_indices_from_selected_phases <- function(x, thres) {
 #' @param d the dosage of the inserted marker
 #' @param sh the number of shared alleles between k1 (marker already
 #'     present on the sequence) and k2 (the inserted marker)
-#' @param m the ploidy level
+#' @param ploidy the ploidy level
 #' @param k1 marker already present on the sequence
 #' @param k2 inserted marker
 #' @return a unique list of matrices representing linkage phases
 #' @keywords internal
-generate_all_link_phase_elim_equivalent <- function(X, d, sh, m, k1, k2) {
-    mat <- matrix(0, nrow = m, ncol = choose(m, d))
-    i <- combn(m, d)
-    j <- cumsum(c(0, rep(m, choose(m, d) - 1)))
+generate_all_link_phase_elim_equivalent <- function(X, d, sh, ploidy, k1, k2) {
+    mat <- matrix(0, nrow = ploidy, ncol = choose(ploidy, d))
+    i <- combn(ploidy, d)
+    j <- cumsum(c(0, rep(ploidy, choose(ploidy, d) - 1)))
     mat[as.numeric(apply(i, 1, function(x, y) x + y, y = j))] <- 1
     ct <- NULL
     Y <- NULL
     for (i in 1:ncol(mat)) {
         Y[[i]] <- rbind(X, mat[, i])
-        so <- sum(apply(Y[[i]][c(k1, k2), ], 2, sum) == 2)
-        if (any(so == sh))
+        so <- sum(apply(Y[[i]][c(k1, k2), ], 2, sum)  ==  2)
+        if (any(so  ==  sh))
             ct <- c(ct, i)
     }
     elim_equiv(Y[ct])
@@ -123,36 +123,36 @@ generate_all_link_phase_elim_equivalent <- function(X, d, sh, m, k1, k2) {
 #' @param d the dosage of the inserted marker
 #' @param sh a list of shared alleles between all markers in the sequence
 #' @param seq.num a vector of integers containing the number of each marker in the raw data file
-#' @param m the ploidy level
+#' @param ploidy the ploidy level
 #' @param mrk the marker to be inserted
 #' @return a unique list of matrices representing linkage phases
 #'
 #' @keywords internal
-concatenate_new_marker <- function(X = NULL, d, sh = NULL, seq.num = NULL, m, mrk = 1) {
-    if (is.null(X) & is.null(sh) & mrk == 1 & is.null(seq.num)) {
-        Y <- numeric(m)
+concatenate_new_marker <- function(X = NULL, d, sh = NULL, seq.num = NULL, ploidy, mrk = 1) {
+    if (is.null(X) & is.null(sh) & mrk  ==  1 & is.null(seq.num)) {
+        Y <- numeric(ploidy)
         if (d != 0)
             Y[1:d] <- 1
-        return(list(matrix(Y, ncol = m)))
+        return(list(matrix(Y, ncol = ploidy)))
     }
     Y.final <- NULL
     for (i in 1:length(X)) {
         for (j in (mrk - 1):1) {
             id <- paste(sort(c(seq.num[j], seq.num[mrk])), collapse = "-")
-            Y.temp <- generate_all_link_phase_elim_equivalent(X[[i]], d = d[mrk], sh = sh[[id]], m = m, k1 = j, k2 = mrk)
-            if (length(Y.temp) == 1 && j == (mrk - 1)) {
+            Y.temp <- generate_all_link_phase_elim_equivalent(X[[i]], d = d[mrk], sh = sh[[id]], ploidy = ploidy, k1 = j, k2 = mrk)
+            if (length(Y.temp)  ==  1 && j  ==  (mrk - 1)) {
                 Y <- Y.temp
                 best.conf <- 1
                 (break)()
             }
-            if (j == (mrk - 1)) {
+            if (j  ==  (mrk - 1)) {
                 Y <- Y.temp
                 best.conf <- 1:length(Y)
             } else {
                 best.conf <- na.omit(match(Y, Y.temp))
                 if (length(best.conf) != 0)
                   Y <- Y.temp[best.conf]
-                if (length(Y) == 1)
+                if (length(Y)  ==  1)
                   (break)()
             }
         }
@@ -175,8 +175,8 @@ concatenate_new_marker <- function(X = NULL, d, sh = NULL, seq.num = NULL, m, mr
 elim_conf_using_two_pts <- function(input.seq, twopt, thres) {
     if (!inherits(input.seq, "mappoly.sequence"))
         stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
-    dp <- input.seq$seq.dose.p
-    dq <- input.seq$seq.dose.q
+    dp <- input.seq$seq.dose.p1
+    dq <- input.seq$seq.dose.p2
     check <- check_pairwise(input.seq, twopt)
     if (any(check != 0)){
         ## cat("There is no information for pairs: \n")
@@ -188,30 +188,30 @@ elim_conf_using_two_pts <- function(input.seq, twopt, thres) {
     sh <- lapply(w, get_indices_from_selected_phases, thres = thres)
     sp <- lapply(sh, function(x) x$P)
     sq <- lapply(sh, function(x) x$Q)
-    XP <- concatenate_new_marker(d = dp[1], m = input.seq$m)
+    XP <- concatenate_new_marker(d = dp[1], ploidy = input.seq$ploidy)
     for (i in 2:length(dp)) {
         if (is.null(XP)) {
             warning("There are too many conflicts for this threshold level.\nTry anotrher one.")
             return(-1)  #stop('There are too many conflicts for this threshold level.\nTry anotrher one.')
         }
-        XP <- concatenate_new_marker(X = XP, d = dp, sh = sp, seq.num = input.seq$seq.num, m = input.seq$m, mrk = i)
+        XP <- concatenate_new_marker(X = XP, d = dp, sh = sp, seq.num = input.seq$seq.num, ploidy = input.seq$ploidy, mrk = i)
     }
     if (is.null(XP)) {
         warning("There are too many conflicts for this threshold level.\nTry anotrher one.")
         return(-1)  #stop('There are too many conflicts for this threshold level.\nTry anotrher one.')
-    } else for (i in 1:length(XP)) dimnames(XP[[i]]) <- list(input.seq$seq.num, paste("h", 1:input.seq$m, sep = ""))
-    XQ <- concatenate_new_marker(d = dq[1], m = input.seq$m)
+    } else for (i in 1:length(XP)) dimnames(XP[[i]]) <- list(input.seq$seq.num, paste("h", 1:input.seq$ploidy, sep = ""))
+    XQ <- concatenate_new_marker(d = dq[1], ploidy = input.seq$ploidy)
     for (i in 2:length(dq)) {
         if (is.null(XP)) {
             warning("There are too many conflicts for this threshold level.\nTry anotrher one.")
             return(-1)  #stop('There are too many conflicts for this threshold level.\nTry anotrher one.')
         }
-        XQ <- concatenate_new_marker(X = XQ, d = dq, sh = sq, seq.num = input.seq$seq.num, m = input.seq$m, mrk = i)
+        XQ <- concatenate_new_marker(X = XQ, d = dq, sh = sq, seq.num = input.seq$seq.num, ploidy = input.seq$ploidy, mrk = i)
     }
     if (is.null(XQ)) {
         warning("There are too many conflicts for this threshold level.\nTry anotrher one.")
         return(-1)  #stop('There are too many conflicts for this threshold level.\nTry anotrher one.')
-    } else for (i in 1:length(XQ)) dimnames(XQ[[i]]) <- list(input.seq$seq.num, paste("h", 1:input.seq$m, sep = ""))
+    } else for (i in 1:length(XQ)) dimnames(XQ[[i]]) <- list(input.seq$seq.num, paste("h", 1:input.seq$ploidy, sep = ""))
     list(P = XP, Q = XQ)
 }
 
@@ -227,7 +227,7 @@ elim_conf_using_two_pts <- function(input.seq, twopt, thres) {
 get_ph_conf_ret_sh <- function(M) {
     y <- combn(rownames(M), 2)
     y <- apply(y, 2, sort)
-    x <- apply(apply(y, 2, function(x) apply(M[x, ], 2, sum)), 2, function(x) sum(x == 2))
+    x <- apply(apply(y, 2, function(x) apply(M[x, ], 2, sum)), 2, function(x) sum(x  ==  2))
     names(x) <- apply(y, 2, paste, collapse = "-")
     x
 }
@@ -281,9 +281,9 @@ get_rf_from_list <- function(twopt, ph.list) {
     rf <- numeric(length(nm) - 1)
     for (i in 1:(length(nm) - 1)) {
         id <- paste(sort(c(nm[i], nm[i + 1])), collapse = "-")
-        if (all(ph.list$P[[i]] == 0) || all(ph.list$P[[i + 1]] == 0))
+        if (all(ph.list$P[[i]]  ==  0) || all(ph.list$P[[i + 1]]  ==  0))
             id.ph.P <- "0" else id.ph.P <- sum(!is.na(match(ph.list$P[[i]], ph.list$P[[i + 1]])))
-        if (all(ph.list$Q[[i]] == 0) || all(ph.list$Q[[i + 1]] == 0))
+        if (all(ph.list$Q[[i]]  ==  0) || all(ph.list$Q[[i + 1]]  ==  0))
             id.ph.Q <- "0" else id.ph.Q <- sum(!is.na(match(ph.list$Q[[i]], ph.list$Q[[i + 1]])))
         rf[i] <- twopt$pairwise[[id]][paste(id.ph.P, id.ph.Q, sep = "-"), 2]
     }
@@ -322,7 +322,7 @@ get_rf_from_list <- function(twopt, ph.list) {
 #'     \item{config.to.test}{a matrix with all possible linkage phase configurations
 #'      for both parents, P and Q} 
 #'     \item{rec.frac}{a matrix with all recombination fractions}
-#'     \item{m}{the ploidy level}
+#'     \item{ploidy}{the ploidy level}
 #'     \item{seq.num}{the sequence of markers}
 #'     \item{thres}{the LOD threshold}
 #'     \item{data.name}{the dataset name}
@@ -332,7 +332,7 @@ get_rf_from_list <- function(twopt, ph.list) {
 #' id <- get_genomic_order(seq.all.mrk)
 #' s <- make_seq_mappoly(id)
 #' seq10 <- make_seq_mappoly(hexafake, s$seq.mrk.names[1:10])
-#' twopt<-est_pairwise_rf(seq10)
+#' twopt <- est_pairwise_rf(seq10)
 #' 
 #' ## Using the first 10 markers 
 #' l10.seq.3.0 <- ls_linkage_phases(input.seq = seq10, thres = 3, twopt = twopt)
@@ -373,23 +373,23 @@ ls_linkage_phases <- function(input.seq, thres, twopt, mrk.to.add = NULL, prev.i
     if (!inherits(input.seq, input_classes)) {
         stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
     }
-    if (!is.null(mrk.to.add) && length(intersect(mrk.to.add, twopt$seq.num)) == 0)
+    if (!is.null(mrk.to.add) && length(intersect(mrk.to.add, twopt$seq.num))  ==  0)
         stop("Marker ", deparse(substitute(mrk.to.add)), " not found in the twopt object")
     if (is.null(mrk.to.add) || is.null(prev.info)) {
         X <- elim_conf_using_two_pts(input.seq, twopt, thres)
         mrk.seq.temp <- input.seq$seq.num
         if (!is.list(X))
-            return(structure(list(config.to.test = NULL, rec.frac = NULL, m = input.seq$m, seq.num = input.seq$seq.num, thres = thres, data.name = input.seq$data.name),
+            return(structure(list(config.to.test = NULL, rec.frac = NULL, ploidy = input.seq$ploidy, seq.num = input.seq$seq.num, thres = thres, data.name = input.seq$data.name),
                 class = "two.pts.linkage.phases"))
 
     } else {
         LP <- lapply(prev.info$config.to.test, function(x) x$P)
-        MP <- lapply(LP, function(x) ph_list_to_matrix(x, input.seq$m))
+        MP <- lapply(LP, function(x) ph_list_to_matrix(x, input.seq$ploidy))
         LQ <- lapply(prev.info$config.to.test, function(x) x$Q)
-        MQ <- lapply(LQ, function(x) ph_list_to_matrix(x, input.seq$m))
+        MQ <- lapply(LQ, function(x) ph_list_to_matrix(x, input.seq$ploidy))
         seq.temp <- c(input.seq$seq.num, mrk.to.add)
-        dp <- get(input.seq$data.name)$dosage.p[seq.temp]
-        dq <- get(input.seq$data.name)$dosage.q[seq.temp]
+        dp <- get(input.seq$data.name)$dosage.p1[seq.temp]
+        dq <- get(input.seq$data.name)$dosage.p2[seq.temp]
         check <- check_pairwise(input.seq, twopt)
         if (any(check != 0)){
             ## cat("There is no information for pairs: \n")
@@ -401,10 +401,10 @@ ls_linkage_phases <- function(input.seq, thres, twopt, mrk.to.add = NULL, prev.i
         sh <- lapply(w, get_indices_from_selected_phases, thres = thres)
         sp <- lapply(sh, function(x) x$P)
         sq <- lapply(sh, function(x) x$Q)
-        XP <- concatenate_new_marker(X = MP, d = dp, sh = sp, seq.num = seq.temp, m = input.seq$m, mrk = length(seq.temp))
-        XQ <- concatenate_new_marker(X = MQ, d = dq, sh = sq, seq.num = seq.temp, m = input.seq$m, mrk = length(seq.temp))
-        for (i in 1:length(XP)) dimnames(XP[[i]]) <- list(seq.temp, paste("h", 1:input.seq$m, sep = ""))
-        for (i in 1:length(XQ)) dimnames(XQ[[i]]) <- list(seq.temp, paste("h", 1:input.seq$m, sep = ""))
+        XP <- concatenate_new_marker(X = MP, d = dp, sh = sp, seq.num = seq.temp, ploidy = input.seq$ploidy, mrk = length(seq.temp))
+        XQ <- concatenate_new_marker(X = MQ, d = dq, sh = sq, seq.num = seq.temp, ploidy = input.seq$ploidy, mrk = length(seq.temp))
+        for (i in 1:length(XP)) dimnames(XP[[i]]) <- list(seq.temp, paste("h", 1:input.seq$ploidy, sep = ""))
+        for (i in 1:length(XQ)) dimnames(XQ[[i]]) <- list(seq.temp, paste("h", 1:input.seq$ploidy, sep = ""))
         X <- list(P = XP, Q = XQ)
         input.seq <- make_seq_mappoly(get(input.seq$data.name), seq.temp, data.name = input.seq$data.name)
         mrk.seq.temp <- input.seq$seq.num
@@ -441,17 +441,17 @@ ls_linkage_phases <- function(input.seq, thres, twopt, mrk.to.add = NULL, prev.i
             pos.conf <- ph.two.pts[names(check.conf)]
             res <- NULL
             if (is.null(mrk.to.add) || is.null(prev.info)) {
-                for (k in 1:length(pos.conf)) if (any(check.conf[k] == pos.conf[[k]])) {
+                for (k in 1:length(pos.conf)) if (any(check.conf[k]  ==  pos.conf[[k]])) {
                   res <- c(res, TRUE)
                 } else res <- c(res, FALSE)
-                if (sum(res) == length(pos.conf)) {
+                if (sum(res)  ==  length(pos.conf)) {
                   count <- count + 1
                   config.to.test[[count]] <- list(P = ph_matrix_to_list(X$P[[i]]), Q = ph_matrix_to_list(X$Q[[j]]))
                   names(config.to.test[[count]]$P) <- names(config.to.test[[count]]$Q) <- mrk.seq.temp
                   rf.vec <- rbind(rf.vec, get_rf_from_list(twopt = twopt, ph.list = config.to.test[[count]]))
                 }
             } else {
-                if (any(check.conf[length(pos.conf)] == pos.conf[[length(pos.conf)]])) {
+                if (any(check.conf[length(pos.conf)]  ==  pos.conf[[length(pos.conf)]])) {
                   count <- count + 1
                   config.to.test[[count]] <- list(P = ph_matrix_to_list(X$P[[i]]), Q = ph_matrix_to_list(X$Q[[j]]))
                   names(config.to.test[[count]]$P) <- names(config.to.test[[count]]$Q) <- mrk.seq.temp
@@ -465,7 +465,7 @@ ls_linkage_phases <- function(input.seq, thres, twopt, mrk.to.add = NULL, prev.i
     config.to.test <- config.to.test[id]
     rf.vec <- matrix(rf.vec[id, ], nrow = length(id))
     rownames(rf.vec) <- names(config.to.test) <- paste("Conf", 1:length(config.to.test), sep = "-")
-    structure(list(config.to.test = config.to.test, rec.frac = rf.vec, m = input.seq$m, seq.num = input.seq$seq.num, thres = thres, data.name = input.seq$data.name),
+    structure(list(config.to.test = config.to.test, rec.frac = rf.vec, ploidy = input.seq$ploidy, seq.num = input.seq$seq.num, thres = thres, data.name = input.seq$data.name),
         class = "two.pts.linkage.phases")
 }
 
@@ -484,15 +484,15 @@ print.two.pts.linkage.phases <- function(x, ...) {
 #' @keywords internal
 #' @export
 plot.two.pts.linkage.phases <- function(x, ...) {
-    if (length(x$config.to.test) == 1) {
-        draw_phases(m = get(x$data.name)$m, hom.allele.p = x$config.to.test[1][[1]]$P, hom.allele.q = x$config.to.test[1][[1]]$Q)
+    if (length(x$config.to.test)  ==  1) {
+        draw_phases(ploidy = get(x$data.name)$ploidy, hom.allele.p = x$config.to.test[1][[1]]$P, hom.allele.q = x$config.to.test[1][[1]]$Q)
     } else {
         n.col <- ceiling(sqrt(length(x$config.to.test)))
         n.row <- ceiling(length(x$config.to.test)/n.col)
         oldpar <- par(xaxt = "n", bty = "n", mar = c(2, 2, 2, 2), mfrow = c(max(n.row, n.col), max(n.row, n.col)))
         on.exit(par(oldpar))
         for (k in names(x$config.to.test)) {
-            draw_phases(m = get(x$data.name)$m, hom.allele.p = x$config.to.test[k][[1]]$P, hom.allele.q = x$config.to.test[k][[1]]$Q)
+            draw_phases(ploidy = get(x$data.name)$ploidy, hom.allele.p = x$config.to.test[k][[1]]$P, hom.allele.q = x$config.to.test[k][[1]]$Q)
         }
     }
 
@@ -500,7 +500,7 @@ plot.two.pts.linkage.phases <- function(x, ...) {
 
 #' Plot the linkage phase configuration given a list of homologous chromosomes
 #'
-#' @param m ploidy level
+#' @param ploidy ploidy level
 #' @param hom.allele.p a \code{list} of vectors containing linkage
 #'     phase configuration for parent P. Each vector contains the
 #'     numbers of the homologous chromosomes in which the alleles are
@@ -509,26 +509,26 @@ plot.two.pts.linkage.phases <- function(x, ...) {
 #' @keywords internal
 #' @importFrom graphics lines par plot points text
 #'
-draw_phases <- function(m, hom.allele.p, hom.allele.q) {
+draw_phases <- function(ploidy, hom.allele.p, hom.allele.q) {
     col1 <- "#e41a1c"
     col2 <- "#377eb8"
     n.mrk <- length(hom.allele.p)
-    plot(c(0, 22), c(0, -(m + 15)), type = "n", axes = FALSE, xlab = "", main = "", ylab = "")
-    for (i in -(1:m)) {
+    plot(c(0, 22), c(0, -(ploidy + 15)), type = "n", axes = FALSE, xlab = "", main = "", ylab = "")
+    for (i in -(1:ploidy)) {
         lines(c(0, 10), c(i, i), lwd = 1, col = "darkgray", lty = 2)
         lines(c(12, 22), c(i, i), lwd = 1, col = "darkgray", lty = 2)
     }
     pos.p <- cumsum(c(0, rep(1, n.mrk - 1)/sum(rep(1, n.mrk - 1))) * 10)
     for (i in 1:n.mrk) {
-        points(x = rep(pos.p[i], m), y = -c(1:m), pch = 15, col = col2, cex = 2)
+        points(x = rep(pos.p[i], ploidy), y = -c(1:ploidy), pch = 15, col = col2, cex = 2)
         if (any(hom.allele.p[[i]] != 0))
             points(x = rep(pos.p[i], length(hom.allele.p[[i]])), y = -hom.allele.p[[i]], col = col1, pch = 15, cex = 2)
     }
     pos.q <- pos.p + 12
     for (i in 1:n.mrk) {
-        points(x = rep(pos.q[i], m), y = -c(1:m), col = col2, pch = 15, cex = 2)
+        points(x = rep(pos.q[i], ploidy), y = -c(1:ploidy), col = col2, pch = 15, cex = 2)
         if (any(hom.allele.q[[i]] != 0))
             points(x = rep(pos.q[i], length(hom.allele.q[[i]])), y = -hom.allele.q[[i]], col = col1, pch = 15, cex = 2)
     }
-    text(x = 11, y = -(m + 1)/2, labels = "X", cex = 1)
+    text(x = 11, y = -(ploidy + 1)/2, labels = "X", cex = 1)
 }

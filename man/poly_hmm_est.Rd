@@ -5,7 +5,19 @@
 \title{Estimate genetic map using as input the probability distribution of
 genotypes (wrapper function to C++)}
 \usage{
-poly_hmm_est(m, n.mrk, n.ind, p, dp, q, dq, g, rf, verbose = TRUE, tol = 0.001)
+poly_hmm_est(
+  ploidy,
+  n.mrk,
+  n.ind,
+  p,
+  dp,
+  q,
+  dq,
+  g,
+  rf,
+  verbose = TRUE,
+  tol = 0.001
+)
 }
 \arguments{
 \item{void}{internal function to be documented}

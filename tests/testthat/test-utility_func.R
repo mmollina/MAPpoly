@@ -39,7 +39,7 @@ test_that("test several utility functions", {
   expect_equal(round(imf_h(.15),2), 17.83)
   expect_equal(round(imf_k(.15),2), 15.48)
   expect_equal(round(imf_m(.15),2), 15)
-  expect_null(plot_compare_haplotypes(m = 6, 
+  expect_null(plot_compare_haplotypes(ploidy = 6, 
                           hom.allele.p1 = maps.hexafake[[1]]$maps[[1]]$seq.ph$P[1:10],
                           hom.allele.q1 = maps.hexafake[[1]]$maps[[1]]$seq.ph$Q[1:10],
                           hom.allele.p2 = maps.hexafake[[1]]$maps[[1]]$seq.ph$P[1:10],

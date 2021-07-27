@@ -12,7 +12,7 @@
 #'     
 #' @examples
 #'  \donttest{
-#'   hexa.map<-loglike_hmm(maps.hexafake[[1]])
+#'   hexa.map <- loglike_hmm(maps.hexafake[[1]])
 #'   hexa.map
 #'  }
 #'  
@@ -27,24 +27,24 @@
 #'
 #' @export loglike_hmm
 #' 
-loglike_hmm<-function(input.map, input.data = NULL, verbose = FALSE)
+loglike_hmm <- function(input.map, input.data = NULL, verbose = FALSE)
 {
   ## Checking class of arguments
   if(!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
   }
   if(is.null(input.data))
-    D<-get(input.map$info$data.name, pos=1)$geno.dose[input.map$info$mrk.names,]
+    D <- get(input.map$info$data.name, pos = 1)$geno.dose[input.map$info$mrk.names,]
   else
-    D<-input.data$geno.dose[input.map$info$mrk.names,]
-  dp <- input.map$info$seq.dose.p
-  dq <- input.map$info$seq.dose.q
+    D <- input.data$geno.dose[input.map$info$mrk.names,]
+  dp <- input.map$info$seq.dose.p1
+  dq <- input.map$info$seq.dose.p2
   for (j in 1:nrow(D))
-    D[j, D[j, ] == input.map$info$m + 1] <- dp[j] + dq[j] + 1 + as.numeric(dp[j]==0 || dq[j]==0)
+    D[j, D[j, ]  ==  input.map$info$ploidy + 1] <- dp[j] + dq[j] + 1 + as.numeric(dp[j] == 0 || dq[j] == 0)
   for(i in 1:length(input.map$maps)){
-    rf.temp<-input.map$maps[[i]]$seq.rf
-    res.temp<-.Call("loglike_hmm",
-                    input.map$info$m,
+    rf.temp <- input.map$maps[[i]]$seq.rf
+    res.temp <- .Call("loglike_hmm",
+                    input.map$info$ploidy,
                     t(D),
                     lapply(input.map$maps[[i]]$seq.ph$P, function(x) x-1),
                     lapply(input.map$maps[[i]]$seq.ph$Q, function(x) x-1),

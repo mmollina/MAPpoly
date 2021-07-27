@@ -3,7 +3,7 @@
 %   R/reestimate_map_with_prior_genotypic_probability.R
 \name{est_full_hmm_with_prior_prob}
 \alias{est_full_hmm_with_prior_prob}
-\title{Re-estimate genetic map using dosage prior probability distribution}
+\title{Re-estimate genetic map using dosage.p1rior probability distribution}
 \usage{
 est_full_hmm_with_prior_prob(
   input.map,
@@ -31,17 +31,17 @@ will choose the maximum likelihood configuration}
 A list of class \code{mappoly.map} with two elements: 
 
 i) info:  a list containing information about the map, regardless of the linkage phase configuration:
-\item{m}{the ploidy level}
+\item{ploidy}{the ploidy level}
 \item{n.mrk}{number of markers}
 \item{seq.num}{a vector containing the (ordered) indices of markers in the map, 
                according to the input file}
 \item{mrk.names}{the names of markers in the map}
-\item{seq.dose.p}{a vector containing the dosage in parent 1 for all markers in the map}
-\item{seq.dose.q}{a vector containing the dosage in parent 2 for all markers in the map}
-\item{sequence}{a vector indicating the sequence (usually chromosome) each marker belongs 
+\item{seq.dose.p1}{a vector containing the dosage in parent 1 for all markers in the map}
+\item{seq.dose.p2}{a vector containing the dosage in parent 2 for all markers in the map}
+\item{chrom}{a vector indicating the sequence (usually chromosome) each marker belongs 
                 as informed in the input file. If not available, 
-                \code{sequence = NULL}}
-\item{sequence.pos}{physical position (usually in megabase) of the markers into the sequence}
+                \code{chrom = NULL}}
+\item{genome.pos}{physical position (usually in megabase) of the markers into the sequence}
 \item{seq.ref}{reference base used for each marker (i.e. A, T, C, G). If not available, 
                 \code{seq.ref = NULL}}                 
 \item{seq.alt}{alternative base used for each marker (i.e. A, T, C, G). If not available, 
@@ -61,14 +61,14 @@ ii) a list of maps with possible linkage phase configuration. Each map in the li
 \item{loglike}{the hmm-based multipoint likelihood}
 }
 \description{
-This function considers dosage prior distribution when re-estimating
+This function considers dosage.p1rior distribution when re-estimating
 a genetic map using Hidden Markov models
 }
 \examples{
     submap <- get_submap(solcap.dose.map[[1]], mrk.pos = 1:20, verbose = FALSE)
     prob.submap <- est_full_hmm_with_prior_prob(submap,
                                                 dat.prob = tetra.solcap.geno.dist,
-                                                tol=10e-4, 
+                                                tol = 10e-4, 
                                                 verbose = TRUE)
     prob.submap
     plot_map_list(list(dose = submap, prob = prob.submap), 

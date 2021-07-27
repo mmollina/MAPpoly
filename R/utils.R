@@ -19,9 +19,9 @@ get_LOD <- function(x, sorted = TRUE) {
 #' @keywords internal
 #' @export
 get_rf_from_mat <- function(M){
-  r<-numeric(nrow(M)-1)
+  r <- numeric(nrow(M)-1)
   for(i in 1:(nrow(M)-1)){
-    r[i]<-M[i, i+1]
+    r[i] <- M[i, i+1]
   }
   r
 }
@@ -31,6 +31,7 @@ get_rf_from_mat <- function(M){
 #'
 #' @param void internal function to be documented
 #' @keywords internal
+#' @export
 is.prob.data <- function(x){
   exists('geno', where = x)
 }
@@ -40,10 +41,10 @@ is.prob.data <- function(x){
 #' @param void internal function to be documented
 #' @keywords internal
 #' @export
-get_w_m <- function(m){
-  if(m%%2 != 0) stop("ploidy level should be an even number") 
-  if(m <= 0) stop("ploidy level should be greater than zero")
-  1/factorial((m/2)) * prod(choose(seq(2, m, 2),2))
+get_w_m <- function(ploidy){
+  if(ploidy%%2 != 0) stop("ploidy level should be an even number") 
+  if(ploidy <= 0) stop("ploidy level should be greater than zero")
+  1/factorial((ploidy/2)) * prod(choose(seq(2, ploidy, 2),2))
 }
 
 #' Reverse map
@@ -59,9 +60,9 @@ get_w_m <- function(m){
 #'
 #'@export
 #'
-rev_map<-function(input.map)
+rev_map <- function(input.map)
 {
-  output.map<-input.map
+  output.map <- input.map
   output.map$info <- lapply(output.map$info, rev)
   for(i in 1:length(output.map$maps))
   {
@@ -94,23 +95,23 @@ rev_map<-function(input.map)
 #' @importFrom dplyr group_by filter arrange
 #' @export
 dist_prob_to_class <- function(geno, prob.thres = 0.9) {
-  a<-reshape2::melt(geno, id.vars = c("mrk", "ind"))
+  a <- reshape2::melt(geno, id.vars = c("mrk", "ind"))
   mrk <- ind <- value <- variable <- NULL # Setting the variables to NULL first
-  a$variable<-as.numeric(levels(a$variable))[a$variable]
-  b<-a %>%
+  a$variable <- as.numeric(levels(a$variable))[a$variable]
+  b <- a %>%
     dplyr::group_by(mrk, ind) %>%
     dplyr::filter(value > prob.thres) %>%
     dplyr::arrange(mrk, ind, variable)
-  z<-reshape2::dcast(data = b[,1:3], formula = mrk ~ ind, value.var = "variable")
-  rownames(z)<-z[,"mrk"]
-  z<-data.matrix(frame = z[,-1])
-  n<-setdiff(unique(geno$mrk), rownames(z))
+  z <- reshape2::dcast(data = b[,1:3], formula = mrk ~ ind, value.var = "variable")
+  rownames(z) <- z[,"mrk"]
+  z <- data.matrix(frame = z[,-1])
+  n <- setdiff(unique(geno$mrk), rownames(z))
   if(length(n) > 0)
   {
-    m<-matrix(NA, nrow = length(n), ncol = ncol(z), dimnames = list(n, colnames(z)))
-    z<-rbind(z,m)
+    ploidy <- matrix(NA, nrow = length(n), ncol = ncol(z), dimnames = list(n, colnames(z)))
+    z <- rbind(z,ploidy)
   }
-  rm.ind<-setdiff(unique(geno$ind), colnames(z))
+  rm.ind <- setdiff(unique(geno$ind), colnames(z))
   flag <- FALSE
   if(length(rm.ind) > 0){
     flag <- TRUE
@@ -132,10 +133,10 @@ dist_prob_to_class <- function(geno, prob.thres = 0.9) {
 #' @export export_data_to_polymapR
 export_data_to_polymapR <- function(data.in)
 {
-  data.out<-as.matrix(data.frame(P1 = data.in$dosage.p,     
-                                 P2 = data.in$dosage.q,
+  data.out <- as.matrix(data.frame(P1 = data.in$dosage.p1,     
+                                 P2 = data.in$dosage.p2,
                                  data.in$geno.dose))
-  data.out[data.out == (data.in$m + 1)] <- NA
+  data.out[data.out  ==  (data.in$ploidy + 1)] <- NA
   return(data.out)
 }
 
@@ -211,18 +212,18 @@ imf_m <- function(r) sapply(r, function(a) min(a * 100, 50))
 
 #' Compare two polyploid haplotypes stored in list format
 #'
-#' @param m ploidy level
+#' @param ploidy ploidy level
 #' @param h1 homology group 1
 #' @param h2 homology group 2
-#' @return a numeric vector of size \code{m} indicating which
+#' @return a numeric vector of size \code{ploidy} indicating which
 #'     homolog in h2 represents the homolog in h1. If there is
 #'     no correspondence, i.e. different homolog, it returns NA for
 #'     that homolog.
 #' @keywords internal
 #' @export compare_haplotypes
-compare_haplotypes <- function(m, h1, h2) {
-  I1 <- matrix(0, m, length(h1))
-  I2 <- matrix(0, m, length(h2))
+compare_haplotypes <- function(ploidy, h1, h2) {
+  I1 <- matrix(0, ploidy, length(h1))
+  I2 <- matrix(0, ploidy, length(h2))
   for (i in 1:length(h1)) {
     I1[h1[[i]], i] <- 1
     I2[h2[[i]], i] <- 1
@@ -249,7 +250,7 @@ compare_haplotypes <- function(m, h1, h2) {
 #' @examples
 #' \donttest{
 #'      w <- lapply(solcap.err.map[1:3], calc_genoprob)
-#'      h.prob <- calc_homoprob(w)
+#'      h.prob <- calc_homologprob(w)
 #'      plot_GIC(h.prob)
 #' }
 #' 
@@ -265,13 +266,13 @@ plot_GIC <- function(hprobs, P = "P1", Q = "P2"){
     dplyr::mutate(p1 = probability * (1-probability)) %>%
     group_by(marker, homolog, map.position, LG) %>%
     summarise(m1 = sum(p1)) %>%
-    mutate(GIC = 1-(4/hprobs$info$nind)*m1 , parent = ifelse(homolog%in%letters[1:hprobs$info$m], P, Q))
+    mutate(GIC = 1-(4/hprobs$info$n.ind)*m1 , parent = ifelse(homolog%in%letters[1:hprobs$info$ploidy], P, Q))
   head(as.data.frame(DF))
   
  print(ggplot(DF, aes(map.position, GIC, colour = homolog)) +
     geom_smooth(alpha = .8, se = FALSE) + facet_wrap(~LG, nrow = 3, ncol = 5) +
     facet_grid(parent~LG, scales = "free_x", space = "free_x") +
-    geom_hline(yintercept = .8, linetype="dashed") + ylim(0,1) +
+    geom_hline(yintercept = .8, linetype = "dashed") + ylim(0,1) +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     scale_color_discrete(name = "Homologs") +
     ylab("Genotypic Information Content") + xlab("Distance (cM)"))
@@ -283,53 +284,53 @@ plot_GIC <- function(hprobs, P = "P1", Q = "P2"){
 #' @param void internal function to be documented
 #' @keywords internal
 #' @export plot_compare_haplotypes
-plot_compare_haplotypes <- function(m, hom.allele.p1, hom.allele.q1, hom.allele.p2 = NULL, hom.allele.q2 = NULL) {
-  nmmrk<-names(hom.allele.p1)
+plot_compare_haplotypes <- function(ploidy, hom.allele.p1, hom.allele.q1, hom.allele.p2 = NULL, hom.allele.q2 = NULL) {
+  nmmrk <- names(hom.allele.p1)
   oldpar <- par(mar = c(5.1, 4.1, 4.1, 2.1))
   on.exit(par(oldpar))
-  o1 <- order(apply(ph_list_to_matrix(hom.allele.p1, m), 2, paste, collapse = ""), decreasing = TRUE)
-  hom.allele.p1 <- ph_matrix_to_list(ph_list_to_matrix(hom.allele.p1, m)[, o1])
-  o2 <- order(apply(ph_list_to_matrix(hom.allele.q1, m), 2, paste, collapse = ""), decreasing = TRUE)
-  hom.allele.q1 <- ph_matrix_to_list(ph_list_to_matrix(hom.allele.q1, m)[, o2])
+  o1 <- order(apply(ph_list_to_matrix(hom.allele.p1, ploidy), 2, paste, collapse = ""), decreasing = TRUE)
+  hom.allele.p1 <- ph_matrix_to_list(ph_list_to_matrix(hom.allele.p1, ploidy)[, o1])
+  o2 <- order(apply(ph_list_to_matrix(hom.allele.q1, ploidy), 2, paste, collapse = ""), decreasing = TRUE)
+  hom.allele.q1 <- ph_matrix_to_list(ph_list_to_matrix(hom.allele.q1, ploidy)[, o2])
   
   if (!is.null(hom.allele.p2)) {
-    o3 <- order(apply(ph_list_to_matrix(hom.allele.p2, m), 2, paste, collapse = ""), decreasing = TRUE)
-    hom.allele.p2 <- ph_matrix_to_list(ph_list_to_matrix(hom.allele.p2, m)[, o3])
+    o3 <- order(apply(ph_list_to_matrix(hom.allele.p2, ploidy), 2, paste, collapse = ""), decreasing = TRUE)
+    hom.allele.p2 <- ph_matrix_to_list(ph_list_to_matrix(hom.allele.p2, ploidy)[, o3])
   }
   if (!is.null(hom.allele.q2)) {
-    o4 <- order(apply(ph_list_to_matrix(hom.allele.q2, m), 2, paste, collapse = ""), decreasing = TRUE)
-    hom.allele.q2 <- ph_matrix_to_list(ph_list_to_matrix(hom.allele.q2, m)[, o4])
+    o4 <- order(apply(ph_list_to_matrix(hom.allele.q2, ploidy), 2, paste, collapse = ""), decreasing = TRUE)
+    hom.allele.q2 <- ph_matrix_to_list(ph_list_to_matrix(hom.allele.q2, ploidy)[, o4])
   }
   col2 <- 0  #rgb(1,0,.5,0.5)
   col1 <- rgb(1, 0, 0, 0.5)
   col3 <- rgb(0, 0, 1, 0.5)
   n.mrk <- length(hom.allele.p1)
-  plot(c(0, 22), c(0, -(m + 15)), type = "n", axes = FALSE, xlab = "", main = "", ylab = "")
-  for (i in -(1:m)) {
+  plot(c(0, 22), c(0, -(ploidy + 15)), type = "n", axes = FALSE, xlab = "", main = "", ylab = "")
+  for (i in -(1:ploidy)) {
     lines(c(0, 10), c(i, i), lwd = 1, col = "darkgray", lty = 2)
     lines(c(12, 22), c(i, i), lwd = 1, col = "darkgray", lty = 2)
   }
   pos.p <- cumsum(c(0, rep(1, n.mrk - 1)/sum(rep(1, n.mrk - 1))) * 10)
   for (i in 1:n.mrk) {
-    points(x = rep(pos.p[i], m), y = -c(1:m), pch = 15, col = col2, cex = 2)
+    points(x = rep(pos.p[i], ploidy), y = -c(1:ploidy), pch = 15, col = col2, cex = 2)
     if (any(hom.allele.p1[[i]] != 0))
       points(x = rep(pos.p[i], length(hom.allele.p1[[i]])), y = -hom.allele.p1[[i]], col = col1, pch = 15, cex = 2)
     if (any(hom.allele.p2[[i]] != 0))
       if (!is.null(hom.allele.p2))
         points(x = rep(pos.p[i], length(hom.allele.p2[[i]])), y = -hom.allele.p2[[i]], col = col3, pch = 15, cex = 2)
   }
-  text(x = pos.p, y = rep(-(m+1), length(pos.p)), labels = nmmrk, cex = .5)
+  text(x = pos.p, y = rep(-(ploidy+1), length(pos.p)), labels = nmmrk, cex = .5)
   pos.q <- pos.p + 12
   for (i in 1:n.mrk) {
-    points(x = rep(pos.q[i], m), y = -c(1:m), col = col2, pch = 15, cex = 2)
+    points(x = rep(pos.q[i], ploidy), y = -c(1:ploidy), col = col2, pch = 15, cex = 2)
     if (any(hom.allele.q1[[i]] != 0))
       points(x = rep(pos.q[i], length(hom.allele.q1[[i]])), y = -hom.allele.q1[[i]], col = col1, pch = 15, cex = 2)
     if (any(hom.allele.q2[[i]] != 0))
       if (!is.null(hom.allele.q2))
         points(x = rep(pos.q[i], length(hom.allele.q2[[i]])), y = -hom.allele.q2[[i]], col = col3, pch = 15, cex = 2)
   }
-  text(x = pos.q, y = rep(-(m+1) , length(pos.q)), labels = nmmrk, cex = .5)
-  text(x = 11, y = -(m + 1)/2, labels = "X", cex = 1)
+  text(x = pos.q, y = rep(-(ploidy+1) , length(pos.q)), labels = nmmrk, cex = .5)
+  text(x = 11, y = -(ploidy + 1)/2, labels = "X", cex = 1)
 }
 
 #' Check if it is possible to estimate the recombination
@@ -338,16 +339,16 @@ plot_compare_haplotypes <- function(m, hom.allele.p1, hom.allele.q1, hom.allele.
 #'
 #' @param void internal function to be documented
 #' @keywords internal
-pos_twopt_est<-function(input.seq){
-  dp<-abs(abs(input.seq$seq.dose.p-(input.seq$m/2))-(input.seq$m/2))
-  dq<-abs(abs(input.seq$seq.dose.q-(input.seq$m/2))-(input.seq$m/2))
-  y<-numeric(length(input.seq$seq.num)-1)
+pos_twopt_est <- function(input.seq){
+  dp <- abs(abs(input.seq$seq.dose.p1-(input.seq$ploidy/2))-(input.seq$ploidy/2))
+  dq <- abs(abs(input.seq$seq.dose.p2-(input.seq$ploidy/2))-(input.seq$ploidy/2))
+  y <- numeric(length(input.seq$seq.num)-1)
   for(i in 1:length(y))
-    y[i]<-(dp[i] == 0 && dq[i+1] == 0) ||
-    (dp[i+1] == 0 && dq[i] == 0) ||
-    (dp[i] == 0 && dq[i] == 0) ||
-    (dp[i+1] == 0 && dq[i+1] == 0)
-  y<-as.logical(y)
+    y[i] <- (dp[i]  ==  0 && dq[i+1]  ==  0) ||
+    (dp[i+1]  ==  0 && dq[i]  ==  0) ||
+    (dp[i]  ==  0 && dq[i]  ==  0) ||
+    (dp[i+1]  ==  0 && dq[i+1]  ==  0)
+  y <- as.logical(y)
   y
 }
 
@@ -413,7 +414,7 @@ perm_pars <- function(v) {
 #' @export
 #' @importFrom grDevices hcl col2rgb hsv rgb2hsv
 gg_color_hue <- function(n) {
-  x<-rgb2hsv(col2rgb("steelblue"))[, 1]
+  x <- rgb2hsv(col2rgb("steelblue"))[, 1]
   cols = seq(x[1], x[1] + 1, by = 1/n)
   cols = cols[1:n]
   cols[cols > 1] <- cols[cols > 1] - 1
@@ -436,7 +437,7 @@ gg_color_hue <- function(n) {
 #' }
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' @export
-update_missing<-function(input.data, prob.thres = 0.95){
+update_missing <- function(input.data, prob.thres = 0.95){
   geno.dose <- dist_prob_to_class(geno = input.data$geno, prob.thres = prob.thres)
   if(geno.dose$flag)
   {
@@ -445,9 +446,9 @@ update_missing<-function(input.data, prob.thres = 0.95){
   } else {
     geno.dose <- geno.dose$geno.dose
   }
-  geno.dose[is.na(geno.dose)] <- input.data$m + 1
-  input.data$geno.dose<-geno.dose
-  input.data$prob.thres<-prob.thres
+  geno.dose[is.na(geno.dose)] <- input.data$ploidy + 1
+  input.data$geno.dose <- geno.dose
+  input.data$prob.thres <- prob.thres
   return(input.data)
 }
 
@@ -455,15 +456,15 @@ update_missing<-function(input.data, prob.thres = 0.95){
 #'
 #' @param void internal function to be documented
 #' @keywords internal
-mrk_chisq_test<-function(x, m){
-  y<-x[-c(1:(m+1))]
-  y[y==m+1]<-NA
-  y<-table(y, useNA = "always")
-  names(y)<-c(names(y)[-length(y)], "NA") 
-  seg.exp <- x[0:(m+1)]
-  seg.exp <- seg.exp[seg.exp!=0]
+mrk_chisq_test <- function(x, ploidy){
+  y <- x[-c(1:(ploidy+1))]
+  y[y == ploidy+1] <- NA
+  y <- table(y, useNA = "always")
+  names(y) <- c(names(y)[-length(y)], "NA") 
+  seg.exp <- x[0:(ploidy+1)]
+  seg.exp <- seg.exp[seg.exp != 0]
   seg.obs <- seg.exp
-  seg.obs[names(y)[-length(y)]]<-y[-length(y)]
+  seg.obs[names(y)[-length(y)]] <- y[-length(y)]
   pval <- suppressWarnings(stats::chisq.test(x = seg.obs, p = seg.exp[names(seg.obs)])$p.value)
   pval
 }
@@ -480,35 +481,35 @@ mrk_chisq_test<-function(x, m){
 #'   
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' @examples
-#' s1<-make_seq_mappoly(tetra.solcap, "all")
-#' o1<-get_genomic_order(s1)
+#' s1 <- make_seq_mappoly(tetra.solcap, "all")
+#' o1 <- get_genomic_order(s1)
 #' plot(o1)
 #' s.geno.ord <- make_seq_mappoly(o1)
 #' @export get_genomic_order
-get_genomic_order<-function(input.seq, verbose = TRUE){
+get_genomic_order <- function(input.seq, verbose = TRUE){
   if (!inherits(input.seq, "mappoly.sequence")) {
     stop(deparse(substitute(input.seq)), 
          " is not an object of class 'mappoly.sequence'")
   }
-  if(all(is.na(input.seq$sequence.pos))){
-    if(all(is.na(input.seq$sequence))) 
+  if(all(is.na(input.seq$genome.pos))){
+    if(all(is.na(input.seq$chrom))) 
       stop("No sequence or sequence position information found.")
     else{
-      if (verbose) message("Ordering markers based on sequence information")
-      M <- data.frame(seq = input.seq$sequence, row.names = input.seq$seq.mrk.names)
+      if (verbose) message("Ordering markers based on chromosome information")
+      M <- data.frame(seq = input.seq$chrom, row.names = input.seq$seq.mrk.names)
       M.out <- M[order(M[,1]),]
     }
-  } else if(all(is.na(input.seq$sequence))){
-    if(all(is.na(input.seq$sequence.pos))) 
+  } else if(all(is.na(input.seq$chrom))){
+    if(all(is.na(input.seq$genome.pos))) 
       stop("No sequence or sequence position information found.")
     else{
       if (verbose) message("Ordering markers based on sequence position information")
-      M <- data.frame(seq.pos = input.seq$sequence.pos, row.names = input.seq$seq.mrk.names)
+      M <- data.frame(seq.pos = input.seq$genome.pos, row.names = input.seq$seq.mrk.names)
       M.out <- M[order(as.numeric(M[,1])),]
     }
   } else{
-    M<-data.frame(seq = input.seq$sequence, 
-                  seq.pos = input.seq$sequence.pos, 
+    M <- data.frame(seq = input.seq$chrom, 
+                  seq.pos = input.seq$genome.pos, 
                   row.names = input.seq$seq.mrk.names)
     M.out <- M[order(as.numeric(M[,1]), as.numeric(M[,2])),]
   }
@@ -527,8 +528,8 @@ print.mappoly.geno.ord <- function(x, ...){
 plot.mappoly.geno.ord <- function(x, ...){
   seq <- seq.pos <- NULL
   ggplot2::ggplot(as.data.frame(x$ord), 
-                  ggplot2::aes(x=seq.pos, y=seq, group=as.factor(seq))) +
-    ggplot2::geom_point(ggplot2::aes(color=as.factor(seq)), shape = 108) +
+                  ggplot2::aes(x = seq.pos, y = seq, group = as.factor(seq))) +
+    ggplot2::geom_point(ggplot2::aes(color = as.factor(seq)), shape = 108) +
     ggplot2::xlab("position") + 
     ggplot2::ylab("sequence") + 
     ggplot2::theme(legend.position = "none") 
@@ -549,14 +550,14 @@ plot.mappoly.geno.ord <- function(x, ...){
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' 
 #' @examples
-#'  sub.map<-get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
+#'  sub.map <- get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
 #'  plot(sub.map, mrk.names = TRUE)
 #'  mrk.to.remove <- c("M_1", "M_23", "M_34")
 #'  red.map <- drop_marker(sub.map, mrk.to.remove)
 #'  plot(red.map, mrk.names = TRUE)
 #' 
 #' @export
-drop_marker<-function(input.map, mrk, verbose = TRUE)
+drop_marker <- function(input.map, mrk, verbose = TRUE)
 {
   ## Checking class of arguments
   if (!inherits(input.map, "mappoly.map")) {
@@ -574,13 +575,13 @@ drop_marker<-function(input.map, mrk, verbose = TRUE)
     }
   }
   ## Getting new map
-  suppressMessages(output.map<-get_submap(input.map = input.map,
+  suppressMessages(output.map <- get_submap(input.map = input.map,
                                           mrk.pos = c(1:input.map$info$n.mrk)[-mrk], 
                                           phase.config = 1, 
                                           reestimate.rf = FALSE))
   if(length(input.map$maps) > 1){
     for(i in 2:length(input.map$maps)){
-      suppressMessages(temp.map<-get_submap(input.map = input.map,
+      suppressMessages(temp.map <- get_submap(input.map = input.map,
                                             mrk.pos = c(1:input.map$info$n.mrk)[-mrk], 
                                             phase.config = 1, 
                                             reestimate.rf = FALSE))
@@ -638,17 +639,17 @@ drop_marker<-function(input.map, mrk, verbose = TRUE)
 #' @return A list of class \code{mappoly.map} with two elements: 
 #' 
 #' i) info:  a list containing information about the map, regardless of the linkage phase configuration:
-#' \item{m}{the ploidy level}
+#' \item{ploidy}{the ploidy level}
 #' \item{n.mrk}{number of markers}
 #' \item{seq.num}{a vector containing the (ordered) indices of markers in the map, 
 #'                according to the input file}
 #' \item{mrk.names}{the names of markers in the map}
-#' \item{seq.dose.p}{a vector containing the dosage in parent 1 for all markers in the map}
-#' \item{seq.dose.q}{a vector containing the dosage in parent 2 for all markers in the map}
-#' \item{sequence}{a vector indicating the sequence (usually chromosome) each marker belongs 
+#' \item{seq.dose.p1}{a vector containing the dosage in parent 1 for all markers in the map}
+#' \item{seq.dose.p2}{a vector containing the dosage in parent 2 for all markers in the map}
+#' \item{chrom}{a vector indicating the sequence (usually chromosome) each marker belongs 
 #'                 as informed in the input file. If not available, 
-#'                 \code{sequence = NULL}}
-#' \item{sequence.pos}{physical position (usually in megabase) of the markers into the sequence}
+#'                 \code{chrom = NULL}}
+#' \item{genome.pos}{physical position (usually in megabase) of the markers into the sequence}
 #' \item{seq.ref}{reference base used for each marker (i.e. A, T, C, G). If not available, 
 #'                 \code{seq.ref = NULL}}                 
 #' \item{seq.alt}{alternative base used for each marker (i.e. A, T, C, G). If not available, 
@@ -671,9 +672,9 @@ drop_marker<-function(input.map, mrk, verbose = TRUE)
 #' 
 #' @examples
 #' \donttest{
-#' sub.map<-get_submap(maps.hexafake[[1]], 1:20, reestimate.rf = FALSE)
+#' sub.map <- get_submap(maps.hexafake[[1]], 1:20, reestimate.rf = FALSE)
 #' plot(sub.map, mrk.names = TRUE)
-#' s<-make_seq_mappoly(hexafake, sub.map$info$mrk.names)
+#' s <- make_seq_mappoly(hexafake, sub.map$info$mrk.names)
 #' tpt <- est_pairwise_rf(s)
 #' rf.matrix <- rf_list_to_matrix(input.twopt = tpt,
 #'                                thresh.LOD.ph = 3, 
@@ -685,7 +686,7 @@ drop_marker<-function(input.map, mrk, verbose = TRUE)
 #' plot(input.map, mrk.names = TRUE)
 #' ## Computing conditional probabilities using the resulting map
 #' genoprob <- calc_genoprob(input.map)
-#' res.add.M_1<-add_marker(input.map = input.map,
+#' res.add.M_1 <- add_marker(input.map = input.map,
 #'                         mrk = "M_1",
 #'                         pos = 0,
 #'                         rf.matrix = rf.matrix,
@@ -693,8 +694,8 @@ drop_marker<-function(input.map, mrk, verbose = TRUE)
 #'                         tol = 10e-4)  
 #'  plot(res.add.M_1, mrk.names = TRUE)                       
 #'  best.phase <- res.add.M_1$maps[[1]]$seq.ph
-#'  names.id<-names(best.phase$P)
-#'  plot_compare_haplotypes(m = 6,
+#'  names.id <- names(best.phase$P)
+#'  plot_compare_haplotypes(ploidy = 6,
 #'                          hom.allele.p1 = best.phase$P[names.id],
 #'                          hom.allele.q1 = best.phase$Q[names.id],
 #'                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
@@ -706,7 +707,7 @@ drop_marker<-function(input.map, mrk, verbose = TRUE)
 #' plot(input.map, mrk.names = TRUE)
 #' # Computing conditional probabilities using the resulting map
 #' genoprob <- calc_genoprob(input.map)
-#' res.add.M_10<-add_marker(input.map = input.map,
+#' res.add.M_10 <- add_marker(input.map = input.map,
 #'                         mrk = "M_10",
 #'                         pos = "M_9",
 #'                         rf.matrix = rf.matrix,
@@ -714,8 +715,8 @@ drop_marker<-function(input.map, mrk, verbose = TRUE)
 #'                         tol = 10e-4)  
 #'  plot(res.add.M_10, mrk.names = TRUE)                       
 #'  best.phase <- res.add.M_10$maps[[1]]$seq.ph
-#'  names.id<-names(best.phase$P)
-#'  plot_compare_haplotypes(m = 6,
+#'  names.id <- names(best.phase$P)
+#'  plot_compare_haplotypes(ploidy = 6,
 #'                          hom.allele.p1 = best.phase$P[names.id],
 #'                          hom.allele.q1 = best.phase$Q[names.id],
 #'                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
@@ -742,7 +743,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
   }
   ## choosing the linkage phase configuration
   LOD.conf <- get_LOD(input.map, sorted = FALSE)
-  if(phase.config == "best") {
+  if(phase.config  ==  "best") {
     i.lpc <- which.min(LOD.conf)
   }  else if (phase.config > length(LOD.conf)) {
     stop("invalid linkage phase configuration")
@@ -761,20 +762,20 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
     genoprob <- calc_genoprob(input.map, phase.config = i.lpc, verbose = FALSE)
   }
   ## ploidy
-  m <- input.map$info$m
+  ploidy <- input.map$info$ploidy
   ## Number of genotypes in the offspring
-  ngen <- dim(genoprob$probs)[1]
+  n.gen <- dim(genoprob$probs)[1]
   ## number of markers
-  nmrk <- dim(genoprob$probs)[2]
+  n.mrk <- dim(genoprob$probs)[2]
   ## number of individuals
-  nind <- dim(genoprob$probs)[3]
-  ## number of genotipic states
-  ngam <- choose(m, m/2)
-  ## the threshold for visiting states: 1/ngen
-  thresh.cut.path <- 1/ngen
+  n.ind <- dim(genoprob$probs)[3]
+  ## number of genotypic states
+  ngam <- choose(ploidy, ploidy/2)
+  ## the threshold for visiting states: 1/n.gen
+  thresh.cut.path <- 1/n.gen
   ## Indexing position were the marker should be inserted
   if(is.numeric(pos)){
-    if(!(pos >=0 & pos <= (nmrk+1))){
+    if(!(pos  >= 0 & pos <= (n.mrk+1))){
       stop(deparse(substitute(pos)), " out of bounds.")
     } 
   } else if(is.character(pos)){
@@ -786,7 +787,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
   }
   
   ## Hash table: homolog combination --> states to visit in both parents
-  A<-as.matrix(expand.grid(c(1:ngam) - 1, c(1:ngam) - 1)[,2:1])
+  A <- as.matrix(expand.grid(c(1:ngam) - 1, c(1:ngam) - 1)[,2:1])
   rownames(A) <- dimnames(genoprob$probs)[[1]]
   
   ## Indexing marker to be inserted
@@ -796,28 +797,28 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
   mrk.id <- as.numeric(colnames(rf.matrix$ShP)[match(mrk, colnames(rf.matrix$rec.mat))])
   
   ## Adding marker: beginning of sequence
-  if(pos == 0){
+  if(pos  ==  0){
     ## h: states to visit in both parents
     ## e: probability distribution (ignored in this version) 
-    e.right <- h.right <- vector("list", nind)
-    for(i in 1:nind){
+    e.right <- h.right <- vector("list", n.ind)
+    for(i in 1:n.ind){
       a.right <-  genoprob$probs[,pos+1,i]
       e.right[[i]] <- a.right[a.right > thresh.cut.path]
       h.right[[i]] <- A[names(e.right[[i]]), , drop = FALSE]
     }
     if(is.null(r.test)){
-      r.test<-generate_all_link_phases_elim_equivalent_haplo(block1 = input.map$maps[[i.lpc]], 
+      r.test <- generate_all_link_phases_elim_equivalent_haplo(block1 = input.map$maps[[i.lpc]], 
                                                              block2 = mrk.id, 
                                                              rf.matrix = rf.matrix, 
-                                                             m = m, max.inc = 0)
+                                                             ploidy = ploidy, max.inc = 0)
       
     }
   } 
-  else if(pos > 0 & pos < nmrk){   ## Adding marker: middle positions
+  else if(pos > 0 & pos < n.mrk){   ## Adding marker: middle positions
     ## h: states to visit in both parents
     ## e: probability distribution (ignored in this version) 
-    e.left <- h.left <- e.right <- h.right <- vector("list", nind)
-    for(i in 1:nind){
+    e.left <- h.left <- e.right <- h.right <- vector("list", n.ind)
+    for(i in 1:n.ind){
       a.left <- genoprob$probs[,pos,i]  
       a.right <-  genoprob$probs[,pos+1,i]
       e.left[[i]] <- a.left[a.left > thresh.cut.path]
@@ -833,7 +834,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
     r.left <- generate_all_link_phases_elim_equivalent_haplo(block1 = map.left$maps[[i.lpc]], 
                                                              block2 = mrk.id, 
                                                              rf.matrix = rf.matrix, 
-                                                             m = m, max.inc = 0)
+                                                             ploidy = ploidy, max.inc = 0)
     ## Info to the right
     suppressMessages(map.right <- get_submap(input.map = input.map,
                                              mrk.pos = (pos+1):input.map$info$n.mrk,
@@ -842,23 +843,23 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
     r.right <- generate_all_link_phases_elim_equivalent_haplo(block1 = map.right$maps[[i.lpc]], 
                                                               block2 = mrk.id, 
                                                               rf.matrix = rf.matrix, 
-                                                              m = m, max.inc = 0)
+                                                              ploidy = ploidy, max.inc = 0)
     ## Using both information sources, left and right 
     r.test <- unique(r.left, r.right)
   } 
-  else if(pos == nmrk){
+  else if(pos  ==  n.mrk){
     ## h: states to visit in both parents
     ## e: probability distribution (ignored in this version) 
-    e.left <- h.left <- vector("list", nind)
-    for(i in 1:nind){
+    e.left <- h.left <- vector("list", n.ind)
+    for(i in 1:n.ind){
       a.left <- genoprob$probs[,pos,i]  
       e.left[[i]] <- a.left[a.left > thresh.cut.path]
       h.left[[i]] <- A[names(e.left[[i]]), , drop = FALSE]
     }
-    r.test<-generate_all_link_phases_elim_equivalent_haplo(block1 = input.map$maps[[i.lpc]], 
+    r.test <- generate_all_link_phases_elim_equivalent_haplo(block1 = input.map$maps[[i.lpc]], 
                                                            block2 = mrk.id, 
                                                            rf.matrix = rf.matrix, 
-                                                           m = m, max.inc = 0)
+                                                           ploidy = ploidy, max.inc = 0)
   } 
   else stop("should not get here!")
   ## gathering maps to test and conditional probabilities
@@ -870,7 +871,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
                                             c(1,1), 
                                             reestimate.rf = FALSE))
     hap.temp <- filter_map_at_hmm_thres(hap.temp, thres.hmm = 10e-10)
-    hap.temp$maps[[1]]$seq.num<-rep(mrk.id, 2)
+    hap.temp$maps[[1]]$seq.num <- rep(mrk.id, 2)
     hap.temp$maps[[1]]$seq.ph <- list(P = c(r.test[[i]]$P, r.test[[i]]$P),
                                       Q = c(r.test[[i]]$Q, r.test[[i]]$Q))
     hap.temp$maps[[1]]$seq.rf <- 10e-6
@@ -884,8 +885,8 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
   ## e: probability distribution 
   h <- e <- vector("list", length(r.test))
   for(j in 1:length(r.test)){
-    etemp<-htemp<-vector("list", nind)
-    for(i in 1:nind){
+    etemp <- htemp <- vector("list", n.ind)
+    for(i in 1:n.ind){
       a <- mrk.genoprobs[[j]]$probs[,1,i]  
       etemp[[i]] <- a[a > thresh.cut.path]
       htemp[[i]] <- A[names(etemp[[i]]), , drop = FALSE]
@@ -893,92 +894,92 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
     h[[j]] <- htemp
     e[[j]] <- etemp
   }
-  configs<-vector("list", length(test.maps))
+  configs <- vector("list", length(test.maps))
   names(configs) <- paste0("Phase_config.", 1:length(test.maps))
-  res<-matrix(NA, nrow = length(h), ncol = 3, dimnames = list(names(configs), c("log_like", "rf1", "rf2")))
+  res <- matrix(NA, nrow = length(h), ncol = 3, dimnames = list(names(configs), c("log_like", "rf1", "rf2")))
   ## Computing three-point multiallelic map using HMM
   for(i in 1:length(h)){
     if (verbose) cat(".")
-    if(pos == 0){
-      h.test<-c(h[i], list(h.right))
+    if(pos  ==  0){
+      h.test <- c(h[i], list(h.right))
       names(h.test) <- c("hap1", "hap2")
-      e.test<-c(e[i], list(e.right))
-      restemp<-est_haplo_hmm(m = m, 
+      e.test <- c(e[i], list(e.right))
+      restemp <- est_haplo_hmm(ploidy = ploidy, 
                              n.mrk = length(h.test), 
-                             n.ind = nind, 
+                             n.ind = n.ind, 
                              haplo = h.test, 
                              #emit = e.test, 
                              rf_vec = rep(0.01, length(h.test)-1), 
                              verbose = FALSE, 
                              use_H0 = FALSE, 
                              tol = tol) 
-      temp<-unlist(restemp)
+      temp <- unlist(restemp)
       res[i,1:length(temp)] <- temp
-      P<-c(test.maps[[i]]$maps[[1]]$seq.ph$P[1],
+      P <- c(test.maps[[i]]$maps[[1]]$seq.ph$P[1],
            input.map$maps[[1]]$seq.ph$P)
-      Q<-c(test.maps[[i]]$maps[[1]]$seq.ph$Q[1], 
+      Q <- c(test.maps[[i]]$maps[[1]]$seq.ph$Q[1], 
            input.map$maps[[1]]$seq.ph$Q)
-      names(P)<-names(Q)<-c(test.maps[[i]]$maps[[1]]$seq.num[1], 
+      names(P) <- names(Q) <- c(test.maps[[i]]$maps[[1]]$seq.num[1], 
                             input.map$maps[[1]]$seq.num)
-      configs[[i]]<-list(P = P, Q = Q)
+      configs[[i]] <- list(P = P, Q = Q)
     } 
-    else if(pos > 0 & pos < nmrk){
-      h.test<-c(list(h.left), h[i], list(h.right))
+    else if(pos > 0 & pos < n.mrk){
+      h.test <- c(list(h.left), h[i], list(h.right))
       names(h.test) <- c("hap1", "hap2", "hap3")
-      e.test<-c(list(e.left), e[i], list(e.right))
-      restemp<-est_haplo_hmm(m = m, 
+      e.test <- c(list(e.left), e[i], list(e.right))
+      restemp <- est_haplo_hmm(ploidy = ploidy, 
                              n.mrk = length(h.test), 
-                             n.ind = nind, 
+                             n.ind = n.ind, 
                              haplo = h.test, 
                              #emit = e.test, 
                              rf_vec = rep(0.01, length(h.test)-1), 
                              verbose = FALSE, 
                              use_H0 = FALSE, 
                              tol = tol) 
-      temp<-unlist(restemp)
+      temp <- unlist(restemp)
       res[i,1:length(temp)] <- temp
-      P<-c(map.left$maps[[1]]$seq.ph$P, 
+      P <- c(map.left$maps[[1]]$seq.ph$P, 
            test.maps[[i]]$maps[[1]]$seq.ph$P[1],
            map.right$maps[[1]]$seq.ph$P)
-      Q<-c(map.left$maps[[1]]$seq.ph$Q, 
+      Q <- c(map.left$maps[[1]]$seq.ph$Q, 
            test.maps[[i]]$maps[[1]]$seq.ph$Q[1], 
            map.right$maps[[1]]$seq.ph$Q)
-      names(P)<-names(Q)<-c(map.left$maps[[1]]$seq.num, 
+      names(P) <- names(Q) <- c(map.left$maps[[1]]$seq.num, 
                             test.maps[[i]]$maps[[1]]$seq.num[1], 
                             map.right$maps[[1]]$seq.num)
-      configs[[i]]<-list(P = P, Q = Q)
+      configs[[i]] <- list(P = P, Q = Q)
     } 
-    else if(pos == nmrk){
-      h.test<-c(list(h.left), h[i])
+    else if(pos  ==  n.mrk){
+      h.test <- c(list(h.left), h[i])
       names(h.test) <- c("hap1", "hap2")
-      e.test<-c(list(e.left), e[i])
-      restemp<-est_haplo_hmm(m = m, 
+      e.test <- c(list(e.left), e[i])
+      restemp <- est_haplo_hmm(ploidy = ploidy, 
                              n.mrk = length(h.test), 
-                             n.ind = nind, 
+                             n.ind = n.ind, 
                              haplo = h.test, 
                              #emit = e.test, 
                              rf_vec = rep(0.01, length(h.test)-1), 
                              verbose = FALSE, 
                              use_H0 = FALSE, 
                              tol = tol) 
-      temp<-unlist(restemp)
+      temp <- unlist(restemp)
       res[i,1:length(temp)] <- temp
-      P<-c(input.map$maps[[1]]$seq.ph$P, 
+      P <- c(input.map$maps[[1]]$seq.ph$P, 
            test.maps[[i]]$maps[[1]]$seq.ph$P[1])
-      Q<-c(input.map$maps[[1]]$seq.ph$Q, 
+      Q <- c(input.map$maps[[1]]$seq.ph$Q, 
            test.maps[[i]]$maps[[1]]$seq.ph$Q[1])
-      names(P)<-names(Q)<-c(input.map$maps[[1]]$seq.num, 
+      names(P) <- names(Q) <- c(input.map$maps[[1]]$seq.num, 
                             test.maps[[i]]$maps[[1]]$seq.num[1])
-      configs[[i]]<-list(P = P, Q = Q)
+      configs[[i]] <- list(P = P, Q = Q)
     }
   }
   if (verbose) cat("\n")
-  res<-res[order(res[,"log_like"], decreasing = TRUE),,drop = FALSE]
+  res <- res[order(res[,"log_like"], decreasing = TRUE),,drop = FALSE]
   
   
   ## Updating map
   output.map <- input.map
-  seq.num<-as.numeric(names(configs[[1]]$P))
+  seq.num <- as.numeric(names(configs[[1]]$P))
   output.map$info$seq.num <- seq.num
   output.map$info$mrk.names <- colnames(rf.matrix$rec.mat)[match(seq.num, colnames(rf.matrix$ShP))]
   output.map$info$n.mrk <- length(output.map$info$mrk.names)
@@ -986,13 +987,13 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
   for(i in 1:nrow(res))
   {
     ## Updating recombination fractions (approximated)
-    if(pos == 0){
+    if(pos  ==  0){
       seq.rf <- as.numeric(c(res[i, "rf1"], input.map$maps[[i.lpc]]$seq.rf))
-    } else if(pos > 0 & pos < nmrk){
+    } else if(pos > 0 & pos < n.mrk){
       seq.rf <- as.numeric(c(head(input.map$maps[[i.lpc]]$seq.rf, n = pos - 1),
                   res[i, c("rf1", "rf2")], 
                   tail(input.map$maps[[i.lpc]]$seq.rf, n = input.map$info$n.mrk - pos - 1)))
-    } else if(pos == nmrk){
+    } else if(pos  ==  n.mrk){
       seq.rf <- as.numeric(c(input.map$maps[[i.lpc]]$seq.rf, res[i, "rf1"]))
     }
     output.map$maps[[i]] <- list(seq.num = seq.num, 
@@ -1000,11 +1001,11 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
                                  seq.ph = configs[[rownames(res)[i]]],
                                  loglike = res[i, "log_like"])
   }
-  dat<-get(input.map$info$data.name, pos = 1)
-  output.map$info$seq.dose.p <- dat$dosage.p[output.map$info$mrk.names]
-  output.map$info$seq.dose.q <- dat$dosage.q[output.map$info$mrk.names]
-  output.map$info$sequence <- dat$sequence[output.map$info$mrk.names]
-  output.map$info$sequence.pos <- dat$sequence.pos[output.map$info$mrk.names]
+  dat <- get(input.map$info$data.name, pos = 1)
+  output.map$info$seq.dose.p1 <- dat$dosage.p1[output.map$info$mrk.names]
+  output.map$info$seq.dose.p2 <- dat$dosage.p2[output.map$info$mrk.names]
+  output.map$info$chrom <- dat$chrom[output.map$info$mrk.names]
+  output.map$info$genome.pos <- dat$genome.pos[output.map$info$mrk.names]
   output.map$info$chisq.pval <- dat$chisq.pval[output.map$info$mrk.names]
   return(output.map)
 }
@@ -1031,7 +1032,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
 #'     \doi{10.1534/g3.119.400378}
 #'     
 #' @export check_data_sanity
-check_data_sanity<-function(x){
+check_data_sanity <- function(x){
   if(exists('geno', where = x)){
     check_data_dist_sanity(x)
   } else if (exists('geno.dose', where = x)){
@@ -1045,14 +1046,14 @@ check_data_sanity<-function(x){
 #' @param void internal function to be documented
 #' @keywords internal
 check_data_dose_sanity <- function(x){
-  test<-logical(24L)
+  test <- logical(24L)
   names(test) <- 1:24
   
   # ploidy
-  test[1] <- x$m%%2 != 0 #is ploidy even?
-  test[2] <- any(sapply(x$dosage.p, function(y) max(y) > x$m | min(y) < 0)) #are dosages in P higher than ploidy?
-  test[3] <- any(sapply(x$dosage.q, function(y) max(y) > x$m | min(y) < 0)) #are dosages in Q higher than ploidy?
-  test[4] <- max(x$geno.dose) > x$m + 1 #is there any dose in offspring higher than ploidy?
+  test[1] <- x$ploidy%%2 != 0 #is ploidy even?
+  test[2] <- any(sapply(x$dosage.p1, function(y) max(y) > x$ploidy | min(y) < 0)) #are dosages in P higher than ploidy?
+  test[3] <- any(sapply(x$dosage.p2, function(y) max(y) > x$ploidy | min(y) < 0)) #are dosages in Q higher than ploidy?
+  test[4] <- max(x$geno.dose) > x$ploidy + 1 #is there any dose in offspring higher than ploidy?
   test[5] <- min(x$geno.dose) < 0 #is there any negative dose in offspring?
   
   # number of individuals
@@ -1063,12 +1064,12 @@ check_data_dose_sanity <- function(x){
   # number of markers
   test[9] <- x$n.mrk < 0 #is the number of markers greater than zero?
   test[10] <- length(x$mrk.names) != x$n.mrk #is the number of marker names equal to the number of markers?
-  test[11] <- length(x$dosage.p) != x$n.mrk #is the number of marker dosages in P equal to the number of markers?
-  test[12] <- length(x$dosage.q) != x$n.mrk #is the number of marker dosages in Q equal to the number of markers?
-  if(length(x$sequence) > 0)
-    test[13] <- length(x$sequence) != x$n.mrk #is the number of sequences equal to the number of markers?
-  if(length(x$sequence.pos) > 0)
-    test[14] <- length(x$sequence.pos) != x$n.mrk #is the number of sequence positions equal to the number of markers?
+  test[11] <- length(x$dosage.p1) != x$n.mrk #is the number of marker dosages in P equal to the number of markers?
+  test[12] <- length(x$dosage.p2) != x$n.mrk #is the number of marker dosages in Q equal to the number of markers?
+  if(length(x$chrom) > 0)
+    test[13] <- length(x$chrom) != x$n.mrk #is the number of sequences equal to the number of markers?
+  if(length(x$genome.pos) > 0)
+    test[14] <- length(x$genome.pos) != x$n.mrk #is the number of sequence positions equal to the number of markers?
   test[15] <- nrow(x$geno.dose) != x$n.mrk #is the number of rows in the dosage matrix equal to the number of markers?
   if(length(x$chisq.pval) > 0)
     test[16] <- length(x$chisq.pval) != x$n.mrk #is the number of chi-square tests equal to the number of markers?
@@ -1082,10 +1083,10 @@ check_data_dose_sanity <- function(x){
   test[20] <- !identical(rownames(x$geno.dose), x$mrk.names)# are row names in dosage matrix identical to marker names?
   
   # dosage in both parents
-  test[21] <- !is.integer(x$dosage.p) # are dosages in P numeric
-  test[22] <- !is.integer(x$dosage.q) # are dosages in Q numeric 
-  test[23] <- !identical(names(x$dosage.p), x$mrk.names) # are names in P's dosage vector identical to marker names?
-  test[24] <- !identical(names(x$dosage.q), x$mrk.names) # are names in Q's dosage vector identical to marker names?
+  test[21] <- !is.integer(x$dosage.p1) # are dosages in P numeric
+  test[22] <- !is.integer(x$dosage.p2) # are dosages in Q numeric 
+  test[23] <- !identical(names(x$dosage.p1), x$mrk.names) # are names in P's dosage vector identical to marker names?
+  test[24] <- !identical(names(x$dosage.p2), x$mrk.names) # are names in Q's dosage vector identical to marker names?
   
   if(any(test))
     return(test)
@@ -1098,15 +1099,15 @@ check_data_dose_sanity <- function(x){
 #' @param void internal function to be documented
 #' @keywords internal
 check_data_dist_sanity <- function(x){
-  test<-logical(29L)
+  test <- logical(29L)
   names(test) <- 1:29
   
   # ploidy
-  test[1] <- x$m%%2 != 0 #is ploidy even?
-  test[2] <- any(sapply(x$dosage.p, function(y) max(y) > x$m | min(y) < 0)) #are dosages in P higher than ploidy?
-  test[3] <- any(sapply(x$dosage.q, function(y) max(y) > x$m | min(y) < 0)) #are dosages in Q higher than ploidy?
-  test[4] <- ncol(x$geno) > x$m + 3 #is the number of columns in the probability data frame correct? (ploidy + 3)
-  test[5] <- max(x$geno.dose) > x$m + 1 #is there any dose in offspring higher than ploidy?
+  test[1] <- x$ploidy%%2 != 0 #is ploidy even?
+  test[2] <- any(sapply(x$dosage.p1, function(y) max(y) > x$ploidy | min(y) < 0)) #are dosages in P higher than ploidy?
+  test[3] <- any(sapply(x$dosage.p2, function(y) max(y) > x$ploidy | min(y) < 0)) #are dosages in Q higher than ploidy?
+  test[4] <- ncol(x$geno) > x$ploidy + 3 #is the number of columns in the probability data frame correct? (ploidy + 3)
+  test[5] <- max(x$geno.dose) > x$ploidy + 1 #is there any dose in offspring higher than ploidy?
   test[6] <- min(x$geno.dose) < 0 #is there any negative dose in offspring?
   
   # number of individuals
@@ -1118,12 +1119,12 @@ check_data_dist_sanity <- function(x){
   # number of markers
   test[11] <- x$n.mrk < 0 #is the number of markers greater than zero?
   test[12] <- length(x$mrk.names) != x$n.mrk #is the number of marker names equal to the number of markers?
-  test[13] <- length(x$dosage.p) != x$n.mrk #is the number of marker dosages in P equal to the number of markers?
-  test[14] <- length(x$dosage.q) != x$n.mrk #is the number of marker dosages in Q equal to the number of markers?
-  if(length(x$sequence) > 0)
-    test[15] <- length(x$sequence) != x$n.mrk #is the number of sequences equal to the number of markers?
-  if(length(x$sequence.pos) > 0)
-    test[16] <- length(x$sequence.pos) != x$n.mrk #is the number of sequence positions equal to the number of markers?
+  test[13] <- length(x$dosage.p1) != x$n.mrk #is the number of marker dosages in P equal to the number of markers?
+  test[14] <- length(x$dosage.p2) != x$n.mrk #is the number of marker dosages in Q equal to the number of markers?
+  if(length(x$chrom) > 0)
+    test[15] <- length(x$chrom) != x$n.mrk #is the number of sequences equal to the number of markers?
+  if(length(x$genome.pos) > 0)
+    test[16] <- length(x$genome.pos) != x$n.mrk #is the number of sequence positions equal to the number of markers?
   test[17] <- nrow(x$geno)/x$n.ind != x$n.mrk#is the number of rows in the probability data frame divided by n.ind equal to the number of markers?
   test[18] <- nrow(x$geno.dose) != x$n.mrk#is the number of rows in the dosage matrix equal to the number of markers?
   if(length(x$chisq.pval) > 0)
@@ -1142,10 +1143,10 @@ check_data_dist_sanity <- function(x){
   test[25] <- !identical(rownames(x$geno.dose), x$mrk.names)# are row names in dosage matrix identical to marker names?
   
   # dosage in both parents
-  test[26] <- !is.integer(x$dosage.p)# are dosages in P numeric
-  test[27] <- !is.integer(x$dosage.q)# are dosages in Q numeric 
-  test[28] <- !identical(names(x$dosage.p), x$mrk.names)# are names in P's dosage vector identical to marker names?
-  test[29] <- !identical(names(x$dosage.q), x$mrk.names)# are names in Q's dosage vector identical to marker names?
+  test[26] <- !is.integer(x$dosage.p1)# are dosages in P numeric
+  test[27] <- !is.integer(x$dosage.p2)# are dosages in Q numeric 
+  test[28] <- !identical(names(x$dosage.p1), x$mrk.names)# are names in P's dosage vector identical to marker names?
+  test[29] <- !identical(names(x$dosage.p2), x$mrk.names)# are names in Q's dosage vector identical to marker names?
   
   if(any(test))
     return(test)
@@ -1169,19 +1170,19 @@ check_data_dist_sanity <- function(x){
 #'
 #' @return An object of class \code{mappoly.data} which contains all markers
 #' from both datasets. It will be a list with the following components:
-#'     \item{m}{ploidy level}
+#'     \item{ploidy}{ploidy level}
 #'     \item{n.ind}{number individuals}
 #'     \item{n.mrk}{total number of markers}
 #'     \item{ind.names}{the names of the individuals}
 #'     \item{mrk.names}{the names of the markers}
-#'     \item{dosage.p}{a vector containing the dosage in
+#'     \item{dosage.p1}{a vector containing the dosage in
 #'       parent P for all \code{n.mrk} markers}
-#'     \item{dosage.q}{a vector containing the dosage in
+#'     \item{dosage.p2}{a vector containing the dosage in
 #'       parent Q for all \code{n.mrk} markers}
-#'     \item{sequence}{a vector indicating which sequence each marker
+#'     \item{chrom}{a vector indicating which sequence each marker
 #'       belongs. Zero indicates that the marker was not assigned to any
 #'       sequence}
-#'     \item{sequence.pos}{Physical position of the markers into the
+#'     \item{genome.pos}{Physical position of the markers into the
 #'       sequence}
 #'     \item{seq.ref}{if one or both datasets originated from read_vcf, it keeps
 #' reference alleles from sequencing platform, otherwise is NULL}
@@ -1199,8 +1200,8 @@ check_data_dist_sanity <- function(x){
 #'     \item{phen}{(NULL)}
 #'     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
 #'     test of Mendelian segregation performed for all markers in both datasets}
-#'     \item{kept}{if elim.redundant=TRUE when reading any dataset, holds all non-redundant markers}
-#'     \item{elim.correspondence}{if elim.redundant=TRUE when reading any dataset,
+#'     \item{kept}{if elim.redundant = TRUE when reading any dataset, holds all non-redundant markers}
+#'     \item{elim.correspondence}{if elim.redundant = TRUE when reading any dataset,
 #' holds all non-redundant markers and its equivalence to the redundant ones}
 #' 
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
@@ -1251,7 +1252,7 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
     stop(deparse(substitute(dat.2)), " is not an object of class 'mappoly.data'")
   }
   ## Check ploidy
-  if (dat.1$m != dat.2$m){
+  if (dat.1$ploidy != dat.2$ploidy){
     stop("The ploidy levels in the datasets do not match. Please check your files and try again.")
   }
   ## Check individuals
@@ -1268,18 +1269,18 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
     stop("Your datasets have the same number of individuals, but some of them are not the same. Please check the list above, fix your files and try again.")
   }
   ## Checking (and fixing) individuals order in geno.dose
-  if (!all(colnames(dat.1$geno.dose) == colnames(dat.2$geno.dose))){
+  if (!all(colnames(dat.1$geno.dose)  ==  colnames(dat.2$geno.dose))){
     dat.2$geno.dose = dat.2$geno.dose[,colnames(dat.1$geno.dose)]
   }
   ## Merging all items
   dat.1$geno.dose = rbind(dat.1$geno.dose, dat.2$geno.dose)
-  dat.1$dosage.p = c(dat.1$dosage.p, dat.2$dosage.p)
-  dat.1$dosage.q = c(dat.1$dosage.q, dat.2$dosage.q)
+  dat.1$dosage.p1 = c(dat.1$dosage.p1, dat.2$dosage.p1)
+  dat.1$dosage.p2 = c(dat.1$dosage.p2, dat.2$dosage.p2)
   ##dat.1$mrk.names = c(dat.1$mrk.names, dat.2$mrk.names) ## Fixing possible name incompatibilities  
   dat.1$mrk.names = rownames(dat.1$geno.dose) ## Fixing possible name incompatibilities  
   dat.1$n.mrk = dat.1$n.mrk + dat.2$n.mrk
-  dat.1$sequence = c(dat.1$sequence, dat.2$sequence)
-  dat.1$sequence.pos = c(dat.1$sequence.pos, dat.2$sequence.pos)
+  dat.1$chrom = c(dat.1$chrom, dat.2$chrom)
+  dat.1$genome.pos = c(dat.1$genome.pos, dat.2$genome.pos)
   # VCF info
   ## seq.ref and seq.alt
   if (!is.null(dat.1$seq.ref) && !is.null(dat.2$seq.ref)){
@@ -1344,7 +1345,7 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
   if(!is.null(dat.1$chisq.pval) | !any(is.na(dat.1$chisq.pval)))
     dat.1$chisq.pval <- dat.1$chisq.pval[dat.1$mrk.names]
   ## Fixing possible issues with marker names
-  names(dat.1$dosage.p) = names(dat.1$dosage.q) = names(dat.1$sequence.pos) = names(dat.1$sequence) = names(dat.1$chisq.pval) = dat.1$mrk.names
+  names(dat.1$dosage.p1) = names(dat.1$dosage.p2) = names(dat.1$genome.pos) = names(dat.1$chrom) = names(dat.1$chisq.pval) = dat.1$mrk.names
   return(dat.1)
 }
 
@@ -1366,12 +1367,12 @@ summary_maps = function(map.list, verbose = TRUE){
     stop(deparse(substitute(map.list)), 
          " is not a list containing 'mappoly.map' objects.")
   results = data.frame("LG" = as.character(seq(1,length(map.list),1)),
-                       "Genomic sequence" = as.character(unlist(lapply(map.list, function(x) paste(unique(x$info$sequence), collapse = "-")))),
+                       "Genomic sequence" = as.character(unlist(lapply(map.list, function(x) paste(unique(x$info$chrom), collapse = "-")))),
                        "Map length (cM)" = unlist(lapply(map.list, function(x) round(sum(c(0, imf_h(x$maps[[1]]$seq.rf))), 2))),
                        "Markers/cM" = round(unlist(lapply(map.list, function(x) x$info$n.mrk/(round(sum(c(0, imf_h(x$maps[[1]]$seq.rf))), 2)))),2),
-                       "Simplex" = unlist(lapply(map.list, function(x) sum(get_tab_mrks(x)[rbind(c(1,2),c(2,1),c(x$info$m,(x$info$m+1)),c((x$info$m+1),x$info$m))]))),
-                       "Double-simplex" = unlist(lapply(map.list, function(x) sum(get_tab_mrks(x)[rbind(c(2,2),c(x$info$m,x$info$m))]))),
-                       "Multiplex" = unlist(lapply(map.list, function(x) sum(get_tab_mrks(x)) - sum(get_tab_mrks(x)[rbind(c(2,2),c(x$info$m,x$info$m))]) - sum(get_tab_mrks(x)[rbind(c(1,2),c(2,1),c(x$info$m,(x$info$m+1)),c((x$info$m+1),x$info$m))]))),
+                       "Simplex" = unlist(lapply(map.list, function(x) sum(get_tab_mrks(x)[rbind(c(1,2),c(2,1),c(x$info$ploidy,(x$info$ploidy+1)),c((x$info$ploidy+1),x$info$ploidy))]))),
+                       "Double-simplex" = unlist(lapply(map.list, function(x) sum(get_tab_mrks(x)[rbind(c(2,2),c(x$info$ploidy,x$info$ploidy))]))),
+                       "Multiplex" = unlist(lapply(map.list, function(x) sum(get_tab_mrks(x)) - sum(get_tab_mrks(x)[rbind(c(2,2),c(x$info$ploidy,x$info$ploidy))]) - sum(get_tab_mrks(x)[rbind(c(1,2),c(2,1),c(x$info$ploidy,(x$info$ploidy+1)),c((x$info$ploidy+1),x$info$ploidy))]))),
                        "Total" = unlist(lapply(map.list, function(x) x$info$n.mrk)),
                        "Max gap" = unlist(lapply(map.list, function(x) round(imf_h(max(x$maps[[1]]$seq.rf)),2))),
                        check.names = FALSE, stringsAsFactors = F)
@@ -1390,8 +1391,8 @@ summary_maps = function(map.list, verbose = TRUE){
 #' @param x an object of class \code{mappoly.map}
 #' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 get_tab_mrks = function(x){
-  tab = table(get(x$info$data.name, pos = 1)$dosage.p[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)], get(x$info$data.name, pos = 1)$dosage.q[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)])
-  doses = as.character(seq(0,x$info$m,1))
+  tab = table(get(x$info$data.name, pos = 1)$dosage.p1[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)], get(x$info$data.name, pos = 1)$dosage.p2[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)])
+  doses = as.character(seq(0,x$info$ploidy,1))
   # checking dimensions
   if (!all(doses %in% colnames(tab))){
     newmat = matrix(NA, nrow(tab), length(doses))
@@ -1465,26 +1466,26 @@ update_map = function(input.maps, verbose = TRUE){
     ## Adding markers to the sequence
     while (nrow(corresp) > 0){
       pos.kep = match(as.character(corresp$kept), get(input.map$info$data.name, pos = 1)$mrk.names)
-      input.map$info$seq.num = append(input.map$info$seq.num, NA, after = which(input.map$info$seq.num == pos.kep[1]))
-      input.map$info$chisq.pval = append(input.map$info$chisq.pval, input.map$info$chisq.pval[which(input.map$info$seq.num == pos.kep[1])], after = which(input.map$info$seq.num == pos.kep[1]))
-      input.map$info$seq.dose.p = append(input.map$info$seq.dose.p, input.map$info$seq.dose.p[which(input.map$info$seq.num == pos.kep[1])], after = which(input.map$info$seq.num == pos.kep[1]))
-      input.map$info$seq.dose.q = append(input.map$info$seq.dose.q, input.map$info$seq.dose.q[which(input.map$info$seq.num == pos.kep[1])], after = which(input.map$info$seq.num == pos.kep[1]))
-      input.map$info$sequence = as.numeric(append(input.map$info$sequence, as.character(corresp$sequence[1]), after = which(input.map$info$seq.num == pos.kep[1])))
-      input.map$info$sequence.pos = as.numeric(append(input.map$info$sequence.pos, as.character(corresp$sequence.pos[1]), after = which(input.map$info$seq.num == pos.kep[1])))
-      input.map$info$mrk.names = append(input.map$info$mrk.names, as.character(corresp$elim[1]), after = which(input.map$info$mrk.names == as.character(corresp$kept[1])))
+      input.map$info$seq.num = append(input.map$info$seq.num, NA, after = which(input.map$info$seq.num  ==  pos.kep[1]))
+      input.map$info$chisq.pval = append(input.map$info$chisq.pval, input.map$info$chisq.pval[which(input.map$info$seq.num  ==  pos.kep[1])], after = which(input.map$info$seq.num  ==  pos.kep[1]))
+      input.map$info$seq.dose.p1 = append(input.map$info$seq.dose.p1, input.map$info$seq.dose.p1[which(input.map$info$seq.num  ==  pos.kep[1])], after = which(input.map$info$seq.num  ==  pos.kep[1]))
+      input.map$info$seq.dose.p2 = append(input.map$info$seq.dose.p2, input.map$info$seq.dose.p2[which(input.map$info$seq.num  ==  pos.kep[1])], after = which(input.map$info$seq.num  ==  pos.kep[1]))
+      input.map$info$chrom = as.numeric(append(input.map$info$chrom, as.character(corresp$chrom[1]), after = which(input.map$info$seq.num  ==  pos.kep[1])))
+      input.map$info$genome.pos = as.numeric(append(input.map$info$genome.pos, as.character(corresp$genome.pos[1]), after = which(input.map$info$seq.num  ==  pos.kep[1])))
+      input.map$info$mrk.names = append(input.map$info$mrk.names, as.character(corresp$elim[1]), after = which(input.map$info$mrk.names  ==  as.character(corresp$kept[1])))
       if (!is.null(input.map$info$seq.ref) && !is.null(input.map$info$seq.alt)){
-        input.map$info$seq.ref = append(input.map$info$seq.ref, as.character(corresp$seq.ref[1]), after = which(input.map$info$seq.num == pos.kep[1]))
-        input.map$info$seq.alt = append(input.map$info$seq.alt, as.character(corresp$seq.alt[1]), after = which(input.map$info$seq.num == pos.kep[1]))
+        input.map$info$seq.ref = append(input.map$info$seq.ref, as.character(corresp$seq.ref[1]), after = which(input.map$info$seq.num  ==  pos.kep[1]))
+        input.map$info$seq.alt = append(input.map$info$seq.alt, as.character(corresp$seq.alt[1]), after = which(input.map$info$seq.num  ==  pos.kep[1]))
       }
       for (j in 1:length(input.map$maps)){
-        input.map$maps[[j]]$seq.rf = append(input.map$maps[[j]]$seq.rf, 0.000001, after = which(input.map$info$seq.num == pos.kep[1]))
-        input.map$maps[[j]]$seq.ph$P = append(input.map$maps[[j]]$seq.ph$P, input.map$maps[[j]]$seq.ph$P[paste0(pos.kep[1])], after = which(input.map$info$seq.num == pos.kep[1]))
-        input.map$maps[[j]]$seq.ph$Q = append(input.map$maps[[j]]$seq.ph$Q, input.map$maps[[j]]$seq.ph$Q[paste0(pos.kep[1])], after = which(input.map$info$seq.num == pos.kep[1]))
+        input.map$maps[[j]]$seq.rf = append(input.map$maps[[j]]$seq.rf, 0.000001, after = which(input.map$info$seq.num  ==  pos.kep[1]))
+        input.map$maps[[j]]$seq.ph$P = append(input.map$maps[[j]]$seq.ph$P, input.map$maps[[j]]$seq.ph$P[paste0(pos.kep[1])], after = which(input.map$info$seq.num  ==  pos.kep[1]))
+        input.map$maps[[j]]$seq.ph$Q = append(input.map$maps[[j]]$seq.ph$Q, input.map$maps[[j]]$seq.ph$Q[paste0(pos.kep[1])], after = which(input.map$info$seq.num  ==  pos.kep[1]))
       }
       corresp = corresp[-1,]
     }
     ## Renaming objects and updating map information
-    names(input.map$info$sequence) = names(input.map$info$sequence.pos) = names(input.map$info$chisq.pval) = names(input.map$info$seq.dose.p) = names(input.map$info$seq.dose.q) = names(input.map$info$seq.num) = input.map$info$mrk.names
+    names(input.map$info$chrom) = names(input.map$info$genome.pos) = names(input.map$info$chisq.pval) = names(input.map$info$seq.dose.p1) = names(input.map$info$seq.dose.p2) = names(input.map$info$seq.num) = input.map$info$mrk.names
     for (j in 1:length(input.map$maps)){
       names(input.map$maps[[j]]$seq.ph$P) = names(input.map$maps[[j]]$seq.ph$Q) = as.character(input.map$info$seq.num)
       input.map$maps[[j]]$seq.num = input.map$info$seq.num
@@ -1493,14 +1494,14 @@ update_map = function(input.maps, verbose = TRUE){
       names(input.map$info$seq.ref) = names(input.map$info$seq.alt) = input.map$info$mrk.names
     results[[i]] = input.map
   }
-  if (length(results) == 1) return(results[[1]])
+  if (length(results)  ==  1) return(results[[1]])
   else return(results)
 }
 
 #' Random sampling of dataset
 #' @param x an object  of class \code{mappoly.data}
 #' @param n number of individuals or markers to be sampled
-#' @param percentage if \code{n==NULL}, the percentage of individuals or markers to be sampled
+#' @param percentage if \code{n == NULL}, the percentage of individuals or markers to be sampled
 #' @param type should sample individuals or markers?
 #' @param selected.ind a vector containing the name of the individuals to select. Only has effect 
 #' if \code{type = "individual"}, \code{n = NULL} and \code{percentage = NULL}
@@ -1517,7 +1518,7 @@ sample_data <- function(input.data, n = NULL,
                         selected.ind = NULL,
                         selected.mrk = NULL){
   type <- match.arg(type)
-  if(type == "individual"){
+  if(type  ==  "individual"){
     if(!is.null(n)){
       selected.ind.id <- sort(sample(input.data$n.ind, n))
     } else if(!is.null(percentage)){
@@ -1530,28 +1531,28 @@ sample_data <- function(input.data, n = NULL,
     ind <- mrk <- NULL
     selected.ind <- input.data$ind.names[selected.ind.id]
     if(length(selected.ind.id) >= input.data$n.ind) return(input.data)
-    if(nrow(input.data$geno)!=input.data$n.mrk)
+    if(is.prob.data(input.data))
       input.data$geno <-  input.data$geno %>%
       dplyr::filter(ind%in%selected.ind)
-    input.data$geno.dose<-input.data$geno.dose[,selected.ind.id]
-    input.data$ind.names<-input.data$ind.names[selected.ind.id]
+    input.data$geno.dose <- input.data$geno.dose[,selected.ind.id]
+    input.data$ind.names <- input.data$ind.names[selected.ind.id]
     input.data$n.ind <- ncol(input.data$geno.dose)
     ##Computing chi-square p.values
     if(!is.null(input.data$chisq.pval)){
-      m<-input.data$m
-      Ds <- array(NA, dim = c(m+1, m+1, m+1))
-      for(i in 0:m)
-        for(j in 0:m)
-          Ds[i+1,j+1,] <- segreg_poly(m = m, dP = i, dQ = j)
-      Dpop<-cbind(input.data$dosage.p, input.data$dosage.q)
-      M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
-      dimnames(M)<-list(input.data$mrk.names, c(0:m))
-      M<-cbind(M, input.data$geno.dose)
-      input.data$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
+      ploidy <- input.data$ploidy
+      Ds <- array(NA, dim = c(ploidy+1, ploidy+1, ploidy+1))
+      for(i in 0:ploidy)
+        for(j in 0:ploidy)
+          Ds[i+1,j+1,] <- segreg_poly(ploidy = ploidy, dP = i, dQ = j)
+      Dpop <- cbind(input.data$dosage.p1, input.data$dosage.p2)
+      M <- t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
+      dimnames(M) <- list(input.data$mrk.names, c(0:ploidy))
+      M <- cbind(M, input.data$geno.dose)
+      input.data$chisq.pval <- apply(M, 1, mrk_chisq_test, ploidy = ploidy)
     }
     return(input.data)
   } 
-  else if(type == "marker"){
+  else if(type  ==  "marker"){
     if(!is.null(n)){
       selected.mrk.id <- sort(sample(input.data$n.mrk, n))
     } else if(!is.null(percentage)){
@@ -1563,16 +1564,16 @@ sample_data <- function(input.data, n = NULL,
     }
     selected.mrk <- input.data$mrk.names[selected.mrk.id]
     if(length(selected.mrk.id) >= input.data$n.mrk) return(input.data)
-    if(nrow(input.data$geno)!=input.data$n.mrk)
+    if(is.prob.data(input.data))
       input.data$geno <-  input.data$geno %>%
       dplyr::filter(mrk%in%selected.mrk)
-    input.data$geno.dose<-input.data$geno.dose[selected.mrk.id,]
+    input.data$geno.dose <- input.data$geno.dose[selected.mrk.id,]
     input.data$n.mrk <- nrow(input.data$geno.dose)
     input.data$mrk.names <- input.data$mrk.names[selected.mrk.id]
-    input.data$dosage.p <- input.data$dosage.p[selected.mrk.id]
-    input.data$dosage.q <- input.data$dosage.q[selected.mrk.id]
-    input.data$sequence <- input.data$sequence[selected.mrk.id]
-    input.data$sequence.pos <- input.data$sequence.pos[selected.mrk.id]
+    input.data$dosage.p1 <- input.data$dosage.p1[selected.mrk.id]
+    input.data$dosage.p2 <- input.data$dosage.p2[selected.mrk.id]
+    input.data$chrom <- input.data$chrom[selected.mrk.id]
+    input.data$genome.pos <- input.data$genome.pos[selected.mrk.id]
     input.data$seq.ref <- input.data$seq.ref[selected.mrk.id]
     input.data$seq.alt <- input.data$seq.alt[selected.mrk.id]
     input.data$all.mrk.depth <- input.data$all.mrk.depth[selected.mrk.id]
@@ -1600,18 +1601,18 @@ get_ols_map <- function(input.seq, input.map, weight = TRUE){
   v <- t(combn(id,2))
   rf <- get_rf_from_mat(input.map$rec.mat[id,id])
   rf <- zoo::na.approx(rf)
-  z<-cumsum(imf_h(c(0,rf)))
-  names(z)<-id
-  x<-numeric(nrow(v))
-  names(x)<-names(y)<-apply(v, 1, paste0, collapse="-")
+  z <- cumsum(imf_h(c(0,rf)))
+  names(z) <- id
+  x <- numeric(nrow(v))
+  names(x) <- names(y) <- apply(v, 1, paste0, collapse = "-")
   for(i in 1:nrow(v))
-    x[i]<-z[v[i,2]]-z[v[i,1]]
+    x[i] <- z[v[i,2]]-z[v[i,1]]
   if(weight)
-    model <- lm(y ~ x-1, weights=w)
+    model <- lm(y ~ x-1, weights = w)
   else
     model <- lm(y ~ x-1)
   new <- data.frame(x = z)
-  u<-predict(model, new)
+  u <- predict(model, new)
   d <- cumsum(imf_h(c(0, mf_h(diff(u)))))
   names(d) <- id
   d
@@ -1623,11 +1624,11 @@ get_ols_map <- function(input.seq, input.map, weight = TRUE){
 #' @keywords internal
 #' @export
 get_dosage_type <- function(input.seq){
-  p <- abs(abs(input.seq$seq.dose.p - input.seq$m/2) - input.seq$m/2)
-  q <- abs(abs(input.seq$seq.dose.q - input.seq$m/2) - input.seq$m/2)
-  s.p <- p == 1 & q == 0
-  s.q <- p == 0 & q == 1
-  ds <- p == 1 & q == 1
+  p <- abs(abs(input.seq$seq.dose.p1 - input.seq$ploidy/2) - input.seq$ploidy/2)
+  q <- abs(abs(input.seq$seq.dose.p2 - input.seq$ploidy/2) - input.seq$ploidy/2)
+  s.p <- p  ==  1 & q  ==  0
+  s.q <- p  ==  0 & q  ==  1
+  ds <- p  ==  1 & q  ==  1
   list(simplex.p = input.seq$seq.mrk.names[s.p],
        simplex.q = input.seq$seq.mrk.names[s.q], 
        double.simplex = input.seq$seq.mrk.names[ds],
@@ -1642,7 +1643,7 @@ get_dosage_type <- function(input.seq){
 aggregate_matrix <- function(M, fact){
   id <- seq(1,ncol(M), by = fact)
   id <- cbind(id, c(id[-1]-1, ncol(M)))
-  R<-matrix(NA, nrow(id), nrow(id))
+  R <- matrix(NA, nrow(id), nrow(id))
   for(i in 1:(nrow(id)-1)){
     for(j in (i+1):nrow(id)){
       R[j,i] <-  R[i,j] <- mean(M[id[i,1]:id[i,2], id[j,1]:id[j,2]], na.rm = TRUE)

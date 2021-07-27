@@ -6,7 +6,7 @@
 \usage{
 get_counts_all_phases(
   x,
-  m,
+  ploidy,
   verbose = FALSE,
   make.names = FALSE,
   joint.prob = FALSE

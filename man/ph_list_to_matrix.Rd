@@ -4,12 +4,12 @@
 \alias{ph_list_to_matrix}
 \title{Linkage phase format conversion: list to matrix}
 \usage{
-ph_list_to_matrix(L, m)
+ph_list_to_matrix(L, ploidy)
 }
 \arguments{
 \item{L}{a list of configuration phases}
 
-\item{m}{ploidy level}
+\item{ploidy}{ploidy level}
 }
 \value{
 a matrix whose columns represent homologous chromosomes and

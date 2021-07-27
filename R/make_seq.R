@@ -9,7 +9,7 @@
 #' @param arg can be one of the following objects: i) a string 'all',
 #'     resulting in a sequence with all markers in the raw data; ii) a
 #'     string or a vector of strings \code{'seqx'}, where \code{x}
-#'     is the sequence (\code{x=0} indicates unassigned markers); iii) a
+#'     is the sequence (\code{x = 0} indicates unassigned markers); iii) a
 #'     \code{vector} of integers specifying which markers comprise the
 #'     sequence; iv) an integer representing linkage group if 
 #'     \code{input.object} has class \code{mappoly.group}; or v) NULL if 
@@ -51,11 +51,11 @@
 #'         estimates were not computed}
 #'
 #' @examples
-#'     all.mrk<-make_seq_mappoly(hexafake, 'all')
-#'     seq1.mrk<-make_seq_mappoly(hexafake, 'seq1')
+#'     all.mrk <- make_seq_mappoly(hexafake, 'all')
+#'     seq1.mrk <- make_seq_mappoly(hexafake, 'seq1')
 #'     plot(seq1.mrk)
-#'     some.mrk.pos<-c(1,4,28,32,45)
-#'     (some.mrk.1<-make_seq_mappoly(hexafake, some.mrk.pos))
+#'     some.mrk.pos <- c(1,4,28,32,45)
+#'     (some.mrk.1 <- make_seq_mappoly(hexafake, some.mrk.pos))
 #'     plot(some.mrk.1)
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}, with modifications by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
@@ -99,45 +99,45 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.in
   # }
   if (inherits(input.obj, "mappoly.data"))
   {
-    chisq.pval<-input.obj$chisq.pval
-    chisq.pval.thres<-NULL
+    chisq.pval <- input.obj$chisq.pval
+    chisq.pval.thres <- NULL
     ## gathering sequence data
-    sequence <- sequence.pos <- NULL
-    if (any(!is.na(input.obj$sequence)))
-      sequence <- input.obj$sequence
-    if (any(!is.na(input.obj$sequence.pos)))
-      sequence.pos <- input.obj$sequence.pos
+    chrom <- genome.pos <- NULL
+    if (any(!is.na(input.obj$chrom)))
+      chrom <- input.obj$chrom
+    if (any(!is.na(input.obj$genome.pos)))
+      genome.pos <- input.obj$genome.pos
     
     ## make sequence with all markers
-    if (length(arg) == 1 && arg == "all")
+    if (length(arg)  ==  1 && arg  ==  "all")
     {
       if (realkeep) {seq.num = match(tokeep,input.obj$mrk.names)} else {seq.num = as.integer(1:input.obj$n.mrk)}
     }
-    else if (all(is.character(arg)) && length(grep("seq", arg)) == length(arg))
+    else if (all(is.character(arg)) && length(grep("seq", arg))  ==  length(arg))
     {
-      if (length(input.obj$sequence) == 1 && input.obj$sequence == 0)
-        stop("There is no sequence information in ", deparse(substitute(input.obj)))
-      seq.num1 <- as.integer(which(!is.na(match(input.obj$sequence, gsub("[^0-9]", "", arg)))))
+      if (length(input.obj$chrom)  ==  1 && input.obj$chrom  ==  0)
+        stop("There is no chromosome information in ", deparse(substitute(input.obj)))
+      seq.num1 <- as.integer(which(!is.na(match(input.obj$chrom, gsub("[^0-9]", "", arg)))))
       if(realkeep) {seq.num = intersect(seq.num1, seq.num)} else {seq.num = seq.num1}
-      sequence <- input.obj$sequence[seq.num]
-      if (length(input.obj$sequence.pos) > 2)
-        sequence.pos <- input.obj$sequence.pos[seq.num]
+      chrom <- input.obj$chrom[seq.num]
+      if (length(input.obj$genome.pos) > 2)
+        genome.pos <- input.obj$genome.pos[seq.num]
     }
-    else if (all(is.character(arg)) && (length(arg) == length(arg %in% input.obj$mrk.names)))
+    else if (all(is.character(arg)) && (length(arg)  ==  length(arg %in% input.obj$mrk.names)))
     {
       seq.num1 <- as.integer(match(arg, input.obj$mrk.names))
       if(realkeep) {seq.num = intersect(seq.num1, seq.num)} else {seq.num = seq.num1}
-      sequence <- input.obj$sequence[seq.num]
-      if (length(input.obj$sequence.pos) > 2)
-        sequence.pos <- input.obj$sequence.pos[seq.num]
+      chrom <- input.obj$chrom[seq.num]
+      if (length(input.obj$genome.pos) > 2)
+        genome.pos <- input.obj$genome.pos[seq.num]
     }
     else if (is.vector(arg) && all(is.numeric(arg)))
     {
       seq.num1 <- as.integer(arg)
       if(realkeep) {seq.num = intersect(seq.num1, seq.num)} else {seq.num = seq.num1}
-      sequence <- input.obj$sequence[seq.num]
-      if (length(input.obj$sequence.pos) > 2)
-        sequence.pos <- input.obj$sequence.pos[seq.num]
+      chrom <- input.obj$chrom[seq.num]
+      if (length(input.obj$genome.pos) > 2)
+        genome.pos <- input.obj$genome.pos[seq.num]
     }
     else stop("Invalid argument to select markers")
     if (is.null(data.name))
@@ -153,38 +153,38 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.in
   {
     if(!is.null(arg))
       warning("Ignoring argument 'arg' and using chi-square filtered markers instead.")
-    tmp<-make_seq_mappoly(get(input.obj$data.name, pos = 1), arg = input.obj$keep, data.name = input.obj$data.name)
-    tmp$chisq.pval.thres<-input.obj$chisq.pval.thres
-    tmp$chisq.pval<-get(input.obj$data.name, pos = 1)$chisq.pval[input.obj$keep]
+    tmp <- make_seq_mappoly(get(input.obj$data.name, pos = 1), arg = input.obj$keep, data.name = input.obj$data.name)
+    tmp$chisq.pval.thres <- input.obj$chisq.pval.thres
+    tmp$chisq.pval <- get(input.obj$data.name, pos = 1)$chisq.pval[input.obj$keep]
     return(tmp)
   }
   if (inherits(input.obj, "mappoly.group"))
   {
-    chisq.pval<-input.obj$chisq.pval
-    chisq.pval.thres<-input.obj$chisq.pval.thres
+    chisq.pval <- input.obj$chisq.pval
+    chisq.pval.thres <- input.obj$chisq.pval.thres
     if (!is.null(genomic.info) && is.numeric(genomic.info)){
-      seq.num.group = as.numeric(names(which(input.obj$groups.snp == arg)))
+      seq.num.group = as.numeric(names(which(input.obj$groups.snp  ==  arg)))
       seqs = names(sort(input.obj$seq.vs.grouped.snp[arg,-c(ncol(input.obj$seq.vs.grouped.snp))], decreasing = T))[genomic.info]
     } else {
-      seq.num1 <- as.numeric(names(which(input.obj$groups.snp == arg)))
+      seq.num1 <- as.numeric(names(which(input.obj$groups.snp  ==  arg)))
       if(realkeep) seq.num = intersect(seq.num1, seq.num)
       else seq.num = seq.num1
     }
     data.name <- input.obj$data.name
     input.obj <- get(data.name, pos = 1)
     if (!is.null(genomic.info)){
-      seq.num.seq = match(input.obj$mrk.names[(input.obj$sequence %in% seqs)], input.obj$mrk.names)
+      seq.num.seq = match(input.obj$mrk.names[(input.obj$chrom %in% seqs)], input.obj$mrk.names)
       seq.num1 = intersect(seq.num.group, seq.num.seq)
       if(realkeep) seq.num = intersect(seq.num1, seq.num)
       else seq.num = seq.num1
     }
-    if(!all(is.na(input.obj$sequence)) && !all(is.na(input.obj$sequence.pos)))
+    if(!all(is.na(input.obj$chrom)) && !all(is.na(input.obj$genome.pos)))
     {
-      sequence <- input.obj$sequence[seq.num]
-      sequence.pos <- input.obj$sequence.pos[seq.num]
+      chrom <- input.obj$chrom[seq.num]
+      genome.pos <- input.obj$genome.pos[seq.num]
     }
     else
-      sequence <- sequence.pos <- NULL
+      chrom <- genome.pos <- NULL
   }
   if (inherits(input.obj, "mappoly.pcmap") | inherits(input.obj, "mappoly.pcmap3d" ))
   {
@@ -202,11 +202,11 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.in
                             arg = as.character(rownames(input.obj$ord)),
                             data.name = input.obj$data.name))
   }
-  structure(list(m = input.obj$m, seq.num = seq.num, seq.mrk.names = input.obj$mrk.names[seq.num], 
-                 seq.dose.p = input.obj$dosage.p[seq.num], seq.dose.q = input.obj$dosage.q[seq.num],
-                 seq.phases = -1, seq.rf = -1, loglike = -1, sequence = sequence, sequence.pos = sequence.pos, 
+  structure(list(ploidy = input.obj$ploidy, seq.num = seq.num, seq.mrk.names = input.obj$mrk.names[seq.num], 
+                 seq.dose.p1 = input.obj$dosage.p1[seq.num], seq.dose.p2 = input.obj$dosage.p2[seq.num],
+                 seq.phases = -1, seq.rf = -1, loglike = -1, chrom = chrom, genome.pos = genome.pos, 
                  data.name = data.name, twopt = -1, chisq.pval = chisq.pval, 
-                 chisq.pval.thres =  chisq.pval.thres),
+                 chisq.pval.thres = chisq.pval.thres),
             class = "mappoly.sequence")
 }
 
@@ -214,22 +214,22 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.in
 #' @export
 print.mappoly.sequence <- function(x, ...) {
   cat("This is an object of class 'mappoly.sequence'\n")
-  if (x$loglike == -1) {
+  if (x$loglike  ==  -1) {
     cat("    ------------------------\n    Parameters not estimated\n    ------------------------\n")
   }
   n.mrk <- length(x$seq.num)
-  cat("    Ploidy level:      ", x$m, "\n")
+  cat("    Ploidy level:      ", x$ploidy, "\n")
   cat("    No. individuals:   ", get(x$data.name)$n.ind, "\n")
   cat("    No. markers:       ", length(x$seq.num), "\n")
-  w <- table(x$sequence)
-  if (all(is.null(x$sequence)) || all(is.na(x$sequence)))
+  w <- table(x$chrom)
+  if (all(is.null(x$chrom)) || all(is.na(x$chrom)))
     cat("\n    No. markers per sequence: not available")
   else {
     cat("\n    ----------\n    No. markers per sequence:\n")
-    print(data.frame(sequence = paste0("       ", names(w)), No.mrk = as.numeric(w)), row.names = FALSE)
+    print(data.frame(chrom = paste0("       ", names(w)), No.mrk = as.numeric(w)), row.names = FALSE)
   }
   cat("\n    ----------\n    No. of markers per dosage in both parents:\n")
-  freq <- table(paste(get(x$data.name)$dosage.p[x$seq.num], get(x$data.name)$dosage.q[x$seq.num], sep = "-"))
+  freq <- table(paste(get(x$data.name)$dosage.p1[x$seq.num], get(x$data.name)$dosage.p2[x$seq.num], sep = "-"))
   d.temp <- matrix(unlist(strsplit(names(freq), "-")), ncol = 2, byrow = TRUE)
   print(data.frame(dP = paste0("    ", d.temp[, 1]), dQ = d.temp[, 2], freq = as.numeric(freq)), row.names = FALSE)
   if (x$loglike != -1) {
@@ -237,13 +237,13 @@ print.mappoly.sequence <- function(x, ...) {
     cat("\n       log-likelihood:\t", x$loglike)
     cat("\n       rec. fraction:\t", round(imf_h(x$seq.rf), 1))
     cat("\n\n")
-    M <- matrix("|", n.mrk, x$m * 2)
+    M <- matrix("|", n.mrk, x$ploidy * 2)
     for (i in 1:n.mrk) {
       if (all(x$seq.phases$Q[[i]] != 0))
-        M[i, c(x$seq.phases$P[[i]], x$seq.phases$Q[[i]] + x$m)] <- "o" else M[i, x$seq.phases$P[[i]]] <- "o"
+        M[i, c(x$seq.phases$P[[i]], x$seq.phases$Q[[i]] + x$ploidy)] <- "o" else M[i, x$seq.phases$P[[i]]] <- "o"
     }
     M <- cbind(get(x$data.name)$mrk.names[x$seq.num], M)
-    format(apply(M, 1, function(y) cat(c("\t", y[1], "\t", y[2:(x$m + 1)], rep(" ", 4), y[(x$m + 2):(x$m * 2 + 1)], "\n"), collapse = "")))
+    format(apply(M, 1, function(y) cat(c("\t", y[1], "\t", y[2:(x$ploidy + 1)], rep(" ", 4), y[(x$ploidy + 2):(x$ploidy * 2 + 1)], "\n"), collapse = "")))
   }
 }
 
@@ -255,48 +255,48 @@ plot.mappoly.sequence <- function(x, ...)
 {
   oldpar <- par(mar = c(5,4,1,2))
   on.exit(par(oldpar))
-  m<-x$m
-  freq <- table(paste(x$seq.dose.p, x$seq.dose.q, sep = "-"))
+  ploidy <- x$ploidy
+  freq <- table(paste(x$seq.dose.p1, x$seq.dose.p2, sep = "-"))
   d.temp <- matrix(unlist(strsplit(names(freq), "-")), ncol = 2, byrow = TRUE)
-  type<-apply(d.temp, 1, function(x,m) paste0(sort(abs(abs(as.numeric(x)-(m/2))-(m/2))), collapse=""), m = x$m)
-  type.names<-names(table(type))
-  mrk.dist<-as.numeric(freq)
-  names(mrk.dist)<-apply(d.temp, 1 , paste, collapse = "-")
+  type <- apply(d.temp, 1, function(x,ploidy) paste0(sort(abs(abs(as.numeric(x)-(ploidy/2))-(ploidy/2))), collapse = ""), ploidy = x$ploidy)
+  type.names <- names(table(type))
+  mrk.dist <- as.numeric(freq)
+  names(mrk.dist) <- apply(d.temp, 1 , paste, collapse = "-")
   w <- c("#FFFFFF", "#F0F0F0", "#D9D9D9", "#BDBDBD", "#969696",
          "#737373", "#525252", "#252525", "#000000")
-  pal<-colorRampPalette(w)(length(type.names))
+  pal <- colorRampPalette(w)(length(type.names))
   layout(matrix(c(1,1,1,2,3,3,6,4,5), 3, 3), widths = c(1.2,3,.5), heights = c(1.5,4.5,.5))
   barplot(mrk.dist, las = 2, col = pal[match(type, type.names)], 
           xlab = "Number of markers", 
           ylab = "Dosage combination", horiz = TRUE)
-  pval<-x$chisq.pval[x$seq.mrk.names]
+  pval <- x$chisq.pval[x$seq.mrk.names]
   if(is.null(x$chisq.pval))
   {
-    plot(0, 0, axes = FALSE, xlab = "", ylab="", type = "n")
-    text(x=0, y=0, labels = "No segregation test", cex = 2)
+    plot(0, 0, axes = FALSE, xlab = "", ylab = "", type = "n")
+    text(x = 0, y = 0, labels = "No segregation test", cex = 2)
   } else{
-    par(mar=c(1,1,1,2))
-    par(xaxs="i")
-    plot(log10(pval), axes = FALSE, xlab = "", ylab="", pch = 16, 
-         col = rgb(red=0.2, green=0.2, blue=1.0, alpha=0.2))
+    par(mar = c(1,1,1,2))
+    par(xaxs = "i")
+    plot(log10(pval), axes = FALSE, xlab = "", ylab = "", pch = 16, 
+         col = rgb(red = 0.2, green = 0.2, blue = 1.0, alpha = 0.2))
     axis(4, line = 1)
     mtext(text = bquote(log[10](P)), side = 4, line = 4, cex = .7)
   }
-  par(mar=c(5,1,0,2))
+  par(mar = c(5,1,0,2))
   
-  if(x$m == 2) {
+  if(x$ploidy  ==  2) {
     pal <- c("black", "#FC8D59", "#FFFFBF", "#91CF60")
-  }else if(x$m == 4){
+  }else if(x$ploidy  ==  4){
     pal <- c("black", "#D7191C", "#FDAE61", "#FFFFBF", "#A6D96A", "#1A9641")
-  }else if(x$m == 6){
+  }else if(x$ploidy  ==  6){
     pal <- c("black", "#D73027", "#FC8D59", "#FEE08B", "#FFFFBF", "#D9EF8B", "#91CF60", "#1A9850")
-  }else if(x$m == 8){
+  }else if(x$ploidy  ==  8){
     pal <- c("black", "#D73027", "#F46D43", "#FDAE61", "#FEE08B", "#FFFFBF", "#D9EF8B", "#A6D96A", "#66BD63", "#1A9850") 
-  } else pal <- c("black", gg_color_hue(x$m))
+  } else pal <- c("black", gg_color_hue(x$ploidy))
   
-  names(pal)<-c(-1:x$m)
-  M<-as.matrix(get(x$data.name, pos = 1)$geno.dose[x$seq.mrk.names,])
-  M[M==x$m+1]<--1
+  names(pal) <- c(-1:x$ploidy)
+  M <- as.matrix(get(x$data.name, pos = 1)$geno.dose[x$seq.mrk.names,])
+  M[M == x$ploidy+1] <- -1
   image(x = 1:nrow(M), z = M, axes = FALSE, xlab = "",
         col = pal[as.character(sort(unique(as.vector(M))))], useRaster = TRUE)
   mtext(text = "Markers", side = 1, line = .4)
@@ -304,11 +304,11 @@ plot.mappoly.sequence <- function(x, ...)
   par(mar = c(0,0,0,0))
   plot(0:10,0:10, type = "n", axes = FALSE, xlab = "", ylab = "")
   legend(0,10, 
-         horiz=FALSE, 
-         legend=c("missing", 0:x$m),
-         pch=22,
+         horiz = FALSE, 
+         legend = c("missing", 0:x$ploidy),
+         pch = 22,
          pt.cex = 3,
-         pt.bg=pal, pt.lwd = 0,
-         bty = "n", xpd=TRUE)
-  par(mfrow=c(1,1))
+         pt.bg = pal, pt.lwd = 0,
+         bty = "n", xpd = TRUE)
+  par(mfrow = c(1,1))
 }

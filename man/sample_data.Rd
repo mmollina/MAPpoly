@@ -16,7 +16,7 @@ sample_data(
 \arguments{
 \item{n}{number of individuals or markers to be sampled}
 
-\item{percentage}{if \code{n==NULL}, the percentage of individuals or markers to be sampled}
+\item{percentage}{if \code{n == NULL}, the percentage of individuals or markers to be sampled}
 
 \item{type}{should sample individuals or markers?}
 

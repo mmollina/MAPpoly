@@ -4,7 +4,7 @@
 #' and the dosage of the locus in both parents. It does not consider
 #' double reduction.
 #'
-#' @param m the ploidy level
+#' @param ploidy the ploidy level
 #'
 #' @param dP the dosage in parent P
 #'
@@ -16,8 +16,8 @@
 #' @examples
 #' # autohexaploid with two and three doses in parents P and Q,
 #' # respectively
-#' seg<-segreg_poly(m=6, dP=2, dQ=3)
-#' barplot(seg, las=2)
+#' seg <- segreg_poly(ploidy = 6, dP = 2, dQ = 3)
+#' barplot(seg, las = 2)
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
@@ -37,13 +37,13 @@
 #' @importFrom stats dhyper
 #' @export segreg_poly
 #'
-segreg_poly <- function(m, dP, dQ) {
-    if (m%%2 != 0)
+segreg_poly <- function(ploidy, dP, dQ) {
+    if (ploidy%%2 != 0)
         stop("m must be an even number")
-    p.dose <- numeric((m + 1))
-    p.names <- character((m + 1))
-    seg.p1 <- dhyper(x = c(0:(m + 1)), m = dP, n = (m - dP), k = m/2)
-    seg.p2 <- dhyper(x = c(0:(m + 1)), m = dQ, n = (m - dQ), k = m/2)
+    p.dose <- numeric((ploidy + 1))
+    p.names <- character((ploidy + 1))
+    seg.p1 <- dhyper(x = c(0:(ploidy + 1)), m = dP, n = (ploidy - dP), k = ploidy/2)
+    seg.p2 <- dhyper(x = c(0:(ploidy + 1)), m = dQ, n = (ploidy - dQ), k = ploidy/2)
     M <- tcrossprod(seg.p1, seg.p2)
     for (i in 1:nrow(M)) {
         for (j in 1:ncol(M)) {
@@ -51,7 +51,7 @@ segreg_poly <- function(m, dP, dQ) {
         }
     }
     p.dose <- p.dose[!is.na(p.dose)]
-    for (i in 0:m) p.names[i + 1] <- paste(paste(rep("A", i), collapse = ""), paste(rep("a", (m - i)), collapse = ""), sep = "")
+    for (i in 0:ploidy) p.names[i + 1] <- paste(paste(rep("A", i), collapse = ""), paste(rep("a", (ploidy - i)), collapse = ""), sep = "")
     names(p.dose) <- p.names
     return(p.dose)
 }

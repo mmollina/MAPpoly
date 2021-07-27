@@ -3,51 +3,51 @@
 #' @param void internal function to be documented
 #' @keywords internal
 #' @export
-filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
+filter_non_conforming_classes <- function(input.data, prob.thres = NULL)
 {
   if (!inherits(input.data, "mappoly.data")) {
     stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
   }
-  m<-input.data$m
-  dp<-input.data$dosage.p
-  dq<-input.data$dosage.q
-  Ds<-array(NA, dim = c(m+1, m+1, m+1))
-  for(i in 0:m)
-    for(j in 0:m)
-      Ds[i+1,j+1,] <- segreg_poly(m = m, dP = i, dQ = j)
-  Dpop<-cbind(dp,dq)
+  ploidy <- input.data$ploidy
+  dp <- input.data$dosage.p1
+  dq <- input.data$dosage.p2
+  Ds <- array(NA, dim = c(ploidy+1, ploidy+1, ploidy+1))
+  for(i in 0:ploidy)
+    for(j in 0:ploidy)
+      Ds[i+1,j+1,] <- segreg_poly(ploidy = ploidy, dP = i, dQ = j)
+  Dpop <- cbind(dp,dq)
   #Gathering segregation probabilities given parental dosages
-  M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
-  M[M!=0]<-1
-  dimnames(M)<-list(input.data$mrk.names, 0:m)
+  M <- t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
+  M[M != 0] <- 1
+  dimnames(M) <- list(input.data$mrk.names, 0:ploidy)
   ##if no prior probabilities
   if(!is.prob.data(input.data)){
     for(i in 1:nrow(M)){
-      id0<-!as.numeric(input.data$geno.dose[i,])%in%(which(M[i,]==1)-1)
+      id0 <- !as.numeric(input.data$geno.dose[i,])%in%(which(M[i,] == 1)-1)
       if(any(id0))
-        input.data$geno.dose[i,id0]<-(m+1)     
+        input.data$geno.dose[i,id0] <- (ploidy+1)     
     }
     return(input.data)
   }
   ## 1 represents conforming classes/ 0 represents non-conforming classes
-  dp<-rep(dp, input.data$n.ind)
-  dq<-rep(dq, input.data$n.ind)
-  M<-M[rep(seq_len(nrow(M)), input.data$n.ind),]
-  R<-input.data$geno[,-c(1:2)] - input.data$geno[,-c(1:2)]*M
-  id1<-apply(R, 1, function(x) abs(sum(x))) > 0.3 # if the sum of the excluded classes is greater than 0.3, use segreg_poly
-  N<-matrix(NA, sum(id1), input.data$m+1)
-  ct<-1
+  dp <- rep(dp, input.data$n.ind)
+  dq <- rep(dq, input.data$n.ind)
+  M <- M[rep(seq_len(nrow(M)), input.data$n.ind),]
+  R <- input.data$geno[,-c(1:2)] - input.data$geno[,-c(1:2)]*M
+  id1 <- apply(R, 1, function(x) abs(sum(x))) > 0.3 # if the sum of the excluded classes is greater than 0.3, use segreg_poly
+  N <- matrix(NA, sum(id1), input.data$ploidy+1)
+  ct <- 1
   for(i in which(id1)){
     N[ct,] <- Ds[dp[i]+1, dq[i]+1, ]
-    ct<-ct+1
+    ct <- ct+1
   }
-  input.data$geno[id1,-c(1:2)]<-N
+  input.data$geno[id1,-c(1:2)] <- N
   # if the sum of the excluded classes is greater than zero
   # and smaller than 0.3, assign zero to those classes and normalize the vector
-  input.data$geno[,-c(1:2)][R > 0]<-0
-  input.data$geno[,-c(1:2)]<-sweep(input.data$geno[,-c(1:2)], 1, rowSums(input.data$geno[,-c(1:2)]), FUN="/")
+  input.data$geno[,-c(1:2)][R > 0] <- 0
+  input.data$geno[,-c(1:2)] <- sweep(input.data$geno[,-c(1:2)], 1, rowSums(input.data$geno[,-c(1:2)]), FUN = "/")
   if(is.null(prob.thres))
-    prob.thres<-input.data$prob.thres
+    prob.thres <- input.data$prob.thres
   geno.dose <- dist_prob_to_class(geno = input.data$geno, prob.thres = prob.thres)
   if(geno.dose$flag)
   {
@@ -56,7 +56,7 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
   } else {
     input.data$geno.dose <- geno.dose$geno.dose
   }
-  input.data$geno.dose[is.na(input.data$geno.dose)] <- m + 1
+  input.data$geno.dose[is.na(input.data$geno.dose)] <- ploidy + 1
   input.data$n.ind <- ncol(input.data$geno.dose)
   input.data$ind.names <- colnames(input.data$geno.dose)
   return(input.data)
@@ -91,7 +91,7 @@ filter_non_conforming_classes<-function(input.data, prob.thres = NULL)
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
 #' @importFrom graphics axis
-filter_missing<-function(input.data, 
+filter_missing <- function(input.data, 
                          type = c("marker", "individual"), 
                          filter.thres = 0.2, 
                          inter = TRUE)
@@ -119,61 +119,61 @@ filter_missing<-function(input.data,
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
 #' @importFrom graphics axis
-filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
+filter_missing_mrk <- function(input.data, filter.thres = 0.2, inter = TRUE)
 {
   ANSWER <- "flag"
   mrk <- NULL
   if(interactive() && inter)
   {
-    while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
+    while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != "")
     {
-      na.num<-apply(input.data$geno.dose, 1, function(x,m) sum(x==m+1), m = input.data$m)
-      perc.na<-na.num/input.data$n.ind
+      na.num <- apply(input.data$geno.dose, 1, function(x,ploidy) sum(x == ploidy+1), ploidy = input.data$ploidy)
+      perc.na <- na.num/input.data$n.ind
       plot(sort(perc.na), xlab = "markers", ylab = "frequency of missing data", axes = FALSE);
       axis(1);axis(2)
       lines(x = c(0, input.data$n.mrk), y = rep(filter.thres,2), col = 4, lty = 2)
       text(x = input.data$n.mrk/2, y = filter.thres + 0.05, labels = paste0("Excluded mrks: ", sum(perc.na >= filter.thres)), adj = 0, col = "darkred")
       text(x = input.data$n.mrk/2, y = filter.thres - 0.05, labels = paste0("Included mrks: ", sum(perc.na < filter.thres)), adj = 0, col = "darkgreen")
       ANSWER <- readline("Enter 'Y/n' to proceed or update the filter threshold: ")
-      if(substr(ANSWER, 1, 1) == "n" | substr(ANSWER, 1, 1) == "no" | substr(ANSWER, 1, 1) == "N")
+      if(substr(ANSWER, 1, 1)  ==  "n" | substr(ANSWER, 1, 1)  ==  "no" | substr(ANSWER, 1, 1)  ==  "N")
           stop("You decided to stop the function.")
-      if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
+      if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != "")
         filter.thres  <- as.numeric(ANSWER)
     }
-    rm.mrks.id<-which(perc.na > filter.thres)
-    if(length(rm.mrks.id)==0){
+    rm.mrks.id <- which(perc.na > filter.thres)
+    if(length(rm.mrks.id) == 0){
       return(input.data)
     } 
-    rm.mrks<-names(rm.mrks.id)
+    rm.mrks <- names(rm.mrks.id)
     if(is.prob.data(input.data))
       input.data$geno <-  input.data$geno %>%
       dplyr::filter(!mrk%in%rm.mrks)
-    input.data$geno.dose<-input.data$geno.dose[-rm.mrks.id,]
+    input.data$geno.dose <- input.data$geno.dose[-rm.mrks.id,]
     input.data$n.mrk <- nrow(input.data$geno.dose)
     input.data$mrk.names <- input.data$mrk.names[-rm.mrks.id]
-    input.data$dosage.p <- input.data$dosage.p[-rm.mrks.id]
-    input.data$dosage.q <- input.data$dosage.q[-rm.mrks.id]
-    input.data$sequence <- input.data$sequence[-rm.mrks.id]
+    input.data$dosage.p1 <- input.data$dosage.p1[-rm.mrks.id]
+    input.data$dosage.p2 <- input.data$dosage.p2[-rm.mrks.id]
+    input.data$chrom <- input.data$chrom[-rm.mrks.id]
     if(!is.null(input.data$chisq.pval)) 
       input.data$chisq.pval <- input.data$chisq.pval[-rm.mrks.id]
-    input.data$sequence.pos <- input.data$sequence.pos[-rm.mrks.id]
+    input.data$genome.pos <- input.data$genome.pos[-rm.mrks.id]
     return(input.data)
   } else {
-    na.num<-apply(input.data$geno.dose, 1, function(x,m) sum(x==m+1), m = input.data$m)
-    perc.na<-na.num/input.data$n.ind
-    rm.mrks.id<-which(perc.na > filter.thres)
-    if(length(rm.mrks.id)==0) return(input.data)
-    rm.mrks<-names(rm.mrks.id)
+    na.num <- apply(input.data$geno.dose, 1, function(x,ploidy) sum(x == ploidy+1), ploidy = input.data$ploidy)
+    perc.na <- na.num/input.data$n.ind
+    rm.mrks.id <- which(perc.na > filter.thres)
+    if(length(rm.mrks.id) == 0) return(input.data)
+    rm.mrks <- names(rm.mrks.id)
     if(is.prob.data(input.data))
       input.data$geno <-  input.data$geno %>%
       dplyr::filter(!mrk%in%rm.mrks)
-    input.data$geno.dose<-input.data$geno.dose[-rm.mrks.id,]
+    input.data$geno.dose <- input.data$geno.dose[-rm.mrks.id,]
     input.data$n.mrk <- nrow(input.data$geno.dose)
     input.data$mrk.names <- input.data$mrk.names[-rm.mrks.id]
-    input.data$dosage.p <- input.data$dosage.p[-rm.mrks.id]
-    input.data$dosage.q <- input.data$dosage.q[-rm.mrks.id]
-    input.data$sequence <- input.data$sequence[-rm.mrks.id]
-    input.data$sequence.pos <- input.data$sequence.pos[-rm.mrks.id]
+    input.data$dosage.p1 <- input.data$dosage.p1[-rm.mrks.id]
+    input.data$dosage.p2 <- input.data$dosage.p2[-rm.mrks.id]
+    input.data$chrom <- input.data$chrom[-rm.mrks.id]
+    input.data$genome.pos <- input.data$genome.pos[-rm.mrks.id]
     input.data$seq.ref <- input.data$seq.ref[-rm.mrks.id]
     input.data$seq.alt <- input.data$seq.alt[-rm.mrks.id]
     input.data$all.mrk.depth <- input.data$all.mrk.depth[-rm.mrks.id]
@@ -195,76 +195,76 @@ filter_missing_mrk<-function(input.data, filter.thres = 0.2, inter = TRUE)
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
 #' @importFrom graphics axis
-filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
+filter_missing_ind <- function(input.data, filter.thres = 0.2, inter = TRUE)
 {
   ANSWER <- "flag"
   ind <- NULL
   if(interactive() && inter)
   {
-    while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
+    while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != "")
     {
-      na.num<-apply(input.data$geno.dose, 2, function(x,m) sum(x==m+1), m = input.data$m)
-      perc.na<-na.num/input.data$n.mrk
+      na.num <- apply(input.data$geno.dose, 2, function(x,ploidy) sum(x == ploidy+1), ploidy = input.data$ploidy)
+      perc.na <- na.num/input.data$n.mrk
       plot(sort(perc.na), xlab = "individuals", ylab = "frequency of missing data", axes = FALSE);
       axis(1);axis(2)
       lines(x = c(0, input.data$n.mrk), y = rep(filter.thres,2), col = 4, lty = 2)
       text(x = input.data$n.ind/2, y = filter.thres + 0.05, labels = paste0("Excluded individuals: ", sum(perc.na >= filter.thres)), adj = 0, col = "darkred")
       text(x = input.data$n.ind/2, y = filter.thres - 0.05, labels = paste0("Included individuals: ", sum(perc.na < filter.thres)), adj = 0, col = "darkgreen")
       ANSWER <- readline("Enter 'Y/n' to proceed or update the filter threshold: ")
-      if(substr(ANSWER, 1, 1) == "n" | substr(ANSWER, 1, 1) == "no" | substr(ANSWER, 1, 1) == "N")
+      if(substr(ANSWER, 1, 1)  ==  "n" | substr(ANSWER, 1, 1)  ==  "no" | substr(ANSWER, 1, 1)  ==  "N")
           stop("You decided to stop the function.")
-      if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
+      if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != "")
         filter.thres  <- as.numeric(ANSWER)
     }
-    rm.ind.id<-which(perc.na > filter.thres)
-    if(length(rm.ind.id)==0){
+    rm.ind.id <- which(perc.na > filter.thres)
+    if(length(rm.ind.id) == 0){
       return(input.data)
     } 
-    rm.ind<-names(rm.ind.id)
-    if(nrow(input.data$geno)!=input.data$n.mrk)
+    rm.ind <- names(rm.ind.id)
+    if(is.prob.data(input.data))
       input.data$geno <-  input.data$geno %>%
       dplyr::filter(!ind%in%rm.ind)
-    input.data$geno.dose<-input.data$geno.dose[,-rm.ind.id]
-    input.data$ind.names<-input.data$ind.names[-rm.ind.id]
+    input.data$geno.dose <- input.data$geno.dose[,-rm.ind.id]
+    input.data$ind.names <- input.data$ind.names[-rm.ind.id]
     input.data$n.ind <- ncol(input.data$geno.dose)
     ##Computing chi-square p.values
     if(!is.null(input.data$chisq.pval)){
-      m<-input.data$m
-      Ds <- array(NA, dim = c(m+1, m+1, m+1))
-      for(i in 0:m)
-        for(j in 0:m)
-          Ds[i+1,j+1,] <- segreg_poly(m = m, dP = i, dQ = j)
-      Dpop<-cbind(input.data$dosage.p, input.data$dosage.q)
-      M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
-      dimnames(M)<-list(input.data$mrk.names, c(0:m))
-      M<-cbind(M, input.data$geno.dose)
-      input.data$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
+      ploidy <- input.data$ploidy
+      Ds <- array(NA, dim = c(ploidy+1, ploidy+1, ploidy+1))
+      for(i in 0:ploidy)
+        for(j in 0:ploidy)
+          Ds[i+1,j+1,] <- segreg_poly(ploidy = ploidy, dP = i, dQ = j)
+      Dpop <- cbind(input.data$dosage.p1, input.data$dosage.p2)
+      M <- t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
+      dimnames(M) <- list(input.data$mrk.names, c(0:ploidy))
+      M <- cbind(M, input.data$geno.dose)
+      input.data$chisq.pval <- apply(M, 1, mrk_chisq_test, ploidy = ploidy)
     }
     return(input.data)
   } else {
-    na.num<-apply(input.data$geno.dose, 2, function(x,m) sum(x==m+1), m = input.data$m)
-    perc.na<-na.num/input.data$n.mrk
-    rm.ind.id<-which(perc.na > filter.thres)
-    if(length(rm.ind.id)==0) return(input.data)
-    rm.ind<-names(rm.ind.id)
-    if(nrow(input.data$geno)!=input.data$n.mrk)
+    na.num <- apply(input.data$geno.dose, 2, function(x,ploidy) sum(x == ploidy+1), ploidy = input.data$ploidy)
+    perc.na <- na.num/input.data$n.mrk
+    rm.ind.id <- which(perc.na > filter.thres)
+    if(length(rm.ind.id) == 0) return(input.data)
+    rm.ind <- names(rm.ind.id)
+    if(is.prob.data(input.data))
       input.data$geno <-  input.data$geno %>%
       dplyr::filter(!ind%in%rm.ind)
-    input.data$geno.dose<-input.data$geno.dose[,-rm.ind.id]
-    input.data$ind.names<-input.data$ind.names[-rm.ind.id]
+    input.data$geno.dose <- input.data$geno.dose[,-rm.ind.id]
+    input.data$ind.names <- input.data$ind.names[-rm.ind.id]
     input.data$n.ind <- ncol(input.data$geno.dose)
     ##Computing chi-square p.values
     if(!is.null(input.data$chisq.pval)){
-      m<-input.data$m
-      Ds <- array(NA, dim = c(m+1, m+1, m+1))
-      for(i in 0:m)
-        for(j in 0:m)
-          Ds[i+1,j+1,] <- segreg_poly(m = m, dP = i, dQ = j)
-      Dpop<-cbind(input.data$dosage.p, input.data$dosage.q)
-      M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
-      dimnames(M)<-list(input.data$mrk.names, c(0:m))
-      M<-cbind(M, input.data$geno.dose)
-      input.data$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
+      ploidy <- input.data$ploidy
+      Ds <- array(NA, dim = c(ploidy+1, ploidy+1, ploidy+1))
+      for(i in 0:ploidy)
+        for(j in 0:ploidy)
+          Ds[i+1,j+1,] <- segreg_poly(ploidy = ploidy, dP = i, dQ = j)
+      Dpop <- cbind(input.data$dosage.p1, input.data$dosage.p2)
+      M <- t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
+      dimnames(M) <- list(input.data$mrk.names, c(0:ploidy))
+      M <- cbind(M, input.data$geno.dose)
+      input.data$chisq.pval <- apply(M, 1, mrk_chisq_test, ploidy = ploidy)
     }
     return(input.data)
   }
@@ -293,35 +293,35 @@ filter_missing_ind<-function(input.data, filter.thres = 0.2, inter = TRUE)
 #' mrks.chi.filt <- filter_segregation(input.data = tetra.solcap,
 #'                                     chisq.pval.thres = 0.05/tetra.solcap$n.mrk,
 #'                                     inter = TRUE)
-#' seq.init<-make_seq_mappoly(mrks.chi.filt)
+#' seq.init <- make_seq_mappoly(mrks.chi.filt)
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' 
 #' @importFrom graphics axis
 #' @export
-filter_segregation<-function(input.data, chisq.pval.thres = 10e-5, inter = TRUE){
+filter_segregation <- function(input.data, chisq.pval.thres = 10e-5, inter = TRUE){
   ANSWER <- "flag"
   if (!inherits(input.data, "mappoly.data")) {
     stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
   }
   if(interactive() && inter)
   {
-    while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
+    while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != "")
     {
-      plot(log10(sort(input.data$chisq.pval, decreasing = TRUE)), xlab = "markers", ylab = "log10(p.val)", axes=F)
+      plot(log10(sort(input.data$chisq.pval, decreasing = TRUE)), xlab = "markers", ylab = "log10(p.val)", axes = F)
       axis(1); axis(2)
       lines(x = c(0, input.data$n.mrk), y = rep(log10(chisq.pval.thres),2), col = 4, lty = 2)
       text(x = input.data$n.mrk/2, y = 5, labels = paste0("Included mrks: ", sum(input.data$chisq.pval >= chisq.pval.thres)), adj = .5, col = "darkgreen")
       text(x = input.data$n.mrk/2, y = log10(chisq.pval.thres) - 5, labels = paste0("Excluded mrks: ", sum(input.data$chisq.pval < chisq.pval.thres)), adj = .5, col = "darkred")
       ANSWER <- readline("Enter 'Y/n' to proceed or update the p value threshold: ")
-      if(substr(ANSWER, 1, 1) == "n" | substr(ANSWER, 1, 1) == "no" | substr(ANSWER, 1, 1) == "N")
+      if(substr(ANSWER, 1, 1)  ==  "n" | substr(ANSWER, 1, 1)  ==  "no" | substr(ANSWER, 1, 1)  ==  "N")
           stop("You decided to stop the function.")
-      if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !="")
+      if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != "")
         chisq.pval.thres  <- as.numeric(ANSWER)
     }
   }
-  keep<-names(which(input.data$chisq.pval >= chisq.pval.thres))
-  exclude<-names(which(input.data$chisq.pval < chisq.pval.thres))
+  keep <- names(which(input.data$chisq.pval >= chisq.pval.thres))
+  exclude <- names(which(input.data$chisq.pval < chisq.pval.thres))
   structure(list(keep = keep, exclude = exclude, chisq.pval.thres = chisq.pval.thres, data.name = as.character(sys.call())[2]), class = "mappoly.chitest.seq")
 }
 
@@ -350,10 +350,10 @@ filter_contaminats <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
  # if (!require(AGHmatrix))
 #    stop("Please install package 'AGHmatrix' to proceed")
   D <- t(input.data$geno.dose)
-  D[D==input.data$m+1] <- NA
-  D <- rbind(input.data$dosage.p, input.data$dosage.q, D)
+  D[D == input.data$ploidy+1] <- NA
+  D <- rbind(input.data$dosage.p1, input.data$dosage.p2, D)
   rownames(D)[1:2] <- c("P1", "P2")
-  G <-AGHmatrix::Gmatrix(D, method="VanRaden",ploidy=input.data$m)
+  G  <- AGHmatrix::Gmatrix(D, method = "VanRaden",ploidy = input.data$ploidy)
   x <- G[1,]
   y <- G[2,]
   a <- 2*atan(y/x)/pi
@@ -370,7 +370,7 @@ filter_contaminats <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
  #   if (!require(gatepoints))
  #     stop("Please install package 'gatepoints' to proceed")
     ANSWER <- readline("Enter 'Y/n' to proceed with interactive filtering or quit: ")
-    if(substr(ANSWER, 1, 1) == "y" | substr(ANSWER, 1, 1) == "yes" | substr(ANSWER, 1, 1) == "Y" | ANSWER =="")
+    if(substr(ANSWER, 1, 1)  ==  "y" | substr(ANSWER, 1, 1)  ==  "yes" | substr(ANSWER, 1, 1)  ==  "Y" | ANSWER  == "")
     {
       ind.to.remove <- gatepoints::fhs(df, mark = TRUE)
       if(verbose){

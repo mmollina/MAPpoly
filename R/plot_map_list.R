@@ -34,19 +34,19 @@
 #'
 #' @export plot_map_list
 #'
-plot_map_list<-function(map.list, horiz = TRUE, col = "lightgray", title = "Linkage group"){
+plot_map_list <- function(map.list, horiz = TRUE, col = "lightgray", title = "Linkage group"){
   if(inherits(map.list, "mappoly.map"))
-    map.list<-list(map.list)
+    map.list <- list(map.list)
   if (any(!sapply(map.list, inherits, "mappoly.map"))) 
     stop("All elemnts in 'map.list' should be of class 'mappoly.map'")
-  if(all(col == "ggstyle"))
-    col <-gg_color_hue(length(map.list))
-  if(length(col)==1)
-    col<-rep(col, length(map.list))
-  z<-NULL
+  if(all(col  ==  "ggstyle"))
+    col  <- gg_color_hue(length(map.list))
+  if(length(col) == 1)
+    col <- rep(col, length(map.list))
+  z <- NULL
   if(is.null(names(map.list)))
-    names(map.list)<-1:length(map.list)
-  max.dist<-max(sapply(map.list, function(x) sum(imf_h(x$maps[[1]]$seq.rf))))
+    names(map.list) <- 1:length(map.list)
+  max.dist <- max(sapply(map.list, function(x) sum(imf_h(x$maps[[1]]$seq.rf))))
   if(horiz){
     plot(0, 
          xlim = c(0, max.dist), 
@@ -57,7 +57,7 @@ plot_map_list<-function(map.list, horiz = TRUE, col = "lightgray", title = "Link
     axis(1)
     for(i in 1:length(map.list)){
       d <- extract_map(map.list[[i]])
-      z<-rbind(z, data.frame(mrk = map.list[[i]]$info$mrk.names, 
+      z <- rbind(z, data.frame(mrk = map.list[[i]]$info$mrk.names, 
                              LG = names(map.list)[i], pos = d))
       plot_one_map(d, i = i, horiz = TRUE, col = col[i])   
     }
@@ -69,11 +69,11 @@ plot_map_list<-function(map.list, horiz = TRUE, col = "lightgray", title = "Link
          type = "n", axes = FALSE, 
          ylab = "Map position (cM)", 
          xlab = title)
-    x<-axis(2, labels = FALSE, lwd = 0)
+    x <- axis(2, labels = FALSE, lwd = 0)
     axis(2, at = x, labels = abs(x))
     for(i in 1:length(map.list)){
       d <- extract_map(map.list[[i]])
-      z<-rbind(z, data.frame(mrk = map.list[[i]]$info$mrk.names, 
+      z <- rbind(z, data.frame(mrk = map.list[[i]]$info$mrk.names, 
                              LG = names(map.list)[i],pos = d))
       plot_one_map(d, i = i, horiz = FALSE, col = col[i])  
     }
@@ -88,23 +88,23 @@ plot_map_list<-function(map.list, horiz = TRUE, col = "lightgray", title = "Link
 #' @param phase.config which phase configuration should be used. "best" (default) 
 #'                     will choose the maximum likelihood configuration
 #' @examples
-#'  x <- maps.hexafake[[1]]$info$sequence.pos/1e6
+#'  x <- maps.hexafake[[1]]$info$genome.pos/1e6
 #'  y <- extract_map(maps.hexafake[[1]])
 #'  plot(y~x, ylab = "Map position (cM)", xlab = "Genome Position (Mbp)")
 #' @export
-extract_map<-function(input.map, phase.config = "best")
+extract_map <- function(input.map, phase.config = "best")
 {
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
   }
   ## choosing the linkage phase configuration
   LOD.conf <- get_LOD(input.map, sorted = FALSE)
-  if(phase.config == "best") {
+  if(phase.config  ==  "best") {
     i.lpc <- which.min(LOD.conf)
   } else if (phase.config > length(LOD.conf)) {
     stop("invalid linkage phase configuration")
   } else i.lpc <- phase.config
-  x<-cumsum(c(0, imf_h(input.map$maps[[i.lpc]]$seq.rf)))
+  x <- cumsum(c(0, imf_h(input.map$maps[[i.lpc]]$seq.rf)))
   x
 }
 
@@ -112,7 +112,7 @@ extract_map<-function(input.map, phase.config = "best")
 #'
 #' @param void internal function to be documented
 #' @keywords internal
-plot_one_map<-function(x, i = 0, horiz = FALSE, col = "lightgray")
+plot_one_map <- function(x, i = 0, horiz = FALSE, col = "lightgray")
 {
   if(horiz)
   {

@@ -32,7 +32,7 @@ position and each individual given a map.
 }
 \examples{
  ## tetraploid example
- probs.t<-calc_genoprob(input.map = solcap.dose.map[[1]],
+ probs.t <- calc_genoprob(input.map = solcap.dose.map[[1]],
                         verbose = TRUE)
  probs.t
  ## displaying individual 1, 36 genotypic states

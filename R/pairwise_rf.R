@@ -51,7 +51,7 @@
 #'     column indicates the LOD Score in relation to the most likely linkage 
 #'     phase configuration. The second column shows the estimated recombination 
 #'     fraction for each configuration, and the third indicates the LOD Score 
-#'     comparing the likelihood under no linkage (r=0.5) with the estimated 
+#'     comparing the likelihood under no linkage (r = 0.5) with the estimated 
 #'     recombination fraction (evidence of linkage).}
 #'     \code{chisq.pval.thres}{threshold used to perform the segregation tests}
 #'     \code{chisq.pval}{p-values associated with the performed segregation tests}
@@ -63,7 +63,7 @@
 #'   unique.mrks <- make_seq_mappoly(red.mrk)
 #'   all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
 #'                                ncpus = 1, 
-#'                                verbose=TRUE)
+#'                                verbose = TRUE)
 #'    all.pairs
 #'    plot(all.pairs, 20, 21)
 #'    mat <- rf_list_to_matrix(all.pairs)
@@ -101,47 +101,47 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
     count.cache = cache_counts_twopt(input.seq, cached = TRUE)
   # Memory warning
   ANSWER = "flag"
-  if(input.seq$m < 6){
-    if (length(input.seq$seq.num) > 10000 && interactive() && n.batches == 1 && !memory.warning){
-      while (substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !=""){
-        cat("  Ploidy level:", input.seq$m, "\n~~~~~~~~~~\n")
+  if(input.seq$ploidy < 6){
+    if (length(input.seq$seq.num) > 10000 && interactive() && n.batches  ==  1 && !memory.warning){
+      while (substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != ""){
+        cat("  Ploidy level:", input.seq$ploidy, "\n~~~~~~~~~~\n")
         message("
   The sequence contains more than 10000 markers. 
   This requires high-performance computing resources.
   Do you want to proceed? (Y/n): ")
         ANSWER <- readline("")
-        if (substr(ANSWER, 1, 1) == "n" | substr(ANSWER, 1, 1) == "no" | substr(ANSWER, 1, 1) == "N") 
+        if (substr(ANSWER, 1, 1)  ==  "n" | substr(ANSWER, 1, 1)  ==  "no" | substr(ANSWER, 1, 1)  ==  "N") 
           stop("  You decided to stop 'est_pairwise_rf'.")
       }
     } 
   } else {
-    if (length(input.seq$seq.num) > 3000 && interactive() && n.batches == 1 && !memory.warning){
-      while (substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER !=""){
-        cat("  Ploidy level:", input.seq$m, "\n~~~~~~~~~~\n")
+    if (length(input.seq$seq.num) > 3000 && interactive() && n.batches  ==  1 && !memory.warning){
+      while (substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != ""){
+        cat("  Ploidy level:", input.seq$ploidy, "\n~~~~~~~~~~\n")
         message("
   The sequence contains more than 3000 markers. 
   This requires high-performance computing resources.
   Do you want to proceed? (Y/n): ")
         ANSWER <- readline("")
-        if (substr(ANSWER, 1, 1) == "n" | substr(ANSWER, 1, 1) == "no" | substr(ANSWER, 1, 1) == "N") 
+        if (substr(ANSWER, 1, 1)  ==  "n" | substr(ANSWER, 1, 1)  ==  "no" | substr(ANSWER, 1, 1)  ==  "N") 
           stop("  You decided to stop 'est_pairwise_rf'.")
       }
     } 
   }
   est.type = match.arg(est.type)
   ## Checking for genotype probability 
-  if(!exists('geno', where = get(input.seq$data.name, pos=1)) & est.type != "disc"){
+  if(!exists('geno', where = get(input.seq$data.name, pos = 1)) & est.type != "disc"){
     warning("There is no probabilistic dosage scoring in the dataset. Using est.type = 'disc'")
     est.type <- "disc"
   }
   ## get genotypes
-  if(est.type == "disc"){
-    geno <- as.matrix(get(input.seq$data.name, pos=1)$geno.dose)
+  if(est.type  ==  "disc"){
+    geno <- as.matrix(get(input.seq$data.name, pos = 1)$geno.dose)
   } else {
-    d1 <- get(input.seq$data.name, pos=1)$geno 
+    d1 <- get(input.seq$data.name, pos = 1)$geno 
     d2 <- reshape2::melt(d1, id.vars = c("mrk", "ind"))
     geno <- reshape2::acast(d2, mrk ~ variable ~ ind)
-    geno <- geno[get(input.seq$data.name, pos=1)$mrk.names,,get(input.seq$data.name, pos=1)$ind.names]
+    geno <- geno[get(input.seq$data.name, pos = 1)$mrk.names,,get(input.seq$data.name, pos = 1)$ind.names]
   }
   ## all possible pairs
   if (is.null(mrk.pairs)) {
@@ -165,30 +165,30 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
       if (verbose)
         cat("INFO: Using ", ncpus, " CPUs for calculation.\n")
       cl = parallel::makeCluster(ncpus, type = parallelization.type)
-      if(est.type == "disc")
+      if(est.type  ==  "disc")
         parallel::clusterExport(cl, "paralell_pairwise_discrete")
-      if(est.type == "prob")
+      if(est.type  ==  "prob")
         parallel::clusterExport(cl, "paralell_pairwise_probability")
       on.exit(parallel::stopCluster(cl))
-      if(est.type == "disc"){
+      if(est.type  ==  "disc"){
         res <- parallel::parLapply(cl,
                                    input.list,
                                    paralell_pairwise_discrete,
                                    input.seq = input.seq,
                                    geno = geno,
-                                   dP = get(input.seq$data.name)$dosage.p,
-                                   dQ = get(input.seq$data.name)$dosage.q,
+                                   dP = get(input.seq$data.name)$dosage.p1,
+                                   dQ = get(input.seq$data.name)$dosage.p2,
                                    count.cache = count.cache,
                                    tol = tol)
       } 
-      else if(est.type == "prob") {
+      else if(est.type  ==  "prob") {
         res <- parallel::parLapply(cl,
                                    input.list,
                                    paralell_pairwise_probability,
                                    input.seq = input.seq,
                                    geno = geno,
-                                   dP = get(input.seq$data.name)$dosage.p,
-                                   dQ = get(input.seq$data.name)$dosage.q,
+                                   dP = get(input.seq$data.name)$dosage.p1,
+                                   dQ = get(input.seq$data.name)$dosage.p2,
                                    count.cache = count.cache,
                                    tol = tol)
       } 
@@ -209,23 +209,23 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
         if (length(input.seq$seq.num) < 10)
           cat("Also, number of markers is too small to perform parallel computation.\n")
       }
-      if(est.type == "disc"){
+      if(est.type  ==  "disc"){
         res <- lapply(input.list,
                       paralell_pairwise_discrete,
                       input.seq = input.seq,
                       geno = geno,
-                      dP = get(input.seq$data.name)$dosage.p,
-                      dQ = get(input.seq$data.name)$dosage.q,
+                      dP = get(input.seq$data.name)$dosage.p1,
+                      dQ = get(input.seq$data.name)$dosage.p2,
                       count.cache = count.cache,
                       tol = tol)
       } 
-      else if(est.type == "prob") {
+      else if(est.type  ==  "prob") {
         res <- lapply(input.list,
                       paralell_pairwise_probability,
                       input.seq = input.seq,
                       geno = geno,
-                      dP = get(input.seq$data.name)$dosage.p,
-                      dQ = get(input.seq$data.name)$dosage.q,
+                      dP = get(input.seq$data.name)$dosage.p1,
+                      dQ = get(input.seq$data.name)$dosage.p2,
                       count.cache = count.cache,
                       tol = tol)
       } 
@@ -325,7 +325,7 @@ paralell_pairwise_discrete <- function(mrk.pairs,
                                        tol = .Machine$double.eps^0.25)
 {
   res <- .Call("pairwise_rf_estimation_disc",
-               input.seq$m,
+               input.seq$ploidy,
                as.matrix(mrk.pairs),
                as.matrix(geno),
                as.vector(dP),
@@ -350,7 +350,7 @@ paralell_pairwise_probability <- function(mrk.pairs,
                                           tol = .Machine$double.eps^0.25)
 {
   res <- .Call("pairwise_rf_estimation_prob",
-               input.seq$m,
+               input.seq$ploidy,
                as.matrix(mrk.pairs),
                as.integer(dim(geno)),
                as.double(geno),
@@ -404,28 +404,28 @@ print.poly.est.two.pts.pairwise <- function(x, ...) {
 
 #' @export
 plot.poly.est.two.pts.pairwise <- function(x, first.mrk, second.mrk, ...) {
-  i<-which(names(x$pairwise)%in%paste(sort(c(first.mrk, second.mrk)), collapse = "-"))
-  if(length(i)==0)
+  i <- which(names(x$pairwise)%in%paste(sort(c(first.mrk, second.mrk)), collapse = "-"))
+  if(length(i) == 0)
     stop("The requested combination of markers is not included in the two-point object")
   data.name <- x$data.name
-  x<-x$pairwise[[i]]
-  variable<-value<-sh<-NULL
-  x<-reshape2::melt(x, id=rownames(x))
-  colnames(x)<-c("sh", "variable", "value")
-  rfs<-as.character(format(round(t((subset(x, variable=="rf", select=value))), digits=2), digits=2))
-  x.temp<-subset(x, variable!="rf")
-  mLOD<-max(x.temp$value)
+  x <- x$pairwise[[i]]
+  variable <- value <- sh <- NULL
+  x <- reshape2::melt(x, id = rownames(x))
+  colnames(x) <- c("sh", "variable", "value")
+  rfs <- as.character(format(round(t((subset(x, variable == "rf", select = value))), digits = 2), digits = 2))
+  x.temp <- subset(x, variable != "rf")
+  mLOD <- max(x.temp$value)
   x.temp <- transform(x.temp, sh = factor(sh, levels = unique(x.temp$sh)))
-  ds<-paste0(paste0(get(data.name, pos=1)$dosage.p[first.mrk] , "---", get(data.name, pos=1)$dosage.p[second.mrk]), "  x  ",
-             paste0(get(data.name, pos=1)$dosage.q[first.mrk] , "---", get(data.name, pos=1)$dosage.q[second.mrk]))
-  ggplot2::ggplot(x.temp, ggplot2::aes(sh,    value, label = sh    ,fill=variable))  +
+  ds <- paste0(paste0(get(data.name, pos = 1)$dosage.p1[first.mrk] , "---", get(data.name, pos = 1)$dosage.p1[second.mrk]), "  x  ",
+             paste0(get(data.name, pos = 1)$dosage.p2[first.mrk] , "---", get(data.name, pos = 1)$dosage.p2[second.mrk]))
+  ggplot2::ggplot(x.temp, ggplot2::aes(sh,    value, label = sh    ,fill = variable))  +
     ggplot2::geom_bar(stat = "identity", position = "identity") +
-    ggplot2::annotate("text", x = c(1:length(rfs)), y = rep(mLOD + mLOD/20,length(rfs)), label = rfs, size=4) +
-    ggplot2::annotate("text", x = 1, y = mLOD + mLOD/7, label = "recombination fractions", size=4, hjust=0, vjust=0, fontface=3)+
-    ggplot2::scale_x_discrete(name=paste("Homologous sharing alleles   \n dosage in parents ", ds)) +
-    ggplot2::scale_y_continuous(name="LOD") +
-    ggplot2::scale_fill_manual(values=c("#E69F00", "#56B4E9"),
-                               name="",
-                               breaks=c("LOD_ph", "LOD_rf"),
-                               labels=c("LOD_phase", "LOD_rf"))
+    ggplot2::annotate("text", x = c(1:length(rfs)), y = rep(mLOD + mLOD/20,length(rfs)), label = rfs, size = 4) +
+    ggplot2::annotate("text", x = 1, y = mLOD + mLOD/7, label = "recombination fractions", size = 4, hjust = 0, vjust = 0, fontface = 3)+
+    ggplot2::scale_x_discrete(name = paste("Homologous sharing alleles   \n dosage in parents ", ds)) +
+    ggplot2::scale_y_continuous(name = "LOD") +
+    ggplot2::scale_fill_manual(values = c("#E69F00", "#56B4E9"),
+                               name = "",
+                               breaks = c("LOD_ph", "LOD_rf"),
+                               labels = c("LOD_phase", "LOD_rf"))
 }

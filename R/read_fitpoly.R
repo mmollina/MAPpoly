@@ -40,19 +40,19 @@
 #' 
 #' @return An object of class \code{mappoly.data} which contains a
 #'     list with the following components:
-#'     \item{m}{ploidy level}
+#'     \item{ploidy}{ploidy level}
 #'     \item{n.ind}{number individuals}
 #'     \item{n.mrk}{total number of markers}
 #'     \item{ind.names}{the names of the individuals}
 #'     \item{mrk.names}{the names of the markers}
-#'     \item{dosage.p}{a vector containing the dosage in
+#'     \item{dosage.p1}{a vector containing the dosage in
 #'       parent P for all \code{n.mrk} markers}
-#'     \item{dosage.q}{a vector containing the dosage in
+#'     \item{dosage.p2}{a vector containing the dosage in
 #'       parent Q for all \code{n.mrk} markers}
-#'     \item{sequence}{a vector indicating which sequence each marker
+#'     \item{chrom}{a vector indicating which sequence each marker
 #'       belongs. Zero indicates that the marker was not assigned to any
 #'       sequence}
-#'     \item{sequence.pos}{Physical position of the markers into the
+#'     \item{genome.pos}{Physical position of the markers into the
 #'       sequence}
 #'     \item{seq.ref}{NULL (unused in this type of data)}
 #'     \item{seq.alt}{NULL (unused in this type of data)}
@@ -64,8 +64,8 @@
 #'     \item{phen}{a matrix containing the phenotypic data. The rows
 #'                 correspond to the traits and the columns correspond
 #'                 to the individuals}
-#'     \item{kept}{if elim.redundant=TRUE, holds all non-redundant markers}
-#'     \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
+#'     \item{kept}{if elim.redundant = TRUE, holds all non-redundant markers}
+#'     \item{elim.correspondence}{if elim.redundant = TRUE, holds all non-redundant markers and
 #' its equivalence to the redundant ones}
 #' @examples
 #' \donttest{
@@ -100,21 +100,21 @@ read_fitpoly <- function(file.in, ploidy, parent1, parent2, offspring = NULL,
                          prob.thres = 0.95, file.type = c("table", "csv"), verbose = TRUE) 
 {
   file.type <- match.arg(file.type)
-  if(file.type == "table")
+  if(file.type  ==  "table")
     dat <- read.delim(file = file.in, header = TRUE, stringsAsFactors = FALSE)
-  else if(file.type == "csv")
+  else if(file.type  ==  "csv")
     dat <- read.csv(file = file.in, header = TRUE, stringsAsFactors = FALSE)
   p1 <- unique(sapply(parent1, function(x) unique(grep(pattern = x, dat[,"SampleName"], value = TRUE))))
   p2 <- unique(sapply(parent2, function(x) unique(grep(pattern = x, dat[,"SampleName"], value = TRUE))))
   if(is.null(offspring)){
     offspring <- setdiff(unique(dat[,"SampleName"]), c(p1, p2))    
   } else {
-    if(length(offspring) == 1)
+    if(length(offspring)  ==  1)
       offspring <- unique(grep(pattern = offspring, dat[,"SampleName"], value = TRUE))
   }
   parent.geno <- match.arg(parent.geno)
-  dat<-dat[,c("MarkerName", "SampleName",paste0("P", 0:ploidy))] 
-  if(parent.geno == "joint"){
+  dat <- dat[,c("MarkerName", "SampleName",paste0("P", 0:ploidy))] 
+  if(parent.geno  ==  "joint"){
     dat.p1 <- dat %>%
       filter(SampleName %in% p1) %>%
       group_by(MarkerName) %>%
@@ -140,7 +140,7 @@ read_fitpoly <- function(file.in, ploidy, parent1, parent2, offspring = NULL,
       return(which.max(x)-1)
     })
   }
-  if(parent.geno == "max"){
+  if(parent.geno  ==  "max"){
     dat.p1 <- dat %>%
       filter(SampleName %in% p1) %>%
       group_by(MarkerName) %>%
@@ -173,17 +173,17 @@ read_fitpoly <- function(file.in, ploidy, parent1, parent2, offspring = NULL,
   ## get individual names ------------------
   ind.names <- offspring
   ## get dosage in parent P ----------------
-  dosage.p <- as.integer(genoP1[mrk.names])
-  names(dosage.p)<-mrk.names
+  dosage.p1 <- as.integer(genoP1[mrk.names])
+  names(dosage.p1) <- mrk.names
   ## get dosage in parent Q ----------------
-  dosage.q <- as.integer(genoP2[mrk.names])
-  names(dosage.q)<-mrk.names
+  dosage.p2 <- as.integer(genoP2[mrk.names])
+  names(dosage.p2) <- mrk.names
   ## monomorphic markers
-  dp<-abs(abs(dosage.p-(ploidy/2))-(ploidy/2))
-  dq<-abs(abs(dosage.q-(ploidy/2))-(ploidy/2))
-  mrk.names<-names(which(dp+dq!=0))
-  dosage.p <- dosage.p[mrk.names]
-  dosage.q <- dosage.q[mrk.names]
+  dp <- abs(abs(dosage.p1-(ploidy/2))-(ploidy/2))
+  dq <- abs(abs(dosage.p2-(ploidy/2))-(ploidy/2))
+  mrk.names <- names(which(dp+dq != 0))
+  dosage.p1 <- dosage.p1[mrk.names]
+  dosage.p2 <- dosage.p2[mrk.names]
   nphen <- 0
   phen <- NULL
   if (verbose){
@@ -205,15 +205,15 @@ read_fitpoly <- function(file.in, ploidy, parent1, parent2, offspring = NULL,
   colnames(geno) <- c("mrk", "ind", as.character(0:ploidy))
   ind.names <- unique(geno$ind)
   mrk.names <- unique(geno$mrk)
-  dosage.p <- dosage.p[mrk.names]
-  dosage.q <- dosage.q[mrk.names]
+  dosage.p1 <- dosage.p1[mrk.names]
+  dosage.p2 <- dosage.p2[mrk.names]
   
   ## transforming na's in expected genotypes using Mendelian segregation
   i.na <- which(apply(geno, 1, function(x) any(is.na(x))))
   if (length(i.na) > 0) {
     m.na <- match(geno[i.na, 1], mrk.names)
-    dp.na <- dosage.p[m.na]
-    dq.na <- dosage.q[m.na]
+    dp.na <- dosage.p1[m.na]
+    dq.na <- dosage.p2[m.na]
     for (i in 1:length(m.na)) geno[i.na[i], -c(1, 2)] <- segreg_poly(ploidy, dp.na[i], dq.na[i])
   }
   ## dosage info
@@ -234,15 +234,15 @@ read_fitpoly <- function(file.in, ploidy, parent1, parent2, offspring = NULL,
   }
   ## returning the 'mappoly.data' object
   if (verbose) cat("\n    Done with reading.\n")
-  res<-structure(list(m = ploidy,
+  res <- structure(list(ploidy = ploidy,
                       n.ind = n.ind,
                       n.mrk = length(mrk.names),
                       ind.names = ind.names,
                       mrk.names = mrk.names,
-                      dosage.p = dosage.p,
-                      dosage.q = dosage.q,
-                      sequence = rep(NA, length(mrk.names)),
-                      sequence.pos = rep(NA, length(mrk.names)),
+                      dosage.p1 = dosage.p1,
+                      dosage.p2 = dosage.p2,
+                      chrom = rep(NA, length(mrk.names)),
+                      genome.pos = rep(NA, length(mrk.names)),
                       seq.ref = NULL,
                       seq.alt = NULL,
                       all.mrk.depth = NULL,
@@ -258,18 +258,18 @@ read_fitpoly <- function(file.in, ploidy, parent1, parent2, offspring = NULL,
   
   if(filter.non.conforming){
     if (verbose) cat("    Filtering non-conforming markers.\n    ...")
-    res<-filter_non_conforming_classes(res)
+    res <- filter_non_conforming_classes(res)
     if (verbose) cat("\n    Performing chi-square test.\n    ...")
     ##Computing chi-square p.values
     Ds <- array(NA, dim = c(ploidy+1, ploidy+1, ploidy+1))
     for(i in 0:ploidy)
       for(j in 0:ploidy)
-        Ds[i+1,j+1,] <- segreg_poly(m = ploidy, dP = i, dQ = j)
-    Dpop<-cbind(res$dosage.p, res$dosage.q)
-    M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
-    dimnames(M)<-list(res$mrk.names, c(0:ploidy))
-    M<-cbind(M, res$geno.dose)
-    res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = ploidy)
+        Ds[i+1,j+1,] <- segreg_poly(ploidy = ploidy, dP = i, dQ = j)
+    Dpop <- cbind(res$dosage.p1, res$dosage.p2)
+    M <- t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
+    dimnames(M) <- list(res$mrk.names, c(0:ploidy))
+    M <- cbind(M, res$geno.dose)
+    res$chisq.pval <- apply(M, 1, mrk_chisq_test, ploidy = ploidy)
     if (verbose) cat("\n    Done.\n")
   }
   if (elim.redundant){
@@ -279,8 +279,8 @@ read_fitpoly <- function(file.in, ploidy, parent1, parent2, offspring = NULL,
     res$kept = redun$kept
     res$elim.correspondence = redun$elim.correspondence
     mrks.rem = match(res$elim.correspondence$elim, res$mrk.names)
-    res$elim.correspondence$sequence = res$sequence[c(mrks.rem)]
-    res$elim.correspondence$sequence.pos = res$sequence.pos[c(mrks.rem)]
+    res$elim.correspondence$chrom = res$chrom[c(mrks.rem)]
+    res$elim.correspondence$genome.pos = res$genome.pos[c(mrks.rem)]
     res$elim.correspondence$seq.ref = NULL
     res$elim.correspondence$seq.alt = NULL
     res$elim.correspondence$all.mrk.depth = NULL
@@ -288,10 +288,10 @@ read_fitpoly <- function(file.in, ploidy, parent1, parent2, offspring = NULL,
     res$mrk.names = res$mrk.names[-c(mrks.rem)]
     res$geno.dose = res$geno.dose[-c(mrks.rem),]
     res$geno = res$geno[which(res$geno$mrk %in% rownames(res$geno.dose)),]
-    res$dosage.p = res$dosage.p[-c(mrks.rem)]
-    res$dosage.q = res$dosage.q[-c(mrks.rem)]
-    res$sequence = res$sequence[-c(mrks.rem)]
-    res$sequence.pos = res$sequence.pos[-c(mrks.rem)]
+    res$dosage.p1 = res$dosage.p1[-c(mrks.rem)]
+    res$dosage.p2 = res$dosage.p2[-c(mrks.rem)]
+    res$chrom = res$chrom[-c(mrks.rem)]
+    res$genome.pos = res$genome.pos[-c(mrks.rem)]
     res$chisq.pval = res$chisq.pval[-c(mrks.rem)]
   }
   return(res)

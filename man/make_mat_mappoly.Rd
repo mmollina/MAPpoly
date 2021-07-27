@@ -24,15 +24,15 @@ Get a subset of an object of class \code{mappoly.rf.matrix}, i.e.
 }
 \examples{
     # sequence with 20 markers
-    mrk.seq<-make_seq_mappoly(hexafake, 1:20)
-    mrk.pairs<-est_pairwise_rf(input.seq = mrk.seq,
-                               verbose=TRUE)
+    mrk.seq <- make_seq_mappoly(hexafake, 1:20)
+    mrk.pairs <- est_pairwise_rf(input.seq = mrk.seq,
+                               verbose = TRUE)
     ## Full recombination fraction matrix
-    mat<-rf_list_to_matrix(input.twopt=mrk.pairs)
+    mat <- rf_list_to_matrix(input.twopt = mrk.pairs)
     plot(mat)
     ## Matrix subset
     id <- make_seq_mappoly(hexafake, 1:10)
-    mat.sub<-make_mat_mappoly(mat, id)
+    mat.sub <- make_mat_mappoly(mat, id)
     plot(mat.sub)
    
 }

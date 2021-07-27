@@ -5,7 +5,7 @@
 \title{Plot two overlapped haplotypes}
 \usage{
 plot_compare_haplotypes(
-  m,
+  ploidy,
   hom.allele.p1,
   hom.allele.q1,
   hom.allele.p2 = NULL,

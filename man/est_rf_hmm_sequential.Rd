@@ -81,17 +81,17 @@ which can take a long time to perform (default = FALSE)}
 A list of class \code{mappoly.map} with two elements: 
 
 i) info:  a list containing information about the map, regardless of the linkage phase configuration:
-\item{m}{the ploidy level}
+\item{ploidy}{the ploidy level}
 \item{n.mrk}{number of markers}
 \item{seq.num}{a vector containing the (ordered) indices of markers in the map, 
                according to the input file}
 \item{mrk.names}{the names of markers in the map}
-\item{seq.dose.p}{a vector containing the dosage in parent 1 for all markers in the map}
-\item{seq.dose.q}{a vector containing the dosage in parent 2 for all markers in the map}
-\item{sequence}{a vector indicating the sequence (usually chromosome) each marker belongs 
+\item{seq.dose.p1}{a vector containing the dosage in parent 1 for all markers in the map}
+\item{seq.dose.p2}{a vector containing the dosage in parent 2 for all markers in the map}
+\item{chrom}{a vector indicating the sequence (usually chromosome) each marker belongs 
                 as informed in the input file. If not available, 
-                \code{sequence = NULL}}
-\item{sequence.pos}{physical position (usually in megabase) of the markers into the sequence}
+                \code{chrom = NULL}}
+\item{genome.pos}{physical position (usually in megabase) of the markers into the sequence}
 \item{seq.ref}{reference base used for each marker (i.e. A, T, C, G). If not available, 
                 \code{seq.ref = NULL}}
 \item{seq.alt}{alternative base used for each marker (i.e. A, T, C, G). If not available, 
@@ -125,12 +125,12 @@ the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
 }
 \examples{
  \donttest{
-    mrk.subset<-make_seq_mappoly(hexafake, 1:20)
-    red.mrk<-elim_redundant(mrk.subset)
-    unique.mrks<-make_seq_mappoly(red.mrk)
-    subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
+    mrk.subset <- make_seq_mappoly(hexafake, 1:20)
+    red.mrk <- elim_redundant(mrk.subset)
+    unique.mrks <- make_seq_mappoly(red.mrk)
+    subset.pairs <- est_pairwise_rf(input.seq = unique.mrks,
                                   ncpus = 1,
-                                  verbose=TRUE)
+                                  verbose = TRUE)
     subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
                                         thres.twopt = 5,
                                         thres.hmm = 10,
@@ -151,8 +151,8 @@ the ones that pass the HMM threshold (\code{thres.hmm}) are eliminated.
      ## Estimated linkage phase
      ph.P.est <- subset.map$maps[[1]]$seq.ph$P
      ph.Q.est <- subset.map$maps[[1]]$seq.ph$Q
-     compare_haplotypes(m = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
-     compare_haplotypes(m = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
+     compare_haplotypes(ploidy = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
+     compare_haplotypes(ploidy = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
    }
 
 }

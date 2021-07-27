@@ -5,7 +5,7 @@
 \title{Draw simple parental linkage phase configurations}
 \usage{
 draw_cross(
-  m,
+  ploidy,
   rf.vec = NULL,
   hom.allele.p,
   hom.allele.q,

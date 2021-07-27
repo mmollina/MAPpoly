@@ -13,9 +13,9 @@ test_that("merging maps correctly", {
   expect_equal(round(mean(unlist(merged.maps$maps[[1]]$seq.ph)),6), 2.495868)
   best.phase <- merged.maps$maps[[1]]$seq.ph
   names.id<-names(best.phase$P)
-  x1 <- compare_haplotypes(m = 4, best.phase$P[names.id], 
+  x1 <- compare_haplotypes(ploidy = 4, best.phase$P[names.id], 
                            full.map$maps[[1]]$seq.ph$P[names.id]) 
-  x2 <- compare_haplotypes(m = 4, best.phase$Q[names.id], 
+  x2 <- compare_haplotypes(ploidy = 4, best.phase$Q[names.id], 
                            full.map$maps[[1]]$seq.ph$Q[names.id])
   expect_true(x1$is.same.haplo)
   expect_true(x2$is.same.haplo)
