@@ -216,7 +216,7 @@ read_geno_prob <- function(file.in, prob.thres = 0.95, filter.non.conforming = T
     geno <- read.table(file.in, skip = 12 + nphen, colClasses = c("character", "character", rep("numeric", ploidy + 1)), nrows = n.mrk * n.ind, comment.char = "")
     colnames(geno) <- c("mrk", "ind", as.character(0:ploidy))
     mrk <- NULL
-    geno <- subset(geno, mrk%in%mrk.names[id])
+    geno <- subset(geno, mrk.names%in%mrk.names[id])
     ## transforming na's in expected genotypes using Mendelian segregation
     i.na <- which(apply(geno, 1, function(x) any(is.na(x))))
     if (length(i.na) > 0) {

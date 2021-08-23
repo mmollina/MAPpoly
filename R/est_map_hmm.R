@@ -163,7 +163,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   if (!inherits(input.ph, input_classes[2])) {
     stop(deparse(substitute(input.ph)), " is not an object of class 'two.pts.linkage.phases'")
   }
-  if(length(input.seq$seq.num)  ==  2){
+  if(length(input.seq$seq.num)  ==  2 & !est.given.0.rf){
     maps <- vector("list", 1)
     res.temp <- twopt$pairwise[[paste(sort(input.seq$seq.num), collapse = "-")]]
     dp <- get(input.seq$data.name, pos  = 1)$dosage.p1[input.seq$seq.num]

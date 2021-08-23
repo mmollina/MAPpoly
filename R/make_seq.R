@@ -231,7 +231,7 @@ print.mappoly.sequence <- function(x, ...) {
   cat("\n    ----------\n    No. of markers per dosage in both parents:\n")
   freq <- table(paste(get(x$data.name)$dosage.p1[x$seq.num], get(x$data.name)$dosage.p2[x$seq.num], sep = "-"))
   d.temp <- matrix(unlist(strsplit(names(freq), "-")), ncol = 2, byrow = TRUE)
-  print(data.frame(dP = paste0("    ", d.temp[, 1]), dQ = d.temp[, 2], freq = as.numeric(freq)), row.names = FALSE)
+  print(data.frame(dP1 = paste0("    ", d.temp[, 1]), dP2 = d.temp[, 2], freq = as.numeric(freq)), row.names = FALSE)
   if (x$loglike != -1) {
     cat("\n    ---------------------------------------------\n")
     cat("\n       log-likelihood:\t", x$loglike)

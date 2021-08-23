@@ -82,7 +82,9 @@
 #'     
 #' @export import_from_updog
 #' 
-import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = FALSE, verbose = TRUE){
+import_from_updog = function(object, prob.thres = 0.95, 
+                             filter.non.conforming = TRUE, 
+                             verbose = TRUE){
   # Case 1: updog
   if (inherits(object, "multidog")){
     ploidy = object$snpdf$ploidy[1]
@@ -125,8 +127,8 @@ import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = 
       }
       geno.dose[is.na(geno.dose)] <- ploidy + 1
     }
-    mrk.names <- rownames(geno.dose)
-    ind.names <- colnames(geno.dose)
+    mrk.names <- unique(geno$mrk)
+    ind.names <- unique(geno$ind)
     nphen = 0
     phen = NULL
     res <- structure(list(ploidy = ploidy,

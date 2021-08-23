@@ -339,7 +339,8 @@ plot_compare_haplotypes <- function(ploidy, hom.allele.p1, hom.allele.q1, hom.al
 #'
 #' @param void internal function to be documented
 #' @keywords internal
-pos_twopt_est <- function(input.seq){
+#' @export
+check_if_rf_is_possible <- function(input.seq){
   dp <- abs(abs(input.seq$seq.dose.p1-(input.seq$ploidy/2))-(input.seq$ploidy/2))
   dq <- abs(abs(input.seq$seq.dose.p2-(input.seq$ploidy/2))-(input.seq$ploidy/2))
   y <- numeric(length(input.seq$seq.num)-1)
@@ -349,7 +350,7 @@ pos_twopt_est <- function(input.seq){
     (dp[i]  ==  0 && dq[i]  ==  0) ||
     (dp[i+1]  ==  0 && dq[i+1]  ==  0)
   y <- as.logical(y)
-  y
+  !y
 }
 
 #' N! combination

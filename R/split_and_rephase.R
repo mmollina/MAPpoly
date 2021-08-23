@@ -68,12 +68,16 @@ split_and_rephase <- function(input.map,
   if(length(id) == 0) return(input.map)
   id <- cbind(c(1, id+1), c(id, input.map$info$n.mrk))
   ## Removing single markers at the beginning of the group
-  i <- 1
-  while(diff(id[i, ])  ==  0){
-    i <- i + 1
+  j <- 1
+  while(diff(id[j, ])  ==  0){
+   j <- j + 1
   }
   invisible(capture.output(suppressMessages(
-    input.map <- get_submap(input.map, i:input.map$info$n.mrk, reestimate.rf = FALSE))))
+    input.map <- get_submap(input.map, j:input.map$info$n.mrk, reestimate.rf = FALSE, phase.config = i.lpc))))
+  if(nrow(id) == j){
+    new.map <- reest_rf(input.map = input.map, phase.config = i.lpc, tol = tol.final, verbose = FALSE)
+    return(new.map)
+  }
   ## Dividing map in submaps
   id <- which(imf_h(input.map$maps[[1]]$seq.rf) > gap.threshold)
   id <- cbind(c(1, id+1), c(id, input.map$info$n.mrk))
@@ -111,5 +115,10 @@ split_and_rephase <- function(input.map,
     }
   }
   new.map <- reest_rf(input.map = newmap, tol = tol.final, verbose = FALSE)
+  new.map$info$seq.ref <- new.map$info$seq.alt <- NULL 
+  if(!is.null(input.map$info$seq.ref)){
+    new.map$info$seq.ref <- input.map$info$seq.ref[new.map$info$mrk.names] 
+    new.map$info$seq.alt <- input.map$info$seq.alt[new.map$info$mrk.names] 
+  }
   return(new.map)
 }

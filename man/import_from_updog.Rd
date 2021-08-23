@@ -6,8 +6,8 @@
 \usage{
 import_from_updog(
   object,
-  prob.thres = NULL,
-  filter.non.conforming = FALSE,
+  prob.thres = 0.95,
+  filter.non.conforming = TRUE,
   verbose = TRUE
 )
 }
