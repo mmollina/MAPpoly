@@ -1,6 +1,6 @@
 [![Travis Build Status](https://app.travis-ci.com/mmollina/MAPpoly.svg?branch=master)](https://app.travis-ci.com/github/mmollina/MAPpoly) 
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mmollina/mappoly?branch=master&svg=true)](https://ci.appveyor.com/project/mmollina/mappoly)
-[![Development](https://img.shields.io/badge/development-active-blue.svg)]
+![Development](https://img.shields.io/badge/development-active-blue.svg)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![codecov](https://codecov.io/github/mmollina/MAPpoly/branch/master/graphs/badge.svg)](https://codecov.io/github/mmollina/MAPpoly)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/mappoly)](https://cran.r-project.org/package=mappoly)
