@@ -1,4 +1,4 @@
-[![Travis Build Status](https://travis-ci.org/mmollina/MAPpoly.svg?branch=master)](https://app.travis-ci.com/github/mmollina/MAPpoly) 
+[![Travis Build Status](https://app.travis-ci.com/github/mmollina/MAPpoly.svg?branch=master)](https://app.travis-ci.com/github/mmollina/MAPpoly) 
 [![Development](https://img.shields.io/badge/development-active-blue.svg)]
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mmollina/mappoly?branch=master&svg=true)](https://ci.appveyor.com/project/mmollina/mappoly)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
