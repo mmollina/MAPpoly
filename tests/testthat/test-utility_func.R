@@ -14,7 +14,7 @@ test_that("test several utility functions", {
   x2<-make_seq_mappoly(tetra.solcap, 21:40)
   x1<-as.numeric(check_if_rf_is_possible(x1))
   x2<-as.numeric(check_if_rf_is_possible(x2))
-  expect_equal(as.numeric(crossprod(x1,x2)), 1)
+  expect_equal(as.numeric(crossprod(x1,x2)), 14)
   M<-rf_list_to_matrix(tpt, shared.alleles = TRUE)
   expect_equal(round(sum(get_rf_from_mat(M$rec.mat), na.rm = TRUE), 6), 3.913633)
   expect_equal(get_w_m(6), 15)
