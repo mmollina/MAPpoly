@@ -10,7 +10,7 @@ est_pairwise_rf(
   ncpus = 1L,
   mrk.pairs = NULL,
   n.batches = 1L,
-  est.type = c("disc", "prob"),
+  est.type = c("disc", "prob", "sparse_grid"),
   verbose = TRUE,
   memory.warning = TRUE,
   parallelization.type = c("PSOCK", "FORK"),
@@ -36,7 +36,10 @@ in parallel. Using \code{n.batches > 1}, will usually result in more processing
 time. However, it will require less memory. See examples.}
 
 \item{est.type}{Indicates whether to use the discrete ("disc") or the probabilistic ("prob") dosage scoring 
-when estimating the two-point recombination fractions.}
+when estimating the two-point recombination fractions. The option 
+"sparse_grid" is for development purposes use only. 
+It compares the likelihoods of a set of recombination fractions and returns the most likely.
+Currently, it tests rf = c(0.0, 0.2, 0.5).}
 
 \item{verbose}{If \code{TRUE} (default), current progress is shown; if
 \code{FALSE}, no output is produced}

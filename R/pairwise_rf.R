@@ -22,7 +22,10 @@
 #'    time. However, it will require less memory. See examples.
 #'    
 #' @param est.type  Indicates whether to use the discrete ("disc") or the probabilistic ("prob") dosage scoring 
-#'                  when estimating the two-point recombination fractions. 
+#'                  when estimating the two-point recombination fractions. The option 
+#'                  "sparse_grid" is for development purposes use only. 
+#'                  It compares the likelihoods of a set of recombination fractions and returns the most likely.
+#'                  Currently, it tests rf = c(0.0, 0.2, 0.5).
 #'
 #' @param verbose If \code{TRUE} (default), current progress is shown; if
 #'     \code{FALSE}, no output is produced
@@ -84,7 +87,7 @@
 #' @importFrom dplyr filter arrange
 est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
                             mrk.pairs = NULL, n.batches = 1L,
-                            est.type = c("disc","prob"),
+                            est.type = c("disc","prob","sparse_grid"),
                             verbose = TRUE, memory.warning = TRUE, 
                             parallelization.type = c("PSOCK", "FORK"), 
                             tol = .Machine$double.eps^0.25)
@@ -130,12 +133,12 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
   }
   est.type = match.arg(est.type)
   ## Checking for genotype probability 
-  if(!exists('geno', where = get(input.seq$data.name, pos = 1)) & est.type != "disc"){
+  if(!exists('geno', where = get(input.seq$data.name, pos = 1)) & est.type == "prob"){
     warning("There is no probabilistic dosage scoring in the dataset. Using est.type = 'disc'")
     est.type <- "disc"
   }
   ## get genotypes
-  if(est.type  ==  "disc"){
+  if(est.type  ==  "disc" || est.type == "sparse_grid"){
     geno <- as.matrix(get(input.seq$data.name, pos = 1)$geno.dose)
   } else {
     d1 <- get(input.seq$data.name, pos = 1)$geno 
@@ -169,6 +172,8 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
         parallel::clusterExport(cl, "paralell_pairwise_discrete")
       if(est.type  ==  "prob")
         parallel::clusterExport(cl, "paralell_pairwise_probability")
+      if(est.type  ==  "sparse_grid")
+        parallel::clusterExport(cl, "paralell_pairwise_given_sparse_grid")
       on.exit(parallel::stopCluster(cl))
       if(est.type  ==  "disc"){
         res <- parallel::parLapply(cl,
@@ -192,6 +197,17 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
                                    count.cache = count.cache,
                                    tol = tol)
       } 
+      else if(est.type  ==  "sparse_grid"){
+        res <- parallel::parLapply(cl,
+                                   input.list,
+                                   paralell_pairwise_given_sparse_grid,
+                                   input.seq = input.seq,
+                                   geno = geno,
+                                   dP = get(input.seq$data.name)$dosage.p1,
+                                   dQ = get(input.seq$data.name)$dosage.p2,
+                                   count.cache = count.cache)
+      } 
+      
       end <- proc.time()
       if (verbose) {
         cat("INFO: Done with",
@@ -228,6 +244,14 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
                       dQ = get(input.seq$data.name)$dosage.p2,
                       count.cache = count.cache,
                       tol = tol)
+      } else if(est.type  ==  "sparse_grid"){
+        res <- lapply(input.list,
+                      paralell_pairwise_given_sparse_grid,
+                      input.seq = input.seq,
+                      geno = geno,
+                      dP = get(input.seq$data.name)$dosage.p1,
+                      dQ = get(input.seq$data.name)$dosage.p2,
+                      count.cache = count.cache)
       } 
     }
     res <- unlist(res,
@@ -362,13 +386,28 @@ paralell_pairwise_probability <- function(mrk.pairs,
   return(lapply(res, format_rf))
 }
 
-
-
-
-
-
-
-
+#' Wrapper function to discrete-based pairwise likelihood computation given rf = 1e-5
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @export
+paralell_pairwise_given_sparse_grid <- function(mrk.pairs,
+                                       input.seq,
+                                       geno,
+                                       dP,
+                                       dQ,
+                                       count.cache)
+{
+  res <- .Call("pairwise_given_0rf",
+               input.seq$ploidy,
+               as.matrix(mrk.pairs),
+               as.matrix(geno),
+               as.vector(dP),
+               as.vector(dQ),
+               count.cache$cond,
+               PACKAGE = "mappoly")
+  return(lapply(res, format_rf))
+}
 
 #' Format results from pairwise two-point estimation in C++
 #'

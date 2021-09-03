@@ -499,4 +499,78 @@ RcppExport SEXP pairwise_rf_estimation_prob(SEXP m_R,
   delete [] G;
   return(out);
 }
+RcppExport SEXP pairwise_given_0rf(SEXP m_R,
+                                   SEXP mrk_pairs_R,
+                                   SEXP geno_R,
+                                   SEXP dP_R,
+                                   SEXP dQ_R,
+                                   SEXP count_cache_R)
+{
+  Rcpp::NumericMatrix mrk_pairs = Rcpp::as<Rcpp::NumericMatrix>(mrk_pairs_R);
+  Rcpp::NumericMatrix geno = Rcpp::as<Rcpp::NumericMatrix>(geno_R);
+  Rcpp::NumericVector dP = Rcpp::as<Rcpp::NumericVector>(dP_R);
+  Rcpp::NumericVector dQ = Rcpp::as<Rcpp::NumericVector>(dQ_R);
+  Rcpp::List count_cache = Rcpp::as<Rcpp::List>(count_cache_R);
+  Rcpp::NumericVector d_pair(4);
+  Rcpp::List out(mrk_pairs.ncol());
+  int m = Rcpp::as<int>(m_R);
+  int n_ind = geno.ncol();
+  for(int k=0; k < mrk_pairs.ncol(); k++)
+  {
+    //Rcpp::Rcout << mrk_pairs(0,k) << " - " << mrk_pairs(1,k) <<  std::endl;
+    int id = (m+1)*(m+1)*(m+1)*dQ[mrk_pairs(1,k)]+(m+1)*(m+1)*dQ[mrk_pairs(0,k)]+(m+1)*dP[mrk_pairs(1,k)]+dP[mrk_pairs(0,k)]+1;
+    //Rcpp::Rcout << "id: " << id <<  std::endl;
+    Rcpp::List temp_list = count_cache[(id-1)];
+    //Rcpp::List temp_list = count_cache[k];
+    if(temp_list.size() > 1)
+    {
+      NumericVector gen_1 = geno( mrk_pairs(0,k), _);
+      NumericVector gen_2 = geno( mrk_pairs(1,k), _);
+      Rcpp::NumericMatrix res(3, temp_list.size());
+      Rcpp::CharacterVector zn = temp_list.attr( "names" ) ;
+      colnames(res)=zn;
+      for(int i=0; i < temp_list.size(); i++)
+      {
+        Rcpp::NumericMatrix count_mat = temp_list[i] ;
+        Rcpp::List dimnames = count_mat.attr( "dimnames" ) ;
+        Rcpp::CharacterVector z = dimnames[0];
+        Rcpp::NumericVector dk(z.size()), dk1(z.size());
+        std::string delimiter = " ";
+        for(int j=0; j < z.size(); j++)
+        {
+          std::string lnames = Rcpp::as<std::string>(z(j));
+          dk(j) = std::stoi(lnames.substr(0,lnames.find(delimiter)));
+          dk1(j) = std::stoi(lnames.substr(lnames.find(delimiter)+1, lnames.length()));
+        }
+        vector<double> x{0.0, 0.2, 0.5};
+        double lltemp, ll, curx;
+        ll = twopt_likelihood_dosage(x[0], m, n_ind, dP[mrk_pairs(0,k)], dQ[mrk_pairs(0,k)], dk, dk1, gen_1, gen_2, count_mat);
+        curx = x[0];
+        for(int j=1; j < x.size(); j++)
+        {
+          lltemp = twopt_likelihood_dosage(x[j], m, n_ind, dP[mrk_pairs(0,k)], dQ[mrk_pairs(0,k)], dk, dk1, gen_1, gen_2, count_mat);
+          if(ll - lltemp < 0.0) break;
+          else{
+            curx = x[j];
+            ll = lltemp;
+          }
+        }
+          res(0,i) = curx;
+          res(1,i) = ll;
+          res(2,i) = ll;
+      }
+      out(k)=res;
+    }
+    else
+    {
+      Rcpp::NumericVector d_out(4);
+      d_out(0)=dP[mrk_pairs(0,k)];
+      d_out(1)=dP[mrk_pairs(1,k)];
+      d_out(2)=dQ[mrk_pairs(0,k)];
+      d_out(3)=dQ[mrk_pairs(1,k)];
+      out(k)=d_out;
+    }
+  }
+  return(out);
+}
 //end of file two_pts_est.cpp
