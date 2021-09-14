@@ -42,19 +42,19 @@ during map construction, keeping them annotated to export to the final map.}
 \value{
 An object of class \code{mappoly.data} which contains a
     list with the following components:
-    \item{m}{ploidy level}
+    \item{ploidy}{ploidy level}
     \item{n.ind}{number individuals}
     \item{n.mrk}{total number of markers}
     \item{ind.names}{the names of the individuals}
     \item{mrk.names}{the names of the markers}
-    \item{dosage.p}{a vector containing the dosage in
+    \item{dosage.p1}{a vector containing the dosage in
       parent P for all \code{n.mrk} markers}
-    \item{dosage.q}{a vector containing the dosage in
+    \item{dosage.p2}{a vector containing the dosage in
       parent Q for all \code{n.mrk} markers}
-    \item{sequence}{a vector indicating which sequence each marker
+    \item{chrom}{a vector indicating which sequence each marker
       belongs. Zero indicates that the marker was not assigned to any
       sequence}
-    \item{sequence.pos}{Physical position of the markers into the
+    \item{genome.pos}{Physical position of the markers into the
       sequence}
     \item{seq.ref}{NULL (unused in this type of data)}
     \item{seq.alt}{NULL (unused in this type of data)}
@@ -66,8 +66,8 @@ An object of class \code{mappoly.data} which contains a
     \item{phen}{a matrix containing the phenotypic data. The rows
                 correspond to the traits and the columns correspond
                 to the individuals}
-    \item{kept}{if elim.redundant=TRUE, holds all non-redundant markers}
-    \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
+    \item{kept}{if elim.redundant = TRUE, holds all non-redundant markers}
+    \item{elim.correspondence}{if elim.redundant = TRUE, holds all non-redundant markers and
 its equivalence to the redundant ones}
 }
 \description{
@@ -76,12 +76,12 @@ section. This function creates an object of class \code{mappoly.data}
 }
 \details{
 The first line of the input file contains the string \code{ploidy} followed by the ploidy level of the parents.
-The second and third lines contain the strings \code{nind} and \code{nmrk} followed by the number of individuals in 
+The second and third lines contain the strings \code{n.ind} and \code{n.mrk} followed by the number of individuals in 
 the dataset and the total number of markers, respectively. Lines number 4 and 5 contain the strings
-\code{mrknames} and \code{indnames} followed by a sequence of the names of the markers and the name of the individuals, 
+\code{mrk.names} and \code{ind.names} followed by a sequence of the names of the markers and the name of the individuals, 
 respectively. Lines 6 and 7 contain the strings \code{dosageP} and \code{dosageQ} followed by a sequence of numbers 
 containing the dosage of all markers in parent \code{P} and \code{Q}. Line 8, contains the string seq followed by 
-a sequence of integer numbers indicating the sequence each marker belongs. It can be any 'a priori' 
+a sequence of integer numbers indicating the chromosome each marker belongs. It can be any 'a priori' 
 information regarding the physical distance between markers. For example, these numbers could refer 
 to chromosomes, scaffolds or even contigs, in which the markers are positioned. If this information 
 is not available for a particular marker, NA should be used. If this information is not available for 

@@ -5,7 +5,7 @@
 \title{Access a remote server to get Counts for recombinant classes}
 \usage{
 get_cache_two_pts_from_web(
-  m,
+  ploidy,
   url.address = NULL,
   joint.prob = TRUE,
   verbose = FALSE

@@ -5,7 +5,7 @@
 \title{Simulate mapping population (tow parents)}
 \usage{
 sim_cross_two_informative_parents(
-  m,
+  ploidy,
   n.mrk,
   rf.vec,
   n.ind,

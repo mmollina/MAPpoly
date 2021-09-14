@@ -30,7 +30,7 @@
 #' 
 #' @examples
 #'  \donttest{
-#'      probs.error<-calc_genoprob_error(input.map = solcap.err.map[[1]],
+#'      probs.error <- calc_genoprob_error(input.map = solcap.err.map[[1]],
 #'                                 error = 0.05,
 #'                                 verbose = TRUE)
 #'  }
@@ -45,7 +45,7 @@
 #'     \doi{10.1534/g3.119.400378} 
 #'
 #' @export calc_genoprob_error
-calc_genoprob_error<-function(input.map,  step = 0, phase.config = "best", error = 0.01, 
+calc_genoprob_error <- function(input.map,  step = 0, phase.config = "best", error = 0.01, 
                               th.prob = 0.95, restricted = TRUE, verbose = TRUE)
 {
   if (!inherits(input.map, "mappoly.map")) {
@@ -56,64 +56,64 @@ calc_genoprob_error<-function(input.map,  step = 0, phase.config = "best", error
   }
   ## choosing the linkage phase configuration
   LOD.conf <- get_LOD(input.map, sorted = FALSE)
-  if(phase.config == "best") {
+  if(phase.config  ==  "best") {
     i.lpc <- which.min(LOD.conf)
   } else if (phase.config > length(LOD.conf)) {
     stop("invalid linkage phase configuration")
   } else i.lpc <- phase.config
-  m<-input.map$info$m
-  n.ind<-get(input.map$info$data.name, pos=1)$n.ind
-  Dtemp<-get(input.map$info$data.name, pos=1)$geno.dose[input.map$maps[[1]]$seq.num,]
+  ploidy <- input.map$info$ploidy
+  n.ind <- get(input.map$info$data.name, pos = 1)$n.ind
+  Dtemp <- get(input.map$info$data.name, pos = 1)$geno.dose[input.map$maps[[1]]$seq.num,]
   map.pseudo <- create_map(input.map, step, phase.config = i.lpc)
-  mrknames<-names(map.pseudo)
-  n.mrk<-length(map.pseudo)
-  indnames<-colnames(Dtemp)
-  D<-matrix(m+1, nrow = length(map.pseudo), ncol = ncol(Dtemp), 
-            dimnames = list(mrknames, indnames))
+  mrk.names <- names(map.pseudo)
+  n.mrk <- length(map.pseudo)
+  ind.names <- colnames(Dtemp)
+  D <- matrix(ploidy+1, nrow = length(map.pseudo), ncol = ncol(Dtemp), 
+            dimnames = list(mrk.names, ind.names))
   D[rownames(Dtemp), ] <- as.matrix(Dtemp)
-  dptemp <- get(input.map$info$data.name)$dosage.p[input.map$maps[[i.lpc]]$seq.num]
-  dqtemp <- get(input.map$info$data.name)$dosage.q[input.map$maps[[i.lpc]]$seq.num]
-  dq<-dp<-rep(m/2, length(mrknames))
-  names(dp)<-names(dq)<-mrknames
-  dp[names(dptemp)]<-dptemp
-  dq[names(dqtemp)]<-dqtemp
+  dptemp <- get(input.map$info$data.name)$dosage.p1[input.map$maps[[i.lpc]]$seq.num]
+  dqtemp <- get(input.map$info$data.name)$dosage.p2[input.map$maps[[i.lpc]]$seq.num]
+  dq <- dp <- rep(ploidy/2, length(mrk.names))
+  names(dp) <- names(dq) <- mrk.names
+  dp[names(dptemp)] <- dptemp
+  dq[names(dqtemp)] <- dqtemp
  
   phP <- phQ <- vector("list", n.mrk)
   for(i in 1:length(phP)){
-    phP[[i]] <- phQ[[i]] <- c(0:(m/2 - 1))
+    phP[[i]] <- phQ[[i]] <- c(0:(ploidy/2 - 1))
   }
-  names(phP) <- names(phQ) <- mrknames
+  names(phP) <- names(phQ) <- mrk.names
   phP[rownames(Dtemp)] <- input.map$maps[[i.lpc]]$seq.ph$P
   phQ[rownames(Dtemp)] <- input.map$maps[[i.lpc]]$seq.ph$Q
 
   ## Including error  
-  gen<-vector("list", length(indnames))
-  names(gen)<-indnames
-  d.pq<-data.frame(dp = dp, 
+  gen <- vector("list", length(ind.names))
+  names(gen) <- ind.names
+  d.pq <- data.frame(dp = dp, 
                    dq = dq)
-  d.pq$mrk<-rownames(d.pq)
+  d.pq$mrk <- rownames(d.pq)
   for(i in names(gen))
   {
-    a<-matrix(0, nrow(D), input.map$info$m+1, dimnames = list(mrknames, 0:input.map$info$m))
+    a <- matrix(0, nrow(D), input.map$info$ploidy+1, dimnames = list(mrk.names, 0:input.map$info$ploidy))
     for(j in rownames(a)){
-      if(D[j,i] == input.map$info$m+1){
-        a[j,]<-segreg_poly(m = input.map$info$m, dP = dp[j], dQ = dq[j])
+      if(D[j,i]  ==  input.map$info$ploidy+1){
+        a[j,] <- segreg_poly(ploidy = input.map$info$ploidy, dP = dp[j], dQ = dq[j])
       } else {
-        a[j,D[j,i]+1]<-1          
+        a[j,D[j,i]+1] <- 1          
       }
     }
-    a<-as.data.frame(a)
-    a$mrk<-rownames(a)
-    a.temp<-t(merge(a, d.pq, sort = FALSE)[,-c(1)])
+    a <- as.data.frame(a)
+    a$mrk <- rownames(a)
+    a.temp <- t(merge(a, d.pq, sort = FALSE)[,-c(1)])
     if(!is.null(error))
-      a.temp<-apply(a.temp, 2, genotyping_global_error, 
-                    m = input.map$info$m, error=error, 
+      a.temp <- apply(a.temp, 2, genotyping_global_error, 
+                    ploidy = input.map$info$ploidy, error = error, 
                     th.prob = th.prob, 
                     restricted = restricted)
     else
-      a.temp <- a.temp[1:(input.map$info$m+1), ]
-    colnames(a.temp)<-a[,1]
-    gen[[i]]<-a.temp
+      a.temp <- a.temp[1:(input.map$info$ploidy+1), ]
+    colnames(a.temp) <- a[,1]
+    gen[[i]] <- a.temp
   }
   g = as.double(unlist(gen))
   p = as.numeric(unlist(phP))
@@ -121,10 +121,10 @@ calc_genoprob_error<-function(input.map,  step = 0, phase.config = "best", error
   q = as.numeric(unlist(phQ))
   dq = as.numeric(cumsum(c(0, sapply(phQ, function(x) sum(length(x))))))
   rf = as.double(mf_h(diff(map.pseudo)))
-  res.temp <-
+  res.temp  <- 
     .Call(
       "calc_genoprob_prior",
-      as.numeric(m),
+      as.numeric(ploidy),
       as.numeric(n.mrk),
       as.numeric(n.ind),
       as.numeric(p),
@@ -133,15 +133,15 @@ calc_genoprob_error<-function(input.map,  step = 0, phase.config = "best", error
       as.numeric(dq),
       as.double(g),
       as.double(rf),
-      as.numeric(rep(0, choose(m, m/2)^2 * n.mrk * n.ind)),
+      as.numeric(rep(0, choose(ploidy, ploidy/2)^2 * n.mrk * n.ind)),
       as.double(0),
       as.numeric(verbose),
       PACKAGE = "mappoly"
     )
   if (verbose) cat("\n")
-  dim(res.temp[[1]])<-c(choose(m,m/2)^2,n.mrk,n.ind)
-  dimnames(res.temp[[1]])<-list(kronecker(apply(combn(letters[1:m],m/2),2, paste, collapse=""),
-                                          apply(combn(letters[(m+1):(2*m)],m/2),2, paste, collapse=""), paste, sep=":"),
-                                mrknames, indnames)
-  structure(list(probs = res.temp[[1]], map = map.pseudo), class="mappoly.genoprob")
+  dim(res.temp[[1]]) <- c(choose(ploidy,ploidy/2)^2,n.mrk,n.ind)
+  dimnames(res.temp[[1]]) <- list(kronecker(apply(combn(letters[1:ploidy],ploidy/2),2, paste, collapse = ""),
+                                          apply(combn(letters[(ploidy+1):(2*ploidy)],ploidy/2),2, paste, collapse = ""), paste, sep = ":"),
+                                mrk.names, ind.names)
+  structure(list(probs = res.temp[[1]], map = map.pseudo), class = "mappoly.genoprob")
 }

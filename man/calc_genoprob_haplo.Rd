@@ -6,13 +6,13 @@
 of block markers}
 \usage{
 calc_genoprob_haplo(
-  m,
+  ploidy,
   n.mrk,
   n.ind,
   haplo,
   emit = NULL,
   rf_vec,
-  indnames,
+  ind.names,
   verbose = TRUE,
   highprec = FALSE
 )

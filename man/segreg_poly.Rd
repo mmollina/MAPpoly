@@ -4,10 +4,10 @@
 \alias{segreg_poly}
 \title{Polysomic segregation frequency}
 \usage{
-segreg_poly(m, dP, dQ)
+segreg_poly(ploidy, dP, dQ)
 }
 \arguments{
-\item{m}{the ploidy level}
+\item{ploidy}{the ploidy level}
 
 \item{dP}{the dosage in parent P}
 
@@ -25,8 +25,8 @@ double reduction.
 \examples{
 # autohexaploid with two and three doses in parents P and Q,
 # respectively
-seg<-segreg_poly(m=6, dP=2, dQ=3)
-barplot(seg, las=2)
+seg <- segreg_poly(ploidy = 6, dP = 2, dQ = 3)
+barplot(seg, las = 2)
 
 }
 \references{

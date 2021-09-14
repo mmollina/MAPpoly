@@ -23,10 +23,10 @@ An object of class \code{mappoly.unique.seq} which
 Eliminate markers with identical dosage information for all individuals.
 }
 \examples{
-    all.mrk<-make_seq_mappoly(hexafake, 'all')
-    red.mrk<-elim_redundant(all.mrk)
+    all.mrk <- make_seq_mappoly(hexafake, 'all')
+    red.mrk <- elim_redundant(all.mrk)
     plot(red.mrk)
-    unique.mrks<-make_seq_mappoly(red.mrk)
+    unique.mrks <- make_seq_mappoly(red.mrk)
    
 }
 \references{

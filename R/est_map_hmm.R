@@ -78,17 +78,17 @@
 #' @return A list of class \code{mappoly.map} with two elements: 
 #' 
 #' i) info:  a list containing information about the map, regardless of the linkage phase configuration:
-#' \item{m}{the ploidy level}
+#' \item{ploidy}{the ploidy level}
 #' \item{n.mrk}{number of markers}
 #' \item{seq.num}{a vector containing the (ordered) indices of markers in the map, 
 #'                according to the input file}
 #' \item{mrk.names}{the names of markers in the map}
-#' \item{seq.dose.p}{a vector containing the dosage in parent 1 for all markers in the map}
-#' \item{seq.dose.q}{a vector containing the dosage in parent 2 for all markers in the map}
-#' \item{sequence}{a vector indicating the sequence (usually chromosome) each marker belongs 
+#' \item{seq.dose.p1}{a vector containing the dosage in parent 1 for all markers in the map}
+#' \item{seq.dose.p2}{a vector containing the dosage in parent 2 for all markers in the map}
+#' \item{chrom}{a vector indicating the sequence (usually chromosome) each marker belongs 
 #'                 as informed in the input file. If not available, 
-#'                 \code{sequence = NULL}}
-#' \item{sequence.pos}{physical position (usually in megabase) of the markers into the sequence}
+#'                 \code{chrom = NULL}}
+#' \item{genome.pos}{physical position (usually in megabase) of the markers into the sequence}
 #' \item{seq.ref}{reference base used for each marker (i.e. A, T, C, G). If not available, 
 #'                 \code{seq.ref = NULL}}                 
 #' \item{seq.alt}{alternative base used for each marker (i.e. A, T, C, G). If not available, 
@@ -108,12 +108,12 @@
 #' \item{loglike}{the hmm-based multipoint likelihood}
 #'
 #' @examples
-#'     mrk.subset<-make_seq_mappoly(hexafake, 1:10)
-#'     red.mrk<-elim_redundant(mrk.subset)
-#'     unique.mrks<-make_seq_mappoly(red.mrk)
-#'     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
+#'     mrk.subset <- make_seq_mappoly(hexafake, 1:10)
+#'     red.mrk <- elim_redundant(mrk.subset)
+#'     unique.mrks <- make_seq_mappoly(red.mrk)
+#'     subset.pairs <- est_pairwise_rf(input.seq = unique.mrks,
 #'                                   ncpus = 1,
-#'                                   verbose=TRUE)
+#'                                   verbose = TRUE)
 #'
 #'     ## Estimating subset map with a low tolerance for the E.M. procedure
 #'     ## for CRAN testing purposes
@@ -143,7 +143,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
                        thres = 0.5, twopt = NULL,
                        verbose = FALSE, 
                        tol = 1e-04,
-                       est.given.0.rf=FALSE,
+                       est.given.0.rf = FALSE,
                        reestimate.single.ph.configuration = TRUE,
                        high.prec = TRUE) {
   ## checking for correct object
@@ -151,7 +151,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   if (!inherits(input.seq, input_classes[1])) {
     stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
   }
-  if(length(input.seq$seq.num) == 1)
+  if(length(input.seq$seq.num)  ==  1)
     stop("Input sequence contains only one marker.", call. = FALSE)
   if (is.null(input.ph)) {
     if (is.null(twopt))
@@ -163,11 +163,11 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   if (!inherits(input.ph, input_classes[2])) {
     stop(deparse(substitute(input.ph)), " is not an object of class 'two.pts.linkage.phases'")
   }
-  if(length(input.seq$seq.num) == 2){
-    maps<-vector("list", 1)
+  if(length(input.seq$seq.num)  ==  2 & !est.given.0.rf){
+    maps <- vector("list", 1)
     res.temp <- twopt$pairwise[[paste(sort(input.seq$seq.num), collapse = "-")]]
-    dp <- get(input.seq$data.name, pos =1)$dosage.p[input.seq$seq.num]
-    dq <- get(input.seq$data.name, pos =1)$dosage.q[input.seq$seq.num]
+    dp <- get(input.seq$data.name, pos  = 1)$dosage.p1[input.seq$seq.num]
+    dq <- get(input.seq$data.name, pos  = 1)$dosage.p2[input.seq$seq.num]
     sh <- as.numeric(unlist(strsplit(rownames(res.temp)[1], split = "-")))
     res.ph <- list(P = c(list(0),list(0)), Q = c(list(0),list(0)))
     if(dp[1] != 0)
@@ -176,30 +176,30 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
       res.ph$Q[[1]] <- 1:dq[1]
     if(dp[2] != 0)
     {
-      v<-(rev(res.ph$P[[1]])[1]+1):(dp[2]+rev(res.ph$P[[1]])[1])
-      res.ph$P[[2]]<-v-sh[1]
+      v <- (rev(res.ph$P[[1]])[1]+1):(dp[2]+rev(res.ph$P[[1]])[1])
+      res.ph$P[[2]] <- v-sh[1]
     }
     if(dq[2] != 0)
     {
-      v<-(rev(res.ph$Q[[1]])[1]+1):(dq[2]+rev(res.ph$Q[[1]])[1])
-      res.ph$Q[[2]]<-v-sh[2]
+      v <- (rev(res.ph$Q[[1]])[1]+1):(dq[2]+rev(res.ph$Q[[1]])[1])
+      res.ph$Q[[2]] <- v-sh[2]
     }
-    names(res.ph$P)<-names(res.ph$Q)<-input.seq$seq.num
+    names(res.ph$P) <- names(res.ph$Q) <- input.seq$seq.num
     maps[[1]] <- list(seq.num = input.seq$seq.num,
                       seq.rf = res.temp[1,"rf"],
                       seq.ph = res.ph,
                       loglike = 0)
-    return(structure(list(info = list(m = input.seq$m,
+    return(structure(list(info = list(ploidy = input.seq$ploidy,
                                       n.mrk = length(input.seq$seq.num),
                                       seq.num = input.seq$seq.num,
                                       mrk.names = input.seq$seq.mrk.names,
-                                      seq.dose.p = get(input.seq$data.name, pos =1)$dosage.p[input.seq$seq.mrk.names],
-                                      seq.dose.q = get(input.seq$data.name, pos =1)$dosage.q[input.seq$seq.mrk.names],
-                                      sequence = get(input.seq$data.name, pos =1)$sequence[input.seq$seq.mrk.names],
-                                      sequence.pos = get(input.seq$data.name, pos =1)$sequence.pos[input.seq$seq.mrk.names],
-                                      seq.ref = get(input.seq$data.name, pos =1)$seq.ref[input.seq$seq.mrk.names],
-                                      seq.alt = get(input.seq$data.name, pos =1)$seq.alt[input.seq$seq.mrk.names],
-                                      chisq.pval = get(input.seq$data.name, pos =1)$chisq.pval[input.seq$seq.mrk.names],
+                                      seq.dose.p1 = get(input.seq$data.name, pos  = 1)$dosage.p1[input.seq$seq.mrk.names],
+                                      seq.dose.p2 = get(input.seq$data.name, pos  = 1)$dosage.p2[input.seq$seq.mrk.names],
+                                      chrom = get(input.seq$data.name, pos  = 1)$chrom[input.seq$seq.mrk.names],
+                                      genome.pos = get(input.seq$data.name, pos  = 1)$genome.pos[input.seq$seq.mrk.names],
+                                      seq.ref = get(input.seq$data.name, pos  = 1)$seq.ref[input.seq$seq.mrk.names],
+                                      seq.alt = get(input.seq$data.name, pos  = 1)$seq.alt[input.seq$seq.mrk.names],
+                                      chisq.pval = get(input.seq$data.name, pos  = 1)$chisq.pval[input.seq$seq.mrk.names],
                                       data.name = input.seq$data.name,
                                       ph.thresh = abs(res.temp[2,1])),
                           maps = maps),
@@ -207,7 +207,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   }
   n.ph <- length(input.ph$config.to.test)
   ret.map.no.rf.estimation <- FALSE
-  if(n.ph == 1 && !reestimate.single.ph.configuration)
+  if(n.ph  ==  1 && !reestimate.single.ph.configuration)
     ret.map.no.rf.estimation <- TRUE
   #if (verbose) {
   #  cat("\n    Number of linkage phase configurations: ")
@@ -215,18 +215,18 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   #}
   maps <- vector("list", n.ph)
   if (verbose){
-    txt<-paste0("       ",n.ph, " phase(s): ")
+    txt <- paste0("       ",n.ph, " phase(s): ")
     cat(txt)
   }
   for (i in 1:n.ph) {
     if (verbose) {
-      if((i+1)%%40==0)
-        cat("\n", paste0(rep(" ", nchar(txt)), collapse = ""), sep="")
+      if((i+1)%%40 == 0)
+        cat("\n", paste0(rep(" ", nchar(txt)), collapse = ""), sep = "")
       cat(". ")
     }
     if(est.given.0.rf){
       rf.temp <- rep(1e-5, length(input.seq$seq.num) - 1)
-      tol=1
+      tol = 1
     }
     else{
       rf.temp <- rep(0.001, length(input.seq$seq.num) - 1)
@@ -242,21 +242,21 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
                                    high.prec = high.prec)
   }
   #cat("\n")
-  id<-order(sapply(maps, function(x) x$loglike), decreasing = TRUE)
-  maps<-maps[id]
+  id <- order(sapply(maps, function(x) x$loglike), decreasing = TRUE)
+  maps <- maps[id]
   if (verbose)
     cat("\n")
-  structure(list(info = list(m = input.seq$m,
+  structure(list(info = list(ploidy = input.seq$ploidy,
                              n.mrk = length(input.seq$seq.num),
                              seq.num = input.seq$seq.num,
                              mrk.names = input.seq$seq.mrk.names,
-                             seq.dose.p = get(input.seq$data.name, pos =1)$dosage.p[input.seq$seq.mrk.names],
-                             seq.dose.q = get(input.seq$data.name, pos =1)$dosage.q[input.seq$seq.mrk.names],
-                             sequence = get(input.seq$data.name, pos =1)$sequence[input.seq$seq.mrk.names],
-                             sequence.pos = get(input.seq$data.name, pos =1)$sequence.pos[input.seq$seq.mrk.names],
-                             seq.ref = get(input.seq$data.name, pos =1)$seq.ref[input.seq$seq.mrk.names],
-                             seq.alt = get(input.seq$data.name, pos =1)$seq.alt[input.seq$seq.mrk.names],
-                             chisq.pval = get(input.seq$data.name, pos =1)$chisq.pval[input.seq$seq.mrk.names],
+                             seq.dose.p1 = get(input.seq$data.name, pos  = 1)$dosage.p1[input.seq$seq.mrk.names],
+                             seq.dose.p2 = get(input.seq$data.name, pos  = 1)$dosage.p2[input.seq$seq.mrk.names],
+                             chrom = get(input.seq$data.name, pos  = 1)$chrom[input.seq$seq.mrk.names],
+                             genome.pos = get(input.seq$data.name, pos  = 1)$genome.pos[input.seq$seq.mrk.names],
+                             seq.ref = get(input.seq$data.name, pos  = 1)$seq.ref[input.seq$seq.mrk.names],
+                             seq.alt = get(input.seq$data.name, pos  = 1)$seq.alt[input.seq$seq.mrk.names],
+                             chisq.pval = get(input.seq$data.name, pos  = 1)$chisq.pval[input.seq$seq.mrk.names],
                              data.name = input.seq$data.name, ph.thresh = input.ph$thres),
                  maps = maps),
             class = "mappoly.map")
@@ -332,17 +332,17 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #' @return A list of class \code{mappoly.map} with two elements: 
 #' 
 #' i) info:  a list containing information about the map, regardless of the linkage phase configuration:
-#' \item{m}{the ploidy level}
+#' \item{ploidy}{the ploidy level}
 #' \item{n.mrk}{number of markers}
 #' \item{seq.num}{a vector containing the (ordered) indices of markers in the map, 
 #'                according to the input file}
 #' \item{mrk.names}{the names of markers in the map}
-#' \item{seq.dose.p}{a vector containing the dosage in parent 1 for all markers in the map}
-#' \item{seq.dose.q}{a vector containing the dosage in parent 2 for all markers in the map}
-#' \item{sequence}{a vector indicating the sequence (usually chromosome) each marker belongs 
+#' \item{seq.dose.p1}{a vector containing the dosage in parent 1 for all markers in the map}
+#' \item{seq.dose.p2}{a vector containing the dosage in parent 2 for all markers in the map}
+#' \item{chrom}{a vector indicating the sequence (usually chromosome) each marker belongs 
 #'                 as informed in the input file. If not available, 
-#'                 \code{sequence = NULL}}
-#' \item{sequence.pos}{physical position (usually in megabase) of the markers into the sequence}
+#'                 \code{chrom = NULL}}
+#' \item{genome.pos}{physical position (usually in megabase) of the markers into the sequence}
 #' \item{seq.ref}{reference base used for each marker (i.e. A, T, C, G). If not available, 
 #'                 \code{seq.ref = NULL}}
 #' \item{seq.alt}{alternative base used for each marker (i.e. A, T, C, G). If not available, 
@@ -363,12 +363,12 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'
 #' @examples
 #'  \donttest{
-#'     mrk.subset<-make_seq_mappoly(hexafake, 1:20)
-#'     red.mrk<-elim_redundant(mrk.subset)
-#'     unique.mrks<-make_seq_mappoly(red.mrk)
-#'     subset.pairs<-est_pairwise_rf(input.seq = unique.mrks,
+#'     mrk.subset <- make_seq_mappoly(hexafake, 1:20)
+#'     red.mrk <- elim_redundant(mrk.subset)
+#'     unique.mrks <- make_seq_mappoly(red.mrk)
+#'     subset.pairs <- est_pairwise_rf(input.seq = unique.mrks,
 #'                                   ncpus = 1,
-#'                                   verbose=TRUE)
+#'                                   verbose = TRUE)
 #'     subset.map <- est_rf_hmm_sequential(input.seq = unique.mrks,
 #'                                         thres.twopt = 5,
 #'                                         thres.hmm = 10,
@@ -389,8 +389,8 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'      ## Estimated linkage phase
 #'      ph.P.est <- subset.map$maps[[1]]$seq.ph$P
 #'      ph.Q.est <- subset.map$maps[[1]]$seq.ph$Q
-#'      compare_haplotypes(m = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
-#'      compare_haplotypes(m = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
+#'      compare_haplotypes(ploidy = 6, h1 = ph.P[names(ph.P.est)], h2 = ph.P.est)
+#'      compare_haplotypes(ploidy = 6, h1 = ph.Q[names(ph.Q.est)], h2 = ph.Q.est)
 #'    }
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
@@ -405,7 +405,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #' @importFrom utils head
 #' @importFrom cli rule
 #' @export est_rf_hmm_sequential
-est_rf_hmm_sequential<-function(input.seq,
+est_rf_hmm_sequential <- function(input.seq,
                                 twopt,
                                 start.set = 4,
                                 thres.twopt = 5,
@@ -436,9 +436,9 @@ est_rf_hmm_sequential<-function(input.seq,
     msg("Initial sequence", line = 2)
   }
   if(is.null(extend.tail))
-    extend.tail<-length(input.seq$seq.num)
+    extend.tail <- length(input.seq$seq.num)
   ##### Map in case of two markers #####
-  if(length(input.seq$seq.num) == 2)
+  if(length(input.seq$seq.num)  ==  2)
   {
     cur.map <- est_rf_hmm(input.seq = input.seq, thres = thres.twopt, 
                           twopt = twopt, tol = tol.final, high.prec = high.prec, 
@@ -453,18 +453,18 @@ est_rf_hmm_sequential<-function(input.seq,
   if(start.set > length(input.seq$seq.num))
     start.set <- length(input.seq$seq.num)
   if(verbose) cat(start.set, " markers...\n", sep = "")
-  cte<-0
-  rf.temp<-c(Inf, Inf)
+  cte <- 0
+  rf.temp <- c(Inf, Inf)
   while(any(rf.temp >= sub.map.size.diff.limit))
   {
-    cte<-cte+1
-    if(length(rf.temp)==1) {
+    cte <- cte+1
+    if(length(rf.temp) == 1) {
       ## cat("Impossible build a map using the given thresholds\n")
       ## stop()
       stop("Impossible build a map using the given thresholds\n")
     }
     if(verbose) cat(cli::symbol$bullet, "   Trying sequence:", cte:(start.set+cte-1), ":\n")
-    cur.seq <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1), na.omit(input.seq$seq.num[cte:(start.set+cte-1)]), data.name = input.seq$data.name)
+    cur.seq <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos = 1), na.omit(input.seq$seq.num[cte:(start.set+cte-1)]), data.name = input.seq$data.name)
     input.ph <- ls_linkage_phases(input.seq = cur.seq,
                                   thres = thres.twopt,
                                   twopt = twopt)
@@ -473,21 +473,21 @@ est_rf_hmm_sequential<-function(input.seq,
                           verbose = verbose, input.ph = input.ph,
                           reestimate.single.ph.configuration = reestimate.single.ph.configuration)
     cur.map <- filter_map_at_hmm_thres(cur.map, thres.hmm)
-    cur.map <- reest_rf(cur.map, tol=tol.final, verbose = FALSE)
-    rf.temp<-imf_h(cur.map$maps[[1]]$seq.rf)
+    cur.map <- reest_rf(cur.map, tol = tol.final, verbose = FALSE)
+    rf.temp <- imf_h(cur.map$maps[[1]]$seq.rf)
   }
   if(verbose)
     msg("Done with initial sequence", line = 2)
   if(start.set >= length(input.seq$seq.num)){
     if(verbose) cat("\nDone phasing", cur.map$info$n.mrk, "markers\nReestimating final recombination fractions.")
-    return(reest_rf(cur.map, tol=tol.final))
+    return(reest_rf(cur.map, tol = tol.final))
   }
   ##### More than 'start.set' markers #####
   ## For maps with more markers than 'start.set', include
   ## next makres in a sequential fashion
   ct <- start.set+cte
   all.ph <- update_ph_list_at_hmm_thres(cur.map, thres.hmm)
-  if(sub.map.size.diff.limit!=Inf & !reestimate.single.ph.configuration){
+  if(sub.map.size.diff.limit != Inf & !reestimate.single.ph.configuration){
     if (verbose) message("Making 'reestimate.single.ph.configuration = TRUE' to use map expansion")
     reestimate.single.ph.configuration <- TRUE
   }
@@ -495,9 +495,9 @@ est_rf_hmm_sequential<-function(input.seq,
   {
     ## Number of multipoint phases evaluated in the 
     ## previous round of marker insertion
-    hmm.phase.number<-length(cur.map$maps)
+    hmm.phase.number <- length(cur.map$maps)
     ## Get the map tail containing sufficient markers to 
-    ## distinguish among the m*2 possible homologs.
+    ## distinguish among the ploidy*2 possible homologs.
     if(info.tail)
       tail.temp <- get_full_info_tail(input.obj = cur.map)
     input.ph <- NULL
@@ -519,7 +519,7 @@ est_rf_hmm_sequential<-function(input.seq,
       if(max(check_ls_phase(all.ph)) >= length(seq.num)){
         seq.num <- tail(cur.map$maps[[i]]$seq.num, max(check_ls_phase(all.ph)) + start.set)        
       }
-      seq.cur <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1),
+      seq.cur <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos = 1),
                                   arg = seq.num,
                                   data.name = input.seq$data.name)
       all.ph.temp <- get_ph_list_subset(all.ph, seq.num, i)
@@ -534,7 +534,7 @@ est_rf_hmm_sequential<-function(input.seq,
     ## combining HMM phases from previous round of mrk
     ## insertion and the linkage phases from the two-point
     ## information obtained in the current round
-    twopt.phase.number<-length(input.ph$config.to.test)
+    twopt.phase.number <- length(input.ph$config.to.test)
     ## If this number is higher than phase.number.limit,
     ## proceed to the next iteration
     if(length(input.ph$config.to.test) > phase.number.limit) {
@@ -546,7 +546,7 @@ est_rf_hmm_sequential<-function(input.seq,
     ## Appending the marker to the numeric 
     ## sequence and making a new sequence
     seq.num <- c(seq.num, input.seq$seq.num[ct])
-    seq.cur <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1),
+    seq.cur <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos = 1),
                                 arg = seq.num,
                                 data.name = input.seq$data.name)
     if(verbose)
@@ -565,23 +565,23 @@ est_rf_hmm_sequential<-function(input.seq,
     
     ## Gathering linkage phases of the current map, excluding the marker inserted 
     ## in the current round
-    ph.new<-lapply(cur.map.temp$maps, function(x) list(P = head(x$seq.ph$P, -1), 
+    ph.new <- lapply(cur.map.temp$maps, function(x) list(P = head(x$seq.ph$P, -1), 
                                                        Q = head(x$seq.ph$Q, -1)))
     ## Gathering linkage phases of the previous map, excluding the marker inserted 
     ## in the current round
-    ph.old<-lapply(cur.map$maps, function(x, id) list(P = x$seq.ph$P[id], 
+    ph.old <- lapply(cur.map$maps, function(x, id) list(P = x$seq.ph$P[id], 
                                                       Q = x$seq.ph$Q[id]), id = names(ph.new[[1]]$P))
     ## Check in which whole phase configurations the new 
     ## HMM tail should be appended
-    MQ<-MP<-matrix(NA, length(ph.old), length(ph.new))
+    MQ <- MP <- matrix(NA, length(ph.old), length(ph.new))
     for(j1 in 1:nrow(MP)){
       for(j2 in 1:ncol(MP)){
-        MP[j1, j2]<-identical(ph.old[[j1]]$P, ph.new[[j2]]$P)
-        MQ[j1, j2]<-identical(ph.old[[j1]]$Q, ph.new[[j2]]$Q)
+        MP[j1, j2] <- identical(ph.old[[j1]]$P, ph.new[[j2]]$P)
+        MQ[j1, j2] <- identical(ph.old[[j1]]$Q, ph.new[[j2]]$Q)
       }
     }
-    M<-which(MP & MQ, arr.ind = TRUE)
-    colnames(M)<-c("old", "new")
+    M <- which(MP & MQ, arr.ind = TRUE)
+    colnames(M) <- c("old", "new")
     ## Checking for quality (map size and LOD Score)
     submap.length.old <- sapply(cur.map$maps, function(x) sum(imf_h(x$seq.rf)))[M[,1]]
     last.dist.old <- sapply(cur.map$maps, function(x) tail(imf_h(x$seq.rf),1))[M[,1]]
@@ -594,13 +594,13 @@ est_rf_hmm_sequential<-function(input.seq,
     
     cur.map.temp$maps <- cur.map.temp$maps[M[,2]]
     LOD <- get_LOD(cur.map.temp, sorted = FALSE)
-    if(sub.map.size.diff.limit!=Inf){
+    if(sub.map.size.diff.limit != Inf){
       selected.map <- submap.expansion < sub.map.size.diff.limit & LOD < thres.hmm
       if(detailed.verbose){
         x <- round(cbind(submap.length.new, submap.expansion, last.mrk.expansion),2)
         for(j1 in 1:nrow(x)){
           cat("    ", x[j1,1], ": (", x[j1,2],  "/", x[j1,3],")", sep = "")
-          if(j1!=nrow(x)) cat("\n")
+          if(j1 != nrow(x)) cat("\n")
         }
         if(all(!selected.map)) cat(paste0(crayon::red(cli::symbol$cross), "\n"))
         else cat(paste0(crayon::green(cli::symbol$tick), "\n"))
@@ -613,24 +613,24 @@ est_rf_hmm_sequential<-function(input.seq,
     } else { selected.map <- LOD < thres.hmm }
     all.ph.temp <- update_ph_list_at_hmm_thres(cur.map.temp, Inf)
     id <- which(selected.map & which(!sapply(cur.map.temp$maps, is.null)))
-    if(length(id) == 0){
+    if(length(id)  ==  0){
       if(verbose) cat(crayon::italic$yellow(paste0(ct ,": not included (-linkage phases-)\n", sep = "")))
       ct <- ct + 1
       next()
     }
     cur.map.temp$maps <- cur.map.temp$maps[id]      
-    if(any(unique(M[id,2,drop=FALSE]) > length(all.ph.temp$config.to.test))){
+    if(any(unique(M[id,2,drop = FALSE]) > length(all.ph.temp$config.to.test))){
       if(verbose) cat(crayon::italic$yellow(paste0(ct ,": not included (-linkage phases-)\n", sep = "")))
       ct <- ct + 1
       next()
     }
     if(length(id) > nrow(M))
-      all.ph.temp <- add_mrk_at_tail_ph_list(all.ph, all.ph.temp, M[,,drop=FALSE])
-    else if(length(id) == nrow(M)){
+      all.ph.temp <- add_mrk_at_tail_ph_list(all.ph, all.ph.temp, M[,,drop = FALSE])
+    else if(length(id)  ==  nrow(M)){
       M[,2] <- id
-      all.ph.temp <- add_mrk_at_tail_ph_list(all.ph, all.ph.temp, M[,,drop=FALSE])
+      all.ph.temp <- add_mrk_at_tail_ph_list(all.ph, all.ph.temp, M[,,drop = FALSE])
     } else {
-      all.ph.temp <- add_mrk_at_tail_ph_list(all.ph, all.ph.temp, M[id,,drop=FALSE])
+      all.ph.temp <- add_mrk_at_tail_ph_list(all.ph, all.ph.temp, M[id,,drop = FALSE])
     }
     all.ph <- all.ph.temp
     cur.map <- cur.map.temp
@@ -638,7 +638,7 @@ est_rf_hmm_sequential<-function(input.seq,
   }
   ##### Re-estimating final map ####
   ## Re-estimating final map with higher tolerance
-  seq.final <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos=1), 
+  seq.final <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos = 1), 
                                 arg = as.numeric(names(all.ph$config.to.test[[1]]$P)), 
                                 data.name = input.seq$data.name)
   #msg(paste("Done phasing", length(seq.final$seq.num), "markers"))
@@ -667,7 +667,7 @@ est_rf_hmm_sequential<-function(input.seq,
 #' @export 
 print.mappoly.map <- function(x, detailed = FALSE, ...) {
   cat("This is an object of class 'mappoly.map'\n")
-  cat("    Ploidy level:\t", x$info$m, "\n")
+  cat("    Ploidy level:\t", x$info$ploidy, "\n")
   cat("    No. individuals:\t", get(x$info$data.name)$n.ind, "\n")
   cat("    No. markers:\t", x$info$n.mrk, "\n")
   cat("    No. linkage phases:\t", length(x$maps), "\n")
@@ -681,20 +681,20 @@ print.mappoly.map <- function(x, detailed = FALSE, ...) {
       cat("\n       log-likelihood:\t", x$map[[j]]$loglike)
       cat("\n       LOD:\t\t", format(round(LOD[j], 2), digits = 2))
       cat("\n\n")
-      M <- matrix("|", x$info$n.mrk, x$info$m * 2)
+      M <- matrix("|", x$info$n.mrk, x$info$ploidy * 2)
       M <- cbind(M, "    ")
       M <- cbind(M, format(round(cumsum(c(0, imf_h(x$maps[[j]]$seq.rf))), 1), digits = 1))
       for (i in 1:x$info$n.mrk) {
         if (all(x$maps[[j]]$seq.ph$Q[[i]] != 0))
-          M[i, c(x$maps[[j]]$seq.ph$P[[i]], x$maps[[j]]$seq.ph$Q[[i]] + x$info$m)] <- "o" else M[i, x$maps[[j]]$seq.ph$P[[i]]] <- "o"
+          M[i, c(x$maps[[j]]$seq.ph$P[[i]], x$maps[[j]]$seq.ph$Q[[i]] + x$info$ploidy)] <- "o" else M[i, x$maps[[j]]$seq.ph$P[[i]]] <- "o"
       }
       M <- cbind(get(x$info$data.name)$mrk.names[x$maps[[j]]$seq.num], M)
-      big.name<-max(nchar(M[,1]))
-      format_name<-function(y, big.name){
+      big.name <- max(nchar(M[,1]))
+      format_name <- function(y, big.name){
         paste0(y, paste0(rep(" ", big.name-nchar(y)), collapse = ""))
       }
-      M<-rbind(c("", letters[1:(ncol(M)-3)], "", ""), M)
-      format(apply(M, 1, function(y) cat(c("\t", format_name(y[1], big.name), "\t", y[2:(x$info$m + 1)], rep(" ", 4), y[(x$info$m + 2):(x$info$m * 2 + 3)], "\n"), collapse = "")))
+      M <- rbind(c("", letters[1:(ncol(M)-3)], "", ""), M)
+      format(apply(M, 1, function(y) cat(c("\t", format_name(y[1], big.name), "\t", y[2:(x$info$ploidy + 1)], rep(" ", 4), y[(x$info$ploidy + 2):(x$info$ploidy * 2 + 3)], "\n"), collapse = "")))
     }
   } else {
     cat("\n    ---------------------------------------------\n")
@@ -722,7 +722,7 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
   on.exit(par(oldpar))
   if(phase){
     map.info <- prepare_map(x, config)
-    if(any(map.info$ph.p=="B")){
+    if(any(map.info$ph.p == "B")){
       var.col <- c("black", "darkgray")
       var.col <- var.col[1:2]
       names(var.col) <- c("A", "B")
@@ -730,32 +730,32 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
       var.col <- c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")
       names(var.col) <- c("A", "T", "C", "G")
     }
-    m <- map.info$m
-    if(m == 2) {
+    ploidy <- map.info$ploidy
+    if(ploidy  ==  2) {
       d.col <- c(NA, "#1B9E77", "#D95F02")
-    }else if(m == 4){
+    }else if(ploidy  ==  4){
       d.col <- c(NA, "#1B9E77", "#D95F02", "#7570B3", "#E7298A")
-    }else if(m == 6){
+    }else if(ploidy  ==  6){
       d.col <- c(NA, "#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02")
-    }else if(m == 8){
+    }else if(ploidy  ==  8){
       d.col <- c(NA, "#1B9E77", "#D95F02", "#7570B3", "#E7298A", "#66A61E", "#E6AB02", "#A6761D", "#666666") 
-    } else d.col <- c(NA, gg_color_hue(m))
-    names(d.col) <- 0:m
-    d.col[1]<-NA
+    } else d.col <- c(NA, gg_color_hue(ploidy))
+    names(d.col) <- 0:ploidy
+    d.col[1] <- NA
     x <- map.info$map
     lab <- names(x)
-    zy <- seq(0, 0.5, length.out = m) + 1.5
+    zy <- seq(0, 0.5, length.out = ploidy) + 1.5
     pp <- map.info$ph.p
     pq <- map.info$ph.q
     dp <- map.info$dp
     dq <- map.info$dq
-    x1<-abs(left.lim - x)
-    x2<-abs(right.lim - x)
-    id.left<-which(x1==min(x1))[1]
-    id.right<-rev(which(x2==min(x2)))[1]
-    par(mai = c(1,0.15,0,0), mar=c(4.5,2,1,2))
-    curx<-x[id.left:id.right]
-    layout(mat =matrix(c(4,2,3, 1), ncol = 2), heights = c(2, 10), widths = c(1, 10))
+    x1 <- abs(left.lim - x)
+    x2 <- abs(right.lim - x)
+    id.left <- which(x1 == min(x1))[1]
+    id.right <- rev(which(x2 == min(x2)))[1]
+    par(mai = c(1,0.15,0,0), mar = c(4.5,2,1,2))
+    curx <- x[id.left:id.right]
+    layout(mat  = matrix(c(4,2,3, 1), ncol = 2), heights = c(2, 10), widths = c(1, 10))
     if(is.null(xlim))
       xlim <- range(curx)
     plot(x = curx,
@@ -766,11 +766,11 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
          xlab = "Distance (cM)", 
          ylab = "",
          xlim = xlim)
-    lines(c(x[id.left], x[id.right]), c(.5, .5), lwd=15, col = "gray")
+    lines(c(x[id.left], x[id.right]), c(.5, .5), lwd = 15, col = "gray")
     points(x = curx,
            y = rep(.5,length(curx)),
            xlab = "", ylab = "", 
-           pch = "|", cex=1.5, 
+           pch = "|", cex = 1.5, 
            ylim = c(0,2))
     axis(side = 1)
     #Parent 2
@@ -786,39 +786,39 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
       x.control <- x.control * .8
     if(length(x1) < 25)
       x.control <- x.control * .8
-    for(i in 1:m)
+    for(i in 1:ploidy)
     {
-      lines(range(x1), c(zy[i], zy[i]), lwd=8, col = "lightgray")
+      lines(range(x1), c(zy[i], zy[i]), lwd = 8, col = "lightgray")
       y1 <- rep(zy[i], length(curx))
       pal <- var.col[pq[id.left:id.right,i]]
       rect(xleft = x1 - x.control, ybottom = y1 -.05, xright = x1 + x.control, ytop = y1 +.05, col = pal, border = NA)
     }
     #connecting allelic variants to markers 
     for(i in 1:length(x1))
-      lines(c(curx[i], x1[i]), c(0.575, zy[1]-.05), lwd=0.2)
+      lines(c(curx[i], x1[i]), c(0.575, zy[1]-.05), lwd = 0.2)
     points(x = x1,
-           y = zy[m]+0.05+dq[id.left:id.right]/20,
+           y = zy[ploidy]+0.05+dq[id.left:id.right]/20,
            col = d.col[as.character(dq[id.left:id.right])],
            pch = 19, cex = .7)
     #Parent 1
-    zy<-zy + 1.1
-    for(i in 1:m)
+    zy <- zy + 1.1
+    for(i in 1:ploidy)
     {
-      lines(range(x1), c(zy[i], zy[i]), lwd=8, col = "gray")
+      lines(range(x1), c(zy[i], zy[i]), lwd = 8, col = "gray")
       y1 <- rep(zy[i], length(curx))
       pal <- var.col[pp[id.left:id.right,i]]
       rect(xleft = x1 - x.control, ybottom = y1 -.05, xright = x1 + x.control, ytop = y1 +.05, col = pal, border = NA)
     }
     points(x = x1,
-           y = zy[m]+0.05+dp[id.left:id.right]/20,
+           y = zy[ploidy]+0.05+dp[id.left:id.right]/20,
            col = d.col[as.character(dp[id.left:id.right])],
            pch = 19, cex = .7)
     
     if(mrk.names)
       text(x = x1,
-           y = rep(zy[m]+0.05+.3, length(curx)),
+           y = rep(zy[ploidy]+0.05+.3, length(curx)),
            labels = names(curx),
-           srt=90, adj = 0, cex = cex)
+           srt = 90, adj = 0, cex = cex)
     par(mar = c(4.5,1,1,0), xpd = TRUE) 
     plot(x = 0,
          y = 0,
@@ -829,31 +829,31 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
          ylim = c(.25, 4.5))
     zy <- zy - 1.1
     mtext(text = Q, side = 4, at = mean(zy), line = -1, font = 4)
-    for(i in 1:m)
-      mtext(letters[(m+1):(2*m)][i], line = 0, at = zy[i], side = 4)
+    for(i in 1:ploidy)
+      mtext(letters[(ploidy+1):(2*ploidy)][i], line = 0, at = zy[i], side = 4)
     zy <- zy + 1.1
     mtext(text = P, side = 4, at = mean(zy), line = -1, font = 4)
-    for(i in 1:m)
-      mtext(letters[1:m][i],  line = 0, at = zy[i], side = 4)
-    par(mar = c(0,1,2,4), xpd=FALSE)
+    for(i in 1:ploidy)
+      mtext(letters[1:ploidy][i],  line = 0, at = zy[i], side = 4)
+    par(mar = c(0,1,2,4), xpd = FALSE)
     plot(x = curx,
          y = rep(.5,length(curx)),
          type = "n" , 
          axes = FALSE, 
          xlab = "", 
          ylab = "")
-    if(any(map.info$ph.p=="B")){
-      legend("bottomleft", legend=c("A", "B"), 
-             fill =c(var.col), title = "Variants",
-             box.lty=0, bg="transparent", ncol = 2)
+    if(any(map.info$ph.p == "B")){
+      legend("bottomleft", legend = c("A", "B"), 
+             fill  = c(var.col), title = "Variants",
+             box.lty = 0, bg = "transparent", ncol = 2)
     } else {    
-      legend("bottomleft", legend=c("A", "T", "C", "G", "-"), 
-             fill =c(var.col, "white"), title = "Nucleotides",
-             box.lty=0, bg="transparent", ncol = 4)
+      legend("bottomleft", legend = c("A", "T", "C", "G", "-"), 
+             fill  = c(var.col, "white"), title = "Nucleotides",
+             box.lty = 0, bg = "transparent", ncol = 4)
     }
-    legend("bottomright", legend=names(d.col)[-1], title = "Doses" ,
-           col = d.col[-1], ncol = m/2, pch = 19,
-           box.lty=0)
+    legend("bottomright", legend = names(d.col)[-1], title = "Doses" ,
+           col = d.col[-1], ncol = ploidy/2, pch = 19,
+           box.lty = 0)
   } else {
     plot_map_list(x) 
   }
@@ -862,15 +862,15 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
 #' prepare maps for plot 
 #' @param void internal function to be documented
 #' @keywords internal
-prepare_map<-function(input.map, config = "best"){
+prepare_map <- function(input.map, config = "best"){
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
   }
   ## Choosing the linkage phase configuration
   LOD.conf <- get_LOD(input.map, sorted = FALSE)
-  if(config == "best") {
+  if(config  ==  "best") {
     i.lpc <- which.min(LOD.conf)
-  } else if(config == "all"){
+  } else if(config  ==  "all"){
     i.lpc <- seq_along(LOD.conf) } else if (config > length(LOD.conf)) {
       stop("invalid linkage phase configuration")
     } else i.lpc <- config
@@ -878,25 +878,25 @@ prepare_map<-function(input.map, config = "best"){
   map <- cumsum(imf_h(c(0, input.map$maps[[i.lpc]]$seq.rf)))
   names(map) <- input.map$info$mrk.names
   ## 
-  ph.p <- ph_list_to_matrix(input.map$maps[[i.lpc]]$seq.ph$P, input.map$info$m)
-  ph.q <- ph_list_to_matrix(input.map$maps[[i.lpc]]$seq.ph$Q, input.map$info$m)
-  dimnames(ph.p) <- list(names(map), letters[1:input.map$info$m])
-  dimnames(ph.q) <- list(names(map), letters[(1+input.map$info$m):(2*input.map$info$m)])
+  ph.p <- ph_list_to_matrix(input.map$maps[[i.lpc]]$seq.ph$P, input.map$info$ploidy)
+  ph.q <- ph_list_to_matrix(input.map$maps[[i.lpc]]$seq.ph$Q, input.map$info$ploidy)
+  dimnames(ph.p) <- list(names(map), letters[1:input.map$info$ploidy])
+  dimnames(ph.q) <- list(names(map), letters[(1+input.map$info$ploidy):(2*input.map$info$ploidy)])
   if(is.null(input.map$info$seq.alt))
   {
-    ph.p[ph.p==1] <- ph.q[ph.q==1] <- "A"
-    ph.p[ph.p==0] <- ph.q[ph.q==0] <- "B"  
+    ph.p[ph.p == 1] <- ph.q[ph.q == 1] <- "A"
+    ph.p[ph.p == 0] <- ph.q[ph.q == 0] <- "B"  
   } else {
     for(i in input.map$info$mrk.names){
-      ph.p[i, ph.p[i,]==1] <- input.map$info$seq.alt[i]
-      ph.p[i, ph.p[i,]==0] <- input.map$info$seq.ref[i]
-      ph.q[i, ph.q[i,]==1] <- input.map$info$seq.alt[i]
-      ph.q[i, ph.q[i,]==0] <- input.map$info$seq.ref[i]
+      ph.p[i, ph.p[i,] == 1] <- input.map$info$seq.alt[i]
+      ph.p[i, ph.p[i,] == 0] <- input.map$info$seq.ref[i]
+      ph.q[i, ph.q[i,] == 1] <- input.map$info$seq.alt[i]
+      ph.q[i, ph.q[i,] == 0] <- input.map$info$seq.ref[i]
     }
   }
-  dp <- input.map$info$seq.dose.p
-  dq <- input.map$info$seq.dose.q
-  list(m = input.map$info$m, map = map, ph.p = ph.p, ph.q = ph.q, dp = dp, dq = dq)
+  dp <- input.map$info$seq.dose.p1
+  dq <- input.map$info$seq.dose.p2
+  list(ploidy = input.map$info$ploidy, map = map, ph.p = ph.p, ph.q = ph.q, dp = dp, dq = dq)
 }
 
 #' Get the tail of a marker sequence up to the point where the markers
@@ -911,14 +911,14 @@ get_full_info_tail <- function(input.obj, extend = NULL) {
   if (!is.null(extend))
     if (extend > input.obj$info$n.mrk)
       return(input.obj)
-  m <- input.obj$info$m
-  i <- m/2
+  ploidy <- input.obj$info$ploidy
+  i <- ploidy/2
   while (i < input.obj$info$n.mrk) {
-    wp <- ph_list_to_matrix(tail(input.obj$maps[[1]]$seq.ph$P, i), m)
+    wp <- ph_list_to_matrix(tail(input.obj$maps[[1]]$seq.ph$P, i), ploidy)
     xp <- apply(wp, 2, paste, collapse = "-")
-    wq <- ph_list_to_matrix(tail(input.obj$maps[[1]]$seq.ph$Q, i), m)
+    wq <- ph_list_to_matrix(tail(input.obj$maps[[1]]$seq.ph$Q, i), ploidy)
     xq <- apply(wq, 2, paste, collapse = "-")
-    if (length(unique(xp)) == m && length(unique(xq)) == m)
+    if (length(unique(xp))  ==  ploidy && length(unique(xq))  ==  ploidy)
       (break)()
     i <- i + 1
   }
@@ -942,7 +942,7 @@ get_full_info_tail <- function(input.obj, extend = NULL) {
 #' @export filter_map_at_hmm_thres
 filter_map_at_hmm_thres <- function(map, thres.hmm){
   map$info$ph.thresh <- NULL
-  map$maps<-map$maps[get_LOD(map, sorted = FALSE) < thres.hmm]
+  map$maps <- map$maps[get_LOD(map, sorted = FALSE) < thres.hmm]
   map
 }
 
@@ -956,7 +956,7 @@ update_ph_list_at_hmm_thres <- function(map, thres.hmm){
   rf.vec <- t(sapply(temp.map$maps, function(x) x$seq.rf))
   rownames(rf.vec) <- names(config.to.test) <- paste("Conf", 1:length(config.to.test), sep = "-")
   structure(list(config.to.test = config.to.test, rec.frac = rf.vec, 
-                 m = map$info$m, seq.num = map$maps[[1]]$seq.num, 
+                 ploidy = map$info$ploidy, seq.num = map$maps[[1]]$seq.num, 
                  thres = map$info$ph.thresh, data.name = map$info$data.name, 
                  thres.hmm = thres.hmm),
             class = "two.pts.linkage.phases")
@@ -965,12 +965,12 @@ update_ph_list_at_hmm_thres <- function(map, thres.hmm){
 #' subset of a linkage phase list
 #' @param void internal function to be documented
 #' @keywords internal
-get_ph_list_subset<-function(ph.list, seq.num, conf){
+get_ph_list_subset <- function(ph.list, seq.num, conf){
   config.to.test <- list(lapply(ph.list$config.to.test[[conf]], function(x, seq.num) x[as.character(seq.num)], seq.num))
   rf.vec <- ph.list$rec.frac[conf, , drop = FALSE]
   names(config.to.test) <- rownames(rf.vec)
   structure(list(config.to.test = config.to.test, rec.frac = rf.vec, 
-                 m = ph.list$m, seq.num = ph.list$seq.num, 
+                 ploidy = ph.list$ploidy, seq.num = ph.list$seq.num, 
                  thres = ph.list$ph.thresh, data.name = ph.list$data.name, 
                  thres.hmm = ph.list$thres.hmm),
             class = "two.pts.linkage.phases")
@@ -979,8 +979,8 @@ get_ph_list_subset<-function(ph.list, seq.num, conf){
 #' concatenate two linkage phase lists
 #' @param void internal function to be documented
 #' @keywords internal
-concatenate_ph_list<-function(ph.list.1, ph.list.2){
-  if(length(ph.list.1)==0)
+concatenate_ph_list <- function(ph.list.1, ph.list.2){
+  if(length(ph.list.1) == 0)
     return(ph.list.2)
   config.to.test <- c(ph.list.1$config.to.test, ph.list.2$config.to.test)
   id <- which(!duplicated(config.to.test))
@@ -989,7 +989,7 @@ concatenate_ph_list<-function(ph.list.1, ph.list.2){
   rf.vec <- rf.vec[id,,drop = FALSE]
   rownames(rf.vec) <- names(config.to.test) <- paste("Conf", 1:length(config.to.test), sep = "-")
   structure(list(config.to.test = config.to.test, rec.frac = rf.vec, 
-                 m = ph.list.1$m, seq.num = ph.list.1$seq.num, 
+                 ploidy = ph.list.1$ploidy, seq.num = ph.list.1$seq.num, 
                  thres = ph.list.1$ph.thresh, data.name = ph.list.1$data.name, 
                  thres.hmm = ph.list.1$thres.hmm),
             class = "two.pts.linkage.phases")
@@ -1005,7 +1005,7 @@ add_mrk_at_tail_ph_list <- function(ph.list.1, ph.list.2, cor.index){
                                 Q = c(ph.list.1$config.to.test[[cor.index[i,1]]]$Q, tail(ph.list.2$config.to.test[[cor.index[i,2]]]$Q,1)))
   }
   structure(list(config.to.test = config.to.test, rec.frac = NULL, 
-                 m = ph.list.1$m, seq.num = ph.list.1$seq.num, 
+                 ploidy = ph.list.1$ploidy, seq.num = ph.list.1$seq.num, 
                  thres = ph.list.1$ph.thresh, data.name = ph.list.1$data.name, 
                  thres.hmm = ph.list.1$thres.hmm),
             class = "two.pts.linkage.phases")
@@ -1015,8 +1015,8 @@ add_mrk_at_tail_ph_list <- function(ph.list.1, ph.list.2, cor.index){
 #' markers for which they are different.
 #' @param void internal function to be documented
 #' @keywords internal
-check_ls_phase<-function(ph){
-  if(length(ph$config.to.test) == 1) return(0)
+check_ls_phase <- function(ph){
+  if(length(ph$config.to.test)  ==  1) return(0)
   id <- rep(1, length(ph$config.to.test[[1]]$P))
   for(i in 1:length(ph$config.to.test[[1]]$P)){
     w <- ph$config.to.test[[1]]$P[i]
@@ -1025,29 +1025,29 @@ check_ls_phase<-function(ph){
   }
   names(id) <- names((ph$config.to.test[[1]]$P))
   w <- length(ph$config.to.test[[1]]$P) - which(id < length(ph$config.to.test)) 
-  if(length(w)==0) return(0)
+  if(length(w) == 0) return(0)
   w
 }
 
 #' cat for graphical representation of the phases
 #' @param void internal function to be documented
 #' @keywords internal
-print_ph<-function(input.ph){
-  phs.P<-lapply(input.ph$config.to.test, 
-                function(x, m) {
-                  M <- matrix("|", nrow = 1, ncol = m) 
+print_ph <- function(input.ph){
+  phs.P <- lapply(input.ph$config.to.test, 
+                function(x, ploidy) {
+                  M <- matrix("|", nrow = 1, ncol = ploidy) 
                   M[unlist(tail(x$P, 1))] <- crayon::red(cli::symbol$bullet)
                   paste(M, collapse = "")}, 
-                m = input.ph$m) 
-  phs.Q<-lapply(input.ph$config.to.test, 
-                function(x, m) {
-                  M <- matrix("|", nrow = 1, ncol = m) 
+                ploidy = input.ph$ploidy) 
+  phs.Q <- lapply(input.ph$config.to.test, 
+                function(x, ploidy) {
+                  M <- matrix("|", nrow = 1, ncol = ploidy) 
                   M[unlist(tail(x$Q, 1))] <- crayon::cyan(cli::symbol$bullet)
                   paste(M, collapse = "")}, 
-                m = input.ph$m) 
-  if(length(phs.P) == 1)
+                ploidy = input.ph$ploidy) 
+  if(length(phs.P)  ==  1)
     return(paste(unlist(phs.P)[1], unlist(phs.Q)[1], "                   "))
-  if(length(phs.P) == 2)
+  if(length(phs.P)  ==  2)
     return(paste(unlist(phs.P)[1], unlist(phs.Q)[1], "     ", unlist(phs.P)[2], unlist(phs.Q)[2]))
   if(length(phs.P) > 2)
     return(paste(unlist(phs.P)[1], unlist(phs.Q)[1], " ... ", unlist(phs.P)[2], unlist(phs.Q)[2]))

@@ -4,7 +4,13 @@
 \alias{genotyping_global_error}
 \title{Prior probability for genotyping error}
 \usage{
-genotyping_global_error(x, m, restricted = TRUE, error = 0.01, th.prob = 0.95)
+genotyping_global_error(
+  x,
+  ploidy,
+  restricted = TRUE,
+  error = 0.01,
+  th.prob = 0.95
+)
 }
 \arguments{
 \item{void}{internal function to be documented}

@@ -50,17 +50,17 @@ import_data_from_polymapR <- function(input.data,
                                       filter.non.conforming = TRUE,
                                       verbose = TRUE){
   input.type <- match.arg(input.type)
-  if(input.type == "discrete"){
+  if(input.type  ==  "discrete"){
     geno.dose <- input.data[,-match(c(parent1, parent2), colnames(input.data)), drop = FALSE]
-    mappoly.data <- structure(list(m = ploidy,
+    mappoly.data <- structure(list(ploidy = ploidy,
                                    n.ind = ncol(geno.dose),
                                    n.mrk = nrow(geno.dose),
                                    ind.names = colnames(geno.dose),
                                    mrk.names = rownames(geno.dose),
-                                   dosage.p = input.data[,parent1],
-                                   dosage.q = input.data[,parent2],
-                                   sequence = NA,
-                                   sequence.pos = NA,
+                                   dosage.p1 = input.data[,parent1],
+                                   dosage.p2 = input.data[,parent2],
+                                   chrom = NA,
+                                   genome.pos = NA,
                                    seq.ref = NULL,
                                    seq.alt = NULL,
                                    all.mrk.depth = NULL,
@@ -76,7 +76,7 @@ import_data_from_polymapR <- function(input.data,
     if(is.null(pardose)) 
       stop("provide parental dosage.")
     rownames(pardose) <- pardose$MarkerName
-    dat<-input.data[,c("MarkerName", "SampleName",paste0("P", 0:ploidy))]
+    dat <- input.data[,c("MarkerName", "SampleName",paste0("P", 0:ploidy))]
     p1 <- unique(sapply(parent1, function(x) unique(grep(pattern = x, dat[,"SampleName"], value = TRUE))))
     p2 <- unique(sapply(parent2, function(x) unique(grep(pattern = x, dat[,"SampleName"], value = TRUE))))
     if(is.null(offspring)){
@@ -95,17 +95,17 @@ import_data_from_polymapR <- function(input.data,
     ## get individual names ------------------
     ind.names <- offspring
     ## get dosage in parent P ----------------
-    dosage.p <- as.integer(pardose[mrk.names,"parent1"])
-    names(dosage.p)<-mrk.names
+    dosage.p1 <- as.integer(pardose[mrk.names,"parent1"])
+    names(dosage.p1) <- mrk.names
     ## get dosage in parent Q ----------------
-    dosage.q <- as.integer(pardose[mrk.names,"parent2"])
-    names(dosage.q)<-mrk.names
+    dosage.p2 <- as.integer(pardose[mrk.names,"parent2"])
+    names(dosage.p2) <- mrk.names
     ## monomorphic markers
-    dp<-abs(abs(dosage.p-(ploidy/2))-(ploidy/2))
-    dq<-abs(abs(dosage.q-(ploidy/2))-(ploidy/2))
-    mrk.names<-names(which(dp+dq!=0))
-    dosage.p <- dosage.p[mrk.names]
-    dosage.q <- dosage.q[mrk.names]
+    dp <- abs(abs(dosage.p1-(ploidy/2))-(ploidy/2))
+    dq <- abs(abs(dosage.p2-(ploidy/2))-(ploidy/2))
+    mrk.names <- names(which(dp+dq != 0))
+    dosage.p1 <- dosage.p1[mrk.names]
+    dosage.p2 <- dosage.p2[mrk.names]
     nphen <- 0
     phen <- NULL
     if (verbose){
@@ -126,15 +126,15 @@ import_data_from_polymapR <- function(input.data,
     colnames(geno) <- c("mrk", "ind", as.character(0:ploidy))
     ind.names <- unique(geno$ind)
     mrk.names <- unique(geno$mrk)
-    dosage.p <- dosage.p[mrk.names]
-    dosage.q <- dosage.q[mrk.names]
+    dosage.p1 <- dosage.p1[mrk.names]
+    dosage.p2 <- dosage.p2[mrk.names]
     
     ## transforming na's in expected genotypes using Mendelian segregation
     i.na <- which(apply(geno, 1, function(x) any(is.na(x))))
     if (length(i.na) > 0) {
       m.na <- match(geno[i.na, 1], mrk.names)
-      dp.na <- dosage.p[m.na]
-      dq.na <- dosage.q[m.na]
+      dp.na <- dosage.p1[m.na]
+      dq.na <- dosage.p2[m.na]
       for (i in 1:length(m.na)) geno[i.na[i], -c(1, 2)] <- segreg_poly(ploidy, dp.na[i], dq.na[i])
     }
     ## dosage info
@@ -155,15 +155,15 @@ import_data_from_polymapR <- function(input.data,
     }
     ## returning the 'mappoly.data' object
     if (verbose) cat("\n    Done with reading.\n")
-    mappoly.data <- structure(list(m = ploidy,
+    mappoly.data <- structure(list(ploidy = ploidy,
                                    n.ind = n.ind,
                                    n.mrk = length(mrk.names),
                                    ind.names = ind.names,
                                    mrk.names = mrk.names,
-                                   dosage.p = dosage.p,
-                                   dosage.q = dosage.q,
-                                   sequence = rep(NA, length(mrk.names)),
-                                   sequence.pos = rep(NA, length(mrk.names)),
+                                   dosage.p1 = dosage.p1,
+                                   dosage.p2 = dosage.p2,
+                                   chrom = rep(NA, length(mrk.names)),
+                                   genome.pos = rep(NA, length(mrk.names)),
                                    seq.ref = NULL,
                                    seq.alt = NULL,
                                    all.mrk.depth = NULL,
@@ -178,16 +178,16 @@ import_data_from_polymapR <- function(input.data,
                               class = "mappoly.data")
   }
   if(filter.non.conforming){
-    mappoly.data<-filter_non_conforming_classes(mappoly.data)
+    mappoly.data <- filter_non_conforming_classes(mappoly.data)
     Ds <- array(NA, dim = c(ploidy+1, ploidy+1, ploidy+1))
     for(i in 0:ploidy)
       for(j in 0:ploidy)
-        Ds[i+1,j+1,] <- segreg_poly(m = ploidy, dP = i, dQ = j)
-    Dpop<-cbind(mappoly.data$dosage.p, mappoly.data$dosage.q)
-    M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
-    dimnames(M)<-list(mappoly.data$mrk.names, c(0:ploidy))
-    M<-cbind(M, mappoly.data$geno.dose)
-    mappoly.data$chisq.pval<-apply(M, 1, mrk_chisq_test, m = ploidy)
+        Ds[i+1,j+1,] <- segreg_poly(ploidy = ploidy, dP = i, dQ = j)
+    Dpop <- cbind(mappoly.data$dosage.p1, mappoly.data$dosage.p2)
+    M <- t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
+    dimnames(M) <- list(mappoly.data$mrk.names, c(0:ploidy))
+    M <- cbind(M, mappoly.data$geno.dose)
+    mappoly.data$chisq.pval <- apply(M, 1, mrk_chisq_test, ploidy = ploidy)
   }
   mappoly.data
 }
@@ -229,27 +229,27 @@ import_phased_maplist_from_polymapR <- function(maplist,
   }
   X <- maplist[[1]]
   if(is.null(ploidy))
-    m <- (ncol(X)-2)/2
+    ploidy <- (ncol(X)-2)/2
   MAPs <- vector("list", length(maplist))
   for(i in 1:length(MAPs)){
     X <- maplist[[i]]
     seq.num <- match(X$marker, mappoly.data$mrk.names)
     seq.rf <- mf_h(diff(X$position)) ## Using haldane
     seq.rf[seq.rf <= 1e-05] <- 1e-4
-    P = ph_matrix_to_list(X[,3:(m+2)])
-    Q = ph_matrix_to_list(X[,3:(m+2) + m])
+    P = ph_matrix_to_list(X[,3:(ploidy+2)])
+    Q = ph_matrix_to_list(X[,3:(ploidy+2) + ploidy])
     names(P) <- names(Q) <- seq.num
     seq.ph <- list(P = P, Q = Q)
     maps <- vector("list", 1)
     maps[[1]] <- list(seq.num = seq.num, seq.rf = seq.rf, seq.ph = seq.ph, loglike = 0)
-    MAPs[[i]] <- structure(list(info = list(m = (ncol(X)-2)/2,
+    MAPs[[i]] <- structure(list(info = list(ploidy = (ncol(X)-2)/2,
                                             n.mrk = nrow(X),
                                             seq.num = seq.num,
                                             mrk.names = as.character(X$marker),
-                                            seq.dose.p = mappoly.data$dosage.p[as.character(X$marker)],
-                                            seq.dose.q = mappoly.data$dosage.q[as.character(X$marker)],
-                                            sequence = rep(i, nrow(X)),
-                                            sequence.pos = NULL,
+                                            seq.dose.p1 = mappoly.data$dosage.p1[as.character(X$marker)],
+                                            seq.dose.p2 = mappoly.data$dosage.p2[as.character(X$marker)],
+                                            chrom = rep(i, nrow(X)),
+                                            genome.pos = NULL,
                                             seq.ref = NULL,
                                             seq.alt = NULL,
                                             chisq.pval = mappoly.data$chisq.pval[as.character(X$marker)],

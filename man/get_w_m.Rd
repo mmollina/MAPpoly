@@ -4,7 +4,7 @@
 \alias{get_w_m}
 \title{Get the number of bivalent configurations}
 \usage{
-get_w_m(m)
+get_w_m(ploidy)
 }
 \arguments{
 \item{void}{internal function to be documented}

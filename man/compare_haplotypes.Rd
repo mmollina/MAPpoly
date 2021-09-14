@@ -4,17 +4,17 @@
 \alias{compare_haplotypes}
 \title{Compare two polyploid haplotypes stored in list format}
 \usage{
-compare_haplotypes(m, h1, h2)
+compare_haplotypes(ploidy, h1, h2)
 }
 \arguments{
-\item{m}{ploidy level}
+\item{ploidy}{ploidy level}
 
 \item{h1}{homology group 1}
 
 \item{h2}{homology group 2}
 }
 \value{
-a numeric vector of size \code{m} indicating which
+a numeric vector of size \code{ploidy} indicating which
     homolog in h2 represents the homolog in h1. If there is
     no correspondence, i.e. different homolog, it returns NA for
     that homolog.

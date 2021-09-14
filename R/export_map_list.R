@@ -31,28 +31,28 @@ export_map_list <- function(map.list, file = "map_output.csv"){
   }
   R <- NULL
   for(i in 1:length(map.list)){
-    m <- map.list[[i]]$info$m
-    ph.P <- ph_list_to_matrix(map.list[[i]]$maps[[1]]$seq.ph$P, m)
-    ph.Q <- ph_list_to_matrix(map.list[[i]]$maps[[1]]$seq.ph$Q, m)
-    colnames(ph.P) <- letters[1:m]
-    colnames(ph.Q) <- letters[(1+m):(2*m)]
-    if(is.null(map.list[[i]]$info$sequence))
-      map.list[[i]]$info$sequence <- rep(NA, nrow(ph.P))
-    if(is.null(map.list[[i]]$info$sequence.pos))
-      map.list[[i]]$info$sequence.pos <- rep(NA, nrow(ph.P))
+    ploidy <- map.list[[i]]$info$ploidy
+    ph.P <- ph_list_to_matrix(map.list[[i]]$maps[[1]]$seq.ph$P, ploidy)
+    ph.Q <- ph_list_to_matrix(map.list[[i]]$maps[[1]]$seq.ph$Q, ploidy)
+    colnames(ph.P) <- letters[1:ploidy]
+    colnames(ph.Q) <- letters[(1+ploidy):(2*ploidy)]
+    if(is.null(map.list[[i]]$info$chrom))
+      map.list[[i]]$info$chrom <- rep(NA, nrow(ph.P))
+    if(is.null(map.list[[i]]$info$genome.pos))
+      map.list[[i]]$info$genome.pos <- rep(NA, nrow(ph.P))
     if(is.null(map.list[[i]]$info$seq.ref))
       map.list[[i]]$info$seq.ref <- rep(NA, nrow(ph.P))
     if(is.null(map.list[[i]]$info$seq.alt))
       map.list[[i]]$info$seq.alt <- rep(NA, nrow(ph.P))
     x <- dplyr::tibble("Marker Name" = map.list[[i]]$info$mrk.names,
                     "LG" = rep(i, nrow(ph.P)),
-                    "Ref Chrom" = map.list[[i]]$info$sequence,
-                    "Ref Position" = map.list[[i]]$info$sequence.pos,
+                    "Ref Chrom" = map.list[[i]]$info$chrom,
+                    "Ref Position" = map.list[[i]]$info$genome.pos,
                     "Ref Allele" = map.list[[i]]$info$seq.ref,
                     "Alt Allele" = map.list[[i]]$info$seq.alt,
                     "Map Position" = round(cumsum(c(0, imf_h(map.list[[i]]$maps[[1]]$seq.rf))),2),
-                    "Dosage in P" = map.list[[i]]$info$seq.dose.p,
-                    "Dosage in Q" = map.list[[i]]$info$seq.dose.q,
+                    "Dosage in P" = map.list[[i]]$info$seq.dose.p1,
+                    "Dosage in Q" = map.list[[i]]$info$seq.dose.p2,
                     ph.P, ph.Q)
     R <- rbind(R, x)
   }

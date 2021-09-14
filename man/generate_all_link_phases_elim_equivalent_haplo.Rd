@@ -8,7 +8,7 @@ generate_all_link_phases_elim_equivalent_haplo(
   block1,
   block2,
   rf.matrix,
-  m,
+  ploidy,
   max.inc = NULL
 )
 }
@@ -22,7 +22,7 @@ or just a single marker identified by its position on
 \item{rf.matrix}{matrix obtained with the function \code{rf_list_to_matrix}
 using the parameter \code{shared.alleles = TRUE}}
 
-\item{m}{ploidy level (i.e. 4, 6 and so on)}
+\item{ploidy}{ploidy level (i.e. 4, 6 and so on)}
 
 \item{max.inc}{maximum number of allowed inconsistencies (default = NULL: don't check inconsistencies)}
 }

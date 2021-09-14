@@ -28,7 +28,7 @@ Multipoint analysis using Hidden Markov Models (single phase)
     s.go <- make_seq_mappoly(id)
     ## Using the 5 contiguous markers
     seq5 <- make_seq_mappoly(hexafake, s.go$seq.mrk.names[6:10])
-    twopt<-est_pairwise_rf(seq5)
+    twopt <- est_pairwise_rf(seq5)
     l5 <- ls_linkage_phases(input.seq = seq5, thres = 2, twopt = twopt)
     plot(l5)
     
@@ -38,11 +38,11 @@ Multipoint analysis using Hidden Markov Models (single phase)
       maps1[[i]] <- est_rf_hmm_single(seq5, l5$config.to.test[[i]], 
                                       tol = 10e-3,
                                       high.prec = FALSE)
-   (best<-which.max(sapply(maps1, function(x) x$loglike)))
-   dist1<-round(cumsum(c(0, imf_h(maps1[[best]]$seq.rf))),2)
+   (best <- which.max(sapply(maps1, function(x) x$loglike)))
+   dist1 <- round(cumsum(c(0, imf_h(maps1[[best]]$seq.rf))),2)
    
    ## Same thing using automatic search
-   maps2<-est_rf_hmm(input.seq = seq5, twopt = twopt, thres = 2, 
+   maps2 <- est_rf_hmm(input.seq = seq5, twopt = twopt, thres = 2, 
                      verbose = TRUE, tol = 10e-3, high.prec = FALSE)
    plot(maps2)
    dist1

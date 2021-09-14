@@ -31,19 +31,19 @@ during map construction, keeping them annotated to export to the final map.}
 \value{
 An object of class \code{mappoly.data} which contains a
     list with the following components:
-    \item{m}{ploidy level}
+    \item{ploidy}{ploidy level}
     \item{n.ind}{number individuals}
     \item{n.mrk}{total number of markers}
     \item{ind.names}{the names of the individuals}
     \item{mrk.names}{the names of the markers}
-    \item{dosage.p}{a vector containing the dosage in
+    \item{dosage.p1}{a vector containing the dosage in
       parent P for all \code{n.mrk} markers}
-    \item{dosage.q}{a vector containing the dosage in
+    \item{dosage.p2}{a vector containing the dosage in
       parent Q for all \code{n.mrk} markers}
-    \item{sequence}{a vector indicating which sequence each marker
+    \item{chrom}{a vector indicating which sequence each marker
       belongs. Zero indicates that the marker was not assigned to any
       sequence}
-    \item{sequence.pos}{Physical position of the markers into the
+    \item{genome.pos}{Physical position of the markers into the
       sequence}
     \item{seq.ref}{NULL (unused in this type of data)}
     \item{seq.alt}{NULL (unused in this type of data)}
@@ -55,8 +55,8 @@ An object of class \code{mappoly.data} which contains a
     \item{phen}{a matrix containing the phenotypic data. The rows
                 correspond to the traits and the columns correspond
                 to the individuals}
-    \item{kept}{if elim.redundant=TRUE, holds all non-redundant markers}
-    \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
+    \item{kept}{if elim.redundant = TRUE, holds all non-redundant markers}
+    \item{elim.correspondence}{if elim.redundant = TRUE, holds all non-redundant markers and
 its equivalence to the redundant ones}
 }
 \description{
@@ -68,7 +68,7 @@ This is an alternative and a somewhat more straightforward version of the functi
  \code{\link[mappoly]{read_geno}}. The input is a standard CSV file where the rows 
  represent the markers, except for the first row which is used as a header. 
  The first five columns contain the marker names, the dosage in parents 1 and 2, 
- the sequence information (i.e. chromosome,  scaffold, contig, etc) and the 
+ the chromosome information (i.e. chromosome,  scaffold, contig, etc) and the 
  position of the marker within the sequence. The remaining columns contain 
  the dosage of the full-sib population. A tetraploid example of such file 
  can be found in the \code{Examples} section.
@@ -76,7 +76,7 @@ This is an alternative and a somewhat more straightforward version of the functi
 \examples{
 \donttest{
 #### Tetraploid Example
-ft="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/tetra_solcap.csv"
+ft = "https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/data/tetra_solcap.csv"
 tempfl <- tempfile()
 download.file(ft, destfile = tempfl)
 SolCAP.dose <- read_geno_csv(file.in  = tempfl, ploidy = 4)
@@ -99,5 +99,5 @@ Mollinari M., Olukolu B. A.,  Pereira G. da S.,
     \doi{10.1534/g3.119.400378}
 }
 \author{
-Marcelo Mollinari, \email{mmollin@ncsu.edu}
+Marcelo Mollinari, \email{mmollin@ncsu.edu}, with minor changes by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 }

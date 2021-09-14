@@ -5,7 +5,7 @@
 \title{Counts for recombinant classes}
 \usage{
 get_counts(
-  m,
+  ploidy,
   P.k = NULL,
   P.k1 = NULL,
   Q.k = NULL,

@@ -19,19 +19,19 @@
 #' 
 #' @return An object of class \code{mappoly.data} which contains a
 #'     list with the following components:
-#'     \item{m}{ploidy level}
+#'     \item{ploidy}{ploidy level}
 #'     \item{n.ind}{number individuals}
 #'     \item{n.mrk}{total number of markers}
 #'     \item{ind.names}{the names of the individuals}
 #'     \item{mrk.names}{the names of the markers}
-#'     \item{dosage.p}{a vector containing the dosage in
+#'     \item{dosage.p1}{a vector containing the dosage in
 #'       parent P for all \code{n.mrk} markers}
-#'     \item{dosage.q}{a vector containing the dosage in
+#'     \item{dosage.p2}{a vector containing the dosage in
 #'       parent Q for all \code{n.mrk} markers}
-#'     \item{sequence}{a vector indicating which sequence each marker
+#'     \item{chrom}{a vector indicating which sequence each marker
 #'       belongs. Zero indicates that the marker was not assigned to any
 #'       sequence}
-#'     \item{sequence.pos}{physical position of the markers into the
+#'     \item{genome.pos}{physical position of the markers into the
 #'       sequence}
 #'     \item{prob.thres}{probability threshold to associate a marker call to a 
 #'     dosage. Markers with maximum genotype probability smaller than 'prob.thres' 
@@ -82,35 +82,37 @@
 #'     
 #' @export import_from_updog
 #' 
-import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = FALSE, verbose = TRUE){
+import_from_updog = function(object, prob.thres = 0.95, 
+                             filter.non.conforming = TRUE, 
+                             verbose = TRUE){
   # Case 1: updog
   if (inherits(object, "multidog")){
-    m = object$snpdf$ploidy[1]
-    dosage.p = as.integer(object$snpdf$p1geno)
-    names(dosage.p) <- object$snpdf$snp
-    dosage.q = as.integer(object$snpdf$p2geno)
-    names(dosage.q) <- object$snpdf$snp
+    ploidy = object$snpdf$ploidy[1]
+    dosage.p1 = as.integer(object$snpdf$p1geno)
+    names(dosage.p1) <- object$snpdf$snp
+    dosage.p2 = as.integer(object$snpdf$p2geno)
+    names(dosage.p2) <- object$snpdf$snp
     if (is.null(prob.thres)) prob.thres = 0.95
     # Selecting conforming markers
-    dp = abs(abs(dosage.p-(m/2))-(m/2))
-    dq = abs(abs(dosage.q-(m/2))-(m/2))
-    id = dp+dq!=0
-    dosage.p = dosage.p[id]
-    dosage.q = dosage.q[id]
+    dp = abs(abs(dosage.p1-(ploidy/2))-(ploidy/2))
+    dq = abs(abs(dosage.p2-(ploidy/2))-(ploidy/2))
+    id = dp+dq != 0
+    dosage.p1 = dosage.p1[id]
+    dosage.p2 = dosage.p2[id]
     mrk.names = unique(as.character(object$snpdf$snp))[id]
     mrk.sel = which(object$inddf$snp %in% mrk.names)
-    geno<-object$inddf[mrk.sel,]
+    geno <- object$inddf[mrk.sel,]
     geno <- geno[c(1,2,grep(pattern = "Pr_", colnames(geno)))]
-    colnames(geno) <- c("mrk", "ind", 0:m)
-    geno<-geno[order(geno$ind, geno$mrk, decreasing=TRUE),]
+    colnames(geno) <- c("mrk", "ind", 0:ploidy)
+    geno <- geno[order(geno$ind, geno$mrk, decreasing = TRUE),]
     ind.names = as.character(unique(geno$ind))
     mrk.names = as.character(unique(geno$mrk))
     n.ind = length(ind.names)
     n.mrk = length(mrk.names)
     if(n.ind * n.mrk != nrow(geno))
       stop("Check your dataset.")
-    sequence = NULL
-    sequence.pos = NULL
+    chrom = NULL
+    genome.pos = NULL
     ## dosage info
     if(filter.non.conforming){
       geno.dose = matrix(NA,1,1)      
@@ -123,21 +125,21 @@ import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = 
       } else {
         geno.dose <- geno.dose$geno.dose
       }
-      geno.dose[is.na(geno.dose)] <- m + 1
+      geno.dose[is.na(geno.dose)] <- ploidy + 1
     }
-    mrk.names <- rownames(geno.dose)
-    ind.names <- colnames(geno.dose)
+    mrk.names <- unique(geno$mrk)
+    ind.names <- unique(geno$ind)
     nphen = 0
     phen = NULL
-    res<-structure(list(m = m,
+    res <- structure(list(ploidy = ploidy,
                         n.ind = length(ind.names),
                         n.mrk = length(mrk.names),
                         ind.names = ind.names,
                         mrk.names = mrk.names,
-                        dosage.p = dosage.p[mrk.names],
-                        dosage.q = dosage.q[mrk.names],
-                        sequence = sequence[mrk.names],
-                        sequence.pos = sequence.pos[mrk.names],
+                        dosage.p1 = dosage.p1[mrk.names],
+                        dosage.p2 = dosage.p2[mrk.names],
+                        chrom = chrom[mrk.names],
+                        genome.pos = genome.pos[mrk.names],
                         prob.thres = prob.thres,
                         geno = geno,
                         geno.dose = geno.dose,
@@ -147,18 +149,18 @@ import_from_updog = function(object, prob.thres = NULL, filter.non.conforming = 
                    class = "mappoly.data")
     if(filter.non.conforming){
       if (verbose) cat("    Filtering non-conforming markers.\n    ...")
-      res<-filter_non_conforming_classes(res)
+      res <- filter_non_conforming_classes(res)
       if (verbose) cat("\n    Performing chi-square test.\n    ...")
       ##Computing chi-square p.values
-      Ds <- array(NA, dim = c(m+1, m+1, m+1))
-      for(i in 0:m)
-        for(j in 0:m)
-          Ds[i+1,j+1,] <- segreg_poly(m = m, dP = i, dQ = j)
-      Dpop<-cbind(res$dosage.p, res$dosage.q)
-      M<-t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
-      dimnames(M)<-list(res$mrk.names, c(0:m))
-      M<-cbind(M, res$geno.dose)
-      res$chisq.pval<-apply(M, 1, mrk_chisq_test, m = m)
+      Ds <- array(NA, dim = c(ploidy+1, ploidy+1, ploidy+1))
+      for(i in 0:ploidy)
+        for(j in 0:ploidy)
+          Ds[i+1,j+1,] <- segreg_poly(ploidy = ploidy, dP = i, dQ = j)
+      Dpop <- cbind(res$dosage.p1, res$dosage.p2)
+      M <- t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
+      dimnames(M) <- list(res$mrk.names, c(0:ploidy))
+      M <- cbind(M, res$geno.dose)
+      res$chisq.pval <- apply(M, 1, mrk_chisq_test, ploidy = ploidy)
       if (verbose) cat("\n    Done.\n")
     }
     return(res)

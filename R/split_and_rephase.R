@@ -47,7 +47,7 @@
 #'
 #' @importFrom utils capture.output
 #' 
-split_and_rephase<-function(input.map,
+split_and_rephase <- function(input.map,
                             twopt,
                             gap.threshold = 5, 
                             remove.single = TRUE,
@@ -59,17 +59,17 @@ split_and_rephase<-function(input.map,
   }
   ## choosing the linkage phase configuration
   LOD.conf <- get_LOD(input.map, sorted = FALSE)
-  if(phase.config == "best") {
+  if(phase.config  ==  "best") {
     i.lpc <- which.min(LOD.conf)
   } else if (phase.config > length(LOD.conf)) {
     stop("invalid linkage phase configuration")
   } else i.lpc <- phase.config
   id <- which(imf_h(input.map$maps[[i.lpc]]$seq.rf) > gap.threshold)
-  if(length(id)==0) return(input.map)
+  if(length(id) == 0) return(input.map)
   id <- cbind(c(1, id+1), c(id, input.map$info$n.mrk))
   ## Removing single markers at the beginning of the group
   i <- 1
-  while(diff(id[i, ]) == 0){
+  while(diff(id[i, ])  ==  0){
     i <- i + 1
   }
   invisible(capture.output(suppressMessages(
@@ -87,12 +87,12 @@ split_and_rephase<-function(input.map,
     else
       temp.maps[[i]] <- input.map$info$mrk.names[temp.id]    
   }
-  newmap<-temp.maps[[1]]
+  newmap <- temp.maps[[1]]
   for(i in 2:length(temp.maps)){
     if (verbose) cat("Adding block", i, "of", length(temp.maps), "\n")
     if(!is.character(temp.maps[[i]])){
       invisible(capture.output(suppressMessages(
-        newmap<-merge_maps(list(newmap, temp.maps[[i]]), 
+        newmap <- merge_maps(list(newmap, temp.maps[[i]]), 
                            twopt = twopt, 
                            thres.twopt = 10, 
                            thres.hmm = 50))))

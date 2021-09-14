@@ -22,7 +22,7 @@ an object of class \code{mappoly.map}
 This function creates a new map by removing markers from an existing one.
 }
 \examples{
- sub.map<-get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
+ sub.map <- get_submap(maps.hexafake[[1]], 1:50, reestimate.rf = FALSE)
  plot(sub.map, mrk.names = TRUE)
  mrk.to.remove <- c("M_1", "M_23", "M_34")
  red.map <- drop_marker(sub.map, mrk.to.remove)

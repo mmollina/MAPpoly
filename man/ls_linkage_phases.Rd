@@ -39,7 +39,7 @@ An object of class \code{two.pts.linkage.phases} which
     \item{config.to.test}{a matrix with all possible linkage phase configurations
      for both parents, P and Q} 
     \item{rec.frac}{a matrix with all recombination fractions}
-    \item{m}{the ploidy level}
+    \item{ploidy}{the ploidy level}
     \item{seq.num}{the sequence of markers}
     \item{thres}{the LOD threshold}
     \item{data.name}{the dataset name}
@@ -54,7 +54,7 @@ seq.all.mrk <- make_seq_mappoly(hexafake, 'all')
 id <- get_genomic_order(seq.all.mrk)
 s <- make_seq_mappoly(id)
 seq10 <- make_seq_mappoly(hexafake, s$seq.mrk.names[1:10])
-twopt<-est_pairwise_rf(seq10)
+twopt <- est_pairwise_rf(seq10)
 
 ## Using the first 10 markers 
 l10.seq.3.0 <- ls_linkage_phases(input.seq = seq10, thres = 3, twopt = twopt)

@@ -22,7 +22,7 @@ linkage groups (i.e. chromosomes) for the species}
 expected groups before continue}
 
 \item{comp.mat}{if \code{TRUE}, shows a comparison between the reference
-based and the linkage based grouping, if the sequence information is
+based and the linkage based grouping, if the chromosome information is
 available (default = FALSE)}
 
 \item{verbose}{logical. If \code{TRUE} (default), current progress is shown;
@@ -54,10 +54,10 @@ Identifies linkage groups of markers using the results of two-point
     all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
                                  count.cache = counts,
                                  ncpus = 1,
-                                 verbose=TRUE)
+                                 verbose = TRUE)
 
     ## Full recombination fraction matrix
-    mat.full<-rf_list_to_matrix(input.twopt=all.pairs)
+    mat.full <- rf_list_to_matrix(input.twopt = all.pairs)
     plot(mat.full, index = FALSE)
 
     lgs <- group_mappoly(input.mat = mat.full,

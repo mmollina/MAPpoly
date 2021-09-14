@@ -4,7 +4,7 @@ test_that("computes homolog probabilities correctly", {
   probs.t1<-calc_genoprob(input.map = x1,
                          verbose = TRUE)
   expect_equal(var(probs.t1$probs), 0.0153, tolerance = 1e-3)
-  hom.t1 <- calc_homoprob(input.genoprobs = probs.t1)
+  hom.t1 <- calc_homologprob(input.genoprobs = probs.t1)
   expect_equal(var(hom.t1$homoprob$probability), 0.187, tolerance = 1e-3)
   skip_if_not(capabilities("long.double"))
   expect_is(plot(hom.t1), "plotly")

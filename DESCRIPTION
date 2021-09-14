@@ -83,6 +83,9 @@ Encoding: UTF-8
 Suggests:
     testthat,
     updog,
-    fitPoly
+    fitPoly,
+    polymapR,
+    AGHmatrix,
+    gatepoints
 URL: https://github.com/mmollina/MAPpoly
 BugReports: https://github.com/mmollina/MAPpoly/issues

@@ -20,7 +20,7 @@ an object of class \code{mappoly.homoprob}.
 \examples{
 \donttest{
      w <- lapply(solcap.err.map[1:3], calc_genoprob)
-     h.prob <- calc_homoprob(w)
+     h.prob <- calc_homologprob(w)
      plot_GIC(h.prob)
 }
 

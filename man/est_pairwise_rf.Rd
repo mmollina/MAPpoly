@@ -66,7 +66,7 @@ An object of class \code{poly.est.two.pts.pairwise} which
     column indicates the LOD Score in relation to the most likely linkage 
     phase configuration. The second column shows the estimated recombination 
     fraction for each configuration, and the third indicates the LOD Score 
-    comparing the likelihood under no linkage (r=0.5) with the estimated 
+    comparing the likelihood under no linkage (r = 0.5) with the estimated 
     recombination fraction (evidence of linkage).}
     \code{chisq.pval.thres}{threshold used to perform the segregation tests}
     \code{chisq.pval}{p-values associated with the performed segregation tests}
@@ -83,7 +83,7 @@ possible linkage phase configurations and associated LOD Scores.
   unique.mrks <- make_seq_mappoly(red.mrk)
   all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
                                ncpus = 1, 
-                               verbose=TRUE)
+                               verbose = TRUE)
    all.pairs
    plot(all.pairs, 20, 21)
    mat <- rf_list_to_matrix(all.pairs)

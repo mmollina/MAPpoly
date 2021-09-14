@@ -30,21 +30,21 @@
 #' See \code{\link[mappoly]{make_seq_mappoly}} for details
 #' 
 #' @examples
-#'     all.mrk<-make_seq_mappoly(hexafake, 1:20)
-#'     red.mrk<-elim_redundant(all.mrk)
-#'     unique.mrks<-make_seq_mappoly(red.mrk)
-#'     all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
+#'     all.mrk <- make_seq_mappoly(hexafake, 1:20)
+#'     red.mrk <- elim_redundant(all.mrk)
+#'     unique.mrks <- make_seq_mappoly(red.mrk)
+#'     all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
 #'                                ncpus = 1,
-#'                                verbose=TRUE)
+#'                                verbose = TRUE)
 #'
 #'     ## Full recombination fraction matrix
-#'     mat.full<-rf_list_to_matrix(input.twopt=all.pairs)
+#'     mat.full <- rf_list_to_matrix(input.twopt = all.pairs)
 #'     plot(mat.full)
 #'
 #'     ## Removing disruptive SNPs
-#'     tpt.filt<-rf_snp_filter(all.pairs, 2, 2, 0.07, probs = c(0.15, 1))
-#'     p1.filt<-make_pairs_mappoly(input.seq = tpt.filt, input.twopt = all.pairs)
-#'     m1.filt<-rf_list_to_matrix(input.twopt = p1.filt)
+#'     tpt.filt <- rf_snp_filter(all.pairs, 2, 2, 0.07, probs = c(0.15, 1))
+#'     p1.filt <- make_pairs_mappoly(input.seq = tpt.filt, input.twopt = all.pairs)
+#'     m1.filt <- rf_list_to_matrix(input.twopt = p1.filt)
 #'     plot(mat.full, main.text = "LG1")
 #'     plot(m1.filt, main.text = "LG1.filt")
 #'    
@@ -60,7 +60,7 @@
 #' @export rf_snp_filter
 #' @importFrom ggplot2 ggplot geom_histogram aes scale_fill_manual xlab ggtitle
 #' 
-rf_snp_filter<-function(input.twopt,
+rf_snp_filter <- function(input.twopt,
                         thresh.LOD.ph = 5,
                         thresh.LOD.rf = 5,
                         thresh.rf = 0.15,
@@ -69,14 +69,14 @@ rf_snp_filter<-function(input.twopt,
                         diagnostic.plot = TRUE)
 {
     ## checking for correct object
-    input_classes <-c("poly.est.two.pts.pairwise")
+    input_classes  <- c("poly.est.two.pts.pairwise")
     if (!inherits(input.twopt, input_classes)) {
         stop(deparse(substitute(input.twopt)),
              " is not an object of class 'poly.est.two.pts.pairwise'")
     }
     probs <- range(probs)
     ## Getting filtered rf matrix
-    rf_mat<- rf_list_to_matrix(input.twopt = input.twopt, thresh.LOD.ph = thresh.LOD.ph,
+    rf_mat <-  rf_list_to_matrix(input.twopt = input.twopt, thresh.LOD.ph = thresh.LOD.ph,
                                thresh.LOD.rf = thresh.LOD.rf, thresh.rf = thresh.rf,
                                ncpus = ncpus, verbose = FALSE)
     x <- apply(rf_mat$rec.mat, 1, function(x) sum(!is.na(x)))
@@ -85,9 +85,9 @@ rf_snp_filter<-function(input.twopt,
     ids <- names(which(x >= th[1] & x <= th[2]))
     value <- type <- NULL
     if(diagnostic.plot){
-        d<-rbind(data.frame(type = "original", value = x),
+        d <- rbind(data.frame(type = "original", value = x),
                  data.frame(type = "filtered", value = x[ids]))
-        p<-ggplot2::ggplot(d, ggplot2::aes(value)) +
+        p <- ggplot2::ggplot(d, ggplot2::aes(value)) +
             ggplot2::geom_histogram(ggplot2::aes(fill = type),
                                     alpha = 0.4, position = "identity", binwidth = 30) +
             ggplot2::scale_fill_manual(values = c("#00AFBB", "#E7B800")) +
@@ -96,6 +96,6 @@ rf_snp_filter<-function(input.twopt,
         print(p)
     }
     ## Returning sequence object
-    ch_filt<-make_seq_mappoly(input.obj = get(input.twopt$data.name, pos = 1), arg = ids, data.name = input.twopt$data.name)
+    ch_filt <- make_seq_mappoly(input.obj = get(input.twopt$data.name, pos = 1), arg = ids, data.name = input.twopt$data.name)
     ch_filt
 }

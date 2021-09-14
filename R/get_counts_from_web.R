@@ -4,15 +4,15 @@
 #' @keywords internal
 #' @import RCurl
 #' @export get_cache_two_pts_from_web
-get_cache_two_pts_from_web <- function(m, url.address = NULL, joint.prob = TRUE, verbose = FALSE) {
+get_cache_two_pts_from_web <- function(ploidy, url.address = NULL, joint.prob = TRUE, verbose = FALSE) {
     if (is.null(url.address)) {
-        if (m == 2)
-            pl <- "di" else if (m == 4)
-                pl <- "autotetra" else if (m == 6)
-                    pl <- "autohexa" else if (m == 8)
-                        pl <- "autoocta" else if (m == 10)
-                            pl <- "autodeca" else if (m == 12)
-                                pl <- "autododeca" else if (m == 14)
+        if (ploidy  ==  2)
+            pl <- "di" else if (ploidy  ==  4)
+                pl <- "autotetra" else if (ploidy  ==  6)
+                    pl <- "autohexa" else if (ploidy  ==  8)
+                        pl <- "autoocta" else if (ploidy  ==  10)
+                            pl <- "autodeca" else if (ploidy  ==  12)
+                                pl <- "autododeca" else if (ploidy  ==  14)
                                     pl <- "autotetradeca" else stop("Cache file not found. The ploidy level should be one of the following:\n 2 4 6 8 10 12 14.")
                                 url.address.cond = paste("http://152.1.45.19/prev.cache.", pl, "ploid.counts.RData", sep = "")
                                 url.address.joint = paste("http://152.1.45.19/prev.joint.cache.", pl, "ploid.counts.RData", sep = "")

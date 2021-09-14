@@ -60,19 +60,19 @@ are considered as missing data for the dosage calling purposes (default = 0.95)}
 \value{
 An object of class \code{mappoly.data} which contains a
     list with the following components:
-    \item{m}{ploidy level}
+    \item{ploidy}{ploidy level}
     \item{n.ind}{number individuals}
     \item{n.mrk}{total number of markers}
     \item{ind.names}{the names of the individuals}
     \item{mrk.names}{the names of the markers}
-    \item{dosage.p}{a vector containing the dosage in
+    \item{dosage.p1}{a vector containing the dosage in
       parent P for all \code{n.mrk} markers}
-    \item{dosage.q}{a vector containing the dosage in
+    \item{dosage.p2}{a vector containing the dosage in
       parent Q for all \code{n.mrk} markers}
-    \item{sequence}{a vector indicating which sequence each marker
+    \item{chrom}{a vector indicating which sequence each marker
       belongs. Zero indicates that the marker was not assigned to any
       sequence}
-    \item{sequence.pos}{Physical position of the markers into the
+    \item{genome.pos}{Physical position of the markers into the
       sequence}
     \item{seq.ref}{Reference base used for each marker (i.e. A, T, C, G)}
     \item{seq.alt}{Alternative base used for each marker (i.e. A, T, C, G)}
@@ -88,8 +88,8 @@ An object of class \code{mappoly.data} which contains a
     \item{all.mrk.depth}{DP information for all markers on VCF file}
     \item{chisq.pval}{a vector containing p-values related to the chi-squared 
     test of Mendelian segregation performed for all markers}
-    \item{kept}{if elim.redundant=TRUE, holds all non-redundant markers}
-    \item{elim.correspondence}{if elim.redundant=TRUE, holds all non-redundant markers and
+    \item{kept}{if elim.redundant = TRUE, holds all non-redundant markers}
+    \item{elim.correspondence}{if elim.redundant = TRUE, holds all non-redundant markers and
 its equivalence to the redundant ones}
 }
 \description{

@@ -57,11 +57,11 @@ of dimensionality. The frequency is calculated for all pairwise
 combinations and for all possible linkage phase configurations.
 }
 \examples{
-    all.mrk<-make_seq_mappoly(tetra.solcap, 1:20)
+    all.mrk <- make_seq_mappoly(tetra.solcap, 1:20)
     ## local computation
-    counts<-cache_counts_twopt(all.mrk, ncpus = 1)
+    counts <- cache_counts_twopt(all.mrk, ncpus = 1)
     ## load from internal file or web-stored counts (especially important for high ploidy levels)
-    counts.cached<-cache_counts_twopt(all.mrk, cached = TRUE)
+    counts.cached <- cache_counts_twopt(all.mrk, cached = TRUE)
 
 }
 \references{

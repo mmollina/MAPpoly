@@ -4,7 +4,7 @@
 #' \cite{Preedy and Hackett (2016)}. The code is an adaptation from
 #' the package \code{MDSmap}, available under GNU GENERAL PUBLIC LICENSE,
 #' Version 3, at
-#' \url{ https://CRAN.R-project.org/package=MDSMap}
+#' \url{ https://CRAN.R-project.org/package = MDSMap}
 #'
 #' @param input.mat an object of class \code{mappoly.input.matrix}
 #'
@@ -51,7 +51,7 @@
 #'     plot(mds.ord)
 #'     so <- make_seq_mappoly(mds.ord)
 #'     plot(m1, ord = so$seq.mrk.names)
-#'     plot(so$seq.num ~ I(so$sequence.pos/1e6), 
+#'     plot(so$seq.num ~ I(so$genome.pos/1e6), 
 #'          xlab = "Genome Position",
 #'          ylab = "MDS position")
 #'
@@ -69,75 +69,75 @@
 #' @importFrom stats runif 
 #' @importFrom utils read.csv write.csv
 #' @export mds_mappoly
-mds_mappoly<-function(input.mat,
+mds_mappoly <- function(input.mat,
                       p = NULL,
                       n = NULL,
                       ndim = 2,
                       weight.exponent = 2,
                       verbose = TRUE)
 {
-  o<-is.na(input.mat$rec.mat)
-  input.mat$rec.mat[o]<-1e-07
-  input.mat$lod.mat[o]<-1e-07
+  o <- is.na(input.mat$rec.mat)
+  input.mat$rec.mat[o] <- 1e-07
+  input.mat$lod.mat[o] <- 1e-07
   if(weight.exponent != 1)
-    input.mat$lod.mat<-input.mat$lod.mat^weight.exponent
-  diag(input.mat$lod.mat)<-diag(input.mat$rec.mat)<-NA
+    input.mat$lod.mat <- input.mat$lod.mat^weight.exponent
+  diag(input.mat$lod.mat) <- diag(input.mat$rec.mat) <- NA
   locinames <- rownames(input.mat$rec.mat)
   lodrf <- list(rf = input.mat$rec.mat, lod = input.mat$lod.mat, nloci = ncol(input.mat$rec.mat), locinames = locinames)
-  confplotno<-1:lodrf$nloci
+  confplotno <- 1:lodrf$nloci
   if(!is.null(n)){
-    if(!is.numeric(n))n<-which(lodrf$locinames%in%n)    
-    r<-lodrf$rf[-n,-n]
-    lod<-lodrf$lod[-n,-n]
-    confplotno<-confplotno[-n]
+    if(!is.numeric(n))n <- which(lodrf$locinames%in%n)    
+    r <- lodrf$rf[-n,-n]
+    lod <- lodrf$lod[-n,-n]
+    confplotno <- confplotno[-n]
   } else {
-    r<-lodrf$rf
-    lod<-lodrf$lod
+    r <- lodrf$rf
+    lod <- lodrf$lod
   }
   M <- imf_h(r)/100
-  nloci=length(confplotno)
-  smacofsym<-smacof::smacofSym(M,ndim=ndim,weightmat=lod,itmax=100000)
-  pc1<-princurve::principal_curve(smacofsym$conf,maxit=150,spar=p,smoother="smooth_spline")
-  scale<-sum(smacofsym$delta)/sum(smacofsym$dhat) 
+  nloci = length(confplotno)
+  smacofsym <- smacof::smacofSym(M,ndim = ndim,weightmat = lod,itmax = 100000)
+  pc1 <- princurve::principal_curve(smacofsym$conf,maxit = 150,spar = p,smoother = "smooth_spline")
+  scale <- sum(smacofsym$delta)/sum(smacofsym$dhat) 
   # Configuration dissim are based on the normalized observed diss - dhat. 
   # True observed dissimilarities are delta
-  maporder<-pc1$ord
-  estpos<-pc1$lambda[maporder]*scale*100
+  maporder <- pc1$ord
+  estpos <- pc1$lambda[maporder]*scale*100
   # gives the estimated length from the beginning of the line
-  rownames<-lodrf$locinames[maporder]
-  distmap<-outer(maporder,maporder,Vectorize(function(i,j)M[i,j]))
-  lodmap<-outer(maporder,maporder, Vectorize(function(i,j)lod[i,j]))
-  rownames(distmap)<-rownames;colnames(distmap)<-rownames
-  rownames(lodmap)<-rownames;colnames(lodmap)<-rownames
+  rownames <- lodrf$locinames[maporder]
+  distmap <- outer(maporder,maporder,Vectorize(function(i,j)M[i,j]))
+  lodmap <- outer(maporder,maporder, Vectorize(function(i,j)lod[i,j]))
+  rownames(distmap) <- rownames;colnames(distmap) <- rownames
+  rownames(lodmap) <- rownames;colnames(lodmap) <- rownames
   if(!is.null(n))  {
-    locikey<-data.frame(locus=lodrf$locinames[-n],confplotno=confplotno)
+    locikey <- data.frame(locus = lodrf$locinames[-n],confplotno = confplotno)
   } else {
-    locikey<-data.frame(locus=lodrf$locinames,confplotno=confplotno)
+    locikey <- data.frame(locus = lodrf$locinames,confplotno = confplotno)
   }
-  nnfit<-calc.nnfit(distmap,lodmap,estpos)
-  locimap<-data.frame(confplotno=confplotno[maporder],locus=locikey$locus[maporder],position=estpos,nnfit=nnfit$pointfits,row.names=1:nloci)
+  nnfit <- calc.nnfit(distmap,lodmap,estpos)
+  locimap <- data.frame(confplotno = confplotno[maporder],locus = locikey$locus[maporder],position = estpos,nnfit = nnfit$pointfits,row.names = 1:nloci)
   if(!is.null(n)) {
-    removedloci<-data.frame(n,lodrf$locinames[n],row.names=NULL)
+    removedloci <- data.frame(n,lodrf$locinames[n],row.names = NULL)
   } else {
-    removedloci<-n
+    removedloci <- n
   }
-  map<-list(smacofsym=smacofsym,pc=pc1,distmap=distmap,lodmap=lodmap,locimap=locimap,length=max(estpos),removed=n,locikey=locikey,meannnfit=nnfit$meanfit)
+  map <- list(smacofsym = smacofsym,pc = pc1,distmap = distmap,lodmap = lodmap,locimap = locimap,length = max(estpos),removed = n,locikey = locikey,meannnfit = nnfit$meanfit)
   if(verbose)
   {
     cat(paste('Stress:', round(map$smacofsym$stress,5)))
     cat(paste('\nMean Nearest Neighbour Fit:', round(map$meannnfit,5)))
   }
-  map$data.name<-input.mat$data.name
-  if(ndim == 2) {
-    return(structure(map, class="mappoly.pcmap"))
+  map$data.name <- input.mat$data.name
+  if(ndim  ==  2) {
+    return(structure(map, class = "mappoly.pcmap"))
   } else {
-    return(structure(map, class="mappoly.pcmap3d"))
+    return(structure(map, class = "mappoly.pcmap3d"))
   }
 }
 
 #' @rdname mds_mappoly
 #' @export
-print.mappoly.pcmap<-function(x, ...)
+print.mappoly.pcmap <- function(x, ...)
 {
   cat("\nThis is an object of class 'mappoly.mds'")
   cat("\nNumber of markers: ", nrow(x$locimap))
@@ -148,7 +148,7 @@ print.mappoly.pcmap<-function(x, ...)
 
 #' @rdname mds_mappoly
 #' @export
-print.mappoly.pcmap3d<-function(x, ...)
+print.mappoly.pcmap3d <- function(x, ...)
 {
   cat("\nThis is an object of class 'mappoly.mds'")
   cat("\nNumber of markers: ", nrow(x$locimap))
@@ -159,12 +159,12 @@ print.mappoly.pcmap3d<-function(x, ...)
 
 #' @author Katharine F. Preedy, \email{katharine.preedy@bioss.ac.uk}
 #' @export
-plot.mappoly.pcmap<-function (x, D1lim = NULL, D2lim = NULL, displaytext = FALSE, ...) 
+plot.mappoly.pcmap <- function (x, D1lim = NULL, D2lim = NULL, displaytext = FALSE, ...) 
 {
   oldpar <- par(mfrow = c(1, 2))
   on.exit(par(oldpar))
   with(x, {
-    if (displaytext == TRUE) {
+    if (displaytext  ==  TRUE) {
       labels = locikey$locus
     }
     else {
@@ -174,7 +174,7 @@ plot.mappoly.pcmap<-function (x, D1lim = NULL, D2lim = NULL, displaytext = FALSE
                    xlim = D1lim, ylim = D2lim, xlab = "Dim 1", ylab = "Dim 2")
     text(smacofsym$conf, labels = labels, cex = 0.8)
     lines(pc)
-    if (displaytext == TRUE) {
+    if (displaytext  ==  TRUE) {
       labels1 = locimap$locus
     }
     else {
@@ -188,12 +188,12 @@ plot.mappoly.pcmap<-function (x, D1lim = NULL, D2lim = NULL, displaytext = FALSE
 
 #' @author Katharine F. Preedy, \email{katharine.preedy@bioss.ac.uk}
 #' @export
-plot.mappoly.pcmap3d<-function(x, D1lim = NULL, D2lim = NULL, D3lim = NULL, displaytext = FALSE, ...) 
+plot.mappoly.pcmap3d <- function(x, D1lim = NULL, D2lim = NULL, D3lim = NULL, displaytext = FALSE, ...) 
 {
   oldpar <- par(mfrow = c(2, 2))
   on.exit(par(oldpar))
   with(x, {
-    if (displaytext == TRUE) {
+    if (displaytext  ==  TRUE) {
       labels = locikey$locus
     }
     else {
@@ -221,7 +221,7 @@ plot.mappoly.pcmap3d<-function(x, D1lim = NULL, D2lim = NULL, D3lim = NULL, disp
     text(smacofsym$conf[, "D2"], smacofsym$conf[, "D3"], 
          labels = labels, cex = 0.8)
     lines(pc$s[, "D2"][pc$ord], pc$s[, "D3"][pc$ord])
-    if (displaytext == TRUE) {
+    if (displaytext  ==  TRUE) {
       labels1 = locimap$locus
     }
     else {

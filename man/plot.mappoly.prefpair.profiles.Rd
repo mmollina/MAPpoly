@@ -10,8 +10,8 @@
   min.y.prof = 0,
   max.y.prof = 1,
   thresh = 0.01,
-  P = "P",
-  Q = "Q",
+  P = "P1",
+  Q = "P2",
   ...
 )
 }

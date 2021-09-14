@@ -6,8 +6,8 @@
 \usage{
 import_from_updog(
   object,
-  prob.thres = NULL,
-  filter.non.conforming = FALSE,
+  prob.thres = 0.95,
+  filter.non.conforming = TRUE,
   verbose = TRUE
 )
 }
@@ -27,19 +27,19 @@ expected genotypes under random chromosome pairing and no double reduction}
 \value{
 An object of class \code{mappoly.data} which contains a
     list with the following components:
-    \item{m}{ploidy level}
+    \item{ploidy}{ploidy level}
     \item{n.ind}{number individuals}
     \item{n.mrk}{total number of markers}
     \item{ind.names}{the names of the individuals}
     \item{mrk.names}{the names of the markers}
-    \item{dosage.p}{a vector containing the dosage in
+    \item{dosage.p1}{a vector containing the dosage in
       parent P for all \code{n.mrk} markers}
-    \item{dosage.q}{a vector containing the dosage in
+    \item{dosage.p2}{a vector containing the dosage in
       parent Q for all \code{n.mrk} markers}
-    \item{sequence}{a vector indicating which sequence each marker
+    \item{chrom}{a vector indicating which sequence each marker
       belongs. Zero indicates that the marker was not assigned to any
       sequence}
-    \item{sequence.pos}{physical position of the markers into the
+    \item{genome.pos}{physical position of the markers into the
       sequence}
     \item{prob.thres}{probability threshold to associate a marker call to a 
     dosage. Markers with maximum genotype probability smaller than 'prob.thres' 

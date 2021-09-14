@@ -12,12 +12,12 @@
 #'    \donttest{
 #'      ## tetraploid example
 #'      w1 <- calc_genoprob(solcap.dose.map[[1]])
-#'      h.prob <- calc_homoprob(w1)
+#'      h.prob <- calc_homologprob(w1)
 #'      print(h.prob)
 #'      plot(h.prob, ind = 5, use.plotly = FALSE)
 #'      ## using error modeling (removing noise)
 #'      w2 <- calc_genoprob_error(solcap.err.map[[1]])
-#'      h.prob2 <- calc_homoprob(w2)
+#'      h.prob2 <- calc_homologprob(w2)
 #'      print(h.prob2)
 #'      plot(h.prob2, ind = 5, use.plotly = FALSE)
 #'   }
@@ -33,9 +33,9 @@
 #'     \doi{10.1534/g3.119.400620} 
 #'     
 #' @importFrom ggplot2 ggplot geom_density ggtitle facet_grid theme_minimal ylab xlab aes vars
-#' @export calc_homoprob
+#' @export calc_homologprob
 #' 
-calc_homoprob<-function(input.genoprobs, verbose = TRUE){
+calc_homologprob <- function(input.genoprobs, verbose = TRUE){
   if(inherits(input.genoprobs, "mappoly.genoprob")) 
     input.genoprobs <- list(input.genoprobs)
   if(!inherits(input.genoprobs, "list"))
@@ -47,29 +47,29 @@ calc_homoprob<-function(input.genoprobs, verbose = TRUE){
   df.res <- NULL
   for(j in 1:length(input.genoprobs)){
     if (verbose) cat("\nLinkage group ", j, "...")
-    stt.names<-dimnames(input.genoprobs[[j]]$probs)[[1]] ## state names
-    mrk.names<-dimnames(input.genoprobs[[j]]$probs)[[2]] ## mrk names
-    ind.names<-dimnames(input.genoprobs[[j]]$probs)[[3]] ## individual names
-    v<-c(2,4,6,8,10,12)
-    names(v)<-choose(v,v/2)^2
-    m<-v[as.character(length(stt.names))]
-    hom.prob<-array(NA, dim = c(m*2, length(mrk.names), length(ind.names)))
-    dimnames(hom.prob)<-list(letters[1:(2*m)], mrk.names, ind.names)
-    for(i in letters[1:(2*m)])
+    stt.names <- dimnames(input.genoprobs[[j]]$probs)[[1]] ## state names
+    mrk.names <- dimnames(input.genoprobs[[j]]$probs)[[2]] ## mrk names
+    ind.names <- dimnames(input.genoprobs[[j]]$probs)[[3]] ## individual names
+    v <- c(2,4,6,8,10,12)
+    names(v) <- choose(v,v/2)^2
+    ploidy <- v[as.character(length(stt.names))]
+    hom.prob <- array(NA, dim = c(ploidy*2, length(mrk.names), length(ind.names)))
+    dimnames(hom.prob) <- list(letters[1:(2*ploidy)], mrk.names, ind.names)
+    for(i in letters[1:(2*ploidy)])
       hom.prob[i,,] <- apply(input.genoprobs[[j]]$probs[grep(stt.names, pattern = i),,], c(2,3), function(x) round(sum(x, na.rm = TRUE),4))
-    df.hom<-reshape2::melt(hom.prob)
-    map<-data.frame(map.position = input.genoprobs[[j]]$map, marker = names(input.genoprobs[[j]]$map))
-    colnames(df.hom)<-c("homolog", "marker", "individual", "probability")
-    df.hom<-merge(df.hom, map, sort = FALSE)
+    df.hom <- reshape2::melt(hom.prob)
+    map <- data.frame(map.position = input.genoprobs[[j]]$map, marker = names(input.genoprobs[[j]]$map))
+    colnames(df.hom) <- c("homolog", "marker", "individual", "probability")
+    df.hom <- merge(df.hom, map, sort = FALSE)
     df.hom$LG <- j
-    df.res<-rbind(df.res, df.hom)
+    df.res <- rbind(df.res, df.hom)
   }
   if (verbose) cat("\n")
-  structure(list(info = list(m = m, nind = length(ind.names)) , homoprob = df.res), class = "mappoly.homoprob")
+  structure(list(info = list(ploidy = ploidy, n.ind = length(ind.names)) , homoprob = df.res), class = "mappoly.homoprob")
 }
 
 #' @export
-print.mappoly.homoprob<-function(x, ...){
+print.mappoly.homoprob <- function(x, ...){
   head(x$homoprob, 20)
 }
 
@@ -97,23 +97,23 @@ print.mappoly.homoprob<-function(x, ...){
 #' @param ... unused arguments
 #' @importFrom plotly ggplotly
 #' @export
-plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL, 
+plot.mappoly.homoprob <- function(x, stack = FALSE, lg = NULL, 
                                 ind = NULL, use.plotly = TRUE, 
                                 verbose = TRUE,  ...){
-  all.ind<-as.character(unique(x$homoprob$individual))
+  all.ind <- as.character(unique(x$homoprob$individual))
   #### Individual handling ####
   if(length(ind) > 1){
       if (verbose) message("More than one individual provided: using the first one")
-    ind<-ind[1]
+    ind <- ind[1]
   }
   if(is.null(ind)){
-    ind<-as.character(all.ind[1])
-    df.pr1<-subset(x$homoprob, individual == ind)  
+    ind <- as.character(all.ind[1])
+    df.pr1 <- subset(x$homoprob, individual  ==  ind)  
   } else if(is.numeric(ind)) {
     if(ind > length(all.ind))
       stop("Please chose an individual number between 1 and ", length(all.ind))
-    ind<-as.character(all.ind[ind])
-    df.pr1<-subset(x$homoprob, individual == ind)  
+    ind <- as.character(all.ind[ind])
+    df.pr1 <- subset(x$homoprob, individual  ==  ind)  
   } else if (is.character(ind)){
     if(!ind%in%all.ind)
       stop("Invalid individual name")
@@ -121,9 +121,9 @@ plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL,
   #### LG handling ####
   if(is.null(lg))
     lg <- 1
-  if(all(lg=="all"))
+  if(all(lg == "all"))
     lg <- unique(x$homoprob$LG)
-  LG<-individual<-map.position<-probability<-homolog<-NULL
+  LG <- individual <- map.position <- probability <- homolog <- NULL
   if(length(lg) > 1 & !stack)
   {
     if (verbose) message("Using 'stack = TRUE' to plot multiple linkage groups")
@@ -132,10 +132,10 @@ plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL,
   if(stack){
     ##subset linkage group
     if(!is.null(lg)){
-      df.pr1<-subset(x$homoprob, LG%in%lg)
-      df.pr1<-subset(df.pr1, individual == ind)
+      df.pr1 <- subset(x$homoprob, LG%in%lg)
+      df.pr1 <- subset(df.pr1, individual  ==  ind)
     } else 
-      df.pr1<-subset(x$homoprob, individual == ind)
+      df.pr1 <- subset(x$homoprob, individual  ==  ind)
     p <- ggplot2::ggplot(df.pr1, ggplot2::aes(x = map.position, y = probability, fill = homolog, color  = homolog)) +
       ggplot2::geom_density(stat = "identity", alpha = 0.7, position = "stack") + 
       ggplot2::ggtitle(ind) + 
@@ -145,10 +145,10 @@ plot.mappoly.homoprob<-function(x, stack = FALSE, lg = NULL,
   } else {
     ##subset linkage group
     if(is.null(lg)){
-      lg<-1
-      df.pr1<-subset(x$homoprob, LG %in% lg)
-    } else df.pr1<-subset(x$homoprob, LG %in% lg)
-    df.pr1<-subset(df.pr1, individual == ind)  
+      lg <- 1
+      df.pr1 <- subset(x$homoprob, LG %in% lg)
+    } else df.pr1 <- subset(x$homoprob, LG %in% lg)
+    df.pr1 <- subset(df.pr1, individual  ==  ind)  
     p <- ggplot2::ggplot(df.pr1, ggplot2::aes(x = map.position, y = probability, fill = homolog, color  = homolog)) +
       ggplot2::geom_density(stat = "identity", alpha = 0.7) + 
       ggplot2::ggtitle(paste(ind, "   LG", lg)) + 

@@ -8,19 +8,19 @@
 An object of class \code{mappoly.data} which contains a
     list with the following components:
 \describe{
-    \item{m}{ploidy level = 6}
+    \item{plody}{ploidy level = 6}
     \item{n.ind}{number individuals = 300}
     \item{n.mrk}{total number of markers = 1500}
     \item{ind.names}{the names of the individuals}
     \item{mrk.names}{the names of the markers}
-    \item{dosage.p}{a vector containing the dosage in
+    \item{dosage.p1}{a vector containing the dosage in
       parent P for all \code{n.mrk} markers}
-    \item{dosage.q}{a vector containing the dosage in
+    \item{dosage.p2}{a vector containing the dosage in
       parent Q for all \code{n.mrk} markers}
-    \item{sequence}{a vector indicating the sequence each marker
+    \item{chrom}{a vector indicating the chromosome each marker
       belongs. Zero indicates that the marker was not assigned to any
-      sequence}
-    \item{sequence.pos}{Physical position of the markers into the
+      chromosome}
+    \item{genome.pos}{Physical position of the markers into the
       sequence}
     \item{geno.dose}{a matrix containing the dosage for each markers (rows) 
       for each individual (columns). Missing data are represented by 

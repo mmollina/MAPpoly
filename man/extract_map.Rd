@@ -16,7 +16,7 @@ will choose the maximum likelihood configuration}
 Extract the maker position from an object of class 'mappoly.map'
 }
 \examples{
- x <- maps.hexafake[[1]]$info$sequence.pos/1e6
+ x <- maps.hexafake[[1]]$info$genome.pos/1e6
  y <- extract_map(maps.hexafake[[1]])
  plot(y~x, ylab = "Map position (cM)", xlab = "Genome Position (Mbp)")
 }

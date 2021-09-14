@@ -48,17 +48,17 @@ will choose the maximum likelihood configuration}
 A list of class \code{mappoly.map} with two elements: 
 
 i) info:  a list containing information about the map, regardless of the linkage phase configuration:
-\item{m}{the ploidy level}
+\item{ploidy}{the ploidy level}
 \item{n.mrk}{number of markers}
 \item{seq.num}{a vector containing the (ordered) indices of markers in the map, 
                according to the input file}
 \item{mrk.names}{the names of markers in the map}
-\item{seq.dose.p}{a vector containing the dosage in parent 1 for all markers in the map}
-\item{seq.dose.q}{a vector containing the dosage in parent 2 for all markers in the map}
-\item{sequence}{a vector indicating the sequence (usually chromosome) each marker belongs 
+\item{seq.dose.p1}{a vector containing the dosage in parent 1 for all markers in the map}
+\item{seq.dose.p2}{a vector containing the dosage in parent 2 for all markers in the map}
+\item{chrom}{a vector indicating the sequence (usually chromosome) each marker belongs 
                 as informed in the input file. If not available, 
-                \code{sequence = NULL}}
-\item{sequence.pos}{physical position (usually in megabase) of the markers into the sequence}
+                \code{chrom = NULL}}
+\item{genome.pos}{physical position (usually in megabase) of the markers into the sequence}
 \item{seq.ref}{reference base used for each marker (i.e. A, T, C, G). If not available, 
                 \code{seq.ref = NULL}}                 
 \item{seq.alt}{alternative base used for each marker (i.e. A, T, C, G). If not available, 
@@ -88,9 +88,9 @@ inherited from function \code{\link[mappoly]{rf_list_to_matrix}}.
 }
 \examples{
 \donttest{
-sub.map<-get_submap(maps.hexafake[[1]], 1:20, reestimate.rf = FALSE)
+sub.map <- get_submap(maps.hexafake[[1]], 1:20, reestimate.rf = FALSE)
 plot(sub.map, mrk.names = TRUE)
-s<-make_seq_mappoly(hexafake, sub.map$info$mrk.names)
+s <- make_seq_mappoly(hexafake, sub.map$info$mrk.names)
 tpt <- est_pairwise_rf(s)
 rf.matrix <- rf_list_to_matrix(input.twopt = tpt,
                                thresh.LOD.ph = 3, 
@@ -102,7 +102,7 @@ input.map <- drop_marker(sub.map, mrk.to.remove)
 plot(input.map, mrk.names = TRUE)
 ## Computing conditional probabilities using the resulting map
 genoprob <- calc_genoprob(input.map)
-res.add.M_1<-add_marker(input.map = input.map,
+res.add.M_1 <- add_marker(input.map = input.map,
                         mrk = "M_1",
                         pos = 0,
                         rf.matrix = rf.matrix,
@@ -110,8 +110,8 @@ res.add.M_1<-add_marker(input.map = input.map,
                         tol = 10e-4)  
  plot(res.add.M_1, mrk.names = TRUE)                       
  best.phase <- res.add.M_1$maps[[1]]$seq.ph
- names.id<-names(best.phase$P)
- plot_compare_haplotypes(m = 6,
+ names.id <- names(best.phase$P)
+ plot_compare_haplotypes(ploidy = 6,
                          hom.allele.p1 = best.phase$P[names.id],
                          hom.allele.q1 = best.phase$Q[names.id],
                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],
@@ -123,7 +123,7 @@ input.map <- drop_marker(sub.map, mrk.to.remove)
 plot(input.map, mrk.names = TRUE)
 # Computing conditional probabilities using the resulting map
 genoprob <- calc_genoprob(input.map)
-res.add.M_10<-add_marker(input.map = input.map,
+res.add.M_10 <- add_marker(input.map = input.map,
                         mrk = "M_10",
                         pos = "M_9",
                         rf.matrix = rf.matrix,
@@ -131,8 +131,8 @@ res.add.M_10<-add_marker(input.map = input.map,
                         tol = 10e-4)  
  plot(res.add.M_10, mrk.names = TRUE)                       
  best.phase <- res.add.M_10$maps[[1]]$seq.ph
- names.id<-names(best.phase$P)
- plot_compare_haplotypes(m = 6,
+ names.id <- names(best.phase$P)
+ plot_compare_haplotypes(ploidy = 6,
                          hom.allele.p1 = best.phase$P[names.id],
                          hom.allele.q1 = best.phase$Q[names.id],
                          hom.allele.p2 = sub.map$maps[[1]]$seq.ph$P[names.id],

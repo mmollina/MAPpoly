@@ -45,12 +45,12 @@
 #'  \donttest{
 #'     ## selecting the six first markers in linkage group 1
 #'     ## re-estimating the recombination fractions and linkage phases
-#'     submap1.lg1<-get_submap(input.map = maps.hexafake[[1]], 
+#'     submap1.lg1 <- get_submap(input.map = maps.hexafake[[1]], 
 #'                            mrk.pos = 1:6, verbose = TRUE,
 #'                            reestimate.phase = TRUE,  
 #'                            tol.final = 10e-3)
 #'    ## no recombination fraction re-estimation: first 20 markers
-#'    submap2.lg1<-get_submap(input.map = maps.hexafake[[1]], 
+#'    submap2.lg1 <- get_submap(input.map = maps.hexafake[[1]], 
 #'                            mrk.pos = 1:20, reestimate.rf = FALSE,
 #'                            verbose = TRUE, 
 #'                            tol.final = 10e-3)
@@ -70,10 +70,10 @@
 #'
 #' @export get_submap
 #'
-get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf = TRUE,
+get_submap <- function(input.map, mrk.pos,  phase.config = "best", reestimate.rf = TRUE,
                      reestimate.phase = FALSE, thres.twopt = 5, thres.hmm = 3,
                      extend.tail = 50, tol = 0.1, tol.final = 10e-4,
-                     use.high.precision = FALSE, verbose=TRUE)
+                     use.high.precision = FALSE, verbose = TRUE)
 {
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
@@ -86,7 +86,7 @@ get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf =
   }
  ## choosing the linkage phase configuration
   LOD.conf <- get_LOD(input.map)
-  if(phase.config == "best") {
+  if(phase.config  ==  "best") {
     i.lpc <- which.min(LOD.conf)
   } 
   else if (phase.config > length(LOD.conf)) {
@@ -96,17 +96,17 @@ get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf =
   input.obj = get(input.map$info$data.name, pos = 1)
   if(reestimate.rf & !reestimate.phase)
   {
-    seq.num<-input.map$maps[[i.lpc]]$seq.num[mrk.pos]
-    ph<-list(P = input.map$maps[[i.lpc]]$seq.ph$P[as.character(seq.num)],
+    seq.num <- input.map$maps[[i.lpc]]$seq.num[mrk.pos]
+    ph <- list(P = input.map$maps[[i.lpc]]$seq.ph$P[as.character(seq.num)],
              Q = input.map$maps[[i.lpc]]$seq.ph$Q[as.character(seq.num)])
-    s<-make_seq_mappoly(input.obj = input.obj,
+    s <- make_seq_mappoly(input.obj = input.obj,
                         arg = seq.num, 
                         data.name = input.map$info$data.name)
     rf.temp <- NULL#input.map$maps[[i.lpc]]$seq.rf[mrk.pos[-length(mrk.pos)]]
-    res<-est_rf_hmm_single(input.seq = s, input.ph.single = ph, tol = tol.final,
+    res <- est_rf_hmm_single(input.seq = s, input.ph.single = ph, tol = tol.final,
                            verbose = verbose, rf.temp = rf.temp,
                            high.prec = high.prec)
-    output.map<-input.map
+    output.map <- input.map
     output.map$maps[[i.lpc]] <- res
     output.map$info$n.mrk <- length(mrk.pos)
     output.map$info$mrk.names <- input.map$info$mrk.names[mrk.pos]
@@ -118,17 +118,17 @@ get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf =
       message("
     The recombination fraction will be reestimated 
     since 'reestimate.phase = TRUE'")
-    s<-make_seq_mappoly(get(input.map$info$data.name, pos = 1),
+    s <- make_seq_mappoly(get(input.map$info$data.name, pos = 1),
                         input.map$maps[[i.lpc]]$seq.num[mrk.pos],
                         input.map$info$data.name)
     if(verbose)
       cat("\nEstimating pairwise recombination fraction for marker sequence ...")
-    p<-est_pairwise_rf(input.seq = s, verbose = FALSE)
+    p <- est_pairwise_rf(input.seq = s, verbose = FALSE)
     if(verbose){
       cat("done\n")      
       cat("\nEstimating sequential map: \n----------------------------------------\n")
     }
-    output.map<-est_rf_hmm_sequential(input.seq = s,
+    output.map <- est_rf_hmm_sequential(input.seq = s,
                                       thres.twopt = thres.twopt,
                                       thres.hmm = thres.hmm,
                                       extend.tail = extend.tail,
@@ -140,8 +140,8 @@ get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf =
     return(output.map)
   }
   output.map <- input.map
-  z<-cumsum(c(0, imf_h(input.map$maps[[i.lpc]]$seq.rf)))[mrk.pos]
-  rf.vec<-mf_h(abs(diff(z)))
+  z <- cumsum(c(0, imf_h(input.map$maps[[i.lpc]]$seq.rf)))[mrk.pos]
+  rf.vec <- mf_h(abs(diff(z)))
   if (verbose) message("
     You selected: reestimate.rf = FALSE
     -----------------------------------------
@@ -162,10 +162,10 @@ get_submap<-function(input.map, mrk.pos,  phase.config = "best", reestimate.rf =
   output.map$info$mrk.names <- input.map$info$mrk.names[mrk.pos]
   output.map$info$seq.num <- input.map$info$seq.num [mrk.pos]
   output.map$info$mrk.names <- input.map$info$mrk.names[mrk.pos]
-  output.map$info$seq.dose.p <- input.map$info$seq.dose.p[mrk.pos]
-  output.map$info$seq.dose.q <- input.map$info$seq.dose.q[mrk.pos]
-  output.map$info$sequence <- input.map$info$sequence[mrk.pos] 
-  output.map$info$sequence.pos <- input.map$info$sequence.pos[mrk.pos]  
+  output.map$info$seq.dose.p1 <- input.map$info$seq.dose.p1[mrk.pos]
+  output.map$info$seq.dose.p2 <- input.map$info$seq.dose.p2[mrk.pos]
+  output.map$info$chrom <- input.map$info$chrom[mrk.pos] 
+  output.map$info$genome.pos <- input.map$info$genome.pos[mrk.pos]  
   output.map$info$seq.ref <- input.map$info$seq.ref[mrk.pos] 
   output.map$info$seq.alt <- input.map$info$seq.alt[mrk.pos] 
   output.map$info$chisq.pval <- input.map$info$chisq.pval[mrk.pos] 

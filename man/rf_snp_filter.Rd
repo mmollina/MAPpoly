@@ -48,21 +48,21 @@ Remove markers that do not meet a LOD and recombination fraction
     set of analyzed markers.
 }
 \examples{
-    all.mrk<-make_seq_mappoly(hexafake, 1:20)
-    red.mrk<-elim_redundant(all.mrk)
-    unique.mrks<-make_seq_mappoly(red.mrk)
-    all.pairs<-est_pairwise_rf(input.seq = unique.mrks,
+    all.mrk <- make_seq_mappoly(hexafake, 1:20)
+    red.mrk <- elim_redundant(all.mrk)
+    unique.mrks <- make_seq_mappoly(red.mrk)
+    all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
                                ncpus = 1,
-                               verbose=TRUE)
+                               verbose = TRUE)
 
     ## Full recombination fraction matrix
-    mat.full<-rf_list_to_matrix(input.twopt=all.pairs)
+    mat.full <- rf_list_to_matrix(input.twopt = all.pairs)
     plot(mat.full)
 
     ## Removing disruptive SNPs
-    tpt.filt<-rf_snp_filter(all.pairs, 2, 2, 0.07, probs = c(0.15, 1))
-    p1.filt<-make_pairs_mappoly(input.seq = tpt.filt, input.twopt = all.pairs)
-    m1.filt<-rf_list_to_matrix(input.twopt = p1.filt)
+    tpt.filt <- rf_snp_filter(all.pairs, 2, 2, 0.07, probs = c(0.15, 1))
+    p1.filt <- make_pairs_mappoly(input.seq = tpt.filt, input.twopt = all.pairs)
+    m1.filt <- rf_list_to_matrix(input.twopt = p1.filt)
     plot(mat.full, main.text = "LG1")
     plot(m1.filt, main.text = "LG1.filt")
    

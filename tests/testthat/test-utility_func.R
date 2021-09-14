@@ -12,9 +12,9 @@ test_that("test several utility functions", {
   tpt<-est_pairwise_rf(make_seq_mappoly(tetra.solcap, 1:30))
   x1<-make_seq_mappoly(tetra.solcap, 1:20)
   x2<-make_seq_mappoly(tetra.solcap, 21:40)
-  x1<-as.numeric(pos_twopt_est(x1))
-  x2<-as.numeric(pos_twopt_est(x2))
-  expect_equal(as.numeric(crossprod(x1,x2)), 1)
+  x1<-as.numeric(check_if_rf_is_possible(x1))
+  x2<-as.numeric(check_if_rf_is_possible(x2))
+  expect_equal(as.numeric(crossprod(x1,x2)), 14)
   M<-rf_list_to_matrix(tpt, shared.alleles = TRUE)
   expect_equal(round(sum(get_rf_from_mat(M$rec.mat), na.rm = TRUE), 6), 3.913633)
   expect_equal(get_w_m(6), 15)
@@ -39,7 +39,7 @@ test_that("test several utility functions", {
   expect_equal(round(imf_h(.15),2), 17.83)
   expect_equal(round(imf_k(.15),2), 15.48)
   expect_equal(round(imf_m(.15),2), 15)
-  expect_null(plot_compare_haplotypes(m = 6, 
+  expect_null(plot_compare_haplotypes(ploidy = 6, 
                           hom.allele.p1 = maps.hexafake[[1]]$maps[[1]]$seq.ph$P[1:10],
                           hom.allele.q1 = maps.hexafake[[1]]$maps[[1]]$seq.ph$Q[1:10],
                           hom.allele.p2 = maps.hexafake[[1]]$maps[[1]]$seq.ph$P[1:10],

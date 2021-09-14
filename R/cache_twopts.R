@@ -41,11 +41,11 @@
 #'     S3 Appendix in Mollinari and Garcia (2019) for an example.
 #'
 #' @examples
-#'     all.mrk<-make_seq_mappoly(tetra.solcap, 1:20)
+#'     all.mrk <- make_seq_mappoly(tetra.solcap, 1:20)
 #'     ## local computation
-#'     counts<-cache_counts_twopt(all.mrk, ncpus = 1)
+#'     counts <- cache_counts_twopt(all.mrk, ncpus = 1)
 #'     ## load from internal file or web-stored counts (especially important for high ploidy levels)
-#'     counts.cached<-cache_counts_twopt(all.mrk, cached = TRUE)
+#'     counts.cached <- cache_counts_twopt(all.mrk, cached = TRUE)
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} with updates by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
 #'
@@ -70,27 +70,27 @@ cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL,
     stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
   }
   cache.prev = NULL
-  if(input.seq$m==2)
+  if(input.seq$ploidy == 2)
   {
     cached <- FALSE
     if (verbose)
         cat("INFO: Computing genotype frequencies ...\n")
   }
   if (cached){
-    if (input.seq$m == 2) ploidy = 'diploid'
-    else if (input.seq$m == 4) ploidy = 'tetraploid'
-    else if (input.seq$m == 6) ploidy = 'hexaploid'
-    else return(get_cache_two_pts_from_web(input.seq$m, verbose = verbose))
+    if (input.seq$ploidy  ==  2) ploidy = 'diploid'
+    else if (input.seq$ploidy  ==  4) ploidy = 'tetraploid'
+    else if (input.seq$ploidy  ==  6) ploidy = 'hexaploid'
+    else return(get_cache_two_pts_from_web(input.seq$ploidy, verbose = verbose))
     return(structure(full_counts[[ploidy]], class = "cache.info"))
   }
   temp.count <- NULL
   if (joint.prob) {
     temp.count <- cache_counts_twopt(input.seq, cached = FALSE, cache.prev = cache.prev, ncpus = ncpus, verbose = verbose, joint.prob = FALSE)$cond
   }
-  if (verbose && input.seq$m >= 8)
-    message("\nploidy level ", input.seq$m, ": this operation could take a very long time.
+  if (verbose && input.seq$ploidy >= 8)
+    message("\nploidy level ", input.seq$ploidy, ": this operation could take a very long time.
                  \ntry to use the option 'cached' instead.\n")
-  dose.names <- sort(unique(apply(rbind(combn(input.seq$seq.dose.p, 2), combn(input.seq$seq.dose.q, 2)), 2, paste, collapse = "-")))
+  dose.names <- sort(unique(apply(rbind(combn(input.seq$seq.dose.p1, 2), combn(input.seq$seq.dose.p2, 2)), 2, paste, collapse = "-")))
   if (!is.null(cache.prev)) {
     if (!inherits(cache.prev, "cache.info")) {
       stop(deparse(substitute(cache.prev)), " is not an object of class 'cache.info'")
@@ -98,17 +98,17 @@ cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL,
     ## Number of distinct genotypic combinations for differennt ploidy levels
     x <- c(3, 6, 10, 15, 21, 28, 36)
     names(x) <- c("2", "4", "6", "8", "10", "12", "14")
-    pl.class <- choose(1 + input.seq$m/2, 2) + 1 + input.seq$m/2
+    pl.class <- choose(1 + input.seq$ploidy/2, 2) + 1 + input.seq$ploidy/2
     first.na <- sapply(unlist(cache.prev, recursive = FALSE), function(x) !all(is.na(x)))
     
     ## check if the ploidy levels match
     if (ncol(cache.prev[[min(which(first.na))]][[1]]) != pl.class) {
-      warning(deparse(substitute(cache.prev)), " contains counts for ploidy level ", names(which(x == ncol(cache.prev[[1]][[1]]))), "\n  Obtaining new counts for ploidy ",
-              input.seq$m)
+      warning(deparse(substitute(cache.prev)), " contains counts for ploidy level ", names(which(x  ==  ncol(cache.prev[[1]][[1]]))), "\n  Obtaining new counts for ploidy ",
+              input.seq$ploidy)
       return(cache_counts_twopt(input.seq = input.seq, cache.prev = NULL, ncpus = ncpus, verbose = verbose, joint.prob = joint.prob))
     }
     remaining <- which(is.na(pmatch(dose.names, names(cache.prev))))
-    if (length(remaining) == 0) {
+    if (length(remaining)  ==  0) {
         if (verbose)
             cat("\n Nothing to add to 'cache.prev'. Returning original 'cache prev'.\n")
       return(cache.prev)
@@ -126,12 +126,12 @@ cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL,
       cat("INFO: Using ", ncpus, " CPU's for calculation.\n")
     cl <- makeCluster(ncpus)
     on.exit(stopCluster(cl))
-    y <- parApply(cl, aux.mat, 1, get_counts_all_phases, m = input.seq$m, joint.prob = joint.prob)
+    y <- parApply(cl, aux.mat, 1, get_counts_all_phases, ploidy = input.seq$ploidy, joint.prob = joint.prob)
     end <- proc.time()
   } else {
     if (verbose)
       cat("INFO: Going singlemode. Using one Core/CPU/PC for calculation.\n")
-    y <- apply(aux.mat, 1, get_counts_all_phases, input.seq$m, joint.prob = joint.prob)
+    y <- apply(aux.mat, 1, get_counts_all_phases, input.seq$ploidy, joint.prob = joint.prob)
     end <- proc.time()
   }
   if (verbose) {
@@ -144,7 +144,7 @@ cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL,
   cond <- temp.count
   if (joint.prob)
     joint <- w else cond <- w
-  all.dose.names <- apply(expand.grid(0:input.seq$m, 0:input.seq$m, 0:input.seq$m, 0:input.seq$m), 1, paste, collapse = "-")
+  all.dose.names <- apply(expand.grid(0:input.seq$ploidy, 0:input.seq$ploidy, 0:input.seq$ploidy, 0:input.seq$ploidy), 1, paste, collapse = "-")
   z1 <- z2 <- vector("list", length(all.dose.names))
   names(z1) <- names(z2) <- all.dose.names
   z1[names(cond)] <- cond
@@ -155,7 +155,7 @@ cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL,
 
 #' @export
 print.cache.info <- function(x, ...) {
-  x$cond[sapply(x$cond, is.null)]<-NA
+  x$cond[sapply(x$cond, is.null)] <- NA
   NonNAindex <- which(!is.na(x$cond))
   firstNonNA <- min(NonNAindex)
   y <- c(3, 6, 10, 15, 21, 28, 36)
@@ -163,7 +163,7 @@ print.cache.info <- function(x, ...) {
   cat("  This is an object of class 'cache.info'")
   cat("\n  -----------------------------------------------------")
   ## printing summary
-  cat("\n  Ploidy level:                               ", names(which(ncol(x$cond[[firstNonNA]][[1]])==y)), "\n")
+  cat("\n  Ploidy level:                               ", names(which(ncol(x$cond[[firstNonNA]][[1]]) == y)), "\n")
   cat("  No. marker combinations:                    ", length(x$cond), "\n")
   cat("  -----------------------------------------------------\n")
 }

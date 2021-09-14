@@ -4,10 +4,10 @@
 \alias{draw_phases}
 \title{Plot the linkage phase configuration given a list of homologous chromosomes}
 \usage{
-draw_phases(m, hom.allele.p, hom.allele.q)
+draw_phases(ploidy, hom.allele.p, hom.allele.q)
 }
 \arguments{
-\item{m}{ploidy level}
+\item{ploidy}{ploidy level}
 
 \item{hom.allele.p}{a \code{list} of vectors containing linkage
 phase configuration for parent P. Each vector contains the

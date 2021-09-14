@@ -48,7 +48,7 @@ position and each individual given a map.
 }
 \examples{
  \donttest{
-     probs.error<-calc_genoprob_error(input.map = solcap.err.map[[1]],
+     probs.error <- calc_genoprob_error(input.map = solcap.err.map[[1]],
                                 error = 0.05,
                                 verbose = TRUE)
  }

@@ -60,7 +60,7 @@ Estimates loci position using Multidimensional Scaling proposed by
 \cite{Preedy and Hackett (2016)}. The code is an adaptation from
 the package \code{MDSmap}, available under GNU GENERAL PUBLIC LICENSE,
 Version 3, at
-\url{ https://CRAN.R-project.org/package=MDSMap}
+\url{ https://CRAN.R-project.org/package = MDSMap}
 }
 \examples{
     s1 <- make_seq_mappoly(hexafake, 1:20)
@@ -73,7 +73,7 @@ Version 3, at
     plot(mds.ord)
     so <- make_seq_mappoly(mds.ord)
     plot(m1, ord = so$seq.mrk.names)
-    plot(so$seq.num ~ I(so$sequence.pos/1e6), 
+    plot(so$seq.num ~ I(so$genome.pos/1e6), 
          xlab = "Genome Position",
          ylab = "MDS position")
 

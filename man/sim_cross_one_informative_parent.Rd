@@ -5,7 +5,7 @@
 \title{Simulate mapping population (one parent)}
 \usage{
 sim_cross_one_informative_parent(
-  m,
+  ploidy,
   n.mrk,
   rf.vec,
   hom.allele,

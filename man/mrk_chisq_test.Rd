@@ -4,7 +4,7 @@
 \alias{mrk_chisq_test}
 \title{Chi-square test}
 \usage{
-mrk_chisq_test(x, m)
+mrk_chisq_test(x, ploidy)
 }
 \arguments{
 \item{void}{internal function to be documented}

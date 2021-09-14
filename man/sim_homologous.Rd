@@ -5,10 +5,10 @@
 \title{Simulate homology groups}
 \usage{
 sim_homologous(
-  m,
+  ploidy,
   n.mrk,
   min.d = 0,
-  max.d = m + 1,
+  max.d = ploidy + 1,
   prob.dose = NULL,
   max.ph,
   restriction = TRUE,
@@ -16,13 +16,13 @@ sim_homologous(
 )
 }
 \arguments{
-\item{m}{ploidy level. Must be an even number}
+\item{ploidy}{ploidy level. Must be an even number}
 
 \item{n.mrk}{number of markers}
 
 \item{min.d}{minimum dosage to be simulated (default = 0)}
 
-\item{max.d}{maximum dosage to be simulated (default = m + 1)}
+\item{max.d}{maximum dosage to be simulated (default = ploidy + 1)}
 
 \item{prob.dose}{a vector indicating the proportion of markers for
 different dosage to be simulated (default = NULL)}
@@ -60,8 +60,8 @@ configurations which are impossible to estimate via two point
 methods
 }
 \examples{
-    h.temp<-sim_homologous(m=6, n.mrk=20, max.d=3, max.ph=3,
-                           seed=123)
+    h.temp <- sim_homologous(ploidy = 6, n.mrk = 20, max.d = 3, max.ph = 3,
+                           seed = 123)
 
 }
 \references{

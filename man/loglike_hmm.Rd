@@ -20,7 +20,7 @@ using the method proposed by \cite{Mollinari and Garcia (2019)}.
 }
 \examples{
  \donttest{
-  hexa.map<-loglike_hmm(maps.hexafake[[1]])
+  hexa.map <- loglike_hmm(maps.hexafake[[1]])
   hexa.map
  }
  
