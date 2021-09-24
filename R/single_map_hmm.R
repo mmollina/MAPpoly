@@ -31,13 +31,13 @@
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' @export est_rf_hmm_single
 est_rf_hmm_single <- function(input.seq,
-                            input.ph.single,
-                            rf.temp = NULL,
-                            tol,
-                            verbose = FALSE,
-                            ret.map.no.rf.estimation = FALSE,
-                            high.prec = TRUE,
-                            max.rf.to.break.EM = 0.5)
+                              input.ph.single,
+                              rf.temp = NULL,
+                              tol,
+                              verbose = FALSE,
+                              ret.map.no.rf.estimation = FALSE,
+                              high.prec = TRUE,
+                              max.rf.to.break.EM = 0.5)
 {
   input_classes <- c("mappoly.sequence")
   if (!inherits(input.seq, input_classes[1])) {
@@ -57,35 +57,35 @@ est_rf_hmm_single <- function(input.seq,
     dq <- get(input.seq$data.name)$dosage.p2[input.seq$seq.num]
     for (j in 1:nrow(D))
       D[j, D[j, ]  ==  input.seq$ploidy + 1] <- dp[j] + dq[j] + 1 + as.numeric(dp[j] == 0 || dq[j] == 0)
-
+    
     if(high.prec)
     {
       res.temp <- .Call("est_map_hmm_highprec",
-                      input.seq$ploidy,
-                      t(D),
-                      lapply(input.ph.single$P, function(x) x-1),
-                      lapply(input.ph.single$Q, function(x) x-1),
-                      rf.temp,
-                      verbose = verbose,
-                      max.rf.to.break.EM,
-                      tol,
-                      PACKAGE = "mappoly")
+                        input.seq$ploidy,
+                        t(D),
+                        lapply(input.ph.single$P, function(x) x-1),
+                        lapply(input.ph.single$Q, function(x) x-1),
+                        rf.temp,
+                        verbose = verbose,
+                        max.rf.to.break.EM,
+                        tol,
+                        PACKAGE = "mappoly")
     } else{
       res.temp <- .Call("est_map_hmm",
-                      input.seq$ploidy,
-                      t(D),
-                      lapply(input.ph.single$P, function(x) x-1),
-                      lapply(input.ph.single$Q, function(x) x-1),
-                      rf.temp,
-                      verbose = verbose,
-                      max.rf.to.break.EM,
-                      tol,
-                      PACKAGE = "mappoly")
+                        input.seq$ploidy,
+                        t(D),
+                        lapply(input.ph.single$P, function(x) x-1),
+                        lapply(input.ph.single$Q, function(x) x-1),
+                        rf.temp,
+                        verbose = verbose,
+                        max.rf.to.break.EM,
+                        tol,
+                        PACKAGE = "mappoly")
     }
   } else res.temp <- list(1, rf.temp)
   map <- list(seq.num = input.seq$seq.num,
-            seq.rf = res.temp[[2]],
-            seq.ph = input.ph.single,
-            loglike = res.temp[[1]])
+              seq.rf = res.temp[[2]],
+              seq.ph = input.ph.single,
+              loglike = res.temp[[1]])
   map
 }

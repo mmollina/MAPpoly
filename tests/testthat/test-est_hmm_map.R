@@ -20,7 +20,7 @@ test_that("map contructed correctly", {
   print(map, detailed = TRUE)
   expect_is(map, "mappoly.map")
   map <- loglike_hmm(map)
-  expect_output(str(map), "List of 13")
+  expect_output(str(map$info), "List of 12")
   expect_equivalent(map$maps[[1]]$seq.rf, 
                     c(6.787204e-03, 1.283112e-03, 1.137237e-03, 3.272807e-05))
   expect_equivalent(map$maps[[1]]$seq.ph, 
@@ -51,7 +51,7 @@ test_that("sequential map contructed correctly", {
   map <- est_rf_hmm_sequential(input.seq = s, twopt = tpt, thres.twopt = 2, tol.final = 10e-4, detailed.verbose = TRUE)
   map <- est_rf_hmm_sequential(input.seq = s, twopt = tpt, thres.twopt = 2, tol.final = 10e-4, high.prec = TRUE)
   expect_is(map, "mappoly.map")
-  expect_output(str(map), "List of 13")
+  expect_output(str(map$info), "List of 12")
   expect_equivalent(map$maps[[1]]$seq.rf, 
                     c(6.787204e-03, 1.283112e-03, 1.137237e-03, 3.272807e-05))
   expect_equivalent(map$maps[[1]]$seq.ph, 

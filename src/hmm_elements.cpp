@@ -212,7 +212,7 @@ std::vector<std::vector<int> > rec_num_no_denominator(int m)
 
 /* FUNCTION: transition
  -----------------------------------------------------
- Returns a trasition matrix between loci k and k + 1 in
+ Returns a transition matrix between loci k and k + 1 in
  one parent i.e. Prop(p_{k+1}|p_k), given the ploidy level
  m and the recombination fraction rf.
  */
@@ -232,9 +232,9 @@ std::vector<std::vector<double> > transition(int m, double rf)
 
 /* FUNCTION:  index_func
  * -----------------------------------------------------
- * This function has a similar pourpose as the emission function.
- * It return the indices that corresponding to the
- * states that should be vistited given two vectors indicating
+ * This function has a similar purpose as the emission function.
+ * It return the indices corresponding to 
+ * states that should be visited given two vectors indicating
  * which homologous contain the allelic variant.
  * The result is a vector twice the size of states that should be
  * visited. The first half indicates the indices in the transition
@@ -342,7 +342,10 @@ std::vector<double> backward(int m,
   }
   return(fk);
 }
-/* FUNCTION: forward
+
+
+
+/* FUNCTION: forward_emit (with both informative parents)
  -----------------------------------------------------
  Classical forward equation presented in Rabiner 1989.
  */
@@ -367,7 +370,7 @@ std::vector<double> forward_emit(int m,
   }
   return(fk1);
 }
-/* FUNCTION: backward
+/* FUNCTION: backward (with both informative parents)
  -----------------------------------------------------
  Classical backward equation presented in Rabiner 1989.
  */
@@ -392,6 +395,55 @@ std::vector<double> backward_emit(int m,
   return(fk);
 }
 
+/* FUNCTION: forward (with one informative parent)
+ -----------------------------------------------------
+ Classical forward equation presented in Rabiner 1989.
+ */
+std::vector<double> forward_emit_one_parent(int m,
+                                            std::vector<double>& fk,
+                                            std::vector<int>& ik,
+                                            std::vector<int>& ik1,
+                                            std::vector<double>& emit,
+                                            std::vector<std::vector<double> >& T)
+{
+  int ngenk = ik.size();
+  int ngenk1 = ik1.size();
+  std::vector<double> fk1(ngenk1);
+  std::fill(fk1.begin(), fk1.end(), 0.0);
+  for(int k1 = 0; k1 < ngenk1; k1++ )
+  {
+    for(int k = 0; k < ngenk; k++ )
+    {
+      fk1[k1] = fk1[k1] + fk[k] * T[ik[k]][ik1[k1]];
+    }
+    fk1[k1] = fk1[k1] * emit[k1];
+  }
+  return(fk1);
+}
+/* FUNCTION: backward (with one informative parent)
+ -----------------------------------------------------
+ Classical backward equation presented in Rabiner 1989.
+ */
+std::vector<double> backward_emit_one_parent(int m,
+                                             std::vector<double>& fk1,
+                                             std::vector<int>& ik,
+                                             std::vector<int>& ik1,
+                                             std::vector<double>& emit,
+                                             std::vector<std::vector<double> >& T)
+{
+  int ngenk = ik.size();
+  int ngenk1 = ik1.size();
+  std::vector<double> fk(ngenk);
+  std::fill(fk.begin(), fk.end(), 0.0);
+  for(int k = 0; k < ngenk; k++ )
+  {
+    for(int k1 = 0; k1 < ngenk1; k1++ )
+    {
+      fk[k] =  fk[k] + fk1[k1] * T[ik[k]][ik1[k1]] * emit[k1]; 
+    }
+  }
+  return(fk);
+}
 
 /* FUNCTION: forward
  -----------------------------------------------------

@@ -267,6 +267,38 @@ RcppExport SEXP est_haplotype_map(SEXP ploidyR,
   return(z);
 }
 
+// RcppExport SEXP rec_number(SEXP ploidyR,
+//                            SEXP rfR){
+//   int m = Rcpp::as<int>(ploidyR);
+//   Rcpp::NumericVector rf(rfR);
+//   std::vector< std::vector<double> > R;
+//   R = rec_num(m);
+//   for(int i = 0; i < R.size(); i++){
+//     for(int j = 0; j < R[i].size(); j++){
+//       Rcpp::Rcout << R[i][j] << " ";
+//     }
+//     Rcpp::Rcout << "\n";
+//   }
+//   Rcpp::Rcout << "\n";
+//   Rcpp::Rcout << "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~";
+//   Rcpp::Rcout << "\n";
+//   std::vector< std::vector< std::vector<double> > > T;
+//   for(int i=0; i < rf.size(); i++)
+//     T.push_back(transition(m, rf[i]));
+//   for(int i = 0; i < T.size(); i++){
+//     for(int j = 0; j < T[i].size(); j++){
+//       for(int k = 0; k < T[i][j].size(); k++){
+//         Rcpp::Rcout << T[i][j][k] << " ";
+//         }
+//       Rcpp::Rcout << "\n";
+//       }
+//     Rcpp::Rcout << "\n";
+//   }
+//   Rcpp::Rcout << "\n";
+//   return(ploidyR); 
+// }
+
+
 RcppExport SEXP est_haplotype_map_highprec(SEXP ploidyR,
                                            SEXP n_marR,
                                            SEXP n_indR,

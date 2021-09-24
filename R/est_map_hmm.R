@@ -30,7 +30,15 @@
 #'
 #' @param verbose if \code{TRUE}, current progress is shown; if
 #'     \code{FALSE} (default), no output is produced
-#'
+#'     
+#' @param info.parent Parent which will be considered informative in case of
+#'     computing separate maps in both parents. If NULL (default), returns 
+#'     the integrated map for both parents. 
+#' 
+#' @param uninfo.parent Parent which will be considered uninformative in case of
+#'     computing separate maps in both parents. If NULL (default), returns 
+#'     the integrated map for both parents. 
+#' 
 #' @param tol the desired accuracy (default = 1e-04)
 #'
 #' @param est.given.0.rf logical. If TRUE returns a map forcing all
@@ -142,6 +150,8 @@
 est_rf_hmm <- function(input.seq, input.ph = NULL,
                        thres = 0.5, twopt = NULL,
                        verbose = FALSE, 
+                       info.parent = NULL,
+                       uninfo.parent = NULL,
                        tol = 1e-04,
                        est.given.0.rf = FALSE,
                        reestimate.single.ph.configuration = TRUE,
@@ -153,6 +163,14 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   }
   if(length(input.seq$seq.num)  ==  1)
     stop("Input sequence contains only one marker.", call. = FALSE)
+  if(!is.null(info.parent)){
+    if(is.null(uninfo.parent))
+      stop("Input sequence contains only one marker.", call. = FALSE)
+    P <- do.call(cbind, input.seq[grep(pattern = "seq.dose.p", names(input.seq))])
+    id <- P[,info.parent] != 0 & apply(P[,uninfo.parent, drop = FALSE], 1, function(x) all(x==0))
+    input.seq <- make_seq_mappoly(get(input.seq$data.name, pos = 1), names(which(id)), 
+                                  data.name = input.seq$data.name)
+  }
   if (is.null(input.ph)) {
     if (is.null(twopt))
       stop("Two-point analysis not found!")
@@ -166,8 +184,8 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   if(length(input.seq$seq.num)  ==  2 & !est.given.0.rf){
     maps <- vector("list", 1)
     res.temp <- twopt$pairwise[[paste(sort(input.seq$seq.num), collapse = "-")]]
-    dp <- get(input.seq$data.name, pos  = 1)$dosage.p1[input.seq$seq.num]
-    dq <- get(input.seq$data.name, pos  = 1)$dosage.p2[input.seq$seq.num]
+    dp <- input.seq$seq.dose.p1
+    dq <- input.seq$seq.dose.p2
     sh <- as.numeric(unlist(strsplit(rownames(res.temp)[1], split = "-")))
     res.ph <- list(P = c(list(0),list(0)), Q = c(list(0),list(0)))
     if(dp[1] != 0)
@@ -193,13 +211,13 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
                                       n.mrk = length(input.seq$seq.num),
                                       seq.num = input.seq$seq.num,
                                       mrk.names = input.seq$seq.mrk.names,
-                                      seq.dose.p1 = get(input.seq$data.name, pos  = 1)$dosage.p1[input.seq$seq.mrk.names],
-                                      seq.dose.p2 = get(input.seq$data.name, pos  = 1)$dosage.p2[input.seq$seq.mrk.names],
-                                      chrom = get(input.seq$data.name, pos  = 1)$chrom[input.seq$seq.mrk.names],
-                                      genome.pos = get(input.seq$data.name, pos  = 1)$genome.pos[input.seq$seq.mrk.names],
-                                      seq.ref = get(input.seq$data.name, pos  = 1)$seq.ref[input.seq$seq.mrk.names],
-                                      seq.alt = get(input.seq$data.name, pos  = 1)$seq.alt[input.seq$seq.mrk.names],
-                                      chisq.pval = get(input.seq$data.name, pos  = 1)$chisq.pval[input.seq$seq.mrk.names],
+                                      seq.dose.p1 = input.seq$seq.dose.p1,
+                                      seq.dose.p2 = input.seq$seq.dose.p2,
+                                      chrom = input.seq$chrom,
+                                      genome.pos = input.seq$genome.pos,
+                                      seq.ref = input.seq$seq.ref,
+                                      seq.alt = input.seq$seq.alt,
+                                      chisq.pval = input.seq$chisq.pval,
                                       data.name = input.seq$data.name,
                                       ph.thresh = abs(res.temp[2,1])),
                           maps = maps),
@@ -209,10 +227,6 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   ret.map.no.rf.estimation <- FALSE
   if(n.ph  ==  1 && !reestimate.single.ph.configuration)
     ret.map.no.rf.estimation <- TRUE
-  #if (verbose) {
-  #  cat("\n    Number of linkage phase configurations: ")
-  #cat("\n---------------------------------------------\n|\n|--->")
-  #}
   maps <- vector("list", n.ph)
   if (verbose){
     txt <- paste0("       ",n.ph, " phase(s): ")
@@ -233,13 +247,27 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
     }
     ph <- list(P = input.ph$config.to.test[[i]]$P,
                Q = input.ph$config.to.test[[i]]$Q)
-    maps[[i]] <- est_rf_hmm_single(input.seq = input.seq,
-                                   input.ph.single = ph,
-                                   rf.temp = rf.temp,
-                                   tol = tol,
-                                   verbose = FALSE,
-                                   ret.map.no.rf.estimation = ret.map.no.rf.estimation, 
-                                   high.prec = high.prec)
+    if(!is.null(info.parent)){
+      map.temp <- est_rf_hmm_single_one_parent(input.seq = input.seq,
+                                                input.ph.single = ph,
+                                                info.parent = info.parent,
+                                                uninfo.parent = uninfo.parent,
+                                                rf.vec = rf.temp,
+                                                global.err = 0.0,
+                                                tol = tol,
+                                                verbose = FALSE,
+                                                ret.map.no.rf.estimation = ret.map.no.rf.estimation)
+    maps[[i]] <- map.temp$maps[[1]]
+    } else{
+      maps[[i]] <- est_rf_hmm_single(input.seq = input.seq,
+                                     input.ph.single = ph,
+                                     rf.temp = rf.temp,
+                                     tol = tol,
+                                     verbose = FALSE,
+                                     ret.map.no.rf.estimation = ret.map.no.rf.estimation, 
+                                     high.prec = high.prec)
+      
+    }
   }
   #cat("\n")
   id <- order(sapply(maps, function(x) x$loglike), decreasing = TRUE)
@@ -247,17 +275,17 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   if (verbose)
     cat("\n")
   structure(list(info = list(ploidy = input.seq$ploidy,
-                             n.mrk = length(input.seq$seq.num),
-                             seq.num = input.seq$seq.num,
-                             mrk.names = input.seq$seq.mrk.names,
-                             seq.dose.p1 = get(input.seq$data.name, pos  = 1)$dosage.p1[input.seq$seq.mrk.names],
-                             seq.dose.p2 = get(input.seq$data.name, pos  = 1)$dosage.p2[input.seq$seq.mrk.names],
-                             chrom = get(input.seq$data.name, pos  = 1)$chrom[input.seq$seq.mrk.names],
-                             genome.pos = get(input.seq$data.name, pos  = 1)$genome.pos[input.seq$seq.mrk.names],
-                             seq.ref = get(input.seq$data.name, pos  = 1)$seq.ref[input.seq$seq.mrk.names],
-                             seq.alt = get(input.seq$data.name, pos  = 1)$seq.alt[input.seq$seq.mrk.names],
-                             chisq.pval = get(input.seq$data.name, pos  = 1)$chisq.pval[input.seq$seq.mrk.names],
-                             data.name = input.seq$data.name, ph.thresh = input.ph$thres),
+                            n.mrk = length(input.seq$seq.num),
+                            seq.num = input.seq$seq.num,
+                            mrk.names = input.seq$seq.mrk.names,
+                            seq.dose.p1 = input.seq$seq.dose.p1,
+                            seq.dose.p2 = input.seq$seq.dose.p2,
+                            chrom = input.seq$chrom,
+                            genome.pos = input.seq$genome.pos,
+                            seq.ref = input.seq$seq.ref,
+                            seq.alt = input.seq$seq.alt,
+                            chisq.pval = input.seq$chisq.pval,
+                            data.name = input.seq$data.name),
                  maps = maps),
             class = "mappoly.map")
 }

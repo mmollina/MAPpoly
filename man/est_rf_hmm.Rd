@@ -12,6 +12,8 @@ est_rf_hmm(
   thres = 0.5,
   twopt = NULL,
   verbose = FALSE,
+  info.parent = NULL,
+  uninfo.parent = NULL,
   tol = 1e-04,
   est.given.0.rf = FALSE,
   reestimate.single.ph.configuration = TRUE,
@@ -50,6 +52,14 @@ containing two-point information}
 
 \item{verbose}{if \code{TRUE}, current progress is shown; if
 \code{FALSE} (default), no output is produced}
+
+\item{info.parent}{Parent which will be considered informative in case of
+computing separate maps in both parents. If NULL (default), returns 
+the integrated map for both parents.}
+
+\item{uninfo.parent}{Parent which will be considered uninformative in case of
+computing separate maps in both parents. If NULL (default), returns 
+the integrated map for both parents.}
 
 \item{tol}{the desired accuracy (default = 1e-04)}
 
