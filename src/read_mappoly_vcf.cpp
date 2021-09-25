@@ -105,6 +105,7 @@ int get_ploidy(std::string mystring, int gt_pos){
   //  Rcpp::Rcout << "In strsplit" << std::endl;
   char split = ':';
   char split2 = '/';
+  char split3 = '|';
   int flag;
   std::vector<std::string> vec_o_strings;
   int start = 0;
@@ -140,7 +141,7 @@ int get_ploidy(std::string mystring, int gt_pos){
   // Looping through string2
   start = 0;
   for(i = 0; i < mystring.size(); i++){
-    if( mystring[i] != split2){
+    if( mystring[i] != split2 && mystring[i] != split3){
       start += 1;
     }
   }  
