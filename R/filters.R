@@ -343,7 +343,7 @@ filter_segregation <- function(input.data, chisq.pval.thres = 10e-5, inter = TRU
 #' 
 #' @export
 #' 
-filter_contaminats <- function(input.data, ind.to.remove = NULL, inter = TRUE, verbose = TRUE){
+filter_contaminants <- function(input.data, ind.to.remove = NULL, inter = TRUE, verbose = TRUE){
   if (!inherits(input.data, "mappoly.data")) {
     stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
   }
