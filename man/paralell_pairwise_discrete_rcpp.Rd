@@ -6,12 +6,17 @@
 \usage{
 paralell_pairwise_discrete_rcpp(
   mrk.pairs,
-  input.seq,
+  m,
   geno,
   dP,
   dQ,
-  count.cache,
-  tol = .Machine$double.eps^0.25
+  count.vector,
+  count.matrix.rownames,
+  count.matrix.number,
+  count.matrix.pos,
+  count.matrix.length,
+  tol = .Machine$double.eps^0.25,
+  threads
 )
 }
 \arguments{

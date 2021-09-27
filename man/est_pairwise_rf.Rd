@@ -7,6 +7,7 @@
 est_pairwise_rf(
   input.seq,
   count.cache = NULL,
+  count.matrix = NULL,
   ncpus = 1L,
   mrk.pairs = NULL,
   n.batches = 1L,

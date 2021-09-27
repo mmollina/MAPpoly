@@ -618,32 +618,24 @@ est_pairwise_rf_rcpp <- function(input.seq, count.cache = NULL, ncpus = 1L,
                                                count.matrix.length = count.matrix.length,
                                                tol = tol, threads = ncpus)
         
-      } 
-      else if(est.type  ==  "prob") {
-        res <- lapply(input.list,
-                      paralell_pairwise_probability,
-                      input.seq = input.seq,
-                      geno = geno,
-                      dP = get(input.seq$data.name)$dosage.p1,
-                      dQ = get(input.seq$data.name)$dosage.p2,
-                      count.cache = count.cache,
-                      tol = tol)
-      } 
-    ## res <- unlist(res,
-    ##               recursive = FALSE)
-    names(res) <- apply(mrk.pairs + 1,
-                        2,
-                        paste,
-                        collapse = "-")
-    nas <- sapply(res, function(x) any(is.na(x)))
-    return(structure(list(data.name = input.seq$data.name,
-                          n.mrk = length(input.seq$seq.num),
-                          seq.num = input.seq$seq.num,
-                          pairwise = res,
-                          chisq.pval.thres = input.seq$chisq.pval.thres,
-                          chisq.pval = input.seq$chisq.pval,
-                          nas  = nas),
-                     class = "poly.est.two.pts.pairwise"))
+      }
+  res[res == -1] = NA
+  colnames(res) = c("Best phase position","Best phase rf","Best phase LOD-rf","Second best phase LOD diff")
+  return(res)
+    ## rownames(res) <- apply(mrk.pairs + 1,
+    ##                     2,
+    ##                     paste,
+    ##                     collapse = "-")
+    ## nas <- apply(res, 2, function(x) any(is.na(rowSums(x))))
+    ## return(structure(list(data.name = input.seq$data.name,
+    ##                       n.mrk = length(input.seq$seq.num),
+    ##                       seq.num = input.seq$seq.num,
+    ##                       pairwise = res
+    ##                       chisq.pval.thres = input.seq$chisq.pval.thres,
+    ##                       chisq.pval = input.seq$chisq.pval,
+    ##                       nas = rep(NA, length(input.seq$seq.num))
+    ##                       ),
+    ##                  class = "poly.est.two.pts.pairwise"))
 }
 
 #' Wrapper function to discrete-based pairwise two-point estimation in C++
