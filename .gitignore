@@ -21,3 +21,5 @@ my_tests/*.rd*
 my_tests/*.RData
 my_tests/
 old_cran-comments/
+hex.xcf
+test_map.R
