@@ -79,6 +79,17 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
   
 # Related software
 
+* [Polyverse](https://polyploids.r-universe.dev/ui#builds) - the polyploid R universe (a Lindsay Clark's initiative)
+```R
+# Enable this universe
+options(repos = c(
+    polyploids = 'https://polyploids.r-universe.dev',
+    CRAN = 'https://cloud.r-project.org'))
+
+# Install some packages
+install.packages('MAPpoly')
+```
+
 * Variant Calling
   *  [GBSapp: An automated pipeline for variant calling and filtering.](https://github.com/bodeolukolu/GBSapp)
 
