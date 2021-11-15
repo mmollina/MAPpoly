@@ -84,6 +84,7 @@
 #' compare_haplotypes(ploidy = 4, best.phase$Q[names.id], 
 #'                    full.map$maps[[1]]$seq.ph$Q[names.id])
 #' }
+#' @importFrom utils capture.output
 #' @export
 merge_maps <- function(map.list, 
                      twopt,
