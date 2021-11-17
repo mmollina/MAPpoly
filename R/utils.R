@@ -1009,6 +1009,8 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
   output.map$info$seq.dose.p2 <- dat$dosage.p2[output.map$info$mrk.names]
   output.map$info$chrom <- dat$chrom[output.map$info$mrk.names]
   output.map$info$genome.pos <- dat$genome.pos[output.map$info$mrk.names]
+  output.map$info$seq.ref <-  dat$seq.ref[output.map$info$mrk.names]
+  output.map$info$seq.alt <-  dat$seq.alt[output.map$info$mrk.names]
   output.map$info$chisq.pval <- dat$chisq.pval[output.map$info$mrk.names]
   return(output.map)
 }
