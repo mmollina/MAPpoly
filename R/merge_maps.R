@@ -101,9 +101,11 @@ merge_maps <- function(map.list,
   if (!inherits(twopt, "poly.est.two.pts.pairwise")){
     stop(deparse(substitute(twopt)), " is not an object of class 'poly.est.two.pts.pairwise'")    
   }
-  alleles <- lapply(map.list, function(x) x$info$seq.ref)
-  names(alleles) <- NULL
-  alleles <- unlist(alleles)
+  ref <- lapply(map.list, function(x) x$info$seq.ref)
+  alt <- lapply(map.list, function(x) x$info$seq.alt)
+  names(alt) <- names(ref) <- NULL
+  ref <- unlist(ref)
+  alt <- unlist(alt)
   ## Check twopt consistency
   s.temp <- make_seq_mappoly(get(map.list[[1]]$info$data.name), 
                            unlist(sapply(map.list, function(x) x$info$mrk.names)), 
@@ -232,8 +234,8 @@ merge_maps <- function(map.list,
     output.map$info$seq.dose.p2 <- c(map.list[[1]]$info$seq.dose.p2, map.list[[2]]$info$seq.dose.p2)
     output.map$info$chrom <- c(map.list[[1]]$info$chrom, map.list[[2]]$info$chrom)
     output.map$info$genome.pos <- c(map.list[[1]]$info$genome.pos, map.list[[2]]$info$genome.pos)
-    output.map$info$seq.ref <-  alleles[output.map$info$mrk.names]
-    output.map$info$seq.alt <-  alleles[output.map$info$mrk.names]
+    output.map$info$seq.ref <-  ref[output.map$info$mrk.names]
+    output.map$info$seq.alt <-  alt[output.map$info$mrk.names]
     output.map$info$chisq.pval <- c(map.list[[1]]$info$chisq.pval, map.list[[2]]$info$chisq.pval)
     for(i in 1:nrow(res))
     {
@@ -263,8 +265,8 @@ merge_maps <- function(map.list,
     out.map$info$seq.dose.p2 <- unlist(sapply(map.list, function(x) x$info$seq.dose.p2))
     out.map$info$chrom <- unlist(sapply(map.list, function(x) x$info$chrom))
     out.map$info$genome.pos <- unlist(sapply(map.list, function(x) x$info$genome.pos))
-    out.map$info$seq.ref <-  alleles[out.map$info$mrk.names]
-    out.map$info$seq.alt <-  alleles[out.map$info$mrk.names]
+    out.map$info$seq.ref <-  ref[out.map$info$mrk.names]
+    out.map$info$seq.alt <-  alt[out.map$info$mrk.names]
     out.map$info$chisq.pval <- unlist(sapply(map.list, function(x) x$info$chisq.pval))
     ##splitting to reestimate
     map.list2 <- vector("list", length(map.list))
