@@ -167,7 +167,7 @@ concatenate_new_marker <- function(X = NULL, d, sh = NULL, seq.num = NULL, ploid
 #' and a LOD threshold
 #'
 #' @param input.seq an object of class \code{mappoly.sequence}.
-#' @param twopt an object of class \code{poly.est.two.pts.pairwise}
+#' @param twopt an object of class \code{mappoly.twopt}
 #' @param thres threshold from which the linkage phases can be
 #'     discarded (if abs(ph_LOD) > thres)
 #' @return a unique list of matrices representing linkage phases
@@ -236,7 +236,7 @@ get_ph_conf_ret_sh <- function(M) {
 #' are contained in \code{twopt}
 #'
 #' @param input.seq An object of class \code{mappoly.sequence}
-#' @param twopt An object of class \code{poly.est.two.pts.pairwise}
+#' @param twopt An object of class \code{mappoly.twopt}
 #' @return If all pairwise combinations of elements of
 #'     \code{input.seq} are contained in \code{twopt}, the function
 #'     returns 0. Otherwise, returns the missing pairs.
@@ -244,8 +244,8 @@ get_ph_conf_ret_sh <- function(M) {
 check_pairwise <- function(input.seq, twopt) {
     if(!(inherits(input.seq, "mappoly.sequence") || is.integer(input.seq) || is.numeric(input.seq) || is.character(input.seq)))
         stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence', 'numeric' or 'integer'")
-    if(!inherits(twopt, "poly.est.two.pts.pairwise"))
-        stop(deparse(substitute(twopt)), " is not an object of class 'poly.est.two.pts.pairwise' or 'poly.haplo.est.two.pts.pairwise'")
+    if(!inherits(twopt, "mappoly.twopt"))
+        stop(deparse(substitute(twopt)), " is not an object of class 'mappoly.twopt' or 'poly.haplo.est.two.pts.pairwise'")
     id.seq <- input.seq
     if(inherits(input.seq, "mappoly.sequence"))
         id.seq <- input.seq$seq.num
@@ -260,14 +260,14 @@ check_pairwise <- function(input.seq, twopt) {
 }
 
 #' Get the recombination fraction for a sequence of markers given an
-#' object of class \code{poly.est.two.pts.pairwise} and a list
+#' object of class \code{mappoly.twopt} and a list
 #' containing the linkage phase configuration. This list can be found
 #' in any object of class \code{two.pts.linkage.phases}, in
 #' x$config.to.test$'Conf-i', where x is the object of class
 #' \code{two.pts.linkage.phases} and i is one of the possible
 #' configurations.
 #'
-#' @param twopt an object of class \code{poly.est.two.pts.pairwise}
+#' @param twopt an object of class \code{mappoly.twopt}
 #' @param ph.list a list containing the linkage phase configuration. This
 #'     list can be found in any object of class
 #'     \code{two.pts.linkage.phases}, in x$config.to.test$'Conf-i',
@@ -294,7 +294,7 @@ get_rf_from_list <- function(twopt, ph.list) {
 #' List of linkage phases
 #'
 #' Returns a list of possible linkage phase configurations using
-#' the two-point information contained in the object \code{poly.est.two.pts.pairwise}
+#' the two-point information contained in the object \code{mappoly.twopt}
 #' as elimination criteria
 #'
 #' @param input.seq an object of class \code{mappoly.sequence}
@@ -302,7 +302,7 @@ get_rf_from_list <- function(twopt, ph.list) {
 #' @param thres the LOD threshold used to determine whether linkage phases
 #'     compared via two-point analysis should be considered
 #'     
-#' @param twopt an object of class \code{poly.est.two.pts.pairwise}
+#' @param twopt an object of class \code{mappoly.twopt}
 #'     containing the two-point information
 #'     
 #' @param mrk.to.add marker to be added to the end of the linkage

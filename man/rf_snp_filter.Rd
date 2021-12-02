@@ -15,7 +15,7 @@ rf_snp_filter(
 )
 }
 \arguments{
-\item{input.twopt}{an object of class \code{poly.est.two.pts.pairwise}}
+\item{input.twopt}{an object of class \code{mappoly.twopt}}
 
 \item{thresh.LOD.ph}{LOD score threshold for linkage phase configuration (default = 5)}
 

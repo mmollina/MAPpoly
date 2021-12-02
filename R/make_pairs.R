@@ -1,15 +1,15 @@
 #'  Subset pairwise recombination fractions
 #'
-#'  Get a subset of an object of class \code{poly.est.two.pts.pairwise} (i.e.
+#'  Get a subset of an object of class \code{mappoly.twopt} (i.e.
 #'  recombination fraction) and LOD score statistics for all possible linkage
 #'  phase combinations based on a sequence of markers.
 #'
-#' @param input.twopt an object of class \code{poly.est.two.pts.pairwise}
+#' @param input.twopt an object of class \code{mappoly.twopt}
 #'
 #' @param input.seq an object of class \code{mappoly.sequence}, with 
 #' a sequence of markers contained in \code{input.twopt}
 #'
-#' @return an object of class \code{poly.est.two.pts.pairwise} which is a
+#' @return an object of class \code{mappoly.twopt} which is a
 #'  subset of \code{input.twopt}. 
 #'  See \code{\link[mappoly]{est_pairwise_rf}} for details
 #'
@@ -43,9 +43,9 @@ make_pairs_mappoly <- function(input.twopt, input.seq){
   if (!inherits(input.seq, input_classes1)) {
     stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
   }
-  input_classes2  <- c("poly.est.two.pts.pairwise")
+  input_classes2  <- c("mappoly.twopt")
   if (!inherits(input.twopt, input_classes2)) {
-    stop(deparse(substitute(input.twopt)), " is not an object of class 'poly.est.two.pts.pairwise'")
+    stop(deparse(substitute(input.twopt)), " is not an object of class 'mappoly.twopt'")
   }
   if(!all(input.seq$seq.num%in%input.twopt$seq.num))
     stop(deparse(substitute(input.twopt)), " does not contain (some) markers present in ", deparse(substitute(input.seq)))

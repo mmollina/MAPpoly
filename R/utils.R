@@ -1657,10 +1657,73 @@ aggregate_matrix <- function(M, fact){
   R
 }
 
+#' Get states and emission in one informative parent
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @export
+get_states_and_emission_one_parent <- function(ploidy, ph, global.err, D){
+  n.mrk <- nrow(D)
+  n.ind <- ncol(D)
+  A <- matrix(0, nrow = choose(ploidy, ploidy/2), ncol = length(ph))
+  for(i in 1:length(ph)){
+    id1 <- numeric(ploidy)
+    id1[ph[[i]]] <- 1
+    A[,i] <- apply(combn(id1, ploidy/2), 2, sum)
+  }
+  if(round(global.err, 4) == 0.0){
+    e <- h <- vector("list", n.mrk)
+    for(j in 1:n.mrk){
+      e.temp <- h.temp <- vector("list", n.ind)
+      for(i in 1:n.ind){
+        h.temp[[i]] <- which(A[,j] == D[j,i]) - 1
+          if(length(h.temp[[i]]) == 0)
+            h.temp[[i]] <- 1:nrow(A) - 1
+        #e.temp[[i]] <- rep(1, length(h.temp[[i]]))/length(h.temp[[i]])
+         e.temp[[i]] <- rep(1, length(h.temp[[i]]))
+      }
+      e[[j]] <- e.temp
+      h[[j]] <- h.temp
+    }
+  } else if(round(global.err, 4) > 0.0){
+    e <- h <- vector("list", n.mrk)
+    for(j in 1:n.mrk){
+      e.temp <- h.temp <- vector("list", n.ind)
+      for(i in 1:n.ind){
+        h.temp[[i]] <- 1:nrow(A) - 1
+        s <- which(A[,j] == D[j,i])
+        if(length(s) == 0)
+          e.temp[[i]] <- rep(1/nrow(A), nrow(A))
+        else{
+          e.temp0 <- numeric(nrow(A))
+          e.temp0[-s] <- global.err/(nrow(A) - length(s))
+          e.temp0[s] <- (1- global.err)/length(s)
+          e.temp[[i]] <- e.temp0
+        }
+      }
+      e[[j]] <- e.temp
+      h[[j]] <- h.temp
+    }
+  }
+  list(states = h, emission = e)    
+}
 
 
+#' Conversion: vector to matrix
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @export
+v_2_m <- function(x, n){
+  y <- base::matrix(NA, n, n) 
+  y[base::lower.tri(y)] <- as.numeric(x)
+  y[base::upper.tri(y)] <- t(y)[base::upper.tri(y)]
+  y
+}
 
-
-
+#' Skeleton to test CPP functions
+#' #' @export
+#' test_CPP<-function(m, rf)
+#'   .Call("rec_number", as.integer(m), as.numeric(rf), PACKAGE = "mappoly")
 
 

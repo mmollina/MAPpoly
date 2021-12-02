@@ -7,6 +7,7 @@
 est_pairwise_rf(
   input.seq,
   count.cache = NULL,
+  count.matrix = NULL,
   ncpus = 1L,
   mrk.pairs = NULL,
   n.batches = 1L,
@@ -24,6 +25,9 @@ est_pairwise_rf(
 pre-computed genotype frequencies, obtained with
 \code{\link[mappoly]{cache_counts_twopt}}. If \code{NULL} (default),
 genotype frequencies are internally loaded.}
+
+\item{count.matrix}{similar to \code{count.cache}, but in matrix format. 
+Mostly for internal use.}
 
 \item{ncpus}{Number of parallel processes (cores) to spawn (default = 1)}
 
@@ -51,7 +55,7 @@ be either PSOCK (default) or FORK.}
 \item{tol}{the desired accuracy. See \code{optimize()} for details}
 }
 \value{
-An object of class \code{poly.est.two.pts.pairwise} which
+An object of class \code{mappoly.twopt} which
     is a list  containing the following components:
     \item{data.name}{name of the object of class
         \code{mappoly.data} with the raw data}

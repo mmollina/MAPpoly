@@ -33,4 +33,6 @@ test_that("estimate two-points rf correctly", {
   expect_is(sf2, "mappoly.sequence")
   expect_equal(sum(sf$seq.num), 135208)
   expect_equal(sum(sf2$seq.num), 135208)
+  tpt2 <- est_pairwise_rf2(s, ncpus = 2)
+  expect_equal(round(sum(tpt2$pairwise$rf - m$rec.mat, na.rm = TRUE),3), 0)
 })

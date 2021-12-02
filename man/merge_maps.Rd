@@ -16,7 +16,7 @@ merge_maps(
 \arguments{
 \item{map.list}{a list of objects of class \code{mappoly.map} to be merged.}
 
-\item{twopt}{an object of class \code{poly.est.two.pts.pairwise}
+\item{twopt}{an object of class \code{mappoly.twopt}
 containing the two-point information for all pairs of markers
 present in the original maps}
 

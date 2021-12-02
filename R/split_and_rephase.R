@@ -6,7 +6,7 @@
 #'
 #' @param input.map an object of class \code{mappoly.map}
 #' 
-#' @param twopt an object of class \code{poly.est.two.pts.pairwise}
+#' @param twopt an object of class \code{mappoly.twopt}
 #'     containing the two-point information for the markers contained 
 #'     in \code{input.map}
 #'     

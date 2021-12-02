@@ -12,7 +12,7 @@
 #'     That action usually eliminates markers that are unlinked to the
 #'     set of analyzed markers.
 #'
-#' @param input.twopt an object of class \code{poly.est.two.pts.pairwise}
+#' @param input.twopt an object of class \code{mappoly.twopt}
 #'
 #' @param thresh.LOD.ph LOD score threshold for linkage phase configuration (default = 5)
 #'
@@ -69,10 +69,10 @@ rf_snp_filter <- function(input.twopt,
                         diagnostic.plot = TRUE)
 {
     ## checking for correct object
-    input_classes  <- c("poly.est.two.pts.pairwise")
+    input_classes  <- c("mappoly.twopt")
     if (!inherits(input.twopt, input_classes)) {
         stop(deparse(substitute(input.twopt)),
-             " is not an object of class 'poly.est.two.pts.pairwise'")
+             " is not an object of class 'mappoly.twopt'")
     }
     probs <- range(probs)
     ## Getting filtered rf matrix

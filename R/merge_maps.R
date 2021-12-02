@@ -9,7 +9,7 @@
 #' 
 #' @param map.list a list of objects of class \code{mappoly.map} to be merged.
 #' 
-#' @param twopt an object of class \code{poly.est.two.pts.pairwise}
+#' @param twopt an object of class \code{mappoly.twopt}
 #'     containing the two-point information for all pairs of markers
 #'     present in the original maps
 #'     
@@ -98,8 +98,8 @@ merge_maps <- function(map.list,
          " is not a list containing 'mappoly.map' objects.")
   if (length(unique(sapply(map.list, function(x) x$info$data.name))) != 1)
     stop("MAPpoly won't merge maps from different datasets.")
-  if (!inherits(twopt, "poly.est.two.pts.pairwise")){
-    stop(deparse(substitute(twopt)), " is not an object of class 'poly.est.two.pts.pairwise'")    
+  if (!inherits(twopt, "mappoly.twopt")){
+    stop(deparse(substitute(twopt)), " is not an object of class 'mappoly.twopt'")    
   }
   ref <- lapply(map.list, function(x) x$info$seq.ref)
   alt <- lapply(map.list, function(x) x$info$seq.alt)

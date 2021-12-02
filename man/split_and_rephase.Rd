@@ -17,7 +17,7 @@ split_and_rephase(
 \arguments{
 \item{input.map}{an object of class \code{mappoly.map}}
 
-\item{twopt}{an object of class \code{poly.est.two.pts.pairwise}
+\item{twopt}{an object of class \code{mappoly.twopt}
 containing the two-point information for the markers contained 
 in \code{input.map}}
 
