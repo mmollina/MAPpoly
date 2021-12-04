@@ -1,7 +1,7 @@
 #' Recombination fraction list to matrix
 #'
 #' Transforms the recombination fraction list contained in an object
-#' of class \code{mappoly.twopt} into a recombination
+#' of class \code{mappoly.twopt} or \code{mappoly.twopt2} into a recombination
 #' fraction matrix
 #'
 #' \code{thresh_LOD_ph} should be set in order to only select
@@ -9,7 +9,7 @@
 #'     linkage phase configuration higher than \code{thresh_LOD_ph}
 #'     when compared to the second most likely linkage phase configuration.
 #'
-#' @param input.twopt an object of class \code{mappoly.twopt}
+#' @param input.twopt an object of class \code{mappoly.twopt} or \code{mappoly.twopt2} 
 #'
 #' @param thresh.LOD.ph LOD score threshold for linkage phase configurations (default = 0)
 #'
@@ -82,78 +82,124 @@ rf_list_to_matrix <- function(input.twopt,
                               shared.alleles = FALSE,
                               verbose = TRUE) {
   ## checking for correct object
-  if (!inherits(input.twopt, "mappoly.twopt")) {
+  if (inherits(input.twopt, "mappoly.twopt")){
+    pair_input <- input.twopt$pairwise
+    marnames <- rownames(get(input.twopt$data.name, pos = 1)$geno.dose)[sort(input.twopt$seq.num)]
+    marindex <- sort(input.twopt$seq.num)
+    lod.ph.mat <- lod.mat <- rec.mat <- matrix(NA, input.twopt$n.mrk, input.twopt$n.mrk)
+    if(shared.alleles)
+      ShP <- ShQ <- lod.mat
+    #### UPDATE: instead of recovering the order from names, provide using the object 'input.twopt'
+    #seq.num.orig <- unique(sapply(strsplit(x = names(input.twopt$pairwise), split = "-"), function(x) as.numeric(x[1])))
+    #seq.num.orig <- c(seq.num.orig, strsplit(tail(names(input.twopt$pairwise), n = 1), "-")[[1]][2])
+    #dimnames(lod.mat) = dimnames(rec.mat) = list(seq.num.orig, seq.num.orig)
+    if (ncpus > 1) {
+      start <- proc.time()
+      if (verbose)
+        cat("INFO: Using ", ncpus, " CPUs.\n")
+      cl <- parallel::makeCluster(ncpus)
+      parallel::clusterExport(cl,
+                              varlist = c("thresh.LOD.ph", "thresh.LOD.rf", "thresh.rf", "shared.alleles"),
+                              envir = environment())
+      rf.lod.mat <- parallel::parSapply(cl, pair_input, "select_rf",
+                                        thresh.LOD.ph, thresh.LOD.rf, thresh.rf, shared.alleles)
+      parallel::stopCluster(cl)
+      end <- proc.time()
+      if (verbose) {
+        cat("INFO: Done with",
+            length(pair_input),
+            " pairs of markers \n")
+        cat("INFO: Operation took:",
+            round((end - start)[3],
+                  digits = 3),
+            "seconds\n")
+      }
+    } else {
+      if (verbose) {
+        cat("INFO: Going singlemode. Using one CPU.\n")
+      }
+      rf.lod.mat <- sapply(pair_input, select_rf, thresh.LOD.ph, thresh.LOD.rf, thresh.rf, shared.alleles)
+    }
+    rec.mat[lower.tri(rec.mat)] <- as.numeric(rf.lod.mat[1,])
+    rec.mat[upper.tri(rec.mat)] <- t(rec.mat)[upper.tri(rec.mat)]
+    lod.mat[lower.tri(lod.mat)] <- as.numeric(rf.lod.mat[2,])
+    lod.mat[upper.tri(lod.mat)] <- t(lod.mat)[upper.tri(lod.mat)]
+    lod.ph.mat[lower.tri(lod.ph.mat)] <- as.numeric(rf.lod.mat[3,])
+    lod.ph.mat[upper.tri(lod.ph.mat)] <- t(lod.ph.mat)[upper.tri(lod.ph.mat)]
+    dimnames(lod.ph.mat) <- dimnames(rec.mat) <- dimnames(lod.mat) <- list(marnames, marnames)
+    if(shared.alleles){
+      ShP[lower.tri(ShP)] <- as.numeric(rf.lod.mat[4,])
+      ShP[upper.tri(ShP)] <- t(ShP)[upper.tri(ShP)]
+      ShQ[lower.tri(ShQ)] <- as.numeric(rf.lod.mat[5,])
+      ShQ[upper.tri(ShQ)] <- t(ShQ)[upper.tri(ShQ)]
+      dimnames(ShP) <- dimnames(ShQ) <- list(marindex, marindex)
+    } else{
+      ShP <- ShQ <- NULL
+    }
+    structure(list(thresh.LOD.ph = thresh.LOD.ph,
+                   thresh.LOD.rf = thresh.LOD.rf,
+                   thresh.rf = thresh.rf,
+                   rec.mat = rec.mat,
+                   lod.mat = abs(lod.mat),
+                   lod.ph.mat = abs(lod.ph.mat),
+                   ShP = ShP,
+                   ShQ = ShQ,
+                   data.name  = input.twopt$data.name,
+                   chisq.pval.thres = input.twopt$chisq.pval.thres,
+                   chisq.pval = input.twopt$chisq.pval,
+                   cl = class(input.twopt)),
+              class = "mappoly.rf.matrix")    
+  } 
+  else if (inherits(input.twopt, "mappoly.twopt2")){
+    rec.mat <- input.twopt$pairwise$rf
+    lod.mat <- abs(input.twopt$pairwise$LOD.rf)
+    lod.ph.mat <- abs(input.twopt$pairwise$LOD.ph)
+    ShP <- input.twopt$pairwise$Sh.P1
+    ShQ <- input.twopt$pairwise$Sh.P2
+    dimnames(rec.mat) <- dimnames(lod.mat) <- 
+      dimnames(lod.ph.mat) <- dimnames(ShP) <- 
+      dimnames(ShQ) <- list(input.twopt$seq.mrk.names,
+                            input.twopt$seq.mrk.names)
+    
+    if(thresh.LOD.ph > 0){
+      rec.mat[lod.ph.mat < thresh.LOD.ph] <- NA
+      lod.mat[lod.ph.mat < thresh.LOD.ph] <- NA
+      lod.ph.mat[lod.ph.mat < thresh.LOD.ph] <- NA
+      ShP[lod.ph.mat < thresh.LOD.ph] <- NA
+      ShQ[lod.ph.mat < thresh.LOD.ph] <- NA
+    }
+    if(thresh.LOD.rf > 0){
+      rec.mat[lod.mat < thresh.LOD.rf] <- NA
+      lod.mat[lod.mat < thresh.LOD.rf] <- NA
+      lod.ph.mat[lod.mat < thresh.LOD.rf] <- NA
+      ShP[lod.mat < thresh.LOD.rf] <- NA
+      ShQ[lod.mat < thresh.LOD.rf] <- NA
+    } 
+    if(thresh.rf < 0.5){
+        rec.mat[rec.mat < thresh.rf] <- NA
+        lod.mat[rec.mat < thresh.rf] <- NA
+        lod.ph.mat[rec.mat < thresh.rf] <- NA
+        ShP[rec.mat < thresh.rf] <- NA
+        ShQ[rec.mat < thresh.rf] <- NA
+    }  
+    structure(list(thresh.LOD.ph = thresh.LOD.ph,
+                   thresh.LOD.rf = thresh.LOD.rf,
+                   thresh.rf = thresh.rf,
+                   rec.mat = rec.mat,
+                   lod.mat = lod.mat,
+                   lod.ph.mat = lod.ph.mat,
+                   ShP = ShP,
+                   ShQ = ShQ,
+                   data.name  = input.twopt$data.name,
+                   chisq.pval.thres = input.twopt$chisq.pval.thres,
+                   chisq.pval = input.twopt$chisq.pval),
+              class = "mappoly.rf.matrix")    
+    
+  } 
+  else{
     stop(deparse(substitute(input.twopt)),
-         " is not an object of class 'mappoly.twopt'")
+         " is not an object of class 'mappoly.twopt' or 'mappoly.twopt2'")
   }
-  pair_input <- input.twopt$pairwise
-  marnames <- rownames(get(input.twopt$data.name, pos = 1)$geno.dose)[sort(input.twopt$seq.num)]
-  marindex <- sort(input.twopt$seq.num)
-  lod.ph.mat <- lod.mat <- rec.mat <- matrix(NA, input.twopt$n.mrk, input.twopt$n.mrk)
-  if(shared.alleles)
-    ShP <- ShQ <- lod.mat
-  #### UPDATE: instead of recovering the order from names, provide using the object 'input.twopt'
-  #seq.num.orig <- unique(sapply(strsplit(x = names(input.twopt$pairwise), split = "-"), function(x) as.numeric(x[1])))
-  #seq.num.orig <- c(seq.num.orig, strsplit(tail(names(input.twopt$pairwise), n = 1), "-")[[1]][2])
-  #dimnames(lod.mat) = dimnames(rec.mat) = list(seq.num.orig, seq.num.orig)
-  if (ncpus > 1) {
-    start <- proc.time()
-    if (verbose)
-      cat("INFO: Using ", ncpus, " CPUs.\n")
-    cl <- parallel::makeCluster(ncpus)
-    parallel::clusterExport(cl,
-                            varlist = c("thresh.LOD.ph", "thresh.LOD.rf", "thresh.rf", "shared.alleles"),
-                            envir = environment())
-    rf.lod.mat <- parallel::parSapply(cl, pair_input, "select_rf",
-                                      thresh.LOD.ph, thresh.LOD.rf, thresh.rf, shared.alleles)
-    parallel::stopCluster(cl)
-    end <- proc.time()
-    if (verbose) {
-      cat("INFO: Done with",
-          length(pair_input),
-          " pairs of markers \n")
-      cat("INFO: Operation took:",
-          round((end - start)[3],
-                digits = 3),
-          "seconds\n")
-    }
-  } else {
-    if (verbose) {
-      cat("INFO: Going singlemode. Using one CPU.\n")
-    }
-    rf.lod.mat <- sapply(pair_input, select_rf, thresh.LOD.ph, thresh.LOD.rf, thresh.rf, shared.alleles)
-  }
-  rec.mat[lower.tri(rec.mat)] <- as.numeric(rf.lod.mat[1,])
-  rec.mat[upper.tri(rec.mat)] <- t(rec.mat)[upper.tri(rec.mat)]
-  lod.mat[lower.tri(lod.mat)] <- as.numeric(rf.lod.mat[2,])
-  lod.mat[upper.tri(lod.mat)] <- t(lod.mat)[upper.tri(lod.mat)]
-  lod.ph.mat[lower.tri(lod.ph.mat)] <- as.numeric(rf.lod.mat[3,])
-  lod.ph.mat[upper.tri(lod.ph.mat)] <- t(lod.ph.mat)[upper.tri(lod.ph.mat)]
-  
-  
-  dimnames(lod.ph.mat) <- dimnames(rec.mat) <- dimnames(lod.mat) <- list(marnames, marnames)
-  if(shared.alleles){
-    ShP[lower.tri(ShP)] <- as.numeric(rf.lod.mat[4,])
-    ShP[upper.tri(ShP)] <- t(ShP)[upper.tri(ShP)]
-    ShQ[lower.tri(ShQ)] <- as.numeric(rf.lod.mat[5,])
-    ShQ[upper.tri(ShQ)] <- t(ShQ)[upper.tri(ShQ)]
-    dimnames(ShP) <- dimnames(ShQ) <- list(marindex, marindex)
-  } else{
-    ShP <- ShQ <- NULL
-  }
-  structure(list(thresh.LOD.ph = thresh.LOD.ph,
-                 thresh.LOD.rf = thresh.LOD.rf,
-                 thresh.rf = thresh.rf,
-                 rec.mat = rec.mat,
-                 lod.mat = abs(lod.mat),
-                 lod.ph.mat = abs(lod.ph.mat),
-                 ShP = ShP,
-                 ShQ = ShQ,
-                 data.name  = input.twopt$data.name,
-                 chisq.pval.thres = input.twopt$chisq.pval.thres,
-                 chisq.pval = input.twopt$chisq.pval,
-                 cl = class(input.twopt)),
-            class = "mappoly.rf.matrix")
 }
 
 #' @rdname rf_list_to_matrix
