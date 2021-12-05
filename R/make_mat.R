@@ -47,8 +47,6 @@ make_mat_mappoly <- function(input.mat, input.seq){
   if (!inherits(input.mat, input_classes2)) {
     stop(deparse(substitute(input.mat)), " is not an object of class 'mappoly.rf.matrix'")
   }
-  if(input.mat$cl  ==  "poly.haplo.est.two.pts.pairwise")
-    stop("This function does not work for recombination fractions matrices originated from blocks of markers")
   input.mat$thresh.LOD.ph <- NULL
   input.mat$thresh.LOD.rf <- NULL
   input.mat$thresh.rf <- NULL
