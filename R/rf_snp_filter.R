@@ -26,6 +26,8 @@
 #' 
 #' @param diagnostic.plot if \code{TRUE} produces a diagnostic plot
 #' 
+#' @param breaks number of cells for the histogram
+#' 
 #' @return A filtered object of class \code{mappoly.sequence}. 
 #' See \code{\link[mappoly]{make_seq_mappoly}} for details
 #' 
@@ -66,7 +68,8 @@ rf_snp_filter <- function(input.twopt,
                           thresh.rf = 0.15,
                           probs = c(0.05, 1),
                           ncpus = 1L,
-                          diagnostic.plot = TRUE)
+                          diagnostic.plot = TRUE,
+                          breaks = 100)
 {
     
     input_classes <- c("mappoly.twopt", "mappoly.twopt2")
@@ -79,7 +82,7 @@ rf_snp_filter <- function(input.twopt,
                                  thresh.LOD.rf = thresh.LOD.rf, thresh.rf = thresh.rf,
                                  ncpus = ncpus, verbose = FALSE)
     x <- apply(rf_mat$rec.mat, 1, function(x) sum(!is.na(x)))
-    w <- hist(x, breaks = 100, plot = FALSE)
+    w <- hist(x, breaks = breaks, plot = FALSE)
     th <- quantile(x, probs = probs)
     rem <- c(which(x < th[1]), which(x > th[2]))
     ids <- names(which(x >= th[1] & x <= th[2]))
@@ -91,7 +94,7 @@ rf_snp_filter <- function(input.twopt,
             ggplot2::geom_histogram(ggplot2::aes(fill = type),
                                     alpha = 0.4, position = "identity", binwidth = diff(w$mids)[1]) +
             ggplot2::scale_fill_manual(values = c("#00AFBB", "#E7B800")) +
-            ggplot2::ggtitle( paste0("Filtering probs: [", probs[1], " : ", probs[2], "] - Number of non NA values by row in rf matrix")) +
+            ggplot2::ggtitle( paste0("Filtering probs: [", probs[1], " : ", probs[2], "] - Non NA values by row in rf matrix - b width: ", diff(w$mids)[1])) +
             ggplot2::xlab(paste0("Non 'NA' values at LOD.ph = ", thresh.LOD.ph, ", LOD.rf = ", thresh.LOD.rf, ", and thresh.rf = ", thresh.rf))
         print(p)
     }
