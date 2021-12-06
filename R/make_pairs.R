@@ -53,10 +53,10 @@ make_pairs_mappoly <- function(input.twopt, input.seq){
   } 
   else if (inherits(input.twopt, "mappoly.twopt2")){
     id <- match(input.seq$seq.mrk.names, input.twopt$seq.mrk.names)
-    input.twopt$n.mrk <- length(input.seq$seq.num)
-    input.twopt$seq.mrk.names <- input.seq$seq.mrk.names[id]
-    input.twopt$chisq.pval.thres <- input.seq$chisq.pval.thres
-    input.twopt$chisq.pval <- input.seq$chisq.pval[id]
+    input.twopt$n.mrk <- length(id)
+    input.twopt$seq.mrk.names <- input.twopt$seq.mrk.names[id]
+    input.twopt$chisq.pval.thres <- input.twopt$chisq.pval.thres
+    input.twopt$chisq.pval <- input.twopt$chisq.pval[id]
     input.twopt$pairwise$rf <- input.twopt$pairwise$rf[id,id] 
     input.twopt$pairwise$LOD.rf <- input.twopt$pairwise$LOD.rf[id,id] 
     input.twopt$pairwise$LOD.ph <- input.twopt$pairwise$LOD.ph[id,id]
