@@ -61,24 +61,23 @@
 #' @importFrom ggplot2 ggplot geom_histogram aes scale_fill_manual xlab ggtitle
 #' 
 rf_snp_filter <- function(input.twopt,
-                        thresh.LOD.ph = 5,
-                        thresh.LOD.rf = 5,
-                        thresh.rf = 0.15,
-                        probs = c(0.05, 1),
-                        ncpus = 1L,
-                        diagnostic.plot = TRUE)
+                          thresh.LOD.ph = 5,
+                          thresh.LOD.rf = 5,
+                          thresh.rf = 0.15,
+                          probs = c(0.05, 1),
+                          ncpus = 1L,
+                          diagnostic.plot = TRUE)
 {
-    ## checking for correct object
-    input_classes  <- c("mappoly.twopt")
+    
+    input_classes <- c("mappoly.twopt", "mappoly.twopt2")
     if (!inherits(input.twopt, input_classes)) {
-        stop(deparse(substitute(input.twopt)),
-             " is not an object of class 'mappoly.twopt'")
+        stop(deparse(substitute(input.twopt)), paste0(" is not an object of class ", paste0(input_classes, collapse =  " or ")))
     }
     probs <- range(probs)
     ## Getting filtered rf matrix
     rf_mat <-  rf_list_to_matrix(input.twopt = input.twopt, thresh.LOD.ph = thresh.LOD.ph,
-                               thresh.LOD.rf = thresh.LOD.rf, thresh.rf = thresh.rf,
-                               ncpus = ncpus, verbose = FALSE)
+                                 thresh.LOD.rf = thresh.LOD.rf, thresh.rf = thresh.rf,
+                                 ncpus = ncpus, verbose = FALSE)
     x <- apply(rf_mat$rec.mat, 1, function(x) sum(!is.na(x)))
     th <- quantile(x, probs = probs)
     rem <- c(which(x < th[1]), which(x > th[2]))
@@ -86,7 +85,7 @@ rf_snp_filter <- function(input.twopt,
     value <- type <- NULL
     if(diagnostic.plot){
         d <- rbind(data.frame(type = "original", value = x),
-                 data.frame(type = "filtered", value = x[ids]))
+                   data.frame(type = "filtered", value = x[ids]))
         p <- ggplot2::ggplot(d, ggplot2::aes(value)) +
             ggplot2::geom_histogram(ggplot2::aes(fill = type),
                                     alpha = 0.4, position = "identity", binwidth = 30) +
@@ -97,5 +96,5 @@ rf_snp_filter <- function(input.twopt,
     }
     ## Returning sequence object
     ch_filt <- make_seq_mappoly(input.obj = get(input.twopt$data.name, pos = 1), arg = ids, data.name = input.twopt$data.name)
-    ch_filt
+    return(ch_filt)
 }
