@@ -79,6 +79,7 @@ rf_snp_filter <- function(input.twopt,
                                  thresh.LOD.rf = thresh.LOD.rf, thresh.rf = thresh.rf,
                                  ncpus = ncpus, verbose = FALSE)
     x <- apply(rf_mat$rec.mat, 1, function(x) sum(!is.na(x)))
+    w <- hist(x, breaks = 100, plot = FALSE)
     th <- quantile(x, probs = probs)
     rem <- c(which(x < th[1]), which(x > th[2]))
     ids <- names(which(x >= th[1] & x <= th[2]))
@@ -88,9 +89,9 @@ rf_snp_filter <- function(input.twopt,
                    data.frame(type = "filtered", value = x[ids]))
         p <- ggplot2::ggplot(d, ggplot2::aes(value)) +
             ggplot2::geom_histogram(ggplot2::aes(fill = type),
-                                    alpha = 0.4, position = "identity", binwidth = 30) +
+                                    alpha = 0.4, position = "identity", binwidth = diff(w$mids)[1]) +
             ggplot2::scale_fill_manual(values = c("#00AFBB", "#E7B800")) +
-            ggplot2::ggtitle( paste0("Filtering probs: [", probs[1], " : ", probs[2], "]")) +
+            ggplot2::ggtitle( paste0("Filtering probs: [", probs[1], " : ", probs[2], "] - Number of non NA values by row in rf matrix")) +
             ggplot2::xlab(paste0("Non 'NA' values at LOD.ph = ", thresh.LOD.ph, ", LOD.rf = ", thresh.LOD.rf, ", and thresh.rf = ", thresh.rf))
         print(p)
     }
