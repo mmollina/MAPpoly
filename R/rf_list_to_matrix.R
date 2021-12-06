@@ -230,6 +230,8 @@ print.mappoly.rf.matrix <- function(x, ...) {
 plot.mappoly.rf.matrix <- function(x, type = c("rf", "lod"), ord = NULL, rem = NULL, 
                                    main.text = NULL, index = FALSE, fact = 1, ...){
   type <- match.arg(type)
+  if(inherits(ord, "mappoly.sequence"))
+     ord <- ord$seq.mrk.names
   if(type  ==  "rf"){
     w <- x$rec.mat
     if(!is.null(ord))
