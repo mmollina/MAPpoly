@@ -51,8 +51,8 @@ export_map_list <- function(map.list, file = "map_output.csv"){
                     "Ref Allele" = map.list[[i]]$info$seq.ref,
                     "Alt Allele" = map.list[[i]]$info$seq.alt,
                     "Map Position" = round(cumsum(c(0, imf_h(map.list[[i]]$maps[[1]]$seq.rf))),2),
-                    "Dosage in P" = map.list[[i]]$info$seq.dose.p1,
-                    "Dosage in Q" = map.list[[i]]$info$seq.dose.p2,
+                    "Dose in P1" = map.list[[i]]$info$seq.dose.p1,
+                    "Dose in P2" = map.list[[i]]$info$seq.dose.p2,
                     ph.P, ph.Q)
     R <- rbind(R, x)
   }
