@@ -452,9 +452,11 @@ plot.mappoly.twopt <- function(x, first.mrk, second.mrk, ...) {
 #' @return An object of class \code{mappoly.twopt2} 
 #' 
 #' @examples
-#'   ## Tetraploid example (first 50 markers) 
-#'   all.mrk <- make_seq_mappoly(tetra.solcap, 1:100)
-#'   all.pairs <- est_pairwise_rf2(input.seq = all.mrk)
+#'   ## Tetraploid example  
+#'   all.mrk <- make_seq_mappoly(tetra.solcap, 100:300)
+#'   all.pairs <- est_pairwise_rf2(input.seq = all.mrk, ncpus = 2)
+#'   m <- rf_list_to_matrix(all.pairs)
+#'   plot(m, fact = 5)
 #'   
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
@@ -487,7 +489,7 @@ est_pairwise_rf2 <- function(input.seq,
   geno <- as.matrix(get(input.seq$data.name, pos = 1)$geno.dose)
   ## all possible pairs
   if (is.null(mrk.pairs)) {
-    mrk.pairs <- combn(sort(input.seq$seq.num), 2) - 1
+    mrk.pairs <- combn(input.seq$seq.num, 2) - 1
     flag <- 1
   } else {
     mrk.pairs <- mrk.pairs - 1
