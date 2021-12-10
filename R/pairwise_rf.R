@@ -456,7 +456,7 @@ plot.mappoly.twopt <- function(x, first.mrk, second.mrk, ...) {
 #'   all.mrk <- make_seq_mappoly(tetra.solcap, 100:300)
 #'   all.pairs <- est_pairwise_rf2(input.seq = all.mrk, ncpus = 2)
 #'   m <- rf_list_to_matrix(all.pairs)
-#'   plot(m, fact = 5)
+#'   plot(m, fact = 2)
 #'   
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
