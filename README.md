@@ -4,6 +4,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![codecov](https://codecov.io/github/mmollina/MAPpoly/branch/master/graphs/badge.svg)](https://codecov.io/github/mmollina/MAPpoly)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/mappoly)](https://cran.r-project.org/package=mappoly)
+[![R-universe PolyVerse Status Badge](https://polyploids.r-universe.dev/badges/mappoly)](https://polyploids.r-universe.dev/badges/mappoly)
 [![CRAN_monthly_downloads](https://cranlogs.r-pkg.org/badges/mappoly)](https://cranlogs.r-pkg.org/badges/mappoly)
 
 <!-- ![](https://raw.githubusercontent.com/mmollina/MAPpoly/master/mappoly_hexsticker.png) -->
@@ -118,6 +119,9 @@ install.packages('MAPpoly')
   * [QTLpoly: QTL mapping in full-sib families of outcrossing autopolyploid species based on a random-effect multiple QTL model](https://cran.r-project.org/package=qtlpoly)
   * [diaQTL: QTL analysis of diploid and autotetraploid diallel populations](https://github.com/jendelman/diaQTL)
   * [polyqtlR: QTL analysis and exploration of meiotic patterns in autopolyploid bi-parental F1 populations.](https://cran.r-project.org/web/packages/polyqtlR/index.html)
+
+* Data visualization
+  * [VIEWpoly: integrate, visualize and explore results from genetic analysis, together with genomic information for autopolyploids](https://cran.r-project.org/package=viewpoly)
 
 # Miscellaneous
 * [Supplementary scripts for Mollinari and Garcia (2019)](https://github.com/mmollina/Autopolyploid_Linkage)
