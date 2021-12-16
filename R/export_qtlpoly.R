@@ -55,5 +55,5 @@ export_qtlpoly <- function(input.genoprobs, verbose = TRUE){
     res <- rbind(res, out)
   }
   if (verbose) cat("\n")
-  structure(list(info = list(ploidy = ploidy, n.ind = length(ind.names)) , homoprob = df.res), class = "mappoly.qtlpoly")
+  structure(list(info = list(ploidy = ploidy, n.ind = length(ind.names)) , homoprob = res), class = "mappoly.qtlpoly")
 }
