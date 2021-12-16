@@ -52,7 +52,7 @@ export_qtlpoly <- function(input.genoprobs, verbose = TRUE){
       hom.prob[i,,] <- apply(input.genoprobs[[j]]$probs[grep(stt.names, pattern = i),,], c(2,3), function(x) round(sum(x, na.rm = TRUE),4))
     map <- data.frame(map.position = input.genoprobs[[j]]$map, marker = names(input.genoprobs[[j]]$map))
     out <- list(LG = j, map = map, probs = hom.prob)
-    res <- rbind(res, out)
+    res <- c(res, out)
   }
   if (verbose) cat("\n")
   structure(list(info = list(ploidy = ploidy, n.ind = length(ind.names)) , homoprob = res), class = "mappoly.qtlpoly")
