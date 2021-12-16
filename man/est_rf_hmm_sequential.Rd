@@ -25,7 +25,7 @@ est_rf_hmm_sequential(
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}}
 
-\item{twopt}{an object of class \code{poly.est.two.pts.pairwise}
+\item{twopt}{an object of class \code{mappoly.twopt}
 containing the two-point information}
 
 \item{start.set}{number of markers to start the phasing procedure (default = 4)}

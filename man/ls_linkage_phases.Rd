@@ -18,7 +18,7 @@ ls_linkage_phases(input.seq, thres, twopt, mrk.to.add = NULL, prev.info = NULL)
 \item{thres}{the LOD threshold used to determine whether linkage phases
 compared via two-point analysis should be considered}
 
-\item{twopt}{an object of class \code{poly.est.two.pts.pairwise}
+\item{twopt}{an object of class \code{mappoly.twopt}
 containing the two-point information}
 
 \item{mrk.to.add}{marker to be added to the end of the linkage
@@ -46,7 +46,7 @@ An object of class \code{two.pts.linkage.phases} which
 }
 \description{
 Returns a list of possible linkage phase configurations using
-the two-point information contained in the object \code{poly.est.two.pts.pairwise}
+the two-point information contained in the object \code{mappoly.twopt}
 as elimination criteria
 }
 \examples{

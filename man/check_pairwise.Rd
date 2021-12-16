@@ -10,7 +10,7 @@ check_pairwise(input.seq, twopt)
 \arguments{
 \item{input.seq}{An object of class \code{mappoly.sequence}}
 
-\item{twopt}{An object of class \code{poly.est.two.pts.pairwise}}
+\item{twopt}{An object of class \code{mappoly.twopt}}
 }
 \value{
 If all pairwise combinations of elements of

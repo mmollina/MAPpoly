@@ -25,7 +25,7 @@
 #'     values will result in smaller number of linkage phase 
 #'     configurations to be evaluated by the multipoint algorithm. 
 #'
-#' @param twopt an object of class \code{poly.est.two.pts.pairwise}
+#' @param twopt an object of class \code{mappoly.twopt}
 #'     containing two-point information
 #'
 #' @param verbose if \code{TRUE}, current progress is shown; if
@@ -277,7 +277,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #'
 #' @param input.seq an object of class \code{mappoly.sequence}
 #' 
-#' @param twopt an object of class \code{poly.est.two.pts.pairwise}
+#' @param twopt an object of class \code{mappoly.twopt}
 #'     containing the two-point information
 #'  
 #' @param start.set number of markers to start the phasing procedure (default = 4)      
@@ -421,14 +421,14 @@ est_rf_hmm_sequential <- function(input.seq,
                                 detailed.verbose = FALSE,
                                 high.prec = FALSE)
 {## checking for correct object
-  input_classes <- c("mappoly.sequence", "poly.est.two.pts.pairwise")
+  input_classes <- c("mappoly.sequence", "mappoly.twopt")
   if (!inherits(input.seq, input_classes[1])) {
     stop(deparse(substitute(input.seq)), 
          " is not an object of class 'mappoly.sequence'")
   }
   if (!inherits(twopt, input_classes[2])) {
     stop(deparse(substitute(twopt)), 
-         " is not an object of class 'poly.est.two.pts.pairwise'")
+         " is not an object of class 'mappoly.twopt'")
   }
   ## Information about the map
   if(verbose) {

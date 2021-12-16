@@ -9,7 +9,10 @@
 #' @param count.cache an object of class \code{cache.info} containing
 #'     pre-computed genotype frequencies, obtained with
 #'     \code{\link[mappoly]{cache_counts_twopt}}. If \code{NULL} (default),
-#'     genotype frequencies are internally loaded.   
+#'     genotype frequencies are internally loaded.
+#'        
+#' @param count.matrix similar to \code{count.cache}, but in matrix format. 
+#' Mostly for internal use.
 #'
 #' @param ncpus Number of parallel processes (cores) to spawn (default = 1)
 #'
@@ -36,7 +39,7 @@
 #'
 #' @param tol the desired accuracy. See \code{optimize()} for details
 #' 
-#' @return An object of class \code{poly.est.two.pts.pairwise} which
+#' @return An object of class \code{mappoly.twopt} which
 #'     is a list  containing the following components:
 #'     \item{data.name}{name of the object of class
 #'         \code{mappoly.data} with the raw data}
@@ -82,7 +85,8 @@
 #' @importFrom Rcpp sourceCpp
 #' @importFrom reshape2 melt acast
 #' @importFrom dplyr filter arrange
-est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
+est_pairwise_rf <- function(input.seq, count.cache = NULL, 
+                            count.matrix = NULL, ncpus = 1L,
                             mrk.pairs = NULL, n.batches = 1L,
                             est.type = c("disc","prob"),
                             verbose = TRUE, memory.warning = TRUE, 
@@ -244,7 +248,7 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
                           chisq.pval.thres = input.seq$chisq.pval.thres,
                           chisq.pval = input.seq$chisq.pval,
                           nas  = nas),
-                     class = "poly.est.two.pts.pairwise"))
+                     class = "mappoly.twopt"))
   } else {
     if (verbose)
       cat("INFO: There are ",
@@ -308,7 +312,7 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL, ncpus = 1L,
                         chisq.pval.thres = input.seq$chisq.pval.thres,
                         chisq.pval = input.seq$chisq.pval,
                         nas  = nas),
-                   class = "poly.est.two.pts.pairwise"))
+                   class = "mappoly.twopt"))
 }
 
 #' Wrapper function to discrete-based pairwise two-point estimation in C++
@@ -362,14 +366,6 @@ paralell_pairwise_probability <- function(mrk.pairs,
   return(lapply(res, format_rf))
 }
 
-
-
-
-
-
-
-
-
 #' Format results from pairwise two-point estimation in C++
 #'
 #' @param void internal function to be documented
@@ -392,8 +388,8 @@ format_rf <- function(res) {
 }
 
 #' @export
-print.poly.est.two.pts.pairwise <- function(x, ...) {
-  cat("  This is an object of class 'poly.est.two.pts.pairwise'")
+print.mappoly.twopt <- function(x, ...) {
+  cat("  This is an object of class 'mappoly.twopt'")
   cat("\n  -----------------------------------------------------")
   ## printing summary
   cat("\n  No. markers:                            ", x$n.mrk, "\n")
@@ -403,7 +399,7 @@ print.poly.est.two.pts.pairwise <- function(x, ...) {
 }
 
 #' @export
-plot.poly.est.two.pts.pairwise <- function(x, first.mrk, second.mrk, ...) {
+plot.mappoly.twopt <- function(x, first.mrk, second.mrk, ...) {
   i <- which(names(x$pairwise)%in%paste(sort(c(first.mrk, second.mrk)), collapse = "-"))
   if(length(i) == 0)
     stop("The requested combination of markers is not included in the two-point object")
@@ -417,7 +413,7 @@ plot.poly.est.two.pts.pairwise <- function(x, first.mrk, second.mrk, ...) {
   mLOD <- max(x.temp$value)
   x.temp <- transform(x.temp, sh = factor(sh, levels = unique(x.temp$sh)))
   ds <- paste0(paste0(get(data.name, pos = 1)$dosage.p1[first.mrk] , "---", get(data.name, pos = 1)$dosage.p1[second.mrk]), "  x  ",
-             paste0(get(data.name, pos = 1)$dosage.p2[first.mrk] , "---", get(data.name, pos = 1)$dosage.p2[second.mrk]))
+               paste0(get(data.name, pos = 1)$dosage.p2[first.mrk] , "---", get(data.name, pos = 1)$dosage.p2[second.mrk]))
   ggplot2::ggplot(x.temp, ggplot2::aes(sh,    value, label = sh    ,fill = variable))  +
     ggplot2::geom_bar(stat = "identity", position = "identity") +
     ggplot2::annotate("text", x = c(1:length(rfs)), y = rep(mLOD + mLOD/20,length(rfs)), label = rfs, size = 4) +
@@ -428,4 +424,160 @@ plot.poly.est.two.pts.pairwise <- function(x, first.mrk, second.mrk, ...) {
                                name = "",
                                breaks = c("LOD_ph", "LOD_rf"),
                                labels = c("LOD_phase", "LOD_rf"))
+}
+
+
+#' Pairwise two-point analysis - RcppParallel version
+#'
+#' Performs the two-point pairwise analysis between all markers in a sequence. 
+#' For each pair, the function estimates the recombination fraction for all 
+#' possible linkage phase configurations and associated LOD Scores.
+#' 
+#'  Differently from est_pairwise_rf this function returns only the values associated 
+#'  to the best linkage phase configuration. 
+#'
+#' @param input.seq an object of class \code{mappoly.sequence}
+#'
+#' @param ncpus Number of parallel processes (cores) to spawn (default = 1)
+#'
+#' @param mrk.pairs a matrix of dimensions 2*N, containing N
+#'    pairs of markers to be analyzed. If \code{NULL} (default), all pairs are
+#'    considered
+#'
+#' @param verbose If \code{TRUE} (default), current progress is shown; if
+#'     \code{FALSE}, no output is produced
+#'
+#' @param tol the desired accuracy. See \code{optimize()} for details
+#' 
+#' @return An object of class \code{mappoly.twopt2} 
+#' 
+#' @examples
+#'   ## Tetraploid example  
+#'   all.mrk <- make_seq_mappoly(tetra.solcap, 100:300)
+#'   all.pairs <- est_pairwise_rf2(input.seq = all.mrk, ncpus = 2)
+#'   m <- rf_list_to_matrix(all.pairs)
+#'   plot(m, fact = 2)
+#'   
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
+#'
+#' @references
+#'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
+#'     analysis and haplotype phasing in experimental autopolyploid
+#'     populations with high ploidy level using hidden Markov
+#'     models, _G3: Genes, Genomes, Genetics_. 
+#'     \doi{10.1534/g3.119.400378}
+#'     
+#' @export est_pairwise_rf2
+#' @importFrom Rcpp sourceCpp
+#' @importFrom reshape2 melt acast
+#' @importFrom dplyr filter arrange
+est_pairwise_rf2 <- function(input.seq, 
+                                 ncpus = 1L,
+                                 mrk.pairs = NULL, 
+                                 verbose = TRUE, 
+                                 tol = .Machine$double.eps^0.25)
+{
+  ## checking for correct object
+  if (!inherits(input.seq, "mappoly.sequence"))
+    stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
+  dpl <- duplicated(input.seq$seq.num)
+  ## checking for duplicated markers
+  if (any(dpl))
+    stop("There are duplicated markers in the sequence:\n Check markers: ", unique(input.seq$seq.num[dpl]), " at position(s) ", which(dpl))
+  count.cache = cache_counts_twopt(input.seq, cached = TRUE)
+  ## get genotypes
+  geno <- as.matrix(get(input.seq$data.name, pos = 1)$geno.dose)
+  ## all possible pairs
+  if (is.null(mrk.pairs)) {
+    mrk.pairs <- combn(input.seq$seq.num, 2) - 1
+    flag <- 1
+  } else {
+    mrk.pairs <- mrk.pairs - 1
+  }
+  ## splitting pairs in chunks
+  id <- ceiling(seq(1, (ncol(mrk.pairs) + 1), length.out = 1))
+  input.list <- mrk.pairs
+  ## parallel version 
+  if (verbose) {
+    cat("Going RcppParallel mode.\n...")
+  }
+  RcppParallel::setThreadOptions(numThreads = ncpus)
+  count.vector = unlist(count.cache$cond)
+  count.phases = unlist(lapply(count.cache$cond, function(x) paste0(names(x), collapse = '/')))
+  count.matrix.rownames = unlist(lapply(count.cache$cond, function(x) paste0(rownames(x[[1]]), collapse = '/')))
+  count.matrix.number = unlist(lapply(count.cache$cond, length))
+  count.matrix.length = unlist(lapply(count.cache$cond, function(x) length(c(unlist(x)) )))
+  count.matrix.pos = cumsum(c(1, count.matrix.length[-length(count.matrix.length)]))
+  res <- paralell_pairwise_discrete_rcpp(mrk.pairs = as.matrix(input.list),
+                                         m = input.seq$ploidy,
+                                         geno = geno,
+                                         dP = get(input.seq$data.name)$dosage.p1,
+                                         dQ = get(input.seq$data.name)$dosage.p2,
+                                         count.vector = count.vector,
+                                         count.phases = count.phases,
+                                         count.matrix.rownames = count.matrix.rownames,
+                                         count.matrix.number = count.matrix.number,
+                                         count.matrix.pos = count.matrix.pos,
+                                         count.matrix.length = count.matrix.length,
+                                         tol = tol, threads = ncpus)
+  res[res == -1] = NA
+  colnames(res) = c("Sh_P1","Sh_P2","rf","LOD_rf","LOD_ph")
+  if (verbose) {
+    cat("\nDone with pairwise computation.\n~~~~~~~\nReorganizing results\n...")
+  }
+  if(!exists(x = "flag"))
+    return(res)
+  seq.mrk.names <- input.seq$seq.mrk.names  
+  n <- length(seq.mrk.names)
+  Sh_P1 = v_2_m(res[,1], n)
+  Sh_P2 = v_2_m(res[,2], n)
+  rf = v_2_m(res[,3], n)
+  LOD_rf = v_2_m(res[,4], n)
+  LOD_ph = v_2_m(res[,5], n)
+  return(structure(list(seq.mrk.names = seq.mrk.names,
+                        data.name  = input.seq$data.name,
+                        chisq.pval.thres = input.seq$chisq.pval.thres,
+                        chisq.pval = input.seq$chisq.pval,
+                   pairwise = list(rf = rf, LOD.rf = LOD_rf,
+                                   LOD.ph = LOD_ph, Sh.P1 = Sh_P1, 
+                                   Sh.P2 = Sh_P2)), class = "mappoly.twopt2"))
+}
+
+#' Wrapper function to discrete-based pairwise two-point estimation in C++
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @importFrom RcppParallel RcppParallelLibs
+#' @export
+paralell_pairwise_discrete_rcpp <- function(mrk.pairs,
+                                            m,
+                                            geno,
+                                            dP,
+                                            dQ,
+                                            count.vector,
+                                            count.phases,
+                                            count.matrix.rownames,
+                                            count.matrix.number,
+                                            count.matrix.pos,
+                                            count.matrix.length,
+                                            tol = .Machine$double.eps^0.25,
+                                            threads)
+{
+  res <- .Call("pairwise_rf_estimation_disc_rcpp",
+               as.matrix(mrk.pairs),
+               m,
+               as.matrix(geno),
+               as.vector(dP),
+               as.vector(dQ),
+               count.vector,
+               count.phases,
+               count.matrix.rownames,
+               count.matrix.number,
+               count.matrix.pos,
+               count.matrix.length,
+               tol = tol,
+               threads = threads,
+               PACKAGE = "mappoly")
+  return(res)
+  ## return(lapply(res, format_rf))
 }

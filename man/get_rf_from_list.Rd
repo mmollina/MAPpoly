@@ -3,7 +3,7 @@
 \name{get_rf_from_list}
 \alias{get_rf_from_list}
 \title{Get the recombination fraction for a sequence of markers given an
-object of class \code{poly.est.two.pts.pairwise} and a list
+object of class \code{mappoly.twopt} and a list
 containing the linkage phase configuration. This list can be found
 in any object of class \code{two.pts.linkage.phases}, in
 x$config.to.test$'Conf-i', where x is the object of class
@@ -13,7 +13,7 @@ configurations.}
 get_rf_from_list(twopt, ph.list)
 }
 \arguments{
-\item{twopt}{an object of class \code{poly.est.two.pts.pairwise}}
+\item{twopt}{an object of class \code{mappoly.twopt}}
 
 \item{ph.list}{a list containing the linkage phase configuration. This
 list can be found in any object of class
@@ -27,7 +27,7 @@ a vector with the recombination fraction between markers
 }
 \description{
 Get the recombination fraction for a sequence of markers given an
-object of class \code{poly.est.two.pts.pairwise} and a list
+object of class \code{mappoly.twopt} and a list
 containing the linkage phase configuration. This list can be found
 in any object of class \code{two.pts.linkage.phases}, in
 x$config.to.test$'Conf-i', where x is the object of class

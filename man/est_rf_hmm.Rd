@@ -45,7 +45,7 @@ compared via two-point analysis should be considered. Smaller
 values will result in smaller number of linkage phase 
 configurations to be evaluated by the multipoint algorithm.}
 
-\item{twopt}{an object of class \code{poly.est.two.pts.pairwise}
+\item{twopt}{an object of class \code{mappoly.twopt}
 containing two-point information}
 
 \item{verbose}{if \code{TRUE}, current progress is shown; if

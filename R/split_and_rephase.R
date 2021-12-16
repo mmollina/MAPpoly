@@ -6,7 +6,7 @@
 #'
 #' @param input.map an object of class \code{mappoly.map}
 #' 
-#' @param twopt an object of class \code{poly.est.two.pts.pairwise}
+#' @param twopt an object of class \code{mappoly.twopt}
 #'     containing the two-point information for the markers contained 
 #'     in \code{input.map}
 #'     
@@ -14,11 +14,13 @@
 #'                      where the map should be spitted. The default 
 #'                      value is 5 cM
 #' 
-#' @param remove.single Should isolated markers be removed?
+#' @param size.rem.cluster the size of the marker cluster (in number of markers) 
+#'                         from which the cluster should be removed. The default 
+#'                         value is 1
 #' 
 #' @param phase.config which phase configuration should be used. "best" (default) 
-#'                     will choose the phase configuration associated with the
-#'                     maximum likelihood
+#'                     will choose the maximum likelihood phase configuration 
+#'                     
 #' @param tol.final the desired accuracy for the final map (default = 10e-04)   
 #'
 #' @param verbose if \code{TRUE} (default), the current progress is shown; if
@@ -27,12 +29,12 @@
 #' @return An object of class \code{mappoly.map}
 #' 
 #' @examples
-#'  map <- get_submap(maps.hexafake[[1]], 1:20, reestimate.rf = FALSE, reestimate.phase = FALSE)
+#'  map <- get_submap(solcap.dose.map[[1]], 1:20, verbose = FALSE)
 #'  tpt <- est_pairwise_rf(make_seq_mappoly(map))
-#'  new.map <- split_and_rephase(map, tpt, 5)
+#'  new.map <- split_and_rephase(map, tpt, 1, 1)
 #'  map
 #'  new.map
-#'  plot_map_list(list(old.map = map, new.map = new.map))
+#'  plot_map_list(list(old.map = map, new.map = new.map), col = "ggstyle")
 #' 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
@@ -44,16 +46,13 @@
 #'     \doi{10.1534/g3.119.400378} 
 #'
 #' @export split_and_rephase
-#'
-#' @importFrom utils capture.output
-#' 
 split_and_rephase <- function(input.map,
-                            twopt,
-                            gap.threshold = 5, 
-                            remove.single = TRUE,
-                            phase.config = "best",
-                            tol.final = 10e-4,
-                            verbose = TRUE){
+                              twopt,
+                              gap.threshold = 5, 
+                              size.rem.cluster = 1,
+                              phase.config = "best",
+                              tol.final = 10e-4,
+                              verbose = TRUE){
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
   }
@@ -65,51 +64,71 @@ split_and_rephase <- function(input.map,
     stop("invalid linkage phase configuration")
   } else i.lpc <- phase.config
   id <- which(imf_h(input.map$maps[[i.lpc]]$seq.rf) > gap.threshold)
-  if(length(id) == 0) return(input.map)
+  if(length(id) == 0){
+    if(verbose) cat("no submaps found\n")
+    return(input.map)
+  } 
   id <- cbind(c(1, id+1), c(id, input.map$info$n.mrk))
-  ## Removing single markers at the beginning of the group
-  i <- 1
-  while(diff(id[i, ])  ==  0){
-    i <- i + 1
+  temp.map <- input.map
+  ## Selecting map segments larger then the specified threshold
+  segments <- id[apply(id, 1, diff) > size.rem.cluster - 1, , drop = FALSE]
+  if(length(segments) == 0) stop("all markers were eliminated\n")
+  ## Dividing map in sub-maps
+  temp.maps <- vector("list", nrow(segments))
+  if (verbose) {
+    ns <- nrow(segments)
+    if(ns == 1){
+      cat("one submap found ...\n")
+      map <- get_submap(input.map, c(segments[1, 1]:segments[1, 2]), tol.final = tol.final, verbose = FALSE)
+      return(filter_map_at_hmm_thres(map, 10e-4))
+    } 
+    else cat(ns, "submaps found ...\n")
   }
-  invisible(capture.output(suppressMessages(
-    input.map <- get_submap(input.map, i:input.map$info$n.mrk, reestimate.rf = FALSE))))
-  ## Dividing map in submaps
-  id <- which(imf_h(input.map$maps[[1]]$seq.rf) > gap.threshold)
-  id <- cbind(c(1, id+1), c(id, input.map$info$n.mrk))
-  temp.maps <- vector("list", nrow(id))
-  if (verbose) cat(nrow(id), "submaps found ...\n")
   for(i in 1:length(temp.maps)){
-    temp.id <- c(id[i, 1]:id[i, 2])
+    temp.id <- c(segments[i, 1]:segments[i, 2])
     if(length(temp.id) > 1)
-      invisible(capture.output(suppressMessages(
-        temp.maps[[i]] <- get_submap(input.map, temp.id, reestimate.rf = FALSE))))
+      temp.maps[[i]] <- get_submap(input.map, temp.id, reestimate.rf = FALSE, verbose = FALSE)
     else
       temp.maps[[i]] <- input.map$info$mrk.names[temp.id]    
   }
   newmap <- temp.maps[[1]]
   for(i in 2:length(temp.maps)){
-    if (verbose) cat("Adding block", i, "of", length(temp.maps), "\n")
-    if(!is.character(temp.maps[[i]])){
-      invisible(capture.output(suppressMessages(
-        newmap <- merge_maps(list(newmap, temp.maps[[i]]), 
+    if (verbose) cat("adding block", i, "of", length(temp.maps), "\n")
+    if(is.character(newmap) & is.character(temp.maps[[i]])){
+      s <- make_seq_mappoly(get(input.map$info$data.name, pos = 1), 
+                            c(newmap, temp.maps[[i]]), 
+                            input.map$info$data.name)
+      tpt <- est_pairwise_rf(s, verbose = FALSE)
+      newmap <- est_rf_hmm_sequential(s,tpt, verbose = FALSE)
+    } 
+    else if(is.character(newmap) & !is.character(temp.maps[[i]])){
+      newmap <- add_marker(input.map = temp.maps[[i]], mrk = newmap, pos = 0,
+                           rf.matrix = rf_list_to_matrix(twopt,
+                                                         thresh.LOD.ph = 5, 
+                                                         thresh.LOD.rf = 5,
+                                                         shared.alleles = TRUE),
+                           verbose = FALSE)
+    } 
+    else if(!is.character(newmap) & is.character(temp.maps[[i]])){
+      newmap <- add_marker(newmap, temp.maps[[i]], 
+                           newmap$info$n.mrk, 
+                           rf.matrix = rf_list_to_matrix(twopt,
+                                                         thresh.LOD.ph = 5, 
+                                                         thresh.LOD.rf = 5,
+                                                         shared.alleles = TRUE),
+                           verbose = FALSE)
+    } 
+    else {
+      newmap <- merge_maps(list(newmap, temp.maps[[i]]), 
                            twopt = twopt, 
                            thres.twopt = 10, 
-                           thres.hmm = 50))))
-      newmap <- filter_map_at_hmm_thres(newmap, thres.hmm = 0.01)
-    } else {
-      if(remove.single) next()
-      invisible(capture.output(suppressMessages(
-        maptemp <- add_marker(newmap, temp.maps[[i]], 
-                              newmap$info$n.mrk, 
-                              rf.matrix = rf_list_to_matrix(twopt,
-                                                            thresh.LOD.ph = 5, 
-                                                            thresh.LOD.rf = 5,
-                                                            shared.alleles = TRUE),
-                              verbose = verbose))))
-      newmap <- filter_map_at_hmm_thres(maptemp, thres.hmm = 0.01)
+                           thres.hmm = 50)
     }
+    newmap <- filter_map_at_hmm_thres(newmap, thres.hmm = 0.01)
   }
+  newmap$info$seq.num <- newmap$maps[[1]]$seq.num
+  newmap$info$seq.ref <- temp.map$info$seq.ref[newmap$info$mrk.names]
+  newmap$info$seq.alt <- temp.map$info$seq.alt[newmap$info$mrk.names]
   new.map <- reest_rf(input.map = newmap, tol = tol.final, verbose = FALSE)
   return(new.map)
 }

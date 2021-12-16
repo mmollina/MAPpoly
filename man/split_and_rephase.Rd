@@ -8,7 +8,7 @@ split_and_rephase(
   input.map,
   twopt,
   gap.threshold = 5,
-  remove.single = TRUE,
+  size.rem.cluster = 1,
   phase.config = "best",
   tol.final = 0.001,
   verbose = TRUE
@@ -17,7 +17,7 @@ split_and_rephase(
 \arguments{
 \item{input.map}{an object of class \code{mappoly.map}}
 
-\item{twopt}{an object of class \code{poly.est.two.pts.pairwise}
+\item{twopt}{an object of class \code{mappoly.twopt}
 containing the two-point information for the markers contained 
 in \code{input.map}}
 
@@ -25,11 +25,12 @@ in \code{input.map}}
 where the map should be spitted. The default 
 value is 5 cM}
 
-\item{remove.single}{Should isolated markers be removed?}
+\item{size.rem.cluster}{the size of the marker cluster (in number of markers) 
+from which the cluster should be removed. The default 
+value is 1}
 
 \item{phase.config}{which phase configuration should be used. "best" (default) 
-will choose the phase configuration associated with the
-maximum likelihood}
+will choose the maximum likelihood phase configuration}
 
 \item{tol.final}{the desired accuracy for the final map (default = 10e-04)}
 
@@ -45,12 +46,12 @@ given a distance threshold of neighboring markers
 and evaluates alternative phases between the sub-maps.
 }
 \examples{
- map <- get_submap(maps.hexafake[[1]], 1:20, reestimate.rf = FALSE, reestimate.phase = FALSE)
+ map <- get_submap(solcap.dose.map[[1]], 1:20, verbose = FALSE)
  tpt <- est_pairwise_rf(make_seq_mappoly(map))
- new.map <- split_and_rephase(map, tpt, 5)
+ new.map <- split_and_rephase(map, tpt, 1, 1)
  map
  new.map
- plot_map_list(list(old.map = map, new.map = new.map))
+ plot_map_list(list(old.map = map, new.map = new.map), col = "ggstyle")
 
 }
 \references{

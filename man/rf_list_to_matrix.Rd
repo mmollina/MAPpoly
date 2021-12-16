@@ -30,7 +30,7 @@ rf_list_to_matrix(
 )
 }
 \arguments{
-\item{input.twopt}{an object of class \code{poly.est.two.pts.pairwise}}
+\item{input.twopt}{an object of class \code{mappoly.twopt} or \code{mappoly.twopt2}}
 
 \item{thresh.LOD.ph}{LOD score threshold for linkage phase configurations (default = 0)}
 
@@ -73,7 +73,7 @@ A list containing two matrices. The first one contains the
 }
 \description{
 Transforms the recombination fraction list contained in an object
-of class \code{poly.est.two.pts.pairwise} into a recombination
+of class \code{mappoly.twopt} or \code{mappoly.twopt2} into a recombination
 fraction matrix
 }
 \details{

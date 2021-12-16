@@ -9,7 +9,7 @@
 #' 
 #' @param map.list a list of objects of class \code{mappoly.map} to be merged.
 #' 
-#' @param twopt an object of class \code{poly.est.two.pts.pairwise}
+#' @param twopt an object of class \code{mappoly.twopt}
 #'     containing the two-point information for all pairs of markers
 #'     present in the original maps
 #'     
@@ -84,6 +84,7 @@
 #' compare_haplotypes(ploidy = 4, best.phase$Q[names.id], 
 #'                    full.map$maps[[1]]$seq.ph$Q[names.id])
 #' }
+#' @importFrom utils capture.output
 #' @export
 merge_maps <- function(map.list, 
                      twopt,
@@ -97,9 +98,14 @@ merge_maps <- function(map.list,
          " is not a list containing 'mappoly.map' objects.")
   if (length(unique(sapply(map.list, function(x) x$info$data.name))) != 1)
     stop("MAPpoly won't merge maps from different datasets.")
-  if (!inherits(twopt, "poly.est.two.pts.pairwise")){
-    stop(deparse(substitute(twopt)), " is not an object of class 'poly.est.two.pts.pairwise'")    
+  if (!inherits(twopt, "mappoly.twopt")){
+    stop(deparse(substitute(twopt)), " is not an object of class 'mappoly.twopt'")    
   }
+  ref <- lapply(map.list, function(x) x$info$seq.ref)
+  alt <- lapply(map.list, function(x) x$info$seq.alt)
+  names(alt) <- names(ref) <- NULL
+  ref <- unlist(ref)
+  alt <- unlist(alt)
   ## Check twopt consistency
   s.temp <- make_seq_mappoly(get(map.list[[1]]$info$data.name), 
                            unlist(sapply(map.list, function(x) x$info$mrk.names)), 
@@ -228,6 +234,8 @@ merge_maps <- function(map.list,
     output.map$info$seq.dose.p2 <- c(map.list[[1]]$info$seq.dose.p2, map.list[[2]]$info$seq.dose.p2)
     output.map$info$chrom <- c(map.list[[1]]$info$chrom, map.list[[2]]$info$chrom)
     output.map$info$genome.pos <- c(map.list[[1]]$info$genome.pos, map.list[[2]]$info$genome.pos)
+    output.map$info$seq.ref <-  ref[output.map$info$mrk.names]
+    output.map$info$seq.alt <-  alt[output.map$info$mrk.names]
     output.map$info$chisq.pval <- c(map.list[[1]]$info$chisq.pval, map.list[[2]]$info$chisq.pval)
     for(i in 1:nrow(res))
     {
@@ -257,6 +265,8 @@ merge_maps <- function(map.list,
     out.map$info$seq.dose.p2 <- unlist(sapply(map.list, function(x) x$info$seq.dose.p2))
     out.map$info$chrom <- unlist(sapply(map.list, function(x) x$info$chrom))
     out.map$info$genome.pos <- unlist(sapply(map.list, function(x) x$info$genome.pos))
+    out.map$info$seq.ref <-  ref[out.map$info$mrk.names]
+    out.map$info$seq.alt <-  alt[out.map$info$mrk.names]
     out.map$info$chisq.pval <- unlist(sapply(map.list, function(x) x$info$chisq.pval))
     ##splitting to reestimate
     map.list2 <- vector("list", length(map.list))

@@ -130,6 +130,7 @@ cat("\n  No. genotypic classes:                    ", dim(x$probs)[1], "\n")
 #'
 #' @param void internal function to be documented
 #' @keywords internal
+#' @export
 create_map <- function(input.map, step = 0,
                      phase.config = "best")
 {

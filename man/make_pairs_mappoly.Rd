@@ -7,18 +7,18 @@
 make_pairs_mappoly(input.twopt, input.seq)
 }
 \arguments{
-\item{input.twopt}{an object of class \code{poly.est.two.pts.pairwise}}
+\item{input.twopt}{an object of class \code{mappoly.twopt}}
 
 \item{input.seq}{an object of class \code{mappoly.sequence}, with 
 a sequence of markers contained in \code{input.twopt}}
 }
 \value{
-an object of class \code{poly.est.two.pts.pairwise} which is a
+an object of class \code{mappoly.twopt} which is a
  subset of \code{input.twopt}. 
  See \code{\link[mappoly]{est_pairwise_rf}} for details
 }
 \description{
-Get a subset of an object of class \code{poly.est.two.pts.pairwise} (i.e.
+Get a subset of an object of class \code{mappoly.twopt} or \code{mappoly.twopt2} (i.e.
  recombination fraction) and LOD score statistics for all possible linkage
  phase combinations based on a sequence of markers.
 }

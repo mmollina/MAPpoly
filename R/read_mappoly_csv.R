@@ -86,48 +86,57 @@
 #' @export read_geno_csv
 
 read_geno_csv <- function(file.in, ploidy, filter.non.conforming = TRUE, elim.redundant = TRUE, verbose = TRUE) {
-  ploidy <- ploidy
   dat <- read.csv(file = file.in, header = TRUE, stringsAsFactors = FALSE)
-  ## Removing markers with missing datapoints for parents
-  dat = dat[which(!is.na(dat$P1) & !is.na(dat$P2)),]
+  return(table_to_mappoly(dat, ploidy, filter.non.conforming = TRUE, elim.redundant = TRUE, verbose = TRUE))
+}
+
+#' Conversion of data.frame to mappoly.data
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @export
+table_to_mappoly <- function(dat, ploidy, filter.non.conforming = TRUE, elim.redundant = TRUE, verbose = TRUE){
+  ploidy <- ploidy
+  ## Removing markers with missing data points for parents
+  dat = dat[which(!is.na(dat[,2,drop = TRUE]) & !is.na(dat[,3,drop = TRUE])),]
   ## get number of individuals -------------
   n.ind <- ncol(dat) - 5
   ## get number of markers -----------------
   n.mrk <- nrow(dat)
   ## get marker names ----------------------
-  mrk.names <- dat[,1]
+  mrk.names <- dat[,1,drop = TRUE]
   ## get individual names ------------------
   ind.names <- colnames(dat)[-c(1:5)]
   ## get dosage in parent P ----------------
-  dosage.p1 <- as.integer(dat[,2])
+  dosage.p1 <- as.integer(dat[,2,drop = TRUE])
   ## get dosage in parent Q ----------------
-  dosage.p2 <- as.integer(dat[,3])
+  dosage.p2 <- as.integer(dat[,3,drop = TRUE])
   ## monomorphic markers
   dp <- abs(abs(dosage.p1-(ploidy/2))-(ploidy/2))
   dq <- abs(abs(dosage.p2-(ploidy/2))-(ploidy/2))
   id <- dp+dq != 0
   ## get chromosome info ---------------------
-  chrom <- as.character(dat[,4])
+  chrom <- as.character(dat[,4,drop = TRUE])
   ## get sequence position info ------------
-  sequencepos <- as.numeric(dat[,5])
+  sequencepos <- as.numeric(dat[,5,drop = TRUE])
   names(sequencepos) <- names(chrom) <- names(dosage.p2) <- names(dosage.p1) <-  mrk.names
   nphen <- 0
   phen <- NULL
   if (verbose){
-      cat("Reading the following data:")
-      cat("\n    Ploidy level:", ploidy)
-      cat("\n    No. individuals: ", n.ind)
-      cat("\n    No. markers: ", n.mrk) 
-      cat("\n    No. informative markers:  ", sum(id), " (", round(100*sum(id)/n.mrk,1), "%)", sep = "")
-      if (all(unique(nphen) != 0))
-          cat("\n    This dataset contains phenotypic information.")      
-      if (length(sequence) > 1)
-          cat("\n    This dataset contains chromosome information.")
-      cat("\n    ...")
+    cat("Reading the following data:")
+    cat("\n    Ploidy level:", ploidy)
+    cat("\n    No. individuals: ", n.ind)
+    cat("\n    No. markers: ", n.mrk) 
+    cat("\n    No. informative markers:  ", sum(id), " (", round(100*sum(id)/n.mrk,1), "%)", sep = "")
+    if (all(unique(nphen) != 0))
+      cat("\n    This dataset contains phenotypic information.")      
+    if (length(sequence) > 1)
+      cat("\n    This dataset contains chromosome information.")
+    cat("\n    ...")
   }
-
+  
   ## get genotypic info --------------------
-  geno.dose <- dat[,-c(1:5)]
+  geno.dose <- as.matrix(dat[,-c(1:5),drop = TRUE])
   dimnames(geno.dose) <- list(mrk.names, ind.names)
   geno.dose[is.na(geno.dose)] <- ploidy + 1
   ## returning the 'mappoly.data' object
@@ -191,3 +200,5 @@ read_geno_csv <- function(file.in, ploidy, filter.non.conforming = TRUE, elim.re
   }
   return(res)
 }
+
+

@@ -134,8 +134,8 @@ dist_prob_to_class <- function(geno, prob.thres = 0.9) {
 export_data_to_polymapR <- function(data.in)
 {
   data.out <- as.matrix(data.frame(P1 = data.in$dosage.p1,     
-                                 P2 = data.in$dosage.p2,
-                                 data.in$geno.dose))
+                                   P2 = data.in$dosage.p2,
+                                   data.in$geno.dose))
   data.out[data.out  ==  (data.in$ploidy + 1)] <- NA
   return(data.out)
 }
@@ -269,13 +269,13 @@ plot_GIC <- function(hprobs, P = "P1", Q = "P2"){
     mutate(GIC = 1-(4/hprobs$info$n.ind)*m1 , parent = ifelse(homolog%in%letters[1:hprobs$info$ploidy], P, Q))
   head(as.data.frame(DF))
   
- print(ggplot(DF, aes(map.position, GIC, colour = homolog)) +
-    geom_smooth(alpha = .8, se = FALSE) + facet_wrap(~LG, nrow = 3, ncol = 5) +
-    facet_grid(parent~LG, scales = "free_x", space = "free_x") +
-    geom_hline(yintercept = .8, linetype = "dashed") + ylim(0,1) +
-    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-    scale_color_discrete(name = "Homologs") +
-    ylab("Genotypic Information Content") + xlab("Distance (cM)"))
+  print(ggplot(DF, aes(map.position, GIC, colour = homolog)) +
+          geom_smooth(alpha = .8, se = FALSE) + facet_wrap(~LG, nrow = 3, ncol = 5) +
+          facet_grid(parent~LG, scales = "free_x", space = "free_x") +
+          geom_hline(yintercept = .8, linetype = "dashed") + ylim(0,1) +
+          theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+          scale_color_discrete(name = "Homologs") +
+          ylab("Genotypic Information Content") + xlab("Distance (cM)"))
   return(invisible(DF))
 }
 
@@ -510,8 +510,8 @@ get_genomic_order <- function(input.seq, verbose = TRUE){
     }
   } else{
     M <- data.frame(seq = input.seq$chrom, 
-                  seq.pos = input.seq$genome.pos, 
-                  row.names = input.seq$seq.mrk.names)
+                    seq.pos = input.seq$genome.pos, 
+                    row.names = input.seq$seq.mrk.names)
     M.out <- M[order(as.numeric(M[,1]), as.numeric(M[,2])),]
   }
   structure(list(data.name = input.seq$data.name, ord = M.out), class = "mappoly.geno.ord")
@@ -577,15 +577,15 @@ drop_marker <- function(input.map, mrk, verbose = TRUE)
   }
   ## Getting new map
   suppressMessages(output.map <- get_submap(input.map = input.map,
-                                          mrk.pos = c(1:input.map$info$n.mrk)[-mrk], 
-                                          phase.config = 1, 
-                                          reestimate.rf = FALSE))
-  if(length(input.map$maps) > 1){
-    for(i in 2:length(input.map$maps)){
-      suppressMessages(temp.map <- get_submap(input.map = input.map,
                                             mrk.pos = c(1:input.map$info$n.mrk)[-mrk], 
                                             phase.config = 1, 
                                             reestimate.rf = FALSE))
+  if(length(input.map$maps) > 1){
+    for(i in 2:length(input.map$maps)){
+      suppressMessages(temp.map <- get_submap(input.map = input.map,
+                                              mrk.pos = c(1:input.map$info$n.mrk)[-mrk], 
+                                              phase.config = 1, 
+                                              reestimate.rf = FALSE))
       output.map$maps[[i]] <- temp.map$maps[[1]]
     }
   }
@@ -725,7 +725,8 @@ drop_marker <- function(input.map, mrk, verbose = TRUE)
 #' }
 #' @export
 add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL, 
-                       phase.config = "best", tol = 10e-4, r.test = NULL, verbose = TRUE){
+                       phase.config = "best", tol = 10e-4, r.test = NULL, 
+                       verbose = TRUE){
   ## Checking class of arguments
   if(!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
@@ -809,9 +810,9 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
     }
     if(is.null(r.test)){
       r.test <- generate_all_link_phases_elim_equivalent_haplo(block1 = input.map$maps[[i.lpc]], 
-                                                             block2 = mrk.id, 
-                                                             rf.matrix = rf.matrix, 
-                                                             ploidy = ploidy, max.inc = 0)
+                                                               block2 = mrk.id, 
+                                                               rf.matrix = rf.matrix, 
+                                                               ploidy = ploidy, max.inc = 0)
       
     }
   } 
@@ -828,19 +829,20 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
       h.right[[i]] <- A[names(e.right[[i]]), , drop = FALSE]
     }
     ## Info to the left
-    suppressMessages(map.left <- get_submap(input.map = input.map,
-                                            mrk.pos = 1:pos,
-                                            phase.config = i.lpc, 
-                                            reestimate.rf = FALSE))
+    map.left <- get_submap(input.map = input.map,
+                           mrk.pos = 1:pos,
+                           phase.config = i.lpc, 
+                           reestimate.rf = FALSE, 
+                           verbose = FALSE)
     r.left <- generate_all_link_phases_elim_equivalent_haplo(block1 = map.left$maps[[i.lpc]], 
                                                              block2 = mrk.id, 
                                                              rf.matrix = rf.matrix, 
                                                              ploidy = ploidy, max.inc = 0)
     ## Info to the right
-    suppressMessages(map.right <- get_submap(input.map = input.map,
-                                             mrk.pos = (pos+1):input.map$info$n.mrk,
-                                             phase.config = i.lpc, 
-                                             reestimate.rf = FALSE))
+    map.right <- get_submap(input.map = input.map,
+                            mrk.pos = (pos+1):input.map$info$n.mrk,
+                            phase.config = i.lpc, 
+                            reestimate.rf = FALSE, verbose = FALSE)
     r.right <- generate_all_link_phases_elim_equivalent_haplo(block1 = map.right$maps[[i.lpc]], 
                                                               block2 = mrk.id, 
                                                               rf.matrix = rf.matrix, 
@@ -858,9 +860,9 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
       h.left[[i]] <- A[names(e.left[[i]]), , drop = FALSE]
     }
     r.test <- generate_all_link_phases_elim_equivalent_haplo(block1 = input.map$maps[[i.lpc]], 
-                                                           block2 = mrk.id, 
-                                                           rf.matrix = rf.matrix, 
-                                                           ploidy = ploidy, max.inc = 0)
+                                                             block2 = mrk.id, 
+                                                             rf.matrix = rf.matrix, 
+                                                             ploidy = ploidy, max.inc = 0)
   } 
   else stop("should not get here!")
   ## gathering maps to test and conditional probabilities
@@ -868,9 +870,9 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
   for(i in 1:length(test.maps))
   {
     ## This sub-map is just to create a framework
-    suppressMessages(hap.temp <- get_submap(input.map, 
-                                            c(1,1), 
-                                            reestimate.rf = FALSE))
+    hap.temp <- get_submap(input.map, 
+                           c(1,1), 
+                           reestimate.rf = FALSE, verbose = FALSE)
     hap.temp <- filter_map_at_hmm_thres(hap.temp, thres.hmm = 10e-10)
     hap.temp$maps[[1]]$seq.num <- rep(mrk.id, 2)
     hap.temp$maps[[1]]$seq.ph <- list(P = c(r.test[[i]]$P, r.test[[i]]$P),
@@ -906,22 +908,22 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
       names(h.test) <- c("hap1", "hap2")
       e.test <- c(e[i], list(e.right))
       restemp <- est_haplo_hmm(ploidy = ploidy, 
-                             n.mrk = length(h.test), 
-                             n.ind = n.ind, 
-                             haplo = h.test, 
-                             #emit = e.test, 
-                             rf_vec = rep(0.01, length(h.test)-1), 
-                             verbose = FALSE, 
-                             use_H0 = FALSE, 
-                             tol = tol) 
+                               n.mrk = length(h.test), 
+                               n.ind = n.ind, 
+                               haplo = h.test, 
+                               #emit = e.test, 
+                               rf_vec = rep(0.01, length(h.test)-1), 
+                               verbose = FALSE, 
+                               use_H0 = FALSE, 
+                               tol = tol) 
       temp <- unlist(restemp)
       res[i,1:length(temp)] <- temp
       P <- c(test.maps[[i]]$maps[[1]]$seq.ph$P[1],
-           input.map$maps[[1]]$seq.ph$P)
+             input.map$maps[[1]]$seq.ph$P)
       Q <- c(test.maps[[i]]$maps[[1]]$seq.ph$Q[1], 
-           input.map$maps[[1]]$seq.ph$Q)
+             input.map$maps[[1]]$seq.ph$Q)
       names(P) <- names(Q) <- c(test.maps[[i]]$maps[[1]]$seq.num[1], 
-                            input.map$maps[[1]]$seq.num)
+                                input.map$maps[[1]]$seq.num)
       configs[[i]] <- list(P = P, Q = Q)
     } 
     else if(pos > 0 & pos < n.mrk){
@@ -929,25 +931,25 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
       names(h.test) <- c("hap1", "hap2", "hap3")
       e.test <- c(list(e.left), e[i], list(e.right))
       restemp <- est_haplo_hmm(ploidy = ploidy, 
-                             n.mrk = length(h.test), 
-                             n.ind = n.ind, 
-                             haplo = h.test, 
-                             #emit = e.test, 
-                             rf_vec = rep(0.01, length(h.test)-1), 
-                             verbose = FALSE, 
-                             use_H0 = FALSE, 
-                             tol = tol) 
+                               n.mrk = length(h.test), 
+                               n.ind = n.ind, 
+                               haplo = h.test, 
+                               #emit = e.test, 
+                               rf_vec = rep(0.01, length(h.test)-1), 
+                               verbose = FALSE, 
+                               use_H0 = FALSE, 
+                               tol = tol) 
       temp <- unlist(restemp)
       res[i,1:length(temp)] <- temp
       P <- c(map.left$maps[[1]]$seq.ph$P, 
-           test.maps[[i]]$maps[[1]]$seq.ph$P[1],
-           map.right$maps[[1]]$seq.ph$P)
+             test.maps[[i]]$maps[[1]]$seq.ph$P[1],
+             map.right$maps[[1]]$seq.ph$P)
       Q <- c(map.left$maps[[1]]$seq.ph$Q, 
-           test.maps[[i]]$maps[[1]]$seq.ph$Q[1], 
-           map.right$maps[[1]]$seq.ph$Q)
+             test.maps[[i]]$maps[[1]]$seq.ph$Q[1], 
+             map.right$maps[[1]]$seq.ph$Q)
       names(P) <- names(Q) <- c(map.left$maps[[1]]$seq.num, 
-                            test.maps[[i]]$maps[[1]]$seq.num[1], 
-                            map.right$maps[[1]]$seq.num)
+                                test.maps[[i]]$maps[[1]]$seq.num[1], 
+                                map.right$maps[[1]]$seq.num)
       configs[[i]] <- list(P = P, Q = Q)
     } 
     else if(pos  ==  n.mrk){
@@ -955,22 +957,22 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
       names(h.test) <- c("hap1", "hap2")
       e.test <- c(list(e.left), e[i])
       restemp <- est_haplo_hmm(ploidy = ploidy, 
-                             n.mrk = length(h.test), 
-                             n.ind = n.ind, 
-                             haplo = h.test, 
-                             #emit = e.test, 
-                             rf_vec = rep(0.01, length(h.test)-1), 
-                             verbose = FALSE, 
-                             use_H0 = FALSE, 
-                             tol = tol) 
+                               n.mrk = length(h.test), 
+                               n.ind = n.ind, 
+                               haplo = h.test, 
+                               #emit = e.test, 
+                               rf_vec = rep(0.01, length(h.test)-1), 
+                               verbose = FALSE, 
+                               use_H0 = FALSE, 
+                               tol = tol) 
       temp <- unlist(restemp)
       res[i,1:length(temp)] <- temp
       P <- c(input.map$maps[[1]]$seq.ph$P, 
-           test.maps[[i]]$maps[[1]]$seq.ph$P[1])
+             test.maps[[i]]$maps[[1]]$seq.ph$P[1])
       Q <- c(input.map$maps[[1]]$seq.ph$Q, 
-           test.maps[[i]]$maps[[1]]$seq.ph$Q[1])
+             test.maps[[i]]$maps[[1]]$seq.ph$Q[1])
       names(P) <- names(Q) <- c(input.map$maps[[1]]$seq.num, 
-                            test.maps[[i]]$maps[[1]]$seq.num[1])
+                                test.maps[[i]]$maps[[1]]$seq.num[1])
       configs[[i]] <- list(P = P, Q = Q)
     }
   }
@@ -992,8 +994,8 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
       seq.rf <- as.numeric(c(res[i, "rf1"], input.map$maps[[i.lpc]]$seq.rf))
     } else if(pos > 0 & pos < n.mrk){
       seq.rf <- as.numeric(c(head(input.map$maps[[i.lpc]]$seq.rf, n = pos - 1),
-                  res[i, c("rf1", "rf2")], 
-                  tail(input.map$maps[[i.lpc]]$seq.rf, n = input.map$info$n.mrk - pos - 1)))
+                             res[i, c("rf1", "rf2")], 
+                             tail(input.map$maps[[i.lpc]]$seq.rf, n = input.map$info$n.mrk - pos - 1)))
     } else if(pos  ==  n.mrk){
       seq.rf <- as.numeric(c(input.map$maps[[i.lpc]]$seq.rf, res[i, "rf1"]))
     }
@@ -1007,6 +1009,8 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
   output.map$info$seq.dose.p2 <- dat$dosage.p2[output.map$info$mrk.names]
   output.map$info$chrom <- dat$chrom[output.map$info$mrk.names]
   output.map$info$genome.pos <- dat$genome.pos[output.map$info$mrk.names]
+  output.map$info$seq.ref <-  dat$seq.ref[output.map$info$mrk.names]
+  output.map$info$seq.alt <-  dat$seq.alt[output.map$info$mrk.names]
   output.map$info$chisq.pval <- dat$chisq.pval[output.map$info$mrk.names]
   return(output.map)
 }
@@ -1134,13 +1138,13 @@ check_data_dist_sanity <- function(x){
   # individual names in the dosage and probability dataset
   test[20] <- !is.character(x$ind.names) # are individual's names characters
   test[21] <- !identical(x$geno$ind, rep(x$ind.names, each = x$n.mrk)) #are individual's names in the probability data frame properly 
-                                                                       #arranged and consistent with the informed individual's names 
+  #arranged and consistent with the informed individual's names 
   test[22] <- !identical(colnames(x$geno.dose), x$ind.names)# are column names in dosage matrix identical to individual names?
   
   # marker names in the dosage and probability dataset
   test[23] <- !is.character(x$mrk.names)# are marker's names characters
   test[24] <- !identical(x$geno$mrk, rep(x$mrk.names, x$n.ind))#are marker names in the probability data frame properly 
-                                                               #arranged and consistent with the informed marker names 
+  #arranged and consistent with the informed marker names 
   test[25] <- !identical(rownames(x$geno.dose), x$mrk.names)# are row names in dosage matrix identical to marker names?
   
   # dosage in both parents
@@ -1653,10 +1657,73 @@ aggregate_matrix <- function(M, fact){
   R
 }
 
+#' Get states and emission in one informative parent
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @export
+get_states_and_emission_one_parent <- function(ploidy, ph, global.err, D){
+  n.mrk <- nrow(D)
+  n.ind <- ncol(D)
+  A <- matrix(0, nrow = choose(ploidy, ploidy/2), ncol = length(ph))
+  for(i in 1:length(ph)){
+    id1 <- numeric(ploidy)
+    id1[ph[[i]]] <- 1
+    A[,i] <- apply(combn(id1, ploidy/2), 2, sum)
+  }
+  if(round(global.err, 4) == 0.0){
+    e <- h <- vector("list", n.mrk)
+    for(j in 1:n.mrk){
+      e.temp <- h.temp <- vector("list", n.ind)
+      for(i in 1:n.ind){
+        h.temp[[i]] <- which(A[,j] == D[j,i]) - 1
+          if(length(h.temp[[i]]) == 0)
+            h.temp[[i]] <- 1:nrow(A) - 1
+        #e.temp[[i]] <- rep(1, length(h.temp[[i]]))/length(h.temp[[i]])
+         e.temp[[i]] <- rep(1, length(h.temp[[i]]))
+      }
+      e[[j]] <- e.temp
+      h[[j]] <- h.temp
+    }
+  } else if(round(global.err, 4) > 0.0){
+    e <- h <- vector("list", n.mrk)
+    for(j in 1:n.mrk){
+      e.temp <- h.temp <- vector("list", n.ind)
+      for(i in 1:n.ind){
+        h.temp[[i]] <- 1:nrow(A) - 1
+        s <- which(A[,j] == D[j,i])
+        if(length(s) == 0)
+          e.temp[[i]] <- rep(1/nrow(A), nrow(A))
+        else{
+          e.temp0 <- numeric(nrow(A))
+          e.temp0[-s] <- global.err/(nrow(A) - length(s))
+          e.temp0[s] <- (1- global.err)/length(s)
+          e.temp[[i]] <- e.temp0
+        }
+      }
+      e[[j]] <- e.temp
+      h[[j]] <- h.temp
+    }
+  }
+  list(states = h, emission = e)    
+}
 
 
+#' Conversion: vector to matrix
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @export
+v_2_m <- function(x, n){
+  y <- base::matrix(NA, n, n) 
+  y[base::lower.tri(y)] <- as.numeric(x)
+  y[base::upper.tri(y)] <- t(y)[base::upper.tri(y)]
+  y
+}
 
-
-
+#' Skeleton to test CPP functions
+#' #' @export
+#' test_CPP<-function(m, rf)
+#'   .Call("rec_number", as.integer(m), as.numeric(rf), PACKAGE = "mappoly")
 
 

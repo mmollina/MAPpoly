@@ -1,4 +1,4 @@
-[![Travis Build Status](https://app.travis-ci.com/mmollina/MAPpoly.svg?branch=master)](https://app.travis-ci.com/github/mmollina/MAPpoly) 
+[![R-CMD-check](https://github.com/mmollina/MAPpoly/workflows/R-CMD-check/badge.svg)](https://github.com/mmollina/mappoly/actions)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mmollina/mappoly?branch=master&svg=true)](https://ci.appveyor.com/project/mmollina/mappoly)
 ![Development](https://img.shields.io/badge/development-active-blue.svg)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
@@ -10,7 +10,7 @@
 
 # MAPpoly <img src="https://raw.githubusercontent.com/mmollina/MAPpoly/main/hex.png" align="right" width="200" />
 
-MAPpoly (v. 0.2.3) is an R package to construct genetic maps in autopolyploids with even ploidy levels. In its current version, MAPpoly can handle ploidy levels up to 8 when using hidden Markov models (HMM), and up to 12 when using the two-point simplification. When dealing with large numbers of markers (> 10,000), we strongly recommend using high-performance computation. 
+MAPpoly (v. 0.3.0) is an R package to construct genetic maps in autopolyploids with even ploidy levels. In its current version, MAPpoly can handle ploidy levels up to 8 when using hidden Markov models (HMM), and up to 12 when using the two-point simplification. When dealing with large numbers of markers (> 10,000), we strongly recommend using high-performance computation. 
 
 ![](https://raw.githubusercontent.com/mmollina/MAPpoly/master/mappoly.gif)
 
@@ -78,6 +78,17 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
    
   
 # Related software
+
+* [Polyverse](https://polyploids.r-universe.dev/ui#builds) - the polyploid R universe (a Lindsay Clark's initiative)
+```R
+# Enable this universe
+options(repos = c(
+    polyploids = 'https://polyploids.r-universe.dev',
+    CRAN = 'https://cloud.r-project.org'))
+
+# Install some packages
+install.packages('MAPpoly')
+```
 
 * Variant Calling
   *  [GBSapp: An automated pipeline for variant calling and filtering.](https://github.com/bodeolukolu/GBSapp)

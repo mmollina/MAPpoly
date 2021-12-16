@@ -12,7 +12,7 @@
 #'     That action usually eliminates markers that are unlinked to the
 #'     set of analyzed markers.
 #'
-#' @param input.twopt an object of class \code{poly.est.two.pts.pairwise}
+#' @param input.twopt an object of class \code{mappoly.twopt}
 #'
 #' @param thresh.LOD.ph LOD score threshold for linkage phase configuration (default = 5)
 #'
@@ -25,6 +25,8 @@
 #' @param ncpus number of parallel processes (i.e. cores) to spawn (default = 1)
 #' 
 #' @param diagnostic.plot if \code{TRUE} produces a diagnostic plot
+#' 
+#' @param breaks number of cells for the histogram
 #' 
 #' @return A filtered object of class \code{mappoly.sequence}. 
 #' See \code{\link[mappoly]{make_seq_mappoly}} for details
@@ -59,43 +61,44 @@
 #'
 #' @export rf_snp_filter
 #' @importFrom ggplot2 ggplot geom_histogram aes scale_fill_manual xlab ggtitle
-#' 
+#' @importFrom graphics hist
 rf_snp_filter <- function(input.twopt,
-                        thresh.LOD.ph = 5,
-                        thresh.LOD.rf = 5,
-                        thresh.rf = 0.15,
-                        probs = c(0.05, 1),
-                        ncpus = 1L,
-                        diagnostic.plot = TRUE)
+                          thresh.LOD.ph = 5,
+                          thresh.LOD.rf = 5,
+                          thresh.rf = 0.15,
+                          probs = c(0.05, 1),
+                          ncpus = 1L,
+                          diagnostic.plot = TRUE,
+                          breaks = 100)
 {
-    ## checking for correct object
-    input_classes  <- c("poly.est.two.pts.pairwise")
+    
+    input_classes <- c("mappoly.twopt", "mappoly.twopt2")
     if (!inherits(input.twopt, input_classes)) {
-        stop(deparse(substitute(input.twopt)),
-             " is not an object of class 'poly.est.two.pts.pairwise'")
+        stop(deparse(substitute(input.twopt)), paste0(" is not an object of class ", paste0(input_classes, collapse =  " or ")))
     }
     probs <- range(probs)
     ## Getting filtered rf matrix
     rf_mat <-  rf_list_to_matrix(input.twopt = input.twopt, thresh.LOD.ph = thresh.LOD.ph,
-                               thresh.LOD.rf = thresh.LOD.rf, thresh.rf = thresh.rf,
-                               ncpus = ncpus, verbose = FALSE)
+                                 thresh.LOD.rf = thresh.LOD.rf, thresh.rf = thresh.rf,
+                                 ncpus = ncpus, verbose = FALSE)
     x <- apply(rf_mat$rec.mat, 1, function(x) sum(!is.na(x)))
+    w <- hist(x, breaks = breaks, plot = FALSE)
     th <- quantile(x, probs = probs)
     rem <- c(which(x < th[1]), which(x > th[2]))
     ids <- names(which(x >= th[1] & x <= th[2]))
     value <- type <- NULL
     if(diagnostic.plot){
         d <- rbind(data.frame(type = "original", value = x),
-                 data.frame(type = "filtered", value = x[ids]))
+                   data.frame(type = "filtered", value = x[ids]))
         p <- ggplot2::ggplot(d, ggplot2::aes(value)) +
             ggplot2::geom_histogram(ggplot2::aes(fill = type),
-                                    alpha = 0.4, position = "identity", binwidth = 30) +
+                                    alpha = 0.4, position = "identity", binwidth = diff(w$mids)[1]) +
             ggplot2::scale_fill_manual(values = c("#00AFBB", "#E7B800")) +
-            ggplot2::ggtitle( paste0("Filtering probs: [", probs[1], " : ", probs[2], "]")) +
+            ggplot2::ggtitle( paste0("Filtering probs: [", probs[1], " : ", probs[2], "] - Non NA values by row in rf matrix - b width: ", diff(w$mids)[1])) +
             ggplot2::xlab(paste0("Non 'NA' values at LOD.ph = ", thresh.LOD.ph, ", LOD.rf = ", thresh.LOD.rf, ", and thresh.rf = ", thresh.rf))
         print(p)
     }
     ## Returning sequence object
     ch_filt <- make_seq_mappoly(input.obj = get(input.twopt$data.name, pos = 1), arg = ids, data.name = input.twopt$data.name)
-    ch_filt
+    return(ch_filt)
 }

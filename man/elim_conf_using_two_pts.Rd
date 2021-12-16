@@ -9,7 +9,7 @@ elim_conf_using_two_pts(input.seq, twopt, thres)
 \arguments{
 \item{input.seq}{an object of class \code{mappoly.sequence}.}
 
-\item{twopt}{an object of class \code{poly.est.two.pts.pairwise}}
+\item{twopt}{an object of class \code{mappoly.twopt}}
 
 \item{thres}{threshold from which the linkage phases can be
 discarded (if abs(ph_LOD) > thres)}

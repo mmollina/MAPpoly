@@ -11,11 +11,12 @@ rf_snp_filter(
   thresh.rf = 0.15,
   probs = c(0.05, 1),
   ncpus = 1L,
-  diagnostic.plot = TRUE
+  diagnostic.plot = TRUE,
+  breaks = 100
 )
 }
 \arguments{
-\item{input.twopt}{an object of class \code{poly.est.two.pts.pairwise}}
+\item{input.twopt}{an object of class \code{mappoly.twopt}}
 
 \item{thresh.LOD.ph}{LOD score threshold for linkage phase configuration (default = 5)}
 
@@ -28,6 +29,8 @@ rf_snp_filter(
 \item{ncpus}{number of parallel processes (i.e. cores) to spawn (default = 1)}
 
 \item{diagnostic.plot}{if \code{TRUE} produces a diagnostic plot}
+
+\item{breaks}{number of cells for the histogram}
 }
 \value{
 A filtered object of class \code{mappoly.sequence}. 
