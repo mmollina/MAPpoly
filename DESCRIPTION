@@ -55,7 +55,7 @@ License: GPL-3
 LazyData: TRUE
 LazyDataCompression: xz
 Depends:
-    R (>= 3.5.0)
+    R (>= 4.0.0)
 Imports:
     Rcpp (>= 0.12.6),
     RcppParallel,
