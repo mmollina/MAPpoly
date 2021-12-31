@@ -62,6 +62,9 @@ devtools::install_github("mmollina/mappoly", dependencies=TRUE)
 ```
 
 For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherme-pereira/QTLpoly) package. QTLpoly is an under development software to map quantitative trait loci (QTL) in full-sib families of outcrossing autopolyploid species based on a random-effect multiple QTL model [Pereira et al. 2020](https://doi.org/10.1534/genetics.120.303080). 
+
+
+# Workflow
 ![](https://raw.githubusercontent.com/mmollina/MAPpoly/main/MAPpoly_workflow.png)
 
 # Vignettes
