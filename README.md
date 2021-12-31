@@ -9,7 +9,7 @@
 
 <!-- ![](https://raw.githubusercontent.com/mmollina/MAPpoly/master/mappoly_hexsticker.png) -->
 
-# MAPpoly <img src="https://raw.githubusercontent.com/mmollina/MAPpoly/main/hex.png" align="right" width="200" />
+# MAPpoly <img src="https://raw.githubusercontent.com/mmollina/MAPpoly/main/hex.png" align="right" width="150" />
 
 MAPpoly (v. 0.3.0) is an R package to construct genetic maps in autopolyploids with even ploidy levels. In its current version, MAPpoly can handle ploidy levels up to 8 when using hidden Markov models (HMM), and up to 12 when using the two-point simplification. When dealing with large numbers of markers (> 10,000), we strongly recommend using high-performance computation. 
 
@@ -62,6 +62,7 @@ devtools::install_github("mmollina/mappoly", dependencies=TRUE)
 ```
 
 For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherme-pereira/QTLpoly) package. QTLpoly is an under development software to map quantitative trait loci (QTL) in full-sib families of outcrossing autopolyploid species based on a random-effect multiple QTL model [Pereira et al. 2020](https://doi.org/10.1534/genetics.120.303080). 
+![](https://raw.githubusercontent.com/mmollina/MAPpoly/main/MAPpoly_workflow.png)
 
 # Vignettes
 * [Building a genetic map in a tetraploid potato full-sib population using MAPpoly](https://rpubs.com/mmollin/tetra_mappoly_vignette)
