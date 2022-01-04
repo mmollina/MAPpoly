@@ -6,6 +6,8 @@ This is a re-submission of MAPpoly package. This version (0.3.0), contains the f
   - Update documentation 
   - Update DESCRIPTION file
   - Added Rccp parallelization to avoid memory overflow in personal computers
+  - Added function export_qtlpoly
+  - Added function filter_individuals
   - Added several utility functions
 
 Thank you for reviewing our re-submission!

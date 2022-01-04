@@ -40,7 +40,7 @@ Differently from est_pairwise_rf this function returns only the values associate
 }
 \examples{
   ## Tetraploid example  
-  all.mrk <- make_seq_mappoly(tetra.solcap, 100:300)
+  all.mrk <- make_seq_mappoly(tetra.solcap, 100:200)
   all.pairs <- est_pairwise_rf2(input.seq = all.mrk, ncpus = 2)
   m <- rf_list_to_matrix(all.pairs)
   plot(m, fact = 2)
