@@ -35,9 +35,7 @@ Mostly for internal use.}
 pairs of markers to be analyzed. If \code{NULL} (default), all pairs are
 considered}
 
-\item{n.batches}{The number of batches of marker pairs that should be analyzed 
-in parallel. Using \code{n.batches > 1}, will usually result in more processing 
-time. However, it will require less memory. See examples.}
+\item{n.batches}{deprecated. Not available on MAPpoly 0.3.0 or higher}
 
 \item{est.type}{Indicates whether to use the discrete ("disc") or the probabilistic ("prob") dosage scoring 
 when estimating the two-point recombination fractions.}

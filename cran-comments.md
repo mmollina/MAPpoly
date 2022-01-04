@@ -1,33 +1,30 @@
 ## Re-submission of MAPpoly package
 
-This is a re-submission of MAPpoly package. In this version (0.2.3), suggested packages are used conditionally, following §1.1.3.1 of 'Writing R Extensions'. We also added the flag LazyDataCompression: xz in DESCRIPTION file, following §1.1.6 of 'Writing R Extensions'. 
-
----
-Other changes since version 0.2.1
+This is a re-submission of MAPpoly package. This version (0.3.0), contains the following changes
 
   - Fix minor bugs 
   - Update documentation 
   - Update DESCRIPTION file
-  - Added function plot_GIC
+  - Added Rccp parallelization to avoid memory overflow in personal computers
+  - Added several utility functions
 
 Thank you for reviewing our re-submission!
 
 ## Test environments
-* local R installation (macOS 11.2.3), R 4.0.5
-* local R installation (Ubuntu 20.04), R 4.0.5
-* local R installation compiled without long double support (Ubuntu 20.04), R 4.0.3
-* Ubuntu 16.04 (on travis-ci), R 4.0.2
-* Windows Server x64 (on appveyor), R 4.0.3
-* Win-builder (3.6.3, 4.0.3, and devel)
+* local R installation (macOS 11.6), R 4.1.2
+* local R installation (Ubuntu 20.04), R 4.1.2
+* local R installation compiled without long double support (Ubuntu 20.04), R 4.1.1
+* Windows Server x64 (on appveyor), R 4.1.2
+* Win-builder (4.0.5, 4.1.2, and 4.2.0)
 
-## R CMD check results (on local macOS: 3.6.3 and 4.1.0)
+## R CMD check results (on local macOS: R 4.1.2)
 
 0 errors | 0 warnings | 1 note
 
-* installed size is 6.5Mb
+* installed size is 6.6Mb
   sub-directories of 1Mb or more:
     * R:      2.7Mb
-    * data:   3.1Mb
+    * data:   3.0Mb
 
 ## Downstream dependencies
 

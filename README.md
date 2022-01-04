@@ -84,7 +84,7 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
   
 # Related software
 
-* [Polyverse](https://polyploids.r-universe.dev/ui#builds) - the polyploid R universe (a Lindsay Clark's initiative)
+* [Polyverse](https://polyploids.r-universe.dev) - the polyploid R universe (a Lindsay Clark's initiative)
 ```R
 # Enable this universe
 options(repos = c(
@@ -145,4 +145,4 @@ install.packages('MAPpoly')
 
 # Acknowledgment
 
-This package has been developed as part of the [Genomic Tools for Sweetpotato Improvement project](https://sweetpotatogenomics.cals.ncsu.edu/) (GT4SP) and [SweetGAINS](https://cgspace.cgiar.org/handle/10568/106838), both funded by [Bill & Melinda Gates Foundation](https://www.gatesfoundation.org/). Its continuous improvement is made possible by [Tools for polyploids](https://www.polyploids.org/), funded by USDA NIFA Specialty Crop Research Initiative Award 
+This package has been developed as part of the [Genomic Tools for Sweetpotato Improvement project](https://sweetpotatogenomics.cals.ncsu.edu/) (GT4SP) and [SweetGAINS](https://cgspace.cgiar.org/handle/10568/106838), both funded by [Bill & Melinda Gates Foundation](https://www.gatesfoundation.org/). Its continuous improvement is made possible by [Tools for polyploids](https://www.polyploids.org/), funded by USDA NIFA Specialty Crop Research Initiative Award.

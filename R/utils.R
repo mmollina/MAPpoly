@@ -1522,7 +1522,9 @@ sample_data <- function(input.data, n = NULL,
                         type = c("individual", "marker"),
                         selected.ind = NULL,
                         selected.mrk = NULL){
-  type <- match.arg(type)
+  if(!is.null(selected.mrk))
+    type <- "marker"
+  else type <- match.arg(type)
   if(type  ==  "individual"){
     if(!is.null(n)){
       selected.ind.id <- sort(sample(input.data$n.ind, n))
@@ -1720,6 +1722,39 @@ v_2_m <- function(x, n){
   y[base::upper.tri(y)] <- t(y)[base::upper.tri(y)]
   y
 }
+
+#' Compare a list of maps
+#' 
+#' Compare lengths, density, maximum gaps and log likelihoods in a list of maps.
+#' In order to make the maps comparable, the function uses the intersection of 
+#' markers among maps. 
+#' 
+#' @param ... a list of objects of class \code{mappoly.map}
+#' 
+#' @return A data frame where the lines correspond to the maps in the order provided in input list list
+#' 
+#' @export
+compare_maps <- function(...){
+  l <- list(...)
+  id <- lapply(l, function(x) x$info$mrk.names)
+  id <- Reduce(intersect, id)
+  if(length(id) < 2)
+    stop("At least two markers must be present in all maps")
+  map.out <- vector("list", length(l))
+  for(i in 1:length(l)){
+    id.temp <- which(l[[i]]$info$mrk.names%in%id)
+    map.temp <- filter_map_at_hmm_thres(get_submap(l[[i]], mrk.pos = id.temp, 
+                                                   reestimate.rf = FALSE, verbose = FALSE), 10e-5)
+    map.out[[i]] <-loglike_hmm(map.temp)
+  }
+  a <- summary_maps(map.out, verbose = FALSE)
+  a <- cbind(a[-nrow(a), -c(1,5,6,7,8)], sapply(map.out, function(x) x$maps[[1]]$loglike))
+  a <- cbind(a, rep("-", nrow(a)))
+  a[which.max(a[,5]),6] <- "*"
+  colnames(a)[c(5,6)] <- c("loglike", "max_likelog")
+  return(as.data.frame(a))
+}
+
 
 #' Skeleton to test CPP functions
 #' #' @export
