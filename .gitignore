@@ -23,3 +23,4 @@ my_tests/
 old_cran-comments/
 hex.xcf
 test_map.R
+inst/doc

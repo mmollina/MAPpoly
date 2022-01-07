@@ -58,85 +58,85 @@ calc_prefpair_profiles <- function(input.genoprobs, verbose = TRUE){
     names(v) <- choose(v,v/2)^2
     ploidy <- v[as.character(nsta)]
     ## Possible pairing configurations (Psi's) for both parents
-    Psi <- list(P = NULL, Q = NULL)
-    aP <- combn(letters[1:ploidy],ploidy/2)
-    aQ <- combn(letters[(1+ploidy):(2*ploidy)],ploidy/2)
-    for(i in 1:ncol(aP))
+    Psi <- list(P1 = NULL, P2 = NULL)
+    aP1 <- combn(letters[1:ploidy],ploidy/2)
+    aP2 <- combn(letters[(1+ploidy):(2*ploidy)],ploidy/2)
+    for(i in 1:ncol(aP1))
     {
-      bP <- perm_tot(setdiff(letters[1:ploidy], aP[,i]))
-      bQ <- perm_tot(setdiff(letters[(1+ploidy):(2*ploidy)], aQ[,i]))
-      for(k in 1:nrow(bP))
+      bP1 <- perm_tot(setdiff(letters[1:ploidy], aP1[,i]))
+      bP2 <- perm_tot(setdiff(letters[(1+ploidy):(2*ploidy)], aP2[,i]))
+      for(k in 1:nrow(bP1))
       {
-        Psi$P <- rbind(Psi$P, sort(apply(cbind(aP[,i],bP[k,]), 1, function(x) paste(sort(x), collapse = ""))))
-        Psi$Q <- rbind(Psi$Q, sort(apply(cbind(aQ[,i],bQ[k,]), 1, function(x) paste(sort(x), collapse = ""))))
+        Psi$P1 <- rbind(Psi$P1, sort(apply(cbind(aP1[,i],bP1[k,]), 1, function(x) paste(sort(x), collapse = ""))))
+        Psi$P2 <- rbind(Psi$P2, sort(apply(cbind(aP2[,i],bP2[k,]), 1, function(x) paste(sort(x), collapse = ""))))
       }
     }
-    Psi$P <- unique(Psi$P)
-    Psi$Q <- unique(Psi$Q)
+    Psi$P1 <- unique(Psi$P1)
+    Psi$P2 <- unique(Psi$P2)
     # number of possible bivalent configurations (size of Psi)
-    nbiv <- nrow(Psi$P)
+    nbiv <- nrow(Psi$P1)
     ## Probability of a pairing configuration (Psi) given a genitypic state (G) for both parents
-    Psi_given_G <- list(P = matrix(0, length(Gnames), nrow(Psi$P), dimnames = list(Gnames, apply(Psi$P, 1, paste, collapse = "/"))),
-                      Q = matrix(0, length(Gnames), nrow(Psi$Q), dimnames = list(Gnames, apply(Psi$Q, 1, paste, collapse = "/"))))
+    Psi_given_G <- list(P1 = matrix(0, length(Gnames), nrow(Psi$P1), dimnames = list(Gnames, apply(Psi$P1, 1, paste, collapse = "/"))),
+                      P2 = matrix(0, length(Gnames), nrow(Psi$P2), dimnames = list(Gnames, apply(Psi$P2, 1, paste, collapse = "/"))))
     ## Genotypic states
-    G <- list(P = unlist(strsplit(substr(Gnames, 1, ploidy/2), "")),
-            Q = unlist(strsplit(substr(Gnames, 2+(ploidy/2), ploidy+1), "")))
-    dim(G$Q) <- dim(G$P) <- c(ploidy/2,length(Gnames))
-    for(i in 1:nrow(Psi_given_G$P))
+    G <- list(P1 = unlist(strsplit(substr(Gnames, 1, ploidy/2), "")),
+            P2 = unlist(strsplit(substr(Gnames, 2+(ploidy/2), ploidy+1), "")))
+    dim(G$P2) <- dim(G$P1) <- c(ploidy/2,length(Gnames))
+    for(i in 1:nrow(Psi_given_G$P1))
     {
-      xP <- apply(Psi$P, 1, function(x,y) all(grepl(paste(y, collapse = "|"), x)), y = G$P[,i])
-      xQ <- apply(Psi$Q, 1, function(x,y) all(grepl(paste(y, collapse = "|"), x)), y = G$Q[,i])
+      xP1 <- apply(Psi$P1, 1, function(x,y) all(grepl(paste(y, collapse = "|"), x)), y = G$P1[,i])
+      xP2 <- apply(Psi$P2, 1, function(x,y) all(grepl(paste(y, collapse = "|"), x)), y = G$P2[,i])
       #print(as.character(sum(xP)))
       #print(as.character(factorial(ploidy/2)))
       #print("-----")
-      Psi_given_G$Q[i,xQ] <- Psi_given_G$P[i,xP] <- 1/factorial(ploidy/2)
+      Psi_given_G$P2[i,xP2] <- Psi_given_G$P1[i,xP1] <- 1/factorial(ploidy/2)
     }
     ## Equation 3 in Mollinari et al. (2019)
-    AQ <- AP <- array(NA, dim = c(nbiv,npos,n.ind))
+    AP2 <- AP1 <- array(NA, dim = c(nbiv,npos,n.ind))
     for(i in 1:n.ind){
-      AP[,,i] <- crossprod(Psi_given_G$P,input.genoprobs[[j]]$probs[,,i])   
-      AQ[,,i] <- crossprod(Psi_given_G$Q,input.genoprobs[[j]]$probs[,,i])   
+      AP1[,,i] <- crossprod(Psi_given_G$P1,input.genoprobs[[j]]$probs[,,i])   
+      AP2[,,i] <- crossprod(Psi_given_G$P2,input.genoprobs[[j]]$probs[,,i])   
     }
     ## Pr(psi_i | O_1, ..., Oz, lambda)
-    P <- apply(AP, MARGIN = c(1,2), mean)
-    Q <- apply(AQ, MARGIN = c(1,2), mean)
-    dimnames(P) <- list(colnames(Psi_given_G$P), names(input.genoprobs[[j]]$map))
-    dimnames(Q) <- list(colnames(Psi_given_G$Q), names(input.genoprobs[[j]]$map))
-    df.prefpair.temp <- rbind(data.frame(reshape2::melt(P), parent = "P1", lg = j),
-                            data.frame(reshape2::melt(Q), parent = "P2", lg = j))
+    P1 <- apply(AP1, MARGIN = c(1,2), mean)
+    P2 <- apply(AP2, MARGIN = c(1,2), mean)
+    dimnames(P1) <- list(colnames(Psi_given_G$P1), names(input.genoprobs[[j]]$map))
+    dimnames(P2) <- list(colnames(Psi_given_G$P2), names(input.genoprobs[[j]]$map))
+    df.prefpair.temp <- rbind(data.frame(reshape2::melt(P1), parent = "P1", lg = j),
+                            data.frame(reshape2::melt(P2), parent = "P2", lg = j))
     colnames(df.prefpair.temp) <- c("pair.conf", "marker", "probability", "parent", "LG")
     map <- data.frame(map.position = input.genoprobs[[j]]$map, marker = names(input.genoprobs[[j]]$map))
     df.prefpair.temp <- merge(df.prefpair.temp, map, sort = FALSE)
     df.prefpair <- rbind(df.prefpair, df.prefpair.temp)
-    df.prefpair.pval.temp <- data.frame(p.val.P = apply(n.ind * P, 2, function(x) chisq.test(x)$p.value),
-                                      p.val.Q = apply(n.ind * Q, 2, function(x) chisq.test(x)$p.value),
+    df.prefpair.pval.temp <- data.frame(p.val.P1 = apply(n.ind * P1, 2, function(x) chisq.test(x)$p.value),
+                                      p.val.P2 = apply(n.ind * P2, 2, function(x) chisq.test(x)$p.value),
                                       LG = j,
                                       map.position = input.genoprobs[[j]]$map)
     ## Probability of bivalent pairs given the complete map
-    h.h_prime.P <- apply(combn(letters[1:ploidy], 2), 2, paste0, collapse = "")
-    h.h_prime.Q <- apply(combn(letters[(ploidy+1):(2*ploidy)], 2), 2, paste0, collapse = "")
+    h.h_prime.P1 <- apply(combn(letters[1:ploidy], 2), 2, paste0, collapse = "")
+    h.h_prime.P2 <- apply(combn(letters[(ploidy+1):(2*ploidy)], 2), 2, paste0, collapse = "")
     p1 <- get_w_m(ploidy - 2)/get_w_m(ploidy)
     p <- c(p1,1 - p1)
     df.hom.pair <- NULL
-    for(k1 in h.h_prime.P){
-      phh <- apply(P[grepl(k1, rownames(P)), , drop = FALSE], 2, sum)
-      phh.P <- data.frame(marker = names(phh), phh = phh, hom.pair = k1, LG = j, parent = "P1")
+    for(k1 in h.h_prime.P1){
+      phh <- apply(P1[grepl(k1, rownames(P1)), , drop = FALSE], 2, sum)
+      phh.P1 <- data.frame(marker = names(phh), phh = phh, hom.pair = k1, LG = j, parent = "P1")
       x1 <- phh * n.ind
       x <- cbind(x1,n.ind - x1)
-      p.val.P <- apply(x, 1, function(x) chisq.test(x, p = p)$p.value)
-      p.val.P <- data.frame(marker = names(p.val.P), p.val = p.val.P)
-      mtemp <- merge(phh.P, p.val.P)
+      p.val.P1 <- apply(x, 1, function(x) chisq.test(x, p = p)$p.value)
+      p.val.P1 <- data.frame(marker = names(p.val.P1), p.val = p.val.P1)
+      mtemp <- merge(phh.P1, p.val.P1)
       mtemp <- merge(mtemp, map)
       df.hom.pair <- rbind(df.hom.pair, mtemp)
     }
-    for(k1 in h.h_prime.Q){
-      phh <- apply(Q[grepl(k1, rownames(Q)), , drop = FALSE], 2, sum)
-      phh.Q <- data.frame(marker = names(phh), phh = phh, hom.pair = k1, LG = j, parent = "P2")
+    for(k1 in h.h_prime.P2){
+      phh <- apply(P2[grepl(k1, rownames(P2)), , drop = FALSE], 2, sum)
+      phh.P2 <- data.frame(marker = names(phh), phh = phh, hom.pair = k1, LG = j, parent = "P2")
       x1 <- phh * n.ind
       x <- cbind(x1, n.ind - x1)
-      p.val.Q <- apply(x, 1, function(x) chisq.test(x, p = p)$p.value)
-      p.val.Q <- data.frame(marker = names(p.val.Q), p.val = p.val.Q)
-      mtemp <- merge(phh.Q, p.val.Q)
+      p.val.P2 <- apply(x, 1, function(x) chisq.test(x, p = p)$p.value)
+      p.val.P2 <- data.frame(marker = names(p.val.P2), p.val = p.val.P2)
+      mtemp <- merge(phh.P2, p.val.P2)
       mtemp <- merge(mtemp, map)
       df.hom.pair <- rbind(df.hom.pair, mtemp)
     }
@@ -215,41 +215,41 @@ print.mappoly.prefpair.profiles <- function(x, ...){
 #' 
 #' @param thresh threshold for chi-square test (default = 0.01)
 #' 
-#' @param P a string containing the name of parent P
+#' @param P1 a string containing the name of parent P1
 #' 
-#' @param Q a string containing the name of parent Q
+#' @param P2 a string containing the name of parent P2
 #' 
 #' @param ... unused arguments
 #' @export
 plot.mappoly.prefpair.profiles <- function(x, type = c("pair.configs", "hom.pairs"), 
                                            min.y.prof = 0, max.y.prof = 1, 
-                                           thresh = 0.01, P = "P1", Q = "P2", ...){
+                                           thresh = 0.01, P1 = "P1", P2 = "P2", ...){
   type <- match.arg(type)
-  colnames(x$prefpair.psi.pval)[1:2] <- c(P, Q)
+  colnames(x$prefpair.psi.pval)[1:2] <- c(P1, P2)
   if(type  ==  "pair.configs"){
     ploidy <- x$info$ploidy
     variable <- value <- map.position <- probability <- colour <- pair.conf  <- NULL
     p1 <- ggplot2::ggplot(x$prefpair.psi) + 
       ggplot2::geom_smooth(ggplot2::aes(map.position, probability, colour = pair.conf), size = 1, se = FALSE) + 
-      ggplot2::facet_grid(parent~LG, scales = "free_x", space = "free_x", labeller = ggplot2::labeller(parent = ggplot2::as_labeller(c(P = P, Q = Q)))) +
+      ggplot2::facet_grid(parent~LG, scales = "free_x", space = "free_x", labeller = ggplot2::labeller(parent = ggplot2::as_labeller(c(P1 = P1, P2 = P2)))) +
       ggplot2::geom_hline(yintercept = 1/(prod(choose(seq(2,ploidy,2),2))/factorial(ploidy/2)), linetype = "dashed") +
       ggplot2::ylim(min.y.prof,max.y.prof) + 
       ggplot2::scale_x_continuous(breaks = seq(0, max(x$prefpair.psi$map.position), 100), expand = ggplot2::expansion(add = 15)) +
       ggplot2::labs(subtitle = "Linkage group", y = "Probability", x = ggplot2::element_blank(), col = "Pairing\nconfig.") + 
       ggplot2::theme_bw() +
       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1), panel.spacing = ggplot2::unit(0, "lines"), plot.subtitle = ggplot2::element_text(hjust = 0.5), axis.title.y = ggplot2::element_text(margin = ggplot2::margin(t = 0, r = 5, b = 0, l = 0))) 
-    DF <- reshape2::melt(data = x$prefpair.psi.pval, measure.vars = c(P, Q))
+    DF <- reshape2::melt(data = x$prefpair.psi.pval, measure.vars = c(P1, P2))
     p2 <- ggplot2::ggplot(DF, ggplot2::aes(map.position, -log10(value), colour = variable)) +
       ggplot2::geom_point(alpha = .7, size = 1) +  
       ggplot2::facet_grid(.~LG, scales = "free_x", space = "free_x") +
       ggplot2::geom_hline(yintercept = -log10(thresh), linetype = "dashed") + 
-      ggplot2::labs(y = expression(paste("-",log[10],"(",italic(P),")")), x = "Map Position (cM)") +
+      ggplot2::labs(y = expression(paste("-",log[10],"(",italic(P1),")")), x = "Map Position (cM)") +
       ggplot2::scale_x_continuous(breaks = seq(0, max(x$prefpair.psi$map.position), 100), expand = ggplot2::expansion(add = 15)) +
       ggplot2::theme_bw() +
       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1), panel.spacing = ggplot2::unit(0, "lines"), legend.box.margin = ggplot2::margin(t = 0, r = 0, b = 0, l = 3)) 
     if(ploidy <6 ){
       p1 <- p1 + ggsci::scale_color_d3()
-      p2 <- p2 + ggplot2::scale_color_manual(values = c(ggsci::pal_d3(alpha = 0.8)(nlevels(x$prefpair.psi$pair.conf))[c(1,(nlevels(x$prefpair.psi$pair.conf)/2)+1)]), labels = c(P, Q), name = "Parents")
+      p2 <- p2 + ggplot2::scale_color_manual(values = c(ggsci::pal_d3(alpha = 0.8)(nlevels(x$prefpair.psi$pair.conf))[c(1,(nlevels(x$prefpair.psi$pair.conf)/2)+1)]), labels = c(P1, P2), name = "Parents")
     }
     p <- ggpubr::ggarrange(p1, p2, ncol = 1, nrow = 2, labels = c("A", "B"), heights = c(1.5,1))
     print(p)
@@ -258,7 +258,7 @@ plot.mappoly.prefpair.profiles <- function(x, type = c("pair.configs", "hom.pair
     hom.pair <- phh <- variable <- p.val <- map.position <- probability <- colour <- pair.conf  <- NULL
     p1 <- ggplot2::ggplot(x$prefpair.homolog) + 
       ggplot2::geom_smooth(ggplot2::aes(map.position, phh, colour = hom.pair), size = 1, se = FALSE) + 
-      ggplot2::facet_grid(parent~LG, scales = "free_x", space = "free_x", labeller = ggplot2::labeller(parent = ggplot2::as_labeller(c(P = P, Q = Q)))) +
+      ggplot2::facet_grid(parent~LG, scales = "free_x", space = "free_x", labeller = ggplot2::labeller(parent = ggplot2::as_labeller(c(P1 = P1, P2 = P2)))) +
       ggplot2::geom_hline(yintercept = get_w_m(ploidy - 2)/get_w_m(ploidy), linetype = "dashed") +
       ggplot2::ylim(min.y.prof,max.y.prof) + 
       ggplot2::scale_x_continuous(breaks = seq(0, max(x$prefpair.psi$map.position), 100)) +
@@ -267,9 +267,9 @@ plot.mappoly.prefpair.profiles <- function(x, type = c("pair.configs", "hom.pair
       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1), panel.spacing = ggplot2::unit(0, "lines"), plot.subtitle = ggplot2::element_text(hjust = 0.5), axis.title.y = ggplot2::element_text(margin = ggplot2::margin(t = 0, r = 5, b = 0, l = 0))) 
     p2 <- ggplot2::ggplot(x$prefpair.homolog) + 
       ggplot2::geom_point(ggplot2::aes(map.position, -log10(p.val), colour = hom.pair)) + 
-      ggplot2::facet_grid(parent~LG, scales = "free_x", space = "free_x", labeller = ggplot2::labeller(parent = ggplot2::as_labeller(c(P = P, Q = Q)))) +
+      ggplot2::facet_grid(parent~LG, scales = "free_x", space = "free_x", labeller = ggplot2::labeller(parent = ggplot2::as_labeller(c(P1 = P1, P2 = P2)))) +
       ggplot2::geom_hline(yintercept = -log10(thresh), linetype = "dashed") +  
-      ggplot2::labs(y = expression(paste("-",log[10],"(",italic(P),")")), x = "Map Position (cM)") +
+      ggplot2::labs(y = expression(paste("-",log[10],"(",italic(P1),")")), x = "Map Position (cM)") +
       ggplot2::scale_x_continuous(breaks = seq(0, max(x$prefpair.psi$map.position), 100)) +
       ggplot2::theme_bw() +
       ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1), panel.spacing = ggplot2::unit(0, "lines")) 
