@@ -3,7 +3,7 @@ title: "Introductaion to MAPpoly"
 date: '`r Sys.Date()`'
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{startguide}
+  %\VignetteIndexEntry{mappolyintro}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -151,7 +151,7 @@ lg1.map <- est_rf_hmm_sequential(input.seq = s1.mds,
                                 start.set = 3,
                                 thres.twopt = 10, 
                                 thres.hmm = 20,
-                                extend.tail = 30,
+                                extend.tail = 50,
                                 info.tail = TRUE, 
                                 twopt = tpt1,
                                 sub.map.size.diff.limit = 5, 
@@ -222,6 +222,31 @@ You can also print the same output on the screen using
 export_map_list(lg1.map.up, file = "")
 ```
 
-For a script with a complete analysis of the dataset presented here, please refere to YYYYYYYYY
+For a script with a complete analysis of the data set presented here, please refer to YYYYYYYYY
+
+# Utility functions
+
+## Plot genome vs. map
+```{r}
+```
+## Adding a marker into a map
+```{r}
+```
+## Dropping a marker into a map
+```{r}
+```
+## Merging multiple maps
+```{r}
+```
+## Slipt and rephase
+```{r}
+```
+## Selecy map subset
+```{r}
+```
+## Revert map
+```{r}
+```
+
 
 
