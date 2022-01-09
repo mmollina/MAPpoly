@@ -1,7 +1,7 @@
 ---
 title: "Introductaion to MAPpoly"
 date: '`r Sys.Date()`'
-output: rmarkdown::html_vignette
+output: rmarkdown::html_document
 vignette: >
   %\VignetteIndexEntry{mappolyintro}
   %\VignetteEngine{knitr::rmarkdown}
@@ -222,31 +222,23 @@ You can also print the same output on the screen using
 export_map_list(lg1.map.up, file = "")
 ```
 
-For a script with a complete analysis of the data set presented here, please refer to YYYYYYYYY
+For a script with a complete analysis of the data set presented here, please refer to the [Complete script](https://github.com/mmollina/SCRI/blob/main/docs/tetra/mappoly_intro.md)
 
 # Utility functions
 
+To use the next functions, let us load the complete genetic map
+
+````{r}
+in.file <- "https://github.com/mmollina/SCRI/raw/main/docs/tetra/maps_updated.rda"
+download.file(in.file,"map_file")
+load("map_file")
+````
 ## Plot genome vs. map
-```{r}
-```
-## Adding a marker into a map
-```{r}
-```
-## Dropping a marker into a map
-```{r}
-```
-## Merging multiple maps
-```{r}
-```
-## Slipt and rephase
-```{r}
-```
-## Selecy map subset
-```{r}
-```
-## Revert map
-```{r}
+```{r, fig.width = 5, fig.height= 5}
+plot_genome_vs_map(MAPs.up, same.ch.lg = TRUE)
 ```
 
-
-
+## Map summary
+```{r}
+summary_maps(MAPs.up)
+```
