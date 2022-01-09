@@ -1,11 +1,12 @@
 ---
 title: "Introductaion to MAPpoly"
 date: '`r Sys.Date()`'
-output: rmarkdown::html_document
-vignette: >
-  %\VignetteIndexEntry{mappolyintro}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
+# output: rmarkdown::html_document
+output: rmarkdown::pdf_document
+#vignette: >
+#  %\VignetteIndexEntry{mappolyintro}
+#  %\VignetteEngine{knitr::rmarkdown}
+#  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -162,7 +163,7 @@ lg1.map <- est_rf_hmm_sequential(input.seq = s1.mds,
 ```
 Now, use the functions `print` and `plot` to view the map results:
 
-```{r map_lg1_plot, fig.width=7,  }
+```{r map_lg1_plot, fig.width=6}
 print(lg1.map)
 plot(lg1.map, mrk.names = TRUE, cex = 0.7)
 ```
