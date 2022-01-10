@@ -95,15 +95,22 @@ ncores <- parallel::detectCores() - 1
 tpt <- est_pairwise_rf2(seq.init, ncpus = ncores)
 m <- rf_list_to_matrix(tpt) ## converts rec. frac. list into a matrix 
 sgo <- make_seq_mappoly(go) ## creates a sequence of markers in the genome order
-#plot(m, ord = sgo, fact = 5) ## plots a rec. frac. matrix using the genome order, averaging neighbor cells in a 5 x 5 grid 
+plot(m, ord = sgo, fact = 5) ## plots a rec. frac. matrix using the genome order, averaging neighbor cells in a 5 x 5 grid 
 ```
 
-```{r, twopt_hide, echo=FALSE}
+```{r, twopt_hide_1, echo=FALSE, results='hide', }
 ncores <-2
-tpt <- est_pairwise_rf2(seq.init, ncpus = ncores)
+in.file <- "https://github.com/mmollina/SCRI/raw/main/docs/tetra/tpt.rda"
+download.file(in.file,"tpt_file")
+load("tpt_file")
+#save(tpt, file = "~/tpt.rda", compress = "xz", compression_level = 9)
+#tpt <- est_pairwise_rf2(seq.init, ncpus = ncores)
+```
+
+```{r, twopt_hide_2, echo=FALSE}
 m <- rf_list_to_matrix(tpt) ## converts rec. frac. list into a matrix 
 sgo <- make_seq_mappoly(go) ## creates a sequence of markers in the genome order
-#plot(m, ord = sgo, fact = 5) ## plots a rec. frac. matrix using the genome order, averaging neighbor cells in a 5 x 5 grid 
+plot(m, ord = sgo, fact = 5) ## plots a rec. frac. matrix using the genome order, averaging neighbor cells in a 5 x 5 grid 
 ```
 
 
@@ -153,7 +160,18 @@ Estimating the genetic map for a given order involves the computation of recombi
 
 First we need to calculate the pairwise recombination fraction for markers in sequence `s1.mds` using `est_pairwise_rf`, which contains the information necessary to the proper working of the phasing algorithm.
 
-```{r, map_lg1, results = FALSE}
+```{r, map_lg1_load, results = FALSE, echo=FALSE}
+in.file <- "https://github.com/mmollina/SCRI/raw/main/docs/tetra/tpt1.rda"
+download.file(in.file,"tpt1_file")
+load("tpt1_file")
+in.file <- "https://github.com/mmollina/SCRI/raw/main/docs/tetra/lg1_map.rda"
+download.file(in.file,"lg1_map")
+load("lg1_map")
+#save(lg1.map, file = "~/lg1_map.rda", compress = "xz", compression_level = 9)
+#tpt <- est_pairwise_rf2(seq.init, ncpus = ncores)
+```
+
+```{r, map_lg1, results = FALSE, eval = FALSE}
 tpt1 <- est_pairwise_rf(s1.mds, ncpus = ncores)
 lg1.map <- est_rf_hmm_sequential(input.seq = s1.mds,
                                 start.set = 3,
@@ -199,7 +217,8 @@ map.list.lg1  <- list(orig = lg1.map,
                       mds = lg1.map.mds)
 plot_map_list(map.list.lg1, col = "ggstyle", title = "Estimation method")
 ```
-## Homolog probability and preferential pairing profile
+
+# Homolog probability and preferential pairing profile
 
 To use the genetic map in conjunction with QTL analysis software, we need to obtain the homolog probability for all linkage groups for all individuals in the full-sib population. In this short guide, we will proceed only with one linkage group, but this procedure should be applied to all chromosomes in real situations. Let us use the updated map
 
