@@ -19,15 +19,20 @@ Thank you for reviewing our re-submission!
 * Windows Server x64 (on appveyor), R 4.1.2
 * Win-builder (R Under development - unstable)
 
-## R CMD check results (on local macOS: R 4.1.2)
+## R CMD check results 
 
-0 errors | 0 warnings | 1 note
+0 errors | 0 warnings | 2 notes
 
-* installed size is 11.8Mb
-  sub-directories of 1Mb or more:
-    * R:      2.7Mb
-    * data:   3.1Mb
-    * doc     4.5Mb
+ - on local macOS: R 4.1.2
+   * installed size is 8.0Mb
+     sub-directories of 1Mb or more:
+       * R:      2.7Mb
+       * data:   3.0Mb
+       
+ - on Win-builder    
+
+
+
 
 ## Downstream dependencies
 
