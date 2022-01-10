@@ -532,8 +532,7 @@ plot.mappoly.geno.ord <- function(x, ...){
                   ggplot2::aes(x = seq.pos, y = seq, group = as.factor(seq))) +
     ggplot2::geom_point(ggplot2::aes(color = as.factor(seq)), shape = 108) +
     ggplot2::xlab("Position") + 
-    ggplot2::ylab("Chromosome") + 
-    ggplot2::theme(legend.position = "none") 
+    ggplot2::ylab("Chromosome") 
 }
 
 #' Remove markers from a map
