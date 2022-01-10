@@ -89,7 +89,8 @@ Suggests:
     AGHmatrix,
     gatepoints,
     knitr,
-    rmarkdown
+    rmarkdown,
+    here
 URL: https://github.com/mmollina/MAPpoly
 BugReports: https://github.com/mmollina/MAPpoly/issues
 VignetteBuilder: knitr

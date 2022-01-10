@@ -17,9 +17,7 @@ knitr::opts_chunk$set(
   eval = FALSE
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
-```
-
-```{r setup}
+library(here)
 library(mappoly)
 ```
 
@@ -35,7 +33,7 @@ print(dat, detailed = T)
 plot(dat)
 ```
 ```{r, echo=FALSE, eval = TRUE, out.width = '60%'}
-knitr::include_graphics("images/fig1.png")
+knitr::include_graphics(here("vignettes/images/fig1.png"))
 ```
 
 
@@ -56,7 +54,7 @@ Quality control (QC) procedures are fundamental to identify:
 dat <- filter_individuals(dat)
 ```
 ```{r, echo=FALSE, eval = TRUE, out.width = '60%'}
-knitr::include_graphics("images/fig2.png")
+knitr::include_graphics(here("vignettes/images/fig2.png"))
 ```
 
 Now, let us filter out markers and individuals with more than 5% of missing data. You can update the threshold interactively
@@ -81,7 +79,7 @@ seq.init <- make_seq_mappoly(seq.red)
 plot(seq.init)
 ```
 ```{r, echo=FALSE, eval = TRUE, out.width = '60%'}
-knitr::include_graphics("images/fig3.png")
+knitr::include_graphics(here("vignettes/images/fig3.png"))
 ```
 
 and check the distribution of the markers in the reference genome, if the information is available
@@ -91,7 +89,7 @@ go <- get_genomic_order(input.seq = seq.init) ## get genomic order of the sequen
 plot(go)
 ```
 ```{r, echo=FALSE, eval = TRUE, out.width = '60%'}
-knitr::include_graphics("images/fig4.png")
+knitr::include_graphics(here("vignettes/images/fig4.png"))
 ```
 
 # Two-point analysis{#tpt}
@@ -106,7 +104,7 @@ sgo <- make_seq_mappoly(go) ## creates a sequence of markers in the genome order
 plot(m, ord = sgo, fact = 5) ## plots a rec. frac. matrix using the genome order, averaging neighbor cells in a 5 x 5 grid 
 ```
 ```{r, echo=FALSE, eval = TRUE, out.width = '60%'}
-knitr::include_graphics("images/fig5.png")
+knitr::include_graphics(here("vignettes/images/fig5.png"))
 ```
 
 # Grouping
@@ -119,7 +117,7 @@ plot(g)
 g
 ```
 ```{r, echo=FALSE, eval = TRUE, out.width = '60%'}
-knitr::include_graphics("images/fig6.png")
+knitr::include_graphics(here("vignettes/images/fig6.png"))
 ```
 
 In the table above, the rows indicate linkage groups obtained using linkage information and, the columns are the chromosomes in the reference genome. Notice the diagonal indicating the concordance between the two sources of information.
@@ -181,7 +179,7 @@ print(lg1.map)
 plot(lg1.map, mrk.names = TRUE, cex = 0.7)
 ```
 ```{r, echo=FALSE, eval = TRUE, out.width = '60%'}
-knitr::include_graphics("images/fig7.png")
+knitr::include_graphics(here("vignettes/images/fig7.png"))
 ```
 
 Now let us update the recombination fractions by allowing a global error in the HMM recombination fraction re-estimation. Using this approach, the genetic map's length will be updated by removing spurious recombination events. This procedure can be applied using either the probability distribution provided by the genotype calling software using function `est_full_hmm_with_prior_prob` or assuming a global genotype error like the following example 
@@ -192,7 +190,7 @@ lg1.map.up <- est_full_hmm_with_global_error(input.map = lg1.map, error = 0.05,
 plot(lg1.map.up, mrk.names = TRUE, cex = 0.7)
 ```
 ```{r, echo=FALSE, eval = TRUE, out.width = '60%'}
-knitr::include_graphics("images/fig8.png")
+knitr::include_graphics(here("vignettes/images/fig8.png"))
 ```
 
 We can also use the ordinary least squares (OLS) method and the weighted MDS followed by fitting a one dimensional principal curve (wMDS_to_1D_pc)
@@ -223,7 +221,7 @@ h1 <- calc_homologprob(g1)
 plot(h1, lg = 1, ind = 10)
 ```
 ```{r, echo=FALSE, eval = TRUE, out.width = '60%'}
-knitr::include_graphics("images/fig9.png")
+knitr::include_graphics(here("vignettes/images/fig9.png"))
 ```
 
 Now let us compute the preferential pairing profile for linkage group 1
@@ -233,7 +231,7 @@ p1 = calc_prefpair_profiles(g1)
 plot(p1, min.y.prof = 0.25, max.y.prof = 0.4, P1 = "Atlantic", P2 = "B1829.5")
 ```
 ```{r, echo=FALSE, eval = TRUE, out.width = '60%'}
-knitr::include_graphics("images/fig10.png")
+knitr::include_graphics(here("vignettes/images/fig10.png"))
 ```
 
 # Exporting a phased map
@@ -241,7 +239,7 @@ knitr::include_graphics("images/fig10.png")
 It is possible to export a phased map to an external CSV file using 
 
 ```{r, eval=FALSE}
-export_map_list(lg1.map.up, file = "output_file.csv")
+export_map_list(lg1.map.up, file = here("vignettes/images/output_file.csv"))
 ```
 
 For a script with a complete analysis of the data set presented here, please refer to the [Complete script](https://github.com/mmollina/SCRI/blob/main/docs/tetra/mappoly_intro.md)
@@ -262,7 +260,7 @@ load(map_file)
 plot_genome_vs_map(MAPs.up, same.ch.lg = TRUE)
 ```
 ```{r, echo=FALSE, eval = TRUE, out.width = '60%'}
-knitr::include_graphics("images/fig11.png")
+knitr::include_graphics(here("vignettes/images/fig11.png"))
 ```
 
 ## Map summary
