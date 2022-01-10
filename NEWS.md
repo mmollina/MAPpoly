@@ -1,5 +1,6 @@
 # MAPpoly version 0.3.0
  - Added function est_pairwise_rf2 to avoid memory overflow in  personal computers when estimating recombination fraction in large number of markers.
+ - Added Vignette
  - Added function 'export_qtlpoly'
  - Added function 'filter_individuals'
  - Changed the name of function 'calc_homoprob' to 'calc_homologprob'

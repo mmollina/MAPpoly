@@ -9,6 +9,7 @@ This is a re-submission of MAPpoly package. This version (0.3.0), contains the f
   - Added function export_qtlpoly
   - Added function filter_individuals
   - Added several utility functions
+  - Added Vignette
 
 Thank you for reviewing our re-submission!
 
@@ -23,10 +24,11 @@ Thank you for reviewing our re-submission!
 
 0 errors | 0 warnings | 1 note
 
-* installed size is 6.6Mb
+* installed size is 11.7Mb
   sub-directories of 1Mb or more:
     * R:      2.7Mb
     * data:   3.0Mb
+    * doc     4.4Mb
 
 ## Downstream dependencies
 
