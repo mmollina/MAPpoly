@@ -31,7 +31,7 @@ dat <- read_geno_csv(file.in = file.name, ploidy = 4)
 print(dat, detailed = T)
 plot(dat)
 ```
-![](fig1.png) 
+<img src="fig1.png" width="400" height="400">
 
 The output figure shows a bar plot on the left-hand side with the number of markers in each allele dosage combination in $P_1$ and $P_2$, respectively. The upper-right plot contains the $\log_{10}(p-value)$ from $\chi^2$ tests for all markers, considering the expected segregation patterns under Mendelian inheritance.
 
@@ -49,7 +49,7 @@ Quality control (QC) procedures are fundamental to identify:
 ```{r, eval=FALSE, filter_ind_donot_eval}
 dat <- filter_individuals(dat)
 ```
-![](fig2.png) 
+<img src="fig2.png" width="400" height="280"> 
 
 Now, let us filter out markers and individuals with more than 5% of missing data. You can update the threshold interactively
 
@@ -72,7 +72,7 @@ After filtering, 1990 markers were left to be mapped. Now, let us create a seque
 seq.init <- make_seq_mappoly(seq.red)
 plot(seq.init)
 ```
-![](fig3.png)
+<img src="fig3.png" width="400" height="400">
 
 and check the distribution of the markers in the reference genome, if the information is available
 
@@ -80,7 +80,7 @@ and check the distribution of the markers in the reference genome, if the inform
 go <- get_genomic_order(input.seq = seq.init) ## get genomic order of the sequence
 plot(go)
 ```
-![](fig4.png)
+<img src="fig4.png" width="400" height="400">
 
 # Two-point analysis{#tpt}
 
@@ -93,7 +93,7 @@ m <- rf_list_to_matrix(tpt) ## converts rec. frac. list into a matrix
 sgo <- make_seq_mappoly(go) ## creates a sequence of markers in the genome order
 plot(m, ord = sgo, fact = 5) ## plots a rec. frac. matrix using the genome order, averaging neighbor cells in a 5 x 5 grid 
 ```
-![](fig5.png)
+<img src="fig5.png" width="400" height="400">
 
 # Grouping
 
@@ -104,7 +104,7 @@ g <- group_mappoly(m, expected.groups = 12, comp.mat = TRUE)
 plot(g)
 g
 ```
-![](fig6.png)
+<img src="fig6.png" width="400" height="400">
 
 In the table above, the rows indicate linkage groups obtained using linkage information and, the columns are the chromosomes in the reference genome. Notice the diagonal indicating the concordance between the two sources of information.
 
@@ -164,7 +164,7 @@ Now, use the functions `print` and `plot` to view the map results:
 print(lg1.map)
 plot(lg1.map, mrk.names = TRUE, cex = 0.7)
 ```
-![](fig7.png)
+<img src="fig7.png" width="400" height="400">
 
 Now let us update the recombination fractions by allowing a global error in the HMM recombination fraction re-estimation. Using this approach, the genetic map's length will be updated by removing spurious recombination events. This procedure can be applied using either the probability distribution provided by the genotype calling software using function `est_full_hmm_with_prior_prob` or assuming a global genotype error like the following example 
 
@@ -173,7 +173,7 @@ lg1.map.up <- est_full_hmm_with_global_error(input.map = lg1.map, error = 0.05,
                                              verbose = TRUE)
 plot(lg1.map.up, mrk.names = TRUE, cex = 0.7)
 ```
-![](fig8.png)
+<img src="fig8.png" width="400" height="400">
 
 We can also use the ordinary least squares (OLS) method and the weighted MDS followed by fitting a one dimensional principal curve (wMDS_to_1D_pc)
 
@@ -202,7 +202,7 @@ to.qtlpoly <- export_qtlpoly(g1) #export to QTLpoly
 h1 <- calc_homologprob(g1)
 plot(h1, lg = 1, ind = 10)
 ```
-![](fig9.png)
+<img src="fig9.png" width="400" height="280">
 
 Now let us compute the preferential pairing profile for linkage group 1
 
@@ -210,7 +210,7 @@ Now let us compute the preferential pairing profile for linkage group 1
 p1 = calc_prefpair_profiles(g1)
 plot(p1, min.y.prof = 0.25, max.y.prof = 0.4, P1 = "Atlantic", P2 = "B1829.5")
 ```
-![](fig10.png)
+<img src="fig10.png" width="400" height="400">
 
 # Exporting a phased map
 
@@ -237,7 +237,7 @@ load(map_file)
 ```{r}
 plot_genome_vs_map(MAPs.up, same.ch.lg = TRUE)
 ```
-![](fig11.png)
+<img src="fig11.png" width="400" height="400">
 
 ## Map summary
 ```{r}
