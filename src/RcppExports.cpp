@@ -5,6 +5,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // pairwise_rf_estimation_disc_rcpp
 RcppExport SEXP pairwise_rf_estimation_disc_rcpp(SEXP mrk_pairs_R, SEXP m_R, SEXP geno_R, SEXP dP_R, SEXP dQ_R, SEXP count_vector_R, SEXP count_matrix_phases_R, SEXP count_matrix_rownames_R, SEXP count_matrix_number_R, SEXP count_matrix_pos_R, SEXP count_matrix_length_R, SEXP tol_R, SEXP threads_R);
 RcppExport SEXP _mappoly_pairwise_rf_estimation_disc_rcpp(SEXP mrk_pairs_RSEXP, SEXP m_RSEXP, SEXP geno_RSEXP, SEXP dP_RSEXP, SEXP dQ_RSEXP, SEXP count_vector_RSEXP, SEXP count_matrix_phases_RSEXP, SEXP count_matrix_rownames_RSEXP, SEXP count_matrix_number_RSEXP, SEXP count_matrix_pos_RSEXP, SEXP count_matrix_length_RSEXP, SEXP tol_RSEXP, SEXP threads_RSEXP) {

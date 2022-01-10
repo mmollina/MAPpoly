@@ -1,12 +1,11 @@
 ---
-title: "Introductaion to MAPpoly"
+title: "Introduction to MAPpoly"
 date: '`r Sys.Date()`'
-# output: rmarkdown::html_document
-output: rmarkdown::pdf_document
-#vignette: >
-#  %\VignetteIndexEntry{mappolyintro}
-#  %\VignetteEngine{knitr::rmarkdown}
-#  %\VignetteEncoding{UTF-8}
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{mappoly_intro}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
@@ -23,7 +22,7 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 library(mappoly)
 ```
 
-MAPpoly is an R package to construct genetic maps in autopolyploids with even ploidy levels. In this quick start guide, we will present some basic functions to construct a tetraploid potato map. For a comprehensive description of all function, please refer to MAPpoly's [Reference Manual](https://cran.r-project.org/web/packages/mappoly/mappoly.pdf) and the [Extended Tutorial](https://rpubs.com/mmollin/tetra_mappoly_vignette).
+MAPpoly is an R package to construct genetic maps in autopolyploids with even ploidy levels. This quick start guide will present some essential functions to construct a tetraploid potato map. Please refer to MAPpoly's [Reference Manual](https://cran.r-project.org/web/packages/mappoly/mappoly.pdf) and the [Extended Tutorial](https://rpubs.com/mmollin/tetra_mappoly_vignette) for a comprehensive description of all functions.
 
 # Reading data set
 There are several functions to read discrete and probabilistic dosage-based genotype data sets in MAPpoly. You can read a data set from TXT, CSV, VCF, fitPoly-generated or import it from the R packages polyRAD, polymapR, and updog. The data set distributed along with MAPpoly is a subset of markers from ([Pereira et al., 2021](https://doi.org/10.1101/2020.08.24.265397)) in [CSV format](https://rstudio-pubs-static.s3.amazonaws.com/700481_7d2515dd19834079912a462f1149ff93.html#reading-csv-files). Let us read it into MAPpoly
@@ -39,14 +38,14 @@ The output figure shows a bar plot on the left-hand side with the number of mark
 
 # Data quality control
 
-Quality control (QC) procedures are extremely important to identify:
+Quality control (QC) procedures are fundamental to identify:
 
  - Individuals from crosses other than $P_1 \times P_2$
  - Individuals and markers that exceeds a defined threshold of missing data points
  - Markers with distorted segregation
  - Markers with the same genotypic information (redundant markers). Removed markers are positioned into the final map.
  
- These procedures can be conducted in any order, depending on the data set. Let us first removing individuals from crosses other than $P_1 \times P_2$. When using the interactive function, the user needs select a polygon around the individuals to be removed by clicking in its vertices and pressing Esc. 
+ Depending on the data set, these procedures can be conducted in any order. Let us first remove individuals from crosses other than $P_1 \times P_2$. When using the interactive function, the user needs to select a polygon around the individuals to be removed by clicking its vertices and pressing Esc.
 
 ```{r, eval=FALSE, filter_ind_donot_eval}
 dat <- filter_individuals(dat)
@@ -73,7 +72,7 @@ seq.filt <- make_seq_mappoly(seq.filt)
 seq.red  <- elim_redundant(seq.filt)
 ```
 
-After filtering, 1990 markers left to be mapped. Now, let us create a sequence of ordered markers to proceed with the analysis. You can also plot the data set for a specific sequence of markers
+After filtering, 1990 markers were left to be mapped. Now, let us create a sequence of ordered markers to proceed with the analysis. You can also plot the data set for a specific sequence of markers
 
 ```{r, fig.width = 5, fig.height= 4, make_seq}
 seq.init <- make_seq_mappoly(seq.red)
@@ -89,7 +88,7 @@ plot(go)
 
 # Two-point analysis{#tpt}
 
-The two-point analysis calculates the pairwise recombination fraction in a sequence of markers. At this point of the analysis, where we have a large number of markers, we use the function `est_pairwise_rf2` which has a less detailed output then the original `est_pairwise_rf` (which will be used later), but can handle tens of thousands of markers, even when using a personal computer. Nevertheless, depending on the number of markers, the analysis can take a while if few cores are available.
+The two-point analysis calculates the pairwise recombination fraction in a sequence of markers. At this point of the analysis, where we have many markers, we use the function `est_pairwise_rf2`, which has a less detailed output than the original `est_pairwise_rf` (which will be used later) but can handle tens of thousands of markers, even when using a personal computer. Nevertheless, the analysis can take a while depending on the number of markers if few cores are available.
 
 ```{r, fig.width = 5, fig.height= 5, twopt}
 ncores <- parallel::detectCores() - 1
@@ -101,7 +100,7 @@ plot(m, ord = sgo, fact = 5) ## plots a rec. frac. matrix using the genome order
 
 # Grouping
 
-We can cluster the markers in linkage groups by using function `group_mappoly`. The function uses the recombination fraction matrix and UPGMA method to group markers. Use the option `comp.mat = TRUE` to compare the results of the linkage based clustering with the chromosome information. If your data set does not contain chromosome information, use the option `comp.mat = FALSE`. You also can use the interactive version to change the number of expected groups
+We can cluster the markers in linkage groups by using function `group_mappoly`. The function uses the recombination fraction matrix and UPGMA method to group markers. Use the option `comp.mat = TRUE` to compare the linkage-based clustering results with the chromosome information. If your data set does not contain chromosome information, use the option `comp.mat = FALSE`. You also can use the interactive version to change the number of expected groups
 
 ```{r, fig.width = 7, fig.height= 5, group}
 g <- group_mappoly(m, expected.groups = 12, comp.mat = TRUE)
@@ -109,13 +108,13 @@ plot(g)
 g
 ```
 
-In the table above, the rows indicate linkage groups obtained using linkage information and the columns are the chromosomes in the reference genome. Notice the diagonal indicating the concordance between the two sources of information.
+In the table above, the rows indicate linkage groups obtained using linkage information and, the columns are the chromosomes in the reference genome. Notice the diagonal indicating the concordance between the two sources of information.
 
 # Ordering markers
 
-Markers are ordered within linkage groups. In this tutorial, we are going to show the step-by-ptep procedure using Linkage Group 1 (LG1). You can do the same for the remaining linakge groups.
+Markers are ordered within linkage groups. In this tutorial, we will show the step-by-step procedure using Linkage Group 1 (LG1). You can do the same for the remaining linkage groups.
 
-Since we had a good concordance between genome and linkage information, we will use only markers that were assigned to a particular linkage group using both sources of information. We will do that using `genomic.info = 1` so the function uses the intersection of the markers assigned using linkage and the chromosome with highest number of allocated markers. To use only the linkage information, do not use the argument `genomic.info`. You also need the recombination fraction matrix for that group. 
+Since we had a good concordance between genome and linkage information, we will use only markers assigned to a particular linkage group using both sources of information. We will do that using `genomic.info = 1` , so the function uses the intersection of the markers assigned using linkage and the chromosome with the highest number of allocated markers. To use only the linkage information, do not use the argument `genomic.info`. You also need the recombination fraction matrix for that group.
 
 ```{r, select_group}
 s1 <- make_seq_mappoly(g, 1, ## Select LG1 
@@ -137,12 +136,11 @@ gen.o1 <- get_genomic_order(s1)
 s1.gen <- make_seq_mappoly(gen.o1)
 plot(m1, ord = s1.gen)
 ```
-
-For the sake of this short tutorial, let us use the MDS order (`s1.mds`) to phase the markers, but you can also try the genome order (`s1.gen`) and compare the resulting maps using function `compare_maps` and you will notice that the genomic order yield a better map since its likelihood is higher.
+For the sake of this short tutorial, let us use the MDS order (`s1.mds`) to phase the markers. Still, you can also try the genome order (`s1.gen`) and compare the resulting maps using function `compare_maps`, and you will notice that the genomic order yields a better map since its likelihood is higher.
 
 # Phasing markers and estimating multilocus recombination fractions.
 
-The estimation of the genetic map for a given order involves the computation of recombination fraction between adjacent markers and inferring the linkage phase configuration of those markers in both parents. The core function to perform these tasks in `MAPpoly` is `est_rf_hmm_sequential`. This function uses the pairwise [recombination fraction](#tpt) as the first source of information to sequenlially position allelic variants in specific parental homologs. For situations where pairwise analysis has limited power, the algorithm relies on the likelihood obtained through a hidden Markov model (HMM). Once all markers are positioned, the final map is reconstructed using the HMM multipoint algorithm. For a detailed description of the `est_rf_hmm_sequential` arguments, please refer to MAPpoly's [Reference Manual](https://cran.r-project.org/web/packages/mappoly/mappoly.pdf) and the [Extended Tutorial](https://rstudio-pubs-static.s3.amazonaws.com/700481_7d2515dd19834079912a462f1149ff93.html#estimating-the-map-for-a-given-order). 
+Estimating the genetic map for a given order involves the computation of recombination fraction between adjacent markers and inferring the linkage phase configuration of those markers in both parents. The core function to perform these tasks in `MAPpoly` is `est_rf_hmm_sequential`. This function uses the pairwise [recombination fraction](#tpt) as the first source of information to sequentially position allelic variants in specific parental homologs. The algorithm relies on the likelihood obtained through a hidden Markov model (HMM) for situations where pairwise analysis has limited power. Once all markers are positioned, the final map is reconstructed using the HMM multipoint algorithm. For a detailed description of the `est_rf_hmm_sequential` arguments, please refer to MAPpoly's [Reference Manual](https://cran.r-project.org/web/packages/mappoly/mappoly.pdf) and the [Extended Tutorial](https://rstudio-pubs-static.s3.amazonaws.com/700481_7d2515dd19834079912a462f1149ff93.html#estimating-the-map-for-a-given-order). 
 
 First we need to calculate the pairwise recombination fraction for markers in sequence `s1.mds` using `est_pairwise_rf`, which contains the information necessary to the proper working of the phasing algorithm.
 
@@ -194,7 +192,7 @@ plot_map_list(map.list.lg1, col = "ggstyle", title = "Estimation method")
 ```
 ## Homolog probability and preferential pairing profile
 
-In order to use the genetic map in conjunction with QTL analysis software, we need to obtain the homolog probability for all linkage groups for all individuals in the full-sib population. In this short guide we will proceed only with one linkage group, but in real situations this procedure should be applied to all chromosomes. Let us use the updated map
+To use the genetic map in conjunction with QTL analysis software, we need to obtain the homolog probability for all linkage groups for all individuals in the full-sib population. In this short guide, we will proceed only with one linkage group, but this procedure should be applied to all chromosomes in real situations. Let us use the updated map
 
 ```{r homolog_p, fig.width = 5, fig.height= 5}
 g1 <- calc_genoprob_error(lg1.map.up, step = 1, error = 0.05)

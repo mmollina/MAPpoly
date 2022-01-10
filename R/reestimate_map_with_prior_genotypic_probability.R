@@ -1,6 +1,6 @@
-#' Re-estimate genetic map using dosage.p1rior probability distribution
+#' Re-estimate genetic map using dosage.priorprobability distribution
 #'
-#' This function considers dosage.p1rior distribution when re-estimating
+#' This function considers dosage.priordistribution when re-estimating
 #' a genetic map using Hidden Markov models
 #'
 #' @param input.map an object of class \code{mappoly.map}
