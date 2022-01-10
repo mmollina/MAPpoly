@@ -237,7 +237,7 @@ load(map_file)
 ```{r}
 plot_genome_vs_map(MAPs.up, same.ch.lg = TRUE)
 ```
-![](images/fig11.png)
+![](fig11.png)
 
 ## Map summary
 ```{r}
