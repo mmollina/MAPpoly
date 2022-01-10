@@ -122,7 +122,7 @@ install.packages('MAPpoly')
 * QTL mapping
   * [QTLpoly: QTL mapping in full-sib families of outcrossing autopolyploid species based on a random-effect multiple QTL model](https://cran.r-project.org/package=qtlpoly)
   * [diaQTL: QTL analysis of diploid and autotetraploid diallel populations](https://github.com/jendelman/diaQTL)
-  * [polyqtlR: QTL analysis and exploration of meiotic patterns in autopolyploid bi-parental F1 populations.](https://cran.r-project.org/web/packages/polyqtlR/index.html)
+  * [polyqtlR: QTL analysis and exploration of meiotic patterns in autopolyploid bi-parental F1 populations.](https://cran.r-project.org/package=polyqtlR)
 
 * Visualization
   * [VIEWpoly: integrate, visualize and explore results from genetic analysis, together with genomic information for autopolyploids](https://cran.r-project.org/package=viewpoly)

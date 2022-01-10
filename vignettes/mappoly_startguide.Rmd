@@ -22,7 +22,7 @@ options(rmarkdown.html_vignette.check_title = FALSE)
 library(mappoly)
 ```
 
-MAPpoly is an R package to construct genetic maps in autopolyploids with even ploidy levels. This quick start guide will present some essential functions to construct a tetraploid potato map. Please refer to MAPpoly's [Reference Manual](https://cran.r-project.org/web/packages/mappoly/mappoly.pdf) and the [Extended Tutorial](https://rpubs.com/mmollin/tetra_mappoly_vignette) for a comprehensive description of all functions.
+MAPpoly is an R package to construct genetic maps in autopolyploids with even ploidy levels. This quick start guide will present some essential functions to construct a tetraploid potato map. Please refer to MAPpoly's [Reference Manual](https://CRAN.R-project.org/package=mappoly) and the [Extended Tutorial](https://rpubs.com/mmollin/tetra_mappoly_vignette) for a comprehensive description of all functions.
 
 # Reading data set
 There are several functions to read discrete and probabilistic dosage-based genotype data sets in MAPpoly. You can read a data set from TXT, CSV, VCF, fitPoly-generated or import it from the R packages polyRAD, polymapR, and updog. The data set distributed along with MAPpoly is a subset of markers from ([Pereira et al., 2021](https://doi.org/10.1101/2020.08.24.265397)) in [CSV format](https://rstudio-pubs-static.s3.amazonaws.com/700481_7d2515dd19834079912a462f1149ff93.html#reading-csv-files). Let us read it into MAPpoly
