@@ -18,18 +18,21 @@ Thank you for reviewing our re-submission!
 * local R installation (Ubuntu 20.04), R 4.1.2
 * local R installation compiled without long double support (Ubuntu 20.04), R 4.1.1
 * Windows Server x64 (on appveyor), R 4.1.2
-* Win-builder (4.0.5, 4.1.2, and 4.2.0)
+* Win-builder (R Under development - unstable)
 
 ## R CMD check results (on local macOS: R 4.1.2)
 
 0 errors | 0 warnings | 1 note
 
-* installed size is 11.7Mb
+* installed size is 11.8Mb
   sub-directories of 1Mb or more:
     * R:      2.7Mb
-    * data:   3.0Mb
-    * doc     4.4Mb
+    * data:   3.1Mb
+    * doc     4.5Mb
 
 ## Downstream dependencies
 
- There are currently no downstream dependencies for this package
+We checked 3 reverse dependencies (3 from CRAN + 0 from Bioconductor), comparing R CMD check results across CRAN and dev versions of this package.
+
+ * We saw 0 new problems
+ * We failed to check 0 packages
