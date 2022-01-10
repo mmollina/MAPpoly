@@ -55,7 +55,7 @@ dat <- filter_individuals(dat)
 dat <- filter_individuals(dat, ind.to.remove = c("B2721.026", "B2721.078"), inter = FALSE, verbose = FALSE)
 ```
 
-<img src="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/figures/filter_ind.png" width="484"/>
+<img src="https://raw.githubusercontent.com/mmollina/MAPpoly_vignettes/master/figures/filter_ind.png" width="388"/>
 
 Now, let us filter out markers and individuals with more than 5% of missing data. You can update the threshold interactively
 
@@ -101,8 +101,9 @@ plot(m, ord = sgo, fact = 5) ## plots a rec. frac. matrix using the genome order
 ```{r, twopt_hide_1, echo=FALSE, results='hide', }
 ncores <-2
 in.file <- "https://github.com/mmollina/SCRI/raw/main/docs/tetra/tpt.rda"
-download.file(in.file,"tpt_file")
-load("tpt_file")
+tpt_file <- tempfile()
+download.file(in.file,tpt_file)
+load(tpt_file)
 #save(tpt, file = "~/tpt.rda", compress = "xz", compression_level = 9)
 #tpt <- est_pairwise_rf2(seq.init, ncpus = ncores)
 ```
@@ -139,7 +140,7 @@ m1 <- make_mat_mappoly(m, s1)
 ```
 
 Let us order the markers in the sequence using the MDS algorithm.
-```{r, fig.width = 5, fig.height= 5, order_mds}
+```{r, order_mds}
 mds.o1 <- mds_mappoly(input.mat = m1)
 s1.mds <- make_seq_mappoly(mds.o1)
 plot(m1, ord = s1.mds)
@@ -156,17 +157,19 @@ For the sake of this short tutorial, let us use the MDS order (`s1.mds`) to phas
 
 # Phasing markers and estimating multilocus recombination fractions.
 
-Estimating the genetic map for a given order involves the computation of recombination fraction between adjacent markers and inferring the linkage phase configuration of those markers in both parents. The core function to perform these tasks in `MAPpoly` is `est_rf_hmm_sequential`. This function uses the pairwise [recombination fraction](#tpt) as the first source of information to sequentially position allelic variants in specific parental homologs. The algorithm relies on the likelihood obtained through a hidden Markov model (HMM) for situations where pairwise analysis has limited power. Once all markers are positioned, the final map is reconstructed using the HMM multipoint algorithm. For a detailed description of the `est_rf_hmm_sequential` arguments, please refer to MAPpoly's [Reference Manual](https://cran.r-project.org/web/packages/mappoly/mappoly.pdf) and the [Extended Tutorial](https://rstudio-pubs-static.s3.amazonaws.com/700481_7d2515dd19834079912a462f1149ff93.html#estimating-the-map-for-a-given-order). 
+Estimating the genetic map for a given order involves the computation of recombination fraction between adjacent markers and inferring the linkage phase configuration of those markers in both parents. The core function to perform these tasks in `MAPpoly` is `est_rf_hmm_sequential`. This function uses the pairwise [recombination fraction](#tpt) as the first source of information to sequentially position allelic variants in specific parental homologs. The algorithm relies on the likelihood obtained through a hidden Markov model (HMM) for situations where pairwise analysis has limited power. Once all markers are positioned, the final map is reconstructed using the HMM multipoint algorithm. For a detailed description of the `est_rf_hmm_sequential` arguments, please refer to MAPpoly's [Reference Manual](https://CRAN.R-project.org/package=mappoly) and the [Extended Tutorial](https://rstudio-pubs-static.s3.amazonaws.com/700481_7d2515dd19834079912a462f1149ff93.html#estimating-the-map-for-a-given-order). 
 
 First we need to calculate the pairwise recombination fraction for markers in sequence `s1.mds` using `est_pairwise_rf`, which contains the information necessary to the proper working of the phasing algorithm.
 
 ```{r, map_lg1_load, results = FALSE, echo=FALSE}
 in.file <- "https://github.com/mmollina/SCRI/raw/main/docs/tetra/tpt1.rda"
-download.file(in.file,"tpt1_file")
-load("tpt1_file")
+tpt1_file <- tempfile()
+download.file(in.file, tpt1_file)
+load(tpt1_file)
 in.file <- "https://github.com/mmollina/SCRI/raw/main/docs/tetra/lg1_map.rda"
-download.file(in.file,"lg1_map")
-load("lg1_map")
+lg1_file <- tempfile()
+download.file(in.file, lg1_file)
+load(lg1_file)
 #save(lg1.map, file = "~/lg1_map.rda", compress = "xz", compression_level = 9)
 #tpt <- est_pairwise_rf2(seq.init, ncpus = ncores)
 ```
@@ -188,7 +191,7 @@ lg1.map <- est_rf_hmm_sequential(input.seq = s1.mds,
 ```
 Now, use the functions `print` and `plot` to view the map results:
 
-```{r map_lg1_plot, fig.width=6}
+```{r map_lg1_plot}
 print(lg1.map)
 plot(lg1.map, mrk.names = TRUE, cex = 0.7)
 ```
@@ -239,14 +242,8 @@ plot(p1, min.y.prof = 0.25, max.y.prof = 0.4, P1 = "Atlantic", P2 = "B1829.5")
 
 It is possible to export a phased map to an external CSV file using 
 
-```{r}
-export_map_list(lg1.map.up, file = "output_file.csv")
-```
-
-You can also print the same output on the screen using
-
 ```{r, eval=FALSE}
-export_map_list(lg1.map.up, file = "")
+export_map_list(lg1.map.up, file = "output_file.csv")
 ```
 
 For a script with a complete analysis of the data set presented here, please refer to the [Complete script](https://github.com/mmollina/SCRI/blob/main/docs/tetra/mappoly_intro.md)
@@ -257,9 +254,11 @@ To use the next functions, let us load the complete genetic map
 
 ````{r}
 in.file <- "https://github.com/mmollina/SCRI/raw/main/docs/tetra/maps_updated.rda"
-download.file(in.file,"map_file")
-load("map_file")
+map_file <- tempfile()
+download.file(in.file, map_file)
+load(map_file)
 ````
+
 ## Plot genome vs. map
 ```{r}
 plot_genome_vs_map(MAPs.up, same.ch.lg = TRUE)
