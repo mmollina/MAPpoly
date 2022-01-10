@@ -12,7 +12,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.width = 5, 
+  fig.width = 4, 
   fig.height= 4
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
@@ -27,7 +27,7 @@ MAPpoly is an R package to construct genetic maps in autopolyploids with even pl
 # Reading data set
 There are several functions to read discrete and probabilistic dosage-based genotype data sets in MAPpoly. You can read a data set from TXT, CSV, VCF, fitPoly-generated or import it from the R packages polyRAD, polymapR, and updog. The data set distributed along with MAPpoly is a subset of markers from ([Pereira et al., 2021](https://doi.org/10.1101/2020.08.24.265397)) in [CSV format](https://rstudio-pubs-static.s3.amazonaws.com/700481_7d2515dd19834079912a462f1149ff93.html#reading-csv-files). Let us read it into MAPpoly
 
-```{r, fig.width = 5, fig.height= 4, load_data}
+```{r load_data}
 file.name <- system.file("extdata/potato_example.csv", package = "mappoly")
 dat <- read_geno_csv(file.in = file.name, ploidy = 4)
 print(dat, detailed = T)
@@ -59,14 +59,14 @@ dat <- filter_individuals(dat, ind.to.remove = c("B2721.026", "B2721.078"), inte
 
 Now, let us filter out markers and individuals with more than 5% of missing data. You can update the threshold interactively
 
-```{r, fig.width = 5, fig.height= 4, filter}
+```{r, filter}
 dat <- filter_missing(dat, type = "marker", filter.thres = .05)
 dat <- filter_missing(dat, type = "individual", filter.thres = .05)
 ```
 
 Finally, we can filter out markers with distorted segregation and redundant information. At this point, we do not consider preferential pairing and double reduction.
 
-```{r, fig.width = 5, fig.height= 4, filter_seg}
+```{r, filter_seg}
 seq.filt <- filter_segregation(dat, chisq.pval.thres = 0.05/dat$n.mrk)
 seq.filt <- make_seq_mappoly(seq.filt)
 seq.red  <- elim_redundant(seq.filt)
@@ -74,14 +74,14 @@ seq.red  <- elim_redundant(seq.filt)
 
 After filtering, 1990 markers were left to be mapped. Now, let us create a sequence of ordered markers to proceed with the analysis. You can also plot the data set for a specific sequence of markers
 
-```{r, fig.width = 5, fig.height= 4, make_seq}
+```{r,  make_seq}
 seq.init <- make_seq_mappoly(seq.red)
 plot(seq.init)
 ```
 
 and check the distribution of the markers in the reference genome, if the information is available
 
-```{r, fig.width = 5, fig.height= 4, geno_ord}
+```{r,  geno_ord}
 go <- get_genomic_order(input.seq = seq.init) ## get genomic order of the sequence
 plot(go)
 ```
@@ -90,19 +90,28 @@ plot(go)
 
 The two-point analysis calculates the pairwise recombination fraction in a sequence of markers. At this point of the analysis, where we have many markers, we use the function `est_pairwise_rf2`, which has a less detailed output than the original `est_pairwise_rf` (which will be used later) but can handle tens of thousands of markers, even when using a personal computer. Nevertheless, the analysis can take a while depending on the number of markers if few cores are available.
 
-```{r, fig.width = 5, fig.height= 5, twopt}
+```{r, twopt_show, eval=FALSE}
 ncores <- parallel::detectCores() - 1
 tpt <- est_pairwise_rf2(seq.init, ncpus = ncores)
 m <- rf_list_to_matrix(tpt) ## converts rec. frac. list into a matrix 
 sgo <- make_seq_mappoly(go) ## creates a sequence of markers in the genome order
-plot(m, ord = sgo, fact = 5) ## plots a rec. frac. matrix using the genome order, averaging neighbor cells in a 5 x 5 grid 
+#plot(m, ord = sgo, fact = 5) ## plots a rec. frac. matrix using the genome order, averaging neighbor cells in a 5 x 5 grid 
 ```
+
+```{r, twopt_hide, echo=FALSE}
+ncores <-2
+tpt <- est_pairwise_rf2(seq.init, ncpus = ncores)
+m <- rf_list_to_matrix(tpt) ## converts rec. frac. list into a matrix 
+sgo <- make_seq_mappoly(go) ## creates a sequence of markers in the genome order
+#plot(m, ord = sgo, fact = 5) ## plots a rec. frac. matrix using the genome order, averaging neighbor cells in a 5 x 5 grid 
+```
+
 
 # Grouping
 
 We can cluster the markers in linkage groups by using function `group_mappoly`. The function uses the recombination fraction matrix and UPGMA method to group markers. Use the option `comp.mat = TRUE` to compare the linkage-based clustering results with the chromosome information. If your data set does not contain chromosome information, use the option `comp.mat = FALSE`. You also can use the interactive version to change the number of expected groups
 
-```{r, fig.width = 7, fig.height= 5, group}
+```{r, group}
 g <- group_mappoly(m, expected.groups = 12, comp.mat = TRUE)
 plot(g)
 g
@@ -131,7 +140,7 @@ plot(m1, ord = s1.mds)
 Usually, at this point, the user can use diagnostic plots to remove markers that disturb the ordering procedure. We didn't use that procedure in this tutorial, but we encourage the user to check the example in `?mds_mappoly`. Now, let us use the reference genome to order the markers.
 
 You also can order the markers the reference genome
-```{r, fig.width = 5, fig.height= 5, order_genome}
+```{r,  order_genome}
 gen.o1 <- get_genomic_order(s1)
 s1.gen <- make_seq_mappoly(gen.o1)
 plot(m1, ord = s1.gen)
@@ -168,7 +177,7 @@ plot(lg1.map, mrk.names = TRUE, cex = 0.7)
 
 Now let us update the recombination fractions by allowing a global error in the HMM recombination fraction re-estimation. Using this approach, the genetic map's length will be updated by removing spurious recombination events. This procedure can be applied using either the probability distribution provided by the genotype calling software using function `est_full_hmm_with_prior_prob` or assuming a global genotype error like the following example 
 
-```{r map_err_lg1, results='hide', fig.width=7}
+```{r map_err_lg1, results='hide'}
 lg1.map.up <- est_full_hmm_with_global_error(input.map = lg1.map, error = 0.05, 
                                              verbose = TRUE)
 plot(lg1.map.up, mrk.names = TRUE, cex = 0.7)
@@ -176,14 +185,14 @@ plot(lg1.map.up, mrk.names = TRUE, cex = 0.7)
 
 We can also use the ordinary least squares (OLS) method and the weighted MDS followed by fitting a one dimensional principal curve (wMDS_to_1D_pc)
 
-```{r map_reest, results='hide', fig.width=7}
+```{r map_reest, results='hide'}
 lg1.map.ols <- reest_rf(lg1.map, m1, method = "ols")
 lg1.map.mds <- reest_rf(lg1.map, m1, method = "wMDS_to_1D_pc", input.mds = mds.o1)
 ```
 
 Now let us create a list with the maps and plot the results
 
-```{r map_list,  results='hide', fig.width=7}
+```{r map_list,  results='hide'}
 map.list.lg1  <- list(orig = lg1.map, 
                       updt = lg1.map.up, 
                       ols = lg1.map.ols, 
@@ -194,7 +203,7 @@ plot_map_list(map.list.lg1, col = "ggstyle", title = "Estimation method")
 
 To use the genetic map in conjunction with QTL analysis software, we need to obtain the homolog probability for all linkage groups for all individuals in the full-sib population. In this short guide, we will proceed only with one linkage group, but this procedure should be applied to all chromosomes in real situations. Let us use the updated map
 
-```{r homolog_p, fig.width = 5, fig.height= 5}
+```{r homolog_p}
 g1 <- calc_genoprob_error(lg1.map.up, step = 1, error = 0.05)
 to.qtlpoly <- export_qtlpoly(g1) #export to QTLpoly
 h1 <- calc_homologprob(g1)
@@ -202,7 +211,7 @@ plot(h1, lg = 1, ind = 10)
 ```
 Now let us compute the preferential pairing profile for linkage group 1
 
-```{r, meiosis_evaluation, fig.width = 5, fig.height= 5}
+```{r, meiosis_evaluation}
 p1 = calc_prefpair_profiles(g1)
 plot(p1, min.y.prof = 0.25, max.y.prof = 0.4, P1 = "Atlantic", P2 = "B1829.5")
 ```
@@ -233,7 +242,7 @@ download.file(in.file,"map_file")
 load("map_file")
 ````
 ## Plot genome vs. map
-```{r, fig.width = 5, fig.height= 5}
+```{r}
 plot_genome_vs_map(MAPs.up, same.ch.lg = TRUE)
 ```
 

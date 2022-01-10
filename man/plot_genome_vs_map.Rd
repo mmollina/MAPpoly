@@ -22,7 +22,6 @@ distance (in cM). Map(s) should be passed as a single object or a list of object
 of class \code{mappoly.map}.
 }
 \examples{
-  plot_genome_vs_map(solcap.mds.map)
   plot_genome_vs_map(solcap.mds.map, same.ch.lg = TRUE)
  
 }
