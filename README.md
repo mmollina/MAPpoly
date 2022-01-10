@@ -68,6 +68,10 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
 ![](https://raw.githubusercontent.com/mmollina/MAPpoly/main/MAPpoly_workflow.png)
 
 # Vignettes
+* To access the MAPpoly vignette from R, use
+   ```R
+   vignette("mappoly_startguide")
+   ```
 * [Building a genetic map in a tetraploid potato full-sib population using MAPpoly](https://rpubs.com/mmollin/tetra_mappoly_vignette)
 * [Building a genetic map in an hexaploid full-sib population using MAPpoly](https://mmollina.github.io/tutorials/hexa_fake/haxaploid_map_construction.html)
 * Real datasets
