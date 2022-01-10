@@ -92,7 +92,7 @@ options(repos = c(
     CRAN = 'https://cloud.r-project.org'))
 
 # Install some packages
-install.packages('MAPpoly')
+install.packages(mappoly')
 ```
 
 * Variant Calling
