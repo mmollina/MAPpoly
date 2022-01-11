@@ -30,10 +30,8 @@ Thank you for reviewing our re-submission!
        * data:   3.0Mb
        
  - on Win-builder    
-
-
-
-
+   * GNU make is a SystemRequirements
+   
 ## Downstream dependencies
 
 We checked 3 reverse dependencies (3 from CRAN + 0 from Bioconductor), comparing R CMD check results across CRAN and dev versions of this package.
