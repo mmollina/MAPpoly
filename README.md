@@ -151,9 +151,15 @@ install.packages(mappoly')
 
 This package has been developed as part of the [Genomic Tools for Sweetpotato Improvement project](https://sweetpotatogenomics.cals.ncsu.edu/) (GT4SP) and [SweetGAINS](https://cgspace.cgiar.org/handle/10568/106838), both funded by [Bill & Melinda Gates Foundation](https://www.gatesfoundation.org/). Its continuous improvement is made possible by [Tools for polyploids](https://www.polyploids.org/), funded by USDA NIFA Specialty Crop Research Initiative Award.
 
-<img src="http://sweetpotato.uga.edu/img/gates.png" align="left" width="210" />
-<img src="http://sweetpotato.uga.edu/img/sweetpotatobase_logo.png" align="left" width="210" />
-<img src="https://cipotato.org/wp-content/uploads/2020/06/SweetGains-sin-fondo-1-350x230.png" align="left" width="210" />
-<img src="https://www.polyploids.org/sites/default/files/inline-images/Project%20Logo-transparent.png" align="left" width="210" />
+<div id="thumbs">
+    <a id="BMGF" href="https://www.gatesfoundation.org/"><img src="https://www.gatesfoundation.org/-/media/logos/logolg.svg" width="210" alt=""/></a>
+    <a id="GT4SP" href="https://sweetpotatogenomics.cals.ncsu.edu/"><img src="http://sweetpotato.uga.edu/img/sweetpotatobase_logo.png" width="210" alt=""/></a>
+    <a id="sweetgains" href="https://cgspace.cgiar.org/handle/10568/106838"><img src="https://cipotato.org/wp-content/uploads/2020/06/SweetGains-sin-fondo-1-350x230.png" width="200" alt=""/></a>
+    <a id="PolyploidTools" href="https://www.polyploids.org/"><img src="https://www.polyploids.org/sites/default/files/inline-images/Project%20Logo-transparent.png" width="200" alt=""/></a>    
+    <span class="stretch"></span>
+</div>
+
+
+
 
 
