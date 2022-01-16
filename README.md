@@ -120,7 +120,7 @@ install.packages(mappoly')
   
   
 * Haplotype reconstruction
-  * [MChap: Polyploid micro-haplotype assembly using Markov chain Monte Carlo simulation.](https://github.com/PlantandFoodResearch/MCHap)
+  * [MCHap: Polyploid micro-haplotype assembly using Markov chain Monte Carlo simulation.](https://github.com/PlantandFoodResearch/MCHap)
   * [TetraOrigin:haplotype reconstruction in a full-sib tetraploid family](https://github.com/chaozhi/TetraOrigin)
   * [PolyOriginR:haplotype reconstruction in polyploid multiparental populations](https://github.com/chaozhi/PolyOriginR)
 
