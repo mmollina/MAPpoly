@@ -5,7 +5,7 @@
 [![codecov](https://codecov.io/github/mmollina/MAPpoly/branch/master/graphs/badge.svg)](https://codecov.io/github/mmollina/MAPpoly)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/mappoly)](https://cran.r-project.org/package=mappoly)
 [![R-universe PolyVerse Status Badge](https://polyploids.r-universe.dev/badges/mappoly)](https://polyploids.r-universe.dev)
-[![CRAN_monthly_downloads](https://cranlogs.r-pkg.org/badges/mappoly)](https://cranlogs.r-pkg.org/badges/mappoly)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/mappoly)](https://cran.r-project.org/package=mappoly)
 
 <!-- ![](https://raw.githubusercontent.com/mmollina/MAPpoly/master/mappoly_hexsticker.png) -->
 
