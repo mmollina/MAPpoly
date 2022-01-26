@@ -88,7 +88,7 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
   
 # Related software
 
-* [Polyverse](https://polyploids.r-universe.dev) - the polyploid R universe (a Lindsay Clark's initiative)
+* [Polyverse](https://polyploids.r-universe.dev) - the polyploid R universe (a [Lindsay Clark](https://lvclark.github.io/)'s initiative)
 ```R
 # Enable this universe
 options(repos = c(
