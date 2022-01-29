@@ -155,7 +155,7 @@ This package has been developed as part of the [Genomic Tools for Sweetpotato Im
 <div class="horizontalgap" style="width:10px">
     <a id="NCSU" href="https://www.ncsu.edu/"><img src="https://brand.ncsu.edu/assets/logos/ncstate-brick-2x2-red.png" width="150" alt=""/></a> &emsp;&emsp;
     <a id="BMGF" href="https://www.gatesfoundation.org/"><img src="https://www.gatesfoundation.org/-/media/logos/logolg.svg" width="150" alt=""/></a>&emsp;
-    <a id="GT4SP" href="https://sweetpotatogenomics.cals.ncsu.edu/"><img src="http://sweetpotato.uga.edu/img/sweetpotatobase_logo.png" width="150" alt=""/></a>&emsp;
+    <a id="GT4SP" href="https://sweetpotatogenomics.cals.ncsu.edu/"><img src="http://sweetpotato.uga.edu/img/sweetpotatobase_logo.png" width="150" alt=""/></a>
     <a id="sweetgains" href="https://cgspace.cgiar.org/handle/10568/106838"><img src="https://cipotato.org/wp-content/uploads/2020/06/SweetGains-sin-fondo-1-350x230.png" width="150" alt=""/></a>&emsp;
     <a id="PolyploidTools" href="https://www.polyploids.org/"><img src="https://www.polyploids.org/sites/default/files/inline-images/Project%20Logo-transparent.png" width="200" alt=""/></a>    
     <span class="stretch"></span>
