@@ -158,8 +158,13 @@ This package has been developed as part of the [Genomic Tools for Sweetpotato Im
     <a id="GT4SP" href="https://sweetpotatogenomics.cals.ncsu.edu/"><img src="http://sweetpotato.uga.edu/img/sweetpotatobase_logo.png" width="150" alt=""/></a>
     <a id="sweetgains" href="https://cgspace.cgiar.org/handle/10568/106838"><img src="https://cipotato.org/wp-content/uploads/2020/06/SweetGains-sin-fondo-1-350x230.png" width="150" alt=""/></a>
     <a id="PolyploidTools" href="https://www.polyploids.org/"><img src="https://www.polyploids.org/sites/default/files/inline-images/Project%20Logo-transparent.png" width="200" alt=""/></a>    
+     <a id="USDA-NIFA" href="https://nifa.usda.gov/"><img src="https://upload.wikimedia.org/wikipedia/commons/0/06/USDA_NIFA_Twitter_Logo.jpg" width="100" alt=""/></a>  
     <span class="stretch"></span>
 </div>
+
+
+
+
 
 ---
 <sub>NC State University promotes equal opportunity and prohibits discrimination and harassment based upon one’s age, color, disability, gender identity, genetic information, national origin, race, religion, sex (including pregnancy), sexual orientation and veteran status.</sub>
