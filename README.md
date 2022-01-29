@@ -152,8 +152,8 @@ install.packages('mappoly')
 
 This package has been developed as part of the [Genomic Tools for Sweetpotato Improvement project](https://sweetpotatogenomics.cals.ncsu.edu/) (GT4SP) and [SweetGAINS](https://cgspace.cgiar.org/handle/10568/106838), both funded by [Bill & Melinda Gates Foundation](https://www.gatesfoundation.org/). Its continuous improvement is made possible by [Tools for polyploids](https://www.polyploids.org/), funded by USDA NIFA Specialty Crop Research Initiative Award.
 
-<div class="horizontalgap" style="width:10px">
-    <a id="NCSU" href="https://www.ncsu.edu/"><img src="https://brand.ncsu.edu/assets/logos/ncstate-brick-2x2-red.png" width="150" alt=""/></a> &emsp;
+<div class="horizontalgap" style="width:5px">
+    <a id="NCSU" href="https://www.ncsu.edu/"><img src="https://brand.ncsu.edu/assets/logos/ncstate-brick-2x2-red.png" width="150" alt=""/></a>
     <a id="BMGF" href="https://www.gatesfoundation.org/"><img src="https://www.gatesfoundation.org/-/media/logos/logolg.svg" width="150" alt=""/></a>
     <a id="GT4SP" href="https://sweetpotatogenomics.cals.ncsu.edu/"><img src="http://sweetpotato.uga.edu/img/sweetpotatobase_logo.png" width="150" alt=""/></a>
     <a id="sweetgains" href="https://cgspace.cgiar.org/handle/10568/106838"><img src="https://cipotato.org/wp-content/uploads/2020/06/SweetGains-sin-fondo-1-350x230.png" width="150" alt=""/></a>
