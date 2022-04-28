@@ -148,6 +148,7 @@ plot_mrk_info <- function(input.data, mrk)
 #'  print_mrk(hexafake, 256)
 #' @export
 print_mrk <- function(input.data, mrks){
+  L<-vector("list", length(mrks))
   for(i in 1:length(mrks))
   {
     x <- input.data$geno.dose[mrks[i], ]
@@ -170,5 +171,9 @@ print_mrk <- function(input.data, mrks){
     names(y) <- 0:input.data$ploidy
     print(y)
     cat("----------------------------------\n")
+    L[[i]] <- list(p1p2 = c(input.data$dosage.p1[mrks[i]], input.data$dosage.p2[mrks[i]]),
+                   freq  = z,
+                   seg = y)
   }
+  invisible(L)
 }

@@ -795,8 +795,9 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
   if(!mrk%in%colnames(rf.matrix$rec.mat)){
     stop(deparse(substitute(mrk)), " is not in 'rf.matrix'")
   }
-  mrk.id <- as.numeric(colnames(rf.matrix$ShP)[match(mrk, colnames(rf.matrix$rec.mat))])
-  
+  dat <- get(input.map$info$data.name, pos = 1)
+  #mrk.id <- match(mrk, dat$mrk.names)
+  mrk.id <- mrk
   ## Adding marker: beginning of sequence
   if(pos  ==  0){
     ## h: states to visit in both parents
@@ -808,14 +809,13 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
       h.right[[i]] <- A[names(e.right[[i]]), , drop = FALSE]
     }
     if(is.null(r.test)){
-      r.test <- generate_all_link_phases_elim_equivalent_haplo(block1 = input.map$maps[[i.lpc]], 
+      r.test <- generate_all_link_phases_elim_equivalent_haplo(block1 = c(input.map$maps[[i.lpc]], mrk.names = list(input.map$info$mrk.names)), 
                                                                block2 = mrk.id, 
                                                                rf.matrix = rf.matrix, 
                                                                ploidy = ploidy, max.inc = 0)
       
     }
-  } 
-  else if(pos > 0 & pos < n.mrk){   ## Adding marker: middle positions
+  } else if(pos > 0 & pos < n.mrk){   ## Adding marker: middle positions
     ## h: states to visit in both parents
     ## e: probability distribution (ignored in this version) 
     e.left <- h.left <- e.right <- h.right <- vector("list", n.ind)
@@ -833,7 +833,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
                            phase.config = i.lpc, 
                            reestimate.rf = FALSE, 
                            verbose = FALSE)
-    r.left <- generate_all_link_phases_elim_equivalent_haplo(block1 = map.left$maps[[i.lpc]], 
+    r.left <- generate_all_link_phases_elim_equivalent_haplo(block1 = c(map.left$maps[[i.lpc]], mrk.names = list(map.left$info$mrk.names)),
                                                              block2 = mrk.id, 
                                                              rf.matrix = rf.matrix, 
                                                              ploidy = ploidy, max.inc = 0)
@@ -842,14 +842,13 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
                             mrk.pos = (pos+1):input.map$info$n.mrk,
                             phase.config = i.lpc, 
                             reestimate.rf = FALSE, verbose = FALSE)
-    r.right <- generate_all_link_phases_elim_equivalent_haplo(block1 = map.right$maps[[i.lpc]], 
+    r.right <- generate_all_link_phases_elim_equivalent_haplo(block1 = c(map.right$maps[[i.lpc]], mrk.names = list(map.right$info$mrk.names)), 
                                                               block2 = mrk.id, 
                                                               rf.matrix = rf.matrix, 
                                                               ploidy = ploidy, max.inc = 0)
     ## Using both information sources, left and right 
     r.test <- unique(r.left, r.right)
-  } 
-  else if(pos  ==  n.mrk){
+  } else if(pos  ==  n.mrk){
     ## h: states to visit in both parents
     ## e: probability distribution (ignored in this version) 
     e.left <- h.left <- vector("list", n.ind)
@@ -858,7 +857,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
       e.left[[i]] <- a.left[a.left > thresh.cut.path]
       h.left[[i]] <- A[names(e.left[[i]]), , drop = FALSE]
     }
-    r.test <- generate_all_link_phases_elim_equivalent_haplo(block1 = input.map$maps[[i.lpc]], 
+    r.test <- generate_all_link_phases_elim_equivalent_haplo(block1 = c(input.map$maps[[i.lpc]], mrk.names = list(input.map$info$mrk.names)), 
                                                              block2 = mrk.id, 
                                                              rf.matrix = rf.matrix, 
                                                              ploidy = ploidy, max.inc = 0)
@@ -873,7 +872,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
                            c(1,1), 
                            reestimate.rf = FALSE, verbose = FALSE)
     hap.temp <- filter_map_at_hmm_thres(hap.temp, thres.hmm = 10e-10)
-    hap.temp$maps[[1]]$seq.num <- rep(mrk.id, 2)
+    hap.temp$maps[[1]]$seq.num <- rep(match(mrk.id, dat$mrk.names), 2)
     hap.temp$maps[[1]]$seq.ph <- list(P = c(r.test[[i]]$P, r.test[[i]]$P),
                                       Q = c(r.test[[i]]$Q, r.test[[i]]$Q))
     hap.temp$maps[[1]]$seq.rf <- 10e-6
@@ -929,7 +928,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
       h.test <- c(list(h.left), h[i], list(h.right))
       names(h.test) <- c("hap1", "hap2", "hap3")
       e.test <- c(list(e.left), e[i], list(e.right))
-      restemp <- est_haplo_hmm(ploidy = ploidy, 
+      restemp <-est_haplo_hmm(ploidy = ploidy, 
                                n.mrk = length(h.test), 
                                n.ind = n.ind, 
                                haplo = h.test, 
@@ -983,7 +982,7 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
   output.map <- input.map
   seq.num <- as.numeric(names(configs[[1]]$P))
   output.map$info$seq.num <- seq.num
-  output.map$info$mrk.names <- colnames(rf.matrix$rec.mat)[match(seq.num, colnames(rf.matrix$ShP))]
+  output.map$info$mrk.names <- dat$mrk.names[seq.num]
   output.map$info$n.mrk <- length(output.map$info$mrk.names)
   output.map$maps <- vector("list", nrow(res))
   for(i in 1:nrow(res))
@@ -1003,7 +1002,6 @@ add_marker <- function(input.map,  mrk, pos, rf.matrix, genoprob = NULL,
                                  seq.ph = configs[[rownames(res)[i]]],
                                  loglike = res[i, "log_like"])
   }
-  dat <- get(input.map$info$data.name, pos = 1)
   output.map$info$seq.dose.p1 <- dat$dosage.p1[output.map$info$mrk.names]
   output.map$info$seq.dose.p2 <- dat$dosage.p2[output.map$info$mrk.names]
   output.map$info$chrom <- dat$chrom[output.map$info$mrk.names]
