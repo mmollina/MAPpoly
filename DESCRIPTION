@@ -55,7 +55,7 @@ License: GPL-3
 LazyData: TRUE
 LazyDataCompression: xz
 Depends:
-    R (>= 3.5.0)
+    R (>= 4.0.0)
 Imports:
     Rcpp (>= 0.12.6),
     RcppParallel,
@@ -87,6 +87,9 @@ Suggests:
     fitPoly,
     polymapR,
     AGHmatrix,
-    gatepoints
+    gatepoints,
+    knitr,
+    rmarkdown
 URL: https://github.com/mmollina/MAPpoly
 BugReports: https://github.com/mmollina/MAPpoly/issues
+VignetteBuilder: knitr

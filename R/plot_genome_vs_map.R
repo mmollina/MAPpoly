@@ -14,7 +14,6 @@
 #'   chromosomes and linkage groups with the same number. Default is \code{FALSE}.   
 #'    
 #' @examples
-#'   plot_genome_vs_map(solcap.mds.map)
 #'   plot_genome_vs_map(solcap.mds.map, same.ch.lg = TRUE)
 #'  
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}

@@ -87,11 +87,11 @@
 #' @importFrom utils capture.output
 #' @export
 merge_maps <- function(map.list, 
-                     twopt,
-                     thres.twopt = 10,
-                     genoprob.list = NULL,
-                     thres.hmm = "best",
-                     tol = 10e-5){
+                       twopt,
+                       thres.twopt = 10,
+                       genoprob.list = NULL,
+                       thres.hmm = "best",
+                       tol = 10e-5){
   ## Checking class of arguments
   if (any(!sapply(map.list, inherits, "mappoly.map"))) 
     stop(deparse(substitute(map.list)), 
@@ -108,8 +108,8 @@ merge_maps <- function(map.list,
   alt <- unlist(alt)
   ## Check twopt consistency
   s.temp <- make_seq_mappoly(get(map.list[[1]]$info$data.name), 
-                           unlist(sapply(map.list, function(x) x$info$mrk.names)), 
-                           map.list[[1]]$info$data.name)
+                             unlist(sapply(map.list, function(x) x$info$mrk.names)), 
+                             map.list[[1]]$info$data.name)
   check <- check_pairwise(s.temp, twopt)
   if (any(check != 0)){
     stop("There is no information for pairs: \n", paste(capture.output(print(check)), collapse = "\n"))
@@ -149,7 +149,7 @@ merge_maps <- function(map.list,
   thresh.cut.path <- 1/n.gen
   ## Hash table: homolog combination --> states to visit in both parents
   A <- as.matrix(expand.grid(0:(ngam-1), 
-                           0:(ngam-1))[,2:1])
+                             0:(ngam-1))[,2:1])
   rownames(A) <- dimnames(genoprob.list[[1]]$probs)[[1]]
   if(length(map.list)  ==  2){
     ## h: states to visit in both parents
@@ -167,11 +167,11 @@ merge_maps <- function(map.list,
                                    thresh.LOD.rf = thres.twopt, 
                                    shared.alleles = TRUE, 
                                    verbose = FALSE)
-    w <- generate_all_link_phases_elim_equivalent_haplo(block1 = map.list[[1]]$maps[[i.lpc[1]]], 
-                                                      block2 = map.list[[2]]$maps[[i.lpc[2]]],
-                                                      rf.matrix = rf.matrix,
-                                                      ploidy = ploidy, 
-                                                      max.inc = 0)
+    w <- generate_all_link_phases_elim_equivalent_haplo(block1 = c(map.list[[1]]$maps[[i.lpc[1]]], mrk.names = list(map.list[[1]]$info$mrk.names)), 
+                                                        block2 = c(map.list[[2]]$maps[[i.lpc[2]]], mrk.names = list(map.list[[2]]$info$mrk.names)),
+                                                        rf.matrix = rf.matrix,
+                                                        ploidy = ploidy, 
+                                                        max.inc = 0)
     ## get test.maps and conditional probabilities
     test.maps <- p <- vector("list", length(w))
     rem <- logical(length(w))
@@ -207,14 +207,14 @@ merge_maps <- function(map.list,
       h.test <- c(list(h.first), h.second[i])
       e.test <- c(list(e.first), e.second[i])
       restemp <- est_haplo_hmm(ploidy = ploidy, 
-                             n.mrk = length(h.test), 
-                             n.ind = n.ind, 
-                             haplo = h.test, 
-                             emit = e.test, 
-                             rf_vec = rep(0.01, length(h.test)-1), 
-                             verbose = FALSE, 
-                             use_H0 = FALSE, 
-                             tol = tol) 
+                               n.mrk = length(h.test), 
+                               n.ind = n.ind, 
+                               haplo = h.test, 
+                               emit = e.test, 
+                               rf_vec = rep(0.01, length(h.test)-1), 
+                               verbose = FALSE, 
+                               use_H0 = FALSE, 
+                               tol = tol) 
       res[i,] <- unlist(restemp)
     }
     #cat("\n")
@@ -256,9 +256,9 @@ merge_maps <- function(map.list,
     out.map <- map.list[[1]]
     for(i in 2:length(map.list)){
       out.map <- merge_maps(map.list = list(out.map, map.list[[i]]), 
-                          twopt = twopt, 
-                          tol = tol, 
-                          thres.twopt = thres.twopt)  
+                            twopt = twopt, 
+                            tol = tol, 
+                            thres.twopt = thres.twopt)  
     }
     out.map$info$seq.num <- unlist(sapply(map.list, function(x) x$info$seq.num))
     out.map$info$seq.dose.p1 <- unlist(sapply(map.list, function(x) x$info$seq.dose.p1))

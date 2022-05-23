@@ -16,8 +16,7 @@ generate_all_link_phases_elim_equivalent_haplo(
 \item{block1}{submap with markers of the first block}
 
 \item{block2}{submap with markers of the second block, 
-or just a single marker identified by its position on
- the \code{mappoly.data} object}
+or just a single marker identified by its name}
 
 \item{rf.matrix}{matrix obtained with the function \code{rf_list_to_matrix}
 using the parameter \code{shared.alleles = TRUE}}

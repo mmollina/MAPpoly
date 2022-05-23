@@ -300,8 +300,8 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
   }
   w <- table(x$chrom)
   if (length(w) <= 1)
-    cat("\n    No. markers per sequence: not available") else if (detailed) {
-      cat("\n    ----------\n    No. markers per sequence:\n")
+    cat("\n    No. markers per chromosome: not available") else if (detailed) {
+      cat("\n    ----------\n    No. markers per chromosome:\n")
       print(data.frame(seq = paste0("       ", names(w)), No.mrk = as.numeric(w)), row.names = FALSE)
       cat("    ----------\n")
       cat(paste0("    Markers with no chromosome information: ", sum(is.na(x$chrom))))

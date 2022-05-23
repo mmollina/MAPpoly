@@ -61,7 +61,7 @@
 #'
 #' @export rf_snp_filter
 #' @importFrom ggplot2 ggplot geom_histogram aes scale_fill_manual xlab ggtitle
-#' 
+#' @importFrom graphics hist
 rf_snp_filter <- function(input.twopt,
                           thresh.LOD.ph = 5,
                           thresh.LOD.rf = 5,

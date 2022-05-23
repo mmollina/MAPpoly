@@ -3,8 +3,7 @@
 #' Estimates loci position using Multidimensional Scaling proposed by
 #' \cite{Preedy and Hackett (2016)}. The code is an adaptation from
 #' the package \code{MDSmap}, available under GNU GENERAL PUBLIC LICENSE,
-#' Version 3, at
-#' \url{ https://CRAN.R-project.org/package = MDSMap}
+#' Version 3, at \url{https://CRAN.R-project.org/package=MDSMap}
 #'
 #' @param input.mat an object of class \code{mappoly.input.matrix}
 #'

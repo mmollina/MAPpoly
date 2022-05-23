@@ -39,9 +39,11 @@ Differently from est_pairwise_rf this function returns only the values associate
  to the best linkage phase configuration.
 }
 \examples{
-  ## Tetraploid example (first 50 markers) 
-  all.mrk <- make_seq_mappoly(tetra.solcap, 1:100)
-  all.pairs <- est_pairwise_rf2(input.seq = all.mrk)
+  ## Tetraploid example  
+  all.mrk <- make_seq_mappoly(tetra.solcap, 100:200)
+  all.pairs <- est_pairwise_rf2(input.seq = all.mrk, ncpus = 2)
+  m <- rf_list_to_matrix(all.pairs)
+  plot(m, fact = 2)
   
 }
 \references{

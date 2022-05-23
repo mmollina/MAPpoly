@@ -10,8 +10,8 @@
   min.y.prof = 0,
   max.y.prof = 1,
   thresh = 0.01,
-  P = "P1",
-  Q = "P2",
+  P1 = "P1",
+  P2 = "P2",
   ...
 )
 }
@@ -29,9 +29,9 @@ the preferential pairing profile for the homolog pairs}
 
 \item{thresh}{threshold for chi-square test (default = 0.01)}
 
-\item{P}{a string containing the name of parent P}
+\item{P1}{a string containing the name of parent P1}
 
-\item{Q}{a string containing the name of parent Q}
+\item{P2}{a string containing the name of parent P2}
 
 \item{...}{unused arguments}
 }

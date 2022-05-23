@@ -153,7 +153,9 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.in
   {
     if(!is.null(arg))
       warning("Ignoring argument 'arg' and using chi-square filtered markers instead.")
-    tmp <- make_seq_mappoly(get(input.obj$data.name, pos = 1), arg = input.obj$keep, data.name = input.obj$data.name)
+    tmp <- make_seq_mappoly(get(input.obj$data.name, pos = 1), 
+                            arg = input.obj$keep, 
+                            data.name = input.obj$data.name)
     tmp$chisq.pval.thres <- input.obj$chisq.pval.thres
     tmp$chisq.pval <- get(input.obj$data.name, pos = 1)$chisq.pval[input.obj$keep]
     return(tmp)

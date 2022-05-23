@@ -1,14 +1,15 @@
-[![Travis Build Status](https://app.travis-ci.com/mmollina/MAPpoly.svg?branch=master)](https://app.travis-ci.com/github/mmollina/MAPpoly) 
+[![R-CMD-check](https://github.com/mmollina/MAPpoly/workflows/R-CMD-check/badge.svg)](https://github.com/mmollina/mappoly/actions)
 [![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mmollina/mappoly?branch=master&svg=true)](https://ci.appveyor.com/project/mmollina/mappoly)
 ![Development](https://img.shields.io/badge/development-active-blue.svg)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![codecov](https://codecov.io/github/mmollina/MAPpoly/branch/master/graphs/badge.svg)](https://codecov.io/github/mmollina/MAPpoly)
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/mappoly)](https://cran.r-project.org/package=mappoly)
-[![CRAN_monthly_downloads](https://cranlogs.r-pkg.org/badges/mappoly)](https://cranlogs.r-pkg.org/badges/mappoly)
+[![R-universe PolyVerse Status Badge](https://polyploids.r-universe.dev/badges/mappoly)](https://polyploids.r-universe.dev)
+[![](https://cranlogs.r-pkg.org/badges/grand-total/mappoly)](https://cran.r-project.org/package=mappoly)
 
 <!-- ![](https://raw.githubusercontent.com/mmollina/MAPpoly/master/mappoly_hexsticker.png) -->
 
-# MAPpoly <img src="hex.png" align="right" width="200" />
+# MAPpoly <img src="https://raw.githubusercontent.com/mmollina/MAPpoly/main/hex.png" align="right" width="150" />
 
 MAPpoly (v. 0.3.0) is an R package to construct genetic maps in autopolyploids with even ploidy levels. In its current version, MAPpoly can handle ploidy levels up to 8 when using hidden Markov models (HMM), and up to 12 when using the two-point simplification. When dealing with large numbers of markers (> 10,000), we strongly recommend using high-performance computation. 
 
@@ -62,7 +63,15 @@ devtools::install_github("mmollina/mappoly", dependencies=TRUE)
 
 For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherme-pereira/QTLpoly) package. QTLpoly is an under development software to map quantitative trait loci (QTL) in full-sib families of outcrossing autopolyploid species based on a random-effect multiple QTL model [Pereira et al. 2020](https://doi.org/10.1534/genetics.120.303080). 
 
+
+# Workflow
+![](https://raw.githubusercontent.com/mmollina/MAPpoly/main/MAPpoly_workflow.png)
+
 # Vignettes
+* To access the MAPpoly vignette from R, use
+   ```R
+   vignette("mappoly_startguide")
+   ```
 * [Building a genetic map in a tetraploid potato full-sib population using MAPpoly](https://rpubs.com/mmollin/tetra_mappoly_vignette)
 * [Building a genetic map in an hexaploid full-sib population using MAPpoly](https://mmollina.github.io/tutorials/hexa_fake/haxaploid_map_construction.html)
 * Real datasets
@@ -79,7 +88,7 @@ For further QTL analysis, we recommend our [QTLpoly](https://github.com/guilherm
   
 # Related software
 
-* [Polyverse](https://polyploids.r-universe.dev/ui#builds) - the polyploid R universe (a Lindsay Clark's initiative)
+* [Polyverse](https://polyploids.r-universe.dev) - the polyploid R universe (a [Lindsay Clark](https://lvclark.github.io/)'s initiative)
 ```R
 # Enable this universe
 options(repos = c(
@@ -87,7 +96,7 @@ options(repos = c(
     CRAN = 'https://cloud.r-project.org'))
 
 # Install some packages
-install.packages('MAPpoly')
+install.packages('mappoly')
 ```
 
 * Variant Calling
@@ -111,13 +120,17 @@ install.packages('MAPpoly')
   
   
 * Haplotype reconstruction
+  * [MCHap: Polyploid micro-haplotype assembly using Markov chain Monte Carlo simulation.](https://github.com/PlantandFoodResearch/MCHap)
   * [TetraOrigin:haplotype reconstruction in a full-sib tetraploid family](https://github.com/chaozhi/TetraOrigin)
   * [PolyOriginR:haplotype reconstruction in polyploid multiparental populations](https://github.com/chaozhi/PolyOriginR)
 
 * QTL mapping
-  * [QTLpoly: QTL mapping in full-sib families of outcrossing autopolyploid species based on a random-effect multiple QTL model](https://github.com/guilherme-pereira/QTLpoly)
+  * [QTLpoly: QTL mapping in full-sib families of outcrossing autopolyploid species based on a random-effect multiple QTL model](https://cran.r-project.org/package=qtlpoly)
   * [diaQTL: QTL analysis of diploid and autotetraploid diallel populations](https://github.com/jendelman/diaQTL)
-  * [polyqtlR: QTL analysis and exploration of meiotic patterns in autopolyploid bi-parental F1 populations.](https://cran.r-project.org/web/packages/polyqtlR/index.html)
+  * [polyqtlR: QTL analysis and exploration of meiotic patterns in autopolyploid bi-parental F1 populations.](https://cran.r-project.org/package=polyqtlR)
+
+* Visualization
+  * [VIEWpoly: integrate, visualize and explore results from genetic analysis, together with genomic information for autopolyploids](https://cran.r-project.org/package=viewpoly)
 
 # Miscellaneous
 * [Supplementary scripts for Mollinari and Garcia (2019)](https://github.com/mmollina/Autopolyploid_Linkage)
@@ -137,4 +150,22 @@ install.packages('MAPpoly')
 
 # Acknowledgment
 
-This package has been developed as part of the [Genomic Tools for Sweetpotato Improvement project](https://sweetpotatogenomics.cals.ncsu.edu/) (GT4SP) and [SweetGAINS](https://cgspace.cgiar.org/handle/10568/106838), both funded by [Bill & Melinda Gates Foundation](https://www.gatesfoundation.org/).
+This package has been developed as part of the [Genomic Tools for Sweetpotato Improvement project](https://sweetpotatogenomics.cals.ncsu.edu/) (GT4SP) and [SweetGAINS](https://cgspace.cgiar.org/handle/10568/106838), both funded by [Bill & Melinda Gates Foundation](https://www.gatesfoundation.org/). Its continuous improvement is made possible by [Tools for polyploids](https://www.polyploids.org/), funded by USDA NIFA Specialty Crop Research Initiative Award.
+
+<div class="horizontalgap" style="width:5px">
+    <a id="NCSU" href="https://www.ncsu.edu/"><img src="https://brand.ncsu.edu/assets/logos/ncstate-brick-2x2-red.png" width="150" alt=""/></a>
+    <a id="BMGF" href="https://www.gatesfoundation.org/"><img src="https://fsm-alliance.org/wp-content/uploads/gates-logo-bda5cc0866e8e37eccab4ac502b916c1-copy.png" width="150" alt=""/></a>
+    <a id="GT4SP" href="https://sweetpotatogenomics.cals.ncsu.edu/"><img src="http://www.sweetpotatoknowledge.org/wp-content/uploads/2016/02/GT4SP-logo-e1456736272456.png" width="70" alt=""/></a>
+    <a id="sweetgains" href="https://cgspace.cgiar.org/handle/10568/106838"><img src="https://cipotato.org/wp-content/uploads/2020/06/SweetGains-sin-fondo-1-350x230.png" width="150" alt=""/></a>
+    <a id="PolyploidTools" href="https://www.polyploids.org/"><img src="https://www.polyploids.org/sites/default/files/inline-images/Project%20Logo-transparent.png" width="180" alt=""/></a>    
+     <a id="USDA-NIFA" href="https://nifa.usda.gov/"><img src="https://upload.wikimedia.org/wikipedia/commons/0/06/USDA_NIFA_Twitter_Logo.jpg" width="100" alt=""/></a>  
+    <span class="stretch"></span>
+</div>
+
+---
+<sub>NC State University promotes equal opportunity and prohibits discrimination and harassment based upon one’s age, color, disability, gender identity, genetic information, national origin, race, religion, sex (including pregnancy), sexual orientation and veteran status.</sub>
+
+
+
+
+

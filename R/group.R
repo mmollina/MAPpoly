@@ -143,8 +143,9 @@ group_mappoly <- function(input.mat, expected.groups = NULL,
       x <- table(names(which(groups.snp == i)))
       seq.vs.grouped.snp[i,names(x)] <- x
     }
-    idtemp2 <- apply(seq.vs.grouped.snp, 1, which.max)
-    seq.vs.grouped.snp <- cbind(seq.vs.grouped.snp[,unique(idtemp2)], seq.vs.grouped.snp[,"NH"])
+    idtemp2 <- unique(apply(seq.vs.grouped.snp, 1, which.max))
+    idtemp2 <- c(idtemp2, setdiff(1:(ncol(seq.vs.grouped.snp)-1), idtemp2))
+    seq.vs.grouped.snp <- cbind(seq.vs.grouped.snp[,idtemp2], seq.vs.grouped.snp[,"NH"])
     cnm <- colnames(seq.vs.grouped.snp)
     cnm[cnm == ""] <- "NoChr"
     colnames(seq.vs.grouped.snp) <- cnm

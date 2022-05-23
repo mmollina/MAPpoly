@@ -89,6 +89,7 @@ rf_list_to_matrix <- function(input.twopt,
     lod.ph.mat <- lod.mat <- rec.mat <- matrix(NA, input.twopt$n.mrk, input.twopt$n.mrk)
     if(shared.alleles)
       ShP <- ShQ <- lod.mat
+     
     #### UPDATE: instead of recovering the order from names, provide using the object 'input.twopt'
     #seq.num.orig <- unique(sapply(strsplit(x = names(input.twopt$pairwise), split = "-"), function(x) as.numeric(x[1])))
     #seq.num.orig <- c(seq.num.orig, strsplit(tail(names(input.twopt$pairwise), n = 1), "-")[[1]][2])
@@ -132,7 +133,7 @@ rf_list_to_matrix <- function(input.twopt,
       ShP[upper.tri(ShP)] <- t(ShP)[upper.tri(ShP)]
       ShQ[lower.tri(ShQ)] <- as.numeric(rf.lod.mat[5,])
       ShQ[upper.tri(ShQ)] <- t(ShQ)[upper.tri(ShQ)]
-      dimnames(ShP) <- dimnames(ShQ) <- list(marindex, marindex)
+      dimnames(ShP) <- dimnames(ShQ) <- list(marnames, marnames)
     } else{
       ShP <- ShQ <- NULL
     }

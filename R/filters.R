@@ -362,7 +362,7 @@ filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
   plot(df[,1:2], col = df$type, pch = 19)
   legend("topright",  c("Parents", "Offspring") , col = c(2,4), pch = 19)
   if(!is.null(ind.to.remove)){
-    out.data <- sample_data(input.data, selected.ind = ind.to.remove)
+    out.data <- sample_data(input.data, selected.ind = setdiff(input.data$ind.names, ind.to.remove))
     return(out.data)
   }
   if(interactive() && inter)

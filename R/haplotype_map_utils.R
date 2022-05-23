@@ -8,8 +8,7 @@
 #' @param block1 submap with markers of the first block
 #' 
 #' @param block2 submap with markers of the second block, 
-#' or just a single marker identified by its position on
-#'  the \code{mappoly.data} object
+#' or just a single marker identified by its name
 #'  
 #' @param rf.matrix matrix obtained with the function \code{rf_list_to_matrix}
 #' using the parameter \code{shared.alleles = TRUE}
@@ -27,25 +26,25 @@
 generate_all_link_phases_elim_equivalent_haplo <- 
   function(block1, block2, rf.matrix, ploidy, max.inc = NULL) {
     ## Check block2 class (block or single marker)
-    if (is.numeric(block2)){
+    if (length(block2)==1){
       dp <- get(rf.matrix$data.name)$dosage.p1[block2]
       dq <- get(rf.matrix$data.name)$dosage.p2[block2]
       if(dp != 0) dp <- 1:dp
       if(dq != 0) dq <- 1:dq
       seq.ph = list(P = list(dp), Q = list(dq))
-      block2 = list(seq.num = block2, seq.ph = seq.ph)
+      block2 = list(seq.ph = seq.ph, mrk.names = block2)
     }
     ## Getting M matrix
-    M = list(P = rf.matrix$ShP[as.character(block1$seq.num),as.character(block2$seq.num)], 
-             Q = rf.matrix$ShQ[as.character(block1$seq.num),as.character(block2$seq.num)])
+    M = list(P = rf.matrix$ShP[block1$mrk.names,block2$mrk.names], 
+             Q = rf.matrix$ShQ[block1$mrk.names,block2$mrk.names])
     
     ## Parent P: all permutations between blocks
     hP1 <- ph_list_to_matrix(L = block1$seq.ph$P, ploidy = ploidy)
     p1 <- apply(hP1, 2, paste, collapse = "")
     hP2 <- ph_list_to_matrix(L = block2$seq.ph$P, ploidy = ploidy)
     p2 <- apply(hP2, 2, paste, collapse = "")
-    dimnames(hP1) <- list(block1$seq.num, p1)
-    dimnames(hP2) <- list(block2$seq.num, p2)
+    dimnames(hP1) <- list(block1$mrk.names, p1)
+    dimnames(hP2) <- list(block2$mrk.names, p2)
     p2 <- perm_tot(p2)
     
     ## Parent Q: all permutations between blocks
@@ -53,8 +52,8 @@ generate_all_link_phases_elim_equivalent_haplo <-
     q1 <- apply(hQ1, 2, paste, collapse = "")
     hQ2 <- ph_list_to_matrix(L = block2$seq.ph$Q, ploidy = ploidy)
     q2 <- apply(hQ2, 2, paste, collapse = "")
-    dimnames(hQ1) <- list(block1$seq.num, q1)
-    dimnames(hQ2) <- list(block2$seq.num, q2)
+    dimnames(hQ1) <- list(block1$mrk.names, q1)
+    dimnames(hQ2) <- list(block2$mrk.names, q2)
     q2 <- perm_tot(q2)
     
     ## WP: removing redundancy and accounting for shared alleles
