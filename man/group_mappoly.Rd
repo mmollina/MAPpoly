@@ -9,6 +9,7 @@ group_mappoly(
   expected.groups = NULL,
   inter = TRUE,
   comp.mat = FALSE,
+  LODweight = FALSE,
   verbose = TRUE
 )
 }
@@ -24,6 +25,9 @@ expected groups before continue}
 \item{comp.mat}{if \code{TRUE}, shows a comparison between the reference
 based and the linkage based grouping, if the chromosome information is
 available (default = FALSE)}
+
+\item{LODweight}{if \code{TRUE}, clusterization is weighted by the square of the 
+LOD Score}
 
 \item{verbose}{logical. If \code{TRUE} (default), current progress is shown;
 if \code{FALSE}, no output is produced}
