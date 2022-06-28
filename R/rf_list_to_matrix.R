@@ -177,11 +177,11 @@ rf_list_to_matrix <- function(input.twopt,
       ShQ[lod.mat < thresh.LOD.rf] <- NA
     } 
     if(thresh.rf < 0.5){
-        rec.mat[rec.mat < thresh.rf] <- NA
-        lod.mat[rec.mat < thresh.rf] <- NA
-        lod.ph.mat[rec.mat < thresh.rf] <- NA
-        ShP[rec.mat < thresh.rf] <- NA
-        ShQ[rec.mat < thresh.rf] <- NA
+        rec.mat[rec.mat > thresh.rf] <- NA
+        lod.mat[rec.mat > thresh.rf] <- NA
+        lod.ph.mat[rec.mat > thresh.rf] <- NA
+        ShP[rec.mat > thresh.rf] <- NA
+        ShQ[rec.mat > thresh.rf] <- NA
     }  
     structure(list(thresh.LOD.ph = thresh.LOD.ph,
                    thresh.LOD.rf = thresh.LOD.rf,

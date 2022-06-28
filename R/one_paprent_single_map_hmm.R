@@ -16,6 +16,7 @@ est_rf_hmm_single_one_parent <- function(input.seq,
                                          global.err = 0.0,
                                          tol = 10e-4,
                                          verbose = FALSE,
+                                         highprec = TRUE,
                                          ret.map.no.rf.estimation = FALSE)
 {
   input_classes <- c("mappoly.sequence")
@@ -24,8 +25,8 @@ est_rf_hmm_single_one_parent <- function(input.seq,
   }
   if(length(input.seq$seq.num)  ==  1)
     stop("Input sequence contains only one marker.", call. = FALSE)
-  if(global.err != 0)
-    stop("Incorporation of global error not available yet")
+  #if(global.err != 0)
+  #  stop("Incorporation of global error not available yet")
   ploidy <- input.seq$ploidy
   P <- do.call(cbind, input.seq[grep(pattern = "seq.dose.p", names(input.seq))])
   id <- P[,info.parent] != 0 & apply(P[,uninfo.parent, drop = FALSE], 1, function(x) all(x==0))
@@ -37,18 +38,34 @@ est_rf_hmm_single_one_parent <- function(input.seq,
   h <- get_states_and_emission_one_parent(ploidy, ph, global.err, D)
   if(is.null(rf.vec))
     rf.vec <- rep(0.001, n.mrk-1)
-  res.temp  <- 
-    .Call("est_hmm_map_one_parent",
-          ploidy,
-          n.mrk,
-          n.ind,
-          h$states,
-          h$emission,
-          rf.vec,
-          verbose,
-          tol,
-          ret.map.no.rf.estimation,
-          PACKAGE = "mappoly")
+  if(highprec){
+    res.temp  <- 
+      .Call("est_hmm_map_one_parent_highprec",
+            ploidy,
+            n.mrk,
+            n.ind,
+            h$states,
+            h$emission,
+            rf.vec,
+            verbose,
+            tol,
+            ret.map.no.rf.estimation,
+            PACKAGE = "mappoly")
+  } else {
+    res.temp  <- 
+      .Call("est_hmm_map_one_parent",
+            ploidy,
+            n.mrk,
+            n.ind,
+            h$states,
+            h$emission,
+            rf.vec,
+            verbose,
+            tol,
+            ret.map.no.rf.estimation,
+            PACKAGE = "mappoly")
+  }
+  
   return(structure(list(info = list(ploidy = ploidy,
                                     n.mrk = sum(id),
                                     seq.num = input.seq$seq.num[id],
@@ -69,3 +86,7 @@ est_rf_hmm_single_one_parent <- function(input.seq,
                                          loglike = res.temp[[1]]))),
                    class = "mappoly.map"))
 }
+
+
+
+
