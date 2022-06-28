@@ -548,3 +548,56 @@ std::vector<long double> backward_emit_highprec(int m,
   }
   return(fk);
 }
+
+/* FUNCTION: forward (with one informative parent) - high precision version
+ -----------------------------------------------------
+ Classical forward equation presented in Rabiner 1989.
+ */
+std::vector<long double> forward_emit_one_parent_highprec(int m,
+                                                     std::vector<long double>& fk,
+                                                     std::vector<int>& ik,
+                                                     std::vector<int>& ik1,
+                                                     std::vector<double>& emit,
+                                                     std::vector<std::vector<double> >& T)
+{
+  int ngenk = ik.size();
+  int ngenk1 = ik1.size();
+  std::vector<long double> fk1(ngenk1);
+  std::fill(fk1.begin(), fk1.end(), 0.0);
+  for(int k1 = 0; k1 < ngenk1; k1++ )
+  {
+    for(int k = 0; k < ngenk; k++ )
+    {
+      fk1[k1] = fk1[k1] + fk[k] * T[ik[k]][ik1[k1]];
+    }
+    fk1[k1] = fk1[k1] * emit[k1];
+  }
+  return(fk1);
+}
+/* FUNCTION: backward (with one informative parent)
+ -----------------------------------------------------
+ Classical backward equation presented in Rabiner 1989.
+ */
+std::vector<long double> backward_emit_one_parent_highprec(int m,
+                                                           std::vector<long double>& fk1,
+                                                           std::vector<int>& ik,
+                                                           std::vector<int>& ik1,
+                                                           std::vector<double>& emit,
+                                                           std::vector<std::vector<double> >& T)
+{
+  int ngenk = ik.size();
+  int ngenk1 = ik1.size();
+  std::vector<long double> fk(ngenk);
+  std::fill(fk.begin(), fk.end(), 0.0);
+  for(int k = 0; k < ngenk; k++ )
+  {
+    for(int k1 = 0; k1 < ngenk1; k1++ )
+    {
+      fk[k] =  fk[k] + fk1[k1] * T[ik[k]][ik1[k1]] * emit[k1]; 
+    }
+  }
+  return(fk);
+}
+
+
+

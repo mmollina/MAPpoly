@@ -13,6 +13,7 @@ est_rf_hmm_single_one_parent(
   global.err = 0,
   tol = 0.001,
   verbose = FALSE,
+  highprec = TRUE,
   ret.map.no.rf.estimation = FALSE
 )
 }

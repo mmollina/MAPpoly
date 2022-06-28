@@ -96,6 +96,18 @@ std::vector<long double> backward_emit_highprec(int m,
                                                 std::vector<int>& ik1,
                                                 std::vector<double>& emit,
                                                 std::vector<std::vector<double> >& T);
+std::vector<long double> forward_emit_one_parent_highprec(int m,
+                                                          std::vector<long double>& fk,
+                                                          std::vector<int>& ik,
+                                                          std::vector<int>& ik1,
+                                                          std::vector<double>& emit,
+                                                          std::vector<std::vector<double> >& T);
+std::vector<long double> backward_emit_one_parent_highprec(int m,
+                                                           std::vector<long double>& fk1,
+                                                           std::vector<int>& ik,
+                                                           std::vector<int>& ik1,
+                                                           std::vector<double>& emit,
+                                                           std::vector<std::vector<double> >& T);
 
 std::vector<std::vector<int> > index_func(int m,
                                              std::vector<int>& p,
@@ -106,5 +118,9 @@ std::vector<std::vector<double> > rec_num(int m);
 std::vector<std::vector<int> > rec_num_no_denominator(int m);
 
 double init_poly(int m, int dP, int dQ, int dG);
+
+
+
+
 
 #endif
