@@ -251,7 +251,7 @@ check_pairwise <- function(input.seq, twopt) {
         id.seq <- input.seq$seq.num
     dpl <- duplicated(id.seq)
     if(any(dpl))
-        stop("There are duplicated markers in the sequence:\n Check markers: ", unique(id.seq[dpl]), " at position(s) ", which(dpl))
+        stop("There are duplicated markers in the sequence.")
     index <- apply(apply(combn(id.seq, 2), 2, sort), 2, paste, collapse = "-")
     miss.pairs <- which(is.na(match(index, names(twopt$pairwise))))
     if(length(miss.pairs) > 0)
