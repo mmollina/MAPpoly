@@ -71,7 +71,6 @@ Imports:
     magrittr,
     reshape2,
     ggplot2,
-    smacof,
     princurve,
     dendextend,
     vcfR,
@@ -82,6 +81,7 @@ RoxygenNote: 7.2.0
 SystemRequirements: C++11, GNU make
 Encoding: UTF-8
 Suggests:
+    smacof,
     testthat,
     updog,
     fitPoly,

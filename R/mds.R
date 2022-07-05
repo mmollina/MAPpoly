@@ -40,6 +40,9 @@
 #' with each number on the MDS configuration plots}
 #'
 #' @examples
+#' \donttest{
+#' if(requireNamespace("smacof", quietly = TRUE)){
+#' library("smacof")
 #'     s1 <- make_seq_mappoly(hexafake, 1:20)
 #'     t1 <- est_pairwise_rf(s1, ncpus = 1)
 #'     m1 <- rf_list_to_matrix(t1)
@@ -53,6 +56,8 @@
 #'     plot(so$seq.num ~ I(so$genome.pos/1e6), 
 #'          xlab = "Genome Position",
 #'          ylab = "MDS position")
+#'}
+#'}
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} mostly adapted from MDSmap 
 #'         codes, written by Katharine F. Preedy, \email{katharine.preedy@bioss.ac.uk}
@@ -63,7 +68,6 @@
 #'  using multidimensional scaling. _Theoretical and Applied Genetics_, 129(11),
 #'  2117-2132. \doi{10.1007/s00122-016-2761-8}
 #'
-#' @importFrom smacof smacofSym
 #' @importFrom princurve principal.curve
 #' @importFrom stats runif 
 #' @importFrom utils read.csv write.csv
@@ -95,7 +99,12 @@ mds_mappoly <- function(input.mat,
   }
   M <- imf_h(r)/100
   nloci = length(confplotno)
-  smacofsym <- smacof::smacofSym(M,ndim = ndim,weightmat = lod,itmax = 100000)
+  if(requireNamespace("smacof", quietly = TRUE)){
+    requireNamespace("smacof", quietly = TRUE)
+    smacofsym <- smacof::smacofSym(M,ndim = ndim,weightmat = lod,itmax = 100000)
+  } else {
+    stop("'smacof' package is not availeble. Please install it an try again.")
+  }
   pc1 <- princurve::principal_curve(smacofsym$conf,maxit = 150,spar = p,smoother = "smooth_spline")
   scale <- sum(smacofsym$delta)/sum(smacofsym$dhat) 
   # Configuration dissim are based on the normalized observed diss - dhat. 

@@ -1,3 +1,7 @@
+# MAPpoly version 0.3.1
+ - Minor modifications to the test functions
+ - Changed 'smacof' package to suggested  
+
 # MAPpoly version 0.3.0
  - Added function est_pairwise_rf2 to avoid memory overflow in  personal computers when estimating recombination fraction in large number of markers.
  - Added Vignette

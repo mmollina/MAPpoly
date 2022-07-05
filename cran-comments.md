@@ -1,5 +1,14 @@
 ## Re-submission of MAPpoly package
 
+This is a re-submission of MAPpoly package. This version (0.3.1), contains only minor modifications
+
+  - Update test functions
+  - Update documentation 
+  - Update DESCRIPTION file
+  - Fix minor bugs 
+
+## Re-submission of MAPpoly package
+
 This is a re-submission of MAPpoly package. This version (0.3.0), contains the following changes
 
   - Added Rccp parallelization to avoid memory overflow in personal computers
