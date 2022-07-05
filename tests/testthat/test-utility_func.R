@@ -44,7 +44,8 @@ test_that("test several utility functions", {
                           hom.allele.q1 = maps.hexafake[[1]]$maps[[1]]$seq.ph$Q[1:10],
                           hom.allele.p2 = maps.hexafake[[1]]$maps[[1]]$seq.ph$P[1:10],
                           hom.allele.q2 = maps.hexafake[[1]]$maps[[1]]$seq.ph$Q[1:10]))
-  expect_null(print_mrk(input.data = hexafake, mrks = "M_1"))
+  w0<-print_mrk(input.data = hexafake, mrks = "M_1")
+  expect_equal(sum(sapply(w0[[1]], sum)), 304)
   expect_equal(sum(perm_pars(1:5)), 900)
   expect_equal(sum(perm_tot(1:5)), 1800)
   a<-sample_data(tetra.solcap.geno.dist, n=30, type = "marker")

@@ -5,6 +5,4 @@ test_that("compute genotype counts correctly", {
   o<-cache_counts_twopt(s)
   expect_is(o, "cache.info")
   expect_null(print(o))
-  o2<-get_cache_two_pts_from_web(ploidy = 4)
-  expect_is(o2, "cache.info")
 })

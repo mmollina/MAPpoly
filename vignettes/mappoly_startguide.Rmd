@@ -40,7 +40,7 @@ The output figure shows a bar plot on the left-hand side with the number of mark
 Quality control (QC) procedures are fundamental to identify:
 
  - Individuals from crosses other than $P_1 \times P_2$
- - Individuals and markers that exceeds a defined threshold of missing data points
+ - Individuals and markers exceeding a defined threshold of missing data points
  - Markers with distorted segregation
  - Markers with the same genotypic information (redundant markers). Removed markers are positioned into the final map.
  
