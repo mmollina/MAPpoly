@@ -67,7 +67,7 @@ informative parents under random chromosome segregation.
  the marker has three doses located in the chromosomes 1, 3 and 4. For
  zero doses, use 0.
  For more sophisticated simulations, we strongly recommend using PedigreeSim V2.0
- \url{https://www.wur.nl/en/show/Software-PedigreeSim.htm}
+ \url{https://github.com/PBR/pedigreeSim}
 }
 \examples{
     h.temp <- sim_homologous(ploidy = 6, n.mrk = 20, max.d = 3, max.ph = 3, seed = 123)
