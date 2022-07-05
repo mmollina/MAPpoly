@@ -100,10 +100,9 @@ mds_mappoly <- function(input.mat,
   M <- imf_h(r)/100
   nloci = length(confplotno)
   if(requireNamespace("smacof", quietly = TRUE)){
-    requireNamespace("smacof", quietly = TRUE)
     smacofsym <- smacof::smacofSym(M,ndim = ndim,weightmat = lod,itmax = 100000)
   } else {
-    stop("'smacof' package is not availeble. Please install it an try again.")
+    stop("'smacof' package is not available. Please install it and try again.")
   }
   pc1 <- princurve::principal_curve(smacofsym$conf,maxit = 150,spar = p,smoother = "smooth_spline")
   scale <- sum(smacofsym$delta)/sum(smacofsym$dhat) 
