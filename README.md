@@ -103,7 +103,7 @@ install.packages('mappoly')
   *  [GBSapp: An automated pipeline for variant calling and filtering.](https://github.com/bodeolukolu/GBSapp)
 
 * Simulations
-  * [PedigreeSim: Simulation of genetic marker data in diploid and polyploid pedigreed populations.](https://www.wur.nl/en/show/Software-PedigreeSim.htm)
+  * [PedigreeSim: Simulation of genetic marker data in diploid and polyploid pedigreed populations.](https://github.com/PBR/pedigreeSim)
 
 * Genotype calling
   * [ClusterCall: Automated tetraploid genotype calling by hierarchical clustering](https://potatobreeding.cals.wisc.edu/software/)
