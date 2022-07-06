@@ -17,3 +17,4 @@ cran-comments.md
 ^tests/testthat/Rplots\.pdf
 ^old_cran-comments$
 ^\.github$
+^CRAN-SUBMISSION$
