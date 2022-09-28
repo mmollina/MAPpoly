@@ -31,10 +31,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - run: |
-          export DISPLAY=:99
-          sudo Xvfb -ac :99 -screen 0 1280x1024x24 > /dev/null 2>&1 & # optional
-
       - uses: r-lib/actions/setup-pandoc@v1
 
       - uses: r-lib/actions/setup-r@v1
@@ -55,9 +51,13 @@ jobs:
         shell: bash
         
       - name: Install XQuartz on macOS
-        if: runner.os == 'macOS'
+        if: runner.os == 'macOS-latest'
         run: brew install xquartz --cask
-
+        
+      - name: Export Display
+        if: runner.os == 'ubuntu-latest'
+        run: export DISPLAY=:99
+          
       - name: Upload check results
         if: failure()
         uses: actions/upload-artifact@main
