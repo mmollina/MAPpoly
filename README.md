@@ -63,6 +63,7 @@ devtools::install_github("mmollina/mappoly", dependencies=TRUE)
 For further QTL analysis, we recommend our [QTLpoly](https://cran.r-project.org/package=qtlpoly) package. QTLpoly performs random-effect multiple interval mapping (REMIM) in full-sib families of autopolyploid species based on restricted maximum likelihood (REML) estimation and score statistics, as described in [Pereira et al. 2020](https://doi.org/10.1534/genetics.120.303080). 
 
 We recently released [VIEWpoly](https://cran.r-project.org/package=viewpoly). VIEWpoly provides a graphical user interface to integrate, visualize and explore results from linkage and quantitative trait loci analysis, together with genomic information for autopolyploid (and diploid) species. The app is meant for interactive use and allows users to optionally upload different sources of information, including gene annotation and alignment files, enabling the exploitation and search for candidate genes in a genome browser. VIEWpoly supports inputs other than MAPpoly's, including polymapR, diaQTL, QTLpoly, and polyqtlR. 
+
 [![VIEWpoly tutorial](https://img.youtube.com/vi/OBt_jebhfeY/0.jpg)](https://www.youtube.com/watch?v=OBt_jebhfeY)
 
 # MAPpoly's workflow
