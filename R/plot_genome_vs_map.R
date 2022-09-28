@@ -12,9 +12,15 @@
 #'     
 #' @param same.ch.lg Logical. If \code{TRUE} displays only the scatterplots between the 
 #'   chromosomes and linkage groups with the same number. Default is \code{FALSE}.   
+#'
+#' @param alpha transparency factor for SNPs points
+#' 
+#' @param size size of the SNP points
 #'    
 #' @examples
 #'   plot_genome_vs_map(solcap.mds.map, same.ch.lg = TRUE)
+#'   plot_genome_vs_map(solcap.mds.map, same.ch.lg = FALSE, 
+#'                      alpha = 1, size = 1/2)
 #'  
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
@@ -26,7 +32,9 @@
 #'     \doi{10.1534/g3.119.400378}
 #'
 #' @export plot_genome_vs_map
-plot_genome_vs_map <- function(map.list, phase.config = "best", same.ch.lg = FALSE){
+plot_genome_vs_map <- function(map.list, phase.config = "best", 
+                               same.ch.lg = FALSE, alpha = 1/5, 
+                               size = 3){
   if(inherits(map.list, "mappoly.map")) 
     map.list <- list(map.list)
   if(!inherits(map.list, "list"))
@@ -50,24 +58,25 @@ plot_genome_vs_map <- function(map.list, phase.config = "best", same.ch.lg = FAL
     } else stop("invalid linkage phase configuration")
     LG <- genomic.pos <- map.pos <- NULL
     geno.vs.map <- rbind(geno.vs.map,
-                       data.frame(mrk.names = map.list[[i]]$info$mrk.names,
-                                  map.pos = cumsum(imf_h(c(0, map.list[[i]]$maps[[i.lpc]]$seq.rf))),
-                                  genomic.pos = map.list[[i]]$info$genome.pos/1e6, 
-                                  LG = as.factor(i),
-                                  chr = as.factor(map.list[[i]]$info$chrom)))
+                         data.frame(mrk.names = map.list[[i]]$info$mrk.names,
+                                    map.pos = cumsum(imf_h(c(0, map.list[[i]]$maps[[i.lpc]]$seq.rf))),
+                                    genomic.pos = map.list[[i]]$info$genome.pos/1e6, 
+                                    LG = as.factor(i),
+                                    chr = as.factor(map.list[[i]]$info$chrom)))
   }
   geno.vs.map$chr <- factor(geno.vs.map$chr, levels = sort(levels(geno.vs.map$chr))) 
   if(same.ch.lg){
     p <- ggplot2::ggplot(geno.vs.map, ggplot2::aes(genomic.pos, map.pos)) +
-      ggplot2::geom_point(alpha = 1/5, ggplot2::aes(colour = LG)) +
+      ggplot2::geom_point(alpha = alpha, ggplot2::aes(colour = LG), size = size) +
       ggplot2::facet_wrap(~LG, nrow = floor(sqrt(length(map.list)))) +  
       ggplot2::labs(subtitle = "Linkage group", x = "Genome position (Mbp)", y = "Map position (cM)") +
       ggplot2::theme_bw() +
-      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1), legend.position = "none", plot.subtitle = ggplot2::element_text(hjust = 0.5)) 
+      ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1), 
+                     legend.position = "none", plot.subtitle = ggplot2::element_text(hjust = 0.5)) 
     
   } else {
     p <- ggplot2::ggplot(geno.vs.map, ggplot2::aes(genomic.pos, map.pos)) +
-      ggplot2::geom_point(alpha = 1/5, ggplot2::aes(colour = LG)) +
+      ggplot2::geom_point(alpha = alpha, ggplot2::aes(colour = LG), size = size) +
       ggplot2::facet_grid(LG~chr) + 
       ggplot2::labs(x = "Genome position (Mbp)", y = "Map position (cM)") +
       ggplot2::theme_bw() +

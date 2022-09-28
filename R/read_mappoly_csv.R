@@ -87,7 +87,7 @@
 
 read_geno_csv <- function(file.in, ploidy, filter.non.conforming = TRUE, elim.redundant = TRUE, verbose = TRUE) {
   dat <- read.csv(file = file.in, header = TRUE, stringsAsFactors = FALSE)
-  return(table_to_mappoly(dat, ploidy, filter.non.conforming = TRUE, elim.redundant = TRUE, verbose = TRUE))
+  return(table_to_mappoly(dat, ploidy, filter.non.conforming, elim.redundant, verbose))
 }
 
 #' Conversion of data.frame to mappoly.data

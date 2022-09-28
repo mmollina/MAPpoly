@@ -528,9 +528,11 @@ print.mappoly.geno.ord <- function(x, ...){
 #' @importFrom ggplot2 ggplot aes geom_point xlab ylab theme
 plot.mappoly.geno.ord <- function(x, ...){
   seq <- seq.pos <- NULL
+  x$ord$seq<- as.factor(x$ord$seq)
+  levels(x$ord$seq) <- levels(x$ord$seq)[order(as.numeric(levels(x$ord$seq)))]
   ggplot2::ggplot(as.data.frame(x$ord), 
                   ggplot2::aes(x = seq.pos, y = seq, group = as.factor(seq))) +
-    ggplot2::geom_point(ggplot2::aes(color = as.factor(seq)), shape = 108) +
+    ggplot2::geom_point(ggplot2::aes(color = as.factor(seq)), shape = 108, size = 5, show.legend = FALSE) +
     ggplot2::xlab("Position") + 
     ggplot2::ylab("Chromosome") 
 }

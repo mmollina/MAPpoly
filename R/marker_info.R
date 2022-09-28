@@ -22,7 +22,7 @@
 #' @export
 #' @importFrom graphics barplot layout mtext legend 
 #' @importFrom stats chisq.test
-#' @importFrom scatterplot3d scatterplot3d
+#' @importFrom plot3D scatter3D
 plot_mrk_info <- function(input.data, mrk)
   {
   input_classes <- c("mappoly.data")
@@ -36,7 +36,7 @@ plot_mrk_info <- function(input.data, mrk)
       stop(mrk, " exceeds the number of markers in the dataset")
     mrk <- input.data$mrk.names[mrk]
   }
-  oldpar <- par(mar = c(2,2,5,2), bg = "lightgray")
+  oldpar <- par(mar = c(2,2,5,2), bg = "gray98")
   on.exit(par(oldpar))
   if(!mrk%in%input.data$mrk.names)
     stop(deparse(substitute(mrk)), " is not present in ", deparse(substitute(input.data)), " dataset")
@@ -113,25 +113,50 @@ plot_mrk_info <- function(input.data, mrk)
       names(pal) <- 0:input.data$ploidy 
       op <- par(mar = c(5,3,0,2), cex = .7)
       barplot(x, col = c(na.omit(pal[names(x)]), "#404040"))
+      
+      
       ## probability distribution of the genotypes
-      mrk.name <- mrk
-      df <- subset(input.data$geno, 
-                 mrk  ==  mrk.name, 
+      mrk.name<-mrk
+      df<-subset(input.data$geno, 
+                 mrk == mrk.name, 
                  select = c(as.character(0:input.data$ploidy), "ind"))
-      rownames(df) <- df$ind
+      rownames(df)<-df$ind
       z <- df[rev(do.call(order, as.data.frame(df[,1:(input.data$ploidy+1)]))),]
-      z <- z[apply(z[,1:(input.data$ploidy + 1)], 1, function(x) !all(round(x,5) == round(segreg_poly(input.data$ploidy, dp, dq),5))),]
-      w <- expand.grid(1:nrow(z), 0:(ncol(z)-2))
-      x <- w[,1]
-      y <- w[,2]
-      pal <- rep(gg_color_hue(input.data$ploidy + 1), each = nrow(z))
+      z<-z[apply(z[,1:(input.data$ploidy + 1)], 1, function(x) !all(round(x,5)==round(segreg_poly(input.data$ploidy, dp, dq),5))),]
+      w<-expand.grid(1:nrow(z), 0:(ncol(z)-2))
+      x<-w[,1]
+      y<-w[,2]
+      pal<-rep(gg_color_hue(input.data$ploidy + 1), each = nrow(z))
       pal[as.numeric(as.matrix(z[,1:(input.data$ploidy + 1)])) < input.data$prob.thres] <- "#404040"
-      op <- par(mar = c(2,2,2,2))
-      scatterplot3d::scatterplot3d(cbind(x,y, as.double(as.matrix(z[,1:(input.data$ploidy + 1)]))), 
-                                   type = 'h', color = pal, xlab = "Offspring",
-                                   ylab  = "Dose", pch = 20,
-                                   zlab = "Genotype probability", angle = 55,
-                                   xlim = c(0, input.data$n.ind))
+      op<-par(mar = c(2,2,2,2))
+      plot3D::scatter3D(x,y, as.matrix(z[,1:(input.data$ploidy + 1)]),  theta = 30, phi = 30, bty = "g",  type = "h", lwd = .3 ,
+                        ticktype = "detailed", pch = 19, cex = 0.5, 
+                        colvar = NULL, 
+                        col = pal,
+                        xlab = "Offspring",
+                        ylab ="Dose", 
+                        zlab = "Genotype probability", 
+                        cex.axis = .7, cex.lab = .7, clab = )
+      
+      ## probability distribution of the genotypes
+      # mrk.name <- mrk
+      # df <- subset(input.data$geno, 
+      #            mrk  ==  mrk.name, 
+      #            select = c(as.character(0:input.data$ploidy), "ind"))
+      # rownames(df) <- df$ind
+      # z <- df[rev(do.call(order, as.data.frame(df[,1:(input.data$ploidy+1)]))),]
+      # z <- z[apply(z[,1:(input.data$ploidy + 1)], 1, function(x) !all(round(x,5) == round(segreg_poly(input.data$ploidy, dp, dq),5))),]
+      # w <- expand.grid(1:nrow(z), 0:(ncol(z)-2))
+      # x <- w[,1]
+      # y <- w[,2]
+      # pal <- rep(gg_color_hue(input.data$ploidy + 1), each = nrow(z))
+      # pal[as.numeric(as.matrix(z[,1:(input.data$ploidy + 1)])) < input.data$prob.thres] <- "#404040"
+      # op <- par(mar = c(2,2,2,2))
+      # scatterplot3d::scatterplot3d(cbind(x,y, as.double(as.matrix(z[,1:(input.data$ploidy + 1)]))), 
+      #                              type = 'h', color = pal, xlab = "Offspring",
+      #                              ylab  = "Dose", pch = 20,
+      #                              zlab = "Genotype probability", angle = 55,
+      #                              xlim = c(0, input.data$n.ind))
     } 
   })
   par(mfrow = c(1,1))

@@ -1,13 +1,22 @@
-#' Multipoint analysis using Hidden Markov Models (single phase)
+#' Multilocus analysis using Hidden Markov Models (single parent, single phase)
 #'
 #' @param void internal function to be documented
 #' @keywords internal
 #' @examples
 #'   \donttest{
-#'     seq.all.mrk <- make_seq_mappoly(hexafake, 1:20)
+#'     s <- make_seq_mappoly(solcap.dose.map[[1]])
+#'     full.phase <- solcap.dose.map[[1]]$maps[[1]]$seq.ph
+#'     P1.map <- est_rf_hmm_single_one_parent(s, full.phase, info.parent = 1, 
+#'                                            uninfo.parent = 2)
+#'     plot(P1.map)
+#'     P2.map <- est_rf_hmm_single_one_parent(s, full.phase, info.parent = 2, 
+#'                                            uninfo.parent = 1)
+#'     plot(P2.map)
+#'     plot_map_list(list(Atlantic = P1.map, B1829 = P2.map), , horiz = FALSE)
 #'  }
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' @export est_rf_hmm_single_one_parent
+#' 
 est_rf_hmm_single_one_parent <- function(input.seq,
                                          input.ph.single,
                                          info.parent = 1,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/one_paprent_single_map_hmm.R
 \name{est_rf_hmm_single_one_parent}
 \alias{est_rf_hmm_single_one_parent}
-\title{Multipoint analysis using Hidden Markov Models (single phase)}
+\title{Multilocus analysis using Hidden Markov Models (single parent, single phase)}
 \usage{
 est_rf_hmm_single_one_parent(
   input.seq,
@@ -20,11 +20,19 @@ est_rf_hmm_single_one_parent(
 \item{void}{internal function to be documented}
 }
 \description{
-Multipoint analysis using Hidden Markov Models (single phase)
+Multilocus analysis using Hidden Markov Models (single parent, single phase)
 }
 \examples{
   \donttest{
-    seq.all.mrk <- make_seq_mappoly(hexafake, 1:20)
+    s <- make_seq_mappoly(solcap.dose.map[[1]])
+    full.phase <- solcap.dose.map[[1]]$maps[[1]]$seq.ph
+    P1.map <- est_rf_hmm_single_one_parent(s, full.phase, info.parent = 1, 
+                                           uninfo.parent = 2)
+    plot(P1.map)
+    P2.map <- est_rf_hmm_single_one_parent(s, full.phase, info.parent = 2, 
+                                           uninfo.parent = 1)
+    plot(P2.map)
+    plot_map_list(list(Atlantic = P1.map, B1829 = P2.map), , horiz = FALSE)
  }
 }
 \author{

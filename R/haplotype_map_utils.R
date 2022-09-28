@@ -190,7 +190,7 @@ est_map_haplo_given_genoprob <- function(map.list,
     message("This function uses high precision calculations, but your system's architecture doesn't support long double allocation ('capabilities('long.double') = FALSE'). Running in low precision mode.\n")
   }  
   ploidy <- map.list[[1]]$info$ploidy
-  ## number of genotipic states
+  ## number of genotypic states
   ngam <- choose(ploidy, ploidy/2)
   ## Number of genotypes in the offspring
   n.gen <- ngam^2
