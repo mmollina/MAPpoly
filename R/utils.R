@@ -1370,14 +1370,17 @@ summary_maps = function(map.list, verbose = TRUE){
   if (any(!sapply(map.list, inherits, "mappoly.map"))) 
     stop(deparse(substitute(map.list)), 
          " is not a list containing 'mappoly.map' objects.")
+  md <- unlist(lapply(map.list, function(x) sum(get_tab_mrks(x)) - sum(get_tab_mrks(x)[rbind(c(2,2),c(x$info$ploidy,x$info$ploidy))]) - sum(get_tab_mrks(x)[rbind(c(1,2),c(2,1),c(x$info$ploidy,(x$info$ploidy+1)),c((x$info$ploidy+1),x$info$ploidy))])))
+  if(map.list[[1]]$info$ploidy == 2)
+    md[] <- 0
   results = data.frame("LG" = as.character(seq(1,length(map.list),1)),
                        "Genomic sequence" = as.character(unlist(lapply(map.list, function(x) paste(unique(x$info$chrom), collapse = "-")))),
                        "Map length (cM)" = unlist(lapply(map.list, function(x) round(sum(c(0, imf_h(x$maps[[1]]$seq.rf))), 2))),
                        "Markers/cM" = round(unlist(lapply(map.list, function(x) x$info$n.mrk/(round(sum(c(0, imf_h(x$maps[[1]]$seq.rf))), 2)))),2),
                        "Simplex" = unlist(lapply(map.list, function(x) sum(get_tab_mrks(x)[rbind(c(1,2),c(2,1),c(x$info$ploidy,(x$info$ploidy+1)),c((x$info$ploidy+1),x$info$ploidy))]))),
                        "Double-simplex" = unlist(lapply(map.list, function(x) sum(get_tab_mrks(x)[rbind(c(2,2),c(x$info$ploidy,x$info$ploidy))]))),
-                       "Multiplex" = unlist(lapply(map.list, function(x) sum(get_tab_mrks(x)) - sum(get_tab_mrks(x)[rbind(c(2,2),c(x$info$ploidy,x$info$ploidy))]) - sum(get_tab_mrks(x)[rbind(c(1,2),c(2,1),c(x$info$ploidy,(x$info$ploidy+1)),c((x$info$ploidy+1),x$info$ploidy))]))),
-                       "Total" = unlist(lapply(map.list, function(x) x$info$n.mrk)),
+                       "Multiplex" = md,
+                        "Total" = unlist(lapply(map.list, function(x) x$info$n.mrk)),
                        "Max gap" = unlist(lapply(map.list, function(x) round(imf_h(max(x$maps[[1]]$seq.rf)),2))),
                        check.names = FALSE, stringsAsFactors = F)
   results = rbind(results, c('Total', NA, sum(as.numeric(results$`Map length (cM)`)), round(mean(as.numeric(results$`Markers/cM`)),2), sum(as.numeric(results$Simplex)), sum(as.numeric(results$`Double-simplex`)), sum(as.numeric(results$Multiplex)), sum(as.numeric(results$Total)), round(mean(as.numeric(results$`Max gap`)),2)))
