@@ -157,6 +157,11 @@ plot.mappoly.homoprob <- function(x, stack = FALSE, lg = NULL,
       ggplot2::ylab(label = "Homologs probabilty") +
       ggplot2::xlab(label = "Map position")
   }
+  if(x$info$ploidy == 2)
+  {
+    p <- p + scale_fill_manual( values = c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3")) + 
+      scale_color_manual(values = c("#E41A1C", "#377EB8", "#4DAF4A", "#984EA3"))
+  }
   if(use.plotly)
     p <- plotly::ggplotly(p)
   return(p)

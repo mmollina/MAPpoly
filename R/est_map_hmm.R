@@ -773,6 +773,8 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
            pch = "|", cex = 1.5, 
            ylim = c(0,2))
     axis(side = 1)
+    diplocol1 <- c("#4DAF4A", "#984EA3")
+    diplocol2 <- c("#E41A1C", "#377EB8")
     #Parent 2
     x1 <- seq(x[id.left], x[id.right], length.out = length(curx))
     x.control <- diff(x1[1:2])/2
@@ -788,7 +790,11 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
       x.control <- x.control * .8
     for(i in 1:ploidy)
     {
-      lines(range(x1), c(zy[i], zy[i]), lwd = 8, col = "lightgray")
+      if(ploidy == 2 && any(map.info$ph.p == "B")){
+        lines(range(x1), c(zy[i], zy[i]), lwd = 15, col = diplocol1[i])
+      } else {
+        lines(range(x1), c(zy[i], zy[i]), lwd = 8, col = "gray")        
+      }
       y1 <- rep(zy[i], length(curx))
       pal <- var.col[pq[id.left:id.right,i]]
       rect(xleft = x1 - x.control, ybottom = y1 -.05, xright = x1 + x.control, ytop = y1 +.05, col = pal, border = NA)
@@ -804,16 +810,21 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
     zy <- zy + 1.1
     for(i in 1:ploidy)
     {
-      lines(range(x1), c(zy[i], zy[i]), lwd = 8, col = "gray")
+      if(ploidy == 2 && any(map.info$ph.p == "B")){
+        lines(range(x1), c(zy[i], zy[i]), lwd = 12, col = diplocol2[i])
+      } else {
+        lines(range(x1), c(zy[i], zy[i]), lwd = 8, col = "gray")        
+      }
       y1 <- rep(zy[i], length(curx))
       pal <- var.col[pp[id.left:id.right,i]]
       rect(xleft = x1 - x.control, ybottom = y1 -.05, xright = x1 + x.control, ytop = y1 +.05, col = pal, border = NA)
     }
-    points(x = x1,
-           y = zy[ploidy]+0.05+dp[id.left:id.right]/20,
-           col = d.col[as.character(dp[id.left:id.right])],
-           pch = 19, cex = .7)
-    
+    if(ploidy != 2){
+      points(x = x1,
+             y = zy[ploidy]+0.05+dp[id.left:id.right]/20,
+             col = d.col[as.character(dp[id.left:id.right])],
+             pch = 19, cex = .7)
+    }
     if(mrk.names)
       text(x = x1,
            y = rep(zy[ploidy]+0.05+.3, length(curx)),
