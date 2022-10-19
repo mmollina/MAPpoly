@@ -12,7 +12,14 @@
 #'     are considered as missing data for the dosage calling purposes
 #'     
 #' @param filter.non.conforming if \code{TRUE} (default) exclude samples with non 
-#'     expected genotypes under random chromosome pairing and no double reduction 
+#'     expected genotypes under random chromosome pairing and no double reduction
+#'     
+#' @param chrom a vector indicating which sequence each marker
+#'       belongs. Zero indicates that the marker was not assigned to any
+#'       sequence
+#'       
+#' @param genome.pos vector with physical position of the markers into the
+#'       sequence
 #'
 #' @param verbose if \code{TRUE} (default), the current progress is shown; if
 #'     \code{FALSE}, no output is produced
@@ -83,7 +90,9 @@
 #' @export import_from_updog
 #' 
 import_from_updog = function(object, prob.thres = 0.95, 
-                             filter.non.conforming = TRUE, 
+                             filter.non.conforming = TRUE,
+                             chrom = NULL,
+                             genome.pos = NULL,
                              verbose = TRUE){
   # Case 1: updog
   if (inherits(object, "multidog")){
@@ -111,8 +120,12 @@ import_from_updog = function(object, prob.thres = 0.95,
     n.mrk = length(mrk.names)
     if(n.ind * n.mrk != nrow(geno))
       stop("Check your dataset.")
-    chrom = NULL
-    genome.pos = NULL
+    if(!is.null(chrom) & length(chrom) != length(object$snpdf$snp)) 
+      stop("Check 'chrom' input. The vector should have length equal to the number of markers in the updog output.")
+    else names(chrom) <- object$snpdf$snp
+    if(!is.null(genome.pos) & length(genome.pos) != length(object$snpdf$snp)) 
+      stop("Check 'genome.pos' input. The vector should have length equal to the number of markers in the updog output.")
+    else names(genome.pos) <- object$snpdf$snp
     ## dosage info
     if(filter.non.conforming){
       geno.dose = matrix(NA,1,1)      
@@ -132,21 +145,21 @@ import_from_updog = function(object, prob.thres = 0.95,
     nphen = 0
     phen = NULL
     res <- structure(list(ploidy = ploidy,
-                        n.ind = length(ind.names),
-                        n.mrk = length(mrk.names),
-                        ind.names = ind.names,
-                        mrk.names = mrk.names,
-                        dosage.p1 = dosage.p1[mrk.names],
-                        dosage.p2 = dosage.p2[mrk.names],
-                        chrom = chrom[mrk.names],
-                        genome.pos = genome.pos[mrk.names],
-                        prob.thres = prob.thres,
-                        geno = geno,
-                        geno.dose = geno.dose,
-                        nphen = nphen,
-                        phen = phen,
-                        chisq.pval = NULL),
-                   class = "mappoly.data")
+                          n.ind = length(ind.names),
+                          n.mrk = length(mrk.names),
+                          ind.names = ind.names,
+                          mrk.names = mrk.names,
+                          dosage.p1 = dosage.p1[mrk.names],
+                          dosage.p2 = dosage.p2[mrk.names],
+                          chrom = chrom[mrk.names],
+                          genome.pos = genome.pos[mrk.names],
+                          prob.thres = prob.thres,
+                          geno = geno,
+                          geno.dose = geno.dose,
+                          nphen = nphen,
+                          phen = phen,
+                          chisq.pval = NULL),
+                     class = "mappoly.data")
     if(filter.non.conforming){
       if (verbose) cat("    Filtering non-conforming markers.\n    ...")
       res <- filter_non_conforming_classes(res)
