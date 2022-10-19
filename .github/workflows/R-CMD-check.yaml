@@ -49,9 +49,9 @@ jobs:
         if: always()
         run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
         shell: bash
-        
+                
       - name: Install XQuartz on macOS
-        if: runner.os == 'macOS-latest'
+        if: runner.os == 'macOS'
         run: brew install xquartz --cask
         
       - name: Export Display
