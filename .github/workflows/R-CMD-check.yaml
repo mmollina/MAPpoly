@@ -57,14 +57,6 @@ jobs:
         if: always()
         run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
         shell: bash
-                
-      - name: Install XQuartz on macOS
-        if: matrix.os == 'macOS-latest'
-        run: brew install xquartz --cask
-        
-      - name: Export Display
-        if: matrix.os == 'ubuntu-latest'
-        run: export DISPLAY=:99
           
       - name: Upload check results
         if: failure()
