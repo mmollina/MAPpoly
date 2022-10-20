@@ -34,14 +34,11 @@ jobs:
         if: runner.os == 'macOS'
         run: brew install xquartz --cask
         
-      - name: Export Display
-        if: runner.os == 'Linux'
-       
-        run: |
-         export DISPLAY=:99
-         xvfb-run --server-args="-screen 0 1024x768x24" make test
-         sleep 3
-    
+      - name: Run headless test
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: npm test
+          
       - uses: actions/checkout@v2
 
       - uses: r-lib/actions/setup-pandoc@v1
