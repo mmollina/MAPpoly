@@ -18,8 +18,8 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {os: macOS-latest,   r: 'release'}
-          - {os: windows-latest, r: 'release'}
+          # - {os: macOS-latest,   r: 'release'}
+          # - {os: windows-latest, r: 'release'}
           - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
           - {os: ubuntu-latest,   r: 'release'}
           - {os: ubuntu-latest,   r: 'oldrel-1'}
@@ -30,53 +30,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
         with:
-          persist-credentials: false
-          
-      - name: Install XQuartz on macOS
-        if: runner.os == 'macOS'
-        run: brew install xquartz --cask
-       
-      - name: Run headless test
-        if: runner.os == 'Linux'
-        uses: GabrielBB/xvfb-action@v1
-        with:
-          run: |
-           git config --global url."https://${{ secrets.PAT }}@github.com/".insteadOf ssh://git@github.com/
-           npm ci
-          
-      - uses: actions/checkout@v2
-        with:
-          persist-credentials: false
-          
-      - if: runner.os == 'Linux'
-        run: |
-         git config --global url."https://${{ secrets.PAT }}@github.com/".insteadOf ssh://git@github.com/
-         npm ci
-         
-      - uses: r-lib/actions/setup-pandoc@v1
-
-      - uses: r-lib/actions/setup-r@v1
-        with:
-          r-version: ${{ matrix.config.r }}
-          http-user-agent: ${{ matrix.config.http-user-agent }}
-          use-public-rspm: true
-
-      - uses: r-lib/actions/setup-r-dependencies@v1
-        with:
-          extra-packages: rcmdcheck
-
-      - uses: r-lib/actions/check-r-package@v1
-
-      - name: Show testthat output
-        if: always()
-        run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
-        shell: bash
-          
-      - name: Upload check results
-        if: failure()
-        uses: actions/upload-artifact@main
-        with:
-          name: ${{ runner.os }}-r${{ matrix.config.r }}-results
-          path: check
+          node-version: 14
+      - run: npm install
+      - run: npm test
+      - run: sudo apt-get install xvfb
+      - run: xvfb-run --auto-servernum npm test
           
