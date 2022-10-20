@@ -30,6 +30,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 14
           
       - name: Install XQuartz on macOS
         if: runner.os == 'macOS'
@@ -39,6 +43,7 @@ jobs:
         if: runner.os == 'Linux'
         run: |
            npm install
+           npm init -y
            sudo apt-get install xvfb
            xvfb-run --auto-servernum npm init -y
          
