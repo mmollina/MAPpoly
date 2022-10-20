@@ -29,12 +29,13 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
+    
       - name: Install XQuartz on macOS
-        if: matrix.os == 'macOS-latest'
+        if: runner.os == 'macOS'
         run: brew install xquartz --cask
         
       - name: Export Display
-        if: matrix.os == 'ubuntu-latest'
+        if: runner.os == 'Linux'
         run: export DISPLAY=:99
     
       - uses: actions/checkout@v2
