@@ -43,9 +43,9 @@ jobs:
         if: runner.os == 'Linux'
         run: |
            npm install
-           npm init -y
-           sudo apt-get install xvfb
-           xvfb-run --auto-servernum npm init -y
+           export DISPLAY=:99.0
+           xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' npm init -y
+           
          
       - uses: r-lib/actions/setup-pandoc@v1
 
