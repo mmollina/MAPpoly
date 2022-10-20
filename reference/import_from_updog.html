@@ -73,6 +73,8 @@ This function creates an object of class <code>mappoly.data</code></p>
 <span>  <span class="va">object</span>,</span>
 <span>  prob.thres <span class="op">=</span> <span class="fl">0.95</span>,</span>
 <span>  filter.non.conforming <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  chrom <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  genome.pos <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -92,6 +94,17 @@ are considered as missing data for the dosage calling purposes</p></dd>
 <dt>filter.non.conforming</dt>
 <dd><p>if <code>TRUE</code> (default) exclude samples with non 
 expected genotypes under random chromosome pairing and no double reduction</p></dd>
+
+
+<dt>chrom</dt>
+<dd><p>a vector indicating which sequence each marker
+belongs. Zero indicates that the marker was not assigned to any
+sequence</p></dd>
+
+
+<dt>genome.pos</dt>
+<dd><p>vector with physical position of the markers into the
+sequence</p></dd>
 
 
 <dt>verbose</dt>
