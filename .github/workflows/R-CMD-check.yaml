@@ -35,9 +35,10 @@ jobs:
         run: brew install xquartz --cask
         
       - name: Run headless test
-        uses: GabrielBB/xvfb-action@v1
-        with:
-          run: npm test
+        if: runner.os == 'Linux'
+        run: |
+           npm install
+           xvfb-run --auto-servernum npm test
           
       - uses: actions/checkout@v2
 
