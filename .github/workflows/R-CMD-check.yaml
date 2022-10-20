@@ -39,13 +39,13 @@ jobs:
         if: runner.os == 'macOS'
         run: brew install xquartz --cask
        
-      # - name: Run headless test
-      #  if: runner.os == 'Linux'
-      #  run: |
-      #     npm install
-      #     export DISPLAY=:99.0
-      #     xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' npm init -y
-             
+      - name: Run headless test
+        if: runner.os == 'Linux'
+        run: |
+           npm install
+           xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' npm init -y
+           export DISPLAY=:99.0
+
       - uses: r-lib/actions/setup-pandoc@v1
 
       - uses: r-lib/actions/setup-r@v1
@@ -58,10 +58,11 @@ jobs:
         with:
           extra-packages: rcmdcheck pkgdown
           needs: website
-          
-      - uses: r-lib/actions/check-r-package@v1
-      #  with:
-      #    error-on: '"error"'
+
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          args: 'c("--no-manual", "--as-cran")'
+          error-on: '"error"'
 
       - name: Show testthat output
         if: always()
