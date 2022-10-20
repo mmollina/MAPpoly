@@ -120,12 +120,16 @@ import_from_updog = function(object, prob.thres = 0.95,
     n.mrk = length(mrk.names)
     if(n.ind * n.mrk != nrow(geno))
       stop("Check your dataset.")
-    if(!is.null(chrom) & length(chrom) != length(object$snpdf$snp)) 
+    if(!is.null(chrom) & length(chrom) != length(object$snpdf$snp)) {
       stop("Check 'chrom' input. The vector should have length equal to the number of markers in the updog output.")
-    else names(chrom) <- object$snpdf$snp
-    if(!is.null(genome.pos) & length(genome.pos) != length(object$snpdf$snp)) 
+    } else if(!is.null(chrom)){ 
+      names(chrom) <- object$snpdf$snp
+    }
+    if(!is.null(genome.pos) & length(genome.pos) != length(object$snpdf$snp)){ 
       stop("Check 'genome.pos' input. The vector should have length equal to the number of markers in the updog output.")
-    else names(genome.pos) <- object$snpdf$snp
+    } else if(!is.null(genome.pos)){
+      names(genome.pos) <- object$snpdf$snp
+    }
     ## dosage info
     if(filter.non.conforming){
       geno.dose = matrix(NA,1,1)      
