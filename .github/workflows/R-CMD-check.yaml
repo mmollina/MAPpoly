@@ -36,7 +36,10 @@ jobs:
         
       - name: Export Display
         if: runner.os == 'Linux'
-        run: export DISPLAY=:99
+        run: |
+         export DISPLAY=:99
+         sh -e /etc/init.d/xvfb start
+         sleep 3
     
       - uses: actions/checkout@v2
 
