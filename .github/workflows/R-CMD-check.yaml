@@ -39,12 +39,12 @@ jobs:
         if: runner.os == 'macOS'
         run: brew install xquartz --cask
        
-      - name: Run headless test
-        if: runner.os == 'Linux'
-        run: |
-           npm install
-           xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' npm init -y
-           export DISPLAY=:99.0
+     # - name: Run headless test
+     #   if: runner.os == 'Linux'
+     #   run: |
+     #      npm install
+     #      xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' npm init -y
+     #      export DISPLAY=:99.0
 
       - uses: r-lib/actions/setup-pandoc@v1
 
