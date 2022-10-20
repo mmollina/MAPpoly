@@ -29,7 +29,10 @@ jobs:
       R_KEEP_PKG_SOURCE: yes
 
     steps:
-    
+      - uses: actions/checkout@v2
+        with:
+          persist-credentials: false
+          
       - name: Install XQuartz on macOS
         if: runner.os == 'macOS'
         run: brew install xquartz --cask
@@ -39,9 +42,11 @@ jobs:
         uses: GabrielBB/xvfb-action@v1
         with:
           run: |
-           npm install
-           npm test
-          working-directory: ./ #optional
+           #npm install
+           git config --global url."https://${{ secrets.PAT }}@github.com/".insteadOf ssh://git@github.com/
+           #npm ci
+           #npm test
+           #working-directory: ./ #optional
        
       #- name: Run headless test
       #  if: runner.os == 'Linux'
@@ -50,7 +55,14 @@ jobs:
       #     xvfb-run --auto-servernum npm test
           
       - uses: actions/checkout@v2
-
+        with:
+          persist-credentials: false
+          
+      - if: runner.os == 'Linux'
+        run: |
+         git config --global url."https://${{ secrets.PAT }}@github.com/".insteadOf ssh://git@github.com/
+         npm ci
+         
       - uses: r-lib/actions/setup-pandoc@v1
 
       - uses: r-lib/actions/setup-r@v1
