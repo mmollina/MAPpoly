@@ -38,9 +38,8 @@ jobs:
         if: runner.os == 'Linux'
        
         run: |
-         sudo apt-get install xvfb
          export DISPLAY=:99
-         xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24' npm run test -- --browsers Firefox
+         xvfb-run --auto-servernum --server-args='-screen 0 1024x768x24'
          sleep 3
     
       - uses: actions/checkout@v2
