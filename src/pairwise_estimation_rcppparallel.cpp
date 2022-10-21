@@ -437,7 +437,10 @@ RcppExport SEXP pairwise_rf_estimation_disc_rcpp(SEXP mrk_pairs_R,
   int threads = as<int>(threads_R);
   int n_ind = geno.ncol();
 
-  rf_two_point_parallel RF_two_point_parallel(mrk_pairs, geno, dP, dQ, count_vector, count_matrix_phases, count_matrix_rownames, count_matrix_number, count_matrix_pos, count_matrix_length, m, tol, n_ind, out);
+  rf_two_point_parallel RF_two_point_parallel(mrk_pairs, geno, dP, dQ, count_vector, 
+                                              count_matrix_phases, count_matrix_rownames, 
+                                              count_matrix_number, count_matrix_pos, 
+                                              count_matrix_length, m, tol, n_ind, out);
   
   // call it with parallelFor
   parallelFor(0, mrk_pairs.ncol(), RF_two_point_parallel, 3000);
