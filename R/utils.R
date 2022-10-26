@@ -1783,6 +1783,7 @@ compare_maps <- function(...){
                  nphen = NA,
                  phen = NA,
                  kept = NA,
+                 chisq.pval = NA,
                  elim.correspondence = NA),
             class = "mappoly.data")
 
