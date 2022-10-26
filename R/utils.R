@@ -1762,5 +1762,27 @@ compare_maps <- function(...){
 #' #' @export
 #' test_CPP<-function(m, rf)
 #'   .Call("rec_number", as.integer(m), as.numeric(rf), PACKAGE = "mappoly")
+#'   
 
+#' #' @export
+.mappoly_data_skeleton<-function()
+  structure(list(ploidy = NA,
+                 n.ind = NA,
+                 n.mrk = NA,
+                 ind.names = NA,
+                 mrk.names = NA,
+                 dosage.p1 = NA,
+                 dosage.p2 = NA,
+                 chrom = NA,
+                 genome.pos = NA,
+                 seq.ref = NA,
+                 seq.alt = NA,
+                 all.mrk.depth = NA,
+                 prob.thres = NA,
+                 geno.dose = NA,
+                 nphen = NA,
+                 phen = NA,
+                 kept = NA,
+                 elim.correspondence = NA),
+            class = "mappoly.data")
 
