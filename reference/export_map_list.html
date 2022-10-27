@@ -95,147 +95,147 @@ The map(s) should be passed as a single object or a list of objects of class <co
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span> <span class="fu">export_map_list</span><span class="op">(</span><span class="va">solcap.err.map</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, file <span class="op">=</span> <span class="st">""</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "Marker Name","LG","Ref Chrom","Ref Position","Ref Allele","Alt Allele","Map Position","Dose in P1","Dose in P2","ph.P.a","ph.P.b","ph.P.c","ph.P.d","ph.Q.e","ph.Q.f","ph.Q.g","ph.Q.h"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_51460",1,"1",  151147,NA,NA,  0.00,2,3,1,1,0,0,1,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36608",1,"1",  251032,NA,NA,  3.18,3,2,1,0,1,1,1,0,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36615",1,"1",  252977,NA,NA,  3.19,3,2,1,0,1,1,1,0,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36658",1,"1",  269300,NA,NA,  3.20,2,1,0,0,1,1,0,0,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_10930",1,"1",  309242,NA,NA,  3.91,2,1,0,0,1,1,0,0,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36629",1,"1",  433701,NA,NA,  4.61,2,1,0,0,1,1,0,0,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_10915",1,"1",  481195,NA,NA,  5.56,2,3,1,1,0,0,1,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_10918",1,"1",  496966,NA,NA,  6.16,1,2,0,1,0,0,0,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36650",1,"1",  507322,NA,NA,  7.65,1,2,0,1,0,0,0,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36643",1,"1",  508489,NA,NA,  8.70,2,2,0,0,1,1,1,0,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36660",1,"1",  534726,NA,NA,  9.10,2,3,1,1,0,0,1,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36664",1,"1",  535354,NA,NA,  9.39,3,3,0,1,1,1,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36686",1,"1",  601257,NA,NA,  9.40,3,4,0,1,1,1,1,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_54803",1,"1",  811809,NA,NA,  9.92,1,1,1,0,0,0,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_54800",1,"1",  813297,NA,NA,  9.93,1,1,1,0,0,0,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_54797",1,"1",  817305,NA,NA, 10.42,3,2,1,0,1,1,1,0,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_56714",1,"1",  931273,NA,NA, 10.57,3,4,0,1,1,1,1,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_6865",1,"1", 1513756,NA,NA, 12.86,0,1,0,0,0,0,0,0,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_6683",1,"1", 1828357,NA,NA, 15.27,2,2,0,1,1,0,0,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_2417",1,"1", 1838764,NA,NA, 15.28,2,2,0,1,1,0,0,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_6713",1,"1", 2068205,NA,NA, 15.54,2,2,0,1,1,0,0,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_21098",1,"1", 2589396,NA,NA, 17.75,2,2,0,1,1,0,0,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_21100",1,"1", 2591241,NA,NA, 19.12,2,2,0,1,1,0,0,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_21233",1,"1", 2956217,NA,NA, 20.86,2,1,0,1,0,1,0,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_6704",1,"1", 2957498,NA,NA, 21.42,1,2,0,0,1,0,0,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_21236",1,"1", 2958510,NA,NA, 21.99,3,2,0,1,1,1,0,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_6123",1,"1", 3296081,NA,NA, 25.74,2,2,1,0,1,0,0,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_6114",1,"1", 3693321,NA,NA, 25.89,1,0,0,0,1,0,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_6109",1,"1", 3716835,NA,NA, 26.48,3,4,1,1,0,1,1,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_51791",1,"1", 4309511,NA,NA, 32.08,0,1,0,0,0,0,0,0,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_49938",1,"1", 4597936,NA,NA, 32.09,3,4,1,1,1,0,1,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_56125",1,"1", 5291666,NA,NA, 34.48,2,0,0,1,1,0,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_45058",1,"1", 5347412,NA,NA, 34.98,3,4,1,0,1,1,1,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_45071",1,"1", 5386765,NA,NA, 36.16,3,1,1,1,0,1,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_45064",1,"1", 5502148,NA,NA, 36.61,2,0,0,1,1,0,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_13289",1,"1", 5504921,NA,NA, 36.62,2,3,1,0,0,1,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_13293",1,"1", 5505413,NA,NA, 36.63,1,0,0,0,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27877",1,"1", 6071274,NA,NA, 38.62,3,4,1,1,1,0,1,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27878",1,"1", 6071298,NA,NA, 38.63,1,1,0,0,0,1,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27882",1,"1", 6071676,NA,NA, 38.65,3,1,0,1,1,1,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27884",1,"1", 6071778,NA,NA, 38.66,3,1,0,1,1,1,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27885",1,"1", 6071817,NA,NA, 39.03,0,3,0,0,0,0,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27903",1,"1", 6295642,NA,NA, 40.04,2,3,0,1,0,1,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27918",1,"1", 6587772,NA,NA, 40.46,2,0,0,1,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_48155",1,"1", 7165330,NA,NA, 41.90,2,0,1,0,1,0,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_48154",1,"1", 7165840,NA,NA, 42.24,2,3,0,1,0,1,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_50011",1,"1", 7446981,NA,NA, 42.25,2,3,1,0,1,0,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_16312",1,"1", 7641280,NA,NA, 43.65,2,0,0,1,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_52709",1,"1", 8645609,NA,NA, 44.57,2,0,0,1,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_52712",1,"1", 8645693,NA,NA, 44.58,2,0,0,1,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_52705",1,"1", 8653609,NA,NA, 45.06,2,1,0,1,0,1,0,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_48549",1,"1",10570936,NA,NA, 52.46,0,1,0,0,0,0,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_48563",1,"1",10573573,NA,NA, 52.47,4,3,1,1,1,1,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_55639",1,"1",11235975,NA,NA, 52.48,0,1,0,0,0,0,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_56356",1,"1",11737675,NA,NA, 52.49,0,1,0,0,0,0,0,0,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_56359",1,"1",11742617,NA,NA, 52.73,4,3,1,1,1,1,1,1,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_57284",1,"1",11774518,NA,NA, 53.10,4,3,1,1,1,1,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_45637",1,"1",12022263,NA,NA, 53.47,0,1,0,0,0,0,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_55008",1,"1",12994177,NA,NA, 57.63,0,1,0,0,0,0,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_53521",1,"1",13266849,NA,NA, 57.64,2,2,0,1,0,1,0,0,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_43984",1,"1",13369857,NA,NA, 57.65,1,0,0,0,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_12938",1,"1",13392343,NA,NA, 58.28,2,1,1,0,1,0,0,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_43970",1,"1",13545289,NA,NA, 59.54,1,1,0,1,0,0,0,0,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_43973",1,"1",13547044,NA,NA, 60.01,3,2,1,1,1,0,0,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_8908",1,"1",13656016,NA,NA, 60.83,2,1,1,0,1,0,0,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_54355",1,"1",13740719,NA,NA, 63.89,2,2,1,0,1,0,0,1,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_54353",1,"1",13747285,NA,NA, 66.12,0,1,0,0,0,0,0,0,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_49867",1,"1",16399117,NA,NA, 66.13,2,0,0,1,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_48568",1,"1",17370536,NA,NA, 66.14,0,3,0,0,0,0,1,0,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_8593",1,"1",17664021,NA,NA, 66.15,0,1,0,0,0,0,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_53759",1,"1",18753871,NA,NA, 66.16,0,1,0,0,0,0,0,0,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_56842",1,"1",18925684,NA,NA, 66.17,4,3,1,1,1,1,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_16421",1,"1",18926984,NA,NA, 66.52,0,2,0,0,0,0,0,0,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14663",1,"1",19664067,NA,NA, 66.64,4,3,1,1,1,1,1,0,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_49326",1,"1",20549734,NA,NA, 68.21,0,2,0,0,0,0,1,0,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_5477",1,"1",23657080,NA,NA, 68.22,0,2,0,0,0,0,1,0,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_43643",1,"1",29180891,NA,NA, 69.26,4,3,1,1,1,1,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_22549",1,"1",29678234,NA,NA, 69.27,0,1,0,0,0,0,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_22546",1,"1",29679750,NA,NA, 69.28,0,1,0,0,0,0,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_7136",1,"1",30125081,NA,NA, 69.61,0,1,0,0,0,0,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_11066",1,"1",32091982,NA,NA, 69.94,0,1,0,0,0,0,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_9378",1,"1",34098178,NA,NA, 70.08,0,1,0,0,0,0,0,0,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27683",1,"1",37067385,NA,NA, 70.26,4,3,1,1,1,1,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27677",1,"1",37071329,NA,NA, 70.57,0,1,0,0,0,0,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_42829",1,"1",38478335,NA,NA, 71.00,2,0,0,1,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_15714",1,"1",39325633,NA,NA, 71.41,0,3,0,0,0,0,1,0,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_45395",1,"1",39529256,NA,NA, 71.76,4,3,1,1,1,1,1,1,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_49732",1,"1",41859322,NA,NA, 73.63,0,1,0,0,0,0,0,0,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14648",1,"1",41947283,NA,NA, 73.92,4,1,1,1,1,1,0,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14654",1,"1",41979022,NA,NA, 73.94,4,1,1,1,1,1,0,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_32111",1,"1",42197632,NA,NA, 73.95,2,0,0,1,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_32112",1,"1",42197668,NA,NA, 75.00,2,1,1,0,1,0,0,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_50028",1,"1",43180567,NA,NA, 76.65,2,1,1,0,1,0,0,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_50023",1,"1",43196126,NA,NA, 76.76,0,1,0,0,0,0,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_49042",1,"1",43330828,NA,NA, 78.72,2,0,0,1,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_16169",1,"1",44194024,NA,NA, 81.80,4,2,1,1,1,1,0,1,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14248",1,"1",44696488,NA,NA, 81.81,2,1,1,0,1,0,0,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14249",1,"1",44696500,NA,NA, 82.31,0,1,0,0,0,0,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14259",1,"1",44700858,NA,NA, 82.32,2,0,0,1,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14261",1,"1",44702300,NA,NA, 82.33,4,2,1,1,1,1,0,1,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_53708",1,"1",44890351,NA,NA, 82.99,0,2,0,0,0,0,0,0,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_40131",1,"1",45751390,NA,NA, 83.00,0,2,0,0,0,0,1,0,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_54811",1,"1",46271054,NA,NA, 83.01,4,2,1,1,1,1,0,1,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_15855",1,"1",46323471,NA,NA, 83.02,2,0,0,1,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_35220",1,"1",47299682,NA,NA, 83.03,0,3,0,0,0,0,1,0,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_35218",1,"1",47300005,NA,NA, 83.04,0,3,0,0,0,0,1,0,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_35601",1,"1",50791085,NA,NA, 85.07,0,1,0,0,0,0,0,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_694",1,"1",51290105,NA,NA, 85.42,2,0,0,1,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_686",1,"1",51324458,NA,NA, 85.70,4,2,1,1,1,1,0,1,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_57898",1,"1",51736618,NA,NA, 85.71,0,1,0,0,0,0,0,0,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_880",1,"1",54480981,NA,NA, 86.08,4,3,1,1,1,1,1,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_55113",1,"1",54580381,NA,NA, 86.09,2,0,0,1,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2874",1,"1",55163851,NA,NA, 86.10,2,0,0,1,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_55621",1,"1",55427211,NA,NA, 86.11,2,0,0,1,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_55618",1,"1",55427602,NA,NA, 86.15,0,2,0,0,0,0,1,0,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14633",1,"1",57931788,NA,NA, 91.26,0,1,0,0,0,0,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2721",1,"1",58197548,NA,NA, 91.27,1,1,0,0,0,1,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2653",1,"1",58737622,NA,NA, 92.91,0,2,0,0,0,0,1,0,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2591",1,"1",58985511,NA,NA, 93.63,1,0,0,0,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_13430",1,"1",59363361,NA,NA, 94.96,1,3,0,1,0,0,1,0,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_46523",1,"1",59973949,NA,NA, 95.71,0,1,0,0,0,0,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_46521",1,"1",59974282,NA,NA, 95.72,2,3,1,0,1,0,1,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_46520",1,"1",59974316,NA,NA, 95.73,4,3,1,1,1,1,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_53347",1,"1",60026944,NA,NA, 96.42,0,1,0,0,0,0,1,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_35511",1,"1",60433785,NA,NA, 96.43,4,3,1,1,1,1,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_35518",1,"1",60512480,NA,NA, 96.44,4,3,1,1,1,1,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_35520",1,"1",60513199,NA,NA, 96.45,4,3,1,1,1,1,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_35536",1,"1",60515867,NA,NA, 97.83,1,2,1,0,0,0,0,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_35537",1,"1",60516874,NA,NA, 97.84,1,2,1,0,0,0,0,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_43926",1,"1",60887837,NA,NA, 98.15,2,2,0,1,0,1,1,0,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_56267",1,"1",60919490,NA,NA, 98.96,3,2,1,1,1,0,0,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_20798",1,"1",60951573,NA,NA, 98.97,2,2,1,1,0,0,0,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_20799",1,"1",60951606,NA,NA, 99.17,2,2,0,0,1,1,1,0,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_20803",1,"1",60987155,NA,NA, 99.41,1,2,0,0,0,1,1,0,0,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_20890",1,"1",61310805,NA,NA,101.00,3,3,1,1,1,0,1,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "Marker Name","LG","Ref Chrom","Ref Position","Ref Allele","Alt Allele","Map Position","Dose in P1","Dose in P2","a","b","c","d","e","f","g","h"</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_51460",1,"1",151147,NA,NA,0,2,3,1,1,0,0,1,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36608",1,"1",251032,NA,NA,3.18,3,2,1,0,1,1,1,0,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36615",1,"1",252977,NA,NA,3.19,3,2,1,0,1,1,1,0,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36658",1,"1",269300,NA,NA,3.2,2,1,0,0,1,1,0,0,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_10930",1,"1",309242,NA,NA,3.91,2,1,0,0,1,1,0,0,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36629",1,"1",433701,NA,NA,4.61,2,1,0,0,1,1,0,0,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_10915",1,"1",481195,NA,NA,5.56,2,3,1,1,0,0,1,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_10918",1,"1",496966,NA,NA,6.16,1,2,0,1,0,0,0,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36650",1,"1",507322,NA,NA,7.65,1,2,0,1,0,0,0,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36643",1,"1",508489,NA,NA,8.7,2,2,0,0,1,1,1,0,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36660",1,"1",534726,NA,NA,9.1,2,3,1,1,0,0,1,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36664",1,"1",535354,NA,NA,9.39,3,3,0,1,1,1,0,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36686",1,"1",601257,NA,NA,9.4,3,4,0,1,1,1,1,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_54803",1,"1",811809,NA,NA,9.92,1,1,1,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_54800",1,"1",813297,NA,NA,9.93,1,1,1,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_54797",1,"1",817305,NA,NA,10.42,3,2,1,0,1,1,1,0,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_56714",1,"1",931273,NA,NA,10.57,3,4,0,1,1,1,1,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_6865",1,"1",1513756,NA,NA,12.86,0,1,0,0,0,0,0,0,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_6683",1,"1",1828357,NA,NA,15.27,2,2,0,1,1,0,0,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_2417",1,"1",1838764,NA,NA,15.28,2,2,0,1,1,0,0,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_6713",1,"1",2068205,NA,NA,15.54,2,2,0,1,1,0,0,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_21098",1,"1",2589396,NA,NA,17.75,2,2,0,1,1,0,0,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_21100",1,"1",2591241,NA,NA,19.12,2,2,0,1,1,0,0,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_21233",1,"1",2956217,NA,NA,20.86,2,1,0,1,0,1,0,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_6704",1,"1",2957498,NA,NA,21.42,1,2,0,0,1,0,0,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_21236",1,"1",2958510,NA,NA,21.99,3,2,0,1,1,1,0,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_6123",1,"1",3296081,NA,NA,25.74,2,2,1,0,1,0,0,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_6114",1,"1",3693321,NA,NA,25.89,1,0,0,0,1,0,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_6109",1,"1",3716835,NA,NA,26.48,3,4,1,1,0,1,1,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_51791",1,"1",4309511,NA,NA,32.08,0,1,0,0,0,0,0,0,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_49938",1,"1",4597936,NA,NA,32.09,3,4,1,1,1,0,1,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_56125",1,"1",5291666,NA,NA,34.48,2,0,0,1,1,0,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_45058",1,"1",5347412,NA,NA,34.98,3,4,1,0,1,1,1,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_45071",1,"1",5386765,NA,NA,36.16,3,1,1,1,0,1,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_45064",1,"1",5502148,NA,NA,36.61,2,0,0,1,1,0,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_13289",1,"1",5504921,NA,NA,36.62,2,3,1,0,0,1,0,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_13293",1,"1",5505413,NA,NA,36.63,1,0,0,0,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27877",1,"1",6071274,NA,NA,38.62,3,4,1,1,1,0,1,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27878",1,"1",6071298,NA,NA,38.63,1,1,0,0,0,1,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27882",1,"1",6071676,NA,NA,38.65,3,1,0,1,1,1,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27884",1,"1",6071778,NA,NA,38.66,3,1,0,1,1,1,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27885",1,"1",6071817,NA,NA,39.03,0,3,0,0,0,0,0,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27903",1,"1",6295642,NA,NA,40.04,2,3,0,1,0,1,0,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27918",1,"1",6587772,NA,NA,40.46,2,0,0,1,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_48155",1,"1",7165330,NA,NA,41.9,2,0,1,0,1,0,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_48154",1,"1",7165840,NA,NA,42.24,2,3,0,1,0,1,0,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_50011",1,"1",7446981,NA,NA,42.25,2,3,1,0,1,0,0,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_16312",1,"1",7641280,NA,NA,43.65,2,0,0,1,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_52709",1,"1",8645609,NA,NA,44.57,2,0,0,1,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_52712",1,"1",8645693,NA,NA,44.58,2,0,0,1,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_52705",1,"1",8653609,NA,NA,45.06,2,1,0,1,0,1,0,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_48549",1,"1",10570936,NA,NA,52.46,0,1,0,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_48563",1,"1",10573573,NA,NA,52.47,4,3,1,1,1,1,0,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_55639",1,"1",11235975,NA,NA,52.48,0,1,0,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_56356",1,"1",11737675,NA,NA,52.49,0,1,0,0,0,0,0,0,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_56359",1,"1",11742617,NA,NA,52.73,4,3,1,1,1,1,1,1,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_57284",1,"1",11774518,NA,NA,53.1,4,3,1,1,1,1,0,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_45637",1,"1",12022263,NA,NA,53.47,0,1,0,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_55008",1,"1",12994177,NA,NA,57.63,0,1,0,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_53521",1,"1",13266849,NA,NA,57.64,2,2,0,1,0,1,0,0,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_43984",1,"1",13369857,NA,NA,57.65,1,0,0,0,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_12938",1,"1",13392343,NA,NA,58.28,2,1,1,0,1,0,0,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_43970",1,"1",13545289,NA,NA,59.54,1,1,0,1,0,0,0,0,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_43973",1,"1",13547044,NA,NA,60.01,3,2,1,1,1,0,0,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_8908",1,"1",13656016,NA,NA,60.83,2,1,1,0,1,0,0,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_54355",1,"1",13740719,NA,NA,63.89,2,2,1,0,1,0,0,1,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_54353",1,"1",13747285,NA,NA,66.12,0,1,0,0,0,0,0,0,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_49867",1,"1",16399117,NA,NA,66.13,2,0,0,1,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_48568",1,"1",17370536,NA,NA,66.14,0,3,0,0,0,0,1,0,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_8593",1,"1",17664021,NA,NA,66.15,0,1,0,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_53759",1,"1",18753871,NA,NA,66.16,0,1,0,0,0,0,0,0,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_56842",1,"1",18925684,NA,NA,66.17,4,3,1,1,1,1,0,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_16421",1,"1",18926984,NA,NA,66.52,0,2,0,0,0,0,0,0,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14663",1,"1",19664067,NA,NA,66.64,4,3,1,1,1,1,1,0,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_49326",1,"1",20549734,NA,NA,68.21,0,2,0,0,0,0,1,0,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_5477",1,"1",23657080,NA,NA,68.22,0,2,0,0,0,0,1,0,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_43643",1,"1",29180891,NA,NA,69.26,4,3,1,1,1,1,0,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_22549",1,"1",29678234,NA,NA,69.27,0,1,0,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_22546",1,"1",29679750,NA,NA,69.28,0,1,0,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_7136",1,"1",30125081,NA,NA,69.61,0,1,0,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_11066",1,"1",32091982,NA,NA,69.94,0,1,0,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_9378",1,"1",34098178,NA,NA,70.08,0,1,0,0,0,0,0,0,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27683",1,"1",37067385,NA,NA,70.26,4,3,1,1,1,1,0,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_27677",1,"1",37071329,NA,NA,70.57,0,1,0,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_42829",1,"1",38478335,NA,NA,71,2,0,0,1,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_15714",1,"1",39325633,NA,NA,71.41,0,3,0,0,0,0,1,0,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_45395",1,"1",39529256,NA,NA,71.76,4,3,1,1,1,1,1,1,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_49732",1,"1",41859322,NA,NA,73.63,0,1,0,0,0,0,0,0,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14648",1,"1",41947283,NA,NA,73.92,4,1,1,1,1,1,0,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14654",1,"1",41979022,NA,NA,73.94,4,1,1,1,1,1,0,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_32111",1,"1",42197632,NA,NA,73.95,2,0,0,1,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_32112",1,"1",42197668,NA,NA,75,2,1,1,0,1,0,0,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_50028",1,"1",43180567,NA,NA,76.65,2,1,1,0,1,0,0,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_50023",1,"1",43196126,NA,NA,76.76,0,1,0,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_49042",1,"1",43330828,NA,NA,78.72,2,0,0,1,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_16169",1,"1",44194024,NA,NA,81.8,4,2,1,1,1,1,0,1,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14248",1,"1",44696488,NA,NA,81.81,2,1,1,0,1,0,0,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14249",1,"1",44696500,NA,NA,82.31,0,1,0,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14259",1,"1",44700858,NA,NA,82.32,2,0,0,1,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14261",1,"1",44702300,NA,NA,82.33,4,2,1,1,1,1,0,1,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_53708",1,"1",44890351,NA,NA,82.99,0,2,0,0,0,0,0,0,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_40131",1,"1",45751390,NA,NA,83,0,2,0,0,0,0,1,0,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_54811",1,"1",46271054,NA,NA,83.01,4,2,1,1,1,1,0,1,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_15855",1,"1",46323471,NA,NA,83.02,2,0,0,1,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_35220",1,"1",47299682,NA,NA,83.03,0,3,0,0,0,0,1,0,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_35218",1,"1",47300005,NA,NA,83.04,0,3,0,0,0,0,1,0,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_35601",1,"1",50791085,NA,NA,85.07,0,1,0,0,0,0,0,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_694",1,"1",51290105,NA,NA,85.42,2,0,0,1,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_686",1,"1",51324458,NA,NA,85.7,4,2,1,1,1,1,0,1,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_57898",1,"1",51736618,NA,NA,85.71,0,1,0,0,0,0,0,0,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_880",1,"1",54480981,NA,NA,86.08,4,3,1,1,1,1,1,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_55113",1,"1",54580381,NA,NA,86.09,2,0,0,1,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2874",1,"1",55163851,NA,NA,86.1,2,0,0,1,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_55621",1,"1",55427211,NA,NA,86.11,2,0,0,1,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_55618",1,"1",55427602,NA,NA,86.15,0,2,0,0,0,0,1,0,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14633",1,"1",57931788,NA,NA,91.26,0,1,0,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2721",1,"1",58197548,NA,NA,91.27,1,1,0,0,0,1,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2653",1,"1",58737622,NA,NA,92.91,0,2,0,0,0,0,1,0,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2591",1,"1",58985511,NA,NA,93.63,1,0,0,0,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_13430",1,"1",59363361,NA,NA,94.96,1,3,0,1,0,0,1,0,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_46523",1,"1",59973949,NA,NA,95.71,0,1,0,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_46521",1,"1",59974282,NA,NA,95.72,2,3,1,0,1,0,1,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_46520",1,"1",59974316,NA,NA,95.73,4,3,1,1,1,1,0,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_53347",1,"1",60026944,NA,NA,96.42,0,1,0,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_35511",1,"1",60433785,NA,NA,96.43,4,3,1,1,1,1,0,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_35518",1,"1",60512480,NA,NA,96.44,4,3,1,1,1,1,0,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_35520",1,"1",60513199,NA,NA,96.45,4,3,1,1,1,1,0,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_35536",1,"1",60515867,NA,NA,97.83,1,2,1,0,0,0,0,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_35537",1,"1",60516874,NA,NA,97.84,1,2,1,0,0,0,0,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_43926",1,"1",60887837,NA,NA,98.15,2,2,0,1,0,1,1,0,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_56267",1,"1",60919490,NA,NA,98.96,3,2,1,1,1,0,0,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_20798",1,"1",60951573,NA,NA,98.97,2,2,1,1,0,0,0,1,1,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_20799",1,"1",60951606,NA,NA,99.17,2,2,0,0,1,1,1,0,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_20803",1,"1",60987155,NA,NA,99.41,1,2,0,0,0,1,1,0,0,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_20890",1,"1",61310805,NA,NA,101,3,3,1,1,1,0,1,1,1,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_50903",1,"1",61774492,NA,NA,101.62,0,2,0,0,0,0,1,0,0,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_38428",1,"1",62058660,NA,NA,102.63,1,1,0,0,0,1,0,0,0,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_38406",1,"1",62144916,NA,NA,103.04,3,4,1,1,1,0,1,1,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_38404",1,"1",62148178,NA,NA,103.05,3,2,1,1,1,0,0,1,1,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_38448",1,"1",62289476,NA,NA,104.60,1,0,0,0,0,1,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_38448",1,"1",62289476,NA,NA,104.6,1,0,0,0,0,1,0,0,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_12106",1,"1",62802674,NA,NA,106.16,1,3,0,0,0,1,1,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_41337",1,"1",62930793,NA,NA,106.72,1,3,0,0,0,1,1,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_32359",1,"1",63208419,NA,NA,108.66,0,2,0,0,0,0,0,0,1,1</span>
@@ -254,12 +254,12 @@ The map(s) should be passed as a single object or a list of objects of class <co
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14467",1,"1",65694581,NA,NA,118.72,1,2,0,0,0,1,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14470",1,"1",65697018,NA,NA,118.73,2,4,1,0,0,1,1,1,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_4706",1,"1",65780052,NA,NA,119.49,1,2,0,0,0,1,0,0,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14487",1,"1",65780861,NA,NA,119.50,1,2,0,0,0,1,0,0,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14487",1,"1",65780861,NA,NA,119.5,1,2,0,0,0,1,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14489",1,"1",65781907,NA,NA,119.52,1,2,0,0,0,1,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14491",1,"1",65782311,NA,NA,119.65,2,0,0,1,1,0,0,0,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14492",1,"1",65782372,NA,NA,119.68,2,0,0,1,1,0,0,0,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14493",1,"1",65782860,NA,NA,120.12,1,2,0,0,0,1,0,0,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_4745",1,"1",66094082,NA,NA,123.00,2,2,1,0,0,1,1,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_4745",1,"1",66094082,NA,NA,123,2,2,1,0,0,1,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_4748",1,"1",66259325,NA,NA,123.01,2,0,1,0,0,1,0,0,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14589",1,"1",66283156,NA,NA,123.16,4,3,1,1,1,1,0,1,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_37564",1,"1",66307265,NA,NA,123.27,0,1,0,0,0,0,1,0,0,0</span>
@@ -270,11 +270,11 @@ The map(s) should be passed as a single object or a list of objects of class <co
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_4757",1,"1",66354237,NA,NA,124.72,1,0,0,0,0,1,0,0,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_4763",1,"1",66376115,NA,NA,124.73,4,2,1,1,1,1,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_5150",1,"1",66675718,NA,NA,127.51,2,0,1,0,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_58099",1,"1",66845540,NA,NA,127.60,0,1,0,0,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_58099",1,"1",66845540,NA,NA,127.6,0,1,0,0,0,0,1,0,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_5145",1,"1",66904071,NA,NA,127.61,0,1,0,0,0,0,1,0,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_20569",1,"1",67013419,NA,NA,132.21,3,1,1,1,1,0,0,0,1,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_20501",1,"1",67211402,NA,NA,136.23,3,3,0,1,1,1,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_20502",1,"1",67221811,NA,NA,136.90,1,2,1,0,0,0,1,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_20502",1,"1",67221811,NA,NA,136.9,1,2,1,0,0,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_20505",1,"1",67223365,NA,NA,137.96,3,2,0,1,1,1,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_20506",1,"1",67223618,NA,NA,139.22,3,3,0,1,1,1,1,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_20508",1,"1",67224636,NA,NA,139.54,0,1,0,0,0,0,1,0,0,0</span>
@@ -289,10 +289,10 @@ The map(s) should be passed as a single object or a list of objects of class <co
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_49451",1,"1",68416146,NA,NA,145.11,0,1,0,0,0,0,0,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14044",1,"1",68529607,NA,NA,146.48,4,3,1,1,1,1,1,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_51055",1,"1",68950490,NA,NA,147.55,0,2,0,0,0,0,1,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_11769",1,"1",69200071,NA,NA,148.40,2,2,0,1,0,1,1,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_11769",1,"1",69200071,NA,NA,148.4,2,2,0,1,0,1,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_39834",1,"1",69381232,NA,NA,149.04,2,2,1,0,1,0,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_17592",1,"1",69809943,NA,NA,150.09,2,0,0,1,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_17529",1,"1",69902111,NA,NA,150.10,2,2,0,1,0,1,1,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_17529",1,"1",69902111,NA,NA,150.1,2,2,0,1,0,1,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_17531",1,"1",70016341,NA,NA,150.94,2,2,1,0,1,0,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_17537",1,"1",70097616,NA,NA,150.95,2,2,1,0,1,0,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_15579",1,"1",70341165,NA,NA,151.51,1,2,0,0,1,0,0,0,1,1</span>
@@ -326,7 +326,7 @@ The map(s) should be passed as a single object or a list of objects of class <co
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14274",1,"1",74061621,NA,NA,166.56,3,4,1,0,1,1,1,1,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_4617",1,"1",74355434,NA,NA,168.03,0,2,0,0,0,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14365",1,"1",74688262,NA,NA,168.05,2,0,1,0,0,1,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14366",1,"1",74688318,NA,NA,168.50,1,2,0,0,1,0,0,0,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14366",1,"1",74688318,NA,NA,168.5,1,2,0,0,1,0,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_14931",1,"1",75007319,NA,NA,168.51,4,2,1,1,1,1,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_16369",1,"1",75164058,NA,NA,169.77,0,2,0,0,0,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_5267",1,"1",75333553,NA,NA,170.13,2,0,1,0,0,1,0,0,0,0</span>
@@ -335,7 +335,7 @@ The map(s) should be passed as a single object or a list of objects of class <co
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_16424",1,"1",75478258,NA,NA,171.42,2,0,1,0,0,1,0,0,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_16425",1,"1",75485276,NA,NA,171.71,2,0,1,0,0,1,0,0,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_16466",1,"1",75749019,NA,NA,171.72,2,4,0,1,1,0,1,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_5346",1,"1",75789912,NA,NA,172.10,1,0,0,0,1,0,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_5346",1,"1",75789912,NA,NA,172.1,1,0,0,0,1,0,0,0,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_16435",1,"1",76304406,NA,NA,172.57,1,0,0,0,1,0,0,0,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2509",1,"1",76406745,NA,NA,172.58,4,2,1,1,1,1,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2291",1,"1",76480645,NA,NA,173.86,1,2,0,1,0,0,0,0,1,1</span>
@@ -343,12 +343,12 @@ The map(s) should be passed as a single object or a list of objects of class <co
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2420",1,"1",76953005,NA,NA,174.97,3,2,1,0,1,1,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2423",1,"1",76958677,NA,NA,175.29,2,3,0,1,1,0,0,1,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2424",1,"1",76960116,NA,NA,177.14,0,1,0,0,0,0,0,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2427",1,"1",76960344,NA,NA,177.50,1,0,0,0,1,0,0,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2427",1,"1",76960344,NA,NA,177.5,1,0,0,0,1,0,0,0,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2450",1,"1",77056087,NA,NA,177.93,2,2,0,1,1,0,1,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2463",1,"1",77190863,NA,NA,178.90,2,2,0,1,1,0,1,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2463",1,"1",77190863,NA,NA,178.9,2,2,0,1,1,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2464",1,"1",77190891,NA,NA,178.91,2,2,0,1,1,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2466",1,"1",77191250,NA,NA,179.13,2,2,0,1,1,0,1,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2505",1,"1",77350779,NA,NA,179.60,0,1,0,0,0,0,0,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2505",1,"1",77350779,NA,NA,179.6,0,1,0,0,0,0,0,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2508",1,"1",77353050,NA,NA,180.11,2,2,0,1,1,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_758",1,"1",77526728,NA,NA,180.47,1,1,0,0,1,0,0,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2201",1,"1",77738922,NA,NA,180.81,2,2,0,1,1,0,1,1,0,0</span>
@@ -357,7 +357,7 @@ The map(s) should be passed as a single object or a list of objects of class <co
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2299",1,"1",78192398,NA,NA,183.01,2,2,1,0,0,1,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_2354",1,"1",78430745,NA,NA,183.71,2,2,1,0,0,1,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_50486",1,"1",78756800,NA,NA,184.17,2,2,0,1,1,0,1,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_50484",1,"1",78757017,NA,NA,184.40,2,2,0,1,1,0,1,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_50484",1,"1",78757017,NA,NA,184.4,2,2,0,1,1,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_50483",1,"1",78757327,NA,NA,184.64,2,2,0,1,1,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_50502",1,"1",78809381,NA,NA,184.88,2,2,1,0,0,1,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_15872",1,"1",78928170,NA,NA,185.37,2,2,0,1,1,0,1,1,0,0</span>
@@ -383,13 +383,13 @@ The map(s) should be passed as a single object or a list of objects of class <co
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_7062",1,"1",80230636,NA,NA,204.85,2,2,1,1,0,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_1853",1,"1",80429124,NA,NA,205.13,1,2,0,0,0,1,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_5091",1,"1",80558977,NA,NA,206.04,2,2,0,1,1,0,1,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_5077",1,"1",80591992,NA,NA,207.60,1,1,1,0,0,0,0,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_5077",1,"1",80591992,NA,NA,207.6,1,1,1,0,0,0,0,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_5078",1,"1",80592039,NA,NA,207.92,1,1,0,0,1,0,0,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_5039",1,"1",80669402,NA,NA,208.99,4,3,1,1,1,1,1,0,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_9727",1,"1",80833354,NA,NA,209.00,0,1,0,0,0,0,0,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_9727",1,"1",80833354,NA,NA,209,0,1,0,0,0,0,0,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_9726",1,"1",80833555,NA,NA,209.19,2,2,0,1,0,1,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_9722",1,"1",80835882,NA,NA,209.81,2,2,1,0,1,0,0,0,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_9988",1,"1",81013079,NA,NA,211.70,4,3,1,1,1,1,1,0,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_9988",1,"1",81013079,NA,NA,211.7,4,3,1,1,1,1,1,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_9925",1,"1",81410356,NA,NA,212.47,3,4,1,1,0,1,1,1,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_9892",1,"1",81567397,NA,NA,215.74,3,4,1,1,1,0,1,1,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_9864",1,"1",81615881,NA,NA,215.75,3,3,0,1,1,1,0,1,1,1</span>
@@ -417,32 +417,32 @@ The map(s) should be passed as a single object or a list of objects of class <co
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_1737",1,"1",83602469,NA,NA,238.38,2,3,0,1,0,1,1,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_1739",1,"1",83608625,NA,NA,240.71,3,4,1,1,0,1,1,1,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_4614",1,"1",83843457,NA,NA,240.73,4,3,1,1,1,1,1,0,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_4664",1,"1",84062694,NA,NA,242.00,1,3,0,0,0,1,0,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_4664",1,"1",84062694,NA,NA,242,1,3,0,0,0,1,0,1,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_4708",1,"1",84214693,NA,NA,244.12,0,2,0,0,0,0,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_4713",1,"1",84217673,NA,NA,244.13,4,2,1,1,1,1,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_36495",1,"1",84457206,NA,NA,244.38,0,2,0,0,0,0,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_34546",1,"1",84727952,NA,NA,245.96,1,3,0,0,0,1,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_10354",1,"1",84979069,NA,NA,251.10,4,3,1,1,1,1,1,0,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_10354",1,"1",84979069,NA,NA,251.1,4,3,1,1,1,1,1,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_22",1,"1",85243830,NA,NA,251.59,0,1,0,0,0,0,0,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_24",1,"1",85323495,NA,NA,255.23,1,2,0,1,0,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_13385",1,"1",85715515,NA,NA,256.66,3,0,1,0,1,1,0,0,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_46448",1,"1",85760106,NA,NA,256.67,1,2,0,1,0,0,1,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_53075",1,"1",85902499,NA,NA,257.40,3,2,1,0,1,1,0,0,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_53075",1,"1",85902499,NA,NA,257.4,3,2,1,0,1,1,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_42943",1,"1",85953353,NA,NA,258.08,1,2,0,1,0,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_49917",1,"1",86090288,NA,NA,258.09,1,4,0,1,0,0,1,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_49911",1,"1",86095463,NA,NA,258.10,1,4,0,1,0,0,1,1,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_49911",1,"1",86095463,NA,NA,258.1,1,4,0,1,0,0,1,1,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_49910",1,"1",86095890,NA,NA,258.11,3,2,1,0,1,1,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14839",1,"1",86328984,NA,NA,260.48,0,2,0,0,0,0,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14707",1,"1",86355213,NA,NA,260.49,0,2,0,0,0,0,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14708",1,"1",86356234,NA,NA,262.46,1,2,0,1,0,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14709",1,"1",86356378,NA,NA,262.47,1,2,0,1,0,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_4796",1,"1",86388041,NA,NA,262.72,3,2,1,0,1,1,0,0,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14730",1,"1",86441357,NA,NA,266.10,0,2,0,0,0,0,0,0,1,1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14730",1,"1",86441357,NA,NA,266.1,0,2,0,0,0,0,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14733",1,"1",86527670,NA,NA,266.84,4,2,1,1,1,1,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_4799",1,"1",86663770,NA,NA,268.85,1,2,0,1,0,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14761",1,"1",86750111,NA,NA,269.76,1,2,0,1,0,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14762",1,"1",86750599,NA,NA,270.03,1,2,0,1,0,0,1,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14763",1,"1",86847560,NA,NA,270.30,1,2,0,1,0,0,1,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14763",1,"1",86847560,NA,NA,270.3,1,2,0,1,0,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14764",1,"1",86847664,NA,NA,270.68,3,2,1,0,1,1,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14772",1,"1",86877778,NA,NA,271.06,1,2,0,1,0,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14779",1,"1",86887803,NA,NA,273.48,0,2,0,0,0,0,0,0,1,1</span>
@@ -450,7 +450,7 @@ The map(s) should be passed as a single object or a list of objects of class <co
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14827",1,"1",87096629,NA,NA,276.43,1,2,0,1,0,0,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14840",1,"1",87161581,NA,NA,277.64,3,0,1,0,1,1,0,0,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14841",1,"1",87161695,NA,NA,278.88,3,3,1,0,1,1,0,1,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14848",1,"1",87196823,NA,NA,279.40,1,1,0,1,0,0,1,0,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_14848",1,"1",87196823,NA,NA,279.4,1,1,0,1,0,0,1,0,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_37836",1,"1",87392825,NA,NA,281.43,1,4,0,1,0,0,1,1,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_37820",1,"1",87463711,NA,NA,281.44,3,2,1,0,1,1,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_11288",1,"1",87558384,NA,NA,281.45,3,2,1,0,1,1,0,0,1,1</span>
@@ -460,12 +460,12 @@ The map(s) should be passed as a single object or a list of objects of class <co
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_9428",1,"1",87944667,NA,NA,298.54,3,1,1,1,1,0,0,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_9430",1,"1",87965033,NA,NA,306.08,4,2,1,1,1,1,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_22105",1,"1",88057376,NA,NA,308.57,4,3,1,1,1,1,1,0,1,1</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_9413",1,"1",88294049,NA,NA,310.60,4,2,1,1,1,1,1,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_9413",1,"1",88294049,NA,NA,310.6,4,2,1,1,1,1,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_9406",1,"1",88347489,NA,NA,311.27,0,2,0,0,0,0,0,0,1,1</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_30963",1,"1",88362769,NA,NA,312.85,2,0,1,0,1,0,0,0,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_30961",1,"1",88389459,NA,NA,313.30,0,1,0,0,0,0,0,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_30961",1,"1",88389459,NA,NA,313.3,0,1,0,0,0,0,0,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_9397",1,"1",88409394,NA,NA,314.49,4,2,1,1,1,1,1,1,0,0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_9392",1,"1",88434818,NA,NA,314.50,4,2,1,1,1,1,1,1,0,0</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c1_9392",1,"1",88434818,NA,NA,314.5,4,2,1,1,1,1,1,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_30958",1,"1",88451845,NA,NA,316.41,0,1,0,0,0,0,0,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_30956",1,"1",88452032,NA,NA,316.42,0,1,0,0,0,0,0,1,0,0</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> "solcap_snp_c2_30955",1,"1",88452236,NA,NA,316.43,0,1,0,0,0,0,0,1,0,0</span>
