@@ -34,6 +34,15 @@ export_map_list <- function(map.list, file = "map_output.csv"){
     ploidy <- map.list[[i]]$info$ploidy
     ph.P <- ph_list_to_matrix(map.list[[i]]$maps[[1]]$seq.ph$P, ploidy)
     ph.Q <- ph_list_to_matrix(map.list[[i]]$maps[[1]]$seq.ph$Q, ploidy)
+    if(length(map.list[[i]]$info$seq.ref) == nrow(ph.P))
+      for(j in 1:nrow(ph.P)){
+        ph.P[j, ph.P[j, ] == 0] <- map.list[[i]]$info$seq.ref[j]
+        ph.P[j, ph.P[j, ] == 1] <- map.list[[i]]$info$seq.alt[j]
+        ph.Q[j, ph.Q[j, ] == 0] <- map.list[[i]]$info$seq.ref[j]
+        ph.Q[j, ph.Q[j, ] == 1] <- map.list[[i]]$info$seq.alt[j]
+      }
+    ph.P <- as.data.frame(ph.P)
+    ph.Q <- as.data.frame(ph.Q)
     colnames(ph.P) <- letters[1:ploidy]
     colnames(ph.Q) <- letters[(1+ploidy):(2*ploidy)]
     if(is.null(map.list[[i]]$info$chrom))
@@ -57,4 +66,5 @@ export_map_list <- function(map.list, file = "map_output.csv"){
     R <- rbind(R, x)
   }
   write.csv(R , file = file, row.names = FALSE)
+  invisible(R)
 }

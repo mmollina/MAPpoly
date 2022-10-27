@@ -1757,14 +1757,13 @@ compare_maps <- function(...){
   return(as.data.frame(a))
 }
 
+# Skeleton to test CPP functions
+# @export
+# test_CPP<-function(m, rf)
+#   .Call("rec_number", as.integer(m), as.numeric(rf), PACKAGE = "mappoly")
+#   
 
-#' Skeleton to test CPP functions
-#' #' @export
-#' test_CPP<-function(m, rf)
-#'   .Call("rec_number", as.integer(m), as.numeric(rf), PACKAGE = "mappoly")
-#'   
-
-#' #' @export
+#' @export
 .mappoly_data_skeleton<-function()
   structure(list(ploidy = NA,
                  n.ind = NA,
