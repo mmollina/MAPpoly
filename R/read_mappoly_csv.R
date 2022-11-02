@@ -135,12 +135,12 @@ table_to_mappoly <- function(dat, ploidy, filter.non.conforming = TRUE, elim.red
   }
   
   ## get genotypic info --------------------
-  geno.dose <- as.matrix(dat[,-c(1:5),drop = TRUE])
+  geno.dose <- as.matrix(dat[,-c(1:5), drop = FALSE])
   dimnames(geno.dose) <- list(mrk.names, ind.names)
   geno.dose[is.na(geno.dose)] <- ploidy + 1
   ## returning the 'mappoly.data' object
   if (verbose) cat("\n    Done with reading.\n")
-  geno.dose <- geno.dose[id,]
+  geno.dose <- geno.dose[id, , drop = FALSE]
   res <- structure(list(ploidy = ploidy,
                         n.ind = n.ind,
                         n.mrk = sum(id),
