@@ -11,7 +11,8 @@ paralell_pairwise_probability(
   dP,
   dQ,
   count.cache,
-  tol = .Machine$double.eps^0.25
+  tol = .Machine$double.eps^0.25,
+  ll = ll
 )
 }
 \arguments{

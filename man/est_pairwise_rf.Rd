@@ -15,7 +15,8 @@ est_pairwise_rf(
   verbose = TRUE,
   memory.warning = TRUE,
   parallelization.type = c("PSOCK", "FORK"),
-  tol = .Machine$double.eps^0.25
+  tol = .Machine$double.eps^0.25,
+  ll = FALSE
 )
 }
 \arguments{
@@ -51,6 +52,9 @@ number of markers is greater than 10000 for ploidy levels up to 4, and
 be either PSOCK (default) or FORK.}
 
 \item{tol}{the desired accuracy. See \code{optimize()} for details}
+
+\item{ll}{will return log-likelihood instead of LOD scores. 
+(for internal use)}
 }
 \value{
 An object of class \code{mappoly.twopt} which
