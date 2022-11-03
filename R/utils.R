@@ -1576,7 +1576,7 @@ sample_data <- function(input.data, n = NULL,
     if(is.prob.data(input.data))
       input.data$geno <-  input.data$geno %>%
       dplyr::filter(mrk%in%selected.mrk)
-    input.data$geno.dose <- input.data$geno.dose[selected.mrk.id,]
+    input.data$geno.dose <- input.data$geno.dose[selected.mrk.id, , drop = FALSE]
     input.data$n.mrk <- nrow(input.data$geno.dose)
     input.data$mrk.names <- input.data$mrk.names[selected.mrk.id]
     input.data$dosage.p1 <- input.data$dosage.p1[selected.mrk.id]
@@ -1587,7 +1587,7 @@ sample_data <- function(input.data, n = NULL,
     input.data$seq.alt <- input.data$seq.alt[selected.mrk.id]
     input.data$all.mrk.depth <- input.data$all.mrk.depth[selected.mrk.id]
     input.data$kept <- intersect(input.data$mrk.names, input.data$kept)
-    input.data$elim.correspondence <- input.data$elim.correspondence[input.data$elim.correspondence$kept%in%input.data$mrk.names,]
+    input.data$elim.correspondence <- input.data$elim.correspondence[input.data$elim.correspondence$kept%in%input.data$mrk.names, , drop = FALSE]
     input.data$chisq.pval <- input.data$chisq.pval[names(input.data$chisq.pval)%in%input.data$mrk.names]
     if(!is.null(input.data$chisq.pval)) 
       input.data$chisq.pval <- input.data$chisq.pval[names(input.data$chisq.pval)%in%input.data$mrk.names]
