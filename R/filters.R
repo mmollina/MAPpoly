@@ -403,19 +403,23 @@ filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
 #'
 #' @param input.twopt an object of class \code{mappoly.twopt}
 #'
-#' @param thresh.LOD.ph LOD score threshold for linkage phase configuration (default = 5)
+#' @param thresh.LOD.ph LOD score threshold for linkage phase configuration 
+#' (default = 5)
 #'
-#' @param thresh.LOD.rf LOD score threshold for recombination fraction (default = 5)
+#' @param thresh.LOD.rf LOD score threshold for recombination fraction 
+#' (default = 5)
 #'
 #' @param thresh.rf threshold for recombination fractions (default = 0.15) 
 #'
-#' @param probs indicates the probability corresponding to the filtering quantiles. (default = c(0.05, 1))
+#' @param probs indicates the probability corresponding to the filtering 
+#' quantiles. (default = c(0.05, 1))
 #' 
-#' @param diag.markers indicates a window within which markers pairs should be considered. 
-#'    If NULL (default) all markers are considered. This argument shoudl be used onbly for
-#'    ordered markers.
+#' @param diag.markers A window where marker pairs should be considered. 
+#'    If NULL (default), all markers are considered. This argument should be 
+#'    used only for ordered markers.
 #' 
-#' @param ncpus number of parallel processes (i.e. cores) to spawn (default = 1)
+#' @param ncpus number of parallel processes (i.e. cores) to spawn 
+#' (default = 1)
 #' 
 #' @param diagnostic.plot if \code{TRUE} produces a diagnostic plot
 #' 
