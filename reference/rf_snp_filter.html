@@ -57,7 +57,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Remove markers that do not meet a LOD criteria</h1>
-    <small class="dont-index">Source: <a href="https://github.com/mmollina/MAPpoly/blob/HEAD/R/rf_snp_filter.R" class="external-link"><code>R/rf_snp_filter.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/mmollina/MAPpoly/blob/HEAD/R/filters.R" class="external-link"><code>R/filters.R</code></a></small>
     <div class="hidden name"><code>rf_snp_filter.Rd</code></div>
     </div>
 
@@ -75,6 +75,7 @@
 <span>  thresh.LOD.rf <span class="op">=</span> <span class="fl">5</span>,</span>
 <span>  thresh.rf <span class="op">=</span> <span class="fl">0.15</span>,</span>
 <span>  probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>  diag.markers <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ncpus <span class="op">=</span> <span class="fl">1L</span>,</span>
 <span>  diagnostic.plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  breaks <span class="op">=</span> <span class="fl">100</span></span>
@@ -88,11 +89,13 @@
 
 
 <dt>thresh.LOD.ph</dt>
-<dd><p>LOD score threshold for linkage phase configuration (default = 5)</p></dd>
+<dd><p>LOD score threshold for linkage phase configuration 
+(default = 5)</p></dd>
 
 
 <dt>thresh.LOD.rf</dt>
-<dd><p>LOD score threshold for recombination fraction (default = 5)</p></dd>
+<dd><p>LOD score threshold for recombination fraction 
+(default = 5)</p></dd>
 
 
 <dt>thresh.rf</dt>
@@ -100,11 +103,19 @@
 
 
 <dt>probs</dt>
-<dd><p>indicates the probability corresponding to the filtering quantiles. (default = c(0.05, 1))</p></dd>
+<dd><p>indicates the probability corresponding to the filtering 
+quantiles. (default = c(0.05, 1))</p></dd>
+
+
+<dt>diag.markers</dt>
+<dd><p>A window where marker pairs should be considered. 
+If NULL (default), all markers are considered. This argument should be 
+used only for ordered markers.</p></dd>
 
 
 <dt>ncpus</dt>
-<dd><p>number of parallel processes (i.e. cores) to spawn (default = 1)</p></dd>
+<dd><p>number of parallel processes (i.e. cores) to spawn 
+(default = 1)</p></dd>
 
 
 <dt>diagnostic.plot</dt>
