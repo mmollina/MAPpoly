@@ -1786,3 +1786,54 @@ compare_maps <- function(...){
                  elim.correspondence = NA),
             class = "mappoly.data")
 
+#' Split map into sub maps given a gap threshold
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @export
+split_mappoly <- function(input.map,
+                          gap.threshold = 5, 
+                          size.rem.cluster = 1,
+                          phase.config = "best",
+                          tol.final = 10e-4,
+                          verbose = TRUE){
+  if (!inherits(input.map, "mappoly.map")) {
+    stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
+  }
+  ## choosing the linkage phase configuration
+  LOD.conf <- get_LOD(input.map, sorted = FALSE)
+  if(phase.config  ==  "best") {
+    i.lpc <- which.min(LOD.conf)
+  } else if (phase.config > length(LOD.conf)) {
+    stop("invalid linkage phase configuration")
+  } else i.lpc <- phase.config
+  id <- which(imf_h(input.map$maps[[i.lpc]]$seq.rf) > gap.threshold)
+  if(length(id) == 0){
+    if(verbose) cat("no submaps found\n")
+    return(input.map)
+  } 
+  id <- cbind(c(1, id+1), c(id, input.map$info$n.mrk))
+  temp.map <- input.map
+  ## Selecting map segments larger then the specified threshold
+  segments <- id[apply(id, 1, diff) > size.rem.cluster - 1, , drop = FALSE]
+  if(length(segments) == 0) stop("all markers were eliminated\n")
+  ## Dividing map in sub-maps
+  temp.maps <- vector("list", nrow(segments))
+  if (verbose) {
+    ns <- nrow(segments)
+    if(ns == 1){
+      cat("one submap found ...\n")
+      map <- get_submap(input.map, c(segments[1, 1]:segments[1, 2]), tol.final = tol.final, verbose = FALSE)
+      return(filter_map_at_hmm_thres(map, 10e-4))
+    } 
+    else cat(ns, "submaps found ...\n")
+  }
+  for(i in 1:length(temp.maps)){
+    temp.id <- c(segments[i, 1]:segments[i, 2])
+    if(length(temp.id) > 1)
+      temp.maps[[i]] <- get_submap(input.map, temp.id, reestimate.rf = FALSE, verbose = FALSE)
+    else
+      temp.maps[[i]] <- input.map$info$mrk.names[temp.id]    
+  }
+  temp.maps
+}

@@ -415,8 +415,9 @@ filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
 #' quantiles. (default = c(0.05, 1))
 #' 
 #' @param diag.markers A window where marker pairs should be considered. 
-#'    If NULL (default), all markers are considered. This argument should be 
-#'    used only for ordered markers.
+#'    If NULL (default), all markers are considered. 
+#'    
+#' @param mrk.order marker order. Only has effect if 'diag.markers' is not NULL
 #' 
 #' @param ncpus number of parallel processes (i.e. cores) to spawn 
 #' (default = 1)
@@ -465,6 +466,7 @@ rf_snp_filter <- function(input.twopt,
                           thresh.rf = 0.15,
                           probs = c(0.05, 1),
                           diag.markers = NULL,
+                          mrk.order = NULL, 
                           ncpus = 1L,
                           diagnostic.plot = TRUE,
                           breaks = 100)
@@ -479,9 +481,12 @@ rf_snp_filter <- function(input.twopt,
   rf_mat <-  rf_list_to_matrix(input.twopt = input.twopt, thresh.LOD.ph = thresh.LOD.ph,
                                thresh.LOD.rf = thresh.LOD.rf, thresh.rf = thresh.rf,
                                ncpus = ncpus, verbose = FALSE)
+  M <- rf_mat$rec.mat
+  if(!is.null(mrk.order))
+    M <- M[mrk.order, mrk.order]
   if(!is.null(diag.markers))
-      rf_mat$rec.mat[abs(col(rf_mat$rec.mat) - row(rf_mat$rec.mat)) > diag.markers] <- NA
-  x <- apply(rf_mat$rec.mat, 1, function(x) sum(!is.na(x)))
+      M[abs(col(M) - row(M)) > diag.markers] <- NA
+  x <- apply(M, 1, function(x) sum(!is.na(x)))
   w <- hist(x, breaks = breaks, plot = FALSE)
   th <- quantile(x, probs = probs)
   rem <- c(which(x < th[1]), which(x > th[2]))

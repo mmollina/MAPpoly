@@ -11,6 +11,7 @@ rf_snp_filter(
   thresh.rf = 0.15,
   probs = c(0.05, 1),
   diag.markers = NULL,
+  mrk.order = NULL,
   ncpus = 1L,
   diagnostic.plot = TRUE,
   breaks = 100
@@ -31,8 +32,9 @@ rf_snp_filter(
 quantiles. (default = c(0.05, 1))}
 
 \item{diag.markers}{A window where marker pairs should be considered. 
-If NULL (default), all markers are considered. This argument should be 
-used only for ordered markers.}
+If NULL (default), all markers are considered.}
+
+\item{mrk.order}{marker order. Only has effect if 'diag.markers' is not NULL}
 
 \item{ncpus}{number of parallel processes (i.e. cores) to spawn 
 (default = 1)}
