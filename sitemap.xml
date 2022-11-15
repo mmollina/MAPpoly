@@ -172,6 +172,9 @@
     <loc>/reference/filter_segregation.html</loc>
   </url>
   <url>
+    <loc>/reference/find_blocks.html</loc>
+  </url>
+  <url>
     <loc>/reference/format_rf.html</loc>
   </url>
   <url>
@@ -331,6 +334,9 @@
     <loc>/reference/paralell_pairwise_probability.html</loc>
   </url>
   <url>
+    <loc>/reference/parallel_block.html</loc>
+  </url>
+  <url>
     <loc>/reference/perm_pars.html</loc>
   </url>
   <url>
@@ -440,6 +446,9 @@
   </url>
   <url>
     <loc>/reference/split_and_rephase.html</loc>
+  </url>
+  <url>
+    <loc>/reference/split_mappoly.html</loc>
   </url>
   <url>
     <loc>/reference/summary_maps.html</loc>

@@ -76,6 +76,7 @@
 <span>  thresh.rf <span class="op">=</span> <span class="fl">0.15</span>,</span>
 <span>  probs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>  diag.markers <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mrk.order <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  ncpus <span class="op">=</span> <span class="fl">1L</span>,</span>
 <span>  diagnostic.plot <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  breaks <span class="op">=</span> <span class="fl">100</span></span>
@@ -109,8 +110,11 @@ quantiles. (default = c(0.05, 1))</p></dd>
 
 <dt>diag.markers</dt>
 <dd><p>A window where marker pairs should be considered. 
-If NULL (default), all markers are considered. This argument should be 
-used only for ordered markers.</p></dd>
+If NULL (default), all markers are considered.</p></dd>
+
+
+<dt>mrk.order</dt>
+<dd><p>marker order. Only has effect if 'diag.markers' is not NULL</p></dd>
 
 
 <dt>ncpus</dt>
@@ -148,7 +152,7 @@ See <code><a href="make_seq_mappoly.html">make_seq_mappoly</a></code> for detail
     analysis and haplotype phasing in experimental autopolyploid
     populations with high ploidy level using hidden Markov
     models, _G3: Genes, Genomes, Genetics_. 
-    <a href="https://doi.org/10.1534/g3.119.400378" class="external-link">doi:10.1534/g3.119.400378</a></p>
+    doi: <a href="https://doi.org/10.1534/g3.119.400378" class="external-link">10.1534/g3.119.400378</a></p>
     </div>
     <div id="author">
     <h2>Author</h2>
