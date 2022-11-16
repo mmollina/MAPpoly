@@ -482,13 +482,13 @@ est_pairwise_rf2 <- function(input.seq,
   rf = v_2_m(res[,3], n)
   LOD_rf = v_2_m(res[,4], n)
   LOD_ph = v_2_m(res[,5], n)
-  return(structure(list(seq.mrk.names = seq.mrk.names,
-                        data.name  = input.seq$data.name,
-                        chisq.pval.thres = input.seq$chisq.pval.thres,
-                        chisq.pval = input.seq$chisq.pval,
-                        pairwise = list(rf = rf, LOD.rf = LOD_rf,
-                                        LOD.ph = LOD_ph, Sh.P1 = Sh_P1, 
-                                        Sh.P2 = Sh_P2)), class = "mappoly.twopt2"))
+  invisible(structure(list(seq.mrk.names = seq.mrk.names,
+                           data.name  = input.seq$data.name,
+                           chisq.pval.thres = input.seq$chisq.pval.thres,
+                           chisq.pval = input.seq$chisq.pval,
+                           pairwise = list(rf = rf, LOD.rf = LOD_rf,
+                                           LOD.ph = LOD_ph, Sh.P1 = Sh_P1, 
+                                           Sh.P2 = Sh_P2)), class = "mappoly.twopt2"))
 }
 
 #' Wrapper function to discrete-based pairwise two-point estimation in C++
