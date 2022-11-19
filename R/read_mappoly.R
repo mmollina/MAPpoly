@@ -285,18 +285,16 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
   cat("    Ploidy level:                           ", x$ploidy, "\n")
   cat("    No. individuals:                        ", x$n.ind, "\n")
   cat("    No. markers:                            ", x$n.mrk, "\n")
+  if(!is.null(x$prob.thres))
+  cat("    Prob. threshold to declare missing:     ", x$prob.thres, "\n") 
   miss <- round(100*sum(x$geno.dose == x$ploidy+1)/length(as.matrix(x$geno.dose)),2)
   if(!is.null(x$kept)){
     redundant = round(100*(nrow(x$elim.correspondence)/(length(x$kept)+nrow(x$elim.correspondence))),2)
   }
-  ##if no prior probabilities
-  if(is.prob.data(x)){
-    cat("    Missing data:                            ", miss, "%\n", sep = "")  
-  } else {
-    cat("    Missing data under ", x$prob.thres, " prob. threshold: ", miss, "%\n", sep = "")    
-  }
+  cat("    Missing data:                            ", miss, "%\n", sep = "")  
+
   if(!is.null(x$kept)){
-    cat("    Redundant markers:                       ", redundant, "%\n", sep = "")  
+  cat("    Redundant markers:                       ", redundant, "%\n", sep = "")  
   }
   w <- table(x$chrom)
   if (length(w) <= 1)
