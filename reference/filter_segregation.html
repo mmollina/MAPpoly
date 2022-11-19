@@ -69,7 +69,7 @@ The chi-square test assumes that markers follow the expected segregation
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">filter_segregation</span><span class="op">(</span><span class="va">input.data</span>, chisq.pval.thres <span class="op">=</span> <span class="fl">1e-04</span>, inter <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">filter_segregation</span><span class="op">(</span><span class="va">input.data</span>, chisq.pval.thres <span class="op">=</span> <span class="cn">NULL</span>, inter <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -79,7 +79,9 @@ The chi-square test assumes that markers follow the expected segregation
 
 
 <dt>chisq.pval.thres</dt>
-<dd><p>p-value threshold used for chi-square tests (default = 10e-05)</p></dd>
+<dd><p>p-value threshold used for chi-square tests 
+(default = Bonferroni aproximation with global alpha of 0.05, i.e., 
+0.05/n.mrk)</p></dd>
 
 
 <dt>inter</dt>
