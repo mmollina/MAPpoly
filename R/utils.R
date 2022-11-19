@@ -422,6 +422,10 @@ gg_color_hue <- function(n) {
   return(hsv(cols, x[2], x[3]))
 }
 
+
+#' @export
+mp_pal <- colorRampPalette(c("#d11141", "#00b159","#00aedb","#f37735","#ffc425"))
+
 #' Update missing information
 #'
 #' Updates the missing data in the dosage matrix of an object of class 
@@ -1208,7 +1212,7 @@ check_data_dist_sanity <- function(x){
 #'     \item{elim.correspondence}{if elim.redundant = TRUE when reading any dataset,
 #' holds all non-redundant markers and its equivalence to the redundant ones}
 #' 
-#' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' @author Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 #' @examples
 #' \donttest{
 #' ## Loading a subset of SNPs from chromosomes 3 and 12 of sweetpotato dataset 
@@ -1363,7 +1367,7 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
 #' @examples
 #' tetra.sum <- summary_maps(solcap.err.map)
 #' tetra.sum
-#' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' @author Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 #' @export summary_maps
 summary_maps = function(map.list, verbose = TRUE){
   ## Check data
@@ -1396,7 +1400,7 @@ summary_maps = function(map.list, verbose = TRUE){
 #' 
 #' Internal function
 #' @param x an object of class \code{mappoly.map}
-#' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' @author Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 get_tab_mrks = function(x){
   tab = table(get(x$info$data.name, pos = 1)$dosage.p1[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)], get(x$info$data.name, pos = 1)$dosage.p2[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)])
   doses = as.character(seq(0,x$info$ploidy,1))
@@ -1430,7 +1434,7 @@ get_tab_mrks = function(x){
 #' @param input.maps a single map or a list of maps of class \code{mappoly.map}
 #' @param verbose if TRUE (default), shows information about each update process
 #' @return an updated map (or list of maps) of class \code{mappoly.map}, containing the original map(s) plus redundant markers
-#' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' @author Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 #' @examples
 #' orig.map <- solcap.err.map
 #' up.map <- lapply(solcap.err.map, update_map)

@@ -17,8 +17,9 @@ plot_map_list(
 \item{horiz}{logical. If FALSE, the maps are plotted vertically with the first map to the left. 
 If TRUE  (default), the maps are plotted horizontally with the first at the bottom}
 
-\item{col}{a vector of colors for the bars or bar components (default = 'lightgrey')
-\code{ggstyle} produces maps using the default \code{ggplot} color palette}
+\item{col}{a vector of colors for each linkage group.  (default = 'lightgrey')
+\code{ggstyle} produces maps using the default \code{ggplot} color palette. 
+\code{mp_pal} produces maps varying from red, green, blue, and yellow}
 
 \item{title}{a title (string) for the maps (default = 'Linkage group')}
 }

@@ -66,7 +66,7 @@
 #' print(SolCAP.dose, detailed = TRUE)
 #' plot(SolCAP.dose)
 #'}
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}, with minor changes by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}, with minor changes by Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 #'
 #' @references
 #' 

@@ -47,7 +47,7 @@
 #'     ## load from internal file or web-stored counts (especially important for high ploidy levels)
 #'     counts.cached <- cache_counts_twopt(all.mrk, cached = TRUE)
 #'
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} with updates by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} with updates by Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 #'
 #' @references
 #'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

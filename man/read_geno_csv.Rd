@@ -99,5 +99,5 @@ Mollinari M., Olukolu B. A.,  Pereira G. da S.,
     \doi{10.1534/g3.119.400378}
 }
 \author{
-Marcelo Mollinari, \email{mmollin@ncsu.edu}, with minor changes by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+Marcelo Mollinari, \email{mmollin@ncsu.edu}, with minor changes by Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 }

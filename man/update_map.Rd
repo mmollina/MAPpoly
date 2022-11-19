@@ -27,5 +27,5 @@ summary_maps(orig.map)
 summary_maps(up.map)
 }
 \author{
-Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 }

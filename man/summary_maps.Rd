@@ -23,5 +23,5 @@ tetra.sum <- summary_maps(solcap.err.map)
 tetra.sum
 }
 \author{
-Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 }

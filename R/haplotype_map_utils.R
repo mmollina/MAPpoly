@@ -19,7 +19,7 @@
 #' 
 #' @keywords internal
 #' 
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} and Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} and Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 #' 
 #' @export generate_all_link_phases_elim_equivalent_haplo
 #' 

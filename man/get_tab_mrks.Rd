@@ -13,5 +13,5 @@ get_tab_mrks(x)
 Internal function
 }
 \author{
-Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 }

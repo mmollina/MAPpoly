@@ -58,7 +58,7 @@
 #'     (some.mrk.1 <- make_seq_mappoly(hexafake, some.mrk.pos))
 #'     plot(some.mrk.1)
 #'
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}, with modifications by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}, with modifications by Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 #'
 #' @references
 #'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage

@@ -128,5 +128,5 @@ Mollinari M., Olukolu B. A.,  Pereira G. da S.,
     \doi{10.1534/g3.119.400378}
 }
 \author{
-Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 }

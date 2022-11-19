@@ -423,7 +423,7 @@ filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
 #'     plot(mat.full, main.text = "LG1")
 #'     plot(m1.filt, main.text = "LG1.filt")
 #'    
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} with updates by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} with updates by Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 #'
 #' @references
 #'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
