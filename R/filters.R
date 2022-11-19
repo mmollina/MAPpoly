@@ -273,8 +273,8 @@ filter_segregation <- function(input.data, chisq.pval.thres = NULL, inter = TRUE
            col = ifelse(x <= th, 2, 4), 
            pch =ifelse(x <= th, 4, 1))
       abline(h = th, lty = 2)
-      f<-paste0("Filtered out: ", sum(x > filter.thres))
-      i<-paste0("Included: ", sum(x <= filter.thres))
+      f<-paste0("Filtered out: ", sum(x > th))
+      i<-paste0("Included: ", sum(x <= th))
       legend("bottomleft",  c(f, i) , col = c(2,4), pch = c(4,1))
       ANSWER <- readline("Enter 'Y/n' to proceed or update the p value threshold: ")
       if(substr(ANSWER, 1, 1)  ==  "n" | substr(ANSWER, 1, 1)  ==  "no" | substr(ANSWER, 1, 1)  ==  "N")
@@ -321,7 +321,7 @@ filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
   y <- G[2,]
   #a <- 2*atan(y/x)/pi
   #b <- sqrt(x^2 + y^2)
-  df <- data.frame(x = a, y = b, type = c(2, 2, rep(4, length(a)-2)))
+  df <- data.frame(x = x, y = y, type = c(2, 2, rep(4, length(x)-2)))
   op <- par(pty="s")
   on.exit(par(op))
   plot(df[,1:2], col = df$type, pch = 19, 
