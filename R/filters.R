@@ -252,9 +252,9 @@ filter_missing_ind <- function(input.data, filter.thres = 0.2, inter = TRUE)
 #' @importFrom graphics axis
 #' @export
 filter_segregation <- function(input.data, chisq.pval.thres = NULL, inter = TRUE){
-  is.null(chisq.pval.thres)
   ##Bonferroni approx
-  chisq.pval.thres <- 0.05/input.data$n.mrk
+  if(is.null(chisq.pval.thres))
+    chisq.pval.thres <- 0.05/input.data$n.mrk
   ANSWER <- "flag"
   if (!inherits(input.data, "mappoly.data")) {
     stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
