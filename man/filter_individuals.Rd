@@ -2,7 +2,7 @@
 % Please edit documentation in R/filters.R
 \name{filter_individuals}
 \alias{filter_individuals}
-\title{Filter contaminant individuals}
+\title{Filter out individuals}
 \usage{
 filter_individuals(
   input.data,

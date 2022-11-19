@@ -4,12 +4,14 @@
 \alias{filter_segregation}
 \title{Filter markers based on chi-square test}
 \usage{
-filter_segregation(input.data, chisq.pval.thres = 1e-04, inter = TRUE)
+filter_segregation(input.data, chisq.pval.thres = NULL, inter = TRUE)
 }
 \arguments{
 \item{input.data}{name of input object (class \code{mappoly.data})}
 
-\item{chisq.pval.thres}{p-value threshold used for chi-square tests (default = 10e-05)}
+\item{chisq.pval.thres}{p-value threshold used for chi-square tests 
+(default = Bonferroni aproximation with global alpha of 0.05, i.e., 
+0.05/n.mrk)}
 
 \item{inter}{if TRUE (default), plots distorted vs. non-distorted markers}
 }
