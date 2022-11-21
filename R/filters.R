@@ -118,6 +118,8 @@ filter_missing <- function(input.data,
 #' @keywords internal
 filter_missing_mrk <- function(input.data, filter.thres = 0.2, inter = TRUE)
 {
+  op <- par(pty="s")
+  on.exit(par(op))
   ANSWER <- "flag"
   if(interactive() && inter)
   {
@@ -125,8 +127,6 @@ filter_missing_mrk <- function(input.data, filter.thres = 0.2, inter = TRUE)
     {
       na.num <- apply(input.data$geno.dose, 1, function(x,ploidy) sum(x == ploidy+1), ploidy = input.data$ploidy)
       perc.na <- na.num/input.data$n.ind
-      op <- par(pty="s")
-      on.exit(par(op))
       x <- sort(perc.na)
       plot(x, 
            xlab = "markers", 
@@ -173,6 +173,8 @@ filter_missing_mrk <- function(input.data, filter.thres = 0.2, inter = TRUE)
 #' @importFrom graphics axis
 filter_missing_ind <- function(input.data, filter.thres = 0.2, inter = TRUE)
 {
+  op <- par(pty="s")
+  on.exit(par(op))
   ANSWER <- "flag"
   ind <- NULL
   if(interactive() && inter)
@@ -181,8 +183,6 @@ filter_missing_ind <- function(input.data, filter.thres = 0.2, inter = TRUE)
     {
       na.num <- apply(input.data$geno.dose, 2, function(x,ploidy) sum(x == ploidy+1), ploidy = input.data$ploidy)
       perc.na <- na.num/input.data$n.mrk
-      op <- par(pty="s")
-      on.exit(par(op))
       x <- sort(perc.na)
       plot(x, 
            xlab = "offspring", 
@@ -252,6 +252,8 @@ filter_missing_ind <- function(input.data, filter.thres = 0.2, inter = TRUE)
 #' @importFrom graphics axis
 #' @export
 filter_segregation <- function(input.data, chisq.pval.thres = NULL, inter = TRUE){
+  op <- par(pty="s")
+  on.exit(par(op))
   ##Bonferroni approx
   if(is.null(chisq.pval.thres))
     chisq.pval.thres <- 0.05/input.data$n.mrk
@@ -263,8 +265,6 @@ filter_segregation <- function(input.data, chisq.pval.thres = NULL, inter = TRUE
   {
     while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != "")
     {
-      op <- par(pty="s")
-      on.exit(par(op))
       x <- log10(sort(input.data$chisq.pval, decreasing = TRUE))
       th <- log10(chisq.pval.thres)
       plot(x, 
@@ -273,8 +273,8 @@ filter_segregation <- function(input.data, chisq.pval.thres = NULL, inter = TRUE
            col = ifelse(x <= th, 2, 4), 
            pch =ifelse(x <= th, 4, 1))
       abline(h = th, lty = 2)
-      f<-paste0("Filtered out: ", sum(x > th))
-      i<-paste0("Included: ", sum(x <= th))
+      f<-paste0("Filtered out: ", sum(x < th))
+      i<-paste0("Included: ", sum(x >= th))
       legend("bottomleft",  c(f, i) , col = c(2,4), pch = c(4,1))
       ANSWER <- readline("Enter 'Y/n' to proceed or update the p value threshold: ")
       if(substr(ANSWER, 1, 1)  ==  "n" | substr(ANSWER, 1, 1)  ==  "no" | substr(ANSWER, 1, 1)  ==  "N")
@@ -310,6 +310,8 @@ filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
   if (!inherits(input.data, "mappoly.data")) {
     stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
   }
+  op <- par(pty="s")
+  on.exit(par(op))
  # if (!require(AGHmatrix))
 #    stop("Please install package 'AGHmatrix' to proceed")
   D <- t(input.data$geno.dose)
@@ -322,8 +324,6 @@ filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
   #a <- 2*atan(y/x)/pi
   #b <- sqrt(x^2 + y^2)
   df <- data.frame(x = x, y = y, type = c(2, 2, rep(4, length(x)-2)))
-  op <- par(pty="s")
-  on.exit(par(op))
   plot(df[,1:2], col = df$type, pch = 19, 
        xlab = "relationships between the offspring and P1", 
        ylab = "relationships between the offspring and P2")
@@ -343,18 +343,18 @@ filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
     if(substr(ANSWER, 1, 1)  ==  "y" | substr(ANSWER, 1, 1)  ==  "yes" | substr(ANSWER, 1, 1)  ==  "Y" | ANSWER  == "")
     {
       ind.to.remove <- gatepoints::fhs(df, mark = TRUE)
+      ind.to.remove <- setdiff(ind.to.remove, c("P1", "P2"))
+      ind.to.include <- setdiff(rownames(df)[-c(1:2)], ind.to.remove)
       if(verbose){
         cat("Removing individual(s): \n")
         print(ind.to.remove)
         cat("...\n")
       }
-      ind.to.remove <- setdiff(rownames(df)[-c(1:2)], ind.to.remove)
-      ind.to.remove <- setdiff(ind.to.remove, c("P1", "P2"))
       if(length(ind.to.remove) == 0){
         warning("No individuals removed. Returning original data set.")
         return(input.data)
       } 
-      out.data <- sample_data(input.data, selected.ind = ind.to.remove)
+      out.data <- sample_data(input.data, selected.ind = ind.to.include)
       return(out.data)
     } else{
       warning("No individuals removed. Returning original data set.")
