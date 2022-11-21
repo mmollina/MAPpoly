@@ -2,11 +2,12 @@
 
 This is a re-submission of MAPpoly package. This version (0.3.0), contains the following changes
 
-  - Added Rccp parallelization to avoid memory overflow in personal computers
-  - Added function export_qtlpoly
-  - Added function filter_individuals
-  - Added several utility functions
-  - Added Vignette
+  - Added function find_blocks
+  - Added utility functions
+  - Update function filter_individuals
+  - Update filtering graphics
+  - Update some color schemes
+  - Update vignette
   - Update documentation 
   - Update DESCRIPTION file
   - Fix minor bugs 

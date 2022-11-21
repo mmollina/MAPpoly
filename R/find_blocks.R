@@ -1,44 +1,47 @@
 #'  Allocate markers into linkage blocks
 #'
-#' Function to allocate markers located into linkage blocks.  This is an 
+#' Function to allocate markers into linkage blocks.  This is an 
 #' EXPERIMENTAL FUNCTION and should be used with caution.
 #'
 #' @param input.seq an object of class \code{mappoly.sequence}.
 #'
 #' @param clustering.type if \code{'rf'}, it uses UPGMA clusterization based on 
-#' the recombination fraction matrix. Linkage groups are assembled by cutting the 
-#' clusterization tree at \code{rf.limit}. If \code{'genome'}, it split the 
-#' marker sequence into blocks of size \code{'genome.block.size'}.
+#' the recombination fraction matrix to assemble blocks. Linkage blocks are 
+#' assembled by cutting the clusterization tree at \code{rf.limit}. 
+#' If \code{'genome'}, it splits the marker sequence at neighbor markers morre than 
+#' \code{'genome.block.threshold'} apart.
 #'
 #' @param rf.limit the maximum value to consider linked markers in
-#'     case of \code{'clustering.type=rf'}
+#'     case of \code{'clustering.type = rf'}
 #'
-#' @param genome.block.size the distance limit to be considered when allocating
-#'     markers into blocks in case of \code{'clustering.type=seq'}
+#' @param genome.block.threshold the threshold to assume markers are in the same linkage block.
+#' to be considered when allocating markers into blocks in case of \code{'clustering.type = genomee'}
 #' 
 #' @param rf.mat an object of class \code{mappoly.rf.matrix}.
 #' 
 #' @param ncpus Number of parallel processes to spawn 
 #'
-#' @param ph.thres the threshold used to phase of discard markers
+#' @param ph.thres the threshold used to sequentially phase markers. 
+#' Used in \code{thres.twopt} and \code{thres.hmm}. See \code{\link[mappoly]{est_rf_hmm_sequential}} 
+#' for details.
 #'
-#' @param phase.number.limit the maximum number of linkage phases of the sub-maps defined 
-#'     by arguments \code{info.tail} and \code{extend.tail}. The default is 20. If the
-#'     size exceeds this limit, the marker will not be inserted. If
-#'     \code{Inf}, then it will insert all markers.
+#' @param phase.number.limit the maximum number of linkage phases of the sub-maps.
+#'  The default is 10. See \code{\link[mappoly]{est_rf_hmm_sequential}} for details.
 #'     
-#' @param error the assumed global error rate (default = NULL)
+#' @param error the assumed global genotyping error rate. If \code{NULL} (default) it does 
+#' not include an error in the block estimation.
 #' 
 #' @param verbose if \code{TRUE} (default), the current progress is shown; if
-#'     \code{FALSE}, no output is produced
+#'     \code{FALSE}, no output is produced.
 #'     
 #' @param tol tolerance for the C routine, i.e., the value used to
 #'     evaluate convergence.
 #'
 #' @param tol.err tolerance for the C routine, i.e., the value used to
-#'     evaluate convergence, including the global error in the model.
+#'     evaluate convergence, including the global genotyping error in the model.
 #'
-#' @return a list of maps
+#' @return a list containing 1: a list of blocks in form of \code{mappoly.map} objects;
+#'    2: a vector containing markers that were not included into blocks.
 #'
 #' @examples
 #'   \dontrun{
@@ -52,10 +55,10 @@
 #'   plot_map_list(bl.rf)
 #'   
 #'   ## Merging resulting maps
-#'   map.merge <- merge_maps(bl.rf,tpt5)
+#'   map.merge <- merge_maps(bl.rf, tpt5)
 #'   plot(map.merge, mrk.names = T)
 #'   
-#'   ## Comparing linkage phases with pre assambled map
+#'   ## Comparing linkage phases with pre assembled map
 #'   id <- na.omit(match(map.merge$info$mrk.names, solcap.err.map[[5]]$info$mrk.names))
 #'   map.orig <- get_submap(solcap.err.map[[5]], mrk.pos = id)
 #'   p1.m<-map.merge$maps[[1]]$seq.ph$P
@@ -68,7 +71,7 @@
 #'   plot_compare_haplotypes(4, p1.o[n], p2.o[n], p1.m[n], p2.m[n])
 #'   
 #'   ### Using genome
-#'   fb.geno <- find_blocks(s5, clustering.type = "genome", genome.block.size = 10^4)
+#'   fb.geno <- find_blocks(s5, clustering.type = "genome", genome.block.threshold = 10^4)
 #'   plot_map_list(fb.geno$blocks)
 #'   splt <- lapply(fb.geno$blocks, split_mappoly, 1)
 #'   plot_map_list(splt)
@@ -81,7 +84,7 @@
 find_blocks <- function(input.seq,
                         clustering.type = c("rf", "genome"),
                         rf.limit = 1e-04,
-                        genome.block.size = 10000,
+                        genome.block.threshold = 10000,
                         rf.mat = NULL,
                         ncpus = 1,
                         ph.thres = 3,
@@ -122,7 +125,7 @@ find_blocks <- function(input.seq,
     names(p) <- uso
     for (i in uso) {
       o <- order(input.seq$genome.pos[so[, 1] == i])
-      sq <- c(which(diff(input.seq$genome.pos[so[, 1] == i][o]) > genome.block.size),
+      sq <- c(which(diff(input.seq$genome.pos[so[, 1] == i][o]) > genome.block.threshold),
               length(input.seq$genome.pos[so[, 1] == i]))
       arg <- vector("list", length(sq))
       sqi <- c(1, sq + 1)

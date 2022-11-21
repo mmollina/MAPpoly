@@ -42,7 +42,7 @@
 #'     
 #'     Stam P (1993) Construction of integrated genetic-linkage maps 
 #'     by means of a new computer package: Joinmap. _Plant J_ 3:739–744
-#'     \doi{10.1111/j.1365-313X.1993.00739.x}
+  #'   \doi{10.1111/j.1365-313X.1993.00739.x}
 #'     
 #' @export reest_rf
 #' 
