@@ -422,7 +422,10 @@ gg_color_hue <- function(n) {
   return(hsv(cols, x[2], x[3]))
 }
 
-
+#' Mp pallete
+#'
+#' @param void internal function to be documented
+#' @keywords internal
 #' @export
 mp_pal <- colorRampPalette(c("#d11141", "#00b159","#00aedb","#f37735","#ffc425"))
 
