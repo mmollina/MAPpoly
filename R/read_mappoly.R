@@ -341,8 +341,8 @@ plot.mappoly.data <- function(x, thresh.line = 10e-6, ...)
   } else{
     par(mar = c(1,1,1,2))
     par(xaxs = "i")
-    plot(log10(x$chisq.pval), axes = FALSE, xlab = "", ylab = "", col = 4)
-         #col = rgb(red = 0.2, green = 0.2, blue = 1.0, alpha = 0.2))
+    plot(log10(x$chisq.pval), axes = FALSE, xlab = "", ylab = "", pch = 16, 
+         col = rgb(red = 0.25, green = 0.64, blue = 0.86, alpha = 0.3))
     axis(4, line = 1)
     mtext(text = bquote(log[10](P)), side = 4, line = 4, cex = .7)
     lines(x = c(0, x$n.mrk), y = rep(log10(thresh.line),2), col = 2, lty = 2)

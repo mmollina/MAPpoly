@@ -1,9 +1,9 @@
 ## Re-submission of MAPpoly package
 
-This is a re-submission of MAPpoly package. This version (0.3.0), contains the following changes
+This is a re-submission of MAPpoly package. This version (0.3.2), contains the following changes
 
   - Added function find_blocks
-  - Added utility functions
+  - Added several utility functions
   - Update function filter_individuals
   - Update filtering graphics
   - Update some color schemes
@@ -15,8 +15,8 @@ This is a re-submission of MAPpoly package. This version (0.3.0), contains the f
 Thank you for reviewing our re-submission!
 
 ## Test environments
-* local R installation (macOS 11.6), R 4.1.2
-* local R installation (Ubuntu 20.04), R 4.1.2
+* local R installation (macOS 11.6), R 4.2.2
+* local R installation (Ubuntu 20.04), R 4.2.2
 * Windows Server x64 (on appveyor), R 4.1.2
 * Win-builder (R Under development - unstable)
 

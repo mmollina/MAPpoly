@@ -49,7 +49,7 @@ Quality control (QC) procedures are fundamental to identify:
 ```{r, eval=FALSE, filter_ind_donot_eval}
 dat <- filter_individuals(dat)
 ```
-<img src="images/fig2.jpeg" width="280" height="280"> 
+<img src="images/fig2.jpeg" width="400" height="400"> 
 
 Now, let us filter out markers and individuals with more than 5% of missing data. You can update the threshold interactively
 
