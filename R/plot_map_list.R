@@ -108,6 +108,7 @@ extract_map <- function(input.map, phase.config = "best")
     stop("invalid linkage phase configuration")
   } else i.lpc <- phase.config
   x <- cumsum(c(0, imf_h(input.map$maps[[i.lpc]]$seq.rf)))
+  names(x) <- input.map$info$mrk.names
   x
 }
 
