@@ -94,8 +94,7 @@ get_submap <- function(input.map, mrk.pos,  phase.config = "best", reestimate.rf
   } 
   else i.lpc <- phase.config
   input.obj = get(input.map$info$data.name, pos = 1)
-  if(reestimate.rf & !reestimate.phase)
-  {
+  if(reestimate.rf & !reestimate.phase) {
     seq.num <- input.map$maps[[i.lpc]]$seq.num[mrk.pos]
     ph <- list(P = input.map$maps[[i.lpc]]$seq.ph$P[as.character(seq.num)],
              Q = input.map$maps[[i.lpc]]$seq.ph$Q[as.character(seq.num)])
@@ -108,12 +107,7 @@ get_submap <- function(input.map, mrk.pos,  phase.config = "best", reestimate.rf
                            high.prec = high.prec)
     output.map <- input.map
     output.map$maps[[i.lpc]] <- res
-    output.map$info$n.mrk <- length(mrk.pos)
-    output.map$info$mrk.names <- input.map$info$mrk.names[mrk.pos]
-    return(output.map)
-  }
-  else if(reestimate.phase)
-  {
+  } else if(reestimate.phase) {
     if(verbose && !reestimate.rf)
       message("
     The recombination fraction will be reestimated 
@@ -138,11 +132,11 @@ get_submap <- function(input.map, mrk.pos,  phase.config = "best", reestimate.rf
                                       tol.final = tol.final, 
                                       high.prec = high.prec)
     return(output.map)
-  }
-  output.map <- input.map
-  z <- cumsum(c(0, imf_h(input.map$maps[[i.lpc]]$seq.rf)))[mrk.pos]
-  rf.vec <- mf_h(abs(diff(z)))
-  if (verbose) message("
+  } else {
+    output.map <- input.map
+    z <- cumsum(c(0, imf_h(input.map$maps[[i.lpc]]$seq.rf)))[mrk.pos]
+    rf.vec <- mf_h(abs(diff(z)))
+    if (verbose) message("
     You selected: reestimate.rf = FALSE
     -----------------------------------------
     The recombination fractions provided were
@@ -151,12 +145,13 @@ get_submap <- function(input.map, mrk.pos,  phase.config = "best", reestimate.rf
     reestimate the map using functions 'reest_rf', 
     'est_full_hmm_with_global_error' or 
     'est_full_hmm_with_prior_prob'")
-  ##phase info
-  output.map$maps[[i.lpc]]$seq.rf <- rf.vec
-  output.map$maps[[i.lpc]]$seq.num <- input.map$maps[[i.lpc]]$seq.num[mrk.pos]
-  output.map$maps[[i.lpc]]$seq.ph$P <- input.map$maps[[i.lpc]]$seq.ph$P[mrk.pos]
-  output.map$maps[[i.lpc]]$seq.ph$Q <- input.map$maps[[i.lpc]]$seq.ph$Q[mrk.pos]
-  output.map$maps[[i.lpc]]$loglike <- 0
+    ##phase info
+    output.map$maps[[i.lpc]]$seq.rf <- rf.vec
+    output.map$maps[[i.lpc]]$seq.num <- input.map$maps[[i.lpc]]$seq.num[mrk.pos]
+    output.map$maps[[i.lpc]]$seq.ph$P <- input.map$maps[[i.lpc]]$seq.ph$P[mrk.pos]
+    output.map$maps[[i.lpc]]$seq.ph$Q <- input.map$maps[[i.lpc]]$seq.ph$Q[mrk.pos]
+    output.map$maps[[i.lpc]]$loglike <- 0
+  }
   ##map info
   output.map$info$n.mrk <- length(mrk.pos)
   output.map$info$mrk.names <- input.map$info$mrk.names[mrk.pos]
