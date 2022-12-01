@@ -15,16 +15,15 @@ This is a re-submission of MAPpoly package. This version (0.3.2), contains the f
 Thank you for reviewing our re-submission!
 
 ## Test environments
-* local R installation (macOS 11.6), R 4.2.2
+* local R installation (macOS Monterey 12.6), R 4.2.2
 * local R installation (Ubuntu 20.04), R 4.2.2
-* Windows Server x64 (on appveyor), R 4.1.2
 * Win-builder (R Under development - unstable)
 
 ## R CMD check results 
 
 0 errors | 0 warnings | 2 notes
 
- - on local macOS: R 4.1.2
+ - on local macOS: R 4.2.2
    * installed size is 8.0Mb
      sub-directories of 1Mb or more:
        * R:      2.7Mb
