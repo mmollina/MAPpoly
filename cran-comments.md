@@ -17,11 +17,11 @@ Thank you for reviewing our re-submission!
 ## Test environments
 * local R installation (macOS Monterey 12.6), R 4.2.2
 * local R installation (Ubuntu 20.04), R 4.2.2
-* Win-builder (R Under development - unstable)
+* Win-builder (devel)
 
 ## R CMD check results 
 
-0 errors | 0 warnings | 2 notes
+0 errors | 0 warnings | 1 notes
 
  - on local macOS: R 4.2.2
    * installed size is 8.1Mb
@@ -29,8 +29,7 @@ Thank you for reviewing our re-submission!
        * R:      2.7Mb
        * data:   3.0Mb
        
- - on Win-builder    
-   * GNU make is a SystemRequirements
+
    
 ## Downstream dependencies
 
