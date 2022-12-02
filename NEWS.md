@@ -1,5 +1,5 @@
 # MAPpoly version 0.3.2
-   - Added function find_blocks
+  - Added function find_blocks
   - Added several utility functions
   - Update function filter_individuals
   - Update filtering graphics
