@@ -1,24 +1,24 @@
 # Platform
 
-|field    |value                                                        |
-|:--------|:------------------------------------------------------------|
-|version  |R version 4.1.2 (2021-11-01)                                 |
-|os       |Ubuntu 20.04.3 LTS                                           |
-|system   |x86_64, linux-gnu                                            |
-|ui       |RStudio                                                      |
-|language |(EN)                                                         |
-|collate  |en_US.UTF-8                                                  |
-|ctype    |en_US.UTF-8                                                  |
-|tz       |America/New_York                                             |
-|date     |2022-01-09                                                   |
-|rstudio  |1.4.1717 Juliet Rose (server)                                |
-|pandoc   |2.11.4 @ /usr/lib/rstudio-server/bin/pandoc/ (via rmarkdown) |
+|field    |value                                       |
+|:--------|:-------------------------------------------|
+|version  |R version 4.2.2 Patched (2022-11-10 r83330) |
+|os       |Ubuntu 20.04.5 LTS                          |
+|system   |x86_64, linux-gnu                           |
+|ui       |RStudio                                     |
+|language |(EN)                                        |
+|collate  |en_US.UTF-8                                 |
+|ctype    |en_US.UTF-8                                 |
+|tz       |America/New_York                            |
+|date     |2022-12-01                                  |
+|rstudio  |2022.07.2+576 Spotted Wakerobin (server)    |
+|pandoc   |2.5 @ /usr/bin/pandoc                       |
 
 # Dependencies
 
 |package       |old      |new        |Δ  |
 |:-------------|:--------|:----------|:--|
-|mappoly       |0.2.3    |0.3.0      |*  |
+|mappoly       |0.3.0    |0.3.0      |   |
 |ape           |5.6-1    |5.6-1      |   |
 |backports     |NA       |1.4.1      |*  |
 |broom         |NA       |0.7.11     |*  |
