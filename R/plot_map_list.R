@@ -8,9 +8,8 @@
 #' @param horiz logical. If FALSE, the maps are plotted vertically with the first map to the left. 
 #'              If TRUE  (default), the maps are plotted horizontally with the first at the bottom
 #'
-#' @param col a vector of colors for each linkage group.  (default = 'lightgrey')
+#' @param col a vector of colors for each linkage group.  (default = 'lightgray')
 #'            \code{ggstyle} produces maps using the default \code{ggplot} color palette. 
-#'            \code{mp_pal} produces maps varying from red, green, blue, and yellow  
 #'            
 #' @param title a title (string) for the maps (default = 'Linkage group')
 #'
@@ -23,6 +22,7 @@
 #'  
 #'  ## solcap map
 #'  plot_map_list(solcap.dose.map, col = "ggstyle")
+#'  plot_map_list(solcap.dose.map, col = "mp_pallet3", horiz = FALSE)
 #'  
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
@@ -35,15 +35,21 @@
 #'
 #' @export plot_map_list
 #'
-plot_map_list <- function(map.list, horiz = TRUE, col = "lightgray", title = "Linkage group"){
+plot_map_list <- function(map.list, horiz = TRUE, 
+                          col = "lightgray", 
+                          title = "Linkage group"){
   if(inherits(map.list, "mappoly.map"))
     map.list <- list(map.list)
   if (any(!sapply(map.list, inherits, "mappoly.map"))) 
     stop("All elemnts in 'map.list' should be of class 'mappoly.map'")
   if(all(col  ==  "ggstyle"))
     col  <- gg_color_hue(length(map.list))
-  if(all(col  ==  "mp_pal"))
-    col  <- mp_pal(length(map.list))
+  if(all(col  ==  "mp_pallet1"))
+    col  <- mp_pallet1(length(map.list))
+  if(all(col  ==  "mp_pallet2"))
+    col  <- mp_pallet2(length(map.list))
+  if(all(col  ==  "mp_pallet3"))
+    col  <- mp_pallet3(length(map.list))
   if(length(col) == 1)
     col <- rep(col, length(map.list))
   z <- NULL

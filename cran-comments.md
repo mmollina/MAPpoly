@@ -24,7 +24,7 @@ Thank you for reviewing our re-submission!
 0 errors | 0 warnings | 2 notes
 
  - on local macOS: R 4.2.2
-   * installed size is 8.0Mb
+   * installed size is 8.1Mb
      sub-directories of 1Mb or more:
        * R:      2.7Mb
        * data:   3.0Mb

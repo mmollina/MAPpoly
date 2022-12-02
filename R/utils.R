@@ -422,12 +422,26 @@ gg_color_hue <- function(n) {
   return(hsv(cols, x[2], x[3]))
 }
 
-#' Mp pallete
+#' MAPpoly pallet 1
 #'
 #' @param void internal function to be documented
 #' @keywords internal
 #' @export
-mp_pal <- colorRampPalette(c("#d11141", "#00b159","#00aedb","#f37735","#ffc425"))
+mp_pallet1 <- colorRampPalette(c("#ffe119", "#f58231","#e6194b","#808000","#9a6324", "#800000"))
+
+#' MAPpoly pallet 2
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @export
+mp_pallet2 <- colorRampPalette(c("#911eb4", "#000075","#4363d8","#42d4f4","#469990", "#3cb44b"))
+
+#' MAPpoly pallet 3
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @export
+mp_pallet3 <- colorRampPalette(c("#ffe119", "#f58231","#e6194b","#808000","#9a6324", "#800000","#911eb4", "#000075","#4363d8","#42d4f4","#469990", "#3cb44b"))
 
 #' Update missing information
 #'

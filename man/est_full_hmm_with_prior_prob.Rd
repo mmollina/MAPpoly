@@ -2,7 +2,7 @@
 % Please edit documentation in R/reest_map_error.R
 \name{est_full_hmm_with_prior_prob}
 \alias{est_full_hmm_with_prior_prob}
-\title{Re-estimate genetic map using dosage.priorprobability distribution}
+\title{Re-estimate genetic map using dosage prior probability distribution}
 \usage{
 est_full_hmm_with_prior_prob(
   input.map,
@@ -60,7 +60,7 @@ ii) a list of maps with possible linkage phase configuration. Each map in the li
 \item{loglike}{the hmm-based multipoint likelihood}
 }
 \description{
-This function considers dosage.priordistribution when re-estimating
+This function considers dosage prior distribution when re-estimating
 a genetic map using Hidden Markov models
 }
 \examples{

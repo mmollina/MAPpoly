@@ -202,9 +202,9 @@ est_full_hmm_with_global_error <- function(input.map, error = NULL, tol = 10e-4,
   return(output.seq)
 }
 
-#' Re-estimate genetic map using dosage.priorprobability distribution
+#' Re-estimate genetic map using dosage prior probability distribution
 #'
-#' This function considers dosage.priordistribution when re-estimating
+#' This function considers dosage prior distribution when re-estimating
 #' a genetic map using Hidden Markov models
 #'
 #' @param input.map an object of class \code{mappoly.map}
