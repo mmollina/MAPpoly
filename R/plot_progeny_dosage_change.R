@@ -11,7 +11,7 @@
 #' @return A ggplot of the changed and imputed genotypic dosages
 #'
 #' @examples
-
+#'     plot_progeny_dosage_change(map_list=MAPs, error=0.05)
 #'
 #' @author Jeekin Lau, \email{jzl0026@tamu.edu}, with optimization by Cristiane Taniguti, \email{chtaniguti@tamu.edu}
 #'
