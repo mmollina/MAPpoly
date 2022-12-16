@@ -4,12 +4,14 @@
 \alias{plot_progeny_dosage_change}
 \title{Look at genotypes that were imputed or changed by the HMM chain given a level of global genotypic error}
 \usage{
-plot_progeny_dosage_change(map_list, error)
+plot_progeny_dosage_change(map_list, error, verbose = T)
 }
 \arguments{
 \item{map_list}{a list of multiple \code{mappoly.map.list}}
 
 \item{error}{error rate used in global error in the `calc_genoprob_error()`}
+
+\item{verbose}{T or F for `calc_genoprob_error()` and `calc_homologprob()`}
 }
 \value{
 A ggplot of the changed and imputed genotypic dosages
