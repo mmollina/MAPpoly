@@ -1,4 +1,3 @@
-#############################################################################################################################
 #' Look at genotypes that were imputed or changed by the HMM chain given a level of global genotypic error
 #'
 #' Outputs a graphical representation ggplot with the percent of data changed
@@ -12,12 +11,7 @@
 #' @return A ggplot of the changed and imputed genotypic dosages
 #'
 #' @examples
-#'     all.mrk <- make_seq_mappoly(hexafake, 'all')
-#'     seq1.mrk <- make_seq_mappoly(hexafake, 'seq1')
-#'     plot(seq1.mrk)
-#'     some.mrk.pos <- c(1,4,28,32,45)
-#'     (some.mrk.1 <- make_seq_mappoly(hexafake, some.mrk.pos))
-#'     plot(some.mrk.1)
+
 #'
 #' @author Jeekin Lau, \email{jzl0026@tamu.edu}, with optimization by Cristiane Taniguti, \email{chtaniguti@tamu.edu}
 #'
