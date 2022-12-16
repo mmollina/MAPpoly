@@ -5,7 +5,7 @@
 #' @param map_list a list of multiple \code{mappoly.map.list}
 #'
 #' @param error error rate used in global error in the `calc_genoprob_error()`
-#'
+#' @param verbose T or F for `calc_genoprob_error()` and `calc_homologprob()`
 #' 
 #'
 #' @return A ggplot of the changed and imputed genotypic dosages
@@ -16,10 +16,10 @@
 #' @author Jeekin Lau, \email{jzl0026@tamu.edu}, with optimization by Cristiane Taniguti, \email{chtaniguti@tamu.edu}
 #'
 #' @import ggplot2 
-#' @import reshape
+#' @import reshape2
 #' @export plot_progeny_dosage_change
 
-plot_progeny_dosage_change <- function(map_list, error){
+plot_progeny_dosage_change <- function(map_list, error, verbose=T){
   map=map_list
   if(!exists(map[[1]]$info$data.name)) stop("mappoly.data object not here")
   
@@ -30,12 +30,12 @@ plot_progeny_dosage_change <- function(map_list, error){
   
   genoprob  <- vector("list", 7)
   for(i in 1:7){
-    genoprob[[i]] <- calc_genoprob_error(input.map = map[[i]], error = error, verbose = F)
+    genoprob[[i]] <- calc_genoprob_error(input.map = map[[i]], error = error, verbose = verbose)
   }
   
   print("calculating homologprob")
   
-  homoprobs = calc_homologprob(genoprob, verbose=F)
+  homoprobs = calc_homologprob(genoprob, verbose=verbose)
   
   print("comparing to orginal")
   
@@ -132,7 +132,7 @@ plot_progeny_dosage_change <- function(map_list, error){
   empty_matrix[which(!original_geno==finished&original_geno==5)]="imputed"
   empty_matrix[which(!original_geno==finished&!original_geno==5)]="changed"
   empty_matrix_melt=melt(empty_matrix)
-  plot1<-ggplot(empty_matrix_melt, aes(X1, X2, fill= factor(value))) + 
+  plot1<-ggplot(empty_matrix_melt, aes(Var1, Var2, fill= factor(value))) + 
     geom_tile()+scale_fill_manual(values=colors)+
     xlab("Markers")+
     ylab("Individuals")+
@@ -143,3 +143,5 @@ plot_progeny_dosage_change <- function(map_list, error){
   return(plot1) 
   
 }
+
+str(empty_matrix)
