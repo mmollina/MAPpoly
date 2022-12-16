@@ -15,7 +15,8 @@
 #'
 #' @author Jeekin Lau, \email{jzl0026@tamu.edu}, with optimization by Cristiane Taniguti, \email{chtaniguti@tamu.edu}
 #'
-#' @import ggplot2, reshape
+#' @import ggplot2 
+#' @import reshape
 #' @export plot_progeny_dosage_change
 
 plot_progeny_dosage_change <- function(map_list, error){
