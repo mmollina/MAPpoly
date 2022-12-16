@@ -144,4 +144,4 @@ plot_progeny_dosage_change <- function(map_list, error, verbose=T){
   
 }
 
-str(empty_matrix)
+
