@@ -110,7 +110,7 @@ install.packages('mappoly')
   * [PedigreeSim: Simulation of genetic marker data in diploid and polyploid pedigreed populations.](https://github.com/PBR/pedigreeSim)
 
 * Genotype calling
-  * [ClusterCall: Automated tetraploid genotype calling by hierarchical clustering](https://potatobreeding.cals.wisc.edu/software/)
+  * [ClusterCall: Automated tetraploid genotype calling by hierarchical clustering](https://doi.org/10.1007/s00122-016-2845-5)
   * [fitPoly: Genotype Calling for Bi-Allelic Marker Assays](https://CRAN.R-project.org/package=fitPoly)
   * [polyRAD: Genotype Calling with Uncertainty from Sequencing Data in Polyploids and Diploids](https://CRAN.R-project.org/package=polyRAD)
   * [SuperMASSA: Graphical Bayesian inference tool for genotyping polyploids](https://bitbucket.org/orserang/supermassa)
