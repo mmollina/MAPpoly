@@ -10,7 +10,7 @@ Thank you for reviewing our re-submission!
 ## Test environments
 * local R installation (macOS Monterey 12.6), R 4.2.2
 * local R installation (Ubuntu 20.04), R 4.2.2
-* Win-builder (devel)
+* Win-builder (release and devel)
 
 ## R CMD check results 
 
