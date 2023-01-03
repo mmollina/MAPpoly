@@ -75,7 +75,7 @@
 
       
 
-      </header><script src="mappoly_startguide_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Introduction to MAPpoly</h1>
@@ -89,11 +89,22 @@
 
     
     
-<p>MAPpoly is an R package to construct genetic maps in autopolyploids with even ploidy levels. This quick start guide will present some essential functions to construct a tetraploid potato map. Please refer to MAPpoly’s <a href="https://CRAN.R-project.org/package=mappoly" class="external-link">Reference Manual</a> and the <a href="https://rpubs.com/mmollin/tetra_mappoly_vignette" class="external-link">Extended Tutorial</a> for a comprehensive description of all functions.</p>
+<p>MAPpoly is an R package to construct genetic maps in autopolyploids
+with even ploidy levels. This quick start guide will present some
+essential functions to construct a tetraploid potato map. Please refer
+to MAPpoly’s <a href="https://CRAN.R-project.org/package=mappoly" class="external-link">Reference Manual</a>
+and the <a href="https://rpubs.com/mmollin/tetra_mappoly_vignette" class="external-link">Extended
+Tutorial</a> for a comprehensive description of all functions.</p>
 <div class="section level2">
 <h2 id="reading-data-set">Reading data set<a class="anchor" aria-label="anchor" href="#reading-data-set"></a>
 </h2>
-<p>There are several functions to read discrete and probabilistic dosage-based genotype data sets in MAPpoly. You can read a data set from TXT, CSV, VCF, fitPoly-generated or import it from the R packages polyRAD, polymapR, and updog. The data set distributed along with MAPpoly is a subset of markers from (<a href="https://doi.org/10.1101/2020.08.24.265397" class="external-link">Pereira et al., 2021</a>) in <a href="https://rstudio-pubs-static.s3.amazonaws.com/700481_7d2515dd19834079912a462f1149ff93.html#reading-csv-files" class="external-link">CSV format</a>. Let us read it into MAPpoly</p>
+<p>There are several functions to read discrete and probabilistic
+dosage-based genotype data sets in MAPpoly. You can read a data set from
+TXT, CSV, VCF, fitPoly-generated or import it from the R packages
+polyRAD, polymapR, and updog. The data set distributed along with
+MAPpoly is a subset of markers from (<a href="https://doi.org/10.1101/2020.08.24.265397" class="external-link">Pereira et al.,
+2021</a>) in <a href="https://rstudio-pubs-static.s3.amazonaws.com/700481_7d2515dd19834079912a462f1149ff93.html#reading-csv-files" class="external-link">CSV
+format</a>. Let us read it into MAPpoly</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/mmollina/MAPpoly" class="external-link">mappoly</a></span><span class="op">)</span></span>
 <span><span class="va">file.name</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata/potato_example.csv"</span>, package <span class="op">=</span> <span class="st">"mappoly"</span><span class="op">)</span></span>
@@ -101,38 +112,55 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">dat</span>, detailed <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code></pre></div>
 <p><img src="images/fig1.jpeg" width="400" height="400"></p>
-<p>The output figure shows a bar plot on the left-hand side with the number of markers in each allele dosage combination in <span class="math inline">\(P_1\)</span> and <span class="math inline">\(P_2\)</span>, respectively. The upper-right plot contains the <span class="math inline">\(\log_{10}(p-value)\)</span> from <span class="math inline">\(\chi^2\)</span> tests for all markers, considering the expected segregation patterns under Mendelian inheritance.</p>
+<p>The output figure shows a bar plot on the left-hand side with the
+number of markers in each allele dosage combination in <span class="math inline">\(P_1\)</span> and <span class="math inline">\(P_2\)</span>, respectively. The upper-right plot
+contains the <span class="math inline">\(\log_{10}(p-value)\)</span>
+from <span class="math inline">\(\chi^2\)</span> tests for all markers,
+considering the expected segregation patterns under Mendelian
+inheritance.</p>
 </div>
 <div class="section level2">
 <h2 id="data-quality-control">Data quality control<a class="anchor" aria-label="anchor" href="#data-quality-control"></a>
 </h2>
 <p>Quality control (QC) procedures are fundamental to identify:</p>
 <ul>
-<li>Individuals from crosses other than <span class="math inline">\(P_1 \times P_2\)</span>
+<li>Individuals from crosses other than <span class="math inline">\(P_1
+\times P_2\)</span>
 </li>
-<li>Individuals and markers that exceeds a defined threshold of missing data points</li>
+<li>Individuals and markers that exceeds a defined threshold of missing
+data points</li>
 <li>Markers with distorted segregation</li>
-<li>Markers with the same genotypic information (redundant markers). Removed markers are positioned into the final map.</li>
+<li>Markers with the same genotypic information (redundant markers).
+Removed markers are positioned into the final map.</li>
 </ul>
-<p>Depending on the data set, these procedures can be conducted in any order. Let us first remove individuals from crosses other than <span class="math inline">\(P_1 \times P_2\)</span>. When using the interactive function, the user needs to select a polygon around the individuals to be removed by clicking its vertices and pressing Esc.</p>
+<p>Depending on the data set, these procedures can be conducted in any
+order. Let us first remove individuals from crosses other than <span class="math inline">\(P_1 \times P_2\)</span>. When using the
+interactive function, the user needs to select a polygon around the
+individuals to be removed by clicking its vertices and pressing Esc.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_individuals.html">filter_individuals</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code></pre></div>
 <p><img src="images/fig2.jpeg" width="400" height="400"></p>
-<p>Now, let us filter out markers and individuals with more than 5% of missing data. You can update the threshold interactively</p>
+<p>Now, let us filter out markers and individuals with more than 5% of
+missing data. You can update the threshold interactively</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_missing.html">filter_missing</a></span><span class="op">(</span><span class="va">dat</span>, type <span class="op">=</span> <span class="st">"marker"</span>, filter.thres <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_missing.html">filter_missing</a></span><span class="op">(</span><span class="va">dat</span>, type <span class="op">=</span> <span class="st">"individual"</span>, filter.thres <span class="op">=</span> <span class="fl">.05</span><span class="op">)</span></span></code></pre></div>
-<p>Finally, we can filter out markers with distorted segregation and redundant information. At this point, we do not consider preferential pairing and double reduction.</p>
+<p>Finally, we can filter out markers with distorted segregation and
+redundant information. At this point, we do not consider preferential
+pairing and double reduction.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seq.filt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/filter_segregation.html">filter_segregation</a></span><span class="op">(</span><span class="va">dat</span>, chisq.pval.thres <span class="op">=</span> <span class="fl">0.05</span><span class="op">/</span><span class="va">dat</span><span class="op">$</span><span class="va">n.mrk</span><span class="op">)</span></span>
 <span><span class="va">seq.filt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_seq_mappoly.html">make_seq_mappoly</a></span><span class="op">(</span><span class="va">seq.filt</span><span class="op">)</span></span>
 <span><span class="va">seq.red</span>  <span class="op">&lt;-</span> <span class="fu"><a href="../reference/elim_redundant.html">elim_redundant</a></span><span class="op">(</span><span class="va">seq.filt</span><span class="op">)</span></span></code></pre></div>
-<p>After filtering, 1990 markers were left to be mapped. Now, let us create a sequence of ordered markers to proceed with the analysis. You can also plot the data set for a specific sequence of markers</p>
+<p>After filtering, 1990 markers were left to be mapped. Now, let us
+create a sequence of ordered markers to proceed with the analysis. You
+can also plot the data set for a specific sequence of markers</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">seq.init</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_seq_mappoly.html">make_seq_mappoly</a></span><span class="op">(</span><span class="va">seq.red</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">seq.init</span><span class="op">)</span></span></code></pre></div>
 <p><img src="images/fig3.jpeg" width="400" height="400"></p>
-<p>and check the distribution of the markers in the reference genome, if the information is available</p>
+<p>and check the distribution of the markers in the reference genome, if
+the information is available</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">go</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_genomic_order.html">get_genomic_order</a></span><span class="op">(</span>input.seq <span class="op">=</span> <span class="va">seq.init</span><span class="op">)</span> <span class="co">## get genomic order of the sequence</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">go</span><span class="op">)</span></span></code></pre></div>
@@ -141,7 +169,14 @@
 <div class="section level2">
 <h2 id="tpt">Two-point analysis<a class="anchor" aria-label="anchor" href="#tpt"></a>
 </h2>
-<p>The two-point analysis calculates the pairwise recombination fraction in a sequence of markers. At this point of the analysis, where we have many markers, we use the function <code>est_pairwise_rf2</code>, which has a less detailed output than the original <code>est_pairwise_rf</code> (which will be used later) but can handle tens of thousands of markers, even when using a personal computer. Nevertheless, the analysis can take a while depending on the number of markers if few cores are available.</p>
+<p>The two-point analysis calculates the pairwise recombination fraction
+in a sequence of markers. At this point of the analysis, where we have
+many markers, we use the function <code>est_pairwise_rf2</code>, which
+has a less detailed output than the original
+<code>est_pairwise_rf</code> (which will be used later) but can handle
+tens of thousands of markers, even when using a personal computer.
+Nevertheless, the analysis can take a while depending on the number of
+markers if few cores are available.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ncores</span> <span class="op">&lt;-</span> <span class="fu">parallel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/parallel/detectCores.html" class="external-link">detectCores</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span></span>
 <span><span class="va">tpt</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_pairwise_rf2.html">est_pairwise_rf2</a></span><span class="op">(</span><span class="va">seq.init</span>, ncpus <span class="op">=</span> <span class="va">ncores</span><span class="op">)</span></span>
@@ -153,19 +188,38 @@
 <div class="section level2">
 <h2 id="grouping">Grouping<a class="anchor" aria-label="anchor" href="#grouping"></a>
 </h2>
-<p>We can cluster the markers in linkage groups by using function <code>group_mappoly</code>. The function uses the recombination fraction matrix and UPGMA method to group markers. Use the option <code>comp.mat = TRUE</code> to compare the linkage-based clustering results with the chromosome information. If your data set does not contain chromosome information, use the option <code>comp.mat = FALSE</code>. You also can use the interactive version to change the number of expected groups</p>
+<p>We can cluster the markers in linkage groups by using function
+<code>group_mappoly</code>. The function uses the recombination fraction
+matrix and UPGMA method to group markers. Use the option
+<code>comp.mat = TRUE</code> to compare the linkage-based clustering
+results with the chromosome information. If your data set does not
+contain chromosome information, use the option
+<code>comp.mat = FALSE</code>. You also can use the interactive version
+to change the number of expected groups</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/group_mappoly.html">group_mappoly</a></span><span class="op">(</span><span class="va">m</span>, expected.groups <span class="op">=</span> <span class="fl">12</span>, comp.mat <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">g</span><span class="op">)</span></span>
 <span><span class="va">g</span></span></code></pre></div>
 <p><img src="images/fig6.jpeg" width="400" height="400"></p>
-<p>In the table above, the rows indicate linkage groups obtained using linkage information and, the columns are the chromosomes in the reference genome. Notice the diagonal indicating the concordance between the two sources of information.</p>
+<p>In the table above, the rows indicate linkage groups obtained using
+linkage information and, the columns are the chromosomes in the
+reference genome. Notice the diagonal indicating the concordance between
+the two sources of information.</p>
 </div>
 <div class="section level2">
 <h2 id="ordering-markers">Ordering markers<a class="anchor" aria-label="anchor" href="#ordering-markers"></a>
 </h2>
-<p>Markers are ordered within linkage groups. In this tutorial, we will show the step-by-step procedure using Linkage Group 1 (LG1). You can do the same for the remaining linkage groups.</p>
-<p>Since we had a good concordance between genome and linkage information, we will use only markers assigned to a particular linkage group using both sources of information. We will do that using <code>genomic.info = 1</code> , so the function uses the intersection of the markers assigned using linkage and the chromosome with the highest number of allocated markers. To use only the linkage information, do not use the argument <code>genomic.info</code>. You also need the recombination fraction matrix for that group.</p>
+<p>Markers are ordered within linkage groups. In this tutorial, we will
+show the step-by-step procedure using Linkage Group 1 (LG1). You can do
+the same for the remaining linkage groups.</p>
+<p>Since we had a good concordance between genome and linkage
+information, we will use only markers assigned to a particular linkage
+group using both sources of information. We will do that using
+<code>genomic.info = 1</code> , so the function uses the intersection of
+the markers assigned using linkage and the chromosome with the highest
+number of allocated markers. To use only the linkage information, do not
+use the argument <code>genomic.info</code>. You also need the
+recombination fraction matrix for that group.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">s1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_seq_mappoly.html">make_seq_mappoly</a></span><span class="op">(</span><span class="va">g</span>, <span class="fl">1</span>, <span class="co">## Select LG1 </span></span>
 <span>                       genomic.info <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> </span>
@@ -175,19 +229,44 @@
 <code class="sourceCode R"><span><span class="va">mds.o1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/mds_mappoly.html">mds_mappoly</a></span><span class="op">(</span>input.mat <span class="op">=</span> <span class="va">m1</span><span class="op">)</span></span>
 <span><span class="va">s1.mds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_seq_mappoly.html">make_seq_mappoly</a></span><span class="op">(</span><span class="va">mds.o1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">m1</span>, ord <span class="op">=</span> <span class="va">s1.mds</span><span class="op">)</span></span></code></pre></div>
-<p>Usually, at this point, the user can use diagnostic plots to remove markers that disturb the ordering procedure. We didn’t use that procedure in this tutorial, but we encourage the user to check the example in <code><a href="../reference/mds_mappoly.html">?mds_mappoly</a></code>. Now, let us use the reference genome to order the markers.</p>
+<p>Usually, at this point, the user can use diagnostic plots to remove
+markers that disturb the ordering procedure. We didn’t use that
+procedure in this tutorial, but we encourage the user to check the
+example in <code><a href="../reference/mds_mappoly.html">?mds_mappoly</a></code>. Now, let us use the reference
+genome to order the markers.</p>
 <p>You also can order the markers the reference genome</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">gen.o1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_genomic_order.html">get_genomic_order</a></span><span class="op">(</span><span class="va">s1</span><span class="op">)</span></span>
 <span><span class="va">s1.gen</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/make_seq_mappoly.html">make_seq_mappoly</a></span><span class="op">(</span><span class="va">gen.o1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">m1</span>, ord <span class="op">=</span> <span class="va">s1.gen</span><span class="op">)</span></span></code></pre></div>
-<p>For the sake of this short tutorial, let us use the MDS order (<code>s1.mds</code>) to phase the markers. Still, you can also try the genome order (<code>s1.gen</code>) and compare the resulting maps using function <code>compare_maps</code>, and you will notice that the genomic order yields a better map since its likelihood is higher.</p>
+<p>For the sake of this short tutorial, let us use the MDS order
+(<code>s1.mds</code>) to phase the markers. Still, you can also try the
+genome order (<code>s1.gen</code>) and compare the resulting maps using
+function <code>compare_maps</code>, and you will notice that the genomic
+order yields a better map since its likelihood is higher.</p>
 </div>
 <div class="section level2">
-<h2 id="phasing-markers-and-estimating-multilocus-recombination-fractions-">Phasing markers and estimating multilocus recombination fractions.<a class="anchor" aria-label="anchor" href="#phasing-markers-and-estimating-multilocus-recombination-fractions-"></a>
+<h2 id="phasing-markers-and-estimating-multilocus-recombination-fractions-">Phasing markers and estimating multilocus recombination
+fractions.<a class="anchor" aria-label="anchor" href="#phasing-markers-and-estimating-multilocus-recombination-fractions-"></a>
 </h2>
-<p>Estimating the genetic map for a given order involves the computation of recombination fraction between adjacent markers and inferring the linkage phase configuration of those markers in both parents. The core function to perform these tasks in <code>MAPpoly</code> is <code>est_rf_hmm_sequential</code>. This function uses the pairwise <a href="#tpt">recombination fraction</a> as the first source of information to sequentially position allelic variants in specific parental homologs. The algorithm relies on the likelihood obtained through a hidden Markov model (HMM) for situations where pairwise analysis has limited power. Once all markers are positioned, the final map is reconstructed using the HMM multipoint algorithm. For a detailed description of the <code>est_rf_hmm_sequential</code> arguments, please refer to MAPpoly’s <a href="https://CRAN.R-project.org/package=mappoly" class="external-link">Reference Manual</a> and the <a href="https://rstudio-pubs-static.s3.amazonaws.com/700481_7d2515dd19834079912a462f1149ff93.html#estimating-the-map-for-a-given-order" class="external-link">Extended Tutorial</a>.</p>
-<p>First we need to calculate the pairwise recombination fraction for markers in sequence <code>s1.mds</code> using <code>est_pairwise_rf</code>, which contains the information necessary to the proper working of the phasing algorithm.</p>
+<p>Estimating the genetic map for a given order involves the computation
+of recombination fraction between adjacent markers and inferring the
+linkage phase configuration of those markers in both parents. The core
+function to perform these tasks in <code>MAPpoly</code> is
+<code>est_rf_hmm_sequential</code>. This function uses the pairwise <a href="#tpt">recombination fraction</a> as the first source of
+information to sequentially position allelic variants in specific
+parental homologs. The algorithm relies on the likelihood obtained
+through a hidden Markov model (HMM) for situations where pairwise
+analysis has limited power. Once all markers are positioned, the final
+map is reconstructed using the HMM multipoint algorithm. For a detailed
+description of the <code>est_rf_hmm_sequential</code> arguments, please
+refer to MAPpoly’s <a href="https://CRAN.R-project.org/package=mappoly" class="external-link">Reference Manual</a>
+and the <a href="https://rstudio-pubs-static.s3.amazonaws.com/700481_7d2515dd19834079912a462f1149ff93.html#estimating-the-map-for-a-given-order" class="external-link">Extended
+Tutorial</a>.</p>
+<p>First we need to calculate the pairwise recombination fraction for
+markers in sequence <code>s1.mds</code> using
+<code>est_pairwise_rf</code>, which contains the information necessary
+to the proper working of the phasing algorithm.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tpt1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_pairwise_rf.html">est_pairwise_rf</a></span><span class="op">(</span><span class="va">s1.mds</span>, ncpus <span class="op">=</span> <span class="va">ncores</span><span class="op">)</span></span>
 <span><span class="va">lg1.map</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_rf_hmm_sequential.html">est_rf_hmm_sequential</a></span><span class="op">(</span>input.seq <span class="op">=</span> <span class="va">s1.mds</span>,</span>
@@ -202,18 +281,27 @@
 <span>                                reestimate.single.ph.configuration <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>                                tol <span class="op">=</span> <span class="fl">10e-3</span>,</span>
 <span>                                tol.final <span class="op">=</span> <span class="fl">10e-4</span><span class="op">)</span></span></code></pre></div>
-<p>Now, use the functions <code>print</code> and <code>plot</code> to view the map results:</p>
+<p>Now, use the functions <code>print</code> and <code>plot</code> to
+view the map results:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">lg1.map</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lg1.map</span>, mrk.names <span class="op">=</span> <span class="cn">TRUE</span>, cex <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span></code></pre></div>
 <p><img src="images/fig7.jpeg" width="400" height="400"></p>
-<p>Now let us update the recombination fractions by allowing a global error in the HMM recombination fraction re-estimation. Using this approach, the genetic map’s length will be updated by removing spurious recombination events. This procedure can be applied using either the probability distribution provided by the genotype calling software using function <code>est_full_hmm_with_prior_prob</code> or assuming a global genotype error like the following example</p>
+<p>Now let us update the recombination fractions by allowing a global
+error in the HMM recombination fraction re-estimation. Using this
+approach, the genetic map’s length will be updated by removing spurious
+recombination events. This procedure can be applied using either the
+probability distribution provided by the genotype calling software using
+function <code>est_full_hmm_with_prior_prob</code> or assuming a global
+genotype error like the following example</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lg1.map.up</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/est_full_hmm_with_global_error.html">est_full_hmm_with_global_error</a></span><span class="op">(</span>input.map <span class="op">=</span> <span class="va">lg1.map</span>, error <span class="op">=</span> <span class="fl">0.05</span>, </span>
 <span>                                             verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">lg1.map.up</span>, mrk.names <span class="op">=</span> <span class="cn">TRUE</span>, cex <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span></span></code></pre></div>
 <p><img src="images/fig8.jpeg" width="400" height="400"></p>
-<p>We can also use the ordinary least squares (OLS) method and the weighted MDS followed by fitting a one dimensional principal curve (wMDS_to_1D_pc)</p>
+<p>We can also use the ordinary least squares (OLS) method and the
+weighted MDS followed by fitting a one dimensional principal curve
+(wMDS_to_1D_pc)</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lg1.map.ols</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reest_rf.html">reest_rf</a></span><span class="op">(</span><span class="va">lg1.map</span>, <span class="va">m1</span>, method <span class="op">=</span> <span class="st">"ols"</span><span class="op">)</span></span>
 <span><span class="va">lg1.map.mds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/reest_rf.html">reest_rf</a></span><span class="op">(</span><span class="va">lg1.map</span>, <span class="va">m1</span>, method <span class="op">=</span> <span class="st">"wMDS_to_1D_pc"</span>, input.mds <span class="op">=</span> <span class="va">mds.o1</span><span class="op">)</span></span></code></pre></div>
@@ -228,14 +316,20 @@
 <div class="section level2">
 <h2 id="homolog-probability-and-preferential-pairing-profile">Homolog probability and preferential pairing profile<a class="anchor" aria-label="anchor" href="#homolog-probability-and-preferential-pairing-profile"></a>
 </h2>
-<p>To use the genetic map in conjunction with QTL analysis software, we need to obtain the homolog probability for all linkage groups for all individuals in the full-sib population. In this short guide, we will proceed only with one linkage group, but this procedure should be applied to all chromosomes in real situations. Let us use the updated map</p>
+<p>To use the genetic map in conjunction with QTL analysis software, we
+need to obtain the homolog probability for all linkage groups for all
+individuals in the full-sib population. In this short guide, we will
+proceed only with one linkage group, but this procedure should be
+applied to all chromosomes in real situations. Let us use the updated
+map</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">g1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_genoprob_error.html">calc_genoprob_error</a></span><span class="op">(</span><span class="va">lg1.map.up</span>, step <span class="op">=</span> <span class="fl">1</span>, error <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="va">to.qtlpoly</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/export_qtlpoly.html">export_qtlpoly</a></span><span class="op">(</span><span class="va">g1</span><span class="op">)</span> <span class="co">#export to QTLpoly</span></span>
 <span><span class="va">h1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/calc_homologprob.html">calc_homologprob</a></span><span class="op">(</span><span class="va">g1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">h1</span>, lg <span class="op">=</span> <span class="fl">1</span>, ind <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div>
 <p><img src="images/fig9.jpeg" width="400" height="280"></p>
-<p>Now let us compute the preferential pairing profile for linkage group 1</p>
+<p>Now let us compute the preferential pairing profile for linkage group
+1</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p1</span> <span class="op">=</span> <span class="fu"><a href="../reference/calc_prefpair_profiles.html">calc_prefpair_profiles</a></span><span class="op">(</span><span class="va">g1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">p1</span>, min.y.prof <span class="op">=</span> <span class="fl">0.25</span>, max.y.prof <span class="op">=</span> <span class="fl">0.4</span>, P1 <span class="op">=</span> <span class="st">"Atlantic"</span>, P2 <span class="op">=</span> <span class="st">"B1829.5"</span><span class="op">)</span></span></code></pre></div>
@@ -244,10 +338,13 @@
 <div class="section level2">
 <h2 id="exporting-a-phased-map">Exporting a phased map<a class="anchor" aria-label="anchor" href="#exporting-a-phased-map"></a>
 </h2>
-<p>It is possible to export a phased map to an external CSV file using</p>
+<p>It is possible to export a phased map to an external CSV file
+using</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/export_map_list.html">export_map_list</a></span><span class="op">(</span><span class="va">lg1.map.up</span>, file <span class="op">=</span> <span class="st">"output_file.csv"</span><span class="op">)</span></span></code></pre></div>
-<p>For a script with a complete analysis of the data set presented here, please refer to the <a href="https://github.com/mmollina/SCRI/blob/main/docs/tetra/mappoly_intro.md" class="external-link">Complete script</a></p>
+<p>For a script with a complete analysis of the data set presented here,
+please refer to the <a href="https://github.com/mmollina/SCRI/blob/main/docs/tetra/mappoly_intro.md" class="external-link">Complete
+script</a></p>
 </div>
 <div class="section level2">
 <h2 id="utility-functions">Utility functions<a class="anchor" aria-label="anchor" href="#utility-functions"></a>
