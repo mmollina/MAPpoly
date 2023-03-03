@@ -1,0 +1,7 @@
+ll_given_rf_twp barnch
+----------------------
+
+In this branch, we implemented the log-likelihood computation for the two-point 
+linkage analysis given a recombination fraction. This strategy can be used in 
+heuristics to compute linkage phases in large multiparental populations, given 
+we know the distance between two markers. 

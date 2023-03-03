@@ -529,3 +529,29 @@ paralell_pairwise_discrete_rcpp <- function(mrk.pairs,
   return(res)
   ## return(lapply(res, format_rf))
 }
+
+#' Compute the log-likelihood of a set of pairwise markers given a recombination fraction
+#' 
+#' @param void internal function to be documented
+#' @export
+ll_twopt <- function(rec.frac,
+                     input.seq)
+{
+  mrk.pairs <- combn(sort(input.seq$seq.num), 2) - 1
+  geno <- as.matrix(get(input.seq$data.name, pos = 1)$geno.dose)
+  dP <- get(input.seq$data.name)$dosage.p1
+  dQ <- get(input.seq$data.name)$dosage.p2
+  count.cache = cache_counts_twopt(input.seq, cached = TRUE)
+  res <- .Call("ll_twopt_given_rf",
+               as.double(rec.frac),
+               input.seq$ploidy,
+               as.matrix(mrk.pairs),
+               as.matrix(geno),
+               as.vector(dP),
+               as.vector(dQ),
+               count.cache$cond,
+               PACKAGE = "mappoly")
+  return(res)
+}
+
+
