@@ -89,15 +89,21 @@ poly_cross_simulate <- function(ploidy, rf.vec, n.mrk,
   geno <- t(x[[1]])
   ind.names <- colnames(geno)
   mrk.names <- rownames(geno)
+  dosage.p1 = hom.allele$p
+  dosage.p2 = hom.allele$q
+  chrom = rep(1, n.mrk)
+  genome.pos = 1:n.mrk
+  names(dosage.p1) <- names(dosage.p2) <- names(chrom) <- names(genome.pos) <- mrk.names
+
   structure(list(ploidy = ploidy,
                  n.ind = n.ind,
                  n.mrk = n.mrk,
                  ind.names = ind.names,
                  mrk.names = mrk.names,
-                 dosage.p1 = hom.allele$p,
-                 dosage.p2 = hom.allele$q,
-                 chrom = NA,
-                 genome.pos = NA,
+                 dosage.p1 = dosage.p1,
+                 dosage.p2 = dosage.p2,
+                 chrom = chrom,
+                 genome.pos = genome.pos,
                  geno.dose = geno,
                  nphen = 0,
                  phen = NULL),

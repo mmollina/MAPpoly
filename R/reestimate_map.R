@@ -90,16 +90,42 @@ reest_rf <- function(input.map, input.mat = NULL, tol = 10e-3,  phase.config = "
   }
   else if(method  ==  "hmm")
   {
+    info.par <-detect_info_par(input.map)
     s <- make_seq_mappoly(input.obj = get(input.map$info$data.name, pos  = 1),
                         arg = input.map$info$mrk.names,
                         data.name = input.map$info$data.name)
     for(j in i.lpc){
-      mtemp <- est_rf_hmm_single(input.seq = s,
-                               input.ph.single = input.map$maps[[j]]$seq.ph,
-                               rf.temp = input.map$maps[[j]]$seq.rf,
-                               tol = tol, verbose = verbose, 
-                               high.prec = high.prec,
-                               max.rf.to.break.EM = max.rf.to.break.EM)
+      
+      if(info.par == "both")
+      {
+        mtemp <- est_rf_hmm_single_phase(input.seq = s,
+                                         input.ph.single = input.map$maps[[j]]$seq.ph,
+                                         rf.temp = input.map$maps[[j]]$seq.rf,
+                                         tol = tol, verbose = verbose, 
+                                         high.prec = high.prec,
+                                         max.rf.to.break.EM = max.rf.to.break.EM)
+      }
+      else if (info.par == "p1") 
+      {
+        mtemp <-  est_rf_hmm_single_phase_single_parent(input.seq = s,
+                                                           input.ph.single = input.map$maps[[j]]$seq.ph,
+                                                           info.parent = 1,
+                                                           uninfo.parent = 2,
+                                                           rf.vec = input.map$maps[[j]]$seq.rf,
+                                                           tol = tol,
+                                                           verbose = verbose)
+      }
+      else if (info.par == "p2")
+      {
+        mtemp <-  est_rf_hmm_single_phase_single_parent(input.seq = s,
+                                                        input.ph.single = input.map$maps[[j]]$seq.ph,
+                                                        info.parent = 2,
+                                                        uninfo.parent = 1,
+                                                        rf.vec = input.map$maps[[j]]$seq.rf,
+                                                        tol = tol,
+                                                        verbose = verbose)
+      }
+      else stop("Should not get here.")
       output.map$maps[[j]] <- mtemp
     }
   } else if(method  ==  "wMDS_to_1D_pc")

@@ -20,7 +20,7 @@ present on the sequence) and k2 (the inserted marker)}
 
 \item{ploidy}{the ploidy level}
 
-\item{k1}{marker already present on the sequence}
+\item{k1}{marker already present in the sequence}
 
 \item{k2}{inserted marker}
 }

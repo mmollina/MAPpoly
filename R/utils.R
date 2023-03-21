@@ -1687,14 +1687,14 @@ aggregate_matrix <- function(M, fact){
 #' @param void internal function to be documented
 #' @keywords internal
 #' @export
-get_states_and_emission_one_parent <- function(ploidy, ph, global.err, D){
+get_states_and_emission_single_parent <- function(ploidy, ph, global.err, D, dose.notinf.P){
   n.mrk <- nrow(D)
   n.ind <- ncol(D)
   A <- matrix(0, nrow = choose(ploidy, ploidy/2), ncol = length(ph))
   for(i in 1:length(ph)){
     id1 <- numeric(ploidy)
     id1[ph[[i]]] <- 1
-    A[,i] <- apply(combn(id1, ploidy/2), 2, sum)
+    A[,i] <- apply(combn(id1, ploidy/2), 2, sum) + dose.notinf.P[i]/2
   }
   if(round(global.err, 4) == 0.0){
     e <- h <- vector("list", n.mrk)
@@ -1776,6 +1776,32 @@ compare_maps <- function(...){
   a[which.max(a[,5]),6] <- "*"
   colnames(a)[c(5,6)] <- c("loglike", "max_likelog")
   return(as.data.frame(a))
+}
+
+#' Detects which parent is informative
+#'
+#' @param x an object of class \code{mappoly.sequence} or \code{mappoly.map}
+#' 
+#' @export
+detect_info_par<-function(x){
+  ## checking for correct object
+  if (inherits(x, "mappoly.sequence")) {
+   if(all(x$seq.dose.p2 == 0 | x$seq.dose.p2 == x$ploidy))
+     return("p1")
+  else if(all(x$seq.dose.p1 == 0 | x$seq.dose.p1 == x$ploidy))
+    return("p2")
+  else
+    return("both")
+  } else if (inherits(x, "mappoly.map")) {
+    if(all(x$info$seq.dose.p2 == 0 | x$info$seq.dose.p2 == x$info$ploidy))
+      return("p1")
+    else if(all(x$info$seq.dose.p1 == 0 | x$info$seq.dose.p1 == x$info$ploidy))
+      return("p2")
+    else
+      return("both")
+  } else{
+    stop(deparse(substitute(x)), " is not an object of class 'mappoly.map' or 'mappoly.sequence'")    
+  }
 }
 
 # Skeleton to test CPP functions

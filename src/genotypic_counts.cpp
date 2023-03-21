@@ -31,7 +31,7 @@
 
 using namespace Rcpp;
 
-RcppExport SEXP get_counts_one_parent_cpp(SEXP ploidyR, SEXP gen_par_mk1R,
+RcppExport SEXP get_counts_single_parent_cpp(SEXP ploidyR, SEXP gen_par_mk1R,
 					  SEXP gen_par_mk2R, SEXP gen_prog_mk1R,
 					  SEXP gen_prog_mk2R, SEXP countsR)
 {
