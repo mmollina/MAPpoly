@@ -999,9 +999,7 @@ filter_map_at_hmm_thres <- function(map, thres.hmm){
 update_ph_list_at_hmm_thres <- function(map, thres.hmm){
   temp.map <- filter_map_at_hmm_thres(map, thres.hmm)
   config.to.test <- lapply(temp.map$maps, function(x) x$seq.ph)
-  rf.vec <- t(sapply(temp.map$maps, function(x) x$seq.rf))
-  rownames(rf.vec) <- names(config.to.test) <- paste("Conf", 1:length(config.to.test), sep = "-")
-  structure(list(config.to.test = config.to.test, rec.frac = rf.vec, 
+  structure(list(config.to.test = config.to.test, 
                  ploidy = map$info$ploidy, seq.num = map$maps[[1]]$seq.num, 
                  thres = map$info$ph.thresh, data.name = map$info$data.name, 
                  thres.hmm = thres.hmm),
@@ -1013,9 +1011,7 @@ update_ph_list_at_hmm_thres <- function(map, thres.hmm){
 #' @keywords internal
 get_ph_list_subset <- function(ph.list, seq.num, conf){
   config.to.test <- list(lapply(ph.list$config.to.test[[conf]], function(x, seq.num) x[as.character(seq.num)], seq.num))
-  rf.vec <- ph.list$rec.frac[conf, , drop = FALSE]
-  names(config.to.test) <- rownames(rf.vec)
-  structure(list(config.to.test = config.to.test, rec.frac = rf.vec, 
+  structure(list(config.to.test = config.to.test, 
                  ploidy = ph.list$ploidy, seq.num = ph.list$seq.num, 
                  thres = ph.list$ph.thresh, data.name = ph.list$data.name, 
                  thres.hmm = ph.list$thres.hmm),
@@ -1031,10 +1027,7 @@ concatenate_ph_list <- function(ph.list.1, ph.list.2){
   config.to.test <- c(ph.list.1$config.to.test, ph.list.2$config.to.test)
   id <- which(!duplicated(config.to.test))
   config.to.test <- config.to.test[id]
-  rf.vec <- rbind(ph.list.1$rec.frac, ph.list.2$rec.frac)
-  rf.vec <- rf.vec[id,,drop = FALSE]
-  rownames(rf.vec) <- names(config.to.test) <- paste("Conf", 1:length(config.to.test), sep = "-")
-  structure(list(config.to.test = config.to.test, rec.frac = rf.vec, 
+  structure(list(config.to.test = config.to.test,
                  ploidy = ph.list.1$ploidy, seq.num = ph.list.1$seq.num, 
                  thres = ph.list.1$ph.thresh, data.name = ph.list.1$data.name, 
                  thres.hmm = ph.list.1$thres.hmm),
@@ -1050,7 +1043,7 @@ add_mrk_at_tail_ph_list <- function(ph.list.1, ph.list.2, cor.index){
     config.to.test[[i]] <- list(P = c(ph.list.1$config.to.test[[cor.index[i,1]]]$P, tail(ph.list.2$config.to.test[[cor.index[i,2]]]$P,1)),
                                 Q = c(ph.list.1$config.to.test[[cor.index[i,1]]]$Q, tail(ph.list.2$config.to.test[[cor.index[i,2]]]$Q,1)))
   }
-  structure(list(config.to.test = config.to.test, rec.frac = NULL, 
+  structure(list(config.to.test = config.to.test, 
                  ploidy = ph.list.1$ploidy, seq.num = ph.list.1$seq.num, 
                  thres = ph.list.1$ph.thresh, data.name = ph.list.1$data.name, 
                  thres.hmm = ph.list.1$thres.hmm),

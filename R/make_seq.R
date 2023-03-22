@@ -3,7 +3,8 @@
 #' Makes a sequence of markers based on an object of another class.
 #'
 #' @param input.obj an object of one of the following classes:
-#'     \code{mappoly.data}, \code{mappoly.map}, \code{mappoly.group}, \code{mappoly.unique.seq},
+#'     \code{mappoly.data}, \code{mappoly.map}, \code{mappoly.sequence}, 
+#'     \code{mappoly.group}, \code{mappoly.unique.seq},
 #'     \code{mappoly.pcmap}, \code{mappoly.pcmap3d}, or \code{mappoly.geno.ord}
 #'
 #' @param arg can be one of the following objects: i) a string 'all',
@@ -80,13 +81,11 @@ make_seq_mappoly <- function(input.obj,
                              info.parent = c('all', 'p1', 'p2'), 
                              genomic.info = NULL) {
   ## checking for correct object
-  input_classes <- c("mappoly.data", "mappoly.map", "mappoly.unique.seq", "mappoly.pcmap", "mappoly.pcmap3d", 
+  input_classes <- c("mappoly.data", "mappoly.map", "mappoly.sequence", 
+                     "mappoly.unique.seq", "mappoly.pcmap", "mappoly.pcmap3d", 
                      "mappoly.group", "mappoly.chitest.seq", "mappoly.geno.ord")
-  
-  
   if (!inherits(input.obj, input_classes)) {
-    stop(deparse(substitute(input.obj)), " is not an object of class 'mappoly.data', 'mappoly.map', 
-               'mappoly.chitest.seq', 'mappoly.unique.seq', 'mappoly.pcmap', 'mappoly.pcmap3d', 'mappoly.geno.ord', or 'mappoly.group'")
+    stop("invalid input object.", call. = FALSE)
   }
   ## if input object is a map, call 'make_seq_mappoly' recursively
   info.parent <- match.arg(info.parent)
@@ -95,6 +94,17 @@ make_seq_mappoly <- function(input.obj,
                             arg = input.obj$info$mrk.names,
                             info.parent = info.parent,
                             data.name = input.obj$info$data.name))
+  if(inherits (input.obj, "mappoly.sequence")){
+    if(is.null(arg))
+      arg = input.obj$seq.mrk.names
+    if(!is.character(arg))
+      stop("provide marker names when using 'mappoly.sequence' as input object.", 
+           call. = FALSE)
+    return(make_seq_mappoly(get(input.obj$data.name, pos = 1), 
+                            arg = arg,
+                            info.parent = info.parent,
+                            data.name = input.obj$data.name))
+  }
   ## checking for argument to make a sequence
   if (is.null(arg) && !inherits(input.obj, "mappoly.chitest.seq") && !inherits(input.obj, "mappoly.unique.seq") && 
       !inherits(input.obj, "mappoly.pcmap") && !inherits(input.obj, "mappoly.pcmap3d") && !inherits(input.obj, "mappoly.geno.ord")) {
