@@ -4,7 +4,7 @@
 \alias{get_ols_map}
 \title{Get weighted ordinary least squared map give a sequence and rf matrix}
 \usage{
-get_ols_map(input.seq, input.map, weight = TRUE)
+get_ols_map(input.seq, input.mat, weight = TRUE)
 }
 \arguments{
 \item{void}{internal function to be documented}

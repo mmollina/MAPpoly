@@ -1624,12 +1624,12 @@ sample_data <- function(input.data, n = NULL,
 #' @keywords internal
 #' @export
 #' @importFrom zoo na.approx
-get_ols_map <- function(input.seq, input.map, weight = TRUE){
+get_ols_map <- function(input.seq, input.mat, weight = TRUE){
   id <- input.seq$seq.mrk.names
-  y <- as.numeric((imf_h(as.dist(input.map$rec.mat[id,id]))))
-  w <- as.numeric((imf_h(as.dist(input.map$lod.mat[id,id]))))
+  y <- as.numeric((imf_h(as.dist(input.mat$rec.mat[id,id]))))
+  w <- as.numeric((imf_h(as.dist(input.mat$lod.mat[id,id]))))
   v <- t(combn(id,2))
-  rf <- get_rf_from_mat(input.map$rec.mat[id,id])
+  rf <- get_rf_from_mat(input.mat$rec.mat[id,id])
   rf <- zoo::na.approx(rf)
   z <- cumsum(imf_h(c(0,rf)))
   names(z) <- id
@@ -1811,28 +1811,83 @@ detect_info_par<-function(x){
 #   
 
 #' @export
-.mappoly_data_skeleton<-function()
-  structure(list(ploidy = NA,
-                 n.ind = NA,
-                 n.mrk = NA,
-                 ind.names = NA,
-                 mrk.names = NA,
-                 dosage.p1 = NA,
-                 dosage.p2 = NA,
-                 chrom = NA,
-                 genome.pos = NA,
-                 seq.ref = NA,
-                 seq.alt = NA,
-                 all.mrk.depth = NA,
-                 prob.thres = NA,
-                 geno.dose = NA,
-                 nphen = NA,
-                 phen = NA,
-                 kept = NA,
-                 chisq.pval = NA,
-                 elim.correspondence = NA),
+.mappoly_data_skeleton<-function(ploidy =NULL,
+                                 n.ind =NULL,
+                                 n.mrk =NULL,
+                                 ind.names =NULL,
+                                 mrk.names =NULL,
+                                 dosage.p1 =NULL,
+                                 dosage.p2 =NULL,
+                                 chrom =NULL,
+                                 genome.pos =NULL,
+                                 seq.ref =NULL,
+                                 seq.alt =NULL,
+                                 all.mrk.depth =NULL,
+                                 prob.thres =NULL,
+                                 geno.dose =NULL,
+                                 nphen =NULL,
+                                 phen =NULL,
+                                 kept =NULL,
+                                 chisq.pval =NULL,
+                                 elim.correspondence =NULL)
+  structure(list(ploidy = ploidy,
+                 n.ind = n.ind,
+                 n.mrk = n.mrk,
+                 ind.names = ind.names,
+                 mrk.names = mrk.names,
+                 dosage.p1 = dosage.p1,
+                 dosage.p2 = dosage.p2,
+                 chrom = chrom,
+                 genome.pos = genome.pos,
+                 seq.ref = seq.ref,
+                 seq.alt = seq.alt,
+                 all.mrk.depth = all.mrk.depth,
+                 prob.thres = prob.thres,
+                 geno.dose = geno.dose,
+                 nphen = nphen,
+                 phen = phen,
+                 kept = kept,
+                 chisq.pval = chisq.pval,
+                 elim.correspondence = elim.correspondence),
             class = "mappoly.data")
 
+#' @export
+.mappoly_map_skeleton<-function(ploidy=NULL,
+                                n.mrk=NULL,
+                                seq.num=NULL,
+                                mrk.names=NULL,
+                                seq.dose.p1=NULL,
+                                seq.dose.p2=NULL,
+                                chrom=NULL,
+                                genome.pos=NULL,
+                                seq.ref=NULL,
+                                seq.alt=NULL,
+                                chisq.pval=NULL,
+                                data.name=NULL,
+                                ph.thresh =NULL,
+                                seq.rf =NULL,
+                                seq.ph = list(P =NULL, Q =NULL),
+                                loglike =NULL)
+  structure(list(info = list(ploidy=ploidy,
+                             n.mrk=n.mrk,
+                             seq.num=seq.num,
+                             mrk.names=mrk.names,
+                             seq.dose.p1=seq.dose.p1,
+                             seq.dose.p2=seq.dose.p2,
+                             chrom=chrom,
+                             genome.pos=genome.pos,
+                             seq.ref=seq.ref,
+                             seq.alt=seq.alt,
+                             chisq.pval=chisq.pval,
+                             data.name=data.name,
+                             ph.thresh = ph.thresh),
+                 maps = list(list(seq.num = seq.num,
+                                  seq.rf = seq.rf,
+                                  seq.ph = seq.ph,
+                                  loglike = loglike))),
+            class = "mappoly.map")
+  
+  
 #' Split map into sub maps given a gap threshold
 #'
 #' @param void internal function to be documented
