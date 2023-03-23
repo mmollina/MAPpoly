@@ -1626,13 +1626,16 @@ sample_data <- function(input.data, n = NULL,
 #' @importFrom zoo na.approx
 get_ols_map <- function(input.seq, input.mat, weight = TRUE){
   id <- input.seq$seq.mrk.names
+  rf <- imf_h(get_rf_from_mat(input.mat$rec.mat[id,id]))
+  pos <- c(0, cumsum(ifelse(is.na(rf), 0, rf)) + rf*0)
+  names(pos) <- input.seq$seq.mrk.names
+  pos <- rev(rev(pos)[!cumprod(is.na(rev(pos)))])
+  id <- names(pos)
+  z <- zoo::na.approx(pos)  
+  names(z) <- id
   y <- as.numeric((imf_h(as.dist(input.mat$rec.mat[id,id]))))
   w <- as.numeric((imf_h(as.dist(input.mat$lod.mat[id,id]))))
   v <- t(combn(id,2))
-  rf <- get_rf_from_mat(input.mat$rec.mat[id,id])
-  rf <- zoo::na.approx(rf)
-  z <- cumsum(imf_h(c(0,rf)))
-  names(z) <- id
   x <- numeric(nrow(v))
   names(x) <- names(y) <- apply(v, 1, paste0, collapse = "-")
   for(i in 1:nrow(v))
