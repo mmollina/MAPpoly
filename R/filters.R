@@ -227,7 +227,7 @@ filter_missing_ind <- function(input.data, filter.thres = 0.2, inter = TRUE)
 #'  patterns under Mendelian inheritance, random chromosome bivalent 
 #'  pairing and no double reduction.
 #'
-#' @param input.data name of input object (class \code{mappoly.data})
+#' @param input.obj name of input object (class \code{mappoly.data})
 #' 
 #' @param chisq.pval.thres p-value threshold used for chi-square tests 
 #'  (default = Bonferroni aproximation with global alpha of 0.05, i.e., 
@@ -242,7 +242,7 @@ filter_missing_ind <- function(input.data, filter.thres = 0.2, inter = TRUE)
 #' \item{data.name}{input dataset used to perform the chi-square tests}
 #' 
 #'@examples
-#' mrks.chi.filt <- filter_segregation(input.data = tetra.solcap,
+#' mrks.chi.filt <- filter_segregation(input.obj = tetra.solcap,
 #'                                     chisq.pval.thres = 0.05/tetra.solcap$n.mrk,
 #'                                     inter = TRUE)
 #' seq.init <- make_seq_mappoly(mrks.chi.filt)
@@ -251,21 +251,31 @@ filter_missing_ind <- function(input.data, filter.thres = 0.2, inter = TRUE)
 #' 
 #' @importFrom graphics axis
 #' @export
-filter_segregation <- function(input.data, chisq.pval.thres = NULL, inter = TRUE){
+filter_segregation <- function(input.obj, chisq.pval.thres = NULL, inter = TRUE){
   op <- par(pty="s")
   on.exit(par(op))
+  if(inherits(input.obj, c("mappoly.data"))){
+    chisq.val <- input.obj$chisq.pval
+    n.mrk <- input.obj$n.mrk
+    data.name <- as.character(sys.call())[2]
+  } else if (inherits(input.obj, c("mappoly.sequence"))){
+    chisq.val <- input.obj$chisq.pval[input.obj$seq.mrk.names]
+    n.mrk <- length(input.obj$seq.num)
+    data.name <- input.obj$data.name  
+  } else {
+    stop(deparse(substitute(input.obj)), 
+         " is not an object of class 'mappoly.data' or 'mappoly.sequence'")    
+  }
   ##Bonferroni approx
   if(is.null(chisq.pval.thres))
-    chisq.pval.thres <- 0.05/input.data$n.mrk
+    chisq.pval.thres <- 0.05/n.mrk
   ANSWER <- "flag"
-  if (!inherits(input.data, "mappoly.data")) {
-    stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
-  }
+ 
   if(interactive() && inter)
   {
     while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != "")
     {
-      x <- log10(sort(input.data$chisq.pval, decreasing = TRUE))
+      x <- log10(sort(chisq.val, decreasing = TRUE))
       th <- log10(chisq.pval.thres)
       plot(x, 
            xlab = "markers", 
@@ -283,9 +293,11 @@ filter_segregation <- function(input.data, chisq.pval.thres = NULL, inter = TRUE
         chisq.pval.thres  <- as.numeric(ANSWER)
     }
   }
-  keep <- names(which(input.data$chisq.pval >= chisq.pval.thres))
-  exclude <- names(which(input.data$chisq.pval < chisq.pval.thres))
-  structure(list(keep = keep, exclude = exclude, chisq.pval.thres = chisq.pval.thres, data.name = as.character(sys.call())[2]), class = "mappoly.chitest.seq")
+  keep <- names(which(chisq.val >= chisq.pval.thres))
+  exclude <- names(which(chisq.val < chisq.pval.thres))
+  structure(list(keep = keep, exclude = exclude, chisq.pval.thres = chisq.pval.thres, 
+                 data.name = data.name), 
+            class = "mappoly.chitest.seq")
 }
 
 #' Filter out individuals

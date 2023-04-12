@@ -960,18 +960,28 @@ get_full_info_tail <- function(input.obj, extend = NULL) {
   max2 <- length(unique(apply(w2, 2, paste0, collapse = "")))
   while (i < input.obj$info$n.mrk) {
     wp <- ph_list_to_matrix(tail(input.obj$maps[[1]]$seq.ph$P, i), ploidy)
-
     xp <- apply(wp, 2, paste, collapse = "-")
     wq <- ph_list_to_matrix(tail(input.obj$maps[[1]]$seq.ph$Q, i), ploidy)
     xq <- apply(wq, 2, paste, collapse = "-")
     if (length(unique(xp))  ==  max1 && length(unique(xq))  ==  max2)
-      (break)()
+      break()
     i <- i + 1
   }
   if (!is.null(extend))
     if (i < extend)
       i <- extend
   input.obj$info$n.mrk <- i
+  
+  
+  
+  input.obj$info$seq.num <- tail(input.obj$info$seq.num, i)
+  input.obj$info$mrk.names <- tail(input.obj$info$mrk.names, i)
+  input.obj$info$seq.dose.p1 <- tail(input.obj$info$seq.dose.p1, i)
+  input.obj$info$seq.dose.p2 <- tail(input.obj$info$seq.dose.p2, i)
+  input.obj$info$chrom <- tail(input.obj$info$chrom, i)
+  input.obj$info$genome.pos <- tail(input.obj$info$genome.pos, i)
+  input.obj$info$chisq.pval <- tail(input.obj$info$chisq.pval, i)
+  
   for (j in 1:length(input.obj$maps)) {
     input.obj$maps[[j]]$loglike <- 0
     input.obj$maps[[j]]$seq.ph$P <- tail(input.obj$maps[[j]]$seq.ph$P, n = i)
