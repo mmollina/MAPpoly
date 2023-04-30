@@ -39,7 +39,9 @@
 #'     populations with high ploidy level using hidden Markov
 #'     models, _G3: Genes, Genomes, Genetics_. 
 #'     \doi{10.1534/g3.119.400378} 
-#'
+#'     
+#' @importFrom dplyr select
+#' 
 #' @export calc_genoprob_dist
 calc_genoprob_dist <- function(input.map, dat.prob = NULL, phase.config = "best", verbose = TRUE)
 {
@@ -61,14 +63,14 @@ calc_genoprob_dist <- function(input.map, dat.prob = NULL, phase.config = "best"
       stop("
             The dataset associated to 'input.map'
             contains no genotypic probability distribution.
-            Please provide provide dataset in argument 
+            Provide dataset using the argument 
            'dat.prob'.
            ")
     } else {
       dat.prob <- get(input.map$info$data.name, pos = 1)
     }
   }
-  mrk <- NULL
+  ind <- mrk <- NULL
   original.map.mrk <- input.map$info$mrk.names
   dat.prob.pos <- match(original.map.mrk, dat.prob$mrk.names)
   which.is.na <- which(is.na(dat.prob.pos))
@@ -78,19 +80,15 @@ calc_genoprob_dist <- function(input.map, dat.prob = NULL, phase.config = "best"
   temp.map$info$seq.num <- temp.map$maps[[i.lpc]]$seq.num <- dat.prob.pos
   names(temp.map$maps[[i.lpc]]$seq.ph$P) <- names(temp.map$maps[[i.lpc]]$seq.ph$Q) <- dat.prob.pos
   if(!all(sort(get(temp.map$info$data.name, pos = 1)$ind.names) %in% sort(get(input.map$info$data.name, pos = 1)$ind.names)))
-    stop("The individuals are different in the new and original datasets")
-  geno <- subset(dat.prob$geno, mrk%in%original.map.mrk)
-  geno.new <- NULL
-  for(i in unique(geno$ind))
-    geno.new <- rbind(geno.new, geno[geno[,"ind"]  ==  i, ][match(original.map.mrk, geno[,"mrk"]),])
-  g <- as.double(t(geno.new[, -c(1:2)]))
+    stop("Individuals are different between dataset")
+  g <- t(dat.prob$geno %>% filter(mrk%in%original.map.mrk) %>% select(!(mrk:ind)))
   ploidy = as.numeric(temp.map$info$ploidy)
   n.mrk = as.numeric(temp.map$info$n.mrk)
   n.ind = get(temp.map$info$data.name, pos = 1)$n.ind
-  p = as.numeric(unlist(temp.map$maps[[1]]$seq.ph$P))
-  dp = as.numeric(cumsum(c(0, sapply(temp.map$maps[[1]]$seq.ph$P, function(x) sum(length(x))))))
-  q = as.numeric(unlist(temp.map$maps[[1]]$seq.ph$Q))
-  dq = as.numeric(cumsum(c(0, sapply(temp.map$maps[[1]]$seq.ph$Q, function(x) sum(length(x))))))
+  p1 = as.numeric(unlist(temp.map$maps[[1]]$seq.ph$P))
+  dp1 = as.numeric(cumsum(c(0, sapply(temp.map$maps[[1]]$seq.ph$P, function(x) sum(length(x))))))
+  p2 = as.numeric(unlist(temp.map$maps[[1]]$seq.ph$Q))
+  dp2 = as.numeric(cumsum(c(0, sapply(temp.map$maps[[1]]$seq.ph$Q, function(x) sum(length(x))))))
   rf = temp.map$maps[[1]]$seq.rf
   ind.names <- dat.prob$ind.names
   res.temp  <- 
@@ -99,10 +97,10 @@ calc_genoprob_dist <- function(input.map, dat.prob = NULL, phase.config = "best"
       as.numeric(ploidy),
       as.numeric(n.mrk),
       as.numeric(n.ind),
-      as.numeric(p),
-      as.numeric(dp),
-      as.numeric(q),
-      as.numeric(dq),
+      as.numeric(p1),
+      as.numeric(dp1),
+      as.numeric(p2),
+      as.numeric(dp2),
       as.double(g),
       as.double(rf),
       as.numeric(rep(0, choose(ploidy, ploidy/2)^2 * n.mrk * n.ind)),

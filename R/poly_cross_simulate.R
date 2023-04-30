@@ -10,7 +10,7 @@
 #'  the marker has three doses located in the chromosomes 1, 3 and 4. For
 #'  zero doses, use 0.
 #'  For more sophisticated simulations, we strongly recommend using PedigreeSim V2.0
-#'  \url{https://www.wur.nl/en/show/Software-PedigreeSim.htm}
+#'  \url{https://github.com/PBR/pedigreeSim}
 #'
 #' @param ploidy ploidy level. Must be an even number
 #' 

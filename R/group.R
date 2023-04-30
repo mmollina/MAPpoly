@@ -108,7 +108,7 @@ group_mappoly <- function(input.mat, expected.groups = NULL,
       dend1 <- dendextend::color_branches(dend.snp, k = expected.groups)
       plot(dend1, leaflab = "none")
       if(is.null(expected.groups))
-        expected.group <- as.numeric(readline("Enter the number of expected groups: "))
+        expected.groups <- as.numeric(readline("Enter the number of expected groups: "))
       z <- rect.hclust(hc.snp, k = expected.groups, border = "red")
       groups.snp  <- cutree(tree = hc.snp, k = expected.groups)
       xy <- sapply(z, length)

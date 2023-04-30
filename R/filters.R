@@ -116,73 +116,49 @@ filter_missing <- function(input.data,
 #' @param filter.thres maximum percentage of missing data
 #' @param inter if \code{TRUE}, expects user-input to proceed with filtering
 #' @keywords internal
-#' @importFrom magrittr "%>%"
-#' @importFrom dplyr filter
-#' @importFrom graphics axis
 filter_missing_mrk <- function(input.data, filter.thres = 0.2, inter = TRUE)
 {
+  op <- par(pty="s")
+  on.exit(par(op))
   ANSWER <- "flag"
-  mrk <- NULL
   if(interactive() && inter)
   {
     while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != "")
     {
       na.num <- apply(input.data$geno.dose, 1, function(x,ploidy) sum(x == ploidy+1), ploidy = input.data$ploidy)
       perc.na <- na.num/input.data$n.ind
-      plot(sort(perc.na), xlab = "markers", ylab = "frequency of missing data", axes = FALSE);
-      axis(1);axis(2)
-      lines(x = c(0, input.data$n.mrk), y = rep(filter.thres,2), col = 4, lty = 2)
-      text(x = input.data$n.mrk/2, y = filter.thres + 0.05, labels = paste0("Excluded mrks: ", sum(perc.na >= filter.thres)), adj = 0, col = "darkred")
-      text(x = input.data$n.mrk/2, y = filter.thres - 0.05, labels = paste0("Included mrks: ", sum(perc.na < filter.thres)), adj = 0, col = "darkgreen")
-      ANSWER <- readline("Enter 'Y/n' to proceed or update the filter threshold: ")
+      x <- sort(perc.na)
+      plot(x, 
+           xlab = "markers", 
+           ylab = "frequency of missing data", 
+           col = ifelse(x <= filter.thres, 4, 2), 
+           pch =ifelse(x <= filter.thres, 1, 4))
+      abline(h = filter.thres, lty = 2)
+      f<-paste0("Filtered out: ", sum(perc.na > filter.thres))
+      i<-paste0("Included: ", sum(perc.na <= filter.thres))
+      legend("topleft",  c(f, i) , col = c(2,4), pch = c(4,1))
+       ANSWER <- readline("Enter 'Y/n' to proceed or update the filter threshold: ")
       if(substr(ANSWER, 1, 1)  ==  "n" | substr(ANSWER, 1, 1)  ==  "no" | substr(ANSWER, 1, 1)  ==  "N")
-          stop("You decided to stop the function.")
+          stop("Stop function.")
       if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != "")
         filter.thres  <- as.numeric(ANSWER)
     }
-    rm.mrks.id <- which(perc.na > filter.thres)
-    if(length(rm.mrks.id) == 0){
+    mrks.id <- which(perc.na <= filter.thres)
+    if(length(mrks.id) == input.data$n.mrk){
       return(input.data)
     } 
-    rm.mrks <- names(rm.mrks.id)
-    if(is.prob.data(input.data))
-      input.data$geno <-  input.data$geno %>%
-      dplyr::filter(!mrk%in%rm.mrks)
-    input.data$geno.dose <- input.data$geno.dose[-rm.mrks.id,]
-    input.data$n.mrk <- nrow(input.data$geno.dose)
-    input.data$mrk.names <- input.data$mrk.names[-rm.mrks.id]
-    input.data$dosage.p1 <- input.data$dosage.p1[-rm.mrks.id]
-    input.data$dosage.p2 <- input.data$dosage.p2[-rm.mrks.id]
-    input.data$chrom <- input.data$chrom[-rm.mrks.id]
-    if(!is.null(input.data$chisq.pval)) 
-      input.data$chisq.pval <- input.data$chisq.pval[-rm.mrks.id]
-    input.data$genome.pos <- input.data$genome.pos[-rm.mrks.id]
-    return(input.data)
-  } else {
+    out.dat <- sample_data(input.data, type = "markers", selected.mrk = names(mrks.id))
+    return(out.dat)
+  }
+  else{
     na.num <- apply(input.data$geno.dose, 1, function(x,ploidy) sum(x == ploidy+1), ploidy = input.data$ploidy)
     perc.na <- na.num/input.data$n.ind
-    rm.mrks.id <- which(perc.na > filter.thres)
-    if(length(rm.mrks.id) == 0) return(input.data)
-    rm.mrks <- names(rm.mrks.id)
-    if(is.prob.data(input.data))
-      input.data$geno <-  input.data$geno %>%
-      dplyr::filter(!mrk%in%rm.mrks)
-    input.data$geno.dose <- input.data$geno.dose[-rm.mrks.id,]
-    input.data$n.mrk <- nrow(input.data$geno.dose)
-    input.data$mrk.names <- input.data$mrk.names[-rm.mrks.id]
-    input.data$dosage.p1 <- input.data$dosage.p1[-rm.mrks.id]
-    input.data$dosage.p2 <- input.data$dosage.p2[-rm.mrks.id]
-    input.data$chrom <- input.data$chrom[-rm.mrks.id]
-    input.data$genome.pos <- input.data$genome.pos[-rm.mrks.id]
-    input.data$seq.ref <- input.data$seq.ref[-rm.mrks.id]
-    input.data$seq.alt <- input.data$seq.alt[-rm.mrks.id]
-    input.data$all.mrk.depth <- input.data$all.mrk.depth[-rm.mrks.id]
-    input.data$kept <- intersect(input.data$mrk.names, input.data$kept)
-    input.data$elim.correspondence <- input.data$elim.correspondence[input.data$elim.correspondence$kept%in%input.data$mrk.names,]
-    input.data$chisq.pval <- input.data$chisq.pval[names(input.data$chisq.pval)%in%input.data$mrk.names]
-    if(!is.null(input.data$chisq.pval)) 
-      input.data$chisq.pval <- input.data$chisq.pval[names(input.data$chisq.pval)%in%input.data$mrk.names]
-    return(input.data)
+    mrks.id <- which(perc.na <= filter.thres)
+    if(length(mrks.id) == input.data$n.mrk){
+      return(input.data)
+    } 
+    out.dat <- sample_data(input.data, type = "markers", selected.mrk = names(mrks.id))
+    return(out.dat)
   }
 }
 
@@ -197,6 +173,8 @@ filter_missing_mrk <- function(input.data, filter.thres = 0.2, inter = TRUE)
 #' @importFrom graphics axis
 filter_missing_ind <- function(input.data, filter.thres = 0.2, inter = TRUE)
 {
+  op <- par(pty="s")
+  on.exit(par(op))
   ANSWER <- "flag"
   ind <- NULL
   if(interactive() && inter)
@@ -205,71 +183,43 @@ filter_missing_ind <- function(input.data, filter.thres = 0.2, inter = TRUE)
     {
       na.num <- apply(input.data$geno.dose, 2, function(x,ploidy) sum(x == ploidy+1), ploidy = input.data$ploidy)
       perc.na <- na.num/input.data$n.mrk
-      plot(sort(perc.na), xlab = "individuals", ylab = "frequency of missing data", axes = FALSE);
-      axis(1);axis(2)
-      lines(x = c(0, input.data$n.mrk), y = rep(filter.thres,2), col = 4, lty = 2)
-      text(x = input.data$n.ind/2, y = filter.thres + 0.05, labels = paste0("Excluded individuals: ", sum(perc.na >= filter.thres)), adj = 0, col = "darkred")
-      text(x = input.data$n.ind/2, y = filter.thres - 0.05, labels = paste0("Included individuals: ", sum(perc.na < filter.thres)), adj = 0, col = "darkgreen")
+      x <- sort(perc.na)
+      plot(x, 
+           xlab = "offspring", 
+           ylab = "frequency of missing data", 
+           col = ifelse(x <= filter.thres, 4, 2), 
+           pch =ifelse(x <= filter.thres, 1, 4));
+      abline(h = filter.thres, lty = 2)
+      f<-paste0("Filtered out: ", sum(perc.na > filter.thres))
+      i<-paste0("Included: ", sum(perc.na <= filter.thres))
+      legend("topleft",  c(f, i) , col = c(2,4), pch = c(4,1))
       ANSWER <- readline("Enter 'Y/n' to proceed or update the filter threshold: ")
       if(substr(ANSWER, 1, 1)  ==  "n" | substr(ANSWER, 1, 1)  ==  "no" | substr(ANSWER, 1, 1)  ==  "N")
           stop("You decided to stop the function.")
       if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != "")
         filter.thres  <- as.numeric(ANSWER)
     }
-    rm.ind.id <- which(perc.na > filter.thres)
-    if(length(rm.ind.id) == 0){
+    ind.id <- which(perc.na <= filter.thres)
+    if(length(ind.id) == input.data$n.ind){
       return(input.data)
     } 
-    rm.ind <- names(rm.ind.id)
-    if(is.prob.data(input.data))
-      input.data$geno <-  input.data$geno %>%
-      dplyr::filter(!ind%in%rm.ind)
-    input.data$geno.dose <- input.data$geno.dose[,-rm.ind.id]
-    input.data$ind.names <- input.data$ind.names[-rm.ind.id]
-    input.data$n.ind <- ncol(input.data$geno.dose)
-    ##Computing chi-square p.values
-    if(!is.null(input.data$chisq.pval)){
-      ploidy <- input.data$ploidy
-      Ds <- array(NA, dim = c(ploidy+1, ploidy+1, ploidy+1))
-      for(i in 0:ploidy)
-        for(j in 0:ploidy)
-          Ds[i+1,j+1,] <- segreg_poly(ploidy = ploidy, dP = i, dQ = j)
-      Dpop <- cbind(input.data$dosage.p1, input.data$dosage.p2)
-      M <- t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
-      dimnames(M) <- list(input.data$mrk.names, c(0:ploidy))
-      M <- cbind(M, input.data$geno.dose)
-      input.data$chisq.pval <- apply(M, 1, mrk_chisq_test, ploidy = ploidy)
-    }
-    return(input.data)
-  } else {
+    ind <- names(ind.id)
+    out.dat <- sample_data(input.data, type = "individual", selected.ind = names(ind.id))
+    return(out.dat)
+  }
+  else{
     na.num <- apply(input.data$geno.dose, 2, function(x,ploidy) sum(x == ploidy+1), ploidy = input.data$ploidy)
     perc.na <- na.num/input.data$n.mrk
-    rm.ind.id <- which(perc.na > filter.thres)
-    if(length(rm.ind.id) == 0) return(input.data)
-    rm.ind <- names(rm.ind.id)
-    if(is.prob.data(input.data))
-      input.data$geno <-  input.data$geno %>%
-      dplyr::filter(!ind%in%rm.ind)
-    input.data$geno.dose <- input.data$geno.dose[,-rm.ind.id]
-    input.data$ind.names <- input.data$ind.names[-rm.ind.id]
-    input.data$n.ind <- ncol(input.data$geno.dose)
-    ##Computing chi-square p.values
-    if(!is.null(input.data$chisq.pval)){
-      ploidy <- input.data$ploidy
-      Ds <- array(NA, dim = c(ploidy+1, ploidy+1, ploidy+1))
-      for(i in 0:ploidy)
-        for(j in 0:ploidy)
-          Ds[i+1,j+1,] <- segreg_poly(ploidy = ploidy, dP = i, dQ = j)
-      Dpop <- cbind(input.data$dosage.p1, input.data$dosage.p2)
-      M <- t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
-      dimnames(M) <- list(input.data$mrk.names, c(0:ploidy))
-      M <- cbind(M, input.data$geno.dose)
-      input.data$chisq.pval <- apply(M, 1, mrk_chisq_test, ploidy = ploidy)
-    }
-    return(input.data)
+    ind.id <- which(perc.na <= filter.thres)
+    if(length(ind.id) == input.data$n.ind){
+      return(input.data)
+    } 
+    ind <- names(ind.id)
+    out.dat <- sample_data(input.data, type = "individual", selected.ind = names(ind.id))
+    return(out.dat)
   }
 }
-
+    
 #' Filter markers based on chi-square test
 #'
 #' This function filter markers based on p-values of a chi-square test. 
@@ -279,7 +229,9 @@ filter_missing_ind <- function(input.data, filter.thres = 0.2, inter = TRUE)
 #'
 #' @param input.data name of input object (class \code{mappoly.data})
 #' 
-#' @param chisq.pval.thres p-value threshold used for chi-square tests (default = 10e-05)
+#' @param chisq.pval.thres p-value threshold used for chi-square tests 
+#'  (default = Bonferroni aproximation with global alpha of 0.05, i.e., 
+#'  0.05/n.mrk)
 #' 
 #' @param inter if TRUE (default), plots distorted vs. non-distorted markers 
 #'
@@ -299,7 +251,12 @@ filter_missing_ind <- function(input.data, filter.thres = 0.2, inter = TRUE)
 #' 
 #' @importFrom graphics axis
 #' @export
-filter_segregation <- function(input.data, chisq.pval.thres = 10e-5, inter = TRUE){
+filter_segregation <- function(input.data, chisq.pval.thres = NULL, inter = TRUE){
+  op <- par(pty="s")
+  on.exit(par(op))
+  ##Bonferroni approx
+  if(is.null(chisq.pval.thres))
+    chisq.pval.thres <- 0.05/input.data$n.mrk
   ANSWER <- "flag"
   if (!inherits(input.data, "mappoly.data")) {
     stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
@@ -308,11 +265,17 @@ filter_segregation <- function(input.data, chisq.pval.thres = 10e-5, inter = TRU
   {
     while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != "")
     {
-      plot(log10(sort(input.data$chisq.pval, decreasing = TRUE)), xlab = "markers", ylab = "log10(p.val)", axes = F)
-      axis(1); axis(2)
-      lines(x = c(0, input.data$n.mrk), y = rep(log10(chisq.pval.thres),2), col = 4, lty = 2)
-      text(x = input.data$n.mrk/2, y = 5, labels = paste0("Included mrks: ", sum(input.data$chisq.pval >= chisq.pval.thres)), adj = .5, col = "darkgreen")
-      text(x = input.data$n.mrk/2, y = log10(chisq.pval.thres) - 5, labels = paste0("Excluded mrks: ", sum(input.data$chisq.pval < chisq.pval.thres)), adj = .5, col = "darkred")
+      x <- log10(sort(input.data$chisq.pval, decreasing = TRUE))
+      th <- log10(chisq.pval.thres)
+      plot(x, 
+           xlab = "markers", 
+           ylab = bquote(log[10](P)), 
+           col = ifelse(x <= th, 2, 4), 
+           pch =ifelse(x <= th, 4, 1))
+      abline(h = th, lty = 2)
+      f<-paste0("Filtered out: ", sum(x < th))
+      i<-paste0("Included: ", sum(x >= th))
+      legend("bottomleft",  c(f, i) , col = c(2,4), pch = c(4,1))
       ANSWER <- readline("Enter 'Y/n' to proceed or update the p value threshold: ")
       if(substr(ANSWER, 1, 1)  ==  "n" | substr(ANSWER, 1, 1)  ==  "no" | substr(ANSWER, 1, 1)  ==  "N")
           stop("You decided to stop the function.")
@@ -325,7 +288,7 @@ filter_segregation <- function(input.data, chisq.pval.thres = 10e-5, inter = TRU
   structure(list(keep = keep, exclude = exclude, chisq.pval.thres = chisq.pval.thres, data.name = as.character(sys.call())[2]), class = "mappoly.chitest.seq")
 }
 
-#' Filter contaminant individuals
+#' Filter out individuals
 #'
 #' This function removes individuals from the data set. Individuals can be 
 #' user-defined or can be accessed via interactive kinship analysis. 
@@ -347,6 +310,8 @@ filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
   if (!inherits(input.data, "mappoly.data")) {
     stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
   }
+  op <- par(pty="s")
+  on.exit(par(op))
  # if (!require(AGHmatrix))
 #    stop("Please install package 'AGHmatrix' to proceed")
   D <- t(input.data$geno.dose)
@@ -356,10 +321,15 @@ filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
   G  <- AGHmatrix::Gmatrix(D, method = "VanRaden",ploidy = input.data$ploidy)
   x <- G[1,]
   y <- G[2,]
-  a <- 2*atan(y/x)/pi
-  b <- sqrt(x^2 + y^2)
-  df <- data.frame(x = a, y = b, type = c(2, 2, rep(4, length(a)-2)))
-  plot(df[,1:2], col = df$type, pch = 19)
+  #a <- 2*atan(y/x)/pi
+  #b <- sqrt(x^2 + y^2)
+  df <- data.frame(x = x, y = y, type = c(2, 2, rep(4, length(x)-2)))
+  plot(df[,1:2], col = df$type, pch = 19, 
+       xlab = "relationships between the offspring and P1", 
+       ylab = "relationships between the offspring and P2")
+  abline(c(0,1), lty = 2)
+  abline(c(-0.4,1), lty = 2, col = "gray")
+  abline(c(0.4,1), lty = 2, col = "gray")
   legend("topright",  c("Parents", "Offspring") , col = c(2,4), pch = 19)
   if(!is.null(ind.to.remove)){
     out.data <- sample_data(input.data, selected.ind = setdiff(input.data$ind.names, ind.to.remove))
@@ -373,17 +343,142 @@ filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
     if(substr(ANSWER, 1, 1)  ==  "y" | substr(ANSWER, 1, 1)  ==  "yes" | substr(ANSWER, 1, 1)  ==  "Y" | ANSWER  == "")
     {
       ind.to.remove <- gatepoints::fhs(df, mark = TRUE)
+      ind.to.remove <- setdiff(ind.to.remove, c("P1", "P2"))
+      ind.to.include <- setdiff(rownames(df)[-c(1:2)], ind.to.remove)
       if(verbose){
         cat("Removing individual(s): \n")
         print(ind.to.remove)
         cat("...\n")
       }
-      ind.to.remove <- setdiff(rownames(df)[-c(1:2)], ind.to.remove)
-      out.data <- sample_data(input.data, selected.ind = ind.to.remove)
+      if(length(ind.to.remove) == 0){
+        warning("No individuals removed. Returning original data set.")
+        return(input.data)
+      } 
+      out.data <- sample_data(input.data, selected.ind = ind.to.include)
       return(out.data)
     } else{
       warning("No individuals removed. Returning original data set.")
       return(input.data)
     } 
   }
+}
+#'  Remove markers that do not meet a LOD criteria
+#'
+#'  Remove markers that do not meet a LOD and recombination fraction
+#'  criteria for at least a percentage of the pairwise marker
+#'  combinations. It also removes markers with strong evidence of
+#'  linkage across the whole linkage group (false positive).
+#'
+#' \code{thresh.LOD.ph} should be set in order to only select
+#'     recombination fractions that have LOD scores associated to the
+#'     linkage phase configuration higher than \code{thresh_LOD_ph}
+#'     when compared to the second most likely linkage phase configuration.
+#'     That action usually eliminates markers that are unlinked to the
+#'     set of analyzed markers.
+#'
+#' @param input.twopt an object of class \code{mappoly.twopt}
+#'
+#' @param thresh.LOD.ph LOD score threshold for linkage phase configuration 
+#' (default = 5)
+#'
+#' @param thresh.LOD.rf LOD score threshold for recombination fraction 
+#' (default = 5)
+#'
+#' @param thresh.rf threshold for recombination fractions (default = 0.15) 
+#'
+#' @param probs indicates the probability corresponding to the filtering 
+#' quantiles. (default = c(0.05, 1))
+#' 
+#' @param diag.markers A window where marker pairs should be considered. 
+#'    If NULL (default), all markers are considered. 
+#'    
+#' @param mrk.order marker order. Only has effect if 'diag.markers' is not NULL
+#' 
+#' @param ncpus number of parallel processes (i.e. cores) to spawn 
+#' (default = 1)
+#' 
+#' @param diagnostic.plot if \code{TRUE} produces a diagnostic plot
+#' 
+#' @param breaks number of cells for the histogram
+#' 
+#' @return A filtered object of class \code{mappoly.sequence}. 
+#' See \code{\link[mappoly]{make_seq_mappoly}} for details
+#' 
+#' @examples
+#'     all.mrk <- make_seq_mappoly(hexafake, 1:20)
+#'     red.mrk <- elim_redundant(all.mrk)
+#'     unique.mrks <- make_seq_mappoly(red.mrk)
+#'     all.pairs <- est_pairwise_rf(input.seq = unique.mrks,
+#'                                ncpus = 1,
+#'                                verbose = TRUE)
+#'
+#'     ## Full recombination fraction matrix
+#'     mat.full <- rf_list_to_matrix(input.twopt = all.pairs)
+#'     plot(mat.full)
+#'
+#'     ## Removing disruptive SNPs
+#'     tpt.filt <- rf_snp_filter(all.pairs, 2, 2, 0.07, probs = c(0.15, 1))
+#'     p1.filt <- make_pairs_mappoly(input.seq = tpt.filt, input.twopt = all.pairs)
+#'     m1.filt <- rf_list_to_matrix(input.twopt = p1.filt)
+#'     plot(mat.full, main.text = "LG1")
+#'     plot(m1.filt, main.text = "LG1.filt")
+#'    
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} with updates by Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
+#'
+#' @references
+#'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
+#'     analysis and haplotype phasing in experimental autopolyploid
+#'     populations with high ploidy level using hidden Markov
+#'     models, _G3: Genes, Genomes, Genetics_. 
+#'     \doi{10.1534/g3.119.400378}
+#'
+#' @export rf_snp_filter
+#' @importFrom ggplot2 ggplot geom_histogram aes scale_fill_manual xlab ggtitle
+#' @importFrom graphics hist
+rf_snp_filter <- function(input.twopt,
+                          thresh.LOD.ph = 5,
+                          thresh.LOD.rf = 5,
+                          thresh.rf = 0.15,
+                          probs = c(0.05, 1),
+                          diag.markers = NULL,
+                          mrk.order = NULL, 
+                          ncpus = 1L,
+                          diagnostic.plot = TRUE,
+                          breaks = 100)
+{
+  
+  input_classes <- c("mappoly.twopt", "mappoly.twopt2")
+  if (!inherits(input.twopt, input_classes)) {
+    stop(deparse(substitute(input.twopt)), paste0(" is not an object of class ", paste0(input_classes, collapse =  " or ")))
+  }
+  probs <- range(probs)
+  ## Getting filtered rf matrix
+  rf_mat <-  rf_list_to_matrix(input.twopt = input.twopt, thresh.LOD.ph = thresh.LOD.ph,
+                               thresh.LOD.rf = thresh.LOD.rf, thresh.rf = thresh.rf,
+                               ncpus = ncpus, verbose = FALSE)
+  M <- rf_mat$rec.mat
+  if(!is.null(mrk.order))
+    M <- M[mrk.order, mrk.order]
+  if(!is.null(diag.markers))
+      M[abs(col(M) - row(M)) > diag.markers] <- NA
+  x <- apply(M, 1, function(x) sum(!is.na(x)))
+  w <- hist(x, breaks = breaks, plot = FALSE)
+  th <- quantile(x, probs = probs)
+  rem <- c(which(x < th[1]), which(x > th[2]))
+  ids <- names(which(x >= th[1] & x <= th[2]))
+  value <- type <- NULL
+  if(diagnostic.plot){
+    d <- rbind(data.frame(type = "original", value = x),
+               data.frame(type = "filtered", value = x[ids]))
+    p <- ggplot2::ggplot(d, ggplot2::aes(value)) +
+      ggplot2::geom_histogram(ggplot2::aes(fill = type),
+                              alpha = 0.4, position = "identity", binwidth = diff(w$mids)[1]) +
+      ggplot2::scale_fill_manual(values = c("#00AFBB", "#E7B800")) +
+      ggplot2::ggtitle( paste0("Filtering probs: [", probs[1], " : ", probs[2], "] - Non NA values by row in rf matrix - b width: ", diff(w$mids)[1])) +
+      ggplot2::xlab(paste0("Non 'NA' values at LOD.ph = ", thresh.LOD.ph, ", LOD.rf = ", thresh.LOD.rf, ", and thresh.rf = ", thresh.rf))
+    print(p)
+  }
+  ## Returning sequence object
+  ch_filt <- make_seq_mappoly(input.obj = get(input.twopt$data.name, pos = 1), arg = ids, data.name = input.twopt$data.name)
+  return(ch_filt)
 }

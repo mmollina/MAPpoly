@@ -422,6 +422,27 @@ gg_color_hue <- function(n) {
   return(hsv(cols, x[2], x[3]))
 }
 
+#' MAPpoly pallet 1
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @export
+mp_pallet1 <- colorRampPalette(c("#ffe119", "#f58231","#e6194b","#808000","#9a6324", "#800000"))
+
+#' MAPpoly pallet 2
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @export
+mp_pallet2 <- colorRampPalette(c("#911eb4", "#000075","#4363d8","#42d4f4","#469990", "#3cb44b"))
+
+#' MAPpoly pallet 3
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @export
+mp_pallet3 <- colorRampPalette(c("#ffe119", "#f58231","#e6194b","#808000","#9a6324", "#800000","#911eb4", "#000075","#4363d8","#42d4f4","#469990", "#3cb44b"))
+
 #' Update missing information
 #'
 #' Updates the missing data in the dosage matrix of an object of class 
@@ -528,9 +549,10 @@ print.mappoly.geno.ord <- function(x, ...){
 #' @importFrom ggplot2 ggplot aes geom_point xlab ylab theme
 plot.mappoly.geno.ord <- function(x, ...){
   seq <- seq.pos <- NULL
-  x$ord$seq<- as.factor(x$ord$seq)
-  levels(x$ord$seq) <- levels(x$ord$seq)[order(as.numeric(levels(x$ord$seq)))]
-  ggplot2::ggplot(as.data.frame(x$ord), 
+  w <- x$ord
+  w$seq <- as.factor(w$seq)
+  w$seq = with(w, reorder(seq))
+  ggplot2::ggplot(w, 
                   ggplot2::aes(x = seq.pos, y = seq, group = as.factor(seq))) +
     ggplot2::geom_point(ggplot2::aes(color = as.factor(seq)), shape = 108, size = 5, show.legend = FALSE) +
     ggplot2::xlab("Position") + 
@@ -1208,7 +1230,7 @@ check_data_dist_sanity <- function(x){
 #'     \item{elim.correspondence}{if elim.redundant = TRUE when reading any dataset,
 #' holds all non-redundant markers and its equivalence to the redundant ones}
 #' 
-#' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' @author Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 #' @examples
 #' \donttest{
 #' ## Loading a subset of SNPs from chromosomes 3 and 12 of sweetpotato dataset 
@@ -1363,7 +1385,7 @@ merge_datasets = function(dat.1 = NULL, dat.2 = NULL){
 #' @examples
 #' tetra.sum <- summary_maps(solcap.err.map)
 #' tetra.sum
-#' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' @author Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 #' @export summary_maps
 summary_maps = function(map.list, verbose = TRUE){
   ## Check data
@@ -1396,7 +1418,7 @@ summary_maps = function(map.list, verbose = TRUE){
 #' 
 #' Internal function
 #' @param x an object of class \code{mappoly.map}
-#' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' @author Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 get_tab_mrks = function(x){
   tab = table(get(x$info$data.name, pos = 1)$dosage.p1[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)], get(x$info$data.name, pos = 1)$dosage.p2[which(get(x$info$data.name, pos = 1)$mrk.names %in% x$info$mrk.names)])
   doses = as.character(seq(0,x$info$ploidy,1))
@@ -1430,7 +1452,7 @@ get_tab_mrks = function(x){
 #' @param input.maps a single map or a list of maps of class \code{mappoly.map}
 #' @param verbose if TRUE (default), shows information about each update process
 #' @return an updated map (or list of maps) of class \code{mappoly.map}, containing the original map(s) plus redundant markers
-#' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' @author Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 #' @examples
 #' orig.map <- solcap.err.map
 #' up.map <- lapply(solcap.err.map, update_map)
@@ -1576,7 +1598,7 @@ sample_data <- function(input.data, n = NULL,
     if(is.prob.data(input.data))
       input.data$geno <-  input.data$geno %>%
       dplyr::filter(mrk%in%selected.mrk)
-    input.data$geno.dose <- input.data$geno.dose[selected.mrk.id,]
+    input.data$geno.dose <- input.data$geno.dose[selected.mrk.id, , drop = FALSE]
     input.data$n.mrk <- nrow(input.data$geno.dose)
     input.data$mrk.names <- input.data$mrk.names[selected.mrk.id]
     input.data$dosage.p1 <- input.data$dosage.p1[selected.mrk.id]
@@ -1587,7 +1609,7 @@ sample_data <- function(input.data, n = NULL,
     input.data$seq.alt <- input.data$seq.alt[selected.mrk.id]
     input.data$all.mrk.depth <- input.data$all.mrk.depth[selected.mrk.id]
     input.data$kept <- intersect(input.data$mrk.names, input.data$kept)
-    input.data$elim.correspondence <- input.data$elim.correspondence[input.data$elim.correspondence$kept%in%input.data$mrk.names,]
+    input.data$elim.correspondence <- input.data$elim.correspondence[input.data$elim.correspondence$kept%in%input.data$mrk.names, , drop = FALSE]
     input.data$chisq.pval <- input.data$chisq.pval[names(input.data$chisq.pval)%in%input.data$mrk.names]
     if(!is.null(input.data$chisq.pval)) 
       input.data$chisq.pval <- input.data$chisq.pval[names(input.data$chisq.pval)%in%input.data$mrk.names]
@@ -1757,10 +1779,83 @@ compare_maps <- function(...){
   return(as.data.frame(a))
 }
 
+# Skeleton to test CPP functions
+# @export
+# test_CPP<-function(m, rf)
+#   .Call("rec_number", as.integer(m), as.numeric(rf), PACKAGE = "mappoly")
+#   
 
-#' Skeleton to test CPP functions
-#' #' @export
-#' test_CPP<-function(m, rf)
-#'   .Call("rec_number", as.integer(m), as.numeric(rf), PACKAGE = "mappoly")
+#' @export
+.mappoly_data_skeleton<-function()
+  structure(list(ploidy = NA,
+                 n.ind = NA,
+                 n.mrk = NA,
+                 ind.names = NA,
+                 mrk.names = NA,
+                 dosage.p1 = NA,
+                 dosage.p2 = NA,
+                 chrom = NA,
+                 genome.pos = NA,
+                 seq.ref = NA,
+                 seq.alt = NA,
+                 all.mrk.depth = NA,
+                 prob.thres = NA,
+                 geno.dose = NA,
+                 nphen = NA,
+                 phen = NA,
+                 kept = NA,
+                 chisq.pval = NA,
+                 elim.correspondence = NA),
+            class = "mappoly.data")
 
-
+#' Split map into sub maps given a gap threshold
+#'
+#' @param void internal function to be documented
+#' @keywords internal
+#' @export
+split_mappoly <- function(input.map,
+                          gap.threshold = 5, 
+                          size.rem.cluster = 1,
+                          phase.config = "best",
+                          tol.final = 10e-4,
+                          verbose = TRUE){
+  if (!inherits(input.map, "mappoly.map")) {
+    stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
+  }
+  ## choosing the linkage phase configuration
+  LOD.conf <- get_LOD(input.map, sorted = FALSE)
+  if(phase.config  ==  "best") {
+    i.lpc <- which.min(LOD.conf)
+  } else if (phase.config > length(LOD.conf)) {
+    stop("invalid linkage phase configuration")
+  } else i.lpc <- phase.config
+  id <- which(imf_h(input.map$maps[[i.lpc]]$seq.rf) > gap.threshold)
+  if(length(id) == 0){
+    if(verbose) cat("no submaps found\n")
+    return(input.map)
+  } 
+  id <- cbind(c(1, id+1), c(id, input.map$info$n.mrk))
+  temp.map <- input.map
+  ## Selecting map segments larger then the specified threshold
+  segments <- id[apply(id, 1, diff) > size.rem.cluster - 1, , drop = FALSE]
+  if(length(segments) == 0) stop("all markers were eliminated\n")
+  ## Dividing map in sub-maps
+  temp.maps <- vector("list", nrow(segments))
+  if (verbose) {
+    ns <- nrow(segments)
+    if(ns == 1){
+      cat("one submap found ...\n")
+      map <- get_submap(input.map, c(segments[1, 1]:segments[1, 2]), tol.final = tol.final, verbose = FALSE)
+      return(filter_map_at_hmm_thres(map, 10e-4))
+    } 
+    else cat(ns, "submaps found ...\n")
+  }
+  for(i in 1:length(temp.maps)){
+    temp.id <- c(segments[i, 1]:segments[i, 2])
+    if(length(temp.id) > 1)
+      temp.maps[[i]] <- get_submap(input.map, temp.id, reestimate.rf = FALSE, verbose = FALSE)
+    else
+      temp.maps[[i]] <- input.map$info$mrk.names[temp.id]    
+  }
+  temp.maps
+}

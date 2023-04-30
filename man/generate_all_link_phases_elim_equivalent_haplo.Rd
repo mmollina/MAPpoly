@@ -32,6 +32,6 @@ i.e. configurations with the same likelihood and also considering
 the two-point information (shared alleles)
 }
 \author{
-Marcelo Mollinari, \email{mmollin@ncsu.edu} and Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+Marcelo Mollinari, \email{mmollin@ncsu.edu} and Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 }
 \keyword{internal}

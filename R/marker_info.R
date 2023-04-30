@@ -74,7 +74,7 @@ plot_mrk_info <- function(input.data, mrk)
       ##genomic position and sequence
       text(x = 0, y = 40 , labels = paste0("sequence: ", input.data$chrom[input.data$mrk.names == mrk]), adj = 0)
       text(x = 0, y = 30 , labels = paste0("seq. position: ", input.data$genome.pos[input.data$mrk.names == mrk]), adj = 0)
-      barplot(x, col = c(gg_color_hue(input.data$ploidy + 1)[1:(length(x)-1)], "#404040"))
+      barplot(x, col = c(mp_pallet2(input.data$ploidy + 1)[1:(length(x)-1)], "#404040"))
     } 
     else { ## if genotype probabilities are available
       layout(matrix(c(1,2,3,3), ncol = 2, nrow = 2), widths = c(1, 2))
@@ -109,7 +109,7 @@ plot_mrk_info <- function(input.data, mrk)
       text(x = 0, y = 40 , labels = paste0("sequence: ", input.data$chrom[input.data$mrk.names == mrk]), adj = 0)
       text(x = 0, y = 30 , labels = paste0("seq. position: ", input.data$genome.pos[input.data$mrk.names == mrk]), adj = 0)
       text(x = 0, y = 20 , labels = paste0("prob. threshold: ", input.data$prob.thres), adj = 0)
-      pal <- gg_color_hue(input.data$ploidy + 1)
+      pal <- mp_pallet2(input.data$ploidy + 1)
       names(pal) <- 0:input.data$ploidy 
       op <- par(mar = c(5,3,0,2), cex = .7)
       barplot(x, col = c(na.omit(pal[names(x)]), "#404040"))
@@ -126,7 +126,7 @@ plot_mrk_info <- function(input.data, mrk)
       w<-expand.grid(1:nrow(z), 0:(ncol(z)-2))
       x<-w[,1]
       y<-w[,2]
-      pal<-rep(gg_color_hue(input.data$ploidy + 1), each = nrow(z))
+      pal<-rep(mp_pallet2(input.data$ploidy + 1), each = nrow(z))
       pal[as.numeric(as.matrix(z[,1:(input.data$ploidy + 1)])) < input.data$prob.thres] <- "#404040"
       op<-par(mar = c(2,2,2,2))
       plot3D::scatter3D(x,y, as.matrix(z[,1:(input.data$ploidy + 1)]),  theta = 30, phi = 30, bty = "g",  type = "h", lwd = .3 ,

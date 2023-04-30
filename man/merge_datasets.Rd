@@ -86,5 +86,5 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     \doi{10.1534/g3.119.400378}
 }
 \author{
-Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 }

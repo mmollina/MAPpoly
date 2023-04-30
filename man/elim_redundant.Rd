@@ -37,5 +37,5 @@ Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     \doi{10.1534/g3.119.400378}
 }
 \author{
-Marcelo Mollinari, \email{mmollin@ncsu.edu}, with minor modifications by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+Marcelo Mollinari, \email{mmollin@ncsu.edu}, with minor modifications by Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 }

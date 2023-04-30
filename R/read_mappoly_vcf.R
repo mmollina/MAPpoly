@@ -88,7 +88,7 @@
 #' plot(dat.dose.vcf)
 #'}
 #' 
-#' @author Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' @author Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 #' 
 #' @references
 #'     Mollinari M., Olukolu B. A.,  Pereira G. da S., 

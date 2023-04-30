@@ -285,18 +285,16 @@ print.mappoly.data <- function(x, detailed = FALSE, ...) {
   cat("    Ploidy level:                           ", x$ploidy, "\n")
   cat("    No. individuals:                        ", x$n.ind, "\n")
   cat("    No. markers:                            ", x$n.mrk, "\n")
+  if(!is.null(x$prob.thres))
+  cat("    Prob. threshold to declare missing:     ", x$prob.thres, "\n") 
   miss <- round(100*sum(x$geno.dose == x$ploidy+1)/length(as.matrix(x$geno.dose)),2)
   if(!is.null(x$kept)){
     redundant = round(100*(nrow(x$elim.correspondence)/(length(x$kept)+nrow(x$elim.correspondence))),2)
   }
-  ##if no prior probabilities
-  if(is.prob.data(x)){
-    cat("    Missing data:                            ", miss, "%\n", sep = "")  
-  } else {
-    cat("    Missing data under ", x$prob.thres, " prob. threshold: ", miss, "%\n", sep = "")    
-  }
+  cat("    Missing data:                            ", miss, "%\n", sep = "")  
+
   if(!is.null(x$kept)){
-    cat("    Redundant markers:                       ", redundant, "%\n", sep = "")  
+  cat("    Redundant markers:                       ", redundant, "%\n", sep = "")  
   }
   w <- table(x$chrom)
   if (length(w) <= 1)
@@ -327,13 +325,13 @@ plot.mappoly.data <- function(x, thresh.line = 10e-6, ...)
   type.names <- names(table(type))
   mrk.dist <- as.numeric(freq)
   names(mrk.dist) <- apply(d.temp, 1 , paste, collapse = "-")
-  w <- c("#FFFFFF", "#F0F0F0", "#D9D9D9", "#BDBDBD", "#969696",
-         "#737373", "#525252", "#252525", "#000000")
-  pal <- colorRampPalette(w)(length(type.names))
+  #w <- c("#FFFFFF", "#F0F0F0", "#D9D9D9", "#BDBDBD", "#969696",
+  #       "#737373", "#525252", "#252525", "#000000")
+  #pal <- colorRampPalette(w)(length(type.names))
   oldpar <- par(mar = c(5,4,1,2))
   on.exit(par(oldpar))
   layout(matrix(c(1,1,1,2,3,3,6,4,5), 3, 3), widths = c(1.2,3,.5), heights = c(1.5,2,3))
-  barplot(mrk.dist, las = 2, col = pal[match(type, type.names)], 
+  barplot(mrk.dist, las = 2, #col = pal[match(type, type.names)], 
           xlab = "Number of markers", 
           ylab = "Dosage combination", horiz = TRUE)
   if(is.null(x$chisq.pval))
@@ -344,23 +342,15 @@ plot.mappoly.data <- function(x, thresh.line = 10e-6, ...)
     par(mar = c(1,1,1,2))
     par(xaxs = "i")
     plot(log10(x$chisq.pval), axes = FALSE, xlab = "", ylab = "", pch = 16, 
-         col = rgb(red = 0.2, green = 0.2, blue = 1.0, alpha = 0.2))
+         col = rgb(red = 0.25, green = 0.64, blue = 0.86, alpha = 0.3))
     axis(4, line = 1)
     mtext(text = bquote(log[10](P)), side = 4, line = 4, cex = .7)
     lines(x = c(0, x$n.mrk), y = rep(log10(thresh.line),2), col = 2, lty = 2)
   }
   par(mar = c(5,1,0,2))
-  
-  if(x$ploidy  ==  2) {
-    pal <- c("black", "#FC8D59", "#FFFFBF", "#91CF60")
-  }else if(x$ploidy  ==  4){
-    pal <- c("black", "#D7191C", "#FDAE61", "#FFFFBF", "#A6D96A", "#1A9641")
-  }else if(x$ploidy  ==  6){
-    pal <- c("black", "#D73027", "#FC8D59", "#FEE08B", "#FFFFBF", "#D9EF8B", "#91CF60", "#1A9850")
-  }else if(x$ploidy  ==  8){
-    pal <- c("black", "#D73027", "#F46D43", "#FDAE61", "#FEE08B", "#FFFFBF", "#D9EF8B", "#A6D96A", "#66BD63", "#1A9850") 
-  } else pal <- c("black", gg_color_hue(x$ploidy))
-  
+  pal <- c("black", colorRampPalette(c("#D73027", "#F46D43", "#FDAE61", "#FEE090",
+                                       "#FFFFBF", "#E0F3F8", "#ABD9E9", "#74ADD1",
+                                       "#4575B4"))(x$ploidy + 1))
   names(pal) <- c(-1:x$ploidy)
   M <- as.matrix(x$geno.dose)
   M[M == x$ploidy+1] <- -1

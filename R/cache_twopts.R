@@ -47,7 +47,7 @@
 #'     ## load from internal file or web-stored counts (especially important for high ploidy levels)
 #'     counts.cached <- cache_counts_twopt(all.mrk, cached = TRUE)
 #'
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} with updates by Gabriel Gesteira, \email{gabrielgesteira@usp.br}
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} with updates by Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 #'
 #' @references
 #'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
@@ -70,12 +70,12 @@ cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL,
     stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
   }
   cache.prev = NULL
-  if(input.seq$ploidy == 2)
-  {
-    cached <- FALSE
-    if (verbose)
-        cat("INFO: Computing genotype frequencies ...\n")
-  }
+  # if(input.seq$ploidy == 2)
+  # {
+  #   cached <- FALSE
+  #   if (verbose)
+  #       cat("INFO: Computing genotype frequencies ...\n")
+  # }
   if (cached){
     if (input.seq$ploidy  ==  2) ploidy = 'diploid'
     else if (input.seq$ploidy  ==  4) ploidy = 'tetraploid'
@@ -85,7 +85,8 @@ cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL,
   }
   temp.count <- NULL
   if (joint.prob) {
-    temp.count <- cache_counts_twopt(input.seq, cached = FALSE, cache.prev = cache.prev, ncpus = ncpus, verbose = verbose, joint.prob = FALSE)$cond
+    temp.count <- cache_counts_twopt(input.seq, cached = FALSE, cache.prev = cache.prev, 
+                                     ncpus = ncpus, verbose = verbose, joint.prob = FALSE)$cond
   }
   if (verbose && input.seq$ploidy >= 8)
     message("\nploidy level ", input.seq$ploidy, ": this operation could take a very long time.
@@ -95,7 +96,7 @@ cache_counts_twopt <- function(input.seq, cached = FALSE, cache.prev = NULL,
     if (!inherits(cache.prev, "cache.info")) {
       stop(deparse(substitute(cache.prev)), " is not an object of class 'cache.info'")
     }
-    ## Number of distinct genotypic combinations for differennt ploidy levels
+    ## Number of distinct genotypic combinations for different ploidy levels
     x <- c(3, 6, 10, 15, 21, 28, 36)
     names(x) <- c("2", "4", "6", "8", "10", "12", "14")
     pl.class <- choose(1 + input.seq$ploidy/2, 2) + 1 + input.seq$ploidy/2

@@ -75,15 +75,15 @@ split_and_rephase <- function(input.map,
   if(length(segments) == 0) stop("all markers were eliminated\n")
   ## Dividing map in sub-maps
   temp.maps <- vector("list", nrow(segments))
-  if (verbose) {
-    ns <- nrow(segments)
-    if(ns == 1){
-      cat("one submap found ...\n")
-      map <- get_submap(input.map, c(segments[1, 1]:segments[1, 2]), tol.final = tol.final, verbose = FALSE)
-      return(filter_map_at_hmm_thres(map, 10e-4))
-    } 
-    else cat(ns, "submaps found ...\n")
-  }
+  ns <- nrow(segments)
+  if(ns == 1L){
+    if (verbose) cat("one submap found ...\n")
+    map <- get_submap(input.map, c(segments[1, 1]:segments[1, 2]), tol.final = tol.final, verbose = FALSE)
+    return(filter_map_at_hmm_thres(map, 10e-4))
+  } else{
+    if (verbose)
+      cat(ns, "submaps found ...\n")
+  } 
   for(i in 1:length(temp.maps)){
     temp.id <- c(segments[i, 1]:segments[i, 2])
     if(length(temp.id) > 1)

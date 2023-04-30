@@ -37,6 +37,9 @@
 #'
 #' @param tol the desired accuracy. See \code{optimize()} for details
 #' 
+#' @param ll will return log-likelihood instead of LOD scores. 
+#' (for internal use) 
+#' 
 #' @return An object of class \code{mappoly.twopt} which
 #'     is a list  containing the following components:
 #'     \item{data.name}{name of the object of class
@@ -89,7 +92,7 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL,
                             est.type = c("disc","prob"),
                             verbose = TRUE, memory.warning = TRUE, 
                             parallelization.type = c("PSOCK", "FORK"), 
-                            tol = .Machine$double.eps^0.25)
+                            tol = .Machine$double.eps^0.25, ll = FALSE)
 {
   ## checking for correct object
   if (!inherits(input.seq, "mappoly.sequence"))
@@ -184,7 +187,8 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL,
                                  dP = get(input.seq$data.name)$dosage.p1,
                                  dQ = get(input.seq$data.name)$dosage.p2,
                                  count.cache = count.cache,
-                                 tol = tol)
+                                 tol = tol,
+                                 ll = ll)
     } 
     else if(est.type  ==  "prob") {
       res <- parallel::parLapply(cl,
@@ -195,7 +199,8 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL,
                                  dP = get(input.seq$data.name)$dosage.p1,
                                  dQ = get(input.seq$data.name)$dosage.p2,
                                  count.cache = count.cache,
-                                 tol = tol)
+                                 tol = tol,
+                                 ll =ll)
     } 
     end <- proc.time()
     if (verbose) {
@@ -222,7 +227,8 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL,
                     dP = get(input.seq$data.name)$dosage.p1,
                     dQ = get(input.seq$data.name)$dosage.p2,
                     count.cache = count.cache,
-                    tol = tol)
+                    tol = tol,
+                    ll = ll)
     } 
     else if(est.type  ==  "prob") {
       res <- lapply(input.list,
@@ -232,7 +238,8 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL,
                     dP = get(input.seq$data.name)$dosage.p1,
                     dQ = get(input.seq$data.name)$dosage.p2,
                     count.cache = count.cache,
-                    tol = tol)
+                    tol = tol,
+                    ll = ll)
     } 
   }
   res <- unlist(res,
@@ -241,16 +248,6 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL,
                       2,
                       paste,
                       collapse = "-")
-  nas <- sapply(res, function(x) any(is.na(x)))
-  return(structure(list(data.name = input.seq$data.name,
-                        n.mrk = length(input.seq$seq.num),
-                        seq.num = input.seq$seq.num,
-                        pairwise = res,
-                        chisq.pval.thres = input.seq$chisq.pval.thres,
-                        chisq.pval = input.seq$chisq.pval,
-                        nas  = nas),
-                   class = "mappoly.twopt"))
-  
   nas <- sapply(res, function(x) any(is.na(x)))
   return(structure(list(data.name = input.seq$data.name,
                         n.mrk = length(input.seq$seq.num),
@@ -273,7 +270,8 @@ paralell_pairwise_discrete <- function(mrk.pairs,
                                        dP,
                                        dQ,
                                        count.cache,
-                                       tol = .Machine$double.eps^0.25)
+                                       tol = .Machine$double.eps^0.25,
+                                       ll = ll)
 {
   res <- .Call("pairwise_rf_estimation_disc",
                input.seq$ploidy,
@@ -284,6 +282,7 @@ paralell_pairwise_discrete <- function(mrk.pairs,
                count.cache$cond,
                tol = tol,
                PACKAGE = "mappoly")
+  if(ll) return(res)
   return(lapply(res, format_rf))
 }
 
@@ -298,7 +297,8 @@ paralell_pairwise_probability <- function(mrk.pairs,
                                           dP,
                                           dQ,
                                           count.cache,
-                                          tol = .Machine$double.eps^0.25)
+                                          tol = .Machine$double.eps^0.25,
+                                          ll = ll)
 {
   res <- .Call("pairwise_rf_estimation_prob",
                input.seq$ploidy,
@@ -310,6 +310,7 @@ paralell_pairwise_probability <- function(mrk.pairs,
                count.cache$cond,
                tol = tol,
                PACKAGE = "mappoly")
+  if(ll) return(res)
   return(lapply(res, format_rf))
 }
 
@@ -481,13 +482,13 @@ est_pairwise_rf2 <- function(input.seq,
   rf = v_2_m(res[,3], n)
   LOD_rf = v_2_m(res[,4], n)
   LOD_ph = v_2_m(res[,5], n)
-  return(structure(list(seq.mrk.names = seq.mrk.names,
-                        data.name  = input.seq$data.name,
-                        chisq.pval.thres = input.seq$chisq.pval.thres,
-                        chisq.pval = input.seq$chisq.pval,
-                        pairwise = list(rf = rf, LOD.rf = LOD_rf,
-                                        LOD.ph = LOD_ph, Sh.P1 = Sh_P1, 
-                                        Sh.P2 = Sh_P2)), class = "mappoly.twopt2"))
+  invisible(structure(list(seq.mrk.names = seq.mrk.names,
+                           data.name  = input.seq$data.name,
+                           chisq.pval.thres = input.seq$chisq.pval.thres,
+                           chisq.pval = input.seq$chisq.pval,
+                           pairwise = list(rf = rf, LOD.rf = LOD_rf,
+                                           LOD.ph = LOD_ph, Sh.P1 = Sh_P1, 
+                                           Sh.P2 = Sh_P2)), class = "mappoly.twopt2"))
 }
 
 #' Wrapper function to discrete-based pairwise two-point estimation in C++

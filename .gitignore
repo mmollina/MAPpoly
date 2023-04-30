@@ -24,3 +24,7 @@ old_cran-comments/
 hex.xcf
 test_map.R
 inst/doc
+/doc/
+/Meta/
+doc
+Meta

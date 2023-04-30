@@ -230,7 +230,7 @@ plot.mappoly.prefpair.profiles <- function(x, type = c("pair.configs", "hom.pair
     ploidy <- x$info$ploidy
     variable <- value <- map.position <- probability <- colour <- pair.conf  <- NULL
     p1 <- ggplot2::ggplot(x$prefpair.psi) + 
-      ggplot2::geom_smooth(ggplot2::aes(map.position, probability, colour = pair.conf), size = 1, se = FALSE) + 
+      ggplot2::geom_smooth(ggplot2::aes(map.position, probability, colour = pair.conf), linewidth = 1, se = FALSE) + 
       ggplot2::facet_grid(parent~LG, scales = "free_x", space = "free_x", labeller = ggplot2::labeller(parent = ggplot2::as_labeller(c(P1 = P1, P2 = P2)))) +
       ggplot2::geom_hline(yintercept = 1/(prod(choose(seq(2,ploidy,2),2))/factorial(ploidy/2)), linetype = "dashed") +
       ggplot2::ylim(min.y.prof,max.y.prof) + 
@@ -257,7 +257,7 @@ plot.mappoly.prefpair.profiles <- function(x, type = c("pair.configs", "hom.pair
     ploidy <- x$info$ploidy
     hom.pair <- phh <- variable <- p.val <- map.position <- probability <- colour <- pair.conf  <- NULL
     p1 <- ggplot2::ggplot(x$prefpair.homolog) + 
-      ggplot2::geom_smooth(ggplot2::aes(map.position, phh, colour = hom.pair), size = 1, se = FALSE) + 
+      ggplot2::geom_smooth(ggplot2::aes(map.position, phh, colour = hom.pair), linewidth = 1, se = FALSE) + 
       ggplot2::facet_grid(parent~LG, scales = "free_x", space = "free_x", labeller = ggplot2::labeller(parent = ggplot2::as_labeller(c(P1 = P1, P2 = P2)))) +
       ggplot2::geom_hline(yintercept = get_w_m(ploidy - 2)/get_w_m(ploidy), linetype = "dashed") +
       ggplot2::ylim(min.y.prof,max.y.prof) + 

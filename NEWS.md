@@ -1,3 +1,14 @@
+# MAPpoly version 0.3.3
+
+  - Fix minor bugs
+  
+# MAPpoly version 0.3.2
+  - Added function find_blocks
+  - Added several utility functions
+  - Update function filter_individuals
+  - Update filtering graphics
+  - Update some color schemes
+
 # MAPpoly version 0.3.0
  - Added function est_pairwise_rf2 to avoid memory overflow in  personal computers when estimating recombination fraction in large number of markers.
  - Added Vignette

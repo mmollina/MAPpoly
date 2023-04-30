@@ -17,8 +17,8 @@ plot_map_list(
 \item{horiz}{logical. If FALSE, the maps are plotted vertically with the first map to the left. 
 If TRUE  (default), the maps are plotted horizontally with the first at the bottom}
 
-\item{col}{a vector of colors for the bars or bar components (default = 'lightgrey')
-\code{ggstyle} produces maps using the default \code{ggplot} color palette}
+\item{col}{a vector of colors for each linkage group.  (default = 'lightgray')
+\code{ggstyle} produces maps using the default \code{ggplot} color palette.}
 
 \item{title}{a title (string) for the maps (default = 'Linkage group')}
 }
@@ -36,6 +36,7 @@ The map(s) should be passed as a single object or a list of objects of class \co
  
  ## solcap map
  plot_map_list(solcap.dose.map, col = "ggstyle")
+ plot_map_list(solcap.dose.map, col = "mp_pallet3", horiz = FALSE)
  
 }
 \references{
