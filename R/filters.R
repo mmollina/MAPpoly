@@ -482,3 +482,51 @@ rf_snp_filter <- function(input.twopt,
   ch_filt <- make_seq_mappoly(input.obj = get(input.twopt$data.name, pos = 1), arg = ids, data.name = input.twopt$data.name)
   return(ch_filt)
 }
+
+#' Edit sequence ordered by reference genome positions 
+#' comparing to another set order
+#' 
+#' @param input.seq object of class mappoly.sequence with alternative order (not genomic order)
+#' @param dat object of class mappoly.data
+#' 
+#' @author Cristiane Taniguti, \email{chtaniguti@tamu.edu}
+#' 
+#' @export
+edit_order <- function(input.seq, input.data){
+  
+  if (!inherits(input.data, "mappoly.data")) {
+    stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
+  }
+  if (!inherits(input.seq, "mappoly.sequence")) {
+    stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
+  }
+  
+  get_weird <- data.frame(x = 1:length(input.seq$genome.pos),
+                          y = input.seq$genome.pos)
+  
+  rownames(get_weird) <- input.seq$seq.mrk.names
+  get_weird <- get_weird[order(get_weird$y),]
+  plot(get_weird$x, get_weird$y, xlab="alternative order", ylab = "Genome position")
+  
+  if(interactive()){
+    ANSWER <- "Y"
+    while(substr(ANSWER, 1, 1)  ==  "y" | substr(ANSWER, 1, 1)  ==  "yes" | substr(ANSWER, 1, 1)  ==  "Y" | ANSWER  == ""){
+      plot(get_weird$x, get_weird$y, xlab="MDS order", ylab = "Genome position")
+      mks.to.remove <- gatepoints::fhs(get_weird, mark = TRUE)
+      if(length(which(rownames(get_weird) %in% mks.to.remove)) > 0){
+        ANSWER2 <- readline("Enter 'invert/remove' to proceed with the edition: ")
+        if(ANSWER2 == "invert"){
+          repl <- get_weird[rev(which(rownames(get_weird) %in% as.vector(mks.to.remove))),]
+          get_weird[which(rownames(get_weird) %in% as.vector(mks.to.remove)),2] <- repl[,2]
+        } else {
+          get_weird <- get_weird[-which(rownames(get_weird) %in% mks.to.remove),]
+        }
+      }
+      ANSWER <- readline("Enter 'Y/n' to proceed with interactive edition or quit: ")
+    }
+    plot(get_weird$x, get_weird$y, xlab="MDS order", ylab = "Genome position")
+    new.seq <- make_seq_mappoly(input.obj = input.data,rownames(get_weird))
+  }
+  return(new.seq)
+}
+
