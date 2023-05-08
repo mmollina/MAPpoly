@@ -504,11 +504,8 @@ rf_snp_filter <- function(input.twopt,
 #' @author Cristiane Taniguti, \email{chtaniguti@tamu.edu}
 #' 
 #' @export
-edit_order <- function(input.seq, input.data){
+edit_order <- function(input.seq){
   
-  if (!inherits(input.data, "mappoly.data")) {
-    stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
-  }
   if (!inherits(input.seq, "mappoly.sequence")) {
     stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
   }
@@ -518,27 +515,66 @@ edit_order <- function(input.seq, input.data){
   
   rownames(get_weird) <- input.seq$seq.mrk.names
   get_weird <- get_weird[order(get_weird$y),]
-  plot(get_weird$x, get_weird$y, xlab="alternative order", ylab = "Genome position")
+  plot(get_weird$x, get_weird$y, xlab="alternative order", ylab = "genomic order")
   
+  inverted <- removed <- vector()
   if(interactive()){
     ANSWER <- "Y"
     while(substr(ANSWER, 1, 1)  ==  "y" | substr(ANSWER, 1, 1)  ==  "yes" | substr(ANSWER, 1, 1)  ==  "Y" | ANSWER  == ""){
-      plot(get_weird$x, get_weird$y, xlab="MDS order", ylab = "Genome position")
+      plot(get_weird$x, get_weird$y, xlab="sequence order", ylab = "genomic order")
       mks.to.remove <- gatepoints::fhs(get_weird, mark = TRUE)
       if(length(which(rownames(get_weird) %in% mks.to.remove)) > 0){
         ANSWER2 <- readline("Enter 'invert/remove' to proceed with the edition: ")
         if(ANSWER2 == "invert"){
+          inverted <- c(inverted, as.vector(mks.to.remove))
           repl <- get_weird[rev(which(rownames(get_weird) %in% as.vector(mks.to.remove))),]
           get_weird[which(rownames(get_weird) %in% as.vector(mks.to.remove)),2] <- repl[,2]
         } else {
+          removed <- c(removed, as.vector(mks.to.remove))
           get_weird <- get_weird[-which(rownames(get_weird) %in% mks.to.remove),]
         }
       }
       ANSWER <- readline("Enter 'Y/n' to proceed with interactive edition or quit: ")
     }
-    plot(get_weird$x, get_weird$y, xlab="MDS order", ylab = "Genome position")
-    new.seq <- make_seq_mappoly(input.obj = input.data,rownames(get_weird))
+    plot(get_weird$x, get_weird$y, xlab="sequence order", ylab = "genomic order")
   }
-  return(new.seq)
+  
+  return(structure(list(edited_order = rownames(get_weird),
+                        removed = removed,
+                        inverted = inverted,
+                        data.name = input.seq$data.name), class = "mappoly.edit.order"))
 }
 
+#' Filter aneuploid chromosomes from progeny individuals
+#' 
+#' @param input.data name of input object (class \code{mappoly.data})
+#' 
+#' @param aneuploid.info data.frame with ploidy information by chromosome (columns) for each individual in progeny (rows)
+#' 
+#' @param ploidy main ploidy
+#' 
+#' @author Cristiane Taniguti, \email{chtaniguti@tamu.edu} 
+#' @export
+filter_aneuploid <- function(input.data, aneuploid.info, ploidy){
+  
+  if (!inherits(input.data, "mappoly.data")) {
+    stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
+  }
+  
+  keep.ind <- match(input.data$ind.names, aneuploid.info[,1])
+  aneuploid.info <- aneuploid.info[keep.ind,]
+  
+  idx.list <- apply(aneuploid.info[,-1], 1, function(x) which(x != ploidy))
+  names(idx.list) <- aneuploid.info[,1]
+  
+  idx.list <- idx.list[-which(!sapply(idx.list, function(x) length(x) >0))]
+  
+  cat(round((length(unlist(idx.list))/(dim(aneuploid.info)[1]*(dim(aneuploid.info)[2]-1)))*100,2), "% of the chromosomes x individuals are aneuploids")
+  
+  for(i in 1:length(idx.list)){
+    idx <- which(input.data$chrom %in% idx.list[[i]] | input.data$chrom %in% names(idx.list[[i]])) # by index or chromosome name
+    input.data$geno.dose[idx,names(idx.list[i])] <- ploidy + 1
+  }
+  
+  return(input.data)
+}

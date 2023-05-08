@@ -5,7 +5,7 @@
 \title{Edit sequence ordered by reference genome positions 
 comparing to another set order}
 \usage{
-edit_order(input.seq, input.data)
+edit_order(input.seq)
 }
 \arguments{
 \item{input.seq}{object of class mappoly.sequence with alternative order (not genomic order)}
