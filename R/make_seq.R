@@ -12,7 +12,7 @@
 #'     string or a vector of strings \code{'seqx'}, where \code{x}
 #'     is the sequence (\code{x = 0} indicates unassigned markers); iii) a
 #'     \code{vector} of integers specifying which markers comprise the
-#'     sequence; iv) an integer representing linkage group if 
+#'     sequence; iv) a \code{vector} of integers representing linkage group if 
 #'     \code{input.object} has class \code{mappoly.group}; or v) NULL if 
 #'     \code{input.object} has class \code{mappoly.pcmap}, \code{mappoly.pcmap3d}, 
 #'     \code{mappoly.unique.seq}, or \code{mappoly.geno.ord}
@@ -195,13 +195,14 @@ make_seq_mappoly <- function(input.obj,
   {
     chisq.pval <- input.obj$chisq.pval
     chisq.pval.thres <- input.obj$chisq.pval.thres
+    lgs.idx <- which(input.obj$groups.snp  %in%  arg)
+    seq.num.group = as.numeric(names(input.obj$groups.snp)[lgs.idx])
+    
     if (!is.null(genomic.info) && is.numeric(genomic.info)){
-      seq.num.group = as.numeric(names(which(input.obj$groups.snp  ==  arg)))
-      seqs = names(sort(input.obj$seq.vs.grouped.snp[arg,-c(ncol(input.obj$seq.vs.grouped.snp))], decreasing = T))[genomic.info]
+      seqs = colnames(input.obj$seq.vs.grouped.snp)[genomic.info]
     } else {
-      seq.num1 <- as.numeric(names(which(input.obj$groups.snp  ==  arg)))
-      if(realkeep) seq.num = intersect(seq.num1, seq.num)
-      else seq.num = seq.num1
+      if(realkeep) seq.num = intersect(seq.num.group, seq.num)
+      else seq.num = seq.num.group
     }
     data.name <- input.obj$data.name
     input.obj <- get(data.name, pos = 1)
