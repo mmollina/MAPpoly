@@ -4,10 +4,10 @@
 \alias{filter_segregation}
 \title{Filter markers based on chi-square test}
 \usage{
-filter_segregation(input.data, chisq.pval.thres = NULL, inter = TRUE)
+filter_segregation(input.obj, chisq.pval.thres = NULL, inter = TRUE)
 }
 \arguments{
-\item{input.data}{name of input object (class \code{mappoly.data})}
+\item{input.obj}{name of input object (class \code{mappoly.data})}
 
 \item{chisq.pval.thres}{p-value threshold used for chi-square tests 
 (default = Bonferroni aproximation with global alpha of 0.05, i.e., 
@@ -29,7 +29,7 @@ The chi-square test assumes that markers follow the expected segregation
  pairing and no double reduction.
 }
 \examples{
-mrks.chi.filt <- filter_segregation(input.data = tetra.solcap,
+mrks.chi.filt <- filter_segregation(input.obj = tetra.solcap,
                                     chisq.pval.thres = 0.05/tetra.solcap$n.mrk,
                                     inter = TRUE)
 seq.init <- make_seq_mappoly(mrks.chi.filt)

@@ -15,11 +15,11 @@ new_functions.R
 *.pptx
 r-release/
 tests/testthat/Rplots.pdf
-my_tests/
 .projectile
 my_tests/*.rd*
 my_tests/*.RData
-my_tests/
+my_tests/*.vcf
+my_tests/*.rds
 old_cran-comments/
 hex.xcf
 test_map.R

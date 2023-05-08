@@ -399,7 +399,7 @@ std::vector<double> backward_emit(int m,
  -----------------------------------------------------
  Classical forward equation presented in Rabiner 1989.
  */
-std::vector<double> forward_emit_one_parent(int m,
+std::vector<double> forward_emit_single_parent(int m,
                                             std::vector<double>& fk,
                                             std::vector<int>& ik,
                                             std::vector<int>& ik1,
@@ -424,7 +424,7 @@ std::vector<double> forward_emit_one_parent(int m,
  -----------------------------------------------------
  Classical backward equation presented in Rabiner 1989.
  */
-std::vector<double> backward_emit_one_parent(int m,
+std::vector<double> backward_emit_single_parent(int m,
                                              std::vector<double>& fk1,
                                              std::vector<int>& ik,
                                              std::vector<int>& ik1,
