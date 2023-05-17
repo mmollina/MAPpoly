@@ -9,12 +9,29 @@ filter_aneuploid(input.data, aneuploid.info, ploidy)
 \arguments{
 \item{input.data}{name of input object (class \code{mappoly.data})}
 
-\item{aneuploid.info}{data.frame with ploidy information by chromosome (columns) for each individual in progeny (rows)}
+\item{aneuploid.info}{data.frame with ploidy information by chromosome (columns) for each individual
+in progeny (rows). The chromosome and individuals names must match the ones in the file used as input
+in mappoly.}
 
 \item{ploidy}{main ploidy}
 }
+\value{
+object of class \code{mappoly.data}
+}
 \description{
 Filter aneuploid chromosomes from progeny individuals
+}
+\examples{
+     aneuploid.info <- matrix(4, nrow=tetra.solcap$n.ind, ncol = 12)
+     set.seed(8080)
+     aneuploid.info[sample(1:length(aneuploid.info), round((4*length(aneuploid.info))/100),0)] <- 3
+     aneuploid.info[sample(1:length(aneuploid.info), round((4*length(aneuploid.info))/100),0)] <- 5
+
+     colnames(aneuploid.info) <- paste0(1:12)
+     aneuploid.info <- cbind(inds = tetra.solcap$ind.names, aneuploid.info)
+
+     filt.dat <- filter_aneuploid(input.data = tetra.solcap, aneuploid.info = aneuploid.info, ploidy = 4)
+
 }
 \author{
 Cristiane Taniguti, \email{chtaniguti@tamu.edu}

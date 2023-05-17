@@ -2,7 +2,7 @@
 % Please edit documentation in R/filters.R
 \name{edit_order}
 \alias{edit_order}
-\title{Edit sequence ordered by reference genome positions 
+\title{Edit sequence ordered by reference genome positions
 comparing to another set order}
 \usage{
 edit_order(input.seq)
@@ -12,9 +12,32 @@ edit_order(input.seq)
 
 \item{dat}{object of class mappoly.data}
 }
+\value{
+object of class \code{mappoly.edit.order}: a list containing
+        vector of marker names ordered according to editions (`edited_order`);
+        vector of removed markers names (`removed`);
+        vector of inverted markers names (`inverted`).
+}
 \description{
-Edit sequence ordered by reference genome positions 
+Edit sequence ordered by reference genome positions
 comparing to another set order
+}
+\examples{
+ \donttest{
+  dat <- filter_segregation(tetra.solcap, inter = FALSE)
+  seq_dat <- make_seq_mappoly(dat)
+  seq_chr <- make_seq_mappoly(seq_dat, arg = seq_dat$seq.mrk.names[which(seq_dat$chrom=="1")])
+
+  tpt <- est_pairwise_rf(seq_chr)
+  seq.filt <- rf_snp_filter(tpt, probs = c(0.05, 0.95))
+  mat <- rf_list_to_matrix(tpt)
+  mat2 <- make_mat_mappoly(mat, seq.filt)
+
+  seq_test_mds <- mds_mappoly(mat2)
+  seq_mds <- make_seq_mappoly(seq_test_mds)
+  edit_seq <- edit_order(input.seq = seq_mds)
+ }
+ 
 }
 \author{
 Cristiane Taniguti, \email{chtaniguti@tamu.edu}

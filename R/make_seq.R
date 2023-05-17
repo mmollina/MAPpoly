@@ -108,8 +108,12 @@ make_seq_mappoly <- function(input.obj,
                             data.name = input.obj$data.name))
   }
   ## checking for argument to make a sequence
-  if (is.null(arg) && !inherits(input.obj, "mappoly.chitest.seq") && !inherits(input.obj, "mappoly.unique.seq") && 
-      !inherits(input.obj, "mappoly.pcmap") && !inherits(input.obj, "mappoly.pcmap3d") && !inherits(input.obj, "mappoly.geno.ord")) {
+  if (is.null(arg) && !inherits(input.obj, "mappoly.chitest.seq") && 
+      !inherits(input.obj, "mappoly.unique.seq") && 
+      !inherits(input.obj, "mappoly.pcmap") && 
+      !inherits(input.obj, "mappoly.pcmap3d") && 
+      !inherits(input.obj, "mappoly.geno.ord") &&
+      !inherits(input.obj, "mappoly.edit.order")) {
     stop("argument 'arg' expected.")
   }
   ## Variables defined to block removing redundant markers
