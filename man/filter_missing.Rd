@@ -14,7 +14,7 @@ filter_missing(
 \arguments{
 \item{input.data}{an object of class \code{mappoly.data}}
 
-\item{type}{one of the following options: 
+\item{type}{one of the following options:
 \code{'marker'}{filter out markers based on their percentage of missing data (default)}
 \code{'individual'}{filter out individuals based on their percentage of missing data}
 Please notice that removing individuals with certain amount of data can change some marker parameters
@@ -31,7 +31,7 @@ Excludes markers or individuals based on their proportion of missing data
 \examples{
 plot(tetra.solcap)
 dat.filt.mrk <- filter_missing(input.data = tetra.solcap,
-                               type = "marker", 
+                               type = "marker",
                                filter.thres = 0.1,
                                inter = TRUE)
 plot(dat.filt.mrk)

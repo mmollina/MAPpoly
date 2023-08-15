@@ -5,7 +5,8 @@
 #' @param input.obj an object of one of the following classes:
 #'     \code{mappoly.data}, \code{mappoly.map}, \code{mappoly.sequence}, 
 #'     \code{mappoly.group}, \code{mappoly.unique.seq},
-#'     \code{mappoly.pcmap}, \code{mappoly.pcmap3d}, or \code{mappoly.geno.ord}
+#'     \code{mappoly.pcmap}, \code{mappoly.pcmap3d}, \code{mappoly.geno.ord} or
+#'     \code{mappoly.edit.order}
 #'
 #' @param arg can be one of the following objects: i) a string 'all',
 #'     resulting in a sequence with all markers in the raw data; ii) a
@@ -83,7 +84,8 @@ make_seq_mappoly <- function(input.obj,
   ## checking for correct object
   input_classes <- c("mappoly.data", "mappoly.map", "mappoly.sequence", 
                      "mappoly.unique.seq", "mappoly.pcmap", "mappoly.pcmap3d", 
-                     "mappoly.group", "mappoly.chitest.seq", "mappoly.geno.ord")
+                     "mappoly.group", "mappoly.chitest.seq", "mappoly.geno.ord",
+                     "mappoly.edit.order")
   if (!inherits(input.obj, input_classes)) {
     stop("invalid input object.", call. = FALSE)
   }
@@ -106,8 +108,12 @@ make_seq_mappoly <- function(input.obj,
                             data.name = input.obj$data.name))
   }
   ## checking for argument to make a sequence
-  if (is.null(arg) && !inherits(input.obj, "mappoly.chitest.seq") && !inherits(input.obj, "mappoly.unique.seq") && 
-      !inherits(input.obj, "mappoly.pcmap") && !inherits(input.obj, "mappoly.pcmap3d") && !inherits(input.obj, "mappoly.geno.ord")) {
+  if (is.null(arg) && !inherits(input.obj, "mappoly.chitest.seq") && 
+      !inherits(input.obj, "mappoly.unique.seq") && 
+      !inherits(input.obj, "mappoly.pcmap") && 
+      !inherits(input.obj, "mappoly.pcmap3d") && 
+      !inherits(input.obj, "mappoly.geno.ord") &&
+      !inherits(input.obj, "mappoly.edit.order")) {
     stop("argument 'arg' expected.")
   }
   ## Variables defined to block removing redundant markers
@@ -236,6 +242,14 @@ make_seq_mappoly <- function(input.obj,
     return(make_seq_mappoly(get(input.obj$data.name, pos = 1),
                             arg = as.character(rownames(input.obj$ord)),
                             info.parent = info.parent,
+                            data.name = input.obj$data.name))
+  }
+  if (inherits(input.obj, "mappoly.edit.order"))
+  {
+    if(!is.null(arg))
+      warning("Ignoring argument 'arg' and using the edited sequence order instead.")
+    return(make_seq_mappoly(get(input.obj$data.name, pos = 1),
+                            arg = input.obj$edited_order,
                             data.name = input.obj$data.name))
   }
   dp1 <- input.obj$dosage.p1[seq.num]

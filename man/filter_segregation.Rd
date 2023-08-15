@@ -9,8 +9,8 @@ filter_segregation(input.obj, chisq.pval.thres = NULL, inter = TRUE)
 \arguments{
 \item{input.obj}{name of input object (class \code{mappoly.data})}
 
-\item{chisq.pval.thres}{p-value threshold used for chi-square tests 
-(default = Bonferroni aproximation with global alpha of 0.05, i.e., 
+\item{chisq.pval.thres}{p-value threshold used for chi-square tests
+(default = Bonferroni aproximation with global alpha of 0.05, i.e.,
 0.05/n.mrk)}
 
 \item{inter}{if TRUE (default), plots distorted vs. non-distorted markers}
@@ -23,9 +23,9 @@ An object of class \code{mappoly.chitest.seq} which contains a list with the fol
 \item{data.name}{input dataset used to perform the chi-square tests}
 }
 \description{
-This function filter markers based on p-values of a chi-square test. 
+This function filter markers based on p-values of a chi-square test.
 The chi-square test assumes that markers follow the expected segregation
- patterns under Mendelian inheritance, random chromosome bivalent 
+ patterns under Mendelian inheritance, random chromosome bivalent
  pairing and no double reduction.
 }
 \examples{
