@@ -538,6 +538,7 @@ edit_order <- function(input.seq){
   get_weird <- get_weird[order(get_weird$y),]
   plot(get_weird$x, get_weird$y, xlab="input sequence order", ylab = "genomic position (bp)")
 
+  cat("Mark at least three points on the plot and press `Esc` to continue.")
   inverted <- removed <- vector()
   if(interactive()){
     ANSWER <- "Y"

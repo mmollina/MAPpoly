@@ -1,6 +1,7 @@
-#' Estimate recombination fraction with HMM approach for each parent using 
-#' only markers segregating by each (e.g. map 1 - P1:3 x P2:0, P1: 2x4; map 2 - P1:0 x P2:3, P1:4 x P2:2).
-#' After, it merges both maps and re-estimate recombination fractions.
+#' Design linkage map framework in two steps: i) estimating the recombination fraction with 
+#' HMM approach for each parent separately using only markers segregating individually 
+#' (e.g. map 1 - P1:3 x P2:0, P1: 2x4; map 2 - P1:0 x P2:3, P1:4 x P2:2); ii) merging both 
+#' maps and re-estimate recombination fractions.
 #' 
 #' @param input.seq object of class \code{mappoly.sequence}
 #' @param twopt object of class \code{mappoly.twopt}
@@ -31,22 +32,21 @@
 #' 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} with documentation and minor modifications by Cristiane Taniguti \email{chtaniguti@tamu.edu}
 #' 
-#' @examples 
 #' 
 #' @export
-build_map_1 <- function(input.seq, 
-                        twopt, 
-                        start.set = 10, 
-                        thres.twopt = 10, 
-                        thres.hmm = 30, 
-                        extend.tail = 30,
-                        inflation.lim.p1 = 5,
-                        inflation.lim.p2 = 5,
-                        phase.number.limit = 10,
-                        tol = 10e-3,
-                        tol.final = 10e-4,
-                        verbose = TRUE,
-                        method = "hmm"){
+framework_map <- function(input.seq, 
+                          twopt, 
+                          start.set = 10, 
+                          thres.twopt = 10, 
+                          thres.hmm = 30, 
+                          extend.tail = 30,
+                          inflation.lim.p1 = 5,
+                          inflation.lim.p2 = 5,
+                          phase.number.limit = 10,
+                          tol = 10e-3,
+                          tol.final = 10e-4,
+                          verbose = TRUE,
+                          method = "hmm"){
   
   if (!inherits(input.seq, "mappoly.sequence")) {
     stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
@@ -101,7 +101,8 @@ build_map_1 <- function(input.seq,
        map.p1.p2 = map.p1.p2)
 }
 
-#' Add markers that are informative in both parents using HMM approach and evaluating difference in LOD and gap size
+#' Add markers that are informative in both parents using HMM approach and evaluating difference 
+#' in LOD and gap size
 #' 
 #' @param input.map.list list containing three \code{mappoly.map} objects:1) map built with markers with segregation information from parent 1; 
 #' 2) map built with markers with segregation information from parent 2; 3) maps in 1 and 2 merged
@@ -124,17 +125,17 @@ build_map_1 <- function(input.seq,
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} with documentation and minor modifications by Cristiane Taniguti \email{chtaniguti@tamu.edu}
 #' 
 #' @export
-build_map_2 <- function(input.map.list,
-                        input.seq, 
-                        twopt,
-                        thres.twopt = 10,
-                        init.LOD = 30,
-                        verbose = TRUE,
-                        method = "hmm",
-                        input.mds = NULL,
-                        max.rounds = 50,
-                        size.rem.cluster = 2,
-                        gap.threshold = 4)
+update_framework_map <- function(input.map.list,
+                                 input.seq, 
+                                 twopt,
+                                 thres.twopt = 10,
+                                 init.LOD = 30,
+                                 verbose = TRUE,
+                                 method = "hmm",
+                                 input.mds = NULL,
+                                 max.rounds = 50,
+                                 size.rem.cluster = 2,
+                                 gap.threshold = 4)
 {
   
   if (!all(sapply(input.map.list, function(x) inherits(x, "mappoly.map")))) {
@@ -424,6 +425,9 @@ rem_mrk_clusters <- function(input.map,
 #' Plot object mappoly.map2
 #' 
 #' @param x object of class \code{mappoly.map2}
+#' 
+#' @import ggplot2
+#' @importFrom ggpubr font
 #' 
 #' @export
 plot.mappoly.map2 <- function(x){
