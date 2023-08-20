@@ -13,7 +13,7 @@
 
 # MAPpoly <img src="https://raw.githubusercontent.com/mmollina/MAPpoly/main/hex.png" align="right" width="150" />
 
-MAPpoly (v. 0.3.2) is an R package to construct genetic maps in autopolyploids with even ploidy levels. In its current version, MAPpoly can handle ploidy levels up to 8 when using hidden Markov models (HMM) and up to 12 when using the two-point simplification. When dealing with large numbers of markers (> 10,000), we strongly recommend using high-performance computing (HPC).
+MAPpoly (v. 0.3.3) is an R package to construct genetic maps in diploids and autopolyploids with even ploidy levels. In its current version, MAPpoly can handle ploidy levels up to 8 when using hidden Markov models (HMM) and up to 12 when using the two-point simplification. When dealing with large numbers of markers (> 10,000), we strongly recommend using high-performance computing (HPC).
 
 ![](https://raw.githubusercontent.com/mmollina/MAPpoly/master/mappoly.gif)
 
@@ -110,7 +110,7 @@ install.packages('mappoly')
   * [PedigreeSim: Simulation of genetic marker data in diploid and polyploid pedigreed populations.](https://github.com/PBR/pedigreeSim)
 
 * Genotype calling
-  * [ClusterCall: Automated tetraploid genotype calling by hierarchical clustering](https://potatobreeding.cals.wisc.edu/software/)
+  * [ClusterCall: Automated tetraploid genotype calling by hierarchical clustering](https://doi.org/10.1007/s00122-016-2845-5)
   * [fitPoly: Genotype Calling for Bi-Allelic Marker Assays](https://CRAN.R-project.org/package=fitPoly)
   * [polyRAD: Genotype Calling with Uncertainty from Sequencing Data in Polyploids and Diploids](https://CRAN.R-project.org/package=polyRAD)
   * [SuperMASSA: Graphical Bayesian inference tool for genotyping polyploids](https://bitbucket.org/orserang/supermassa)
@@ -159,7 +159,7 @@ install.packages('mappoly')
 
 # Acknowledgment
 
-This package has been developed as part of the [Genomic Tools for Sweetpotato Improvement project](https://sweetpotatogenomics.cals.ncsu.edu/) (GT4SP) and [SweetGAINS](https://cgspace.cgiar.org/handle/10568/106838), both funded by [Bill & Melinda Gates Foundation](https://www.gatesfoundation.org/). Its continuous improvement is made possible by [Tools for polyploids](https://www.polyploids.org/), funded by USDA NIFA Specialty Crop Research Initiative Award.
+This package has been developed as part of the [Genomic Tools for Sweetpotato Improvement project](https://sweetpotatogenomics.cals.ncsu.edu/) (GT4SP) and [SweetGAINS](https://cgspace.cgiar.org/handle/10568/106838), both funded by [Bill & Melinda Gates Foundation](https://www.gatesfoundation.org/). Its continuous improvement is made possible by the project [AFRI-Grant: A Genetics-Based Data Analysis System for Breeders in Polyploid Breeding Programs](https://portal.nifa.usda.gov/web/crisprojectpages/1027948-a-genetics-based-data-analysis-system-for-breeders-in-polyploid-breeding-programs.html) and  [SCRI-Grant: Tools for polyploids](https://www.polyploids.org/), funded by USDA NIFA.
 
 <div class="horizontalgap" style="width:5px">
     <a id="NCSU" href="https://www.ncsu.edu/"><img src="https://brand.ncsu.edu/assets/logos/ncstate-brick-2x2-red.png" width="150" alt=""/></a>
@@ -167,7 +167,7 @@ This package has been developed as part of the [Genomic Tools for Sweetpotato Im
     <a id="GT4SP" href="https://sweetpotatogenomics.cals.ncsu.edu/"><img src="http://www.sweetpotatoknowledge.org/wp-content/uploads/2016/02/GT4SP-logo-e1456736272456.png" width="70" alt=""/></a>
     <a id="sweetgains" href="https://cgspace.cgiar.org/handle/10568/106838"><img src="https://cipotato.org/wp-content/uploads/2020/06/SweetGains-sin-fondo-1-350x230.png" width="150" alt=""/></a>
     <a id="PolyploidTools" href="https://www.polyploids.org/"><img src="https://www.polyploids.org/sites/default/files/inline-images/Project%20Logo-transparent.png" width="180" alt=""/></a>    
-     <a id="USDA-NIFA" href="https://nifa.usda.gov/"><img src="https://upload.wikimedia.org/wikipedia/commons/0/06/USDA_NIFA_Twitter_Logo.jpg" width="100" alt=""/></a>  
+     <a id="USDA-NIFA" href="https://portal.nifa.usda.gov/web/crisprojectpages/1027948-a-genetics-based-data-analysis-system-for-breeders-in-polyploid-breeding-programs.html"><img src="https://upload.wikimedia.org/wikipedia/commons/0/06/USDA_NIFA_Twitter_Logo.jpg" width="100" alt=""/></a>  
     <span class="stretch"></span>
 </div>
 

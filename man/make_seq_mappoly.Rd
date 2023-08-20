@@ -22,7 +22,7 @@ resulting in a sequence with all markers in the raw data; ii) a
 string or a vector of strings \code{'seqx'}, where \code{x}
 is the sequence (\code{x = 0} indicates unassigned markers); iii) a
 \code{vector} of integers specifying which markers comprise the
-sequence; iv) an integer representing linkage group if 
+sequence; iv) a \code{vector} of integers representing linkage group if 
 \code{input.object} has class \code{mappoly.group}; or v) NULL if 
 \code{input.object} has class \code{mappoly.pcmap}, \code{mappoly.pcmap3d}, 
 \code{mappoly.unique.seq}, or \code{mappoly.geno.ord}}
