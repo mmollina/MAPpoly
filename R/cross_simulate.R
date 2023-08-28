@@ -14,9 +14,7 @@
 #'
 #' @param parental.phases a list containing the linkage phase information for both parents
 #' 
-#' @param distance.vector vector containing the distance between
-#'     adjacent markers. If a single distance is
-#'     provided, it is repeated \eqn{n.mrk-1} times
+#' @param map.length the map length
 #' 
 #' @param n.ind number of individuals in the offspring
 #' 
@@ -44,7 +42,7 @@
 #'
 #' @examples
 #'     h.temp <- sim_homologous(ploidy = 6, n.mrk = 20)
-#'     fake.poly.dat <- cross_simulate(ploidy = 6, distance.vector = .05, n.mrk = 20,
+#'     fake.poly.dat <- cross_simulate(ploidy = 6, map.length = .05, n.mrk = 20,
 #'                                   n.ind = 200, h.temp, seed = 123)
 #'     plot(fake.poly.dat)
 #'                                    
@@ -60,7 +58,7 @@
 #'
 #' @export
 cross_simulate <- function(parental.phases, 
-                           distance.vector,
+                           map.length,
                            n.ind, 
                            draw = FALSE,
                            file = "output.pdf",
@@ -71,8 +69,8 @@ cross_simulate <- function(parental.phases,
                            prob.Q = NULL)
 {
   n.mrk <- length(parental.phases$p)
-  if(length(distance.vector) == 1) 
-    rf.vector <- mf_h(rep(distance.vector, n.mrk-1))
+  map.temp <- seq(0, map.length, length.out  = n.mrk)
+  rf.vector <- mf_h(diff(map.temp))
   ploidy <- parental.phases$ploidy
   x <- sim_cross_two_informative_parents(ploidy,
                                          n.mrk,
@@ -84,7 +82,7 @@ cross_simulate <- function(parental.phases,
                                          prob.P = NULL,
                                          prob.Q = NULL)
   if(draw == TRUE)
-    draw_cross(ploidy,round(distance.vector,4),
+    draw_cross(ploidy, dist.vec = map.temp,
                parental.phases$hom.allele.p,
                parental.phases$hom.allele.q,
                file = file, width = width, height = height)

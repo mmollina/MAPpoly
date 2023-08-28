@@ -57,29 +57,43 @@ sim_homologous <- function(ploidy, n.mrk, prob.dose = NULL, seed = NULL)
     stop("Length of 'prob.dose' must be ploidy + 1.")
   
   
+  
+  # Create a contingency table
+  contingency_table <- outer(prob.dose, prob.dose)
+  
+  
+  # Remove the unacceptable conditions
+  contingency_table[1, ploidy+1] <- 0
+  contingency_table[ploidy+1, 1] <- 0
+  contingency_table[1, 1] <- 0
+  contingency_table[ploidy+1, ploidy+1] <- 0
+  
+  # Normalize the contingency table
+  contingency_table <- contingency_table / sum(contingency_table)
+  
   # Initialize matrices P1 and P2 with zeros
   P1 <- matrix(0, n.mrk, ploidy)
   P2 <- matrix(0, n.mrk, ploidy)
   
   for (i in 1:n.mrk) {
-    # Generate a row for P1 based on the probability distribution prob.dose
-    p1_sum <- sample(0:ploidy, 1, prob = prob.dose)
+    # Generate a pair of sums for P1 and P2 based on the normalized contingency table
+    
+    pair_idx <- sample(1:(ploidy + 1)^2, 1, prob = as.vector(contingency_table))
+    pair <- arrayInd(pair_idx, .dim = c(ploidy + 1, ploidy + 1)) - 1
+    
+    p1_sum <- pair[1]
+    p2_sum <- pair[2]
+    
+    # Generate rows for P1 and P2
     p1_row <- c(rep(1, p1_sum), rep(0, ploidy - p1_sum))
-    P1[i,] <- sample(p1_row)
-    
-    # For P2, make sure it does not violate the conditions while following prob.dose
-    if (p1_sum == 0 || p1_sum == ploidy) {
-      p2_options <- setdiff(0:ploidy, c(0, ploidy))
-      modified_prob_dose <- prob.dose[p2_options + 1]
-      modified_prob_dose <- modified_prob_dose / sum(modified_prob_dose)
-      p2_sum <- sample(p2_options, 1, prob = modified_prob_dose)
-    } else {
-      p2_sum <- sample(0:ploidy, 1, prob = prob.dose)
-    }
-    
     p2_row <- c(rep(1, p2_sum), rep(0, ploidy - p2_sum))
+    
+    P1[i,] <- sample(p1_row)
     P2[i,] <- sample(p2_row)
   }
+  
+      
+
   P1 <- ph_matrix_to_list(P1)
   P2 <- ph_matrix_to_list(P2)
   p <- unlist(lapply(P1, function(x) sum(as.logical(x))))

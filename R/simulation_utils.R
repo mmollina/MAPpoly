@@ -118,24 +118,32 @@ sim_cross_two_informative_parents <- function(ploidy,
 #' @param void internal function to be documented
 #' @importFrom grDevices pdf dev.off
 #' @keywords internal
-draw_cross <- function(ploidy,rf.vec = NULL,hom.allele.p,hom.allele.q, file = NULL, width = 12, height = 6){
+draw_cross <- function(ploidy,
+                       dist.vec = NULL,
+                       hom.allele.p,
+                       hom.allele.q, 
+                       file = NULL, 
+                       width = 12, 
+                       height = 6){
     if(!is.null(file))
         pdf(file, width = width, height = height)
     oldpar <- par(xaxt = "n")
     on.exit(par(oldpar))
-    plot(c(0,22), c(0,-(ploidy+10)), type = "n", axes = FALSE, xlab = "Partental homology groups", main = paste("Ploidy: ", ploidy), ylab = "")
+    plot(c(0,22), c(0,-(ploidy+12)), type = "n", 
+         axes = FALSE, xlab = "Partental homology groups", 
+         main = paste("Ploidy: ", ploidy), ylab = "")
     for(i in -(1:ploidy)){
         lines(c(0,10), c(i,i))
         lines(c(12,22), c(i,i))
     }
-    pos.p <- cumsum(c(0,rf.vec/sum(rf.vec)))*10
+    pos.p <- dist.vec/max(dist.vec)*10
     for(i in 1:length(hom.allele.p)){
         abline(v = pos.p[i], lty = 2, lwd = .5)
         text(pos.p[i], 0, i, cex = .7)
         if(any(hom.allele.p[[i]] != 0))
             points(x = rep(pos.p[i],length(hom.allele.p[[i]])), y = -hom.allele.p[[i]], col = 2, pch = 20, cex = 2)
         points(pos.p[i] , -(ploidy+10), pch = "|")
-        text(pos.p[i]+diff(pos.p)[i]/2, -(ploidy+10)+.8, labels = rf.vec[i], srt = 90)
+        text(pos.p[i], -(ploidy+10)-.8, labels = round(dist.vec,1)[i], srt = 90)
     }
     pos.q <- pos.p+12
     for(i in 1:length(hom.allele.q)){
@@ -144,7 +152,7 @@ draw_cross <- function(ploidy,rf.vec = NULL,hom.allele.p,hom.allele.q, file = NU
         if(any(hom.allele.q[[i]] != 0))
             points(x = rep(pos.q[i],length(hom.allele.q[[i]])), y = -hom.allele.q[[i]], col = 2, pch = 20, cex = 2)
         points(pos.q[i] , -(ploidy+10), pch = "|")
-        text(pos.q[i]+diff(pos.q)[i]/2, -(ploidy+10)+.8, labels = rf.vec[i], srt = 90)
+        text(pos.q[i], -(ploidy+10)-.8, labels = round(dist.vec,1)[i], srt = 90)
     }
     text(x = 11,y = -(ploidy+1)/2,labels = "X", cex = 2)
     lines(c(0,10), c(-(ploidy+10),-(ploidy+10)))
