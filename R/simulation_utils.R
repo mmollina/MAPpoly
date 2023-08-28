@@ -25,7 +25,7 @@ sim_cross_one_informative_parent <- function(ploidy,
     for(i in 1:nrow(a))
     {
       temp <- apply(matrix(a[i,], 2, ploidy/2), 2, sort)
-      bv.conf[[i]] <- temp[,order(temp[1,])]
+      bv.conf[[i]] <- temp[,order(temp[1,]), drop = FALSE]
     }
     bv.conf <- unique(bv.conf)
     names(bv.conf) <- sapply(bv.conf, function(x) paste(apply(x, 2,
@@ -39,18 +39,18 @@ sim_cross_one_informative_parent <- function(ploidy,
         gen.1 <- matrix(1:ploidy,ploidy,n.mrk)  #simulates the chromosomes multiallelic markers in 'n.mrk' positions
         id <- sample(x = 1:length(bv.conf), size = 1, prob = prob) #sampling one bivalent configuration based on given probabilities
         choosed_biv <- bv.conf[[id]]
-        choosed_biv <- choosed_biv[,sample(1:(ploidy/2))]
+        choosed_biv <- choosed_biv[,sample(1:(ploidy/2)), drop = FALSE]
         for(i in 1:ncol(choosed_biv))
         {
           choosed_biv[,i] <- sample(choosed_biv[,i])
         }
-        pole.1 <- choosed_biv[1,]
-        pole.2 <- choosed_biv[2,]
-        set.2 <- gen.1[pole.1,]      #allocating the chromosomes on the variables set.1 and set.2, thus (set.1[i], set.2[i]) represents a bivalent
-        set.1 <- gen.1[pole.2,]
+        pole.1 <- choosed_biv[1,, drop = FALSE]
+        pole.2 <- choosed_biv[2,, drop = FALSE]
+        set.2 <- gen.1[pole.1,, drop = FALSE]      #allocating the chromosomes on the variables set.1 and set.2, thus (set.1[i], set.2[i]) represents a bivalent
+        set.1 <- gen.1[pole.2,, drop = FALSE]
         for(i in 1:(ploidy/2)){         #for each one of the ploidy/2 chromosome pair (bivalents)
-            a <- set.1[i,]
-            b <- set.2[i,]
+            a <- set.1[i,, drop = FALSE]
+            b <- set.2[i,, drop = FALSE]
             for(j in 1:(n.mrk-1)){             #for each adjacent interval between.mrkkers
                 if(runif(1)  < rf.vec[j]){       #if a random number drawn from the interval [0,1] (according a uniform distribution)
                                         #is less than the recombination fraction for that interval

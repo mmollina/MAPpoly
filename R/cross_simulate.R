@@ -3,7 +3,7 @@
 #' Simulate an autopolyploid full-sib population with one or two 
 #' informative parents under random chromosome segregation.
 #'
-#' \code{hom.allele.p} and \code{hom.allele.q} are lists of vectors
+#' \code{parental.phases.p} and \code{parental.phases.q} are lists of vectors
 #'  containing linkage phase configurations. Each vector contains the
 #'  numbers of the homologous chromosomes in which the alleles are
 #'  located. For instance, a vector containing \eqn{(1,3,4)} means that
@@ -12,17 +12,13 @@
 #'  For more sophisticated simulations, we strongly recommend using PedigreeSim V2.0
 #'  \url{https://github.com/PBR/pedigreeSim}
 #'
-#' @param ploidy ploidy level. Must be an even number
+#' @param parental.phases a list containing the linkage phase information for both parents
 #' 
-#' @param rf.vec vector containing the recombination fractions between
-#'     adjacent markers. If a single recombination fraction is
+#' @param distance.vector vector containing the distance between
+#'     adjacent markers. If a single distance is
 #'     provided, it is repeated \eqn{n.mrk-1} times
-#'     
-#' @param n.mrk number of markers
 #' 
 #' @param n.ind number of individuals in the offspring
-#' 
-#' @param hom.allele a list containing the linkage phase information for both parents
 #' 
 #' @param draw if \code{TRUE}, draws a graphical representation of the
 #'     parental map, including the linkage phase configuration, in a
@@ -47,8 +43,8 @@
 #'     \code{\link[mappoly]{read_geno}} for more information
 #'
 #' @examples
-#'     h.temp <- sim_homologous(ploidy = 6, n.mrk = 20, max.d = 3, max.ph = 3, seed = 123)
-#'     fake.poly.dat <- poly_cross_simulate(ploidy = 6, rf.vec = .05, n.mrk = 20,
+#'     h.temp <- sim_homologous(ploidy = 6, n.mrk = 20)
+#'     fake.poly.dat <- cross_simulate(ploidy = 6, distance.vector = .05, n.mrk = 20,
 #'                                   n.ind = 200, h.temp, seed = 123)
 #'     plot(fake.poly.dat)
 #'                                    
@@ -63,43 +59,59 @@
 #'     \doi{10.1534/g3.119.400378}
 #'
 #' @export
-poly_cross_simulate <- function(ploidy, rf.vec, n.mrk,
-                              n.ind, hom.allele,
-                              draw = FALSE,
-                              file = "output.pdf",
-                              seed = NULL,
-                              width = 12,
-                              height = 6,
-                              prob.P = NULL,
-                              prob.Q = NULL)
+cross_simulate <- function(parental.phases, 
+                           distance.vector,
+                           n.ind, 
+                           draw = FALSE,
+                           file = "output.pdf",
+                           seed = NULL,
+                           width = 12,
+                           height = 6,
+                           prob.P = NULL,
+                           prob.Q = NULL)
 {
-  if(length(rf.vec) == 1) rf.vec <- rep(rf.vec, n.mrk-1)
+  n.mrk <- length(parental.phases$p)
+  if(length(distance.vector) == 1) 
+    rf.vector <- mf_h(rep(distance.vector, n.mrk-1))
+  ploidy <- parental.phases$ploidy
   x <- sim_cross_two_informative_parents(ploidy,
-                                       n.mrk,
-                                       rf.vec,
-                                       n.ind,
-                                       hom.allele$hom.allele.p,
-                                       hom.allele$hom.allele.q,
-                                       seed = seed,
-                                       prob.P = NULL,
-                                       prob.Q = NULL)
+                                         n.mrk,
+                                         rf.vector,
+                                         n.ind,
+                                         parental.phases$hom.allele.p,
+                                         parental.phases$hom.allele.q,
+                                         seed = seed,
+                                         prob.P = NULL,
+                                         prob.Q = NULL)
   if(draw == TRUE)
-    draw_cross(ploidy,round(rf.vec,4) ,hom.allele$hom.allele.p,hom.allele$hom.allele.q,
+    draw_cross(ploidy,round(distance.vector,4),
+               parental.phases$hom.allele.p,
+               parental.phases$hom.allele.q,
                file = file, width = width, height = height)
   geno <- t(x[[1]])
   ind.names <- colnames(geno)
   mrk.names <- rownames(geno)
-  structure(list(ploidy = ploidy,
+  res<-structure(list(ploidy = ploidy,
                  n.ind = n.ind,
                  n.mrk = n.mrk,
                  ind.names = ind.names,
                  mrk.names = mrk.names,
-                 dosage.p1 = hom.allele$p,
-                 dosage.p2 = hom.allele$q,
+                 dosage.p1 = parental.phases$p,
+                 dosage.p2 = parental.phases$q,
                  chrom = NA,
                  genome.pos = NA,
                  geno.dose = geno,
                  nphen = 0,
                  phen = NULL),
             class = "mappoly.data")
+  Ds <- array(NA, dim = c(ploidy+1, ploidy+1, ploidy+1))
+  for(i in 0:ploidy)
+    for(j in 0:ploidy)
+      Ds[i+1,j+1,] <- segreg_poly(ploidy = ploidy, dP = i, dQ = j)
+  Dpop <- cbind(res$dosage.p1, res$dosage.p2)
+  M <- t(apply(Dpop, 1, function(x) Ds[x[1]+1, x[2]+1,]))
+  dimnames(M) <- list(res$mrk.names, c(0:ploidy))
+  M <- cbind(M, res$geno.dose)
+  res$chisq.pval <- apply(M, 1, mrk_chisq_test, ploidy = ploidy)
+  return(res)
 }

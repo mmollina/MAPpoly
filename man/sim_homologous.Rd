@@ -4,34 +4,15 @@
 \alias{sim_homologous}
 \title{Simulate homology groups}
 \usage{
-sim_homologous(
-  ploidy,
-  n.mrk,
-  min.d = 0,
-  max.d = ploidy + 1,
-  prob.dose = NULL,
-  max.ph,
-  restriction = TRUE,
-  seed = NULL
-)
+sim_homologous(ploidy, n.mrk, prob.dose = NULL, seed = NULL)
 }
 \arguments{
 \item{ploidy}{ploidy level. Must be an even number}
 
 \item{n.mrk}{number of markers}
 
-\item{min.d}{minimum dosage to be simulated (default = 0)}
-
-\item{max.d}{maximum dosage to be simulated (default = ploidy + 1)}
-
 \item{prob.dose}{a vector indicating the proportion of markers for
 different dosage to be simulated (default = NULL)}
-
-\item{max.ph}{maximum phase difference}
-
-\item{restriction}{if TRUE (default), avoid cases where it is impossible to
-estimate recombination fraction and/or linkage phases via
-two-point analysis}
 
 \item{seed}{random number generator seed}
 }
@@ -49,6 +30,7 @@ a list containing the following components:
     considered)}
   \item{hom.allele.q}{Analogously to \code{hom.allele.p}}
   \item{q}{Analogously to \code{p}}
+   \item{ploidy}{ploidy level}
 }
 \description{
 Simulate two homology groups (one for each parent) and their
@@ -60,8 +42,7 @@ configurations which are impossible to estimate via two point
 methods
 }
 \examples{
-    h.temp <- sim_homologous(ploidy = 6, n.mrk = 20, max.d = 3, max.ph = 3,
-                           seed = 123)
+    h.temp <- sim_homologous(ploidy = 6, n.mrk = 20)
 
 }
 \references{
