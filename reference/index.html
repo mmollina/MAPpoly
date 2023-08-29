@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mappoly</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -81,7 +81,7 @@
         </td>
         <td><p>Compute conditional probabilities of the genotypes using global error</p></td>
       </tr><tr><td>
-          <p><code><a href="calc_genoprob_one_parent.html">calc_genoprob_one_parent()</a></code> </p>
+          <p><code><a href="calc_genoprob_single_parent.html">calc_genoprob_single_parent()</a></code> </p>
         </td>
         <td><p>Compute conditional probabilities of the genotype (one informative parent)</p></td>
       </tr><tr><td>
@@ -105,13 +105,17 @@
         </td>
         <td><p>Simulate an autopolyploid full-sib population</p></td>
       </tr><tr><td>
+          <p><code><a href="detect_info_par.html">detect_info_par()</a></code> </p>
+        </td>
+        <td><p>Detects which parent is informative</p></td>
+      </tr><tr><td>
           <p><code><a href="drop_marker.html">drop_marker()</a></code> </p>
         </td>
         <td><p>Remove markers from a map</p></td>
       </tr><tr><td>
           <p><code><a href="edit_order.html">edit_order()</a></code> </p>
         </td>
-        <td><p>Edit sequence ordered by reference genome positions 
+        <td><p>Edit sequence ordered by reference genome positions
 comparing to another set order</p></td>
       </tr><tr><td>
           <p><code><a href="elim_redundant.html">elim_redundant()</a></code> </p>
@@ -158,6 +162,10 @@ comparing to another set order</p></td>
         </td>
         <td><p>Extract the maker position from an object of class 'mappoly.map'</p></td>
       </tr><tr><td>
+          <p><code><a href="filter_aneuploid.html">filter_aneuploid()</a></code> </p>
+        </td>
+        <td><p>Filter aneuploid chromosomes from progeny individuals</p></td>
+      </tr><tr><td>
           <p><code><a href="filter_individuals.html">filter_individuals()</a></code> </p>
         </td>
         <td><p>Filter out individuals</p></td>
@@ -173,6 +181,13 @@ comparing to another set order</p></td>
           <p><code><a href="find_blocks.html">find_blocks()</a></code> </p>
         </td>
         <td><p>Allocate markers into linkage blocks</p></td>
+      </tr><tr><td>
+          <p><code><a href="framework_map.html">framework_map()</a></code> </p>
+        </td>
+        <td><p>Design linkage map framework in two steps: i) estimating the recombination fraction with 
+HMM approach for each parent separately using only markers segregating individually 
+(e.g. map 1 - P1:3 x P2:0, P1: 2x4; map 2 - P1:0 x P2:3, P1:4 x P2:2); ii) merging both 
+maps and re-estimate recombination fractions.</p></td>
       </tr><tr><td>
           <p><code><a href="get_genomic_order.html">get_genomic_order()</a></code> <code><a href="get_genomic_order.html">print(<i>&lt;mappoly.geno.ord&gt;</i>)</a></code> <code><a href="get_genomic_order.html">plot(<i>&lt;mappoly.geno.ord&gt;</i>)</a></code> </p>
         </td>
@@ -262,6 +277,10 @@ comparing to another set order</p></td>
         </td>
         <td><p>Plot a genetic map</p></td>
       </tr><tr><td>
+          <p><code><a href="plot_mappoly.map2.html">plot_mappoly.map2()</a></code> </p>
+        </td>
+        <td><p>Plot object mappoly.map2</p></td>
+      </tr><tr><td>
           <p><code><a href="plot_mrk_info.html">plot_mrk_info()</a></code> </p>
         </td>
         <td><p>Plot marker information</p></td>
@@ -345,6 +364,11 @@ comparing to another set order</p></td>
           <p><code><a href="tetra.solcap.geno.dist.html">tetra.solcap.geno.dist</a></code> </p>
         </td>
         <td><p>Autotetraploid potato dataset with genotype probabilities.</p></td>
+      </tr><tr><td>
+          <p><code><a href="update_framework_map.html">update_framework_map()</a></code> </p>
+        </td>
+        <td><p>Add markers that are informative in both parents using HMM approach and evaluating difference 
+in LOD and gap size</p></td>
       </tr><tr><td>
           <p><code><a href="update_map.html">update_map()</a></code> </p>
         </td>

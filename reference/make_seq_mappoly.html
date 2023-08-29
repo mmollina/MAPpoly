@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mappoly</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.3.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.4.0</span>
       </span>
     </div>
 
@@ -63,7 +63,13 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">make_seq_mappoly</span><span class="op">(</span><span class="va">input.obj</span>, arg <span class="op">=</span> <span class="cn">NULL</span>, data.name <span class="op">=</span> <span class="cn">NULL</span>, genomic.info <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">make_seq_mappoly</span><span class="op">(</span></span>
+<span>  <span class="va">input.obj</span>,</span>
+<span>  arg <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  data.name <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  info.parent <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"all"</span>, <span class="st">"p1"</span>, <span class="st">"p2"</span><span class="op">)</span>,</span>
+<span>  genomic.info <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for mappoly.sequence</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
@@ -76,8 +82,10 @@
     <h2>Arguments</h2>
     <dl><dt>input.obj</dt>
 <dd><p>an object of one of the following classes:
-<code>mappoly.data</code>, <code>mappoly.map</code>, <code>mappoly.group</code>, <code>mappoly.unique.seq</code>,
-<code>mappoly.pcmap</code>, <code>mappoly.pcmap3d</code>, or <code>mappoly.geno.ord</code></p></dd>
+<code>mappoly.data</code>, <code>mappoly.map</code>, <code>mappoly.sequence</code>, 
+<code>mappoly.group</code>, <code>mappoly.unique.seq</code>,
+<code>mappoly.pcmap</code>, <code>mappoly.pcmap3d</code>, <code>mappoly.geno.ord</code> or
+<code>mappoly.edit.order</code></p></dd>
 
 
 <dt>arg</dt>
@@ -96,8 +104,15 @@ sequence; iv) a <code>vector</code> of integers representing linkage group if
 <dd><p>name of the object of class <code>mappoly.data</code></p></dd>
 
 
+<dt>info.parent</dt>
+<dd><p>one of the following options: 
+<code>'all'</code>select all dosage combinations in both parents (default)
+<code>'P1'</code>select informative markers parent 1
+<code>'P2'</code>select informative markers parent 2</p></dd>
+
+
 <dt>genomic.info</dt>
-<dd><p>optional argument applied for <code>mappoly.group</code> objects only. This argument can be <code>NULL</code>,
+<dd><p>optional argument applied to <code>mappoly.group</code> objects only. This argument can be <code>NULL</code>,
 or can hold the numeric combination of sequences from genomic information to be used when making the sequences.
 When <code>genomic.info = NULL</code> (default), the function returns a sequence containing all markers defined 
 by the grouping function. When <code>genomic.info = 1</code>, the function returns a sequence with markers

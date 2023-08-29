@@ -22,6 +22,9 @@
     <loc>/reference/add_marker.html</loc>
   </url>
   <url>
+    <loc>/reference/add_md_markers.html</loc>
+  </url>
+  <url>
     <loc>/reference/add_mrk_at_tail_ph_list.html</loc>
   </url>
   <url>
@@ -43,7 +46,7 @@
     <loc>/reference/calc_genoprob_haplo.html</loc>
   </url>
   <url>
-    <loc>/reference/calc_genoprob_one_parent.html</loc>
+    <loc>/reference/calc_genoprob_single_parent.html</loc>
   </url>
   <url>
     <loc>/reference/calc_homologprob.html</loc>
@@ -89,6 +92,9 @@
   </url>
   <url>
     <loc>/reference/cross_simulate.html</loc>
+  </url>
+  <url>
+    <loc>/reference/detect_info_par.html</loc>
   </url>
   <url>
     <loc>/reference/dist_prob_to_class.html</loc>
@@ -139,10 +145,10 @@
     <loc>/reference/est_rf_hmm_sequential.html</loc>
   </url>
   <url>
-    <loc>/reference/est_rf_hmm_single.html</loc>
+    <loc>/reference/est_rf_hmm_single_phase.html</loc>
   </url>
   <url>
-    <loc>/reference/est_rf_hmm_single_one_parent.html</loc>
+    <loc>/reference/est_rf_hmm_single_phase_single_parent.html</loc>
   </url>
   <url>
     <loc>/reference/export_data_to_polymapR.html</loc>
@@ -155,6 +161,9 @@
   </url>
   <url>
     <loc>/reference/extract_map.html</loc>
+  </url>
+  <url>
+    <loc>/reference/filter_aneuploid.html</loc>
   </url>
   <url>
     <loc>/reference/filter_individuals.html</loc>
@@ -184,6 +193,9 @@
     <loc>/reference/format_rf.html</loc>
   </url>
   <url>
+    <loc>/reference/framework_map.html</loc>
+  </url>
+  <url>
     <loc>/reference/generate_all_link_phase_elim_equivalent.html</loc>
   </url>
   <url>
@@ -205,7 +217,7 @@
     <loc>/reference/get_counts_all_phases.html</loc>
   </url>
   <url>
-    <loc>/reference/get_counts_one_parent.html</loc>
+    <loc>/reference/get_counts_single_parent.html</loc>
   </url>
   <url>
     <loc>/reference/get_counts_two_parents.html</loc>
@@ -241,7 +253,7 @@
     <loc>/reference/get_rf_from_mat.html</loc>
   </url>
   <url>
-    <loc>/reference/get_states_and_emission_one_parent.html</loc>
+    <loc>/reference/get_states_and_emission_single_parent.html</loc>
   </url>
   <url>
     <loc>/reference/get_submap.html</loc>
@@ -316,6 +328,9 @@
     <loc>/reference/merge_maps.html</loc>
   </url>
   <url>
+    <loc>/reference/merge_parental_maps.html</loc>
+  </url>
+  <url>
     <loc>/reference/mf_h.html</loc>
   </url>
   <url>
@@ -380,6 +395,9 @@
   </url>
   <url>
     <loc>/reference/plot_map_list.html</loc>
+  </url>
+  <url>
+    <loc>/reference/plot_mappoly.map2.html</loc>
   </url>
   <url>
     <loc>/reference/plot_mrk_info.html</loc>
@@ -473,6 +491,9 @@
   </url>
   <url>
     <loc>/reference/tetra.solcap.html</loc>
+  </url>
+  <url>
+    <loc>/reference/update_framework_map.html</loc>
   </url>
   <url>
     <loc>/reference/update_map.html</loc>
