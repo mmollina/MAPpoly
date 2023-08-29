@@ -22,6 +22,6 @@
 
 #include <Rcpp.h>
 
-RcppExport SEXP get_counts_one_parent(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP get_counts_single_parent(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
 #endif

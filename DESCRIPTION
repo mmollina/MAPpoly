@@ -1,7 +1,7 @@
 Package: mappoly
 Type: Package
 Title: Genetic Linkage Maps in Autopolyploids
-Version: 0.3.3.2
+Version: 0.4.0
 Authors@R: c(person(given = "Marcelo",
                     family = "Mollinari",
                     role = c("aut", "cre"),
@@ -95,7 +95,8 @@ Suggests:
     AGHmatrix,
     gatepoints,
     knitr,
-    rmarkdown
+    rmarkdown,
+    stringr
 URL: https://github.com/mmollina/MAPpoly
 BugReports: https://github.com/mmollina/MAPpoly/issues
 VignetteBuilder: knitr

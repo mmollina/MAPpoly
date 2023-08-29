@@ -139,13 +139,16 @@
 #'     https://doi.org/10.1534/g3.119.400378 
 #' @rdname est_rf_hmm
 #' @export est_rf_hmm
-est_rf_hmm <- function(input.seq, input.ph = NULL,
-                       thres = 0.5, twopt = NULL,
+est_rf_hmm <- function(input.seq, 
+                       input.ph = NULL,
+                       thres = 0.5, 
+                       twopt = NULL,
                        verbose = FALSE, 
                        tol = 1e-04,
                        est.given.0.rf = FALSE,
                        reestimate.single.ph.configuration = TRUE,
                        high.prec = TRUE) {
+  
   ## checking for correct object
   input_classes <- c("mappoly.sequence", "two.pts.linkage.phases")
   if (!inherits(input.seq, input_classes[1])) {
@@ -163,6 +166,7 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   if (!inherits(input.ph, input_classes[2])) {
     stop(deparse(substitute(input.ph)), " is not an object of class 'two.pts.linkage.phases'")
   }
+  info.par <-detect_info_par(input.seq)
   if(length(input.seq$seq.num)  ==  2 & !est.given.0.rf){
     maps <- vector("list", 1)
     res.temp <- twopt$pairwise[[paste(sort(input.seq$seq.num), collapse = "-")]]
@@ -209,10 +213,6 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
   ret.map.no.rf.estimation <- FALSE
   if(n.ph  ==  1 && !reestimate.single.ph.configuration)
     ret.map.no.rf.estimation <- TRUE
-  #if (verbose) {
-  #  cat("\n    Number of linkage phase configurations: ")
-  #cat("\n---------------------------------------------\n|\n|--->")
-  #}
   maps <- vector("list", n.ph)
   if (verbose){
     txt <- paste0("       ",n.ph, " phase(s): ")
@@ -231,15 +231,44 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
     else{
       rf.temp <- rep(0.001, length(input.seq$seq.num) - 1)
     }
+    
     ph <- list(P = input.ph$config.to.test[[i]]$P,
                Q = input.ph$config.to.test[[i]]$Q)
-    maps[[i]] <- est_rf_hmm_single(input.seq = input.seq,
-                                   input.ph.single = ph,
-                                   rf.temp = rf.temp,
-                                   tol = tol,
-                                   verbose = FALSE,
-                                   ret.map.no.rf.estimation = ret.map.no.rf.estimation, 
-                                   high.prec = high.prec)
+    
+    if(info.par == "both")
+    {
+      maps[[i]] <- est_rf_hmm_single_phase(input.seq = input.seq,
+                                           input.ph.single = ph,
+                                           rf.temp = rf.temp,
+                                           tol = tol,
+                                           verbose = FALSE,
+                                           ret.map.no.rf.estimation = ret.map.no.rf.estimation, 
+                                           high.prec = high.prec)
+    }
+    else if (info.par == "p1") 
+    {
+      maps[[i]] <- est_rf_hmm_single_phase_single_parent(input.seq,
+                                            input.ph.single = ph,
+                                            info.parent = 1,
+                                            uninfo.parent = 2,
+                                            rf.vec = rf.temp,
+                                            tol = tol,
+                                            verbose = FALSE,
+                                            ret.map.no.rf.estimation = ret.map.no.rf.estimation)
+    }
+    else if (info.par == "p2")
+    {
+      maps[[i]] <- est_rf_hmm_single_phase_single_parent(input.seq,
+                                                         input.ph.single = ph,
+                                                         info.parent = 2,
+                                                         uninfo.parent = 1,
+                                                         rf.vec = rf.temp,
+                                                         tol = tol,
+                                                         verbose = FALSE,
+                                                         ret.map.no.rf.estimation = ret.map.no.rf.estimation)
+      
+    }
+    else stop("Should not get here.")
   }
   #cat("\n")
   id <- order(sapply(maps, function(x) x$loglike), decreasing = TRUE)
@@ -484,7 +513,7 @@ est_rf_hmm_sequential <- function(input.seq,
   }
   ##### More than 'start.set' markers #####
   ## For maps with more markers than 'start.set', include
-  ## next makres in a sequential fashion
+  ## next makers in a sequential fashion
   ct <- start.set+cte
   all.ph <- update_ph_list_at_hmm_thres(cur.map, thres.hmm)
   if(sub.map.size.diff.limit != Inf & !reestimate.single.ph.configuration){
@@ -571,6 +600,7 @@ est_rf_hmm_sequential <- function(input.seq,
     ## in the current round
     ph.old <- lapply(cur.map$maps, function(x, id) list(P = x$seq.ph$P[id], 
                                                         Q = x$seq.ph$Q[id]), id = names(ph.new[[1]]$P))
+
     ## Check in which whole phase configurations the new 
     ## HMM tail should be appended
     MQ <- MP <- matrix(NA, length(ph.old), length(ph.new))
@@ -922,19 +952,34 @@ get_full_info_tail <- function(input.obj, extend = NULL) {
       return(input.obj)
   ploidy <- input.obj$info$ploidy
   i <- ploidy/2
+  w1 <- ph_list_to_matrix(input.obj$maps[[1]]$seq.ph$P, ploidy)
+  max1 <- length(unique(apply(w1, 2, paste0, collapse = "")))
+  w2 <- ph_list_to_matrix(input.obj$maps[[1]]$seq.ph$Q, ploidy)
+  max2 <- length(unique(apply(w2, 2, paste0, collapse = "")))
   while (i < input.obj$info$n.mrk) {
     wp <- ph_list_to_matrix(tail(input.obj$maps[[1]]$seq.ph$P, i), ploidy)
     xp <- apply(wp, 2, paste, collapse = "-")
     wq <- ph_list_to_matrix(tail(input.obj$maps[[1]]$seq.ph$Q, i), ploidy)
     xq <- apply(wq, 2, paste, collapse = "-")
-    if (length(unique(xp))  ==  ploidy && length(unique(xq))  ==  ploidy)
-      (break)()
+    if (length(unique(xp))  ==  max1 && length(unique(xq))  ==  max2)
+      break()
     i <- i + 1
   }
   if (!is.null(extend))
     if (i < extend)
       i <- extend
   input.obj$info$n.mrk <- i
+  
+  
+  
+  input.obj$info$seq.num <- tail(input.obj$info$seq.num, i)
+  input.obj$info$mrk.names <- tail(input.obj$info$mrk.names, i)
+  input.obj$info$seq.dose.p1 <- tail(input.obj$info$seq.dose.p1, i)
+  input.obj$info$seq.dose.p2 <- tail(input.obj$info$seq.dose.p2, i)
+  input.obj$info$chrom <- tail(input.obj$info$chrom, i)
+  input.obj$info$genome.pos <- tail(input.obj$info$genome.pos, i)
+  input.obj$info$chisq.pval <- tail(input.obj$info$chisq.pval, i)
+  
   for (j in 1:length(input.obj$maps)) {
     input.obj$maps[[j]]$loglike <- 0
     input.obj$maps[[j]]$seq.ph$P <- tail(input.obj$maps[[j]]$seq.ph$P, n = i)
@@ -962,9 +1007,7 @@ filter_map_at_hmm_thres <- function(map, thres.hmm){
 update_ph_list_at_hmm_thres <- function(map, thres.hmm){
   temp.map <- filter_map_at_hmm_thres(map, thres.hmm)
   config.to.test <- lapply(temp.map$maps, function(x) x$seq.ph)
-  rf.vec <- t(sapply(temp.map$maps, function(x) x$seq.rf))
-  rownames(rf.vec) <- names(config.to.test) <- paste("Conf", 1:length(config.to.test), sep = "-")
-  structure(list(config.to.test = config.to.test, rec.frac = rf.vec, 
+  structure(list(config.to.test = config.to.test, 
                  ploidy = map$info$ploidy, seq.num = map$maps[[1]]$seq.num, 
                  thres = map$info$ph.thresh, data.name = map$info$data.name, 
                  thres.hmm = thres.hmm),
@@ -976,9 +1019,7 @@ update_ph_list_at_hmm_thres <- function(map, thres.hmm){
 #' @keywords internal
 get_ph_list_subset <- function(ph.list, seq.num, conf){
   config.to.test <- list(lapply(ph.list$config.to.test[[conf]], function(x, seq.num) x[as.character(seq.num)], seq.num))
-  rf.vec <- ph.list$rec.frac[conf, , drop = FALSE]
-  names(config.to.test) <- rownames(rf.vec)
-  structure(list(config.to.test = config.to.test, rec.frac = rf.vec, 
+  structure(list(config.to.test = config.to.test, 
                  ploidy = ph.list$ploidy, seq.num = ph.list$seq.num, 
                  thres = ph.list$ph.thresh, data.name = ph.list$data.name, 
                  thres.hmm = ph.list$thres.hmm),
@@ -994,10 +1035,7 @@ concatenate_ph_list <- function(ph.list.1, ph.list.2){
   config.to.test <- c(ph.list.1$config.to.test, ph.list.2$config.to.test)
   id <- which(!duplicated(config.to.test))
   config.to.test <- config.to.test[id]
-  rf.vec <- rbind(ph.list.1$rec.frac, ph.list.2$rec.frac)
-  rf.vec <- rf.vec[id,,drop = FALSE]
-  rownames(rf.vec) <- names(config.to.test) <- paste("Conf", 1:length(config.to.test), sep = "-")
-  structure(list(config.to.test = config.to.test, rec.frac = rf.vec, 
+  structure(list(config.to.test = config.to.test,
                  ploidy = ph.list.1$ploidy, seq.num = ph.list.1$seq.num, 
                  thres = ph.list.1$ph.thresh, data.name = ph.list.1$data.name, 
                  thres.hmm = ph.list.1$thres.hmm),
@@ -1013,7 +1051,7 @@ add_mrk_at_tail_ph_list <- function(ph.list.1, ph.list.2, cor.index){
     config.to.test[[i]] <- list(P = c(ph.list.1$config.to.test[[cor.index[i,1]]]$P, tail(ph.list.2$config.to.test[[cor.index[i,2]]]$P,1)),
                                 Q = c(ph.list.1$config.to.test[[cor.index[i,1]]]$Q, tail(ph.list.2$config.to.test[[cor.index[i,2]]]$Q,1)))
   }
-  structure(list(config.to.test = config.to.test, rec.frac = NULL, 
+  structure(list(config.to.test = config.to.test, 
                  ploidy = ph.list.1$ploidy, seq.num = ph.list.1$seq.num, 
                  thres = ph.list.1$ph.thresh, data.name = ph.list.1$data.name, 
                  thres.hmm = ph.list.1$thres.hmm),

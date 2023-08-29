@@ -63,13 +63,13 @@ RcppExport SEXP calc_genoprob(void *, void *, void *, void *, void *, void *, vo
 RcppExport SEXP calc_genoprob_prior(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
 RcppExport SEXP calc_genprob_haplo(void *, void *, void *, void *, void *, void *, void *, void *);
 RcppExport SEXP calc_genprob_haplo_highprec(void *, void *, void *, void *, void *, void *, void *, void *);
-RcppExport SEXP calc_genprob_one_parent(void *, void *, void *, void *, void *, void *, void *, void *);
+RcppExport SEXP calc_genprob_single_parent(void *, void *, void *, void *, void *, void *, void *, void *);
 RcppExport SEXP est_haplotype_map(void *, void *, void *, void *, void *, void *, void *, void *, void *);
 RcppExport SEXP est_haplotype_map_highprec(void *, void *, void *, void *, void *, void *, void *, void *, void *);
-RcppExport SEXP est_hmm_map_one_parent(void *, void *, void *, void *, void *, void *, void *, void *, void *);
+RcppExport SEXP est_hmm_map_single_parent(void *, void *, void *, void *, void *, void *, void *, void *, void *);
 RcppExport SEXP est_map_hmm(void *, void *, void *, void *, void *, void *, void *, void *);
 RcppExport SEXP est_map_hmm_highprec(void *, void *, void *, void *, void *, void *, void *, void *);
-RcppExport SEXP get_counts_one_parent_cpp(void *, void *, void *, void *, void *, void *);
+RcppExport SEXP get_counts_single_parent_cpp(void *, void *, void *, void *, void *, void *);
 RcppExport SEXP loglike_hmm(void *, void *, void *, void *, void *, void *);
 RcppExport SEXP pairwise_rf_estimation_disc(void *, void *, void *, void *, void *, void *, void *);
 RcppExport SEXP pairwise_rf_estimation_disc_rcpp(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
@@ -85,13 +85,13 @@ static const R_CallMethodDef CallEntries[] = {
     {"calc_genoprob_prior",              (DL_FUNC) &calc_genoprob_prior,              12},
     {"calc_genprob_haplo",               (DL_FUNC) &calc_genprob_haplo,                8},
     {"calc_genprob_haplo_highprec",      (DL_FUNC) &calc_genprob_haplo_highprec,       8},
-    {"calc_genprob_one_parent",          (DL_FUNC) &calc_genprob_one_parent,           8},
+    {"calc_genprob_single_parent",       (DL_FUNC) &calc_genprob_single_parent,        8},
     {"est_haplotype_map",                (DL_FUNC) &est_haplotype_map,                 9},
     {"est_haplotype_map_highprec",       (DL_FUNC) &est_haplotype_map_highprec,        9},
-    {"est_hmm_map_one_parent",           (DL_FUNC) &est_hmm_map_one_parent,            9},
+    {"est_hmm_map_single_parent",        (DL_FUNC) &est_hmm_map_single_parent,         9},
     {"est_map_hmm",                      (DL_FUNC) &est_map_hmm,                       8},
     {"est_map_hmm_highprec",             (DL_FUNC) &est_map_hmm_highprec,              8},
-    {"get_counts_one_parent_cpp",        (DL_FUNC) &get_counts_one_parent_cpp,         6},
+    {"get_counts_single_parent_cpp",     (DL_FUNC) &get_counts_single_parent_cpp,      6},
     {"loglike_hmm",                      (DL_FUNC) &loglike_hmm,                       6},
     {"pairwise_rf_estimation_disc",      (DL_FUNC) &pairwise_rf_estimation_disc,       7},
     {"pairwise_rf_estimation_disc_rcpp", (DL_FUNC) &pairwise_rf_estimation_disc_rcpp, 13},

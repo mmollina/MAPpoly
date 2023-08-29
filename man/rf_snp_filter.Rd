@@ -20,23 +20,23 @@ rf_snp_filter(
 \arguments{
 \item{input.twopt}{an object of class \code{mappoly.twopt}}
 
-\item{thresh.LOD.ph}{LOD score threshold for linkage phase configuration 
+\item{thresh.LOD.ph}{LOD score threshold for linkage phase configuration
 (default = 5)}
 
-\item{thresh.LOD.rf}{LOD score threshold for recombination fraction 
+\item{thresh.LOD.rf}{LOD score threshold for recombination fraction
 (default = 5)}
 
 \item{thresh.rf}{threshold for recombination fractions (default = 0.15)}
 
-\item{probs}{indicates the probability corresponding to the filtering 
+\item{probs}{indicates the probability corresponding to the filtering
 quantiles. (default = c(0.05, 1))}
 
-\item{diag.markers}{A window where marker pairs should be considered. 
+\item{diag.markers}{A window where marker pairs should be considered.
 If NULL (default), all markers are considered.}
 
 \item{mrk.order}{marker order. Only has effect if 'diag.markers' is not NULL}
 
-\item{ncpus}{number of parallel processes (i.e. cores) to spawn 
+\item{ncpus}{number of parallel processes (i.e. cores) to spawn
 (default = 1)}
 
 \item{diagnostic.plot}{if \code{TRUE} produces a diagnostic plot}
@@ -44,7 +44,7 @@ If NULL (default), all markers are considered.}
 \item{breaks}{number of cells for the histogram}
 }
 \value{
-A filtered object of class \code{mappoly.sequence}. 
+A filtered object of class \code{mappoly.sequence}.
 See \code{\link[mappoly]{make_seq_mappoly}} for details
 }
 \description{
@@ -79,13 +79,13 @@ Remove markers that do not meet a LOD and recombination fraction
     m1.filt <- rf_list_to_matrix(input.twopt = p1.filt)
     plot(mat.full, main.text = "LG1")
     plot(m1.filt, main.text = "LG1.filt")
-   
+
 }
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     analysis and haplotype phasing in experimental autopolyploid
     populations with high ploidy level using hidden Markov
-    models, _G3: Genes, Genomes, Genetics_. 
+    models, _G3: Genes, Genomes, Genetics_.
     \doi{10.1534/g3.119.400378}
 }
 \author{

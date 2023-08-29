@@ -93,18 +93,18 @@ cross_simulate <- function(parental.phases,
   ind.names <- colnames(geno)
   mrk.names <- rownames(geno)
   res<-structure(list(ploidy = ploidy,
-                 n.ind = n.ind,
-                 n.mrk = n.mrk,
-                 ind.names = ind.names,
-                 mrk.names = mrk.names,
-                 dosage.p1 = parental.phases$p,
-                 dosage.p2 = parental.phases$q,
-                 chrom = NA,
-                 genome.pos = NA,
-                 geno.dose = geno,
-                 nphen = 0,
-                 phen = NULL),
-            class = "mappoly.data")
+                      n.ind = n.ind,
+                      n.mrk = n.mrk,
+                      ind.names = ind.names,
+                      mrk.names = mrk.names,
+                      dosage.p1 = parental.phases$p,
+                      dosage.p2 = parental.phases$q,
+                      chrom = NA,
+                      genome.pos = NA,
+                      geno.dose = geno,
+                      nphen = 0,
+                      phen = NULL),
+                 class = "mappoly.data")
   Ds <- array(NA, dim = c(ploidy+1, ploidy+1, ploidy+1))
   for(i in 0:ploidy)
     for(j in 0:ploidy)
