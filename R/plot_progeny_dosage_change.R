@@ -1,7 +1,12 @@
 #' Look at genotypes that were imputed or changed by the HMM chain given a level of global genotypic error
 #'
-#' Outputs a graphical representation ggplot with the percent of data changed
-#'
+#' Outputs a graphical representation ggplot with the percent of data changed. 
+#' 
+#' Most recent update 8/29/2023: 
+#'    -fixed issue where only worked on tetraploid to now working for diploid to octaploid.
+#'    -un-hardcoded linkage groups in maps. previously hard-coded for tetraploid rose.
+#'  
+#'  
 #' @param map_list a list of multiple \code{mappoly.map.list}
 #'
 #' @param error error rate used in global error in the `calc_genoprob_error()`
@@ -11,7 +16,8 @@
 #' @return A ggplot of the changed and imputed genotypic dosages
 #'
 #' @examples
-#'     plot_progeny_dosage_change(map_list=MAPs, error=0.05)
+#'     plot_progeny_dosage_change(map_list=solcap.dose.map, error=0.05)
+#'     
 #'
 #' @author Jeekin Lau, \email{jzl0026@tamu.edu}, with optimization by Cristiane Taniguti, \email{chtaniguti@tamu.edu}
 #'
@@ -28,8 +34,8 @@ plot_progeny_dosage_change <- function(map_list, error, verbose=T){
   
   print("calculating genoprob error")
   
-  genoprob  <- vector("list", 7)
-  for(i in 1:7){
+  genoprob  <- vector("list", length(map))
+  for(i in 1:length(map)){
     genoprob[[i]] <- calc_genoprob_error(input.map = map[[i]], error = error, verbose = verbose)
   }
   
@@ -84,7 +90,7 @@ plot_progeny_dosage_change <- function(map_list, error, verbose=T){
   
   test <- sapply(homoprob_ind, function(x) {
     by_marker <- split.data.frame(x, x[,1]) 
-    final_matrix <- t(sapply(by_marker, function(y) y[order(y[,4], decreasing = T),][1:4,2]))
+    final_matrix <- t(sapply(by_marker, function(y) y[order(y[,4], decreasing = T),][1:ploidy,2]))
     final_vector <- apply(final_matrix, 1, function(w) paste0(w, collapse = ""))
     return(final_vector)
   })
@@ -95,19 +101,47 @@ plot_progeny_dosage_change <- function(map_list, error, verbose=T){
   test=test[match(mrks,rownames(test)),]
   
   finished = test
-
   
+  if (ploidy==2){
+    for(a in 1:length(mrks)){
+      for(b in 1:length(inds)){
+        finished[a,b]=sum(PQ_matrix[a,substr(test[a,b], 1,1)],
+                          PQ_matrix[a,substr(test[a,b], 2,2)])}}
+  }  
   
-  for(a in 1:length(mrks)){
-    for(b in 1:length(inds)){
-      finished[a,b]=sum(PQ_matrix[a,substr(test[a,b], 1,1)],
-                        PQ_matrix[a,substr(test[a,b], 2,2)],
-                        PQ_matrix[a,substr(test[a,b], 3,3)],
-                        PQ_matrix[a,substr(test[a,b], 4,4)])
-      
-    }
-    #print(a)
+  if (ploidy==4){
+    for(a in 1:length(mrks)){
+      for(b in 1:length(inds)){
+        finished[a,b]=sum(PQ_matrix[a,substr(test[a,b], 1,1)],
+                          PQ_matrix[a,substr(test[a,b], 2,2)],
+                          PQ_matrix[a,substr(test[a,b], 3,3)],
+                          PQ_matrix[a,substr(test[a,b], 4,4)])}}
+  }  
+  
+  if (ploidy==6){
+    for(a in 1:length(mrks)){
+      for(b in 1:length(inds)){
+        finished[a,b]=sum(PQ_matrix[a,substr(test[a,b], 1,1)],
+                          PQ_matrix[a,substr(test[a,b], 2,2)],
+                          PQ_matrix[a,substr(test[a,b], 3,3)],
+                          PQ_matrix[a,substr(test[a,b], 4,4)], 
+                          PQ_matrix[a,substr(test[a,b], 5,5)],
+                          PQ_matrix[a,substr(test[a,b], 6,6)])}}
   }
+  
+  if (ploidy==8){
+    for(a in 1:length(mrks)){
+      for(b in 1:length(inds)){
+        finished[a,b]=sum(PQ_matrix[a,substr(test[a,b], 1,1)],
+                          PQ_matrix[a,substr(test[a,b], 2,2)],
+                          PQ_matrix[a,substr(test[a,b], 3,3)],
+                          PQ_matrix[a,substr(test[a,b], 4,4)], 
+                          PQ_matrix[a,substr(test[a,b], 5,5)],
+                          PQ_matrix[a,substr(test[a,b], 6,6)],
+                          PQ_matrix[a,substr(test[a,b], 7,7)],
+                          PQ_matrix[a,substr(test[a,b], 8,8)])}}
+  }
+  
   
   
   
@@ -120,8 +154,8 @@ plot_progeny_dosage_change <- function(map_list, error, verbose=T){
   original_geno[which(!original_geno==finished)]
   
   
-  percent_imputed=length(which(!original_geno==finished&original_geno==5))/length(original_geno)*100
-  percent_changed=length(which(!original_geno==finished&!original_geno==5))/length(original_geno)*100
+  percent_imputed=length(which(!original_geno==finished&original_geno==ploidy+1))/length(original_geno)*100
+  percent_changed=length(which(!original_geno==finished&!original_geno==ploidy+1))/length(original_geno)*100
   
   
   
@@ -129,15 +163,15 @@ plot_progeny_dosage_change <- function(map_list, error, verbose=T){
   colors = c("red","chartreuse","black")
   empty_matrix=matrix(0,nrow(original_geno),ncol(original_geno))
   empty_matrix[which(original_geno==finished)]="unchanged"
-  empty_matrix[which(!original_geno==finished&original_geno==5)]="imputed"
-  empty_matrix[which(!original_geno==finished&!original_geno==5)]="changed"
+  empty_matrix[which(!original_geno==finished&original_geno==ploidy+1)]="imputed"
+  empty_matrix[which(!original_geno==finished&!original_geno==ploidy+1)]="changed"
   empty_matrix_melt=melt(empty_matrix)
-  plot1<-ggplot(empty_matrix_melt, aes(Var1, Var2, fill= factor(value))) + 
-    geom_tile()+scale_fill_manual(values=colors)+
+  plot1<-ggplot(empty_matrix_melt, aes(Var1, Var2, fill= factor(value, levels=c("changed","imputed","unchanged")))) + 
+    geom_tile()+scale_fill_manual(values=colors, drop=F)+
     xlab("Markers")+
     ylab("Individuals")+
-    ggtitle(paste0("changed = ",round(percent_changed, digits=3),"% ","imputed = ", round(percent_imputed, digits=3),"%"))
-  
+    ggtitle(paste0("changed = ",round(percent_changed, digits=3),"% ","imputed = ", round(percent_imputed, digits=3),"%"))+
+    guides(fill=guide_legend(title="Dosage change"))
   print("done")
   
   return(plot1) 
