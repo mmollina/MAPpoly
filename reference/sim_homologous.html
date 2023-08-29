@@ -18,7 +18,7 @@ linkage phase configuration."><!-- mathjax --><script src="https://cdnjs.cloudfl
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">mappoly</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.3.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.3.3.2</span>
       </span>
     </div>
 
@@ -65,16 +65,7 @@ linkage phase configuration.</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sim_homologous</span><span class="op">(</span></span>
-<span>  <span class="va">ploidy</span>,</span>
-<span>  <span class="va">n.mrk</span>,</span>
-<span>  min.d <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>  max.d <span class="op">=</span> <span class="va">ploidy</span> <span class="op">+</span> <span class="fl">1</span>,</span>
-<span>  prob.dose <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">max.ph</span>,</span>
-<span>  restriction <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  seed <span class="op">=</span> <span class="cn">NULL</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">sim_homologous</span><span class="op">(</span><span class="va">ploidy</span>, <span class="va">n.mrk</span>, prob.dose <span class="op">=</span> <span class="cn">NULL</span>, seed <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -87,27 +78,9 @@ linkage phase configuration.</p>
 <dd><p>number of markers</p></dd>
 
 
-<dt>min.d</dt>
-<dd><p>minimum dosage to be simulated (default = 0)</p></dd>
-
-
-<dt>max.d</dt>
-<dd><p>maximum dosage to be simulated (default = ploidy + 1)</p></dd>
-
-
 <dt>prob.dose</dt>
 <dd><p>a vector indicating the proportion of markers for
 different dosage to be simulated (default = NULL)</p></dd>
-
-
-<dt>max.ph</dt>
-<dd><p>maximum phase difference</p></dd>
-
-
-<dt>restriction</dt>
-<dd><p>if TRUE (default), avoid cases where it is impossible to
-estimate recombination fraction and/or linkage phases via
-two-point analysis</p></dd>
 
 
 <dt>seed</dt>
@@ -139,6 +112,9 @@ two-point analysis</p></dd>
   <dt>q</dt>
 <dd><p>Analogously to <code>p</code></p></dd>
 
+   <dt>ploidy</dt>
+<dd><p>ploidy level</p></dd>
+
 </dl></div>
     <div id="details">
     <h2>Details</h2>
@@ -161,8 +137,7 @@ methods</p>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>    <span class="va">h.temp</span> <span class="op">&lt;-</span> <span class="fu">sim_homologous</span><span class="op">(</span>ploidy <span class="op">=</span> <span class="fl">6</span>, n.mrk <span class="op">=</span> <span class="fl">20</span>, max.d <span class="op">=</span> <span class="fl">3</span>, max.ph <span class="op">=</span> <span class="fl">3</span>,</span></span>
-<span class="r-in"><span>                           seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span>    <span class="va">h.temp</span> <span class="op">&lt;-</span> <span class="fu">sim_homologous</span><span class="op">(</span>ploidy <span class="op">=</span> <span class="fl">6</span>, n.mrk <span class="op">=</span> <span class="fl">20</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

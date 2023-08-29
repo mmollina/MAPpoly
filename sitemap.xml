@@ -88,6 +88,9 @@
     <loc>/reference/create_map.html</loc>
   </url>
   <url>
+    <loc>/reference/cross_simulate.html</loc>
+  </url>
+  <url>
     <loc>/reference/dist_prob_to_class.html</loc>
   </url>
   <url>
@@ -383,9 +386,6 @@
   </url>
   <url>
     <loc>/reference/plot_one_map.html</loc>
-  </url>
-  <url>
-    <loc>/reference/poly_cross_simulate.html</loc>
   </url>
   <url>
     <loc>/reference/poly_hmm_est.html</loc>
