@@ -6,7 +6,7 @@
 \usage{
 draw_cross(
   ploidy,
-  rf.vec = NULL,
+  dist.vec = NULL,
   hom.allele.p,
   hom.allele.q,
   file = NULL,

@@ -6,10 +6,11 @@
 \usage{
 cross_simulate(
   parental.phases,
-  distance.vector,
+  map.length,
   n.ind,
   draw = FALSE,
   file = "output.pdf",
+  prefix = NULL,
   seed = NULL,
   width = 12,
   height = 6,
@@ -20,9 +21,7 @@ cross_simulate(
 \arguments{
 \item{parental.phases}{a list containing the linkage phase information for both parents}
 
-\item{distance.vector}{vector containing the distance between
-adjacent markers. If a single distance is
-provided, it is repeated \eqn{n.mrk-1} times}
+\item{map.length}{the map length}
 
 \item{n.ind}{number of individuals in the offspring}
 
@@ -32,6 +31,8 @@ pdf output (default = FALSE)}
 
 \item{file}{name of the output file. It is ignored if
 \code{draw = TRUE}}
+
+\item{prefix}{prefix used in all marker names.}
 
 \item{seed}{random number generator seed (default = NULL)}
 
@@ -65,8 +66,7 @@ informative parents under random chromosome segregation.
 }
 \examples{
     h.temp <- sim_homologous(ploidy = 6, n.mrk = 20)
-    fake.poly.dat <- cross_simulate(ploidy = 6, distance.vector = .05, n.mrk = 20,
-                                  n.ind = 200, h.temp, seed = 123)
+    fake.poly.dat <- cross_simulate(h.temp, map.length = 100, n.ind = 200)
     plot(fake.poly.dat)
                                    
                                   

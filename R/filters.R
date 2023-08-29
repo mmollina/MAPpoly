@@ -487,7 +487,7 @@ rf_snp_filter <- function(input.twopt,
 #' comparing to another set order
 #' 
 #' @param input.seq object of class mappoly.sequence with alternative order (not genomic order)
-#' @param dat object of class mappoly.data
+#' @param input.data object of class mappoly.data
 #' 
 #' @author Cristiane Taniguti, \email{chtaniguti@tamu.edu}
 #' 

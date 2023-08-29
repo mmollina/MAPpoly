@@ -10,7 +10,7 @@ edit_order(input.seq, input.data)
 \arguments{
 \item{input.seq}{object of class mappoly.sequence with alternative order (not genomic order)}
 
-\item{dat}{object of class mappoly.data}
+\item{input.data}{object of class mappoly.data}
 }
 \description{
 Edit sequence ordered by reference genome positions 

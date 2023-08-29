@@ -406,20 +406,20 @@ est_rf_hmm <- function(input.seq, input.ph = NULL,
 #' @importFrom cli rule
 #' @export est_rf_hmm_sequential
 est_rf_hmm_sequential <- function(input.seq,
-                                twopt,
-                                start.set = 4,
-                                thres.twopt = 5,
-                                thres.hmm = 50,
-                                extend.tail = NULL,
-                                phase.number.limit = 20,
-                                sub.map.size.diff.limit = Inf,
-                                info.tail = TRUE,
-                                reestimate.single.ph.configuration = FALSE,
-                                tol = 10e-2,
-                                tol.final = 10e-4,
-                                verbose = TRUE,
-                                detailed.verbose = FALSE,
-                                high.prec = FALSE)
+                                  twopt,
+                                  start.set = 4,
+                                  thres.twopt = 5,
+                                  thres.hmm = 50,
+                                  extend.tail = NULL,
+                                  phase.number.limit = 20,
+                                  sub.map.size.diff.limit = Inf,
+                                  info.tail = TRUE,
+                                  reestimate.single.ph.configuration = FALSE,
+                                  tol = 10e-2,
+                                  tol.final = 10e-4,
+                                  verbose = TRUE,
+                                  detailed.verbose = FALSE,
+                                  high.prec = FALSE)
 {## checking for correct object
   input_classes <- c("mappoly.sequence", "mappoly.twopt")
   if (!inherits(input.seq, input_classes[1])) {
@@ -566,11 +566,11 @@ est_rf_hmm_sequential <- function(input.seq,
     ## Gathering linkage phases of the current map, excluding the marker inserted 
     ## in the current round
     ph.new <- lapply(cur.map.temp$maps, function(x) list(P = head(x$seq.ph$P, -1), 
-                                                       Q = head(x$seq.ph$Q, -1)))
+                                                         Q = head(x$seq.ph$Q, -1)))
     ## Gathering linkage phases of the previous map, excluding the marker inserted 
     ## in the current round
     ph.old <- lapply(cur.map$maps, function(x, id) list(P = x$seq.ph$P[id], 
-                                                      Q = x$seq.ph$Q[id]), id = names(ph.new[[1]]$P))
+                                                        Q = x$seq.ph$Q[id]), id = names(ph.new[[1]]$P))
     ## Check in which whole phase configurations the new 
     ## HMM tail should be appended
     MQ <- MP <- matrix(NA, length(ph.old), length(ph.new))
@@ -819,12 +819,10 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
       pal <- var.col[pp[id.left:id.right,i]]
       rect(xleft = x1 - x.control, ybottom = y1 -.05, xright = x1 + x.control, ytop = y1 +.05, col = pal, border = NA)
     }
-    if(ploidy != 2){
-      points(x = x1,
-             y = zy[ploidy]+0.05+dp[id.left:id.right]/20,
-             col = d.col[as.character(dp[id.left:id.right])],
-             pch = 19, cex = .7)
-    }
+    points(x = x1,
+           y = zy[ploidy]+0.05+dp[id.left:id.right]/20,
+           col = d.col[as.character(dp[id.left:id.right])],
+           pch = 19, cex = .7)
     if(mrk.names)
       text(x = x1,
            y = rep(zy[ploidy]+0.05+.3, length(curx)),
@@ -1045,17 +1043,17 @@ check_ls_phase <- function(ph){
 #' @keywords internal
 print_ph <- function(input.ph){
   phs.P <- lapply(input.ph$config.to.test, 
-                function(x, ploidy) {
-                  M <- matrix("|", nrow = 1, ncol = ploidy) 
-                  M[unlist(tail(x$P, 1))] <- crayon::red(cli::symbol$bullet)
-                  paste(M, collapse = "")}, 
-                ploidy = input.ph$ploidy) 
+                  function(x, ploidy) {
+                    M <- matrix("|", nrow = 1, ncol = ploidy) 
+                    M[unlist(tail(x$P, 1))] <- crayon::red(cli::symbol$bullet)
+                    paste(M, collapse = "")}, 
+                  ploidy = input.ph$ploidy) 
   phs.Q <- lapply(input.ph$config.to.test, 
-                function(x, ploidy) {
-                  M <- matrix("|", nrow = 1, ncol = ploidy) 
-                  M[unlist(tail(x$Q, 1))] <- crayon::cyan(cli::symbol$bullet)
-                  paste(M, collapse = "")}, 
-                ploidy = input.ph$ploidy) 
+                  function(x, ploidy) {
+                    M <- matrix("|", nrow = 1, ncol = ploidy) 
+                    M[unlist(tail(x$Q, 1))] <- crayon::cyan(cli::symbol$bullet)
+                    paste(M, collapse = "")}, 
+                  ploidy = input.ph$ploidy) 
   if(length(phs.P)  ==  1)
     return(paste(unlist(phs.P)[1], unlist(phs.Q)[1], "                   "))
   if(length(phs.P)  ==  2)

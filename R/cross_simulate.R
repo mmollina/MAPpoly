@@ -24,6 +24,8 @@
 #'     
 #' @param file name of the output file. It is ignored if
 #'     \code{draw = TRUE}
+#'  
+#' @param prefix prefix used in all marker names. 
 #'     
 #' @param seed random number generator seed (default = NULL)
 #'
@@ -42,8 +44,7 @@
 #'
 #' @examples
 #'     h.temp <- sim_homologous(ploidy = 6, n.mrk = 20)
-#'     fake.poly.dat <- cross_simulate(ploidy = 6, map.length = .05, n.mrk = 20,
-#'                                   n.ind = 200, h.temp, seed = 123)
+#'     fake.poly.dat <- cross_simulate(h.temp, map.length = 100, n.ind = 200)
 #'     plot(fake.poly.dat)
 #'                                    
 #'                                   
@@ -62,6 +63,7 @@ cross_simulate <- function(parental.phases,
                            n.ind, 
                            draw = FALSE,
                            file = "output.pdf",
+                           prefix = NULL,
                            seed = NULL,
                            width = 12,
                            height = 6,
@@ -87,6 +89,7 @@ cross_simulate <- function(parental.phases,
                parental.phases$hom.allele.q,
                file = file, width = width, height = height)
   geno <- t(x[[1]])
+  rownames(geno) <- paste0(prefix, rownames(geno))
   ind.names <- colnames(geno)
   mrk.names <- rownames(geno)
   res<-structure(list(ploidy = ploidy,
