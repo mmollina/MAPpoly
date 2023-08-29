@@ -3,8 +3,10 @@
 #' Makes a sequence of markers based on an object of another class.
 #'
 #' @param input.obj an object of one of the following classes:
-#'     \code{mappoly.data}, \code{mappoly.map}, \code{mappoly.group}, \code{mappoly.unique.seq},
-#'     \code{mappoly.pcmap}, \code{mappoly.pcmap3d}, or \code{mappoly.geno.ord}
+#'     \code{mappoly.data}, \code{mappoly.map}, \code{mappoly.sequence}, 
+#'     \code{mappoly.group}, \code{mappoly.unique.seq},
+#'     \code{mappoly.pcmap}, \code{mappoly.pcmap3d}, \code{mappoly.geno.ord} or
+#'     \code{mappoly.edit.order}
 #'
 #' @param arg can be one of the following objects: i) a string 'all',
 #'     resulting in a sequence with all markers in the raw data; ii) a
@@ -18,7 +20,12 @@
 #'
 #' @param data.name name of the object of class \code{mappoly.data}
 #' 
-#' @param genomic.info optional argument applied for \code{mappoly.group} objects only. This argument can be \code{NULL},
+#' @param info.parent one of the following options: 
+#' \code{'all'}{select all dosage combinations in both parents (default)}
+#' \code{'P1'}{select informative markers parent 1}
+#' \code{'P2'}{select informative markers parent 2}
+#' 
+#' @param genomic.info optional argument applied to \code{mappoly.group} objects only. This argument can be \code{NULL},
 #'     or can hold the numeric combination of sequences from genomic information to be used when making the sequences.
 #'     When \code{genomic.info = NULL} (default), the function returns a sequence containing all markers defined 
 #'     by the grouping function. When \code{genomic.info = 1}, the function returns a sequence with markers
@@ -69,23 +76,44 @@
 #'
 #' @export
 
-make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.info = NULL) {
+make_seq_mappoly <- function(input.obj, 
+                             arg = NULL, 
+                             data.name = NULL, 
+                             info.parent = c('all', 'p1', 'p2'), 
+                             genomic.info = NULL) {
   ## checking for correct object
-  input_classes <- c("mappoly.data", "mappoly.map", "mappoly.unique.seq", "mappoly.pcmap", "mappoly.pcmap3d", 
-                     "mappoly.group", "mappoly.chitest.seq", "mappoly.geno.ord")
-  
+  input_classes <- c("mappoly.data", "mappoly.map", "mappoly.sequence", 
+                     "mappoly.unique.seq", "mappoly.pcmap", "mappoly.pcmap3d", 
+                     "mappoly.group", "mappoly.chitest.seq", "mappoly.geno.ord",
+                     "mappoly.edit.order")
   if (!inherits(input.obj, input_classes)) {
-    stop(deparse(substitute(input.obj)), " is not an object of class 'mappoly.data', 'mappoly.map', 
-               'mappoly.chitest.seq', 'mappoly.unique.seq', 'mappoly.pcmap', 'mappoly.pcmap3d', 'mappoly.geno.ord', or 'mappoly.group'")
+    stop("invalid input object.", call. = FALSE)
   }
   ## if input object is a map, call 'make_seq_mappoly' recursively
+  info.parent <- match.arg(info.parent)
   if(inherits (input.obj, "mappoly.map"))
     return(make_seq_mappoly(get(input.obj$info$data.name, pos = 1), 
-                            arg = input.obj$info$mrk.names, 
+                            arg = input.obj$info$mrk.names,
+                            info.parent = info.parent,
                             data.name = input.obj$info$data.name))
+  if(inherits (input.obj, "mappoly.sequence")){
+    if(is.null(arg))
+      arg = input.obj$seq.mrk.names
+    if(!is.character(arg))
+      stop("provide marker names when using 'mappoly.sequence' as input object.", 
+           call. = FALSE)
+    return(make_seq_mappoly(get(input.obj$data.name, pos = 1), 
+                            arg = arg,
+                            info.parent = info.parent,
+                            data.name = input.obj$data.name))
+  }
   ## checking for argument to make a sequence
-  if (is.null(arg) && !inherits(input.obj, "mappoly.chitest.seq") && !inherits(input.obj, "mappoly.unique.seq") && 
-      !inherits(input.obj, "mappoly.pcmap") && !inherits(input.obj, "mappoly.pcmap3d") && !inherits(input.obj, "mappoly.geno.ord")) {
+  if (is.null(arg) && !inherits(input.obj, "mappoly.chitest.seq") && 
+      !inherits(input.obj, "mappoly.unique.seq") && 
+      !inherits(input.obj, "mappoly.pcmap") && 
+      !inherits(input.obj, "mappoly.pcmap3d") && 
+      !inherits(input.obj, "mappoly.geno.ord") &&
+      !inherits(input.obj, "mappoly.edit.order")) {
     stop("argument 'arg' expected.")
   }
   ## Variables defined to block removing redundant markers
@@ -111,7 +139,11 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.in
     ## make sequence with all markers
     if (length(arg)  ==  1 && arg  ==  "all")
     {
-      if (realkeep) {seq.num = match(tokeep,input.obj$mrk.names)} else {seq.num = as.integer(1:input.obj$n.mrk)}
+      if (realkeep) {
+        seq.num = match(tokeep,input.obj$mrk.names)
+      } else {
+          seq.num = as.integer(1:input.obj$n.mrk)
+          }
     }
     else if (all(is.character(arg)) && length(grep("seq", arg))  ==  length(arg))
     {
@@ -126,7 +158,11 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.in
     else if (all(is.character(arg)) && (length(arg)  ==  length(arg %in% input.obj$mrk.names)))
     {
       seq.num1 <- as.integer(match(arg, input.obj$mrk.names))
-      if(realkeep) {seq.num = intersect(seq.num1, seq.num)} else {seq.num = seq.num1}
+      if(realkeep) {
+        seq.num = intersect(seq.num1, seq.num)
+      } else {
+        seq.num = seq.num1
+        }
       chrom <- input.obj$chrom[seq.num]
       if (length(input.obj$genome.pos) > 2)
         genome.pos <- input.obj$genome.pos[seq.num]
@@ -154,7 +190,8 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.in
     if(!is.null(arg))
       warning("Ignoring argument 'arg' and using chi-square filtered markers instead.")
     tmp <- make_seq_mappoly(get(input.obj$data.name, pos = 1), 
-                            arg = input.obj$keep, 
+                            arg = input.obj$keep,
+                            info.parent = info.parent, 
                             data.name = input.obj$data.name)
     tmp$chisq.pval.thres <- input.obj$chisq.pval.thres
     tmp$chisq.pval <- get(input.obj$data.name, pos = 1)$chisq.pval[input.obj$keep]
@@ -193,8 +230,9 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.in
   {
     if(!is.null(arg))
       warning("Ignoring argument 'arg' and using the MDS order instead.")
-    return(make_seq_mappoly(get(input.obj$data.name, pos = 1),
+    return(make_seq_mappoly(input.obj = get(input.obj$data.name, pos = 1),
                             arg = as.character(input.obj$locimap$locus),
+                            info.parent = info.parent,
                             data.name = input.obj$data.name))
   }
   if (inherits(input.obj, "mappoly.geno.ord"))
@@ -203,12 +241,38 @@ make_seq_mappoly <- function(input.obj, arg = NULL, data.name = NULL, genomic.in
       warning("Ignoring argument 'arg' and using the genome order instead.")
     return(make_seq_mappoly(get(input.obj$data.name, pos = 1),
                             arg = as.character(rownames(input.obj$ord)),
+                            info.parent = info.parent,
                             data.name = input.obj$data.name))
   }
-  structure(list(ploidy = input.obj$ploidy, seq.num = seq.num, seq.mrk.names = input.obj$mrk.names[seq.num], 
-                 seq.dose.p1 = input.obj$dosage.p1[seq.num], seq.dose.p2 = input.obj$dosage.p2[seq.num],
-                 seq.phases = -1, seq.rf = -1, loglike = -1, chrom = chrom, genome.pos = genome.pos, 
-                 data.name = data.name, twopt = -1, chisq.pval = chisq.pval, 
+  if (inherits(input.obj, "mappoly.edit.order"))
+  {
+    if(!is.null(arg))
+      warning("Ignoring argument 'arg' and using the edited sequence order instead.")
+    return(make_seq_mappoly(get(input.obj$data.name, pos = 1),
+                            arg = input.obj$edited_order,
+                            data.name = input.obj$data.name))
+  }
+  dp1 <- input.obj$dosage.p1[seq.num]
+  dp2 <- input.obj$dosage.p2[seq.num]
+  if(info.parent == "p1")
+    id <- dp2 == 0 | dp2 == input.obj$ploidy
+  else if(info.parent == "p2")
+    id <- dp1 == 0 | dp1 == input.obj$ploidy
+  else 
+    id <- seq_along(seq.num)
+  structure(list(ploidy = input.obj$ploidy, 
+                 seq.num = seq.num[id], 
+                 seq.mrk.names = input.obj$mrk.names[seq.num][id], 
+                 seq.dose.p1 = input.obj$dosage.p1[seq.num][id], 
+                 seq.dose.p2 = input.obj$dosage.p2[seq.num][id],
+                 seq.phases = -1, 
+                 seq.rf = -1, 
+                 loglike = -1, 
+                 chrom = chrom[id], 
+                 genome.pos = genome.pos[id], 
+                 data.name = data.name, 
+                 twopt = -1, 
+                 chisq.pval = chisq.pval, 
                  chisq.pval.thres = chisq.pval.thres),
             class = "mappoly.sequence")
 }

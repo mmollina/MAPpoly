@@ -20,7 +20,7 @@
  */ 
 
 /*
- File: hmm_one_parent.cpp
+ File: hmm_single_parent.cpp
  
  Description: Set of functions to be used with software R
  
@@ -52,7 +52,7 @@
 using namespace std;
 using namespace Rcpp;
 
-RcppExport SEXP est_hmm_map_one_parent(SEXP ploidyR,
+RcppExport SEXP est_hmm_map_single_parent(SEXP ploidyR,
                                        SEXP n_mrkR,
                                        SEXP n_indR,
                                        SEXP haploR,
@@ -155,13 +155,13 @@ RcppExport SEXP est_hmm_map_one_parent(SEXP ploidyR,
       for(k=1,k1=n_mrk-2; k < n_mrk; k++, k1--)
       {
         std::vector<double> temp4 (v[k][ind].size());
-        temp4 = forward_emit_one_parent(m, alpha[ind][k-1], v[k-1][ind], v[k][ind], e[k][ind], T[k-1]);
+        temp4 = forward_emit_single_parent(m, alpha[ind][k-1], v[k-1][ind], v[k][ind], e[k][ind], T[k-1]);
         for(int j=0; (unsigned)j < temp4.size(); j++)
         {
           alpha[ind][k][j]=temp4[j];
         }
         std::vector<double> temp5 (v[k1][ind].size());
-        temp5=backward_emit_one_parent(m, beta[ind][k1+1], v[k1][ind], v[k1+1][ind], e[k1+1][ind], T[k1]);
+        temp5=backward_emit_single_parent(m, beta[ind][k1+1], v[k1][ind], v[k1+1][ind], e[k1+1][ind], T[k1]);
         for(int j=0; (unsigned)j < temp5.size(); j++)
         {
           beta[ind][k1][j]=temp5[j];
@@ -280,7 +280,7 @@ RcppExport SEXP est_hmm_map_one_parent(SEXP ploidyR,
   return(z);
 }
 
-RcppExport SEXP calc_genprob_one_parent(SEXP ploidyR,
+RcppExport SEXP calc_genprob_single_parent(SEXP ploidyR,
                                         SEXP n_mrkR,
                                         SEXP n_indR,
                                         SEXP haploR,
@@ -362,13 +362,13 @@ RcppExport SEXP calc_genprob_one_parent(SEXP ploidyR,
     for(k=1,k1=n_mrk-2; k < n_mrk; k++, k1--)
     {
       std::vector<double> temp4 (v[k][ind].size());
-      temp4 = forward_emit_one_parent(m, alpha[ind][k-1], v[k-1][ind], v[k][ind], e[k][ind], T[k-1]);
+      temp4 = forward_emit_single_parent(m, alpha[ind][k-1], v[k-1][ind], v[k][ind], e[k][ind], T[k-1]);
       for(int j=0; (unsigned)j < temp4.size(); j++)
       {
         alpha[ind][k][j]=temp4[j];
       }
       std::vector<double> temp5 (v[k1][ind].size());
-      temp5=backward_emit_one_parent(m, beta[ind][k1+1], v[k1][ind], v[k1+1][ind], e[k1+1][ind], T[k1]);
+      temp5=backward_emit_single_parent(m, beta[ind][k1+1], v[k1][ind], v[k1+1][ind], e[k1+1][ind], T[k1]);
       for(int j=0; (unsigned)j < temp5.size(); j++)
       {
         beta[ind][k1][j]=temp5[j];

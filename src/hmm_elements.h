@@ -57,14 +57,14 @@ std::vector<double> backward_emit(int m,
                                   std::vector<std::vector<double> >& T);
 
 
-std::vector<double> forward_emit_one_parent(int m,
+std::vector<double> forward_emit_single_parent(int m,
                                             std::vector<double>& fk,
                                             std::vector<int>& ik,
                                             std::vector<int>& ik1,
                                             std::vector<double>& emit,
                                             std::vector<std::vector<double> >& T);
 
-std::vector<double> backward_emit_one_parent(int m,
+std::vector<double> backward_emit_single_parent(int m,
                                              std::vector<double>& fk1,
                                              std::vector<int>& ik,
                                              std::vector<int>& ik1,

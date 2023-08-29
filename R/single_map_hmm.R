@@ -16,7 +16,7 @@
 #'     ## Evaluating 2 linkage phase configurations using HMM
 #'     maps1 <- vector("list", length(l5$config.to.test))
 #'     for(i in 1:length(maps1))
-#'       maps1[[i]] <- est_rf_hmm_single(seq5, l5$config.to.test[[i]], 
+#'       maps1[[i]] <- est_rf_hmm_single_phase(seq5, l5$config.to.test[[i]], 
 #'                                       tol = 10e-3,
 #'                                       high.prec = FALSE)
 #'    (best <- which.max(sapply(maps1, function(x) x$loglike)))
@@ -29,8 +29,8 @@
 #'    dist1
 #'  }
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
-#' @export est_rf_hmm_single
-est_rf_hmm_single <- function(input.seq,
+#' @export est_rf_hmm_single_phase
+est_rf_hmm_single_phase <- function(input.seq,
                             input.ph.single,
                             rf.temp = NULL,
                             tol,

@@ -11,18 +11,8 @@
 #' 
 #' @param n.mrk number of markers
 #' 
-#' @param min.d minimum dosage to be simulated (default = 0)
-#' 
-#' @param max.d maximum dosage to be simulated (default = ploidy + 1)
-#' 
 #' @param prob.dose a vector indicating the proportion of markers for
 #'    different dosage to be simulated (default = NULL)
-#'    
-#' @param max.ph maximum phase difference
-#'  
-#' @param restriction if TRUE (default), avoid cases where it is impossible to
-#'     estimate recombination fraction and/or linkage phases via
-#'     two-point analysis
 #'     
 #' @param seed random number generator seed
 #'
@@ -39,10 +29,10 @@
 #'     considered)}
 #'   \item{hom.allele.q}{Analogously to \code{hom.allele.p}}
 #'   \item{q}{Analogously to \code{p}}
+#'    \item{ploidy}{ploidy level}
 #'
 #' @examples
-#'     h.temp <- sim_homologous(ploidy = 6, n.mrk = 20, max.d = 3, max.ph = 3,
-#'                            seed = 123)
+#'     h.temp <- sim_homologous(ploidy = 6, n.mrk = 20)
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
@@ -54,63 +44,62 @@
 #'     \doi{10.1534/g3.119.400378}
 #'
 #' @export
-sim_homologous <- function(ploidy, n.mrk, min.d = 0, 
-                         max.d = ploidy+1, prob.dose = NULL,
-                         max.ph, restriction = TRUE, 
-                         seed = NULL)
+sim_homologous <- function(ploidy, n.mrk, prob.dose = NULL, seed = NULL)
 {
   #prob.dose <- NULL
-  if(!is.null(seed)) set.seed(seed)
+  if(!is.null(seed)) 
+    set.seed(seed)
   
-  hom.allele.q <- hom.allele.p <- vector("list", n.mrk)
-  count <- 1
-  while(count <= n.mrk)
-  {
-    hom.p.temp <- hom.q.temp <- 0
-    if(any(is.null(prob.dose)))
-      p.temp <- sample(min.d:max.d,1)
-    else
-      p.temp <- sample(min.d:max.d,1, prob = prob.dose)
-    if(all(p.temp != 0))
-      hom.p.temp <- sample(1:ploidy, p.temp)
-    if(any(is.null(prob.dose)))
-      q.temp <- sample(min.d:max.d,1)
-    else
-      q.temp <- sample(min.d:max.d,1, prob = prob.dose)
-    if(all(q.temp != 0))
-      hom.q.temp <- sample(1:ploidy, q.temp)
-    p <- sum(as.logical(hom.p.temp))
-    q <- sum(as.logical(hom.q.temp))
-    if(restriction && count > 1)
-    {
-      if(!any((p+q) == 0,
-              (p+q) == 2*ploidy,
-              sum(as.logical(hom.allele.p[[count-1]])) - q  ==  0,
-              sum(as.logical(hom.allele.q[[count-1]])) - p  ==  0,
-              (p == ploidy & q == 0),
-              (p == 0 & q == ploidy)))
-      {
-        hom.allele.p[[count]] <- hom.p.temp
-        hom.allele.q[[count]] <- hom.q.temp
-        count <- count+1
-      }
-    }
-    else
-    {
-      if(!any((p+q) == 0,
-              (p+q) == 2*ploidy,
-              (p == ploidy & q == 0),
-              (p == 0 & q == ploidy)))
-      {
-        hom.allele.p[[count]] <- hom.p.temp
-        hom.allele.q[[count]] <- hom.q.temp
-        count <- count+1
-      }
-    }
-    p <- unlist(lapply(hom.allele.p, function(x) sum(as.logical(x))))
-    q <- unlist(lapply(hom.allele.q, function(x) sum(as.logical(x))))
+  if(is.null(prob.dose))
+    prob.dose <- rep(1/(ploidy + 1), (ploidy + 1))
+  
+  if (length(prob.dose) != ploidy + 1)
+    stop("Length of 'prob.dose' must be ploidy + 1.")
+  
+  
+  
+  # Create a contingency table
+  contingency_table <- outer(prob.dose, prob.dose)
+  
+  
+  # Remove the unacceptable conditions
+  contingency_table[1, ploidy+1] <- 0
+  contingency_table[ploidy+1, 1] <- 0
+  contingency_table[1, 1] <- 0
+  contingency_table[ploidy+1, ploidy+1] <- 0
+  
+  # Normalize the contingency table
+  contingency_table <- contingency_table / sum(contingency_table)
+  
+  # Initialize matrices P1 and P2 with zeros
+  P1 <- matrix(0, n.mrk, ploidy)
+  P2 <- matrix(0, n.mrk, ploidy)
+  
+  for (i in 1:n.mrk) {
+    # Generate a pair of sums for P1 and P2 based on the normalized contingency table
+    
+    pair_idx <- sample(1:(ploidy + 1)^2, 1, prob = as.vector(contingency_table))
+    pair <- arrayInd(pair_idx, .dim = c(ploidy + 1, ploidy + 1)) - 1
+    
+    p1_sum <- pair[1]
+    p2_sum <- pair[2]
+    
+    # Generate rows for P1 and P2
+    p1_row <- c(rep(1, p1_sum), rep(0, ploidy - p1_sum))
+    p2_row <- c(rep(1, p2_sum), rep(0, ploidy - p2_sum))
+    
+    P1[i,] <- sample(p1_row)
+    P2[i,] <- sample(p2_row)
   }
-  return(list(hom.allele.p = hom.allele.p,
-              hom.allele.q = hom.allele.q,
-              p = p, q = q))
+  
+      
+
+  P1 <- ph_matrix_to_list(P1)
+  P2 <- ph_matrix_to_list(P2)
+  p <- unlist(lapply(P1, function(x) sum(as.logical(x))))
+  q <- unlist(lapply(P2, function(x) sum(as.logical(x))))
+  return(list(hom.allele.p = P1,
+              hom.allele.q = P2,
+              p = p, q = q, 
+              ploidy = ploidy))
 }

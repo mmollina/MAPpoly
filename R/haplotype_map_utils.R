@@ -80,7 +80,7 @@ generate_all_link_phases_elim_equivalent_haplo <-
       id <- which.min(ct)
     wp <- matrix(wp[id, ], ncol = ploidy)
     
-    ## WQ: removing redundancy and accounting for shared elleles
+    ## WQ: removing redundancy and accounting for shared alleles
     wq <- NULL
     for (i in 1:nrow(q2))
       wq <- rbind(wq, paste(q1, q2[i, ], sep = "-"))
