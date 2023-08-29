@@ -28,15 +28,22 @@
 #'
 #' @examples
 #'  ## tetraploid example
-#'  map <- solcap.dose.map[[1]]
-#'  s <- make_seq_mappoly(map)
-#'  map1 <- est_rf_hmm_single_one_parent(input.seq = s, 
-#'                                       input.ph.single = map$maps[[1]]$seq.ph,
-#'                                       info.parent = 1, 
-#'                                       uninfo.parent = 2, 
-#'                                       tol = 10e-4)
-#'  plot(map1)                                     
-#'  probs <- calc_genoprob_one_parent(input.map = map1, 
+#'  s <- make_seq_mappoly(tetra.solcap, 'seq1', info.parent = "p1")
+#'  tpt <- est_pairwise_rf(s)
+#'  map <- est_rf_hmm_sequential(input.seq = s,
+#'                               twopt = tpt,
+#'                                start.set = 10,
+#'                                thres.twopt = 10, 
+#'                                thres.hmm = 10,
+#'                                extend.tail = 4,
+#'                                info.tail = TRUE, 
+#'                                sub.map.size.diff.limit = 8, 
+#'                                phase.number.limit = 20,
+#'                                reestimate.single.ph.configuration = TRUE,
+#'                                tol = 10e-2,
+#'                                tol.final = 10e-3)
+#'  plot(map)                                     
+#'  probs <- calc_genoprob_single_parent(input.map = map, 
 #'                                    info.parent = 1, 
 #'                                    uninfo.parent = 2, 
 #'                                    step = 1)
@@ -54,14 +61,15 @@
 #'     models, _G3: Genes, Genomes, Genetics_. 
 #'     \doi{10.1534/g3.119.400378} 
 #'
-#' @export calc_genoprob_one_parent
-calc_genoprob_one_parent <- function(input.map,
-                                     step = 0,
-                                     info.parent = 1,
-                                     uninfo.parent = 2,
-                                     global.err = 0.0,
-                                     phase.config = "best", 
-                                     verbose = TRUE)
+#' @export calc_genoprob_single_parent
+#' @importFrom dplyr left_join
+calc_genoprob_single_parent <- function(input.map,
+                                        step = 0,
+                                        info.parent = 1,
+                                        uninfo.parent = 2,
+                                        global.err = 0.0,
+                                        phase.config = "best", 
+                                        verbose = TRUE)
 {
   if (!inherits(input.map, "mappoly.map")) {
     stop(deparse(substitute(input.map)), " is not an object of class 'mappoly.map'")
@@ -79,22 +87,29 @@ calc_genoprob_one_parent <- function(input.map,
   ploidy <- input.map$info$ploidy
   g <- choose(ploidy, ploidy/2)
   P <- do.call(cbind, input.map$info[grep(pattern = "seq.dose.p", names(input.map$info))])
-  id <- P[,info.parent] != 0 & apply(P[,uninfo.parent, drop = FALSE], 1, function(x) all(x==0))
-  cur.map <- get_submap(input.map, mrk.pos = which(id), reestimate.rf = FALSE, verbose = FALSE)
-  new.map <- create_map(cur.map, step = step, phase.config = i.lpc)
-  D <- get(cur.map$info$data.name, pos = 1)$geno.dose
+  if(!all(unique(P[,uninfo.parent]) %in% c(0, ploidy)))
+    stop("wrong uninformative parent")
+  new.map <- create_map(input.map, step = step, phase.config = i.lpc)
+  D <- get(input.map$info$data.name, pos = 1)$geno.dose
   D <- D[names(new.map),]
   D[is.na(D)] <- ploidy + 1
   rownames(D) <- names(new.map)
   n.mrk <- nrow(D)
   n.ind <- ncol(D)
-  ph <- cur.map$maps[[i.lpc]]$seq.ph[[info.parent]]
-  names(ph) <- cur.map$info$mrk.names
+  ph <- input.map$maps[[i.lpc]]$seq.ph[[info.parent]]
+  names(ph) <- input.map$info$mrk.names
   ph <- ph[names(new.map)]
   names(ph) <- names(new.map)
   rf.vec <- mf_h(diff(new.map))
-  h <- get_states_and_emission_one_parent(ploidy, ph, global.err, D)
-  res.temp <- .Call("calc_genprob_one_parent",
+  mp <- as.data.frame(new.map)
+  mp$mrk <- rownames(mp)
+  P <- data.frame(P)
+  P$mrk <- rownames(P) 
+  P <- left_join(mp, P, by = "mrk")
+  X <- P[,3:4]
+  X[is.na(X)] <- 0
+  h <- get_states_and_emission_single_parent(ploidy, ph, global.err, D, X[,uninfo.parent])
+  res.temp <- .Call("calc_genprob_single_parent",
                     ploidy,
                     n.mrk,
                     n.ind,

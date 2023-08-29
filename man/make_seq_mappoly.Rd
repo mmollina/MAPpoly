@@ -6,7 +6,13 @@
 \alias{plot.mappoly.sequence}
 \title{Create a sequence of markers}
 \usage{
-make_seq_mappoly(input.obj, arg = NULL, data.name = NULL, genomic.info = NULL)
+make_seq_mappoly(
+  input.obj,
+  arg = NULL,
+  data.name = NULL,
+  info.parent = c("all", "p1", "p2"),
+  genomic.info = NULL
+)
 
 \method{print}{mappoly.sequence}(x, ...)
 
@@ -14,8 +20,10 @@ make_seq_mappoly(input.obj, arg = NULL, data.name = NULL, genomic.info = NULL)
 }
 \arguments{
 \item{input.obj}{an object of one of the following classes:
-\code{mappoly.data}, \code{mappoly.map}, \code{mappoly.group}, \code{mappoly.unique.seq},
-\code{mappoly.pcmap}, \code{mappoly.pcmap3d}, or \code{mappoly.geno.ord}}
+\code{mappoly.data}, \code{mappoly.map}, \code{mappoly.sequence}, 
+\code{mappoly.group}, \code{mappoly.unique.seq},
+\code{mappoly.pcmap}, \code{mappoly.pcmap3d}, \code{mappoly.geno.ord} or
+\code{mappoly.edit.order}}
 
 \item{arg}{can be one of the following objects: i) a string 'all',
 resulting in a sequence with all markers in the raw data; ii) a
@@ -29,7 +37,12 @@ sequence; iv) a \code{vector} of integers representing linkage group if
 
 \item{data.name}{name of the object of class \code{mappoly.data}}
 
-\item{genomic.info}{optional argument applied for \code{mappoly.group} objects only. This argument can be \code{NULL},
+\item{info.parent}{one of the following options: 
+\code{'all'}{select all dosage combinations in both parents (default)}
+\code{'P1'}{select informative markers parent 1}
+\code{'P2'}{select informative markers parent 2}}
+
+\item{genomic.info}{optional argument applied to \code{mappoly.group} objects only. This argument can be \code{NULL},
 or can hold the numeric combination of sequences from genomic information to be used when making the sequences.
 When \code{genomic.info = NULL} (default), the function returns a sequence containing all markers defined 
 by the grouping function. When \code{genomic.info = 1}, the function returns a sequence with markers

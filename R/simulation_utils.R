@@ -25,7 +25,7 @@ sim_cross_one_informative_parent <- function(ploidy,
     for(i in 1:nrow(a))
     {
       temp <- apply(matrix(a[i,], 2, ploidy/2), 2, sort)
-      bv.conf[[i]] <- temp[,order(temp[1,])]
+      bv.conf[[i]] <- temp[,order(temp[1,]), drop = FALSE]
     }
     bv.conf <- unique(bv.conf)
     names(bv.conf) <- sapply(bv.conf, function(x) paste(apply(x, 2,
@@ -39,18 +39,18 @@ sim_cross_one_informative_parent <- function(ploidy,
         gen.1 <- matrix(1:ploidy,ploidy,n.mrk)  #simulates the chromosomes multiallelic markers in 'n.mrk' positions
         id <- sample(x = 1:length(bv.conf), size = 1, prob = prob) #sampling one bivalent configuration based on given probabilities
         choosed_biv <- bv.conf[[id]]
-        choosed_biv <- choosed_biv[,sample(1:(ploidy/2))]
+        choosed_biv <- choosed_biv[,sample(1:(ploidy/2)), drop = FALSE]
         for(i in 1:ncol(choosed_biv))
         {
           choosed_biv[,i] <- sample(choosed_biv[,i])
         }
-        pole.1 <- choosed_biv[1,]
-        pole.2 <- choosed_biv[2,]
-        set.2 <- gen.1[pole.1,]      #allocating the chromosomes on the variables set.1 and set.2, thus (set.1[i], set.2[i]) represents a bivalent
-        set.1 <- gen.1[pole.2,]
+        pole.1 <- choosed_biv[1,, drop = FALSE]
+        pole.2 <- choosed_biv[2,, drop = FALSE]
+        set.2 <- gen.1[pole.1,, drop = FALSE]      #allocating the chromosomes on the variables set.1 and set.2, thus (set.1[i], set.2[i]) represents a bivalent
+        set.1 <- gen.1[pole.2,, drop = FALSE]
         for(i in 1:(ploidy/2)){         #for each one of the ploidy/2 chromosome pair (bivalents)
-            a <- set.1[i,]
-            b <- set.2[i,]
+            a <- set.1[i,, drop = FALSE]
+            b <- set.2[i,, drop = FALSE]
             for(j in 1:(n.mrk-1)){             #for each adjacent interval between.mrkkers
                 if(runif(1)  < rf.vec[j]){       #if a random number drawn from the interval [0,1] (according a uniform distribution)
                                         #is less than the recombination fraction for that interval
@@ -118,24 +118,32 @@ sim_cross_two_informative_parents <- function(ploidy,
 #' @param void internal function to be documented
 #' @importFrom grDevices pdf dev.off
 #' @keywords internal
-draw_cross <- function(ploidy,rf.vec = NULL,hom.allele.p,hom.allele.q, file = NULL, width = 12, height = 6){
+draw_cross <- function(ploidy,
+                       dist.vec = NULL,
+                       hom.allele.p,
+                       hom.allele.q, 
+                       file = NULL, 
+                       width = 12, 
+                       height = 6){
     if(!is.null(file))
         pdf(file, width = width, height = height)
     oldpar <- par(xaxt = "n")
     on.exit(par(oldpar))
-    plot(c(0,22), c(0,-(ploidy+10)), type = "n", axes = FALSE, xlab = "Partental homology groups", main = paste("Ploidy: ", ploidy), ylab = "")
+    plot(c(0,22), c(0,-(ploidy+12)), type = "n", 
+         axes = FALSE, xlab = "Partental homology groups", 
+         main = paste("Ploidy: ", ploidy), ylab = "")
     for(i in -(1:ploidy)){
         lines(c(0,10), c(i,i))
         lines(c(12,22), c(i,i))
     }
-    pos.p <- cumsum(c(0,rf.vec/sum(rf.vec)))*10
+    pos.p <- dist.vec/max(dist.vec)*10
     for(i in 1:length(hom.allele.p)){
         abline(v = pos.p[i], lty = 2, lwd = .5)
         text(pos.p[i], 0, i, cex = .7)
         if(any(hom.allele.p[[i]] != 0))
             points(x = rep(pos.p[i],length(hom.allele.p[[i]])), y = -hom.allele.p[[i]], col = 2, pch = 20, cex = 2)
         points(pos.p[i] , -(ploidy+10), pch = "|")
-        text(pos.p[i]+diff(pos.p)[i]/2, -(ploidy+10)+.8, labels = rf.vec[i], srt = 90)
+        text(pos.p[i], -(ploidy+10)-.8, labels = round(dist.vec,1)[i], srt = 90)
     }
     pos.q <- pos.p+12
     for(i in 1:length(hom.allele.q)){
@@ -144,7 +152,7 @@ draw_cross <- function(ploidy,rf.vec = NULL,hom.allele.p,hom.allele.q, file = NU
         if(any(hom.allele.q[[i]] != 0))
             points(x = rep(pos.q[i],length(hom.allele.q[[i]])), y = -hom.allele.q[[i]], col = 2, pch = 20, cex = 2)
         points(pos.q[i] , -(ploidy+10), pch = "|")
-        text(pos.q[i]+diff(pos.q)[i]/2, -(ploidy+10)+.8, labels = rf.vec[i], srt = 90)
+        text(pos.q[i], -(ploidy+10)-.8, labels = round(dist.vec,1)[i], srt = 90)
     }
     text(x = 11,y = -(ploidy+1)/2,labels = "X", cex = 2)
     lines(c(0,10), c(-(ploidy+10),-(ploidy+10)))

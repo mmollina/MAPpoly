@@ -25,7 +25,7 @@ filter_non_conforming_classes <- function(input.data, prob.thres = NULL)
     for(i in 1:nrow(M)){
       id0 <- !as.numeric(input.data$geno.dose[i,])%in%(which(M[i,] == 1)-1)
       if(any(id0))
-        input.data$geno.dose[i,id0] <- (ploidy+1)     
+        input.data$geno.dose[i,id0] <- (ploidy+1)
     }
     return(input.data)
   }
@@ -63,27 +63,27 @@ filter_non_conforming_classes <- function(input.data, prob.thres = NULL)
 }
 
 #' Filter missing genotypes
-#' 
+#'
 #' Excludes markers or individuals based on their proportion of missing data
 #'
-#' @param input.data an object of class \code{mappoly.data} 
-#' 
-#' @param type one of the following options: 
+#' @param input.data an object of class \code{mappoly.data}
+#'
+#' @param type one of the following options:
 #' \code{'marker'}{filter out markers based on their percentage of missing data (default)}
 #' \code{'individual'}{filter out individuals based on their percentage of missing data}
 #' Please notice that removing individuals with certain amount of data can change some marker parameters
 #' (such as depth), and can also change the estimated genotypes for other individuals.
 #' So be careful when removing individuals.
-#' 
+#'
 #' @param filter.thres maximum percentage of missing data (default = 0.2)
-#' 
+#'
 #' @param inter if \code{TRUE}, expects user-input to proceed with filtering
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #' @examples
 #' plot(tetra.solcap)
 #' dat.filt.mrk <- filter_missing(input.data = tetra.solcap,
-#'                                type = "marker", 
+#'                                type = "marker",
 #'                                filter.thres = 0.1,
 #'                                inter = TRUE)
 #' plot(dat.filt.mrk)
@@ -91,9 +91,9 @@ filter_non_conforming_classes <- function(input.data, prob.thres = NULL)
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter
 #' @importFrom graphics axis
-filter_missing <- function(input.data, 
-                         type = c("marker", "individual"), 
-                         filter.thres = 0.2, 
+filter_missing <- function(input.data,
+                         type = c("marker", "individual"),
+                         filter.thres = 0.2,
                          inter = TRUE)
 {
   if (!inherits(input.data, "mappoly.data")) {
@@ -101,18 +101,18 @@ filter_missing <- function(input.data,
   }
   type <- match.arg(type)
   switch(type,
-         marker = filter_missing_mrk(input.data, 
-                                     filter.thres = filter.thres, 
+         marker = filter_missing_mrk(input.data,
+                                     filter.thres = filter.thres,
                                      inter = inter),
-         individual = filter_missing_ind(input.data, 
-                                         filter.thres = filter.thres, 
+         individual = filter_missing_ind(input.data,
+                                         filter.thres = filter.thres,
                                          inter = inter)
   )
 }
 
 #' Filter markers based on missing genotypes
 #'
-#' @param input.data an object of class \code{"mappoly.data"} 
+#' @param input.data an object of class \code{"mappoly.data"}
 #' @param filter.thres maximum percentage of missing data
 #' @param inter if \code{TRUE}, expects user-input to proceed with filtering
 #' @keywords internal
@@ -128,10 +128,10 @@ filter_missing_mrk <- function(input.data, filter.thres = 0.2, inter = TRUE)
       na.num <- apply(input.data$geno.dose, 1, function(x,ploidy) sum(x == ploidy+1), ploidy = input.data$ploidy)
       perc.na <- na.num/input.data$n.ind
       x <- sort(perc.na)
-      plot(x, 
-           xlab = "markers", 
-           ylab = "frequency of missing data", 
-           col = ifelse(x <= filter.thres, 4, 2), 
+      plot(x,
+           xlab = "markers",
+           ylab = "frequency of missing data",
+           col = ifelse(x <= filter.thres, 4, 2),
            pch =ifelse(x <= filter.thres, 1, 4))
       abline(h = filter.thres, lty = 2)
       f<-paste0("Filtered out: ", sum(perc.na > filter.thres))
@@ -146,7 +146,7 @@ filter_missing_mrk <- function(input.data, filter.thres = 0.2, inter = TRUE)
     mrks.id <- which(perc.na <= filter.thres)
     if(length(mrks.id) == input.data$n.mrk){
       return(input.data)
-    } 
+    }
     out.dat <- sample_data(input.data, type = "markers", selected.mrk = names(mrks.id))
     return(out.dat)
   }
@@ -156,15 +156,15 @@ filter_missing_mrk <- function(input.data, filter.thres = 0.2, inter = TRUE)
     mrks.id <- which(perc.na <= filter.thres)
     if(length(mrks.id) == input.data$n.mrk){
       return(input.data)
-    } 
+    }
     out.dat <- sample_data(input.data, type = "markers", selected.mrk = names(mrks.id))
     return(out.dat)
   }
 }
 
-#' Filter individuals based on missing genotypes 
+#' Filter individuals based on missing genotypes
 #'
-#' @param input.data an object of class \code{"mappoly.data"} 
+#' @param input.data an object of class \code{"mappoly.data"}
 #' @param filter.thres maximum percentage of missing data
 #' @param inter if \code{TRUE}, expects user-input to proceed with filtering
 #' @keywords internal
@@ -184,10 +184,10 @@ filter_missing_ind <- function(input.data, filter.thres = 0.2, inter = TRUE)
       na.num <- apply(input.data$geno.dose, 2, function(x,ploidy) sum(x == ploidy+1), ploidy = input.data$ploidy)
       perc.na <- na.num/input.data$n.mrk
       x <- sort(perc.na)
-      plot(x, 
-           xlab = "offspring", 
-           ylab = "frequency of missing data", 
-           col = ifelse(x <= filter.thres, 4, 2), 
+      plot(x,
+           xlab = "offspring",
+           ylab = "frequency of missing data",
+           col = ifelse(x <= filter.thres, 4, 2),
            pch =ifelse(x <= filter.thres, 1, 4));
       abline(h = filter.thres, lty = 2)
       f<-paste0("Filtered out: ", sum(perc.na > filter.thres))
@@ -202,7 +202,7 @@ filter_missing_ind <- function(input.data, filter.thres = 0.2, inter = TRUE)
     ind.id <- which(perc.na <= filter.thres)
     if(length(ind.id) == input.data$n.ind){
       return(input.data)
-    } 
+    }
     ind <- names(ind.id)
     out.dat <- sample_data(input.data, type = "individual", selected.ind = names(ind.id))
     return(out.dat)
@@ -213,64 +213,74 @@ filter_missing_ind <- function(input.data, filter.thres = 0.2, inter = TRUE)
     ind.id <- which(perc.na <= filter.thres)
     if(length(ind.id) == input.data$n.ind){
       return(input.data)
-    } 
+    }
     ind <- names(ind.id)
     out.dat <- sample_data(input.data, type = "individual", selected.ind = names(ind.id))
     return(out.dat)
   }
 }
-    
+
 #' Filter markers based on chi-square test
 #'
-#' This function filter markers based on p-values of a chi-square test. 
+#' This function filter markers based on p-values of a chi-square test.
 #' The chi-square test assumes that markers follow the expected segregation
-#'  patterns under Mendelian inheritance, random chromosome bivalent 
+#'  patterns under Mendelian inheritance, random chromosome bivalent
 #'  pairing and no double reduction.
 #'
-#' @param input.data name of input object (class \code{mappoly.data})
-#' 
-#' @param chisq.pval.thres p-value threshold used for chi-square tests 
-#'  (default = Bonferroni aproximation with global alpha of 0.05, i.e., 
+#' @param input.obj name of input object (class \code{mappoly.data})
+#'
+#' @param chisq.pval.thres p-value threshold used for chi-square tests
+#'  (default = Bonferroni aproximation with global alpha of 0.05, i.e.,
 #'  0.05/n.mrk)
-#' 
-#' @param inter if TRUE (default), plots distorted vs. non-distorted markers 
+#'
+#' @param inter if TRUE (default), plots distorted vs. non-distorted markers
 #'
 #' @return An object of class \code{mappoly.chitest.seq} which contains a list with the following components:
 #' \item{keep}{markers that follow Mendelian segregation pattern}
 #' \item{exclude}{markers with distorted segregation}
 #' \item{chisq.pval.thres}{threshold p-value used for chi-square tests}
 #' \item{data.name}{input dataset used to perform the chi-square tests}
-#' 
+#'
 #'@examples
-#' mrks.chi.filt <- filter_segregation(input.data = tetra.solcap,
+#' mrks.chi.filt <- filter_segregation(input.obj = tetra.solcap,
 #'                                     chisq.pval.thres = 0.05/tetra.solcap$n.mrk,
 #'                                     inter = TRUE)
 #' seq.init <- make_seq_mappoly(mrks.chi.filt)
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
-#' 
+#'
 #' @importFrom graphics axis
 #' @export
-filter_segregation <- function(input.data, chisq.pval.thres = NULL, inter = TRUE){
+filter_segregation <- function(input.obj, chisq.pval.thres = NULL, inter = TRUE){
   op <- par(pty="s")
   on.exit(par(op))
+  if(inherits(input.obj, c("mappoly.data"))){
+    chisq.val <- input.obj$chisq.pval
+    n.mrk <- input.obj$n.mrk
+    data.name <- as.character(sys.call())[2]
+  } else if (inherits(input.obj, c("mappoly.sequence"))){
+    chisq.val <- input.obj$chisq.pval[input.obj$seq.mrk.names]
+    n.mrk <- length(input.obj$seq.num)
+    data.name <- input.obj$data.name
+  } else {
+    stop(deparse(substitute(input.obj)),
+         " is not an object of class 'mappoly.data' or 'mappoly.sequence'")
+  }
   ##Bonferroni approx
   if(is.null(chisq.pval.thres))
-    chisq.pval.thres <- 0.05/input.data$n.mrk
+    chisq.pval.thres <- 0.05/n.mrk
   ANSWER <- "flag"
-  if (!inherits(input.data, "mappoly.data")) {
-    stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
-  }
+
   if(interactive() && inter)
   {
     while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != "")
     {
-      x <- log10(sort(input.data$chisq.pval, decreasing = TRUE))
+      x <- log10(sort(chisq.val, decreasing = TRUE))
       th <- log10(chisq.pval.thres)
-      plot(x, 
-           xlab = "markers", 
-           ylab = bquote(log[10](P)), 
-           col = ifelse(x <= th, 2, 4), 
+      plot(x,
+           xlab = "markers",
+           ylab = bquote(log[10](P)),
+           col = ifelse(x <= th, 2, 4),
            pch =ifelse(x <= th, 4, 1))
       abline(h = th, lty = 2)
       f<-paste0("Filtered out: ", sum(x < th))
@@ -283,29 +293,31 @@ filter_segregation <- function(input.data, chisq.pval.thres = NULL, inter = TRUE
         chisq.pval.thres  <- as.numeric(ANSWER)
     }
   }
-  keep <- names(which(input.data$chisq.pval >= chisq.pval.thres))
-  exclude <- names(which(input.data$chisq.pval < chisq.pval.thres))
-  structure(list(keep = keep, exclude = exclude, chisq.pval.thres = chisq.pval.thres, data.name = as.character(sys.call())[2]), class = "mappoly.chitest.seq")
+  keep <- names(which(chisq.val >= chisq.pval.thres))
+  exclude <- names(which(chisq.val < chisq.pval.thres))
+  structure(list(keep = keep, exclude = exclude, chisq.pval.thres = chisq.pval.thres,
+                 data.name = data.name),
+            class = "mappoly.chitest.seq")
 }
 
 #' Filter out individuals
 #'
-#' This function removes individuals from the data set. Individuals can be 
-#' user-defined or can be accessed via interactive kinship analysis. 
+#' This function removes individuals from the data set. Individuals can be
+#' user-defined or can be accessed via interactive kinship analysis.
 #'
 #' @param input.data name of input object (class \code{mappoly.data})
-#' 
-#' @param ind.to.remove individuals to be removed. If \code{NULL} it opens 
-#'                      an interactive graphic to proceed with the individual 
+#'
+#' @param ind.to.remove individuals to be removed. If \code{NULL} it opens
+#'                      an interactive graphic to proceed with the individual
 #'                      selection
 #' @param inter if \code{TRUE}, expects user-input to proceed with filtering
-#' 
-#' @param verbose if \code{TRUE} (default), shows the filtered out individuals 
-#'                      
+#'
+#' @param verbose if \code{TRUE} (default), shows the filtered out individuals
+#'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
-#' 
+#'
 #' @export
-#' 
+#'
 filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, verbose = TRUE){
   if (!inherits(input.data, "mappoly.data")) {
     stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
@@ -324,8 +336,8 @@ filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
   #a <- 2*atan(y/x)/pi
   #b <- sqrt(x^2 + y^2)
   df <- data.frame(x = x, y = y, type = c(2, 2, rep(4, length(x)-2)))
-  plot(df[,1:2], col = df$type, pch = 19, 
-       xlab = "relationships between the offspring and P1", 
+  plot(df[,1:2], col = df$type, pch = 19,
+       xlab = "relationships between the offspring and P1",
        ylab = "relationships between the offspring and P2")
   abline(c(0,1), lty = 2)
   abline(c(-0.4,1), lty = 2, col = "gray")
@@ -353,13 +365,13 @@ filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
       if(length(ind.to.remove) == 0){
         warning("No individuals removed. Returning original data set.")
         return(input.data)
-      } 
+      }
       out.data <- sample_data(input.data, selected.ind = ind.to.include)
       return(out.data)
     } else{
       warning("No individuals removed. Returning original data set.")
       return(input.data)
-    } 
+    }
   }
 }
 #'  Remove markers that do not meet a LOD criteria
@@ -378,32 +390,32 @@ filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
 #'
 #' @param input.twopt an object of class \code{mappoly.twopt}
 #'
-#' @param thresh.LOD.ph LOD score threshold for linkage phase configuration 
+#' @param thresh.LOD.ph LOD score threshold for linkage phase configuration
 #' (default = 5)
 #'
-#' @param thresh.LOD.rf LOD score threshold for recombination fraction 
+#' @param thresh.LOD.rf LOD score threshold for recombination fraction
 #' (default = 5)
 #'
-#' @param thresh.rf threshold for recombination fractions (default = 0.15) 
+#' @param thresh.rf threshold for recombination fractions (default = 0.15)
 #'
-#' @param probs indicates the probability corresponding to the filtering 
+#' @param probs indicates the probability corresponding to the filtering
 #' quantiles. (default = c(0.05, 1))
-#' 
-#' @param diag.markers A window where marker pairs should be considered. 
-#'    If NULL (default), all markers are considered. 
-#'    
+#'
+#' @param diag.markers A window where marker pairs should be considered.
+#'    If NULL (default), all markers are considered.
+#'
 #' @param mrk.order marker order. Only has effect if 'diag.markers' is not NULL
-#' 
-#' @param ncpus number of parallel processes (i.e. cores) to spawn 
+#'
+#' @param ncpus number of parallel processes (i.e. cores) to spawn
 #' (default = 1)
-#' 
+#'
 #' @param diagnostic.plot if \code{TRUE} produces a diagnostic plot
-#' 
+#'
 #' @param breaks number of cells for the histogram
-#' 
-#' @return A filtered object of class \code{mappoly.sequence}. 
+#'
+#' @return A filtered object of class \code{mappoly.sequence}.
 #' See \code{\link[mappoly]{make_seq_mappoly}} for details
-#' 
+#'
 #' @examples
 #'     all.mrk <- make_seq_mappoly(hexafake, 1:20)
 #'     red.mrk <- elim_redundant(all.mrk)
@@ -422,14 +434,14 @@ filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
 #'     m1.filt <- rf_list_to_matrix(input.twopt = p1.filt)
 #'     plot(mat.full, main.text = "LG1")
 #'     plot(m1.filt, main.text = "LG1.filt")
-#'    
+#'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu} with updates by Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
 #'
 #' @references
 #'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
 #'     analysis and haplotype phasing in experimental autopolyploid
 #'     populations with high ploidy level using hidden Markov
-#'     models, _G3: Genes, Genomes, Genetics_. 
+#'     models, _G3: Genes, Genomes, Genetics_.
 #'     \doi{10.1534/g3.119.400378}
 #'
 #' @export rf_snp_filter
@@ -441,12 +453,12 @@ rf_snp_filter <- function(input.twopt,
                           thresh.rf = 0.15,
                           probs = c(0.05, 1),
                           diag.markers = NULL,
-                          mrk.order = NULL, 
+                          mrk.order = NULL,
                           ncpus = 1L,
                           diagnostic.plot = TRUE,
                           breaks = 100)
 {
-  
+
   input_classes <- c("mappoly.twopt", "mappoly.twopt2")
   if (!inherits(input.twopt, input_classes)) {
     stop(deparse(substitute(input.twopt)), paste0(" is not an object of class ", paste0(input_classes, collapse =  " or ")))
@@ -483,50 +495,127 @@ rf_snp_filter <- function(input.twopt,
   return(ch_filt)
 }
 
-#' Edit sequence ordered by reference genome positions 
+#' Edit sequence ordered by reference genome positions
 #' comparing to another set order
-#' 
+#'
 #' @param input.seq object of class mappoly.sequence with alternative order (not genomic order)
-#' @param dat object of class mappoly.data
-#' 
+#'
 #' @author Cristiane Taniguti, \email{chtaniguti@tamu.edu}
+#'
+#' @examples
+#'  \donttest{
+#'   dat <- filter_segregation(tetra.solcap, inter = FALSE)
+#'   seq_dat <- make_seq_mappoly(dat)
+#'   seq_chr <- make_seq_mappoly(seq_dat, arg = seq_dat$seq.mrk.names[which(seq_dat$chrom=="1")])
 #' 
+#'   tpt <- est_pairwise_rf(seq_chr)
+#'   seq.filt <- rf_snp_filter(tpt, probs = c(0.05, 0.95))
+#'   mat <- rf_list_to_matrix(tpt)
+#'   mat2 <- make_mat_mappoly(mat, seq.filt)
+#' 
+#'   seq_test_mds <- mds_mappoly(mat2)
+#'   seq_mds <- make_seq_mappoly(seq_test_mds)
+#'   edit_seq <- edit_order(input.seq = seq_mds)
+#'  }
+#'  
+#' @return object of class \code{mappoly.edit.order}: a list containing
+#'         vector of marker names ordered according to editions (`edited_order`);
+#'         vector of removed markers names (`removed`);
+#'         vector of inverted markers names (`inverted`).
+#'  
 #' @export
-edit_order <- function(input.seq, input.data){
-  
-  if (!inherits(input.data, "mappoly.data")) {
-    stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
-  }
+edit_order <- function(input.seq){
+
   if (!inherits(input.seq, "mappoly.sequence")) {
     stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
   }
-  
+
   get_weird <- data.frame(x = 1:length(input.seq$genome.pos),
                           y = input.seq$genome.pos)
-  
+
   rownames(get_weird) <- input.seq$seq.mrk.names
   get_weird <- get_weird[order(get_weird$y),]
-  plot(get_weird$x, get_weird$y, xlab="alternative order", ylab = "Genome position")
-  
+  plot(get_weird$x, get_weird$y, xlab="input sequence order", ylab = "genomic position (bp)")
+
+  cat("Mark at least three points on the plot and press `Esc` to continue.")
+  inverted <- removed <- vector()
   if(interactive()){
     ANSWER <- "Y"
     while(substr(ANSWER, 1, 1)  ==  "y" | substr(ANSWER, 1, 1)  ==  "yes" | substr(ANSWER, 1, 1)  ==  "Y" | ANSWER  == ""){
-      plot(get_weird$x, get_weird$y, xlab="MDS order", ylab = "Genome position")
+      plot(get_weird$x, get_weird$y, xlab="input sequence order", ylab = "genomic position (bp)")
       mks.to.remove <- gatepoints::fhs(get_weird, mark = TRUE)
       if(length(which(rownames(get_weird) %in% mks.to.remove)) > 0){
         ANSWER2 <- readline("Enter 'invert/remove' to proceed with the edition: ")
         if(ANSWER2 == "invert"){
+          inverted <- c(inverted, as.vector(mks.to.remove))
           repl <- get_weird[rev(which(rownames(get_weird) %in% as.vector(mks.to.remove))),]
           get_weird[which(rownames(get_weird) %in% as.vector(mks.to.remove)),2] <- repl[,2]
         } else {
+          removed <- c(removed, as.vector(mks.to.remove))
           get_weird <- get_weird[-which(rownames(get_weird) %in% mks.to.remove),]
         }
       }
       ANSWER <- readline("Enter 'Y/n' to proceed with interactive edition or quit: ")
     }
-    plot(get_weird$x, get_weird$y, xlab="MDS order", ylab = "Genome position")
-    new.seq <- make_seq_mappoly(input.obj = input.data,rownames(get_weird))
+    plot(get_weird$x, get_weird$y, xlab="input sequence order", ylab = "genomic position (bp)")
   }
-  return(new.seq)
+
+  return(structure(list(edited_order = rownames(get_weird),
+                        removed = removed,
+                        inverted = inverted,
+                        data.name = input.seq$data.name), class = "mappoly.edit.order"))
+}
+
+#' Filter aneuploid chromosomes from progeny individuals
+#'
+#' @param input.data name of input object (class \code{mappoly.data})
+#'
+#' @param aneuploid.info data.frame with ploidy information by chromosome (columns) for each individual
+#'  in progeny (rows). The chromosome and individuals names must match the ones in the file used as input
+#'  in mappoly.
+#'
+#' @param ploidy main ploidy
+#'
+#' @examples
+#'      aneuploid.info <- matrix(4, nrow=tetra.solcap$n.ind, ncol = 12)
+#'      set.seed(8080)
+#'      aneuploid.info[sample(1:length(aneuploid.info), round((4*length(aneuploid.info))/100),0)] <- 3
+#'      aneuploid.info[sample(1:length(aneuploid.info), round((4*length(aneuploid.info))/100),0)] <- 5
+#'
+#'      colnames(aneuploid.info) <- paste0(1:12)
+#'      aneuploid.info <- cbind(inds = tetra.solcap$ind.names, aneuploid.info)
+#'
+#'      filt.dat <- filter_aneuploid(input.data = tetra.solcap, 
+#'      aneuploid.info = aneuploid.info, ploidy = 4)
+#'
+#' @author Cristiane Taniguti, \email{chtaniguti@tamu.edu}
+#' 
+#' @return object of class \code{mappoly.data}
+#'
+#' @export
+filter_aneuploid <- function(input.data, aneuploid.info, ploidy){
+
+  if (!inherits(input.data, "mappoly.data")) {
+    stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
+  }
+
+  aneu.chroms <- colnames(aneuploid.info)[-1]
+
+  keep.ind <- match(input.data$ind.names, aneuploid.info[,1])
+  aneuploid.info <- aneuploid.info[keep.ind,]
+
+  idx.list <- apply(aneuploid.info[,-1], 1, function(x) which(x != ploidy))
+  names(idx.list) <- aneuploid.info[,1]
+
+  idx.list <- idx.list[-which(!sapply(idx.list, function(x) length(x) >0))]
+
+  cat(round((length(unlist(idx.list))/(dim(aneuploid.info)[1]*(dim(aneuploid.info)[2]-1)))*100,2), "% of the chromosomes x individuals are aneuploids\n")
+
+  for(i in 1:length(idx.list)){
+    idx <- which(input.data$chrom %in% names(idx.list[[i]]))
+    input.data$geno.dose[idx,names(idx.list[i])] <- ploidy + 1
+  }
+
+  return(input.data)
 }
 

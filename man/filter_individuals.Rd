@@ -14,8 +14,8 @@ filter_individuals(
 \arguments{
 \item{input.data}{name of input object (class \code{mappoly.data})}
 
-\item{ind.to.remove}{individuals to be removed. If \code{NULL} it opens 
-an interactive graphic to proceed with the individual 
+\item{ind.to.remove}{individuals to be removed. If \code{NULL} it opens
+an interactive graphic to proceed with the individual
 selection}
 
 \item{inter}{if \code{TRUE}, expects user-input to proceed with filtering}
@@ -23,7 +23,7 @@ selection}
 \item{verbose}{if \code{TRUE} (default), shows the filtered out individuals}
 }
 \description{
-This function removes individuals from the data set. Individuals can be 
+This function removes individuals from the data set. Individuals can be
 user-defined or can be accessed via interactive kinship analysis.
 }
 \author{

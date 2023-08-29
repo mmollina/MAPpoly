@@ -102,7 +102,7 @@ get_submap <- function(input.map, mrk.pos,  phase.config = "best", reestimate.rf
                         arg = seq.num, 
                         data.name = input.map$info$data.name)
     rf.temp <- NULL#input.map$maps[[i.lpc]]$seq.rf[mrk.pos[-length(mrk.pos)]]
-    res <- est_rf_hmm_single(input.seq = s, input.ph.single = ph, tol = tol.final,
+    res <- est_rf_hmm_single_phase(input.seq = s, input.ph.single = ph, tol = tol.final,
                            verbose = verbose, rf.temp = rf.temp,
                            high.prec = high.prec)
     output.map <- input.map

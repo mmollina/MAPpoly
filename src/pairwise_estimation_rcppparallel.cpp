@@ -405,8 +405,6 @@ struct rf_two_point_parallel : public Worker {
   }
 };
 
-
-// [[Rcpp::export]]
 RcppExport SEXP pairwise_rf_estimation_disc_rcpp(SEXP mrk_pairs_R,
                                                  SEXP m_R,
                                                  SEXP geno_R,
