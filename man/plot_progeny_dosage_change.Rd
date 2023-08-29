@@ -17,10 +17,16 @@ plot_progeny_dosage_change(map_list, error, verbose = T)
 A ggplot of the changed and imputed genotypic dosages
 }
 \description{
-Outputs a graphical representation ggplot with the percent of data changed
+Outputs a graphical representation ggplot with the percent of data changed.
+}
+\details{
+Most recent update 8/29/2023: 
+   -fixed issue where only worked on tetraploid to now working for diploid to octaploid.
+   -un-hardcoded linkage groups in maps. previously hard-coded for tetraploid rose.
 }
 \examples{
-    plot_progeny_dosage_change(map_list=MAPs, error=0.05)
+    plot_progeny_dosage_change(map_list=solcap.dose.map, error=0.05)
+    
 
 }
 \author{
