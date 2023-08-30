@@ -16,8 +16,8 @@
 #' @return A ggplot of the changed and imputed genotypic dosages
 #'
 #' @examples
-#'     plot_progeny_dosage_change(map_list=solcap.dose.map, error=0.05)
-#'     
+#'     x<-get_submap(solcap.err.map[[1]], 1:30, reestimate.rf = FALSE)
+#'     plot_progeny_dosage_change(list(x), error=0.05)     
 #'
 #' @author Jeekin Lau, \email{jzl0026@tamu.edu}, with optimization by Cristiane Taniguti, \email{chtaniguti@tamu.edu}
 #'
@@ -26,6 +26,7 @@
 #' @export plot_progeny_dosage_change
 
 plot_progeny_dosage_change <- function(map_list, error, verbose=T){
+  Var1 <- Var2 <- value <- NULL
   map=map_list
   if(!exists(map[[1]]$info$data.name)) stop("mappoly.data object not here")
   

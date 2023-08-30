@@ -25,8 +25,8 @@ Most recent update 8/29/2023:
    -un-hardcoded linkage groups in maps. previously hard-coded for tetraploid rose.
 }
 \examples{
-    plot_progeny_dosage_change(map_list=solcap.dose.map, error=0.05)
-    
+    x<-get_submap(solcap.err.map[[1]], 1:30, reestimate.rf = FALSE)
+    plot_progeny_dosage_change(list(x), error=0.05)     
 
 }
 \author{
