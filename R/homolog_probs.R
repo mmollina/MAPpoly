@@ -64,7 +64,7 @@ calc_homologprob <- function(input.genoprobs, verbose = TRUE){
     ## Creating dummy variables to associate genotypes with alleles
     for(i in 1:nrow(alleles)){
       for(k in 1:ncol(alleles)){
-        alleles2[i,match(alleles[i,k], letters)]=1.000000
+        alleles2[i,match(alleles[i,k], letters)]=1.00
       }
     }
     ## Getting homolog probabilities
