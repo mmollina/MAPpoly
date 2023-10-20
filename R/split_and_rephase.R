@@ -20,6 +20,8 @@
 #' 
 #' @param phase.config which phase configuration should be used. "best" (default) 
 #'                     will choose the maximum likelihood phase configuration 
+#'
+#' @param tol.merge the desired accuracy for merging maps (default = 10e-04)
 #'                     
 #' @param tol.final the desired accuracy for the final map (default = 10e-04)   
 #'
@@ -51,6 +53,7 @@ split_and_rephase <- function(input.map,
                               gap.threshold = 5, 
                               size.rem.cluster = 1,
                               phase.config = "best",
+                              tol.merge = 10e-4,
                               tol.final = 10e-4,
                               verbose = TRUE){
   if (!inherits(input.map, "mappoly.map")) {
@@ -119,10 +122,11 @@ split_and_rephase <- function(input.map,
                            verbose = FALSE)
     } 
     else {
-      newmap <- merge_maps(list(newmap, temp.maps[[i]]), 
+      newmap <- merge_maps(map.list = list(newmap, temp.maps[[i]]), 
                            twopt = twopt, 
                            thres.twopt = 10, 
-                           thres.hmm = 50)
+                           thres.hmm = 50, 
+                           tol = tol.merge)
     }
     newmap <- filter_map_at_hmm_thres(newmap, thres.hmm = 0.01)
   }
