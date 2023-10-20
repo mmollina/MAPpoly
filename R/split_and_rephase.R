@@ -19,7 +19,17 @@
 #'                         value is 1
 #' 
 #' @param phase.config which phase configuration should be used. "best" (default) 
-#'                     will choose the maximum likelihood phase configuration 
+#'                     will choose the maximum likelihood phase configuration
+
+#' @param  thres.twopt the threshold used to determine if the linkage
+#'     phases compared via two-point analysis should be considered 
+#'     for the search space reduction (default = 3)
+#'      
+#' @param thres.hmm the threshold used to determine which linkage 
+#'     phase configurations should be returned when merging two maps.
+#'     If "best" (default), returns only the best linkage phase 
+#'     configuration. NOTE: if merging multiple maps, it always uses 
+#'     the "best" linkage phase configuration at each block insertion.
 #'
 #' @param tol.merge the desired accuracy for merging maps (default = 10e-04)
 #'                     
@@ -53,6 +63,8 @@ split_and_rephase <- function(input.map,
                               gap.threshold = 5, 
                               size.rem.cluster = 1,
                               phase.config = "best",
+                              thres.twopt = 3,
+                              thres.hmm = "best",
                               tol.merge = 10e-4,
                               tol.final = 10e-4,
                               verbose = TRUE){
@@ -124,8 +136,8 @@ split_and_rephase <- function(input.map,
     else {
       newmap <- merge_maps(map.list = list(newmap, temp.maps[[i]]), 
                            twopt = twopt, 
-                           thres.twopt = 10, 
-                           thres.hmm = 50, 
+                           thres.twopt = thres.twopt, 
+                           thres.hmm = thres.hmm, 
                            tol = tol.merge)
     }
     newmap <- filter_map_at_hmm_thres(newmap, thres.hmm = 0.01)
