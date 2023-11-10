@@ -4,7 +4,7 @@
 \alias{plot_progeny_dosage_change}
 \title{Look at genotypes that were imputed or changed by the HMM chain given a level of global genotypic error}
 \usage{
-plot_progeny_dosage_change(map_list, error, verbose = T)
+plot_progeny_dosage_change(map_list, error, verbose = T, output_corrected = F)
 }
 \arguments{
 \item{map_list}{a list of multiple \code{mappoly.map.list}}
@@ -12,6 +12,8 @@ plot_progeny_dosage_change(map_list, error, verbose = T)
 \item{error}{error rate used in global error in the `calc_genoprob_error()`}
 
 \item{verbose}{T or F for `calc_genoprob_error()` and `calc_homologprob()`}
+
+\item{output_corrected}{TRUE or FALSE, if F only the ggplot of the changed dosage is printed, if T then a new corrected dosage matrix is output.}
 }
 \value{
 A ggplot of the changed and imputed genotypic dosages
@@ -25,8 +27,9 @@ Most recent update 8/29/2023:
    -un-hardcoded linkage groups in maps. previously hard-coded for tetraploid rose.
 }
 \examples{
-    x<-get_submap(solcap.err.map[[1]], 1:30, reestimate.rf = FALSE)
-    plot_progeny_dosage_change(list(x), error=0.05)     
+      x <- get_submap(solcap.err.map[[1]], 1:30, reestimate.rf = FALSE)   # subset to run fast in tests
+      plot_progeny_dosage_change(list(x), error=0.05, output_corrected=F)   # no new corrected dosages  
+      corrected_matrix <- plot_progeny_dosage_change(list(x), error=0.05, output_corrected=F) #output corrected
 
 }
 \author{
