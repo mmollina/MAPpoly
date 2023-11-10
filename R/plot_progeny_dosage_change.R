@@ -11,13 +11,14 @@
 #'
 #' @param error error rate used in global error in the `calc_genoprob_error()`
 #' @param verbose T or F for `calc_genoprob_error()` and `calc_homologprob()`
-#' 
+#' @param output_corrected TRUE or FALSE, if F only the ggplot of the changed dosage is printed, if T then a new corrected dosage matrix is output. 
 #'
 #' @return A ggplot of the changed and imputed genotypic dosages
 #'
 #' @examples
-#'     x<-get_submap(solcap.err.map[[1]], 1:30, reestimate.rf = FALSE)
-#'     plot_progeny_dosage_change(list(x), error=0.05)     
+#'       x <- get_submap(solcap.err.map[[1]], 1:30, reestimate.rf = FALSE)   # subset to run fast in tests
+#'       plot_progeny_dosage_change(list(x), error=0.05, output_corrected=F)   # no new corrected dosages  
+#'       corrected_matrix <- plot_progeny_dosage_change(list(x), error=0.05, output_corrected=F) #output corrected
 #'
 #' @author Jeekin Lau, \email{jzl0026@tamu.edu}, with optimization by Cristiane Taniguti, \email{chtaniguti@tamu.edu}
 #'
@@ -25,7 +26,7 @@
 #' @import reshape2
 #' @export plot_progeny_dosage_change
 
-plot_progeny_dosage_change <- function(map_list, error, verbose=T){
+plot_progeny_dosage_change <- function(map_list, error, verbose=T, output_corrected=F){
   Var1 <- Var2 <- value <- NULL
   map=map_list
   if(!exists(map[[1]]$info$data.name)) stop("mappoly.data object not here")
@@ -175,8 +176,17 @@ plot_progeny_dosage_change <- function(map_list, error, verbose=T){
     guides(fill=guide_legend(title="Dosage change"))
   print("done")
   
-  return(plot1) 
+  print(plot1)
+  if (output_corrected ==T){
+  mrk_names=rownames(finished)
+  mrk_index=which(dat$mrk.names%in%mrk_names)
+  P1 = dat$dosage.p1[mrk_index]
+  P2 = dat$dosage.p2[mrk_index]
+  sequence = dat$chrom[mrk_index]
+  sequence_position = dat$genome.pos[mrk_index]
   
+  hmm_imputed = cbind(P1,P2,sequence,sequence_position, finished)
+  return(hmm_imputed)}
 }
 
 
