@@ -4,7 +4,7 @@
 \alias{filter_aneuploid}
 \title{Filter aneuploid chromosomes from progeny individuals}
 \usage{
-filter_aneuploid(input.data, aneuploid.info, ploidy)
+filter_aneuploid(input.data, aneuploid.info, ploidy, rm_missing = TRUE)
 }
 \arguments{
 \item{input.data}{name of input object (class \code{mappoly.data})}
@@ -14,6 +14,8 @@ in progeny (rows). The chromosome and individuals names must match the ones in t
 in mappoly.}
 
 \item{ploidy}{main ploidy}
+
+\item{rm_missing}{remove also genotype information from chromosomes with missing data (NA) in the aneuploid.info file}
 }
 \value{
 object of class \code{mappoly.data}

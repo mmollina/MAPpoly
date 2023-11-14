@@ -576,6 +576,8 @@ edit_order <- function(input.seq){
 #'  in mappoly.
 #'
 #' @param ploidy main ploidy
+#' 
+#' @param rm_missing remove also genotype information from chromosomes with missing data (NA) in the aneuploid.info file
 #'
 #' @examples
 #'      aneuploid.info <- matrix(4, nrow=tetra.solcap$n.ind, ncol = 12)
@@ -594,29 +596,42 @@ edit_order <- function(input.seq){
 #' @return object of class \code{mappoly.data}
 #'
 #' @export
-filter_aneuploid <- function(input.data, aneuploid.info, ploidy){
-
+filter_aneuploid <- function(input.data, aneuploid.info, ploidy, rm_missing = TRUE){
+  
   if (!inherits(input.data, "mappoly.data")) {
     stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
   }
-
+  
   aneu.chroms <- colnames(aneuploid.info)[-1]
-
+  
   keep.ind <- match(input.data$ind.names, aneuploid.info[,1])
-  aneuploid.info <- aneuploid.info[keep.ind,]
-
-  idx.list <- apply(aneuploid.info[,-1], 1, function(x) which(x != ploidy))
-  names(idx.list) <- aneuploid.info[,1]
-
-  idx.list <- idx.list[-which(!sapply(idx.list, function(x) length(x) >0))]
-
-  cat(round((length(unlist(idx.list))/(dim(aneuploid.info)[1]*(dim(aneuploid.info)[2]-1)))*100,2), "% of the chromosomes x individuals are aneuploids\n")
-
+  
+  if(length(keep.ind) != length(input.data$ind.names) | any(is.na(keep.ind))) 
+    stop("The aneuploid information ploidy is missing at least one sample.")
+  
+  aneuploid.info.filt <- aneuploid.info[keep.ind,]
+  
+  idx.list <- apply(aneuploid.info.filt[,-1], 1, function(x) which(x != ploidy))
+  names(idx.list) <- aneuploid.info.filt[,1]
+  
+  idx.list <- idx.list[-which(!sapply(idx.list, function(x) length(x) > 0))]
+  
+  if(rm_missing){
+    idx.list.na <- apply(aneuploid.info.filt[,-1], 1, function(x) which(is.na(x)))
+    if(length(idx.list.na) > 0){
+      names(idx.list.na) <- aneuploid.info.filt[,1]
+      idx.list.na <- idx.list.na[-which(!sapply(idx.list.na, function(x) length(x) > 0))]
+      idx.list <- c(idx.list, idx.list.na)
+    }
+    cat(round((length(unlist(idx.list))/(dim(aneuploid.info.filt)[1]*(dim(aneuploid.info.filt)[2]-1)))*100,2), "% of the chromosomes x individuals are aneuploids or has missing ploidy information\n")
+  } else 
+    cat(round((length(unlist(idx.list))/(dim(aneuploid.info.filt)[1]*(dim(aneuploid.info.filt)[2]-1)))*100,2), "% of the chromosomes x individuals are aneuploids\n")
+  
   for(i in 1:length(idx.list)){
     idx <- which(input.data$chrom %in% names(idx.list[[i]]))
     input.data$geno.dose[idx,names(idx.list[i])] <- ploidy + 1
   }
-
+  
   return(input.data)
 }
 
