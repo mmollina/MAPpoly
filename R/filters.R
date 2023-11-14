@@ -550,6 +550,7 @@ edit_order <- function(input.seq){
           inverted <- c(inverted, as.vector(mks.to.remove))
           repl <- get_weird[rev(which(rownames(get_weird) %in% as.vector(mks.to.remove))),]
           get_weird[which(rownames(get_weird) %in% as.vector(mks.to.remove)),2] <- repl[,2]
+          rownames(get_weird)[which(rownames(get_weird) %in% as.vector(mks.to.remove))] <- rownames(repl) 
         } else {
           removed <- c(removed, as.vector(mks.to.remove))
           get_weird <- get_weird[-which(rownames(get_weird) %in% mks.to.remove),]
