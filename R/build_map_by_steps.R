@@ -178,7 +178,7 @@ update_framework_map <- function(input.map.list,
                           gap.threshold = gap.threshold)
     rem.mrk <- c(rem.mrk, setdiff(cur.res$map$info$mrk.names, a$info$mrk.names))
     if(a$info$n.mrk < cur.res$map$info$n.mrk){
-     if(method == "hmm"){
+      if(method == "hmm"){
         cur.res$map <- reest_rf(a, method = "hmm", verbose = verbose)
       } else if(method == "wMDS_to_1D_pc"){
         cur.res$map <- reest_rf(a, method = "wMDS_to_1D_pc", input.mds = input.mds)
@@ -331,21 +331,19 @@ add_md_markers <- function(input.map,
   names(ll) <- id2.names
   for(i in 1:length(id2)){
     u <- which(id - id2[i] < 0)
-    if(verbose){
-      cat(crayon::bgMagenta(stringr::str_pad(paste0(round(100*i/length(id2),1), "%"), width = 6)), "----> ")
-      if(length(u) == 0 ){
-        pos.test <- 0
-        cat(crayon::bgRed(id2[i]), "--", id[pos.test + 1], "...|", sep = "")
-      }
-      else if(length(u) == length(id)){
-        pos.test <- length(id)
-        cat("|...",id[pos.test - 1], "--", crayon::bgRed(id2[i]), sep = "")
-      }
-      else{
-        pos.test <- max(u)    
-        cat("|...", id[pos.test], "--", crayon::bgRed(id2[i]), "--", id[pos.test + 1], "...|", sep = "")
-      }
+    
+    if(verbose) cat(crayon::bgMagenta(stringr::str_pad(paste0(round(100*i/length(id2),1), "%"), width = 6)), "----> ")
+    if(length(u) == 0 ){
+      pos.test <- 0
+      if(verbose) cat(crayon::bgRed(id2[i]), "--", id[pos.test + 1], "...|", sep = "")
+    } else if(length(u) == length(id)){
+      pos.test <- length(id)
+      if(verbose) cat("|...",id[pos.test - 1], "--", crayon::bgRed(id2[i]), sep = "")
+    } else{
+      pos.test <- max(u)    
+      if(verbose) cat("|...", id[pos.test], "--", crayon::bgRed(id2[i]), "--", id[pos.test + 1], "...|", sep = "")
     }
+    
     temp.map <- add_marker(input.map = input.map, 
                            mrk = id2.names[i], 
                            pos = pos.test,
