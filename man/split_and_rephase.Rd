@@ -10,6 +10,9 @@ split_and_rephase(
   gap.threshold = 5,
   size.rem.cluster = 1,
   phase.config = "best",
+  thres.twopt = 3,
+  thres.hmm = "best",
+  tol.merge = 0.001,
   tol.final = 0.001,
   verbose = TRUE
 )
@@ -31,6 +34,18 @@ value is 1}
 
 \item{phase.config}{which phase configuration should be used. "best" (default) 
 will choose the maximum likelihood phase configuration}
+
+\item{thres.twopt}{the threshold used to determine if the linkage
+phases compared via two-point analysis should be considered 
+for the search space reduction (default = 3)}
+
+\item{thres.hmm}{the threshold used to determine which linkage 
+phase configurations should be returned when merging two maps.
+If "best" (default), returns only the best linkage phase 
+configuration. NOTE: if merging multiple maps, it always uses 
+the "best" linkage phase configuration at each block insertion.}
+
+\item{tol.merge}{the desired accuracy for merging maps (default = 10e-04)}
 
 \item{tol.final}{the desired accuracy for the final map (default = 10e-04)}
 
