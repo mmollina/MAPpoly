@@ -5,10 +5,14 @@
 \title{Edit sequence ordered by reference genome positions
 comparing to another set order}
 \usage{
-edit_order(input.seq)
+edit_order(input.seq, invert = NULL, remove = NULL)
 }
 \arguments{
 \item{input.seq}{object of class mappoly.sequence with alternative order (not genomic order)}
+
+\item{invert}{vector of marker names to be inverted}
+
+\item{remove}{vector of marker names to be removed}
 }
 \value{
 object of class \code{mappoly.edit.order}: a list containing

@@ -9,7 +9,8 @@ merge_parental_maps(
   map.p2,
   full.seq,
   full.mat,
-  method = c("ols", "hmm")
+  method = c("ols", "hmm"),
+  verbose = TRUE
 )
 }
 \arguments{
