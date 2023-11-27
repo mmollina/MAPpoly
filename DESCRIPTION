@@ -90,7 +90,7 @@ Imports:
     plotly
 LinkingTo: Rcpp, RcppParallel
 RoxygenNote: 7.2.3
-SystemRequirements: C++11, GNU make
+SystemRequirements: GNU make
 Encoding: UTF-8
 Suggests:
     testthat,

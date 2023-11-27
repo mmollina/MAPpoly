@@ -55,8 +55,23 @@ calc_homologprob <- function(input.genoprobs, verbose = TRUE){
     ploidy <- v[as.character(length(stt.names))]
     hom.prob <- array(NA, dim = c(ploidy*2, length(mrk.names), length(ind.names)))
     dimnames(hom.prob) <- list(letters[1:(2*ploidy)], mrk.names, ind.names)
-    for(i in letters[1:(2*ploidy)])
-      hom.prob[i,,] <- apply(input.genoprobs[[j]]$probs[grep(stt.names, pattern = i),,], c(2,3), function(x) round(sum(x, na.rm = TRUE),4))
+    ## for(i in letters[1:(2*ploidy)])
+    ##   hom.prob[i,,] <- apply(input.genoprobs[[j]]$probs[grep(stt.names, pattern = i),,], c(2,3), function(x) round(sum(x, na.rm = TRUE),4))
+    ## Incidence matrix for homologs
+    alleles = matrix(unlist(strsplit(stt.names, '')), ncol=(ploidy+1), byrow=TRUE)[,-c((ploidy/2)+1)]
+    ## Creating incidence matrix to transition from genotypes to homologs
+    alleles2 = matrix(0, length(stt.names), ploidy*2)
+    ## Creating dummy variables to associate genotypes with alleles
+    for(i in 1:nrow(alleles)){
+      for(k in 1:ncol(alleles)){
+        alleles2[i,match(alleles[i,k], letters)]=1.00
+      }
+    }
+    ## Getting homolog probabilities
+    for(m in 1:length(mrk.names)) {
+      hom.prob[,m,] <- round(t(alleles2)%*%input.genoprobs[[j]]$probs[,m,],4)
+      ## hom.prob[,m,] <- round(t(alleles2)%*%input.genoprobs[[j]]$probs[,m,], 4)
+    }
     df.hom <- reshape2::melt(hom.prob)
     map <- data.frame(map.position = input.genoprobs[[j]]$map, marker = names(input.genoprobs[[j]]$map))
     colnames(df.hom) <- c("homolog", "marker", "individual", "probability")

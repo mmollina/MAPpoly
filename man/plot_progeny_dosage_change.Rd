@@ -2,16 +2,25 @@
 % Please edit documentation in R/plot_progeny_dosage_change.R
 \name{plot_progeny_dosage_change}
 \alias{plot_progeny_dosage_change}
-\title{Look at genotypes that were imputed or changed by the HMM chain given a level of global genotypic error}
+\title{Display genotypes imputed or changed by the HMM chain given a global genotypic error}
 \usage{
-plot_progeny_dosage_change(map_list, error, verbose = T)
+plot_progeny_dosage_change(
+  map_list,
+  error,
+  verbose = TRUE,
+  output_corrected = FALSE
+)
 }
 \arguments{
 \item{map_list}{a list of multiple \code{mappoly.map.list}}
 
 \item{error}{error rate used in global error in the `calc_genoprob_error()`}
 
-\item{verbose}{T or F for `calc_genoprob_error()` and `calc_homologprob()`}
+\item{verbose}{if TRUE (default), current progress is shown; if FALSE, 
+no output is produced}
+
+\item{output_corrected}{logical. if FALSE only the ggplot of the changed 
+dosage is printed, if TRUE then a new corrected dosage matrix is output.}
 }
 \value{
 A ggplot of the changed and imputed genotypic dosages
@@ -19,16 +28,14 @@ A ggplot of the changed and imputed genotypic dosages
 \description{
 Outputs a graphical representation ggplot with the percent of data changed.
 }
-\details{
-Most recent update 8/29/2023: 
-   -fixed issue where only worked on tetraploid to now working for diploid to octaploid.
-   -un-hardcoded linkage groups in maps. previously hard-coded for tetraploid rose.
-}
 \examples{
-    x<-get_submap(solcap.err.map[[1]], 1:30, reestimate.rf = FALSE)
-    plot_progeny_dosage_change(list(x), error=0.05)     
+      x <- get_submap(solcap.err.map[[1]], 1:30, reestimate.rf = FALSE)   
+      plot_progeny_dosage_change(list(x), error=0.05, output_corrected=FALSE) 
+      corrected_matrix <- plot_progeny_dosage_change(list(x), error=0.05, 
+      output_corrected=FALSE) #output corrected
 
 }
 \author{
-Jeekin Lau, \email{jzl0026@tamu.edu}, with optimization by Cristiane Taniguti, \email{chtaniguti@tamu.edu}
+Jeekin Lau, \email{jzl0026@tamu.edu}, with optimization by Cristiane 
+Taniguti, \email{chtaniguti@tamu.edu}
 }
