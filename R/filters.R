@@ -92,9 +92,9 @@ filter_non_conforming_classes <- function(input.data, prob.thres = NULL)
 #' @importFrom dplyr filter
 #' @importFrom graphics axis
 filter_missing <- function(input.data,
-                         type = c("marker", "individual"),
-                         filter.thres = 0.2,
-                         inter = TRUE)
+                           type = c("marker", "individual"),
+                           filter.thres = 0.2,
+                           inter = TRUE)
 {
   if (!inherits(input.data, "mappoly.data")) {
     stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
@@ -137,9 +137,9 @@ filter_missing_mrk <- function(input.data, filter.thres = 0.2, inter = TRUE)
       f<-paste0("Filtered out: ", sum(perc.na > filter.thres))
       i<-paste0("Included: ", sum(perc.na <= filter.thres))
       legend("topleft",  c(f, i) , col = c(2,4), pch = c(4,1))
-       ANSWER <- readline("Enter 'Y/n' to proceed or update the filter threshold: ")
+      ANSWER <- readline("Enter 'Y/n' to proceed or update the filter threshold: ")
       if(substr(ANSWER, 1, 1)  ==  "n" | substr(ANSWER, 1, 1)  ==  "no" | substr(ANSWER, 1, 1)  ==  "N")
-          stop("Stop function.")
+        stop("Stop function.")
       if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != "")
         filter.thres  <- as.numeric(ANSWER)
     }
@@ -195,7 +195,7 @@ filter_missing_ind <- function(input.data, filter.thres = 0.2, inter = TRUE)
       legend("topleft",  c(f, i) , col = c(2,4), pch = c(4,1))
       ANSWER <- readline("Enter 'Y/n' to proceed or update the filter threshold: ")
       if(substr(ANSWER, 1, 1)  ==  "n" | substr(ANSWER, 1, 1)  ==  "no" | substr(ANSWER, 1, 1)  ==  "N")
-          stop("You decided to stop the function.")
+        stop("You decided to stop the function.")
       if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != "")
         filter.thres  <- as.numeric(ANSWER)
     }
@@ -270,7 +270,7 @@ filter_segregation <- function(input.obj, chisq.pval.thres = NULL, inter = TRUE)
   if(is.null(chisq.pval.thres))
     chisq.pval.thres <- 0.05/n.mrk
   ANSWER <- "flag"
-
+  
   if(interactive() && inter)
   {
     while(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != "")
@@ -288,7 +288,7 @@ filter_segregation <- function(input.obj, chisq.pval.thres = NULL, inter = TRUE)
       legend("bottomleft",  c(f, i) , col = c(2,4), pch = c(4,1))
       ANSWER <- readline("Enter 'Y/n' to proceed or update the p value threshold: ")
       if(substr(ANSWER, 1, 1)  ==  "n" | substr(ANSWER, 1, 1)  ==  "no" | substr(ANSWER, 1, 1)  ==  "N")
-          stop("You decided to stop the function.")
+        stop("You decided to stop the function.")
       if(substr(ANSWER, 1, 1) != "y" && substr(ANSWER, 1, 1) != "yes" && substr(ANSWER, 1, 1) != "Y" && ANSWER  != "")
         chisq.pval.thres  <- as.numeric(ANSWER)
     }
@@ -324,8 +324,8 @@ filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
   }
   op <- par(pty="s")
   on.exit(par(op))
- # if (!require(AGHmatrix))
-#    stop("Please install package 'AGHmatrix' to proceed")
+  # if (!require(AGHmatrix))
+  #    stop("Please install package 'AGHmatrix' to proceed")
   D <- t(input.data$geno.dose)
   D[D == input.data$ploidy+1] <- NA
   D <- rbind(input.data$dosage.p1, input.data$dosage.p2, D)
@@ -349,8 +349,8 @@ filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, v
   }
   if(interactive() && inter)
   {
- #   if (!require(gatepoints))
- #     stop("Please install package 'gatepoints' to proceed")
+    #   if (!require(gatepoints))
+    #     stop("Please install package 'gatepoints' to proceed")
     ANSWER <- readline("Enter 'Y/n' to proceed with interactive filtering or quit: ")
     if(substr(ANSWER, 1, 1)  ==  "y" | substr(ANSWER, 1, 1)  ==  "yes" | substr(ANSWER, 1, 1)  ==  "Y" | ANSWER  == "")
     {
@@ -458,7 +458,7 @@ rf_snp_filter <- function(input.twopt,
                           diagnostic.plot = TRUE,
                           breaks = 100)
 {
-
+  
   input_classes <- c("mappoly.twopt", "mappoly.twopt2")
   if (!inherits(input.twopt, input_classes)) {
     stop(deparse(substitute(input.twopt)), paste0(" is not an object of class ", paste0(input_classes, collapse =  " or ")))
@@ -472,7 +472,7 @@ rf_snp_filter <- function(input.twopt,
   if(!is.null(mrk.order))
     M <- M[mrk.order, mrk.order]
   if(!is.null(diag.markers))
-      M[abs(col(M) - row(M)) > diag.markers] <- NA
+    M[abs(col(M) - row(M)) > diag.markers] <- NA
   x <- apply(M, 1, function(x) sum(!is.na(x)))
   w <- hist(x, breaks = breaks, plot = FALSE)
   th <- quantile(x, probs = probs)
@@ -499,6 +499,8 @@ rf_snp_filter <- function(input.twopt,
 #' comparing to another set order
 #'
 #' @param input.seq object of class mappoly.sequence with alternative order (not genomic order)
+#' @param invert vector of marker names to be inverted
+#' @param remove vector of marker names to be removed
 #'
 #' @author Cristiane Taniguti, \email{chtaniguti@tamu.edu}
 #'
@@ -524,42 +526,57 @@ rf_snp_filter <- function(input.twopt,
 #'         vector of inverted markers names (`inverted`).
 #'  
 #' @export
-edit_order <- function(input.seq){
-
+edit_order <- function(input.seq, invert= NULL, remove = NULL){
+  
   if (!inherits(input.seq, "mappoly.sequence")) {
     stop(deparse(substitute(input.seq)), " is not an object of class 'mappoly.sequence'")
   }
-
+  
   get_weird <- data.frame(x = 1:length(input.seq$genome.pos),
                           y = input.seq$genome.pos)
-
+  
   rownames(get_weird) <- input.seq$seq.mrk.names
   get_weird <- get_weird[order(get_weird$y),]
   plot(get_weird$x, get_weird$y, xlab="input sequence order", ylab = "genomic position (bp)")
-
-  cat("Mark at least three points on the plot and press `Esc` to continue.")
+  
   inverted <- removed <- vector()
-  if(interactive()){
-    ANSWER <- "Y"
-    while(substr(ANSWER, 1, 1)  ==  "y" | substr(ANSWER, 1, 1)  ==  "yes" | substr(ANSWER, 1, 1)  ==  "Y" | ANSWER  == ""){
-      plot(get_weird$x, get_weird$y, xlab="input sequence order", ylab = "genomic position (bp)")
-      mks.to.remove <- gatepoints::fhs(get_weird, mark = TRUE)
-      if(length(which(rownames(get_weird) %in% mks.to.remove)) > 0){
-        ANSWER2 <- readline("Enter 'invert/remove' to proceed with the edition: ")
-        if(ANSWER2 == "invert"){
-          inverted <- c(inverted, as.vector(mks.to.remove))
-          repl <- get_weird[rev(which(rownames(get_weird) %in% as.vector(mks.to.remove))),]
-          get_weird[which(rownames(get_weird) %in% as.vector(mks.to.remove)),2] <- repl[,2]
-        } else {
-          removed <- c(removed, as.vector(mks.to.remove))
-          get_weird <- get_weird[-which(rownames(get_weird) %in% mks.to.remove),]
-        }
-      }
-      ANSWER <- readline("Enter 'Y/n' to proceed with interactive edition or quit: ")
+  if(!is.null(invert) | !is.null(remove)){
+    if(!is.null(invert)){
+      inverted <- c(inverted, as.vector(invert))
+      repl <- get_weird[rev(match(as.vector(invert),rownames(get_weird))),]
+      get_weird[match(as.vector(invert),rownames(get_weird)),2] <- repl[,2]
+      rownames(get_weird)[match(as.vector(invert), rownames(get_weird))] <- rownames(repl) 
+    }
+    if(!is.null(remove)){
+      removed <- c(removed, as.vector(remove))
+      get_weird <- get_weird[-match(remove, rownames(get_weird)),]
     }
     plot(get_weird$x, get_weird$y, xlab="input sequence order", ylab = "genomic position (bp)")
+  } else {
+    cat("Mark at least three points on the plot and press `Esc` to continue.")
+    if(interactive()){
+      ANSWER <- "Y"
+      while(substr(ANSWER, 1, 1)  ==  "y" | substr(ANSWER, 1, 1)  ==  "yes" | substr(ANSWER, 1, 1)  ==  "Y" | ANSWER  == ""){
+        plot(get_weird$x, get_weird$y, xlab="input sequence order", ylab = "genomic position (bp)")
+        mks.to.remove <- gatepoints::fhs(get_weird, mark = TRUE)
+        if(length(which(rownames(get_weird) %in% mks.to.remove)) > 0){
+          ANSWER2 <- readline("Enter 'invert/remove' to proceed with the edition: ")
+          if(ANSWER2 == "invert"){
+            inverted <- c(inverted, as.vector(mks.to.remove))
+            repl <- get_weird[rev(match(as.vector(mks.to.remove),rownames(get_weird))),]
+            get_weird[match(as.vector(mks.to.remove),rownames(get_weird)),2] <- repl[,2]
+            rownames(get_weird)[match(as.vector(mks.to.remove), rownames(get_weird))] <- rownames(repl) 
+          } else {
+            removed <- c(removed, as.vector(mks.to.remove))
+            get_weird <- get_weird[-match(mks.to.remove, rownames(get_weird)),]
+          }
+        }
+        ANSWER <- readline("Enter 'Y/n' to proceed with interactive edition or quit: ")
+      }
+      plot(get_weird$x, get_weird$y, xlab="input sequence order", ylab = "genomic position (bp)")
+    }
   }
-
+  
   return(structure(list(edited_order = rownames(get_weird),
                         removed = removed,
                         inverted = inverted,
@@ -575,6 +592,8 @@ edit_order <- function(input.seq){
 #'  in mappoly.
 #'
 #' @param ploidy main ploidy
+#' 
+#' @param rm_missing remove also genotype information from chromosomes with missing data (NA) in the aneuploid.info file
 #'
 #' @examples
 #'      aneuploid.info <- matrix(4, nrow=tetra.solcap$n.ind, ncol = 12)
@@ -593,29 +612,42 @@ edit_order <- function(input.seq){
 #' @return object of class \code{mappoly.data}
 #'
 #' @export
-filter_aneuploid <- function(input.data, aneuploid.info, ploidy){
-
+filter_aneuploid <- function(input.data, aneuploid.info, ploidy, rm_missing = TRUE){
+  
   if (!inherits(input.data, "mappoly.data")) {
     stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
   }
-
+  
   aneu.chroms <- colnames(aneuploid.info)[-1]
-
+  
   keep.ind <- match(input.data$ind.names, aneuploid.info[,1])
-  aneuploid.info <- aneuploid.info[keep.ind,]
-
-  idx.list <- apply(aneuploid.info[,-1], 1, function(x) which(x != ploidy))
-  names(idx.list) <- aneuploid.info[,1]
-
-  idx.list <- idx.list[-which(!sapply(idx.list, function(x) length(x) >0))]
-
-  cat(round((length(unlist(idx.list))/(dim(aneuploid.info)[1]*(dim(aneuploid.info)[2]-1)))*100,2), "% of the chromosomes x individuals are aneuploids\n")
-
+  
+  if(length(keep.ind) != length(input.data$ind.names) | any(is.na(keep.ind))) 
+    stop("The aneuploid information ploidy is missing at least one sample.")
+  
+  aneuploid.info.filt <- aneuploid.info[keep.ind,]
+  
+  idx.list <- apply(aneuploid.info.filt[,-1], 1, function(x) which(x != ploidy))
+  names(idx.list) <- aneuploid.info.filt[,1]
+  
+  idx.list <- idx.list[-which(!sapply(idx.list, function(x) length(x) > 0))]
+  
+  if(rm_missing){
+    idx.list.na <- apply(aneuploid.info.filt[,-1], 1, function(x) which(is.na(x)))
+    if(length(idx.list.na) > 0){
+      names(idx.list.na) <- aneuploid.info.filt[,1]
+      idx.list.na <- idx.list.na[-which(!sapply(idx.list.na, function(x) length(x) > 0))]
+      idx.list <- c(idx.list, idx.list.na)
+    }
+    cat(round((length(unlist(idx.list))/(dim(aneuploid.info.filt)[1]*(dim(aneuploid.info.filt)[2]-1)))*100,2), "% of the chromosomes x individuals are aneuploids or has missing ploidy information\n")
+  } else 
+    cat(round((length(unlist(idx.list))/(dim(aneuploid.info.filt)[1]*(dim(aneuploid.info.filt)[2]-1)))*100,2), "% of the chromosomes x individuals are aneuploids\n")
+  
   for(i in 1:length(idx.list)){
     idx <- which(input.data$chrom %in% names(idx.list[[i]]))
     input.data$geno.dose[idx,names(idx.list[i])] <- ploidy + 1
   }
-
+  
   return(input.data)
 }
 

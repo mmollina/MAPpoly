@@ -57,48 +57,67 @@ framework_map <- function(input.seq,
   }
   ##### Map for P1 ####
   s.p1 <- make_seq_mappoly(input.seq, info.parent = "p1")
-  tpt.p1 <- make_pairs_mappoly(twopt, s.p1)
-  map.p1 <- est_rf_hmm_sequential(input.seq = s.p1,
-                                  twopt = tpt.p1,
-                                  start.set = start.set,
-                                  thres.twopt = thres.twopt, 
-                                  thres.hmm = thres.hmm,
-                                  extend.tail = extend.tail,
-                                  sub.map.size.diff.limit = inflation.lim.p1, 
-                                  phase.number.limit = phase.number.limit,
-                                  reestimate.single.ph.configuration = TRUE,
-                                  tol = tol,
-                                  tol.final = tol.final, 
-                                  verbose = verbose)
-  
+  if(length(s.p1$seq.num) > 0){
+    tpt.p1 <- make_pairs_mappoly(twopt, s.p1)
+    map.p1 <- est_rf_hmm_sequential(input.seq = s.p1,
+                                    twopt = tpt.p1,
+                                    start.set = start.set,
+                                    thres.twopt = thres.twopt, 
+                                    thres.hmm = thres.hmm,
+                                    extend.tail = extend.tail,
+                                    sub.map.size.diff.limit = inflation.lim.p1, 
+                                    phase.number.limit = phase.number.limit,
+                                    reestimate.single.ph.configuration = TRUE,
+                                    tol = tol,
+                                    tol.final = tol.final, 
+                                    verbose = verbose)
+  } else {
+    warning("No linkage information for parent 1")
+    map.p1 <- NULL
+    map.p1.p2 <- NULL
+  }
   ##### Map for P2 ####
   s.p2 <- make_seq_mappoly(input.seq, info.parent = "p2")
-  tpt.p2 <- make_pairs_mappoly(twopt, s.p2)
-  map.p2 <- est_rf_hmm_sequential(input.seq = s.p2,
-                                  twopt = tpt.p2,
-                                  start.set = start.set,
-                                  thres.twopt = thres.twopt, 
-                                  thres.hmm = thres.hmm,
-                                  extend.tail = extend.tail,
-                                  sub.map.size.diff.limit = inflation.lim.p2, 
-                                  phase.number.limit = phase.number.limit,
-                                  reestimate.single.ph.configuration = TRUE,
-                                  tol = tol,
-                                  tol.final = tol.final, 
-                                  verbose = verbose)
+  if(length(s.p2$seq.num) > 0){
+    tpt.p2 <- make_pairs_mappoly(twopt, s.p2)
+    map.p2 <- est_rf_hmm_sequential(input.seq = s.p2,
+                                    twopt = tpt.p2,
+                                    start.set = start.set,
+                                    thres.twopt = thres.twopt, 
+                                    thres.hmm = thres.hmm,
+                                    extend.tail = extend.tail,
+                                    sub.map.size.diff.limit = inflation.lim.p2, 
+                                    phase.number.limit = phase.number.limit,
+                                    reestimate.single.ph.configuration = TRUE,
+                                    tol = tol,
+                                    tol.final = tol.final, 
+                                    verbose = verbose)
+  } else {
+    warning("No linkage information for parent 2")
+    map.p2 <- NULL
+    map.p1.p2 <- NULL
+  }
   #### Merging P1 and P2 ####
-  rf.mat <- rf_list_to_matrix(twopt, 
-                              thresh.LOD.ph = thres.twopt,
-                              shared.alleles = TRUE)
   
-  map.p1.p2 <- merge_parental_maps(map.p1, 
-                                   map.p2, 
-                                   input.seq, 
-                                   rf.mat, 
-                                   method = method)
-  list(map.p1 = map.p1, 
-       map.p2 = map.p2,
-       map.p1.p2 = map.p1.p2)
+  if(length(s.p1$seq.num) > 0 & length(s.p2$seq.num) > 0){
+    rf.mat <- rf_list_to_matrix(twopt, 
+                                thresh.LOD.ph = thres.twopt,
+                                shared.alleles = TRUE, 
+                                verbose = verbose)
+    
+    map.p1.p2 <- merge_parental_maps(map.p1 = map.p1, 
+                                     map.p2 = map.p2, 
+                                     full.seq = input.seq, 
+                                     full.mat = rf.mat, 
+                                     method = method,
+                                     verbose = verbose)
+  } 
+  
+  init.map.list <- list(map.p1 = map.p1, 
+                        map.p2 = map.p2,
+                        map.p1.p2 = map.p1.p2)
+  
+  return(init.map.list)
 }
 
 #' Add markers that are informative in both parents using HMM approach and evaluating difference 
@@ -146,7 +165,12 @@ update_framework_map <- function(input.map.list,
   }
   
   #### Inserting remaining markers ####
-  cur.map <- input.map.list$map.p1.p2
+  if(is.null(input.map.list$map.p1.p2)) {
+    warning("Map only have linkage information for one of the parents.")
+    cur.map <- input.map.list[[which(sapply(input.map.list, function(x) !is.null(x)))]]
+  } else {
+    cur.map <- input.map.list$map.p1.p2
+  }
   cur.seq <- input.seq
   LOD <- init.LOD
   ll <- map.list <- vector("list", max.rounds)
@@ -157,11 +181,11 @@ update_framework_map <- function(input.map.list,
   
   rf.mat <- rf_list_to_matrix(twopt, 
                               thresh.LOD.ph = thres.twopt,
-                              shared.alleles = TRUE)
+                              shared.alleles = TRUE, verbose = verbose)
   
   rem.mrk <- NULL
   while(length(mrk.to.include) > 0 & i <= length(la)){
-    cur.gen <- calc_genoprob(cur.map)
+    cur.gen <- calc_genoprob(cur.map, verbose = verbose)
     cur.res <- add_md_markers(input.map = cur.map,
                               mrk.to.include = mrk.to.include,
                               input.seq = cur.seq,
@@ -176,12 +200,13 @@ update_framework_map <- function(input.map.list,
     a <- rem_mrk_clusters(cur.res$map, 
                           size.rem.cluster = size.rem.cluster, 
                           gap.threshold = gap.threshold)
+    
     rem.mrk <- c(rem.mrk, setdiff(cur.res$map$info$mrk.names, a$info$mrk.names))
     if(a$info$n.mrk < cur.res$map$info$n.mrk){
-     if(method == "hmm"){
+      if(method == "hmm"){
         cur.res$map <- reest_rf(a, method = "hmm", verbose = verbose)
       } else if(method == "wMDS_to_1D_pc"){
-        cur.res$map <- reest_rf(a, method = "wMDS_to_1D_pc", input.mds = input.mds)
+        cur.res$map <- reest_rf(a, method = "wMDS_to_1D_pc", input.mds = input.mds, verbose=verbose)
       } 
     }
     #### resulting map
@@ -201,9 +226,12 @@ update_framework_map <- function(input.map.list,
     plot_map_list(map.list[1:i])
     text(rep(0, i), 1:i+.5, labels = unlist(sapply(map.list, function(x) x$info$n.mrk)), adj=-1)
     i <- i + 1
-    cat("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
-    print(summary_maps(map.list[!sapply(map.list, is.null)], verbose = verbose))
-    cat("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")    
+    if(verbose){
+      cat("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")
+      print(summary_maps(map.list[!sapply(map.list, is.null)], verbose = verbose))
+      cat("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n")    
+      if(length(mrk.to.include) == 0) cat(paste("No more markers to add. Stopping in iteration:", i))
+    }
   }
   #### Post-mapping ####
   id <- which(la!=0)
@@ -239,7 +267,8 @@ merge_parental_maps <- function(map.p1,
                                 map.p2, 
                                 full.seq, 
                                 full.mat, 
-                                method = c("ols", "hmm")){
+                                method = c("ols", "hmm"),
+                                verbose = TRUE){
   
   method <- match.arg(method)
   df.map <- data.frame(mrk = full.seq$seq.mrk.names,
@@ -268,9 +297,9 @@ merge_parental_maps <- function(map.p1,
                                      seq.rf = mf_h(diff(df.map$pos[match(mrk.p1.p2, df.map$mrk)])),
                                      seq.ph = seq.ph)
   if(method == "ols"){
-    map.p1.p2 <- reest_rf(map.p1.p2, method = "ols", input.mat = full.mat)
+    map.p1.p2 <- reest_rf(map.p1.p2, method = "ols", input.mat = full.mat, verbose = verbose)
   } else if(method == "hmm"){
-    map.p1.p2 <- reest_rf(map.p1.p2, method = "hmm")
+    map.p1.p2 <- reest_rf(map.p1.p2, method = "hmm", verbose = verbose)
   } else {
     stop("Invalid method.", call. = FALSE)
   }
@@ -331,21 +360,19 @@ add_md_markers <- function(input.map,
   names(ll) <- id2.names
   for(i in 1:length(id2)){
     u <- which(id - id2[i] < 0)
-    if(verbose){
-      cat(crayon::bgMagenta(stringr::str_pad(paste0(round(100*i/length(id2),1), "%"), width = 6)), "----> ")
-      if(length(u) == 0 ){
-        pos.test <- 0
-        cat(crayon::bgRed(id2[i]), "--", id[pos.test + 1], "...|", sep = "")
-      }
-      else if(length(u) == length(id)){
-        pos.test <- length(id)
-        cat("|...",id[pos.test - 1], "--", crayon::bgRed(id2[i]), sep = "")
-      }
-      else{
-        pos.test <- max(u)    
-        cat("|...", id[pos.test], "--", crayon::bgRed(id2[i]), "--", id[pos.test + 1], "...|", sep = "")
-      }
+    
+    if(verbose) cat(crayon::bgMagenta(stringr::str_pad(paste0(round(100*i/length(id2),1), "%"), width = 6)), "----> ")
+    if(length(u) == 0 ){
+      pos.test <- 0
+      if(verbose) cat(crayon::bgRed(id2[i]), "--", id[pos.test + 1], "...|", sep = "")
+    } else if(length(u) == length(id)){
+      pos.test <- length(id)
+      if(verbose) cat("|...",id[pos.test - 1], "--", crayon::bgRed(id2[i]), sep = "")
+    } else{
+      pos.test <- max(u)    
+      if(verbose) cat("|...", id[pos.test], "--", crayon::bgRed(id2[i]), "--", id[pos.test + 1], "...|", sep = "")
     }
+    
     temp.map <- add_marker(input.map = input.map, 
                            mrk = id2.names[i], 
                            pos = pos.test,
@@ -356,9 +383,9 @@ add_md_markers <- function(input.map,
     l <- get_LOD(temp.map)
     if(length(l) > 1){
       ll[i] <- l[2]
-      cat("~~~~~",round(l[2], 4),"~~~~~")
+      if(verbose) cat("~~~~~",round(l[2], 4),"~~~~~")
       if(l[2] < thresh){
-        cat(" ---> skip it!\n")
+        if(verbose) cat(" ---> skip it!\n")
         next()
       } 
     } else ll[i] <- NA
@@ -367,7 +394,7 @@ add_md_markers <- function(input.map,
     nm[i] <- input.seq$seq.num[id2][i]
     Pl[[i]] <- a1[[1]]
     Ql[[i]] <- a2[[1]]
-    cat("\n")
+    if(verbose) cat("\n")
   }
   names(Pl) <- names(Ql) <- nm
   ix <- which(nm == "")
@@ -395,7 +422,7 @@ add_md_markers <- function(input.map,
   if(method == "hmm"){
     map.p1.p2.final <- reest_rf(map.p1.p2.final, method = "hmm", verbose = FALSE)
   } else if(method == "wMDS_to_1D_pc"){
-    map.p1.p2.final <- reest_rf(map.p1.p2.final, method = "wMDS_to_1D_pc", input.mds = input.mds)
+    map.p1.p2.final <- reest_rf(map.p1.p2.final, method = "wMDS_to_1D_pc", input.mds = input.mds, verbose = FALSE)
   } 
   list(map = map.p1.p2.final, ll = ll)
 }
@@ -486,9 +513,9 @@ plot_mappoly.map2 <- function(x){
       scale_color_manual(values=c('#E69F00', '#56B4E9'))
   }
   
-  df5 <- lapply(x$single, function(x) extract_map(x))
+  single_maps <- x$single[which(!sapply(x$single, is.null))]
+  df5 <- lapply(single_maps, function(x) extract_map(x))
   df6 <- reshape2::melt(df5)
-  head(df6)
   colnames(df6) <- c("position", "parent")
   p3<-ggplot(df6, aes(x=position, y=parent, group = as.factor(parent))) +
     geom_point(ggplot2::aes(color = as.factor(parent)), shape = 108, size = 5, show.legend = FALSE) +
