@@ -63,7 +63,7 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">filter_aneuploid</span><span class="op">(</span><span class="va">input.data</span>, <span class="va">aneuploid.info</span>, <span class="va">ploidy</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">filter_aneuploid</span><span class="op">(</span><span class="va">input.data</span>, <span class="va">aneuploid.info</span>, <span class="va">ploidy</span>, rm_missing <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -80,6 +80,10 @@ in mappoly.</p></dd>
 
 <dt>ploidy</dt>
 <dd><p>main ploidy</p></dd>
+
+
+<dt>rm_missing</dt>
+<dd><p>remove also genotype information from chromosomes with missing data (NA) in the aneuploid.info file</p></dd>
 
 </dl></div>
     <div id="value">
@@ -107,7 +111,7 @@ in mappoly.</p></dd>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>     <span class="va">filt.dat</span> <span class="op">&lt;-</span> <span class="fu">filter_aneuploid</span><span class="op">(</span>input.data <span class="op">=</span> <span class="va">tetra.solcap</span>, </span></span>
 <span class="r-in"><span>     aneuploid.info <span class="op">=</span> <span class="va">aneuploid.info</span>, ploidy <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8.02 % of the chromosomes x individuals are aneuploids</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8.02 % of the chromosomes x individuals are aneuploids or has missing ploidy information</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

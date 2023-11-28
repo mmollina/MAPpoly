@@ -68,13 +68,21 @@ comparing to another set order</p>
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">edit_order</span><span class="op">(</span><span class="va">input.seq</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">edit_order</span><span class="op">(</span><span class="va">input.seq</span>, invert <span class="op">=</span> <span class="cn">NULL</span>, remove <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
     <h2>Arguments</h2>
     <dl><dt>input.seq</dt>
 <dd><p>object of class mappoly.sequence with alternative order (not genomic order)</p></dd>
+
+
+<dt>invert</dt>
+<dd><p>vector of marker names to be inverted</p></dd>
+
+
+<dt>remove</dt>
+<dd><p>vector of marker names to be removed</p></dd>
 
 </dl></div>
     <div id="value">
@@ -108,7 +116,7 @@ comparing to another set order</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>  <span class="va">seq_test_mds</span> <span class="op">&lt;-</span> <span class="fu"><a href="mds_mappoly.html">mds_mappoly</a></span><span class="op">(</span><span class="va">mat2</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Stress: 0.35469</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Mean Nearest Neighbour Fit: 0.56734</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Mean Nearest Neighbour Fit: 0.56772</span>
 <span class="r-in"><span>  <span class="va">seq_mds</span> <span class="op">&lt;-</span> <span class="fu"><a href="make_seq_mappoly.html">make_seq_mappoly</a></span><span class="op">(</span><span class="va">seq_test_mds</span><span class="op">)</span></span></span>
 <span class="r-in"><span>  <span class="va">edit_seq</span> <span class="op">&lt;-</span> <span class="fu">edit_order</span><span class="op">(</span>input.seq <span class="op">=</span> <span class="va">seq_mds</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="edit_order-2.png" alt="" width="700" height="433"></span>
