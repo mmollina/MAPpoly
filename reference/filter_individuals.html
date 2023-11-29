@@ -69,6 +69,7 @@ user-defined or can be accessed via interactive kinship analysis.</p>
 <span>  <span class="va">input.data</span>,</span>
 <span>  ind.to.remove <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  inter <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Gmat"</span>, <span class="st">"PCA"</span><span class="op">)</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -87,6 +88,14 @@ selection</p></dd>
 
 <dt>inter</dt>
 <dd><p>if <code>TRUE</code>, expects user-input to proceed with filtering</p></dd>
+
+
+<dt>type</dt>
+<dd><p>A character string specifying the procedure to be used for 
+            detecting outlier offspring. Options include "Gmat", which 
+            utilizes the genomic kinship matrix, and "PCA", which employs 
+            principal component analysis on the dosage matrix.</p>
+<p>coefficient (or covariance) is to be computed. One of "pearson" (default), "kendall", or "spearman": can be abbreviated.</p></dd>
 
 
 <dt>verbose</dt>
