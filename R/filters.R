@@ -312,66 +312,122 @@ filter_segregation <- function(input.obj, chisq.pval.thres = NULL, inter = TRUE)
 #'                      selection
 #' @param inter if \code{TRUE}, expects user-input to proceed with filtering
 #'
+#' @param type A character string specifying the procedure to be used for 
+#'             detecting outlier offspring. Options include "Gmat", which 
+#'             utilizes the genomic kinship matrix, and "PCA", which employs 
+#'             principal component analysis on the dosage matrix.
+#' 
+#'   coefficient (or covariance) is to be computed. One of "pearson" (default), "kendall", or "spearman": can be abbreviated.
+#'
 #' @param verbose if \code{TRUE} (default), shows the filtered out individuals
 #'
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'
+#' @importFrom stats prcomp
 #' @export
-#'
-filter_individuals <- function(input.data, ind.to.remove = NULL, inter = TRUE, verbose = TRUE){
+filter_individuals <- function(input.data, 
+                               ind.to.remove = NULL, 
+                               inter = TRUE,
+                               type = c("Gmat", "PCA"),
+                               verbose = TRUE){
   if (!inherits(input.data, "mappoly.data")) {
     stop(deparse(substitute(input.data)), " is not an object of class 'mappoly.data'")
   }
+  type <- match.arg(type)
   op <- par(pty="s")
   on.exit(par(op))
-  # if (!require(AGHmatrix))
-  #    stop("Please install package 'AGHmatrix' to proceed")
   D <- t(input.data$geno.dose)
   D[D == input.data$ploidy+1] <- NA
   D <- rbind(input.data$dosage.p1, input.data$dosage.p2, D)
   rownames(D)[1:2] <- c("P1", "P2")
-  G  <- AGHmatrix::Gmatrix(D, method = "VanRaden",ploidy = input.data$ploidy)
-  x <- G[1,]
-  y <- G[2,]
-  #a <- 2*atan(y/x)/pi
-  #b <- sqrt(x^2 + y^2)
-  df <- data.frame(x = x, y = y, type = c(2, 2, rep(4, length(x)-2)))
-  plot(df[,1:2], col = df$type, pch = 19,
-       xlab = "relationships between the offspring and P1",
-       ylab = "relationships between the offspring and P2")
-  abline(c(0,1), lty = 2)
-  abline(c(-0.4,1), lty = 2, col = "gray")
-  abline(c(0.4,1), lty = 2, col = "gray")
-  legend("topright",  c("Parents", "Offspring") , col = c(2,4), pch = 19)
-  if(!is.null(ind.to.remove)){
-    out.data <- sample_data(input.data, selected.ind = setdiff(input.data$ind.names, ind.to.remove))
-    return(out.data)
-  }
-  if(interactive() && inter)
-  {
-    #   if (!require(gatepoints))
-    #     stop("Please install package 'gatepoints' to proceed")
-    ANSWER <- readline("Enter 'Y/n' to proceed with interactive filtering or quit: ")
-    if(substr(ANSWER, 1, 1)  ==  "y" | substr(ANSWER, 1, 1)  ==  "yes" | substr(ANSWER, 1, 1)  ==  "Y" | ANSWER  == "")
+  if(type == "Gmat"){
+    G  <- AGHmatrix::Gmatrix(D, method = "VanRaden",ploidy = input.data$ploidy)
+    x <- G[1,]
+    y <- G[2,]
+    df <- data.frame(x = x, y = y, type = c(2, 2, rep(4, length(x)-2)))
+    plot(df[,1:2], col = df$type, pch = 19,
+         xlab = "relationships between the offspring and P1",
+         ylab = "relationships between the offspring and P2")
+    abline(c(0,1), lty = 2)
+    abline(c(-0.4,1), lty = 2, col = "gray")
+    abline(c(0.4,1), lty = 2, col = "gray")
+    legend("topright",  c("Parents", "Offspring") , col = c(2,4), pch = 19)
+    if(!is.null(ind.to.remove)){
+      out.data <- sample_data(input.data, selected.ind = setdiff(input.data$ind.names, ind.to.remove))
+      return(out.data)
+    }
+    if(interactive() && inter)
     {
-      ind.to.remove <- gatepoints::fhs(df, mark = TRUE)
-      ind.to.remove <- setdiff(ind.to.remove, c("P1", "P2"))
-      ind.to.include <- setdiff(rownames(df)[-c(1:2)], ind.to.remove)
-      if(verbose){
-        cat("Removing individual(s): \n")
-        print(ind.to.remove)
-        cat("...\n")
-      }
-      if(length(ind.to.remove) == 0){
+      #   if (!require(gatepoints))
+      #     stop("Please install package 'gatepoints' to proceed")
+      ANSWER <- readline("Enter 'Y/n' to proceed with interactive filtering or quit: ")
+      if(substr(ANSWER, 1, 1)  ==  "y" | substr(ANSWER, 1, 1)  ==  "yes" | substr(ANSWER, 1, 1)  ==  "Y" | ANSWER  == "")
+      {
+        ind.to.remove <- gatepoints::fhs(df, mark = TRUE)
+        ind.to.remove <- setdiff(ind.to.remove, c("P1", "P2"))
+        ind.to.include <- setdiff(rownames(df)[-c(1:2)], ind.to.remove)
+        if(verbose){
+          cat("Removing individual(s): \n")
+          print(ind.to.remove)
+          cat("...\n")
+        }
+        if(length(ind.to.remove) == 0){
+          warning("No individuals removed. Returning original data set.")
+          return(input.data)
+        }
+        out.data <- sample_data(input.data, selected.ind = ind.to.include)
+        return(out.data)
+      } else{
         warning("No individuals removed. Returning original data set.")
         return(input.data)
       }
-      out.data <- sample_data(input.data, selected.ind = ind.to.include)
+    }    
+  }
+  else{
+    row_means <- rowMeans(D, na.rm = TRUE)
+    for (i in 1:nrow(D))
+      D[i, is.na(D[i, ])] <- row_means[i]
+    pc <- prcomp(D)
+    x <- pc$x[,"PC1"]
+    y <- pc$x[,"PC2"]
+    a <- diff(range(x))*0.05
+    b <- diff(range(y))*0.05
+    df <- data.frame(x = x, y = y, type = c(2, 2, rep(4, length(x)-2)))
+    plot(df[,1:2], col = df$type, pch = 19,
+         xlab = "PC1",
+         ylab = "PC2", 
+         xlim = c(min(x)-a, max(x)+a),
+         ylim = c(min(y)-b, max(y)+b))
+    points(df[1:2,1:2], col = 2, pch = 19)
+    legend("bottomleft",  c("Parents", "Offspring") , col = c(2,4), pch = 19)
+    if(!is.null(ind.to.remove)){
+      out.data <- sample_data(input.data, selected.ind = setdiff(input.data$ind.names, ind.to.remove))
       return(out.data)
-    } else{
-      warning("No individuals removed. Returning original data set.")
-      return(input.data)
     }
+    if(interactive() && inter)
+    {
+      ANSWER <- readline("Enter 'Y/n' to proceed with interactive filtering or quit: ")
+      if(substr(ANSWER, 1, 1)  ==  "y" | substr(ANSWER, 1, 1)  ==  "yes" | substr(ANSWER, 1, 1)  ==  "Y" | ANSWER  == "")
+      {
+        ind.to.remove <- gatepoints::fhs(df, mark = TRUE)
+        ind.to.remove <- setdiff(ind.to.remove, c("P1", "P2"))
+        ind.to.include <- setdiff(rownames(df)[-c(1:2)], ind.to.remove)
+        if(verbose){
+          cat("Removing individual(s): \n")
+          print(ind.to.remove)
+          cat("...\n")
+        }
+        if(length(ind.to.remove) == 0){
+          warning("No individuals removed. Returning original data set.")
+          return(input.data)
+        }
+        out.data <- sample_data(input.data, selected.ind = ind.to.include)
+        return(out.data)
+      } else{
+        warning("No individuals removed. Returning original data set.")
+        return(input.data)
+      }
+    }    
   }
 }
 #'  Remove markers that do not meet a LOD criteria

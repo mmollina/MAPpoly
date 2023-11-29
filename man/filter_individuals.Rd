@@ -8,6 +8,7 @@ filter_individuals(
   input.data,
   ind.to.remove = NULL,
   inter = TRUE,
+  type = c("Gmat", "PCA"),
   verbose = TRUE
 )
 }
@@ -19,6 +20,13 @@ an interactive graphic to proceed with the individual
 selection}
 
 \item{inter}{if \code{TRUE}, expects user-input to proceed with filtering}
+
+\item{type}{A character string specifying the procedure to be used for 
+            detecting outlier offspring. Options include "Gmat", which 
+            utilizes the genomic kinship matrix, and "PCA", which employs 
+            principal component analysis on the dosage matrix.
+
+  coefficient (or covariance) is to be computed. One of "pearson" (default), "kendall", or "spearman": can be abbreviated.}
 
 \item{verbose}{if \code{TRUE} (default), shows the filtered out individuals}
 }
