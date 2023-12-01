@@ -493,7 +493,7 @@ est_rf_hmm_sequential <- function(input.seq,
       stop("Impossible build a map using the given thresholds\n")
     }
     if(verbose) cat(cli::symbol$bullet, "   Trying sequence:", cte:(start.set+cte-1), ":\n")
-    cur.seq <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos = 1), na.omit(input.seq$seq.num[cte:(start.set+cte-1)]), data.name = input.seq$data.name)
+    cur.seq <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos = 1), as.vector(na.omit(input.seq$seq.num[cte:(start.set+cte-1)])), data.name = input.seq$data.name)
     input.ph <- ls_linkage_phases(input.seq = cur.seq,
                                   thres = thres.twopt,
                                   twopt = twopt)

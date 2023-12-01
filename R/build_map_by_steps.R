@@ -337,7 +337,7 @@ add_md_markers <- function(input.map,
                            thresh = 500, 
                            extend.tail = 50,
                            method = c("hmm", "wMDS_to_1D_pc"), 
-                           verbose = T){
+                           verbose = TRUE){
   method <- match.arg(method)
   if(method == "wMDS_to_1D_pc" & is.null(input.mds))
     stop("you must provide 'input.mds' when selecting method = 'wMDS_to_1D_pc'", call. = FALSE)
