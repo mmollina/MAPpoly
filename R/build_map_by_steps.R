@@ -197,7 +197,7 @@ update_framework_map <- function(input.map.list,
                               method = "hmm", 
                               verbose = verbose)
     
-    a <- rem_mrk_clusters(cur.res$map, 
+    a <- rem_mrk_clusters(input.map = cur.res$map, 
                           size.rem.cluster = size.rem.cluster, 
                           gap.threshold = gap.threshold)
     
@@ -435,6 +435,7 @@ rem_mrk_clusters <- function(input.map,
   id <- cbind(c(1, id+1), c(id, input.map$info$n.mrk))
   ## Selecting map segments larger then the specified threshold
   segments <- id[apply(id, 1, diff) > size.rem.cluster - 1, , drop = FALSE]
+  if(dim(segments)[1] > 0) stop("All markers were discarted using the defined gap.threshold.")
   id<-NULL
   for(i in 1:nrow(segments)){
     id <- c(id, segments[i,1]:segments[i,2])  
