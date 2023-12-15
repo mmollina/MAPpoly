@@ -621,6 +621,11 @@ est_rf_hmm_sequential <- function(input.seq,
     submap.expansion <- submap.length.new - submap.length.old
     last.mrk.expansion <- last.dist.new - last.dist.old
     
+    if(length(M[,2]) == 0) {
+      if(verbose) cat(crayon::italic$yellow(paste0(ct ,": not included (~map extension~)\n", sep = "")))
+      ct <- ct + 1
+      next()
+    }
     
     cur.map.temp$maps <- cur.map.temp$maps[M[,2]]
     LOD <- get_LOD(cur.map.temp, sorted = FALSE)
