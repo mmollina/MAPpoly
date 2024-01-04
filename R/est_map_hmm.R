@@ -493,7 +493,7 @@ est_rf_hmm_sequential <- function(input.seq,
       stop("Impossible build a map using the given thresholds\n")
     }
     if(verbose) cat(cli::symbol$bullet, "   Trying sequence:", cte:(start.set+cte-1), ":\n")
-    cur.seq <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos = 1), na.omit(input.seq$seq.num[cte:(start.set+cte-1)]), data.name = input.seq$data.name)
+    cur.seq <- make_seq_mappoly(input.obj = get(input.seq$data.name, pos = 1), as.vector(na.omit(input.seq$seq.num[cte:(start.set+cte-1)])), data.name = input.seq$data.name)
     input.ph <- ls_linkage_phases(input.seq = cur.seq,
                                   thres = thres.twopt,
                                   twopt = twopt)
@@ -621,6 +621,11 @@ est_rf_hmm_sequential <- function(input.seq,
     submap.expansion <- submap.length.new - submap.length.old
     last.mrk.expansion <- last.dist.new - last.dist.old
     
+    if(length(M[,2]) == 0) {
+      if(verbose) cat(crayon::italic$yellow(paste0(ct ,": not included (~map extension~)\n", sep = "")))
+      ct <- ct + 1
+      next()
+    }
     
     cur.map.temp$maps <- cur.map.temp$maps[M[,2]]
     LOD <- get_LOD(cur.map.temp, sorted = FALSE)
