@@ -16,8 +16,7 @@ paralell_pairwise_discrete_rcpp(
   count.matrix.number,
   count.matrix.pos,
   count.matrix.length,
-  tol = .Machine$double.eps^0.25,
-  threads
+  tol = .Machine$double.eps^0.25
 )
 }
 \arguments{

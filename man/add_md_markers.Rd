@@ -15,7 +15,7 @@ add_md_markers(
   thresh = 500,
   extend.tail = 50,
   method = c("hmm", "wMDS_to_1D_pc"),
-  verbose = T
+  verbose = TRUE
 )
 }
 \arguments{

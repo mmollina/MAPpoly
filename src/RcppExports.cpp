@@ -72,7 +72,7 @@ RcppExport SEXP est_map_hmm_highprec(void *, void *, void *, void *, void *, voi
 RcppExport SEXP get_counts_single_parent_cpp(void *, void *, void *, void *, void *, void *);
 RcppExport SEXP loglike_hmm(void *, void *, void *, void *, void *, void *);
 RcppExport SEXP pairwise_rf_estimation_disc(void *, void *, void *, void *, void *, void *, void *);
-RcppExport SEXP pairwise_rf_estimation_disc_rcpp(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
+RcppExport SEXP pairwise_rf_estimation_disc_rcpp(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
 RcppExport SEXP pairwise_rf_estimation_prob(void *, void *, void *, void *, void *, void *, void *, void *);
 RcppExport SEXP poly_hmm_est_CPP(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
 
@@ -94,7 +94,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"get_counts_single_parent_cpp",     (DL_FUNC) &get_counts_single_parent_cpp,      6},
     {"loglike_hmm",                      (DL_FUNC) &loglike_hmm,                       6},
     {"pairwise_rf_estimation_disc",      (DL_FUNC) &pairwise_rf_estimation_disc,       7},
-    {"pairwise_rf_estimation_disc_rcpp", (DL_FUNC) &pairwise_rf_estimation_disc_rcpp, 13},
+    {"pairwise_rf_estimation_disc_rcpp", (DL_FUNC) &pairwise_rf_estimation_disc_rcpp, 12},
     {"pairwise_rf_estimation_prob",      (DL_FUNC) &pairwise_rf_estimation_prob,       8},
     {"poly_hmm_est_CPP",                 (DL_FUNC) &poly_hmm_est_CPP,                 13},
     {NULL, NULL, 0}

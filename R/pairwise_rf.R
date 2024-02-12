@@ -467,7 +467,7 @@ est_pairwise_rf2 <- function(input.seq,
                                          count.matrix.number = count.matrix.number,
                                          count.matrix.pos = count.matrix.pos,
                                          count.matrix.length = count.matrix.length,
-                                         tol = tol, threads = ncpus)
+                                         tol = tol)
   res[res == -1] = NA
   colnames(res) = c("Sh_P1","Sh_P2","rf","LOD_rf","LOD_ph")
   if (verbose) {
@@ -508,8 +508,7 @@ paralell_pairwise_discrete_rcpp <- function(mrk.pairs,
                                             count.matrix.number,
                                             count.matrix.pos,
                                             count.matrix.length,
-                                            tol = .Machine$double.eps^0.25,
-                                            threads)
+                                            tol = .Machine$double.eps^0.25)
 {
   res <- .Call("pairwise_rf_estimation_disc_rcpp",
                as.matrix(mrk.pairs),
@@ -524,7 +523,6 @@ paralell_pairwise_discrete_rcpp <- function(mrk.pairs,
                count.matrix.pos,
                count.matrix.length,
                tol = tol,
-               threads = threads,
                PACKAGE = "mappoly")
   return(res)
   ## return(lapply(res, format_rf))
