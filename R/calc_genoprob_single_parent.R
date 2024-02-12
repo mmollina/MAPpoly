@@ -28,7 +28,7 @@
 #'
 #' @examples
 #'  ## tetraploid example
-#'  s <- make_seq_mappoly(tetra.solcap, 'seq1', info.parent = "p1")
+#'  s <- make_seq_mappoly(tetra.solcap, 'seq12', info.parent = "p1")
 #'  tpt <- est_pairwise_rf(s)
 #'  map <- est_rf_hmm_sequential(input.seq = s,
 #'                               twopt = tpt,
@@ -38,7 +38,7 @@
 #'                                extend.tail = 4,
 #'                                info.tail = TRUE, 
 #'                                sub.map.size.diff.limit = 8, 
-#'                                phase.number.limit = 20,
+#'                                phase.number.limit = 4,
 #'                                reestimate.single.ph.configuration = TRUE,
 #'                                tol = 10e-2,
 #'                                tol.final = 10e-3)

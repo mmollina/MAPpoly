@@ -7,8 +7,7 @@
 #' @param twopt object of class \code{mappoly.twopt}
 #' @param start.set number of markers to start the phasing procedure (default = 4)
 #' @param thres.twopt the LOD threshold used to determine if the linkage phases compared via two-point 
-#' analysis should be considered for the search space reduction (A.K.A. η in Mollinari and Garcia (2019), 
-#' default = 5)
+#' analysis should be considered for the search space reduction (default = 5)
 #' @param thres.hmm the LOD threshold used to determine if the linkage phases compared via hmm analysis 
 #' should be evaluated in the next round of marker inclusion (default = 50)
 #' @param extend.tail the length of the chain's tail that should be used to calculate the likelihood of 
@@ -128,8 +127,7 @@ framework_map <- function(input.seq,
 #' @param input.seq object of class \code{mappoly.sequence} containing all markers for specific group
 #' @param twopt object of class \code{mappoly.twopt}
 #' @param thres.twopt the LOD threshold used to determine if the linkage phases compared via two-point 
-#' analysis should be considered for the search space reduction (A.K.A. η in Mollinari and Garcia (2019), 
-#' default = 5)
+#' analysis should be considered for the search space reduction (default = 5)
 #' @param init.LOD the LOD threshold used to determine if the marker will be included or not after hmm analysis  (default = 30)
 #' @param verbose If TRUE (default), current progress is shown; if FALSE, no output is produced
 #' @param method indicates whether to use 'hmm' (Hidden Markov Models), 'ols' (Ordinary Least Squares) or 'wMDS_to_1D_pc' 

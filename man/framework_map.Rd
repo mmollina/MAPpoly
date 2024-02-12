@@ -31,8 +31,7 @@ framework_map(
 \item{start.set}{number of markers to start the phasing procedure (default = 4)}
 
 \item{thres.twopt}{the LOD threshold used to determine if the linkage phases compared via two-point 
-analysis should be considered for the search space reduction (A.K.A. η in Mollinari and Garcia (2019), 
-default = 5)}
+analysis should be considered for the search space reduction (default = 5)}
 
 \item{thres.hmm}{the LOD threshold used to determine if the linkage phases compared via hmm analysis 
 should be evaluated in the next round of marker inclusion (default = 50)}

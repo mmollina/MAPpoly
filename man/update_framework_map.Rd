@@ -28,8 +28,7 @@ update_framework_map(
 \item{twopt}{object of class \code{mappoly.twopt}}
 
 \item{thres.twopt}{the LOD threshold used to determine if the linkage phases compared via two-point 
-analysis should be considered for the search space reduction (A.K.A. η in Mollinari and Garcia (2019), 
-default = 5)}
+analysis should be considered for the search space reduction (default = 5)}
 
 \item{init.LOD}{the LOD threshold used to determine if the marker will be included or not after hmm analysis  (default = 30)}
 
