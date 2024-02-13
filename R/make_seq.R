@@ -28,14 +28,14 @@
 #'
 #' @param ... Currently ignored.
 #'
-#' @return Returns an object of class \code{mappoly.sequence}, comprising:
+#' @return Returns an object of class `mappoly.sequence`, comprising:
 #' \itemize{
-#'   \item{seq.num}{Ordered vector of marker indices according to the input.}
-#'   \item{seq.phases}{List of linkage phases between markers; \code{-1} for undefined phases.}
-#'   \item{seq.rf}{Vector of recombination frequencies; \code{-1} for not estimated frequencies.}
-#'   \item{loglike}{Log-likelihood of the linkage map.}
-#'   \item{data.name}{Name of the \code{mappoly.data} object with raw data.}
-#'   \item{twopt}{Name of the \code{mappoly.twopt} object with 2-point analyses; \code{-1} if not computed.}
+#'   \item{"seq.num"}{Ordered vector of marker indices according to the input.}
+#'   \item{"seq.phases"}{List of linkage phases between markers; -1 for undefined phases.}
+#'   \item{"seq.rf"}{Vector of recombination frequencies; -1 for not estimated frequencies.}
+#'   \item{"loglike"}{Log-likelihood of the linkage map.}
+#'   \item{"data.name"}{Name of the `mappoly.data` object with raw data.}
+#'   \item{"twopt"}{Name of the `mappoly.twopt` object with 2-point analyses; -1 if not computed.}
 #' }
 #'
 #' @examples
