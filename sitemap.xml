@@ -202,6 +202,9 @@
     <loc>/reference/generate_all_link_phases_elim_equivalent_haplo.html</loc>
   </url>
   <url>
+    <loc>/reference/genetic-mapping-functions.html</loc>
+  </url>
+  <url>
     <loc>/reference/genotyping_global_error.html</loc>
   </url>
   <url>
@@ -277,15 +280,6 @@
     <loc>/reference/hexafake.html</loc>
   </url>
   <url>
-    <loc>/reference/imf_h.html</loc>
-  </url>
-  <url>
-    <loc>/reference/imf_k.html</loc>
-  </url>
-  <url>
-    <loc>/reference/imf_m.html</loc>
-  </url>
-  <url>
     <loc>/reference/import_data_from_polymapR.html</loc>
   </url>
   <url>
@@ -316,6 +310,9 @@
     <loc>/reference/make_seq_mappoly.html</loc>
   </url>
   <url>
+    <loc>/reference/mappoly-color-palettes.html</loc>
+  </url>
+  <url>
     <loc>/reference/maps.hexafake.html</loc>
   </url>
   <url>
@@ -329,24 +326,6 @@
   </url>
   <url>
     <loc>/reference/merge_parental_maps.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mf_h.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mf_k.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mf_m.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mp_pallet1.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mp_pallet2.html</loc>
-  </url>
-  <url>
-    <loc>/reference/mp_pallet3.html</loc>
   </url>
   <url>
     <loc>/reference/mrk_chisq_test.html</loc>

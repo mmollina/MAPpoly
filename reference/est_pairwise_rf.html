@@ -149,37 +149,26 @@ be either PSOCK (default) or FORK.</p></dd>
     <h2>Value</h2>
     
 
-<p>An object of class <code>mappoly.twopt</code> which
-    is a list  containing the following components:</p>
-<dl><dt>data.name</dt>
-<dd><p>name of the object of class
-        <code>mappoly.data</code> with the raw data</p></dd>
+<p>An object of class <code>mappoly.twopt</code> which is a list containing the following components:</p><dl><dt><code>data.name</code></dt>
+<dd><p>Name of the object of class <code>mappoly.data</code> containing the raw data.</p></dd>
 
-    <dt>n.mrk</dt>
-<dd><p>number of markers in the sequence</p></dd>
+  <dt><code>n.mrk</code></dt>
+<dd><p>Number of markers in the sequence.</p></dd>
 
-    <dt>seq.num</dt>
-<dd><p>a <code>vector</code> containing the (ordered) indices
-        of markers in the sequence, according to the input file</p></dd>
+  <dt><code>seq.num</code></dt>
+<dd><p>A <code>vector</code> containing the (ordered) indices of markers in the sequence, according to the input file.</p></dd>
 
-    <dt>pairwise</dt>
-<dd><p>a list of size
-    <code>choose(length(input.seq$seq.num), 2)</code>, each of them containing a 
-    matrix where the name of the rows have the form x-y, where x and y indicate 
-    how many homologues share the same allelic variant in parents P and Q, 
-    respectively (see Mollinari and Garcia, 2019 for notation). The first 
-    column indicates the LOD Score in relation to the most likely linkage 
-    phase configuration. The second column shows the estimated recombination 
-    fraction for each configuration, and the third indicates the LOD Score 
-    comparing the likelihood under no linkage (r = 0.5) with the estimated 
-    recombination fraction (evidence of linkage).</p></dd>
+  <dt><code>pairwise</code></dt>
+<dd><p>A list of size <code>choose(length(input.seq$seq.num), 2)</code>, where each element is a matrix. The rows are named in the format x-y, where x and y indicate how many homologues share the same allelic variant in parents P and Q, respectively (see Mollinari and Garcia, 2019 for notation). The first column indicates the LOD Score for the most likely linkage phase configuration. The second column shows the estimated recombination fraction for each configuration, and the third column indicates the LOD Score for comparing the likelihood under no linkage (r = 0.5) with the estimated recombination fraction (evidence of linkage).</p></dd>
 
-    </dl><p><code>chisq.pval.thres</code>threshold used to perform the segregation tests</p>
-<p></p>
-<p><code>chisq.pval</code>p-values associated with the performed segregation tests</p>
+  <dt><code>chisq.pval.thres</code></dt>
+<dd><p>Threshold used to perform the segregation tests.</p></dd>
+
+  <dt><code>chisq.pval</code></dt>
+<dd><p>P-values associated with the performed segregation tests.</p></dd>
 
 
-    </div>
+</dl></div>
     <div id="references">
     <h2>References</h2>
     <p>Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
