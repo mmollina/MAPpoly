@@ -59,22 +59,22 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP calc_genoprob(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP calc_genoprob_prior(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP calc_genprob_haplo(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP calc_genprob_haplo_highprec(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP calc_genprob_single_parent(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP est_haplotype_map(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP est_haplotype_map_highprec(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP est_hmm_map_single_parent(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP est_map_hmm(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP est_map_hmm_highprec(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP get_counts_single_parent_cpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP loglike_hmm(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP pairwise_rf_estimation_disc(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP pairwise_rf_estimation_disc_rcpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP pairwise_rf_estimation_prob(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
-RcppExport SEXP poly_hmm_est_CPP(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP calc_genoprob(void *, void *, void *, void *, void *, void *, void *);
+RcppExport SEXP calc_genoprob_prior(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
+RcppExport SEXP calc_genprob_haplo(void *, void *, void *, void *, void *, void *, void *, void *);
+RcppExport SEXP calc_genprob_haplo_highprec(void *, void *, void *, void *, void *, void *, void *, void *);
+RcppExport SEXP calc_genprob_single_parent(void *, void *, void *, void *, void *, void *, void *, void *);
+RcppExport SEXP est_haplotype_map(void *, void *, void *, void *, void *, void *, void *, void *, void *);
+RcppExport SEXP est_haplotype_map_highprec(void *, void *, void *, void *, void *, void *, void *, void *, void *);
+RcppExport SEXP est_hmm_map_single_parent(void *, void *, void *, void *, void *, void *, void *, void *, void *);
+RcppExport SEXP est_map_hmm(void *, void *, void *, void *, void *, void *, void *, void *);
+RcppExport SEXP est_map_hmm_highprec(void *, void *, void *, void *, void *, void *, void *, void *);
+RcppExport SEXP get_counts_single_parent_cpp(void *, void *, void *, void *, void *, void *);
+RcppExport SEXP loglike_hmm(void *, void *, void *, void *, void *, void *);
+RcppExport SEXP pairwise_rf_estimation_disc(void *, void *, void *, void *, void *, void *, void *);
+RcppExport SEXP pairwise_rf_estimation_disc_rcpp(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
+RcppExport SEXP pairwise_rf_estimation_prob(void *, void *, void *, void *, void *, void *, void *, void *);
+RcppExport SEXP poly_hmm_est_CPP(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_mappoly_vcf_get_probabilities", (DL_FUNC) &_mappoly_vcf_get_probabilities, 2},

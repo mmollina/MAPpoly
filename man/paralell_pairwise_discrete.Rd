@@ -2,7 +2,7 @@
 % Please edit documentation in R/pairwise_rf.R
 \name{paralell_pairwise_discrete}
 \alias{paralell_pairwise_discrete}
-\title{Wrapper function to discrete-based pairwise two-point estimation in C++}
+\title{Parallel Pairwise Discrete Estimation}
 \usage{
 paralell_pairwise_discrete(
   mrk.pairs,
@@ -15,7 +15,27 @@ paralell_pairwise_discrete(
   ll = ll
 )
 }
+\arguments{
+\item{mrk.pairs}{A matrix of dimensions 2*N, containing N pairs of markers to be analyzed.}
+
+\item{input.seq}{An object of class \code{mappoly.sequence}.}
+
+\item{geno}{Genotype matrix.}
+
+\item{dP}{Vector of probabilities for the first allele.}
+
+\item{dQ}{Vector of probabilities for the second allele.}
+
+\item{count.cache}{An object of class \code{cache.info} containing pre-computed genotype frequencies.}
+
+\item{tol}{The tolerance level for the estimation accuracy (default is \code{.Machine$double.eps^0.25}).}
+
+\item{ll}{Logical; if TRUE, the function returns log-likelihood values instead of LOD scores. For internal use.}
+}
+\value{
+Depending on the \code{ll} parameter, returns either log-likelihood values or formatted LOD scores from pairwise recombination fraction estimation.
+}
 \description{
-Wrapper function to discrete-based pairwise two-point estimation in C++
+This function performs parallel pairwise estimation of recombination fractions using discrete dosage scoring via a C++ backend.
 }
 \keyword{internal}

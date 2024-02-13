@@ -249,8 +249,20 @@ est_pairwise_rf <- function(input.seq, count.cache = NULL,
                    class = "mappoly.twopt"))
 }
 
-#' Wrapper function to discrete-based pairwise two-point estimation in C++
+#' Parallel Pairwise Discrete Estimation
+#'
+#' This function performs parallel pairwise estimation of recombination fractions using discrete dosage scoring via a C++ backend.
+#' @param mrk.pairs A matrix of dimensions 2*N, containing N pairs of markers to be analyzed.
+#' @param input.seq An object of class \code{mappoly.sequence}.
+#' @param geno Genotype matrix.
+#' @param dP Vector of probabilities for the first allele.
+#' @param dQ Vector of probabilities for the second allele.
+#' @param count.cache An object of class \code{cache.info} containing pre-computed genotype frequencies.
+#' @param tol The tolerance level for the estimation accuracy (default is \code{.Machine$double.eps^0.25}).
+#' @param ll Logical; if TRUE, the function returns log-likelihood values instead of LOD scores. For internal use.
+#' @return Depending on the \code{ll} parameter, returns either log-likelihood values or formatted LOD scores from pairwise recombination fraction estimation.
 #' @keywords internal
+#' @export
 paralell_pairwise_discrete <- function(mrk.pairs,
                                        input.seq,
                                        geno,
@@ -273,8 +285,20 @@ paralell_pairwise_discrete <- function(mrk.pairs,
   return(lapply(res, format_rf))
 }
 
-#' Wrapper function to probability-based pairwise two-point estimation in C++
+#' Parallel Pairwise Probability Estimation
+#'
+#' This function performs parallel pairwise estimation of recombination fractions using probability-based dosage scoring via a C++ backend.
+#' @param mrk.pairs A matrix of dimensions 2*N, containing N pairs of markers to be analyzed.
+#' @param input.seq An object of class \code{mappoly.sequence}.
+#' @param geno Genotype matrix.
+#' @param dP Vector of probabilities for the first allele.
+#' @param dQ Vector of probabilities for the second allele.
+#' @param count.cache An object of class \code{cache.info} containing pre-computed genotype frequencies.
+#' @param tol The tolerance level for the estimation accuracy (default is \code{.Machine$double.eps^0.25}).
+#' @param ll Logical; if TRUE, the function returns log-likelihood values instead of LOD scores. For internal use.
+#' @return Depending on the \code{ll} parameter, returns either log-likelihood values or formatted LOD scores from pairwise recombination fraction estimation.
 #' @keywords internal
+#' @export
 paralell_pairwise_probability <- function(mrk.pairs,
                                           input.seq,
                                           geno,

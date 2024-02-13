@@ -47,12 +47,12 @@ maximum number of markers with the group. Supports single values or vectors for 
 \value{
 Returns an object of class \code{mappoly.sequence}, comprising:
 \itemize{
-  \item{\code{seq.num}}{Ordered vector of marker indices according to the input.}
-  \item{\code{seq.phases}}{List of linkage phases between markers; \code{-1} for undefined phases.}
-  \item{\code{seq.rf}}{Vector of recombination frequencies; \code{-1} for unestimated frequencies.}
-  \item{\code{loglike}}{Log-likelihood of the linkage map.}
-  \item{\code{data.name}}{Name of the \code{mappoly.data} object with raw data.}
-  \item{\code{twopt}}{Name of the \code{mappoly.twopt} object with 2-point analyses; \code{-1} if not computed.}
+  \item{seq.num}{Ordered vector of marker indices according to the input.}
+  \item{seq.phases}{List of linkage phases between markers; \code{-1} for undefined phases.}
+  \item{seq.rf}{Vector of recombination frequencies; \code{-1} for not estimated frequencies.}
+  \item{loglike}{Log-likelihood of the linkage map.}
+  \item{data.name}{Name of the \code{mappoly.data} object with raw data.}
+  \item{twopt}{Name of the \code{mappoly.twopt} object with 2-point analyses; \code{-1} if not computed.}
 }
 }
 \description{
