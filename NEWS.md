@@ -1,5 +1,11 @@
-# MAPpoly version 0.3.3
+# MAPpoly version 0.4.0
+ - Functions to build maps in individual parents
+ - Functions to merge individual maps
+ - Imputation functions based on map
+ - Functions to edit order interactively
+ - Fix minor bugs
 
+# MAPpoly version 0.3.3
   - Fix minor bugs
   
 # MAPpoly version 0.3.2
