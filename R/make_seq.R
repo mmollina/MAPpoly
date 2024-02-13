@@ -27,7 +27,7 @@
 #' @param x An object of class \code{mappoly.sequence}.
 #'
 #' @param ... Currently ignored.
-#'
+#' 
 #' @return Returns an object of class `mappoly.sequence`, comprising:
 #'   \item{"seq.num"}{Ordered vector of marker indices according to the input.}
 #'   \item{"seq.phases"}{List of linkage phases between markers; -1 for undefined phases.}
