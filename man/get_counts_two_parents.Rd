@@ -15,9 +15,6 @@ get_counts_two_parents(
   joint.prob = FALSE
 )
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Counts for recombinant classes
 }

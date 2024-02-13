@@ -6,9 +6,6 @@
 \usage{
 v_2_m(x, n)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Conversion: vector to matrix
 }

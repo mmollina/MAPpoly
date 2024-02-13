@@ -8,9 +8,6 @@ estimation}
 \usage{
 check_if_rf_is_possible(input.seq)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Check if it is possible to estimate the recombination
 fraction between neighbor markers using two-point

@@ -6,9 +6,6 @@
 \usage{
 perm_pars(v)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 N!/2 combination
 }

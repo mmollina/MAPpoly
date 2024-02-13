@@ -57,25 +57,15 @@ be either PSOCK (default) or FORK.}
 (for internal use)}
 }
 \value{
-An object of class \code{mappoly.twopt} which
-    is a list  containing the following components:
-    \item{data.name}{name of the object of class
-        \code{mappoly.data} with the raw data}
-    \item{n.mrk}{number of markers in the sequence}
-    \item{seq.num}{a \code{vector} containing the (ordered) indices
-        of markers in the sequence, according to the input file}
-    \item{pairwise}{a list of size
-    \code{choose(length(input.seq$seq.num), 2)}, each of them containing a 
-    matrix where the name of the rows have the form x-y, where x and y indicate 
-    how many homologues share the same allelic variant in parents P and Q, 
-    respectively (see Mollinari and Garcia, 2019 for notation). The first 
-    column indicates the LOD Score in relation to the most likely linkage 
-    phase configuration. The second column shows the estimated recombination 
-    fraction for each configuration, and the third indicates the LOD Score 
-    comparing the likelihood under no linkage (r = 0.5) with the estimated 
-    recombination fraction (evidence of linkage).}
-    \code{chisq.pval.thres}{threshold used to perform the segregation tests}
-    \code{chisq.pval}{p-values associated with the performed segregation tests}
+An object of class \code{mappoly.twopt} which is a list containing the following components:
+\describe{
+  \item{\code{data.name}}{Name of the object of class \code{mappoly.data} containing the raw data.}
+  \item{\code{n.mrk}}{Number of markers in the sequence.}
+  \item{\code{seq.num}}{A \code{vector} containing the (ordered) indices of markers in the sequence, according to the input file.}
+  \item{\code{pairwise}}{A list of size \code{choose(length(input.seq$seq.num), 2)}, where each element is a matrix. The rows are named in the format x-y, where x and y indicate how many homologues share the same allelic variant in parents P and Q, respectively (see Mollinari and Garcia, 2019 for notation). The first column indicates the LOD Score for the most likely linkage phase configuration. The second column shows the estimated recombination fraction for each configuration, and the third column indicates the LOD Score for comparing the likelihood under no linkage (r = 0.5) with the estimated recombination fraction (evidence of linkage).}
+  \item{\code{chisq.pval.thres}}{Threshold used to perform the segregation tests.}
+  \item{\code{chisq.pval}}{P-values associated with the performed segregation tests.}
+}
 }
 \description{
 Performs the two-point pairwise analysis between all markers in a sequence. 

@@ -1,78 +1,58 @@
-#' Create a sequence of markers
+#' Create a Sequence of Markers
 #'
-#' Makes a sequence of markers based on an object of another class.
+#' Constructs a sequence of markers based on an object belonging to various specified classes. This
+#' function is versatile, supporting multiple input types and configurations for generating marker sequences.
 #'
-#' @param input.obj an object of one of the following classes:
-#'     \code{mappoly.data}, \code{mappoly.map}, \code{mappoly.sequence}, 
-#'     \code{mappoly.group}, \code{mappoly.unique.seq},
-#'     \code{mappoly.pcmap}, \code{mappoly.pcmap3d}, \code{mappoly.geno.ord} or
-#'     \code{mappoly.edit.order}
+#' @param input.obj An object belonging to one of the specified classes: \code{mappoly.data},
+#' \code{mappoly.map}, \code{mappoly.sequence}, \code{mappoly.group}, \code{mappoly.unique.seq},
+#' \code{mappoly.pcmap}, \code{mappoly.pcmap3d}, \code{mappoly.geno.ord}, or \code{mappoly.edit.order}.
 #'
-#' @param arg can be one of the following objects: i) a string 'all',
-#'     resulting in a sequence with all markers in the raw data; ii) a
-#'     string or a vector of strings \code{'seqx'}, where \code{x}
-#'     is the sequence (\code{x = 0} indicates unassigned markers); iii) a
-#'     \code{vector} of integers specifying which markers comprise the
-#'     sequence; iv) a \code{vector} of integers representing linkage group if 
-#'     \code{input.object} has class \code{mappoly.group}; or v) NULL if 
-#'     \code{input.object} has class \code{mappoly.pcmap}, \code{mappoly.pcmap3d}, 
-#'     \code{mappoly.unique.seq}, or \code{mappoly.geno.ord}
+#' @param arg Specifies the markers to include in the sequence, accepting several formats: a string 'all' for all
+#' markers; a string or vector of strings 'seqx' where x is the sequence number (0 for unassigned markers); a
+#' vector of integers indicating specific markers; or a vector of integers representing linkage group numbers if
+#' \code{input.obj} is of class \code{mappoly.group}. For certain classes (\code{mappoly.pcmap}, \code{mappoly.pcmap3d},
+#' \code{mappoly.unique.seq}, or \code{mappoly.geno.ord}), \code{arg} can be \code{NULL}.
 #'
-#' @param data.name name of the object of class \code{mappoly.data}
-#' 
-#' @param info.parent one of the following options: 
-#' \code{'all'}{select all dosage combinations in both parents (default)}
-#' \code{'P1'}{select informative markers parent 1}
-#' \code{'P2'}{select informative markers parent 2}
-#' 
-#' @param genomic.info optional argument applied to \code{mappoly.group} objects only. This argument can be \code{NULL},
-#'     or can hold the numeric combination of sequences from genomic information to be used when making the sequences.
-#'     When \code{genomic.info = NULL} (default), the function returns a sequence containing all markers defined 
-#'     by the grouping function. When \code{genomic.info = 1}, the function returns a sequence with markers
-#'     that matched the intersection between grouping function and genomic information, considering the sequence
-#'     from genomic information that holds the maximum number of markers matching the group;
-#'     when \code{genomic.info = c(1,2)}, the function returns a sequence with markers
-#'     that matched the intersection between grouping function and genomic information, considering two sequences
-#'     from genomic information that presented the maximum number of markers matching the group; and so on.
+#' @param data.name Name of the \code{mappoly.data} class object.
 #'
-#' @param x an object of the class \code{mappoly.sequence}
+#' @param info.parent Selection criteria based on parental information: \code{'all'} for all dosage combinations,
+#' \code{'P1'} for markers informative in parent 1, or \code{'P2'} for markers informative in parent 2. Default
+#' is \code{'all'}.
 #'
-#' @param ... currently ignored
+#' @param genomic.info Optional and applicable only to \code{mappoly.group} objects. Specifies the use of genomic
+#' information in sequence creation. With \code{NULL} (default), all markers defined by the grouping function are
+#' included. Numeric values indicate the use of specific sequences from genomic information, aiming to match the
+#' maximum number of markers with the group. Supports single values or vectors for multiple sequence consideration.
 #'
-#' @return An object of class \code{mappoly.sequence}, which is a
-#'     list containing the following components:
-#'     \item{seq.num}{a \code{vector} containing the (ordered) indices
-#'         of markers in the sequence, according to the input file}
-#'     \item{seq.phases}{a \code{list} with the linkage phases between
-#'         markers in the sequence, in corresponding positions. \code{-1}
-#'         means that there are no defined linkage phases}
-#'     \item{seq.rf}{a \code{vector} with the recombination
-#'         frequencies between markers in the sequence. \code{-1} means
-#'         that there are no estimated recombination frequencies}
-#'     \item{loglike}{log-likelihood of the corresponding linkage
-#'         map}
-#'     \item{data.name}{name of the object of class
-#'         \code{mappoly.data} with the raw data}
-#'     \item{twopt}{name of the object of class \code{mappoly.twopt}
-#'         with the 2-point analyses. \code{-1} means that the twopt
-#'         estimates were not computed}
+#' @param x An object of class \code{mappoly.sequence}.
+#'
+#' @param ... Currently ignored.
+#'
+#' @return Returns an object of class \code{mappoly.sequence}, comprising:
+#' \itemize{
+#'   \item{\code{seq.num}}{Ordered vector of marker indices according to the input.}
+#'   \item{\code{seq.phases}}{List of linkage phases between markers; \code{-1} for undefined phases.}
+#'   \item{\code{seq.rf}}{Vector of recombination frequencies; \code{-1} for unestimated frequencies.}
+#'   \item{\code{loglike}}{Log-likelihood of the linkage map.}
+#'   \item{\code{data.name}}{Name of the \code{mappoly.data} object with raw data.}
+#'   \item{\code{twopt}}{Name of the \code{mappoly.twopt} object with 2-point analyses; \code{-1} if not computed.}
+#' }
 #'
 #' @examples
-#'     all.mrk <- make_seq_mappoly(hexafake, 'all')
-#'     seq1.mrk <- make_seq_mappoly(hexafake, 'seq1')
-#'     plot(seq1.mrk)
-#'     some.mrk.pos <- c(1,4,28,32,45)
-#'     (some.mrk.1 <- make_seq_mappoly(hexafake, some.mrk.pos))
-#'     plot(some.mrk.1)
+#' all.mrk <- make_seq_mappoly(hexafake, 'all')
+#' seq1.mrk <- make_seq_mappoly(hexafake, 'seq1')
+#' plot(seq1.mrk)
+#' some.mrk.pos <- c(1,4,28,32,45)
+#' some.mrk.1 <- make_seq_mappoly(hexafake, some.mrk.pos)
+#' plot(some.mrk.1)
 #'
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}, with modifications by Gabriel Gesteira, \email{gdesiqu@ncsu.edu}
+#' @author Marcelo Mollinari \email{mmollin@ncsu.edu}, with modifications by Gabriel Gesteira 
+#' \email{gdesiqu@ncsu.edu}
 #'
 #' @references
-#'     Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
-#'     analysis and haplotype phasing in experimental autopolyploid
-#'     populations with high ploidy level using hidden Markov
-#'     models, _G3: Genes, Genomes, Genetics_. 
-#'     \doi{10.1534/g3.119.400378} 
+#' Mollinari, M., and Garcia, A. A. F. (2019). Linkage analysis and haplotype phasing in experimental
+#' autopolyploid populations with high ploidy level using hidden Markov models. _G3: Genes|Genomes|Genetics_,
+#' \doi{10.1534/g3.119.400378}.
 #'
 #' @export
 

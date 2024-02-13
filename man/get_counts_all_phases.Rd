@@ -12,9 +12,6 @@ get_counts_all_phases(
   joint.prob = FALSE
 )
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 return the counts of each recombinant class (for two loci) in
 polyploid cross. The results of this function contains several

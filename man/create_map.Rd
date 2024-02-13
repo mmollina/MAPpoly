@@ -6,9 +6,6 @@
 \usage{
 create_map(input.map, step = 0, phase.config = "best")
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Create a map with pseudomarkers at a given step
 }

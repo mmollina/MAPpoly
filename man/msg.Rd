@@ -6,9 +6,6 @@
 \usage{
 msg(text, line = 1)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Msg function
 }

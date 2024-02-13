@@ -17,9 +17,6 @@ est_haplo_hmm(
   tol = 0.001
 )
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Estimate a genetic map given a sequence of block markers
 }

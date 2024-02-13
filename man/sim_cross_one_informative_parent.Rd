@@ -14,9 +14,6 @@ sim_cross_one_informative_parent(
   prob = NULL
 )
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 This function simulates a polyploid mapping population
 under random chromosome segregation

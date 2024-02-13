@@ -6,9 +6,6 @@
 \usage{
 print_ph(input.ph)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 cat for graphical representation of the phases
 }

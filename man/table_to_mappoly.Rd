@@ -12,9 +12,6 @@ table_to_mappoly(
   verbose = TRUE
 )
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Conversion of data.frame to mappoly.data
 }

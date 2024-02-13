@@ -17,9 +17,6 @@ calc_genoprob_haplo(
   highprec = FALSE
 )
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Compute conditional probabilities of the genotypes given a sequence 
 of block markers

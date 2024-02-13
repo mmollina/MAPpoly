@@ -3,8 +3,6 @@
 #' If \code{restricted = TRUE}, it restricts the prior to the 
 #' possible classes under Mendelian, non double-reduced segregation 
 #' given dosage of the parents
-#'
-#' @param void internal function to be documented
 #' @keywords internal
 genotyping_global_error <- function(x, ploidy, restricted = TRUE,  error = 0.01, th.prob = 0.95)
 {

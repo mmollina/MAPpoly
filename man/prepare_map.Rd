@@ -6,9 +6,6 @@
 \usage{
 prepare_map(input.map, config = "best")
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 prepare maps for plot
 }

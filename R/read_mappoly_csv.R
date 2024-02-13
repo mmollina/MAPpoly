@@ -91,10 +91,7 @@ read_geno_csv <- function(file.in, ploidy, filter.non.conforming = TRUE, elim.re
 }
 
 #' Conversion of data.frame to mappoly.data
-#'
-#' @param void internal function to be documented
 #' @keywords internal
-#' @export
 table_to_mappoly <- function(dat, ploidy, filter.non.conforming = TRUE, elim.redundant = TRUE, verbose = TRUE){
   ## Removing markers with missing data points for parents
   dat = dat[which(!is.na(dat[,2,drop = TRUE]) & !is.na(dat[,3,drop = TRUE])),]

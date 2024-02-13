@@ -1,9 +1,6 @@
 #' Access a remote server to get Counts for recombinant classes
-#'
-#' @param void internal function to be documented
 #' @keywords internal
 #' @import RCurl
-#' @export get_cache_two_pts_from_web
 get_cache_two_pts_from_web <- function(ploidy, url.address = NULL, joint.prob = TRUE, verbose = FALSE) {
     if (is.null(url.address)) {
         if (ploidy  ==  2)

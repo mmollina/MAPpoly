@@ -6,9 +6,6 @@
 \usage{
 filter_non_conforming_classes(input.data, prob.thres = NULL)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Filter non-conforming classes in F1, non double reduced population.
 }

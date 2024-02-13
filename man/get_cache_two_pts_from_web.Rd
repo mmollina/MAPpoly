@@ -11,9 +11,6 @@ get_cache_two_pts_from_web(
   verbose = FALSE
 )
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Access a remote server to get Counts for recombinant classes
 }

@@ -14,10 +14,7 @@ get_LOD <- function(x, sorted = TRUE) {
 }
 
 #' Get recombination fraction from a matrix
-#'
-#' @param void internal function to be documented
 #' @keywords internal
-#' @export
 get_rf_from_mat <- function(M){
   r <- numeric(nrow(M)-1)
   for(i in 1:(nrow(M)-1)){
@@ -27,20 +24,33 @@ get_rf_from_mat <- function(M){
 }
 
 
-#' Is it a probability dataset?
+#' Check if Object is a Probability Dataset in MAPpoly
 #'
-#' @param void internal function to be documented
+#' Determines whether the specified object is a probability dataset
+#' by checking for the existence of the 'geno' component within a
+#' `"mappoly.data"` object. 
+#'
+#' @param x An object of class `"mappoly.data"`
+#'
+#' @return A logical value: `TRUE` if the 'geno' component exists within `x`,
+#' indicating it is a valid probability dataset for genetic analysis; `FALSE`
+#' otherwise.
+#'
 #' @keywords internal
 #' @export
 is.prob.data <- function(x){
+  # Verify if 'x' is indeed an object of class 'mappoly.data'
+  if (!inherits(x, "mappoly.data")) {
+    stop("Input is not an object of class 'mappoly.data'")
+  }
+  
+  # Check for the existence of 'geno' within the 'mappoly.data' object
   exists('geno', where = x)
 }
 
+
 #' Get the number of bivalent configurations
-#'
-#' @param void internal function to be documented
 #' @keywords internal
-#' @export
 get_w_m <- function(ploidy){
   if(ploidy%%2 != 0) stop("ploidy level should be an even number") 
   if(ploidy <= 0) stop("ploidy level should be greater than zero")
@@ -141,8 +151,6 @@ export_data_to_polymapR <- function(data.in)
 }
 
 #' Msg function
-#'
-#' @param void internal function to be documented
 #' @keywords internal
 #' @importFrom cli rule
 msg <- function(text, line = 1){
@@ -165,50 +173,53 @@ text_col <- function(x) {
   if (isTRUE(theme$dark)) crayon::white(x) else crayon::black(x)
 }
 
-#' Map functions
+#' Genetic Mapping Functions
 #'
-#' @param void internal function to be documented
-#' @keywords internal
+#' These functions facilitate the conversion between recombination fractions (r) and genetic distances (d) 
+#' using various mapping models. The functions starting with `mf_` convert recombination fractions to genetic distances,
+#' while those starting with `imf_` convert genetic distances back into recombination fractions.
+#'
+#' @name genetic-mapping-functions
+#' @aliases mf_k mf_h mf_m imf_k imf_h imf_m
+#' @usage mf_k(d)
+#' @usage mf_h(d)
+#' @usage mf_m(d)
+#' @usage imf_k(r)
+#' @usage imf_h(r)
+#' @usage imf_m(r)
+#' @param d Numeric or numeric vector, representing genetic distances in centiMorgans (cM) for direct functions (mf_k, mf_h, mf_m).
+#' @param r Numeric or numeric vector, representing recombination fractions for inverse functions (imf_k, imf_h, imf_m).
+#' @details
+#' The `mf_` prefixed functions apply different models to convert recombination fractions into genetic distances:
+#' \itemize{
+#'   \item \code{mf_k}: Kosambi mapping function.
+#'   \item \code{mf_h}: Haldane mapping function.
+#'   \item \code{mf_m}: Morgan mapping function.
+#'}
+#' The `imf_` prefixed functions convert genetic distances back into recombination fractions:
+#' \itemize{
+#'   \item \code{imf_k}: Inverse Kosambi mapping function.
+#'   \item \code{imf_h}: Inverse Haldane mapping function.
+#'   \item \code{imf_m}: Inverse Morgan mapping function.
+#'}
+#' @references
+#' Kosambi, D.D. (1944). The estimation of map distances from recombination values. Ann Eugen., 12, 172-175.
+#' Haldane, J.B.S. (1919). The combination of linkage values, and the calculation of distances between the loci of linked factors. J Genet, 8, 299-309.
+#' Morgan, T.H. (1911). Random segregation versus coupling in Mendelian inheritance. Science, 34(873), 384.
+#' @keywords genetics
 #' @export
-mf_k <- function(d) 0.5 * tanh(d/50)
-#'
-#' Map functions
-#'
-#' @param void internal function to be documented
-#' @keywords internal
-#' @export
-mf_h <- function(d) 0.5 * (1 - exp(-d/50))
-#' Map functions
-#'
-#' @param void internal function to be documented
-#' @keywords internal
-#' @export
-mf_m <- function(d) sapply(d, function(a) min(a/100, 0.5))
-#' Map functions
-#'
-#' @param void internal function to be documented
-#' @keywords internal
-#' @export
+mf_k <- function(d) 0.5 * tanh(d / 50)
+mf_h <- function(d) 0.5 * (1 - exp(-d / 50))
+mf_m <- function(d) sapply(d, function(a) min(a / 100, 0.5))
 imf_k <- function(r) {
   r[r >= 0.5] <- 0.5 - 1e-14
   50 * atanh(2 * r)
 }
-#' Map functions
-#'
-#' @param void internal function to be documented
-#' @keywords internal
-#' @export
 imf_h <- function(r) {
   r[r >= 0.5] <- 0.5 - 1e-14
   -50 * log(1 - 2 * r)
 }
-#' Map functions
-#'
-#' @param void internal function to be documented
-#' @keywords internal
-#' @export
 imf_m <- function(r) sapply(r, function(a) min(a * 100, 50))
-
 
 #' Compare two polyploid haplotypes stored in list format
 #'
@@ -221,6 +232,7 @@ imf_m <- function(r) sapply(r, function(a) min(a * 100, 50))
 #'     that homolog.
 #' @keywords internal
 #' @export compare_haplotypes
+#' 
 compare_haplotypes <- function(ploidy, h1, h2) {
   I1 <- matrix(0, ploidy, length(h1))
   I2 <- matrix(0, ploidy, length(h2))
@@ -279,11 +291,30 @@ plot_GIC <- function(hprobs, P = "P1", Q = "P2"){
   return(invisible(DF))
 }
 
-#' Plot two overlapped haplotypes
+#' Plot Two Overlapped Haplotypes
 #'
-#' @param void internal function to be documented
+#' This function plots two sets of haplotypes for comparison, allowing for visual
+#' inspection of homologous allele patterns across two groups or conditions.
+#' It is designed to handle and display genetic data for organisms with varying ploidy levels.
+#'
+#' @param ploidy Integer, specifying the ploidy level of the organism being represented.
+#' @param hom.allele.p1 A list where each element represents the alleles for a marker in the first haplotype group, for 'p' parent.
+#' @param hom.allele.q1 A list where each element represents the alleles for a marker in the first haplotype group, for 'q' parent.
+#' @param hom.allele.p2 Optionally, a list where each element represents the alleles for a marker in the second haplotype group, for 'p' parent.
+#' @param hom.allele.q2 Optionally, a list where each element represents the alleles for a marker in the second haplotype group, for 'q' parent.
+#'
+#' @details The function creates a graphical representation of haplotypes, where each marker's alleles are plotted
+#' along a line for each parent ('p' and 'q'). If provided, the second set of haplotypes (for comparison) are overlaid
+#' on the same plot. This allows for direct visual comparison of allele presence or absence across the two sets.
+#' Different colors are used to distinguish between the first and second sets of haplotypes.
+#'
+#' The function uses several internal helper functions (`ph_list_to_matrix` and `ph_matrix_to_list`) to manipulate
+#' haplotype data. These functions should correctly handle the conversion between list and matrix representations
+#' of haplotype data.
+#'
+#' @return Invisible. The function primarily generates a plot for visual analysis and does not return any data.
+#' @export
 #' @keywords internal
-#' @export plot_compare_haplotypes
 plot_compare_haplotypes <- function(ploidy, hom.allele.p1, hom.allele.q1, hom.allele.p2 = NULL, hom.allele.q2 = NULL) {
   nmmrk <- names(hom.allele.p1)
   oldpar <- par(mar = c(5.1, 4.1, 4.1, 2.1))
@@ -336,10 +367,7 @@ plot_compare_haplotypes <- function(ploidy, hom.allele.p1, hom.allele.q1, hom.al
 #' Check if it is possible to estimate the recombination
 #' fraction between neighbor markers using two-point
 #' estimation
-#'
-#' @param void internal function to be documented
 #' @keywords internal
-#' @export
 check_if_rf_is_possible <- function(input.seq){
   dp <- abs(abs(input.seq$seq.dose.p1-(input.seq$ploidy/2))-(input.seq$ploidy/2))
   dq <- abs(abs(input.seq$seq.dose.p2-(input.seq$ploidy/2))-(input.seq$ploidy/2))
@@ -354,10 +382,7 @@ check_if_rf_is_possible <- function(input.seq){
 }
 
 #' N! combination
-#'
-#' @param void internal function to be documented
 #' @keywords internal
-#' @export
 perm_tot <- function(v) {
   n <- length(v)
   result <- v
@@ -377,10 +402,7 @@ perm_tot <- function(v) {
 }
 
 #' N!/2 combination
-#'
-#' @param void internal function to be documented
 #' @keywords internal
-#' @export
 perm_pars <- function(v) {
   n <- length(v)
   result <- v
@@ -409,10 +431,7 @@ perm_pars <- function(v) {
 }
 
 #' Color pallet ggplot-like
-#'
-#' @param void internal function to be documented
 #' @keywords internal
-#' @export
 #' @importFrom grDevices hcl col2rgb hsv rgb2hsv
 gg_color_hue <- function(n) {
   x <- rgb2hsv(col2rgb("steelblue"))[, 1]
@@ -422,25 +441,40 @@ gg_color_hue <- function(n) {
   return(hsv(cols, x[2], x[3]))
 }
 
-#' MAPpoly pallet 1
+#' MAPpoly Color Palettes
 #'
-#' @param void internal function to be documented
+#' Provides a set of color palettes designed for use with MAPpoly, 
+#' a package for genetic mapping in polyploids. These palettes are 
+#' intended to enhance the visual representation of genetic data.
+#'
+#' The available palettes are:
+#' \describe{
+#'   \item{\code{mp_pallet1}}{A palette with warm colors ranging from yellow to dark red and brown.}
+#'   \item{\code{mp_pallet2}}{A palette with cool colors, including purples, blues, and green.}
+#'   \item{\code{mp_pallet3}}{A comprehensive palette that combines colors from both \code{mp_pallet1} and \code{mp_pallet2}, offering a broad range of colors.}
+#'}
+#'
+#' Each palette function returns a function that can generate color vectors of variable length, suitable for mapping or plotting functions in R.
+#'
+#' @name mappoly-color-palettes
+#' @aliases mp_pallet1 mp_pallet2 mp_pallet3
 #' @keywords internal
-#' @export
+#' @export mp_pallet1 mp_pallet2 mp_pallet3
+#' @examples
+#' # Generate a palette of 5 colors from mp_pallet1
+#' pal1 <- mp_pallet1(5)
+#' plot(1:5, pch=19, col=pal1)
+#'
+#' # Generate a palette of 10 colors from mp_pallet2
+#' pal2 <- mp_pallet2(10)
+#' plot(1:10, pch=19, col=pal2)
+#'
+#' # Generate a palette of 15 colors from mp_pallet3
+#' pal3 <- mp_pallet3(15)
+#' plot(1:15, pch=19, col=pal3)
+
 mp_pallet1 <- colorRampPalette(c("#ffe119", "#f58231","#e6194b","#808000","#9a6324", "#800000"))
-
-#' MAPpoly pallet 2
-#'
-#' @param void internal function to be documented
-#' @keywords internal
-#' @export
 mp_pallet2 <- colorRampPalette(c("#911eb4", "#000075","#4363d8","#42d4f4","#469990", "#3cb44b"))
-
-#' MAPpoly pallet 3
-#'
-#' @param void internal function to be documented
-#' @keywords internal
-#' @export
 mp_pallet3 <- colorRampPalette(c("#ffe119", "#f58231","#e6194b","#808000","#9a6324", "#800000","#911eb4", "#000075","#4363d8","#42d4f4","#469990", "#3cb44b"))
 
 #' Update missing information
@@ -475,8 +509,6 @@ update_missing <- function(input.data, prob.thres = 0.95){
 }
 
 #' Chi-square test
-#'
-#' @param void internal function to be documented
 #' @keywords internal
 mrk_chisq_test <- function(x, ploidy){
   y <- x[-c(1:(ploidy+1))]
@@ -591,8 +623,6 @@ check_data_sanity <- function(x){
 }
 
 #' Checks the consistency of dataset (dosage)
-#'
-#' @param void internal function to be documented
 #' @keywords internal
 check_data_dose_sanity <- function(x){
   test <- logical(24L)
@@ -644,8 +674,6 @@ check_data_dose_sanity <- function(x){
 }
 
 #' Checks the consistency of dataset (probability distribution)
-#'
-#' @param void internal function to be documented
 #' @keywords internal
 check_data_dist_sanity <- function(x){
   test <- logical(29L)
@@ -1051,7 +1079,7 @@ update_map = function(input.maps, verbose = TRUE){
 }
 
 #' Random sampling of dataset
-#' @param x an object  of class \code{mappoly.data}
+#' @param input.data an object  of class \code{mappoly.data}
 #' @param n number of individuals or markers to be sampled
 #' @param percentage if \code{n == NULL}, the percentage of individuals or markers to be sampled
 #' @param type should sample individuals or markers?
@@ -1143,10 +1171,7 @@ sample_data <- function(input.data, n = NULL,
 
 
 #' Get weighted ordinary least squared map give a sequence and rf matrix
-#'
-#' @param void internal function to be documented
 #' @keywords internal
-#' @export
 #' @importFrom zoo na.approx
 get_ols_map <- function(input.seq, input.mat, weight = TRUE){
   id <- input.seq$seq.mrk.names
@@ -1175,9 +1200,22 @@ get_ols_map <- function(input.seq, input.mat, weight = TRUE){
   d
 }
 
-#' Get dosage type in a sequence
+#' Get Dosage Type in a Sequence
 #'
-#' @param void internal function to be documented
+#' Analyzes a genomic sequence object to categorize markers based on their dosage type.
+#' The function calculates the dosage type by comparing the dosage of two parental sequences
+#' (p1 and p2) against the ploidy level. It categorizes markers into simplex for parent 1 (simplex.p),
+#' simplex for parent 2 (simplex.q), double simplex (ds), and multiplex based on the calculated dosages.
+#'
+#' @param input.seq An object of class \code{"mappoly.sequence"}:
+#' 
+#' @return A list with four components categorizing marker names into:
+#' \describe{
+#'   \item{simplex.p}{Markers with a simplex dosage from parent 1.}
+#'   \item{simplex.q}{Markers with a simplex dosage from parent 2.}
+#'   \item{double.simplex}{Markers with a double simplex dosage.}
+#'   \item{multiplex}{Markers not fitting into the above categories, indicating a multiplex dosage.}
+#' }
 #' @keywords internal
 #' @export
 get_dosage_type <- function(input.seq){
@@ -1193,10 +1231,7 @@ get_dosage_type <- function(input.seq){
 }
 
 #' Aggregate matrix cells (lower the resolution by a factor)
-#'
-#' @param void internal function to be documented
 #' @keywords internal
-#' @export
 aggregate_matrix <- function(M, fact){
   id <- seq(1,ncol(M), by = fact)
   id <- cbind(id, c(id[-1]-1, ncol(M)))
@@ -1210,10 +1245,7 @@ aggregate_matrix <- function(M, fact){
 }
 
 #' Get states and emission in one informative parent
-#'
-#' @param void internal function to be documented
 #' @keywords internal
-#' @export
 get_states_and_emission_single_parent <- function(ploidy, ph, global.err, D, dose.notinf.P){
   n.mrk <- nrow(D)
   n.ind <- ncol(D)
@@ -1262,10 +1294,7 @@ get_states_and_emission_single_parent <- function(ploidy, ph, global.err, D, dos
 
 
 #' Conversion: vector to matrix
-#'
-#' @param void internal function to be documented
 #' @keywords internal
-#' @export
 v_2_m <- function(x, n){
   y <- base::matrix(NA, n, n) 
   y[base::lower.tri(y)] <- as.numeric(x)
@@ -1337,7 +1366,7 @@ detect_info_par<-function(x){
 #   .Call("rec_number", as.integer(m), as.numeric(rf), PACKAGE = "mappoly")
 #   
 
-#' @export
+
 .mappoly_data_skeleton<-function(ploidy =NULL,
                                  n.ind =NULL,
                                  n.mrk =NULL,
@@ -1378,7 +1407,7 @@ detect_info_par<-function(x){
                  elim.correspondence = elim.correspondence),
             class = "mappoly.data")
 
-#' @export
+
 .mappoly_map_skeleton<-function(ploidy=NULL,
                                 n.mrk=NULL,
                                 seq.num=NULL,
@@ -1416,10 +1445,7 @@ detect_info_par<-function(x){
   
   
 #' Split map into sub maps given a gap threshold
-#'
-#' @param void internal function to be documented
 #' @keywords internal
-#' @export
 split_mappoly <- function(input.map,
                           gap.threshold = 5, 
                           size.rem.cluster = 1,

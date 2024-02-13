@@ -6,9 +6,6 @@
 \usage{
 check_data_dose_sanity(x)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Checks the consistency of dataset (dosage)
 }

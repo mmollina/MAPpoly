@@ -127,10 +127,7 @@ cat("\n  No. genotypic classes:                    ", dim(x$probs)[1], "\n")
 }
 
 #' Create a map with pseudomarkers at a given step
-#'
-#' @param void internal function to be documented
 #' @keywords internal
-#' @export
 create_map <- function(input.map, step = 0,
                      phase.config = "best")
 {

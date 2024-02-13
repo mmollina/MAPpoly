@@ -122,8 +122,6 @@ generate_all_link_phases_elim_equivalent_haplo <-
   }
 
 #' Estimate a genetic map given a sequence of block markers
-#'
-#' @param void internal function to be documented
 #' @keywords internal
 est_haplo_hmm  <- 
   function(ploidy, n.mrk, n.ind, haplo, emit = NULL, 
@@ -179,8 +177,6 @@ est_haplo_hmm  <-
 
 #' Estimate a genetic map given a sequence of block markers 
 #' given the conditional probabilities of the genotypes
-#'
-#' @param void internal function to be documented
 #' @keywords internal
 est_map_haplo_given_genoprob <- function(map.list,
                                        genoprob.list,
@@ -240,8 +236,6 @@ est_map_haplo_given_genoprob <- function(map.list,
 
 #' Compute conditional probabilities of the genotypes given a sequence 
 #' of block markers
-#'
-#' @param void internal function to be documented
 #' @keywords internal
 calc_genoprob_haplo <- function(ploidy, n.mrk, n.ind, haplo, emit = NULL, 
                                 rf_vec, ind.names, verbose = TRUE, 

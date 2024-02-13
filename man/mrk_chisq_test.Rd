@@ -6,9 +6,6 @@
 \usage{
 mrk_chisq_test(x, ploidy)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Chi-square test
 }

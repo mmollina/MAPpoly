@@ -6,9 +6,6 @@
 \usage{
 get_ph_list_subset(ph.list, seq.num, conf)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 subset of a linkage phase list
 }

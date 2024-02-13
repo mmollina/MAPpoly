@@ -294,8 +294,6 @@ plot.mappoly.rf.matrix <- function(x, type = c("rf", "lod"), ord = NULL, rem = N
 
 
 #' Select rf and lod based on thresholds
-#'
-#' @param void internal function to be documented
 #' @keywords internal
 select_rf <- function(x, thresh.LOD.ph, thresh.LOD.rf, thresh.rf, shared.alleles = FALSE)
 {

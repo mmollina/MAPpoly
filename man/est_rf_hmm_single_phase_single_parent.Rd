@@ -16,13 +16,7 @@ est_rf_hmm_single_phase_single_parent(
   ret.map.no.rf.estimation = FALSE
 )
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Multilocus analysis using Hidden Markov Models (single parent, single phase)
-}
-\author{
-Marcelo Mollinari, \email{mmollin@ncsu.edu}
 }
 \keyword{internal}

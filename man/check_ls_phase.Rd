@@ -7,9 +7,6 @@ markers for which they are different.}
 \usage{
 check_ls_phase(ph)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Compare a list of linkage phases and return the 
 markers for which they are different.

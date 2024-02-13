@@ -6,9 +6,6 @@
 \usage{
 get_rf_from_mat(M)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Get recombination fraction from a matrix
 }

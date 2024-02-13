@@ -14,6 +14,8 @@ sample_data(
 )
 }
 \arguments{
+\item{input.data}{an object  of class \code{mappoly.data}}
+
 \item{n}{number of individuals or markers to be sampled}
 
 \item{percentage}{if \code{n == NULL}, the percentage of individuals or markers to be sampled}
@@ -25,8 +27,6 @@ if \code{type = "individual"}, \code{n = NULL} and \code{percentage = NULL}}
 
 \item{selected.mrk}{a vector containing the name of the markers to select. Only has effect 
 if \code{type = "marker"}, \code{n = NULL} and \code{percentage = NULL}}
-
-\item{x}{an object  of class \code{mappoly.data}}
 }
 \value{
 an object  of class \code{mappoly.data}

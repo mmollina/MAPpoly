@@ -6,9 +6,6 @@
 \usage{
 get_w_m(ploidy)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Get the number of bivalent configurations
 }

@@ -15,9 +15,6 @@ paralell_pairwise_probability(
   ll = ll
 )
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Wrapper function to probability-based pairwise two-point estimation in C++
 }

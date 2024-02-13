@@ -6,9 +6,6 @@
 \usage{
 aggregate_matrix(M, fact)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Aggregate matrix cells (lower the resolution by a factor)
 }

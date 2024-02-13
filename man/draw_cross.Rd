@@ -14,9 +14,6 @@ draw_cross(
   height = 6
 )
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 This function draws the parental map (including the linkage
 phase configuration) in a pdf output. This function is not to

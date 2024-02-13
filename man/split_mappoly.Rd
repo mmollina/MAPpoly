@@ -13,9 +13,6 @@ split_mappoly(
   verbose = TRUE
 )
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Split map into sub maps given a gap threshold
 }

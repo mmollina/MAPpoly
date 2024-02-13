@@ -6,9 +6,6 @@
 \usage{
 get_states_and_emission_single_parent(ploidy, ph, global.err, D, dose.notinf.P)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Get states and emission in one informative parent
 }

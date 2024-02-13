@@ -12,9 +12,6 @@ genotyping_global_error(
   th.prob = 0.95
 )
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 If \code{restricted = TRUE}, it restricts the prior to the 
 possible classes under Mendelian, non double-reduced segregation 

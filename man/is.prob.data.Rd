@@ -2,14 +2,21 @@
 % Please edit documentation in R/utils.R
 \name{is.prob.data}
 \alias{is.prob.data}
-\title{Is it a probability dataset?}
+\title{Check if Object is a Probability Dataset in MAPpoly}
 \usage{
 is.prob.data(x)
 }
 \arguments{
-\item{void}{internal function to be documented}
+\item{x}{An object of class `"mappoly.data"`}
+}
+\value{
+A logical value: `TRUE` if the 'geno' component exists within `x`,
+indicating it is a valid probability dataset for genetic analysis; `FALSE`
+otherwise.
 }
 \description{
-Is it a probability dataset?
+Determines whether the specified object is a probability dataset
+by checking for the existence of the 'geno' component within a
+`"mappoly.data"` object.
 }
 \keyword{internal}

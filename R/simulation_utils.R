@@ -4,8 +4,6 @@
 #' under random chromosome segregation
 #' with one informative parent. This function is not to be
 #' directly called by the user
-#'
-#' @param void internal function to be documented
 #' @keywords internal
 sim_cross_one_informative_parent <- function(ploidy,
                                            n.mrk,
@@ -81,8 +79,6 @@ sim_cross_one_informative_parent <- function(ploidy,
 }
 
 #' Simulate mapping population (tow parents)
-#'
-#' @param void internal function to be documented
 #' @keywords internal
 sim_cross_two_informative_parents <- function(ploidy,
                                            n.mrk,
@@ -114,8 +110,6 @@ sim_cross_two_informative_parents <- function(ploidy,
 #' This function draws the parental map (including the linkage
 #' phase configuration) in a pdf output. This function is not to
 #' be directly called by the user
-#'
-#' @param void internal function to be documented
 #' @importFrom grDevices pdf dev.off
 #' @keywords internal
 draw_cross <- function(ploidy,

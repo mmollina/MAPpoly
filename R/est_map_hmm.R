@@ -904,7 +904,6 @@ plot.mappoly.map <- function(x, left.lim = 0, right.lim = Inf,
 }
 
 #' prepare maps for plot 
-#' @param void internal function to be documented
 #' @keywords internal
 prepare_map <- function(input.map, config = "best"){
   if (!inherits(input.map, "mappoly.map")) {
@@ -945,8 +944,6 @@ prepare_map <- function(input.map, config = "best"){
 
 #' Get the tail of a marker sequence up to the point where the markers
 #' provide no additional information.
-#'
-#' @param void internal function to be documented
 #' @keywords internal
 get_full_info_tail <- function(input.obj, extend = NULL) {
   ## checking for correct object
@@ -995,19 +992,32 @@ get_full_info_tail <- function(input.obj, extend = NULL) {
   return(input.obj)
 }
 
-#' remove maps under a certain threshold
-#' @param void internal function to be documented
+#' Filter MAPpoly Map Configurations by Loglikelihood Threshold
+#'
+#' This function filters configurations within a `"mappoly.map"` object based on a specified 
+#' log-likelihood threshold.
+#'
+#' @param map An object of class `"mappoly.map"`, which may contain several maps 
+#' with different linkage phase configurations and their respective log-likelihoods.
+#' @param thres.hmm The threshold for filtering configurations. 
+#'
+#' @return Returns the modified `"mappoly.map"` object with configurations filtered 
+#' based on the log-likelihood threshold.
+#'
 #' @keywords internal
-#' @export filter_map_at_hmm_thres
+#' @export
 filter_map_at_hmm_thres <- function(map, thres.hmm){
+  if (!inherits(map, "mappoly.map")) {
+    stop("Input 'map' is not an object of class 'mappoly.map'")
+  }
+  
   map$info$ph.thresh <- NULL
   map$maps <- map$maps[get_LOD(map, sorted = FALSE) < thres.hmm]
-  map
+  return(map)
 }
 
 #' makes a phase list from map, selecting only 
 #' configurations under a certain threshold
-#' @param void internal function to be documented
 #' @keywords internal
 update_ph_list_at_hmm_thres <- function(map, thres.hmm){
   temp.map <- filter_map_at_hmm_thres(map, thres.hmm)
@@ -1020,7 +1030,6 @@ update_ph_list_at_hmm_thres <- function(map, thres.hmm){
 }
 
 #' subset of a linkage phase list
-#' @param void internal function to be documented
 #' @keywords internal
 get_ph_list_subset <- function(ph.list, seq.num, conf){
   config.to.test <- list(lapply(ph.list$config.to.test[[conf]], function(x, seq.num) x[as.character(seq.num)], seq.num))
@@ -1032,7 +1041,6 @@ get_ph_list_subset <- function(ph.list, seq.num, conf){
 }
 
 #' concatenate two linkage phase lists
-#' @param void internal function to be documented
 #' @keywords internal
 concatenate_ph_list <- function(ph.list.1, ph.list.2){
   if(length(ph.list.1) == 0)
@@ -1048,7 +1056,6 @@ concatenate_ph_list <- function(ph.list.1, ph.list.2){
 }
 
 #' add a single marker at the tail of a linkage phase list
-#' @param void internal function 
 #' @keywords internal
 add_mrk_at_tail_ph_list <- function(ph.list.1, ph.list.2, cor.index){
   config.to.test <- vector("list", length = nrow(cor.index))
@@ -1065,7 +1072,6 @@ add_mrk_at_tail_ph_list <- function(ph.list.1, ph.list.2, cor.index){
 
 #' Compare a list of linkage phases and return the 
 #' markers for which they are different.
-#' @param void internal function to be documented
 #' @keywords internal
 check_ls_phase <- function(ph){
   if(length(ph$config.to.test)  ==  1) return(0)
@@ -1082,7 +1088,6 @@ check_ls_phase <- function(ph){
 }
 
 #' cat for graphical representation of the phases
-#' @param void internal function to be documented
 #' @keywords internal
 print_ph <- function(input.ph){
   phs.P <- lapply(input.ph$config.to.test, 
@@ -1106,7 +1111,6 @@ print_ph <- function(input.ph){
 }
 
 #' cat for phase information
-#' @param void internal function to be documented
 #' @keywords internal
 cat_phase <- function(input.seq,
                       input.ph,

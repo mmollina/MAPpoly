@@ -6,9 +6,6 @@
 \usage{
 get_ols_map(input.seq, input.mat, weight = TRUE)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Get weighted ordinary least squared map give a sequence and rf matrix
 }

@@ -6,9 +6,6 @@
 \usage{
 gg_color_hue(n)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Color pallet ggplot-like
 }

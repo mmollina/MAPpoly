@@ -6,9 +6,6 @@
 \usage{
 concatenate_ph_list(ph.list.1, ph.list.2)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 concatenate two linkage phase lists
 }

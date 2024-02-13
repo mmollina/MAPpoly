@@ -15,9 +15,6 @@ paralell_pairwise_discrete(
   ll = ll
 )
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Wrapper function to discrete-based pairwise two-point estimation in C++
 }

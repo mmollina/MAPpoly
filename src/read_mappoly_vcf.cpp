@@ -255,7 +255,6 @@ std::vector<double> get_probabilities(std::string mystring, int pl_pos){
 }
 
 // Getting PL for all markers and all individuals
-//' @export
 // [[Rcpp::export(name=".vcf_get_probabilities")]]
 Rcpp::List vcf_get_probabilities(Rcpp::StringMatrix& mat, int pl_pos){
   int rowmat = mat.nrow();
@@ -292,7 +291,6 @@ Rcpp::List vcf_get_probabilities(Rcpp::StringMatrix& mat, int pl_pos){
 }
 
 // Getting dosages for all markers and all individuals
-//' @export
 // [[Rcpp::export(name=".vcf_transform_dosage")]]
 Rcpp::NumericMatrix vcf_transform_dosage(Rcpp::StringMatrix& mat, int gt_pos){
   int rowmat = mat.nrow();
@@ -309,7 +307,6 @@ Rcpp::NumericMatrix vcf_transform_dosage(Rcpp::StringMatrix& mat, int gt_pos){
 }
 
 // Getting ploidy for all markers and all individuals
-//' @export
 // [[Rcpp::export(name=".vcf_get_ploidy")]]
 Rcpp::NumericMatrix vcf_get_ploidy(Rcpp::StringMatrix& mat, int gt_pos){
   int rowmat = mat.nrow();
@@ -326,7 +323,6 @@ Rcpp::NumericMatrix vcf_get_ploidy(Rcpp::StringMatrix& mat, int gt_pos){
 }
 
 // Getting depth for all markers and all individuals
-//' @export
 // [[Rcpp::export(name=".vcf_get_depth")]]
 Rcpp::NumericMatrix vcf_get_depth(Rcpp::StringMatrix& mat, int dp_pos){
   int rowmat = mat.nrow();

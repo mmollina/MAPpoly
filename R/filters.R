@@ -1,8 +1,5 @@
 #' Filter non-conforming classes in F1, non double reduced population.
-#'
-#' @param void internal function to be documented
 #' @keywords internal
-#' @export
 filter_non_conforming_classes <- function(input.data, prob.thres = NULL)
 {
   if (!inherits(input.data, "mappoly.data")) {
@@ -64,22 +61,25 @@ filter_non_conforming_classes <- function(input.data, prob.thres = NULL)
 
 #' Filter missing genotypes
 #'
-#' Excludes markers or individuals based on their proportion of missing data
+#' Excludes markers or individuals based on their proportion of missing data.
 #'
-#' @param input.data an object of class \code{mappoly.data}
+#' @param input.data an object of class \code{mappoly.data}.
 #'
 #' @param type one of the following options:
-#' \code{'marker'}{filter out markers based on their percentage of missing data (default)}
-#' \code{'individual'}{filter out individuals based on their percentage of missing data}
+#' \enumerate{
+#'   \item \code{"marker"}: filter out markers based on their percentage of missing data (default).
+#'   \item \code{"individual"}: filter out individuals based on their percentage of missing data.
+#' }
 #' Please notice that removing individuals with certain amount of data can change some marker parameters
 #' (such as depth), and can also change the estimated genotypes for other individuals.
-#' So be careful when removing individuals.
+#' So, be careful when removing individuals.
 #'
-#' @param filter.thres maximum percentage of missing data (default = 0.2)
+#' @param filter.thres maximum percentage of missing data (default = 0.2).
 #'
-#' @param inter if \code{TRUE}, expects user-input to proceed with filtering
+#' @param inter if \code{TRUE}, expects user-input to proceed with filtering.
 #'
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
+#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}.
+#'
 #' @examples
 #' plot(tetra.solcap)
 #' dat.filt.mrk <- filter_missing(input.data = tetra.solcap,
@@ -87,6 +87,7 @@ filter_non_conforming_classes <- function(input.data, prob.thres = NULL)
 #'                                filter.thres = 0.1,
 #'                                inter = TRUE)
 #' plot(dat.filt.mrk)
+#'
 #' @export
 #' @importFrom magrittr "%>%"
 #' @importFrom dplyr filter

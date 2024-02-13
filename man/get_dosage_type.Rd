@@ -2,14 +2,26 @@
 % Please edit documentation in R/utils.R
 \name{get_dosage_type}
 \alias{get_dosage_type}
-\title{Get dosage type in a sequence}
+\title{Get Dosage Type in a Sequence}
 \usage{
 get_dosage_type(input.seq)
 }
 \arguments{
-\item{void}{internal function to be documented}
+\item{input.seq}{An object of class \code{"mappoly.sequence"}:}
+}
+\value{
+A list with four components categorizing marker names into:
+\describe{
+  \item{simplex.p}{Markers with a simplex dosage from parent 1.}
+  \item{simplex.q}{Markers with a simplex dosage from parent 2.}
+  \item{double.simplex}{Markers with a double simplex dosage.}
+  \item{multiplex}{Markers not fitting into the above categories, indicating a multiplex dosage.}
+}
 }
 \description{
-Get dosage type in a sequence
+Analyzes a genomic sequence object to categorize markers based on their dosage type.
+The function calculates the dosage type by comparing the dosage of two parental sequences
+(p1 and p2) against the ploidy level. It categorizes markers into simplex for parent 1 (simplex.p),
+simplex for parent 2 (simplex.q), double simplex (ds), and multiplex based on the calculated dosages.
 }
 \keyword{internal}

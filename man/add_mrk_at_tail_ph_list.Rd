@@ -6,9 +6,6 @@
 \usage{
 add_mrk_at_tail_ph_list(ph.list.1, ph.list.2, cor.index)
 }
-\arguments{
-\item{void}{internal function}
-}
 \description{
 add a single marker at the tail of a linkage phase list
 }

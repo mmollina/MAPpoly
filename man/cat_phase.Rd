@@ -14,9 +14,6 @@ cat_phase(
   hmm.phase.number
 )
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 cat for phase information
 }

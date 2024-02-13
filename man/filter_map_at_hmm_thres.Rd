@@ -2,14 +2,22 @@
 % Please edit documentation in R/est_map_hmm.R
 \name{filter_map_at_hmm_thres}
 \alias{filter_map_at_hmm_thres}
-\title{remove maps under a certain threshold}
+\title{Filter MAPpoly Map Configurations by Loglikelihood Threshold}
 \usage{
 filter_map_at_hmm_thres(map, thres.hmm)
 }
 \arguments{
-\item{void}{internal function to be documented}
+\item{map}{An object of class `"mappoly.map"`, which may contain several maps 
+with different linkage phase configurations and their respective log-likelihoods.}
+
+\item{thres.hmm}{The threshold for filtering configurations.}
+}
+\value{
+Returns the modified `"mappoly.map"` object with configurations filtered 
+based on the log-likelihood threshold.
 }
 \description{
-remove maps under a certain threshold
+This function filters configurations within a `"mappoly.map"` object based on a specified 
+log-likelihood threshold.
 }
 \keyword{internal}

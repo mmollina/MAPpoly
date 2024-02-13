@@ -6,9 +6,6 @@
 \usage{
 select_rf(x, thresh.LOD.ph, thresh.LOD.rf, thresh.rf, shared.alleles = FALSE)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Select rf and lod based on thresholds
 }

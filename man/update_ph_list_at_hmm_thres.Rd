@@ -7,9 +7,6 @@ configurations under a certain threshold}
 \usage{
 update_ph_list_at_hmm_thres(map, thres.hmm)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 makes a phase list from map, selecting only 
 configurations under a certain threshold

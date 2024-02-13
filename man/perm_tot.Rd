@@ -6,9 +6,6 @@
 \usage{
 perm_tot(v)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 N! combination
 }

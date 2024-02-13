@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{plot_compare_haplotypes}
 \alias{plot_compare_haplotypes}
-\title{Plot two overlapped haplotypes}
+\title{Plot Two Overlapped Haplotypes}
 \usage{
 plot_compare_haplotypes(
   ploidy,
@@ -13,9 +13,32 @@ plot_compare_haplotypes(
 )
 }
 \arguments{
-\item{void}{internal function to be documented}
+\item{ploidy}{Integer, specifying the ploidy level of the organism being represented.}
+
+\item{hom.allele.p1}{A list where each element represents the alleles for a marker in the first haplotype group, for 'p' parent.}
+
+\item{hom.allele.q1}{A list where each element represents the alleles for a marker in the first haplotype group, for 'q' parent.}
+
+\item{hom.allele.p2}{Optionally, a list where each element represents the alleles for a marker in the second haplotype group, for 'p' parent.}
+
+\item{hom.allele.q2}{Optionally, a list where each element represents the alleles for a marker in the second haplotype group, for 'q' parent.}
+}
+\value{
+Invisible. The function primarily generates a plot for visual analysis and does not return any data.
 }
 \description{
-Plot two overlapped haplotypes
+This function plots two sets of haplotypes for comparison, allowing for visual
+inspection of homologous allele patterns across two groups or conditions.
+It is designed to handle and display genetic data for organisms with varying ploidy levels.
+}
+\details{
+The function creates a graphical representation of haplotypes, where each marker's alleles are plotted
+along a line for each parent ('p' and 'q'). If provided, the second set of haplotypes (for comparison) are overlaid
+on the same plot. This allows for direct visual comparison of allele presence or absence across the two sets.
+Different colors are used to distinguish between the first and second sets of haplotypes.
+
+The function uses several internal helper functions (`ph_list_to_matrix` and `ph_matrix_to_list`) to manipulate
+haplotype data. These functions should correctly handle the conversion between list and matrix representations
+of haplotype data.
 }
 \keyword{internal}

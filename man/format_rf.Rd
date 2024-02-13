@@ -6,9 +6,6 @@
 \usage{
 format_rf(res)
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Format results from pairwise two-point estimation in C++
 }

@@ -19,9 +19,6 @@ poly_hmm_est(
   tol = 0.001
 )
 }
-\arguments{
-\item{void}{internal function to be documented}
-}
 \description{
 Estimate genetic map using as input the probability distribution of
 genotypes (wrapper function to C++)

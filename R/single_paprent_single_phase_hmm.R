@@ -1,10 +1,5 @@
 #' Multilocus analysis using Hidden Markov Models (single parent, single phase)
-#'
-#' @param void internal function to be documented
 #' @keywords internal
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
-#' @export est_rf_hmm_single_phase_single_parent
-#' 
 est_rf_hmm_single_phase_single_parent <- function(input.seq,
                                                   input.ph.single,
                                                   info.parent = 1,
