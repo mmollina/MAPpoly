@@ -29,14 +29,12 @@
 #' @param ... Currently ignored.
 #'
 #' @return Returns an object of class `mappoly.sequence`, comprising:
-#' \itemize{
 #'   \item{"seq.num"}{Ordered vector of marker indices according to the input.}
 #'   \item{"seq.phases"}{List of linkage phases between markers; -1 for undefined phases.}
 #'   \item{"seq.rf"}{Vector of recombination frequencies; -1 for not estimated frequencies.}
 #'   \item{"loglike"}{Log-likelihood of the linkage map.}
 #'   \item{"data.name"}{Name of the `mappoly.data` object with raw data.}
 #'   \item{"twopt"}{Name of the `mappoly.twopt` object with 2-point analyses; -1 if not computed.}
-#' }
 #'
 #' @examples
 #' all.mrk <- make_seq_mappoly(hexafake, 'all')
