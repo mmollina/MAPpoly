@@ -6,24 +6,7 @@
 \usage{
 update_missing(input.data, prob.thres = 0.95)
 }
-\arguments{
-\item{input.data}{an object of class \code{mappoly.data}}
-
-\item{prob.thres}{probability threshold to associate a marker call to a 
-dosage. Markers with maximum genotype probability smaller than 'prob.thres' 
-are considered as missing data for the dosage calling purposes}
-}
 \description{
-Updates the missing data in the dosage matrix of an object of class 
-\code{mappoly.data} given a new probability threshold
+Update missing information
 }
-\examples{
-\donttest{
-data.updated = update_missing(hexafake.geno.dist, prob.thres = 0.5)
-print(hexafake.geno.dist)
-print(data.updated)
-}
-}
-\author{
-Marcelo Mollinari, \email{mmollin@ncsu.edu}
-}
+\keyword{internal}
