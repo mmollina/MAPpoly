@@ -51,25 +51,16 @@
 using namespace std;
 using namespace Rcpp;
 
-RcppExport SEXP calc_genprob_haplo(SEXP ploidyR,
-                                   SEXP n_mrkR,
-                                   SEXP n_indR,
-                                   SEXP haploR,
-                                   SEXP emitR,
-                                   SEXP rfR,
-                                   SEXP probsR,
-                                   SEXP verboseR)
+// [[Rcpp::export]]
+List calc_genprob_haplo_cpp(int m, 
+                            int n_mrk, 
+                            int n_ind, 
+                            List haplo, 
+                            List emit, 
+                            NumericVector rf, 
+                            std::vector<long double> probs, 
+                            int verbose)
 {
-  //convert input to C++ types
-  int m = Rcpp::as<int>(ploidyR);
-  int n_mrk = Rcpp::as<int>(n_mrkR);
-  int n_ind = Rcpp::as<int>(n_indR);
-  Rcpp::List haplo(haploR);
-  Rcpp::List emit(emitR);
-  Rcpp::NumericVector rf(rfR);
-  int verbose = Rcpp::as<int>(verboseR);
-  std::vector<long double> probs = Rcpp::as<std::vector<long double> >(probsR);
-  
   //Initializing some variables
   int g = nChoosek(m, m/2), k, k1, count = 0;
   std::vector<long double> term(n_ind);
@@ -175,27 +166,16 @@ RcppExport SEXP calc_genprob_haplo(SEXP ploidyR,
   List z  = List::create(probs);
   return z ;
 }
-
-
-RcppExport SEXP calc_genprob_haplo_highprec(SEXP ploidyR,
-                                            SEXP n_mrkR,
-                                            SEXP n_indR,
-                                            SEXP haploR,
-                                            SEXP emitR,
-                                            SEXP rfR,
-                                            SEXP probsR,
-                                            SEXP verboseR)
+// [[Rcpp::export]]
+List calc_genprob_haplo_highprec_cpp(int m, 
+                                     int n_mrk, 
+                                     int n_ind, 
+                                     List haplo, 
+                                     List emit, 
+                                     NumericVector rf, 
+                                     std::vector<long double> probs, 
+                                     int verbose)
 {
-  //convert input to C++ types
-  int m = Rcpp::as<int>(ploidyR);
-  int n_mrk = Rcpp::as<int>(n_mrkR);
-  int n_ind = Rcpp::as<int>(n_indR);
-  Rcpp::List haplo(haploR);
-  Rcpp::List emit(emitR);
-  Rcpp::NumericVector rf(rfR);
-  int verbose = Rcpp::as<int>(verboseR);
-  std::vector<long double> probs = Rcpp::as<std::vector<long double> >(probsR);
-  
   //Initializing some variables
   int g = nChoosek(m, m/2), k, k1, count = 0;
   std::vector<long double> term(n_ind);

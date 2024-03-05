@@ -96,17 +96,17 @@ calc_genoprob <- function(input.map, step = 0,  phase.config = "best", verbose =
     phQ[rownames(Dtemp)] <- phQtemp
     seq.rf.pseudo <- mf_h(diff(map.pseudo))
   }
-  for (j in 1:nrow(D))
-    D[j, D[j, ]  ==  input.map$info$ploidy + 1] <- dp[j] + dq[j] + 1 + as.numeric(dp[j] == 0 || dq[j] == 0)
-  res.temp <- .Call("calc_genoprob",
-                  ploidy,
-                  t(D),
-                  phP,
-                  phQ,
-                  seq.rf.pseudo,
-                  as.numeric(rep(0, choose(ploidy, ploidy/2)^2 * n.mrk * n.ind)),
-                  verbose = verbose,
-                  PACKAGE = "mappoly")
+  for (j in 1:nrow(D)){
+    D[j, D[j, ]  ==  input.map$info$ploidy + 1] <- dp[j] + dq[j] + 1 + 
+      as.numeric(dp[j] == 0 || dq[j] == 0)    
+  }
+  res.temp <- calc_genoprob_cpp(ploidy,
+                                t(D),
+                                phP,
+                                phQ,
+                                seq.rf.pseudo,
+                                as.numeric(rep(0, choose(ploidy, ploidy/2)^2 * n.mrk * n.ind)),
+                                verbose = verbose)
   if(verbose) cat("\n")
   dim(res.temp[[1]]) <- c(choose(ploidy,ploidy/2)^2,n.mrk,n.ind)
   dimnames(res.temp[[1]]) <- list(kronecker(apply(combn(letters[1:ploidy],ploidy/2),2, paste, collapse = ""),

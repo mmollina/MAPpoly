@@ -31,20 +31,20 @@
 using namespace std;
 using namespace Rcpp;
 
-RcppExport SEXP calc_genprob_haplo(SEXP ploidyR,
-                                   SEXP n_mrkR,
-                                   SEXP n_indR,
-                                   SEXP haploR,
-                                   SEXP emitR,
-                                   SEXP rfR,
-                                   SEXP probsR,
-                                   SEXP verboseR);
+List calc_genprob_haplo_cpp(int m, 
+                            int n_mrk, 
+                            int n_ind, 
+                            List haplo, 
+                            List emit, 
+                            NumericVector rf, 
+                            std::vector<long double> probs, 
+                            int verbose);
 
-RcppExport SEXP calc_genprob_haplo_highprec(SEXP ploidyR,
-                                            SEXP n_mrkR,
-                                            SEXP n_indR,
-                                            SEXP haploR,
-                                            SEXP emitR,
-                                            SEXP rfR,
-                                            SEXP probsR,
-                                            SEXP verboseR);
+List calc_genprob_haplo_highprec(int m, 
+                                 int n_mrk, 
+                                 int n_ind, 
+                                 List haplo, 
+                                 List emit, 
+                                 NumericVector rf, 
+                                 std::vector<long double> probs, 
+                                 int verbose);

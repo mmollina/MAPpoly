@@ -1,3 +1,6 @@
+# MAPpoly version 0.4.1
+ - Addressed the `--use-LTO` installation failure issue
+
 # MAPpoly version 0.4.0
  - Functions to build maps in individual parents
  - Functions to merge individual maps

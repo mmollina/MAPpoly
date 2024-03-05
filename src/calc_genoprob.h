@@ -17,10 +17,13 @@
  For a copy of the GNU General Public License, please visit
  <http://www.gnu.org/licenses/>.
  */
-RcppExport SEXP calc_genoprob(SEXP ploidyR,
-			       SEXP genoR,
-			       SEXP phPR,
-			       SEXP phQR,
-			       SEXP rfR,
-			       SEXP probsR,
-			       SEXP verboseR);
+using namespace std;
+using namespace Rcpp;
+
+List calc_genoprob_cpp(int m, 
+                       NumericMatrix geno, 
+                       List ph1, 
+                       List ph2, 
+                       NumericVector rf,
+                       std::vector<long double> probs,
+                       int verbose);
