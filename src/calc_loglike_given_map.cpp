@@ -49,21 +49,14 @@
 using namespace std;
 using namespace Rcpp;
 
-RcppExport SEXP loglike_hmm(SEXP ploidyR,
-                            SEXP genoR,
-                            SEXP phPR,
-                            SEXP phQR,
-                            SEXP rfR,
-                            SEXP verboseR)
+// [[Rcpp::export]]
+List loglike_hmm_cpp(int m,
+                     NumericMatrix geno,
+                     List ph1,
+                     List ph2,
+                     NumericVector rf,
+                     int verbose)
 {
-  //*convert input to C++ types
-  int m = Rcpp::as<int>(ploidyR);
-  Rcpp::NumericMatrix geno(genoR); //(n.ind x n.col)
-  Rcpp::List ph1(phPR);
-  Rcpp::List ph2(phQR);
-  Rcpp::NumericVector rf(rfR);
-  int verbose = Rcpp::as<int>(verboseR);
-  
   //*Initializing some variables
   int g = nChoosek(m, m/2);
   int n_mar = geno.ncol(); // markers are disposed in columns

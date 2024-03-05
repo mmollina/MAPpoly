@@ -10,6 +10,22 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// loglike_hmm_cpp
+List loglike_hmm_cpp(int m, NumericMatrix geno, List ph1, List ph2, NumericVector rf, int verbose);
+RcppExport SEXP _mappoly_loglike_hmm_cpp(SEXP mSEXP, SEXP genoSEXP, SEXP ph1SEXP, SEXP ph2SEXP, SEXP rfSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type m(mSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type geno(genoSEXP);
+    Rcpp::traits::input_parameter< List >::type ph1(ph1SEXP);
+    Rcpp::traits::input_parameter< List >::type ph2(ph2SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type rf(rfSEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(loglike_hmm_cpp(m, geno, ph1, ph2, rf, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
 // vcf_get_probabilities
 Rcpp::List vcf_get_probabilities(Rcpp::StringMatrix& mat, int pl_pos);
 RcppExport SEXP _mappoly_vcf_get_probabilities(SEXP matSEXP, SEXP pl_posSEXP) {
@@ -70,13 +86,13 @@ RcppExport SEXP est_hmm_map_single_parent(void *, void *, void *, void *, void *
 RcppExport SEXP est_map_hmm(void *, void *, void *, void *, void *, void *, void *, void *);
 RcppExport SEXP est_map_hmm_highprec(void *, void *, void *, void *, void *, void *, void *, void *);
 RcppExport SEXP get_counts_single_parent_cpp(void *, void *, void *, void *, void *, void *);
-RcppExport SEXP loglike_hmm(void *, void *, void *, void *, void *, void *);
 RcppExport SEXP pairwise_rf_estimation_disc(void *, void *, void *, void *, void *, void *, void *);
 RcppExport SEXP pairwise_rf_estimation_disc_rcpp(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
 RcppExport SEXP pairwise_rf_estimation_prob(void *, void *, void *, void *, void *, void *, void *, void *);
 RcppExport SEXP poly_hmm_est_CPP(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_mappoly_loglike_hmm_cpp", (DL_FUNC) &_mappoly_loglike_hmm_cpp, 6},
     {"_mappoly_vcf_get_probabilities", (DL_FUNC) &_mappoly_vcf_get_probabilities, 2},
     {"_mappoly_vcf_transform_dosage", (DL_FUNC) &_mappoly_vcf_transform_dosage, 2},
     {"_mappoly_vcf_get_ploidy", (DL_FUNC) &_mappoly_vcf_get_ploidy, 2},
@@ -92,7 +108,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"est_map_hmm",                      (DL_FUNC) &est_map_hmm,                       8},
     {"est_map_hmm_highprec",             (DL_FUNC) &est_map_hmm_highprec,              8},
     {"get_counts_single_parent_cpp",     (DL_FUNC) &get_counts_single_parent_cpp,      6},
-    {"loglike_hmm",                      (DL_FUNC) &loglike_hmm,                       6},
     {"pairwise_rf_estimation_disc",      (DL_FUNC) &pairwise_rf_estimation_disc,       7},
     {"pairwise_rf_estimation_disc_rcpp", (DL_FUNC) &pairwise_rf_estimation_disc_rcpp, 12},
     {"pairwise_rf_estimation_prob",      (DL_FUNC) &pairwise_rf_estimation_prob,       8},

@@ -43,14 +43,12 @@ loglike_hmm <- function(input.map, input.data = NULL, verbose = FALSE)
     D[j, D[j, ]  ==  input.map$info$ploidy + 1] <- dp[j] + dq[j] + 1 + as.numeric(dp[j] == 0 || dq[j] == 0)
   for(i in 1:length(input.map$maps)){
     rf.temp <- input.map$maps[[i]]$seq.rf
-    res.temp <- .Call("loglike_hmm",
-                    input.map$info$ploidy,
-                    t(D),
-                    lapply(input.map$maps[[i]]$seq.ph$P, function(x) x-1),
-                    lapply(input.map$maps[[i]]$seq.ph$Q, function(x) x-1),
-                    rf.temp,
-                    verbose,
-                    PACKAGE = "mappoly")
+    res.temp <- loglike_hmm_cpp(input.map$info$ploidy,
+                                t(D),
+                                lapply(input.map$maps[[i]]$seq.ph$P, function(x) x-1),
+                                lapply(input.map$maps[[i]]$seq.ph$Q, function(x) x-1),
+                                rf.temp,
+                                verbose)
     input.map$maps[[i]]$loglike <- res.temp[[1]]
   }
   return(input.map)
