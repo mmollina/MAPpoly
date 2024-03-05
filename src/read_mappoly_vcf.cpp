@@ -170,7 +170,7 @@ int get_depth(std::string mystring, int dp_pos){
   std::string temp = mystring.substr(start, i - start);
   vec_o_strings.push_back(temp);
   // Returning DP
-  if (vec_o_strings.size() < dp_pos) {
+  if (vec_o_strings.size() < static_cast<std::vector<std::string>::size_type>(dp_pos)){
     start = 0;
   } else if (vec_o_strings[dp_pos-1] == ".") {
     start = 0;
@@ -206,7 +206,7 @@ std::vector<double> get_probabilities(std::string mystring, int pl_pos){
   std::string temp = mystring.substr(start, i - start);
   vec_o_strings.push_back(temp);
   // Checking PL information
-  if (vec_o_strings.size() < pl_pos){
+  if (vec_o_strings.size() < static_cast<std::vector<std::string>::size_type>(pl_pos)){
     final_vec_out2[0] = -1.0;
     return final_vec_out2;
   }
@@ -273,7 +273,7 @@ Rcpp::List vcf_get_probabilities(Rcpp::StringMatrix& mat, int pl_pos){
     for (l=0; l < colmat; l++){
       // Rcout << "The value of l : " << l << "\n";
       out = get_probabilities(as<std::string>(mat(k,l)), pl_pos);
-      if (out.size() == size){
+      if (out.size() == static_cast<std::vector<double>::size_type>(size)){
         for (s=0; s < size; s++){
           // Rcout << "The value of s : " << s << "\n";
           partial_results(l,s) = out[s];
