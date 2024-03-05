@@ -53,14 +53,14 @@ using namespace std;
 using namespace Rcpp;
 
 RcppExport SEXP est_hmm_map_single_parent(SEXP ploidyR,
-                                       SEXP n_mrkR,
-                                       SEXP n_indR,
-                                       SEXP haploR,
-                                       SEXP emitR,
-                                       SEXP rfR,
-                                       SEXP verboseR,
-                                       SEXP tolR,
-                                       SEXP ret_H0R)
+                                          SEXP n_mrkR,
+                                          SEXP n_indR,
+                                          SEXP haploR,
+                                          SEXP emitR,
+                                          SEXP rfR,
+                                          SEXP verboseR,
+                                          SEXP tolR,
+                                          SEXP ret_H0R)
 {
   //convert input to C++ types
   int m = Rcpp::as<int>(ploidyR);
@@ -126,7 +126,7 @@ RcppExport SEXP est_hmm_map_single_parent(SEXP ploidyR,
   //Initializing recombination number matrix
   std::vector< std::vector<double> > R;
   R = rec_num(m);
-
+  
   //begin EM algorithm
   for(int it=0; it<maxit; it++)
   {
@@ -192,7 +192,7 @@ RcppExport SEXP est_hmm_map_single_parent(SEXP ploidyR,
             {
               nr = R[v[k][ind][i]][v[k+1][ind][j]] * 2;
               if(s > 0) // Verify theoretical implications of this condition
-              rf[k] +=  nr * gamma[i][j]/s;
+                rf[k] +=  nr * gamma[i][j]/s;
             }
           }
         }
@@ -203,7 +203,7 @@ RcppExport SEXP est_hmm_map_single_parent(SEXP ploidyR,
         term[ind] +=  alpha[ind][n_mrk-1][j];
       }
     } // loop over individuals
-
+    
     //Likelihood using a specific recombination fraction vector
     //Usually, this is used to compute LOD Score under H0: rf=0.5
     if(ret_H0 == 1)
@@ -212,10 +212,12 @@ RcppExport SEXP est_hmm_map_single_parent(SEXP ploidyR,
       for(int i=0; (unsigned)i < alpha.size(); i++)
       {
         temp=0.0;
-        for(int j=0; (unsigned)j < alpha[i][n_mrk-1].size(); j++)
-          temp += alpha[i][n_mrk-1][j];
-          if(temp > 0)
-            loglike += log10(temp);
+        for(int j=0; (unsigned)j < alpha[i][n_mrk-1].size(); j++){
+          temp += alpha[i][n_mrk-1][j];          
+        }
+        if(temp > 0){
+          loglike += log10(temp);          
+        }
       }
       if(verbose)
         Rcpp::Rcout << "\n";
@@ -251,15 +253,17 @@ RcppExport SEXP est_hmm_map_single_parent(SEXP ploidyR,
     if(!flag) break;
   }//end of EM algorithm
   if(flag && verbose) Rcpp::Rcout << "Didn't converge!\n";
-
+  
   //Loglike computation
   for(int i=0; (unsigned)i < alpha.size(); i++)
   {
     temp=0.0;
-    for(int j=0; (unsigned)j < alpha[i][n_mrk-1].size(); j++)
-      temp += alpha[i][n_mrk-1][j];
-      if(temp > 0)
-        loglike += log10(temp);
+    for(int j=0; (unsigned)j < alpha[i][n_mrk-1].size(); j++){
+      temp += alpha[i][n_mrk-1][j];      
+    }
+    if(temp > 0){
+      loglike += log10(temp);      
+    }
   }
   
   
@@ -281,13 +285,13 @@ RcppExport SEXP est_hmm_map_single_parent(SEXP ploidyR,
 }
 
 RcppExport SEXP calc_genprob_single_parent(SEXP ploidyR,
-                                        SEXP n_mrkR,
-                                        SEXP n_indR,
-                                        SEXP haploR,
-                                        SEXP emitR,
-                                        SEXP rfR,
-                                        SEXP probsR,
-                                        SEXP verboseR)
+                                           SEXP n_mrkR,
+                                           SEXP n_indR,
+                                           SEXP haploR,
+                                           SEXP emitR,
+                                           SEXP rfR,
+                                           SEXP probsR,
+                                           SEXP verboseR)
 {
   //convert input to C++ types
   int m = Rcpp::as<int>(ploidyR);
@@ -376,7 +380,7 @@ RcppExport SEXP calc_genprob_single_parent(SEXP ploidyR,
     }
   } // loop over individuals
   
-
+  
   // for(int k = 0; k < n_mrk; k++)
   // {
   //   for(int j = 0; j < alpha[1][k].size(); j++){
