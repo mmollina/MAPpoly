@@ -43,8 +43,6 @@ Thank you for reviewing our re-submission!
        * R:      2.8Mb
        * data:   3.0Mb
    * GNU make is a SystemRequirements.
-   
- - Checked with `--use-LTO` flag: Installation successful without any errors or warnings.
 
 ## Downstream dependencies
 
