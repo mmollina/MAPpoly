@@ -51,23 +51,15 @@
 using namespace std;
 using namespace Rcpp;
 
-RcppExport SEXP calc_genoprob(SEXP ploidyR,
-                              SEXP genoR,
-                              SEXP phPR,
-                              SEXP phQR,
-                              SEXP rfR,
-                              SEXP probsR,
-                              SEXP verboseR)
+// [[Rcpp::export]]
+List calc_genoprob_cpp(int m, 
+                       NumericMatrix geno, 
+                       List ph1, 
+                       List ph2, 
+                       NumericVector rf,
+                       std::vector<long double> probs,
+                       int verbose)
 {
-  //*convert input to C++ types
-  int m = Rcpp::as<int>(ploidyR);
-  Rcpp::NumericMatrix geno(genoR); //(n.ind x n.col)
-  Rcpp::List ph1(phPR);
-  Rcpp::List ph2(phQR);
-  Rcpp::NumericVector rf(rfR);
-  std::vector<long double> probs = Rcpp::as<std::vector<long double> >(probsR);
-  int verbose = Rcpp::as<int>(verboseR);
-
   //*Initializing some variables
   int g = nChoosek(m, m/2), k, k1;
   int n_mrk = geno.ncol(); // markers are disposed in columns

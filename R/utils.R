@@ -478,21 +478,7 @@ mp_pallet2 <- colorRampPalette(c("#911eb4", "#000075","#4363d8","#42d4f4","#4699
 mp_pallet3 <- colorRampPalette(c("#ffe119", "#f58231","#e6194b","#808000","#9a6324", "#800000","#911eb4", "#000075","#4363d8","#42d4f4","#469990", "#3cb44b"))
 
 #' Update missing information
-#'
-#' Updates the missing data in the dosage matrix of an object of class 
-#' \code{mappoly.data} given a new probability threshold
-#' @param input.data an object of class \code{mappoly.data}
-#' @param prob.thres probability threshold to associate a marker call to a 
-#'     dosage. Markers with maximum genotype probability smaller than 'prob.thres' 
-#'     are considered as missing data for the dosage calling purposes
-#' @examples
-#' \donttest{
-#' data.updated = update_missing(hexafake.geno.dist, prob.thres = 0.5)
-#' print(hexafake.geno.dist)
-#' print(data.updated)
-#' }
-#' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
-#' @export
+#' @keywords internal
 update_missing <- function(input.data, prob.thres = 0.95){
   geno.dose <- dist_prob_to_class(geno = input.data$geno, prob.thres = prob.thres)
   if(geno.dose$flag)

@@ -123,7 +123,7 @@ struct rf_two_point_parallel : public Worker {
           int start = 0;
           int rn = 1;
           // Looping through string
-          for(rn = 1; rn < mystring.size(); rn++){
+          for(std::string::size_type rn = 1; rn < mystring.size(); rn++) {
             if( mystring[rn] == split){
               std::string temp = mystring.substr(start, (rn - start));
               z.push_back(temp);
@@ -142,7 +142,7 @@ struct rf_two_point_parallel : public Worker {
           start = 0;
           rn = 1;
           // Looping through string
-          for(rn = 1; rn < mystring.size(); rn++){
+          for(std::string::size_type rn = 1; rn < mystring.size(); rn++) {
             if( mystring[rn] == split){
               std::string temp = mystring.substr(start, (rn - start));
               phases.push_back(temp);
@@ -154,7 +154,7 @@ struct rf_two_point_parallel : public Worker {
           phases.push_back(temp);
           std::vector<int> phase1(phases.size()), phase2(phases.size());
           std::string delimiter2 = "-";
-          for(int j=0; j < phases.size(); j++)
+          for(std::string::size_type j=0; j < phases.size(); j++)
             {
               std::string lnames = phases[j];
               phase1[j] = std::stoi(lnames.substr(0,lnames.find(delimiter2)));
@@ -172,7 +172,7 @@ struct rf_two_point_parallel : public Worker {
                                                 ((count_matrix_pos[(id-1)]-1) + ((i+1)*len_ac - 1)));
               std::vector<int> dk(z.size()), dk1(z.size());
               std::string delimiter = " ";
-              for(int j=0; j < z.size(); j++)
+              for(std::string::size_type j=0; j < z.size(); j++)
                 {
                   std::string lnames = z[j];
                   dk[j] = std::stoi(lnames.substr(0,lnames.find(delimiter)));
@@ -211,7 +211,7 @@ struct rf_two_point_parallel : public Worker {
               double temp=0.0;
               std::vector<double> Tr((m+2) * (m+2));
               std::fill(Tr.begin(), Tr.end(), 1);
-              for(int i = 0; i < dk.size(); i++){
+              for(std::string::size_type i = 0; i < dk.size(); i++){
                 //Rcpp::Rcout << dk(i) << " " << dk1(i) <<  std::endl;;
                 count=0;
                 Tr[dk[i] + (dk1[i] * (m+2))]=0.0;
@@ -293,7 +293,7 @@ struct rf_two_point_parallel : public Worker {
                 count2=0;
                 temp=0.0;
                 std::fill(Tr.begin(), Tr.end(), 1);
-                for(int i = 0; i < dk.size(); i++){
+                for(std::string::size_type i = 0; i < dk.size(); i++){
                   //Rcpp::Rcout << dk(i) << " " << dk1(i) <<  std::endl;;
                   count=0;
                   Tr[dk[i] + (dk1[i] * (m+2))]=0;
@@ -338,7 +338,7 @@ struct rf_two_point_parallel : public Worker {
               count2=0;
               temp=0.0;
               std::fill(Tr.begin(), Tr.end(), 1);
-              for(int i = 0; i < dk.size(); i++){
+              for(std::string::size_type i = 0; i < dk.size(); i++){
                 //Rcpp::Rcout << dk(i) << " " << dk1(i) <<  std::endl;;
                 count=0;
                 Tr[dk[i] + (dk1[i] * (m+2))]=0;
@@ -369,7 +369,7 @@ struct rf_two_point_parallel : public Worker {
                 count2=0;
                 temp=0.0;
                 std::fill(Tr.begin(), Tr.end(), 1);
-                for(int i = 0; i < dk.size(); i++){
+                for(std::string::size_type i = 0; i < dk.size(); i++){
                   //Rcpp::Rcout << dk(i) << " " << dk1(i) <<  std::endl;;
                   count=0;
                   Tr[dk[i] + (dk1[i] * (m+2))]=0;

@@ -28,9 +28,12 @@
 #include <R_ext/PrtUtil.h>
 #include "combinatorial.h"
 
-RcppExport SEXP loglike_hmm(SEXP ploidyR,
-                            SEXP genoR,
-                            SEXP phPR,
-                            SEXP phQR,
-                            SEXP rfR,
-                            SEXP verboseR);
+using namespace std;
+using namespace Rcpp;
+
+List loglike_hmm_cpp(int m,
+                     NumericMatrix geno,
+                     List ph1,
+                     List ph2,
+                     NumericVector rf,
+                     int verbose);

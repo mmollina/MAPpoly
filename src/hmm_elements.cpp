@@ -259,15 +259,17 @@ std::vector<std::vector<int> > index_func(int m,
     do
     {
       s=0;
-      for(int j=0; (unsigned)j < p.size(); j++)
-        if(p[j]>=0) s=s+vp[p[j]];
-        for(int j=0; (unsigned)j < q.size(); j++)
-          if(q[j]>=0) s=s+vq[q[j]];
-          v1[s].push_back(ip);
-          v2[s].push_back(iq);
-          v1[v1.size()-1].push_back(ip);
-          v2[v2.size()-1].push_back(iq);
-          iq++;
+      for(int j=0; (unsigned)j < p.size(); j++){
+        if(p[j]>=0) s=s+vp[p[j]];        
+      }
+      for(int j=0; (unsigned)j < q.size(); j++){
+        if(q[j]>=0) s=s+vq[q[j]];          
+      }
+      v1[s].push_back(ip);
+      v2[s].push_back(iq);
+      v1[v1.size()-1].push_back(ip);
+      v2[v2.size()-1].push_back(iq);
+      iq++;
     }
     while (std::prev_permutation(vq.begin(), vq.end()));
     ip++;
@@ -400,11 +402,11 @@ std::vector<double> backward_emit(int m,
  Classical forward equation presented in Rabiner 1989.
  */
 std::vector<double> forward_emit_single_parent(int m,
-                                            std::vector<double>& fk,
-                                            std::vector<int>& ik,
-                                            std::vector<int>& ik1,
-                                            std::vector<double>& emit,
-                                            std::vector<std::vector<double> >& T)
+                                               std::vector<double>& fk,
+                                               std::vector<int>& ik,
+                                               std::vector<int>& ik1,
+                                               std::vector<double>& emit,
+                                               std::vector<std::vector<double> >& T)
 {
   int ngenk = ik.size();
   int ngenk1 = ik1.size();
@@ -425,11 +427,11 @@ std::vector<double> forward_emit_single_parent(int m,
  Classical backward equation presented in Rabiner 1989.
  */
 std::vector<double> backward_emit_single_parent(int m,
-                                             std::vector<double>& fk1,
-                                             std::vector<int>& ik,
-                                             std::vector<int>& ik1,
-                                             std::vector<double>& emit,
-                                             std::vector<std::vector<double> >& T)
+                                                std::vector<double>& fk1,
+                                                std::vector<int>& ik,
+                                                std::vector<int>& ik1,
+                                                std::vector<double>& emit,
+                                                std::vector<std::vector<double> >& T)
 {
   int ngenk = ik.size();
   int ngenk1 = ik1.size();

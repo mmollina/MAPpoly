@@ -10,6 +10,75 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// calc_genoprob_cpp
+List calc_genoprob_cpp(int m, NumericMatrix geno, List ph1, List ph2, NumericVector rf, std::vector<long double> probs, int verbose);
+RcppExport SEXP _mappoly_calc_genoprob_cpp(SEXP mSEXP, SEXP genoSEXP, SEXP ph1SEXP, SEXP ph2SEXP, SEXP rfSEXP, SEXP probsSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type m(mSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type geno(genoSEXP);
+    Rcpp::traits::input_parameter< List >::type ph1(ph1SEXP);
+    Rcpp::traits::input_parameter< List >::type ph2(ph2SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type rf(rfSEXP);
+    Rcpp::traits::input_parameter< std::vector<long double> >::type probs(probsSEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(calc_genoprob_cpp(m, geno, ph1, ph2, rf, probs, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
+// calc_genprob_haplo_cpp
+List calc_genprob_haplo_cpp(int m, int n_mrk, int n_ind, List haplo, List emit, NumericVector rf, std::vector<long double> probs, int verbose);
+RcppExport SEXP _mappoly_calc_genprob_haplo_cpp(SEXP mSEXP, SEXP n_mrkSEXP, SEXP n_indSEXP, SEXP haploSEXP, SEXP emitSEXP, SEXP rfSEXP, SEXP probsSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type m(mSEXP);
+    Rcpp::traits::input_parameter< int >::type n_mrk(n_mrkSEXP);
+    Rcpp::traits::input_parameter< int >::type n_ind(n_indSEXP);
+    Rcpp::traits::input_parameter< List >::type haplo(haploSEXP);
+    Rcpp::traits::input_parameter< List >::type emit(emitSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type rf(rfSEXP);
+    Rcpp::traits::input_parameter< std::vector<long double> >::type probs(probsSEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(calc_genprob_haplo_cpp(m, n_mrk, n_ind, haplo, emit, rf, probs, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
+// calc_genprob_haplo_highprec_cpp
+List calc_genprob_haplo_highprec_cpp(int m, int n_mrk, int n_ind, List haplo, List emit, NumericVector rf, std::vector<long double> probs, int verbose);
+RcppExport SEXP _mappoly_calc_genprob_haplo_highprec_cpp(SEXP mSEXP, SEXP n_mrkSEXP, SEXP n_indSEXP, SEXP haploSEXP, SEXP emitSEXP, SEXP rfSEXP, SEXP probsSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type m(mSEXP);
+    Rcpp::traits::input_parameter< int >::type n_mrk(n_mrkSEXP);
+    Rcpp::traits::input_parameter< int >::type n_ind(n_indSEXP);
+    Rcpp::traits::input_parameter< List >::type haplo(haploSEXP);
+    Rcpp::traits::input_parameter< List >::type emit(emitSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type rf(rfSEXP);
+    Rcpp::traits::input_parameter< std::vector<long double> >::type probs(probsSEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(calc_genprob_haplo_highprec_cpp(m, n_mrk, n_ind, haplo, emit, rf, probs, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
+// loglike_hmm_cpp
+List loglike_hmm_cpp(int m, NumericMatrix geno, List ph1, List ph2, NumericVector rf, int verbose);
+RcppExport SEXP _mappoly_loglike_hmm_cpp(SEXP mSEXP, SEXP genoSEXP, SEXP ph1SEXP, SEXP ph2SEXP, SEXP rfSEXP, SEXP verboseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type m(mSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type geno(genoSEXP);
+    Rcpp::traits::input_parameter< List >::type ph1(ph1SEXP);
+    Rcpp::traits::input_parameter< List >::type ph2(ph2SEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type rf(rfSEXP);
+    Rcpp::traits::input_parameter< int >::type verbose(verboseSEXP);
+    rcpp_result_gen = Rcpp::wrap(loglike_hmm_cpp(m, geno, ph1, ph2, rf, verbose));
+    return rcpp_result_gen;
+END_RCPP
+}
 // vcf_get_probabilities
 Rcpp::List vcf_get_probabilities(Rcpp::StringMatrix& mat, int pl_pos);
 RcppExport SEXP _mappoly_vcf_get_probabilities(SEXP matSEXP, SEXP pl_posSEXP) {
@@ -59,32 +128,29 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP calc_genoprob(void *, void *, void *, void *, void *, void *, void *);
-RcppExport SEXP calc_genoprob_prior(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
-RcppExport SEXP calc_genprob_haplo(void *, void *, void *, void *, void *, void *, void *, void *);
-RcppExport SEXP calc_genprob_haplo_highprec(void *, void *, void *, void *, void *, void *, void *, void *);
-RcppExport SEXP calc_genprob_single_parent(void *, void *, void *, void *, void *, void *, void *, void *);
-RcppExport SEXP est_haplotype_map(void *, void *, void *, void *, void *, void *, void *, void *, void *);
-RcppExport SEXP est_haplotype_map_highprec(void *, void *, void *, void *, void *, void *, void *, void *, void *);
-RcppExport SEXP est_hmm_map_single_parent(void *, void *, void *, void *, void *, void *, void *, void *, void *);
-RcppExport SEXP est_map_hmm(void *, void *, void *, void *, void *, void *, void *, void *);
-RcppExport SEXP est_map_hmm_highprec(void *, void *, void *, void *, void *, void *, void *, void *);
-RcppExport SEXP get_counts_single_parent_cpp(void *, void *, void *, void *, void *, void *);
-RcppExport SEXP loglike_hmm(void *, void *, void *, void *, void *, void *);
-RcppExport SEXP pairwise_rf_estimation_disc(void *, void *, void *, void *, void *, void *, void *);
-RcppExport SEXP pairwise_rf_estimation_disc_rcpp(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
-RcppExport SEXP pairwise_rf_estimation_prob(void *, void *, void *, void *, void *, void *, void *, void *);
-RcppExport SEXP poly_hmm_est_CPP(void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *, void *);
+RcppExport SEXP calc_genoprob_prior(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP calc_genprob_single_parent(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP est_haplotype_map(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP est_haplotype_map_highprec(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP est_hmm_map_single_parent(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP est_map_hmm(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP est_map_hmm_highprec(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP get_counts_single_parent_cpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP pairwise_rf_estimation_disc(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP pairwise_rf_estimation_disc_rcpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP pairwise_rf_estimation_prob(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+RcppExport SEXP poly_hmm_est_CPP(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_mappoly_calc_genoprob_cpp", (DL_FUNC) &_mappoly_calc_genoprob_cpp, 7},
+    {"_mappoly_calc_genprob_haplo_cpp", (DL_FUNC) &_mappoly_calc_genprob_haplo_cpp, 8},
+    {"_mappoly_calc_genprob_haplo_highprec_cpp", (DL_FUNC) &_mappoly_calc_genprob_haplo_highprec_cpp, 8},
+    {"_mappoly_loglike_hmm_cpp", (DL_FUNC) &_mappoly_loglike_hmm_cpp, 6},
     {"_mappoly_vcf_get_probabilities", (DL_FUNC) &_mappoly_vcf_get_probabilities, 2},
     {"_mappoly_vcf_transform_dosage", (DL_FUNC) &_mappoly_vcf_transform_dosage, 2},
     {"_mappoly_vcf_get_ploidy", (DL_FUNC) &_mappoly_vcf_get_ploidy, 2},
     {"_mappoly_vcf_get_depth", (DL_FUNC) &_mappoly_vcf_get_depth, 2},
-    {"calc_genoprob",                    (DL_FUNC) &calc_genoprob,                     7},
     {"calc_genoprob_prior",              (DL_FUNC) &calc_genoprob_prior,              12},
-    {"calc_genprob_haplo",               (DL_FUNC) &calc_genprob_haplo,                8},
-    {"calc_genprob_haplo_highprec",      (DL_FUNC) &calc_genprob_haplo_highprec,       8},
     {"calc_genprob_single_parent",       (DL_FUNC) &calc_genprob_single_parent,        8},
     {"est_haplotype_map",                (DL_FUNC) &est_haplotype_map,                 9},
     {"est_haplotype_map_highprec",       (DL_FUNC) &est_haplotype_map_highprec,        9},
@@ -92,7 +158,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"est_map_hmm",                      (DL_FUNC) &est_map_hmm,                       8},
     {"est_map_hmm_highprec",             (DL_FUNC) &est_map_hmm_highprec,              8},
     {"get_counts_single_parent_cpp",     (DL_FUNC) &get_counts_single_parent_cpp,      6},
-    {"loglike_hmm",                      (DL_FUNC) &loglike_hmm,                       6},
     {"pairwise_rf_estimation_disc",      (DL_FUNC) &pairwise_rf_estimation_disc,       7},
     {"pairwise_rf_estimation_disc_rcpp", (DL_FUNC) &pairwise_rf_estimation_disc_rcpp, 12},
     {"pairwise_rf_estimation_prob",      (DL_FUNC) &pairwise_rf_estimation_prob,       8},

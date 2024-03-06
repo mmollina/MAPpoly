@@ -258,27 +258,23 @@ calc_genoprob_haplo <- function(ploidy, n.mrk, n.ind, haplo, emit = NULL,
   }
   mrk.names <- names(haplo)
   if(highprec){
-    res.temp <- .Call("calc_genprob_haplo_highprec",
-                      ploidy,
-                      n.mrk,
-                      n.ind,
-                      haplo,
-                      emit,
-                      rf_vec,
-                      as.numeric(rep(0, choose(ploidy, ploidy/2)^2 * n.mrk * n.ind)),
-                      verbose,
-                      PACKAGE = "mappoly")
+    res.temp <- calc_genprob_haplo_highprec_cpp(ploidy,
+                                                n.mrk,
+                                                n.ind,
+                                                haplo,
+                                                emit,
+                                                rf_vec,
+                                                as.numeric(rep(0, choose(ploidy, ploidy/2)^2 * n.mrk * n.ind)),
+                                                verbose)
   } else{
-    res.temp <- .Call("calc_genprob_haplo",
-                      ploidy,
-                      n.mrk,
-                      n.ind,
-                      haplo,
-                      emit,
-                      rf_vec,
-                      as.numeric(rep(0, choose(ploidy, ploidy/2)^2 * n.mrk * n.ind)),
-                      verbose,
-                      PACKAGE = "mappoly")
+    res.temp <- calc_genprob_haplo_cpp(ploidy,
+                                       n.mrk,
+                                       n.ind,
+                                       haplo,
+                                       emit,
+                                       rf_vec,
+                                       as.numeric(rep(0, choose(ploidy, ploidy/2)^2 * n.mrk * n.ind)),
+                                       verbose)
   }
   if(verbose) cat("\n")
   dim(res.temp[[1]]) <- c(choose(ploidy,ploidy/2)^2,n.mrk,n.ind)
