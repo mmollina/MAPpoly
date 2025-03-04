@@ -71,7 +71,7 @@ jobs:
           
       - name: Upload check results
         if: failure()
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@v4  # Updated from @main to @v4
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
@@ -82,4 +82,3 @@ jobs:
           git config --local user.name "$GITHUB_ACTOR"
           git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
           Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
-          
