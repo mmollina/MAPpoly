@@ -46,9 +46,9 @@ jobs:
      #      xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' npm init -y
      #      export DISPLAY=:99.0
 
-      - uses: r-lib/actions/setup-pandoc@v4
+      - uses: r-lib/actions/setup-pandoc@v3
 
-      - uses: r-lib/actions/setup-r@v4
+      - uses: r-lib/actions/setup-r@v3
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
@@ -64,12 +64,12 @@ jobs:
       #    path: ${{ runner.os }}-r${{ matrix.config.r }}-cache
       #    key: r-cache-${{ runner.os }}-${{ matrix.config.r }}
 
-      - uses: r-lib/actions/setup-r-dependencies@v4
+      - uses: r-lib/actions/setup-r-dependencies@v3
         with:
           extra-packages: rcmdcheck pkgdown
           needs: website
 
-      - uses: r-lib/actions/check-r-package@v4
+      - uses: r-lib/actions/check-r-package@v3
         with:
           args: 'c("--no-manual", "--as-cran")'
           error-on: '"error"'
