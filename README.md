@@ -3,7 +3,7 @@
 ![Development](https://img.shields.io/badge/development-active-blue.svg)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![codecov](https://codecov.io/github/mmollina/MAPpoly/branch/master/graphs/badge.svg)](https://app.codecov.io/github/mmollina/MAPpoly)
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/mappoly)](https://cran.r-project.org/package=mappoly)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/mappoly)](https://cran.r-project.org/package=mappoly)
 [![R-universe PolyVerse Status Badge](https://polyploids.r-universe.dev/badges/mappoly)](https://polyploids.r-universe.dev)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/mappoly)](https://cran.r-project.org/package=mappoly)
 [![](https://img.shields.io/badge/DOI-10.1534%2Fg3.119.400378-BLUE)](https://doi.org/10.1534/g3.119.400378)
