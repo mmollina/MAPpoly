@@ -54,6 +54,11 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
+      - uses: actions/cache@v4  # Updated from @v2 to @v4
+        with:
+          path: ${{ runner.os }}-r${{ matrix.config.r }}-cache
+          key: r-cache-${{ runner.os }}-${{ matrix.config.r }}
+
       - uses: r-lib/actions/setup-r-dependencies@v1
         with:
           extra-packages: rcmdcheck pkgdown
