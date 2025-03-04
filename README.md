@@ -8,6 +8,7 @@
 [![](https://cranlogs.r-pkg.org/badges/grand-total/mappoly)](https://cran.r-project.org/package=mappoly)
 [![](https://img.shields.io/badge/DOI-10.1534%2Fg3.119.400378-BLUE)](https://doi.org/10.1534/g3.119.400378)
 [![](https://img.shields.io/badge/DOI-10.1534%2Fg3.119.400620-BLUE)](https://doi.org/10.1534/g3.119.400620)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.14962606.svg)](https://doi.org/10.5281/zenodo.14962606)
 
 <!-- ![](https://raw.githubusercontent.com/mmollina/MAPpoly/master/mappoly_hexsticker.png) -->
 
