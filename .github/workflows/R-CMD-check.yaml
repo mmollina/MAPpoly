@@ -17,7 +17,7 @@ jobs:
         config:
           - {os: macOS-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
-          - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-latest,  r: 'devel',  http-user-agent: 'release'}
           - {os: ubuntu-latest,  r: 'release'}
           - {os: ubuntu-latest,  r: 'oldrel-1'}
 
@@ -28,39 +28,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "14.17.3"
-          architecture: "x64"
-          
-      - name: Install XQuartz on macOS
-        if: runner.os == 'macOS'
-        run: brew install xquartz --cask
-
-      # If you need a headless browser test on Linux, uncomment and adapt:
-      # - name: Run headless test
-      #   if: runner.os == 'Linux'
-      #   run: |
-      #     npm install
-      #     xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' npm init -y
-      #     export DISPLAY=:99.0
-
-      - uses: r-lib/actions/setup-pandoc@v2
-        with:
-          pandoc-version: '3.1.11'
-
-      - run: echo "# Test" | pandoc -t html
-
       - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
-
-      - uses: actions/cache@v4
-        with:
-          path: ${{ runner.os }}-r${{ matrix.config.r }}-cache
-          key: r-cache-${{ runner.os }}-${{ matrix.config.r }}-new
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
@@ -70,23 +42,30 @@ jobs:
 
       - uses: r-lib/actions/check-r-package@v2
         with:
-          args: 'c("--no-manual", "--as-cran")'
-          error-on: 'error'
-          check-dir: 'check'
+          # Note: no extra quotes or “c(…)” here.
+          args: --no-manual --as-cran
+          error-on: error
+          # Use an explicit check folder so we can upload it as an artifact:
+          check_dir: check
 
       - name: Show testthat output
+        # Use `if: always()` so it will run even if the check fails
         if: always()
         run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
         shell: bash
 
       - name: Upload check results
-        if: failure()
+        # Use `if: always()` if you want to see results even for success
+        # or `if: failure()` if you only want them on error
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
+          # This must match the folder name above
           path: check
 
-      - name: Deploy package
+      # Optional: deploy pkgdown on non-Windows + push only
+      - name: Deploy pkgdown site
         if: ${{ (runner.os != 'Windows') && (github.event_name == 'push') }}
         run: |
           git config --local user.name "$GITHUB_ACTOR"
