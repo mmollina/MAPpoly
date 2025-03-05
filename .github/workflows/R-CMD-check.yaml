@@ -17,9 +17,8 @@ jobs:
         config:
           - {os: macOS-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
-          - {os: ubuntu-latest,  r: 'devel',  http-user-agent: 'release'}
           - {os: ubuntu-latest,  r: 'release'}
-          - {os: ubuntu-latest,  r: 'oldrel-1'}
+          - {os: ubuntu-latest,  r: 'devel'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -28,25 +27,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # If you need Node for certain JS tests or tasks, keep this. Otherwise you can remove it.
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "14.17.3"
-          architecture: "x64"
-
-      - name: Install XQuartz on macOS
-        if: runner.os == 'macOS'
-        run: brew install xquartz --cask
-
-      # (Optional) Example of using pandoc if your vignettes need it:
-      # - uses: r-lib/actions/setup-pandoc@v2
-      #   with:
-      #     pandoc-version: '3.1.11'
-
       - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
-          http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
       - uses: r-lib/actions/setup-r-dependencies@v2
@@ -57,25 +40,26 @@ jobs:
 
       - uses: r-lib/actions/check-r-package@v2
         with:
-          # Make sure these are valid arguments with no extra quotes.
+          # These must be spelled exactly as below:
           args: --no-manual --as-cran
           error-on: error
-          check-dir: check  # MUST match the directory we upload below
+          check-dir: check
 
       - name: Show testthat output
+        # Always run, even if check failed
         if: always()
         run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
         shell: bash
 
       - name: Upload check results
+        # Also always run
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
 
-      - name: Deploy package (pkgdown)
-        # Typically only on pushes, not PRs, and only on non-Windows
+      - name: Deploy pkgdown site (optional)
         if: ${{ (runner.os != 'Windows') && (github.event_name == 'push') }}
         run: |
           git config --local user.name "$GITHUB_ACTOR"
