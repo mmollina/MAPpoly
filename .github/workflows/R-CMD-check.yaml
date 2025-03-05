@@ -1,18 +1,15 @@
-# Workflow derived from https://github.com/r-lib/actions/tree/master/examples
-# Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+name: R-CMD-check
+
 on:
   push:
     branches: [main, master]
   pull_request:
     branches: [main, master]
 
-name: R-CMD-check
-    
 jobs:
   R-CMD-check:
     runs-on: ${{ matrix.config.os }}
-
-    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+    name: ${{ matrix.config.os }} (R ${{ matrix.config.r }})
 
     strategy:
       fail-fast: false
@@ -20,9 +17,9 @@ jobs:
         config:
           - {os: macOS-latest,   r: 'release'}
           - {os: windows-latest, r: 'release'}
-          - {os: ubuntu-latest,   r: 'devel', http-user-agent: 'release'}
-          - {os: ubuntu-latest,   r: 'release'}
-          - {os: ubuntu-latest,   r: 'oldrel-1'}
+          - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-latest,  r: 'release'}
+          - {os: ubuntu-latest,  r: 'oldrel-1'}
 
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
@@ -34,22 +31,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "14.17.3"
-          architecture: 'x64' 
+          architecture: "x64"
           
       - name: Install XQuartz on macOS
         if: runner.os == 'macOS'
         run: brew install xquartz --cask
-       
-     # - name: Run headless test
-     #   if: runner.os == 'Linux'
-     #   run: |
-     #      npm install
-     #      xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' npm init -y
-     #      export DISPLAY=:99.0
+
+      # If you need a headless browser test on Linux, uncomment and adapt:
+      # - name: Run headless test
+      #   if: runner.os == 'Linux'
+      #   run: |
+      #     npm install
+      #     xvfb-run --auto-servernum --server-args='-screen 0, 1600x900x24' npm init -y
+      #     export DISPLAY=:99.0
 
       - uses: r-lib/actions/setup-pandoc@v2
         with:
-          pandoc-version: '3.1.11' # The pandoc version to download (if necessary) and use.
+          pandoc-version: '3.1.11'
+
       - run: echo "# Test" | pandoc -t html
 
       - uses: r-lib/actions/setup-r@v2
@@ -57,42 +56,38 @@ jobs:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
-          
+
       - uses: actions/cache@v4
         with:
           path: ${{ runner.os }}-r${{ matrix.config.r }}-cache
-          key: r-cache-${{ runner.os }}-${{ matrix.config.r }}-new  # Add "-new" to force a fresh cache
-          
-      #- uses: actions/cache@v4  # Updated from @v2 to @v4
-      #  with:
-      #    path: ${{ runner.os }}-r${{ matrix.config.r }}-cache
-      #    key: r-cache-${{ runner.os }}-${{ matrix.config.r }}
+          key: r-cache-${{ runner.os }}-${{ matrix.config.r }}-new
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          build: true
+          install-deps: true
           extra-packages: rcmdcheck pkgdown
-          needs: website
 
       - uses: r-lib/actions/check-r-package@v2
         with:
           args: 'c("--no-manual", "--as-cran")'
-          error-on: '"error"'
-          check-dir: '"check"'
+          error-on: 'error'
+          check-dir: 'check'
 
       - name: Show testthat output
         if: always()
         run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
         shell: bash
-          
+
       - name: Upload check results
         if: failure()
-        uses: actions/upload-artifact@v4  # Updated from @main to @v4
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
-          
+
       - name: Deploy package
-        if: runner.os != 'Windows'
+        if: ${{ (runner.os != 'Windows') && (github.event_name == 'push') }}
         run: |
           git config --local user.name "$GITHUB_ACTOR"
           git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
