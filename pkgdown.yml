@@ -1,0 +1,10 @@
+url: https://<your-github-username>.github.io/<your-repository-name>/
+template:
+  bootstrap: 5
+navbar:
+  title: "MAPpoly: Construction of genetic maps in autopolyploid full-sib populations."
+  left:
+    - text: "Reference"
+      href: reference/index.html
+    - text: "Articles"
+      href: articles/index.html
