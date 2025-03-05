@@ -28,6 +28,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # If you need Node for certain JS tests or tasks, keep this. Otherwise you can remove it.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "14.17.3"
+          architecture: "x64"
+
+      - name: Install XQuartz on macOS
+        if: runner.os == 'macOS'
+        run: brew install xquartz --cask
+
+      # (Optional) Example of using pandoc if your vignettes need it:
+      # - uses: r-lib/actions/setup-pandoc@v2
+      #   with:
+      #     pandoc-version: '3.1.11'
+
       - uses: r-lib/actions/setup-r@v2
         with:
           r-version: ${{ matrix.config.r }}
@@ -42,30 +57,25 @@ jobs:
 
       - uses: r-lib/actions/check-r-package@v2
         with:
-          # Note: no extra quotes or “c(…)” here.
+          # Make sure these are valid arguments with no extra quotes.
           args: --no-manual --as-cran
           error-on: error
-          # Use an explicit check folder so we can upload it as an artifact:
-          check_dir: check
+          check-dir: check  # MUST match the directory we upload below
 
       - name: Show testthat output
-        # Use `if: always()` so it will run even if the check fails
         if: always()
         run: find check -name 'testthat.Rout*' -exec cat '{}' \; || true
         shell: bash
 
       - name: Upload check results
-        # Use `if: always()` if you want to see results even for success
-        # or `if: failure()` if you only want them on error
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
-          # This must match the folder name above
           path: check
 
-      # Optional: deploy pkgdown on non-Windows + push only
-      - name: Deploy pkgdown site
+      - name: Deploy package (pkgdown)
+        # Typically only on pushes, not PRs, and only on non-Windows
         if: ${{ (runner.os != 'Windows') && (github.event_name == 'push') }}
         run: |
           git config --local user.name "$GITHUB_ACTOR"
