@@ -77,12 +77,3 @@ jobs:
         with:
           name: ${{ runner.os }}-r${{ matrix.config.r }}-results
           path: check
-          
-      - name: Deploy package
-        if: runner.os == 'Linux'
-        run: |
-          git config --local user.name "$GITHUB_ACTOR"
-          git config --local user.email "$GITHUB_ACTOR@users.noreply.github.com"
-          Rscript -e 'pkgdown::build_site()'
-          Rscript -e 'pkgdown::deploy_to_branch(new_process = FALSE)'
-          
