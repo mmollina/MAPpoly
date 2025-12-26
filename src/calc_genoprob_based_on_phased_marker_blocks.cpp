@@ -45,7 +45,7 @@
 #include <math.h>
 #include <R.h>
 #include <Rmath.h>
-#include <R_ext/PrtUtil.h>
+#include <R_ext/Print.h>
 #include "combinatorial.h"
 #include "hmm_elements.h"
 using namespace std;

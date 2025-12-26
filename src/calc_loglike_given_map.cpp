@@ -42,7 +42,7 @@
 #include <math.h>
 #include <R.h>
 #include <Rmath.h>
-#include <R_ext/PrtUtil.h>
+#include <R_ext/Print.h>
 #include "combinatorial.h"
 #include "calc_loglike_given_map.h"
 #include "hmm_elements.h"

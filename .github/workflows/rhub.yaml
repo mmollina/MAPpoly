@@ -19,7 +19,7 @@ on:
         description: 'Unique ID. You can leave this empty now.'
         type: string
 
-# Helps pak/remotes when GitHub access is needed (private remotes, higher rate limits, etc.)
+# Helps remotes when GitHub access is needed (rate limits, private remotes, etc.)
 env:
   GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
@@ -56,8 +56,8 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
-      # System deps to avoid pak/curl compilation failures
-      - name: System deps for pak/curl
+      # System deps to avoid pak/curl compilation failures in minimal images
+      - name: System deps for curl/pkg-config
         shell: bash
         run: |
           if command -v apt-get >/dev/null 2>&1; then
@@ -71,7 +71,7 @@ jobs:
             echo "No supported system package manager found; skipping."
           fi
 
-      # Try the canonical deps step, but allow a fallback if pak chokes (e.g., NA bug)
+      # Try the canonical deps step, but allow a fallback if pak chokes
       - uses: r-hub/actions/setup-deps@v1
         id: setup_deps
         continue-on-error: true
@@ -79,12 +79,12 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
-      - name: Fallback deps install (only if setup-deps failed)
+      - name: Fallback deps install with remotes (only if setup-deps failed)
         if: ${{ steps.setup_deps.outcome == 'failure' }}
         shell: bash
         run: |
-          R -q -e 'install.packages("pak", repos="https://cloud.r-project.org")'
-          R -q -e 'pak::pkg_install("any::rcmdcheck"); pak::local_install_deps(root=".", dependencies=TRUE)'
+          R -q -e 'install.packages(c("remotes","rcmdcheck"), repos="https://cloud.r-project.org")'
+          R -q -e 'remotes::install_deps(dependencies = TRUE, upgrade = "never")'
 
       - uses: r-hub/actions/run-check@v1
         with:
@@ -104,11 +104,6 @@ jobs:
     steps:
       - uses: r-hub/actions/checkout@v1
 
-      # If tcltk gets pulled in (e.g., via plot3D -> misc3d), macOS runners may need XQuartz
-      - name: Install XQuartz (macOS)
-        if: runner.os == 'macOS' && contains(matrix.config.label, 'macos')
-        run: brew install --cask xquartz
-
       - uses: r-hub/actions/setup-r@v1
         with:
           job-config: ${{ matrix.config.job-config }}
@@ -119,8 +114,8 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
-      # System deps to avoid pak/curl compilation failures
-      - name: System deps for pak/curl
+      # System deps to avoid curl compilation failures on Linux runners
+      - name: System deps for curl/pkg-config (Linux)
         if: runner.os == 'Linux'
         shell: bash
         run: |
@@ -134,12 +129,12 @@ jobs:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
 
-      - name: Fallback deps install (only if setup-deps failed)
+      - name: Fallback deps install with remotes (only if setup-deps failed)
         if: ${{ steps.setup_deps.outcome == 'failure' }}
         shell: bash
         run: |
-          R -q -e 'install.packages("pak", repos="https://cloud.r-project.org")'
-          R -q -e 'pak::pkg_install("any::rcmdcheck"); pak::local_install_deps(root=".", dependencies=TRUE)'
+          R -q -e 'install.packages(c("remotes","rcmdcheck"), repos="https://cloud.r-project.org")'
+          R -q -e 'remotes::install_deps(dependencies = TRUE, upgrade = "never")'
 
       - uses: r-hub/actions/run-check@v1
         with:

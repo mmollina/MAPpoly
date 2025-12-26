@@ -27,7 +27,7 @@
 #include <math.h>
 #include <R.h>
 #include <Rmath.h>
-#include <R_ext/PrtUtil.h>
+#include <R_ext/Print.h>
 #include "combinatorial.h"
 
 RcppExport SEXP  est_map_hmm(SEXP ploidyR, SEXP genoR, SEXP phPR, SEXP phQR,

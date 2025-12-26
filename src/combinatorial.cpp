@@ -40,7 +40,7 @@
 #include "combinatorial.h"
 #include <math.h>
 #include <Rmath.h>
-#include <R_ext/PrtUtil.h>
+#include <R_ext/Print.h>
 #define THRESH 200.0
 
 /* FUNCTION: nChoosek

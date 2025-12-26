@@ -44,7 +44,7 @@
 #include <math.h>
 #include <R.h>
 #include <Rmath.h>
-#include <R_ext/PrtUtil.h>
+#include <R_ext/Print.h>
 #include "combinatorial.h"
 #include "est_map_hmm_given_dose.h"
 #include "hmm_elements.h"

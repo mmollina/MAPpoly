@@ -48,7 +48,7 @@
 #include <math.h>
 #include <Rmath.h>
 #include <Rcpp.h>
-#include <R_ext/PrtUtil.h>
+#include <R_ext/Print.h>
 #define THRESH 200.0
 
 using namespace std;

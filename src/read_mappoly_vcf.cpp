@@ -38,7 +38,7 @@
 #include <math.h>
 #include <R.h>
 #include <Rmath.h>
-#include <R_ext/PrtUtil.h>
+#include <R_ext/Print.h>
 #include <zlib.h>
 #include <sstream>
 #include <string>
