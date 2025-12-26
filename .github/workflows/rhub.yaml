@@ -54,17 +54,23 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
-      # System deps to avoid pak/curl compilation failures
-      - name: System deps for pak/curl
+      # System deps to avoid pak/curl compilation failures + toolchain for ggpubr chain (e.g., lme4)
+      - name: System deps for pak/curl + Fortran/BLAS/LAPACK
         shell: bash
         run: |
           if command -v apt-get >/dev/null 2>&1; then
             apt-get update
-            apt-get install -y --no-install-recommends libcurl4-openssl-dev pkg-config
+            apt-get install -y --no-install-recommends \
+              libcurl4-openssl-dev pkg-config \
+              gfortran libblas-dev liblapack-dev
           elif command -v dnf >/dev/null 2>&1; then
-            dnf install -y libcurl-devel pkgconf-pkg-config
+            dnf install -y \
+              libcurl-devel pkgconf-pkg-config \
+              gcc-gfortran blas-devel lapack-devel
           elif command -v yum >/dev/null 2>&1; then
-            yum install -y libcurl-devel pkgconf-pkg-config
+            yum install -y \
+              libcurl-devel pkgconf-pkg-config \
+              gcc-gfortran blas-devel lapack-devel
           else
             echo "No supported system package manager found; skipping."
           fi
@@ -77,17 +83,18 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
-      # NEW: run-check uses r-lib/actions/check-r-package, which needs rcmdcheck
+      # run-check path uses r-lib/actions/check-r-package, which needs rcmdcheck
       - name: Ensure rcmdcheck is installed
         shell: bash
         run: |
           R -q -e 'if (!requireNamespace("rcmdcheck", quietly=TRUE)) install.packages("rcmdcheck", repos="https://cloud.r-project.org")'
 
+      # HARD DEPS: install Depends/Imports/LinkingTo and FAIL FAST if any remain missing
       - name: Ensure hard deps from DESCRIPTION are installed (Depends/Imports/LinkingTo)
         shell: bash
         run: |
-          R -q -e 'install.packages("desc", repos="https://cloud.r-project.org")'
-          R -q -e 'd <- desc::desc_get_deps(file="DESCRIPTION"); pkgs <- unique(d$package[d$type %in% c("Depends","Imports","LinkingTo")]); pkgs <- pkgs[!is.na(pkgs) & nzchar(pkgs) & pkgs != "R"]; miss <- setdiff(pkgs, rownames(installed.packages())); if (length(miss)) install.packages(miss, repos="https://cloud.r-project.org")'
+          R -q -e 'install.packages(c("desc","parallel"), repos="https://cloud.r-project.org")'
+          R -q -e 'd <- desc::desc_get_deps(file="DESCRIPTION"); pkgs <- unique(d$package[d$type %in% c("Depends","Imports","LinkingTo")]); pkgs <- pkgs[!is.na(pkgs) & nzchar(pkgs) & pkgs != "R"]; miss <- setdiff(pkgs, rownames(installed.packages())); if (length(miss)) install.packages(miss, repos="https://cloud.r-project.org", Ncpus=max(1L, parallel::detectCores()-1L)); miss2 <- setdiff(pkgs, rownames(installed.packages())); if (length(miss2)) {cat("Still missing after install.packages():", paste(miss2, collapse=", "), "\n"); quit(status=1)}'
 
       - name: Ensure vignette builders are installed (knitr/rmarkdown)
         shell: bash
@@ -135,13 +142,15 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
-      # System deps to avoid pak/curl compilation failures
-      - name: System deps for pak/curl
+      # System deps to avoid pak/curl compilation failures + toolchain for ggpubr chain (Linux runners only)
+      - name: System deps for pak/curl + Fortran/BLAS/LAPACK (Linux)
         if: runner.os == 'Linux'
         shell: bash
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libcurl4-openssl-dev pkg-config
+          sudo apt-get install -y --no-install-recommends \
+            libcurl4-openssl-dev pkg-config \
+            gfortran libblas-dev liblapack-dev
 
       - uses: r-hub/actions/setup-deps@v1
         id: setup_deps
@@ -150,7 +159,6 @@ jobs:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
 
-      # NEW: required by run-check path that uses r-lib/actions/check-r-package
       - name: Ensure rcmdcheck is installed
         shell: bash
         run: |
@@ -159,8 +167,8 @@ jobs:
       - name: Ensure hard deps from DESCRIPTION are installed (Depends/Imports/LinkingTo)
         shell: bash
         run: |
-          R -q -e 'install.packages("desc", repos="https://cloud.r-project.org")'
-          R -q -e 'd <- desc::desc_get_deps(file="DESCRIPTION"); pkgs <- unique(d$package[d$type %in% c("Depends","Imports","LinkingTo")]); pkgs <- pkgs[!is.na(pkgs) & nzchar(pkgs) & pkgs != "R"]; miss <- setdiff(pkgs, rownames(installed.packages())); if (length(miss)) install.packages(miss, repos="https://cloud.r-project.org")'
+          R -q -e 'install.packages(c("desc","parallel"), repos="https://cloud.r-project.org")'
+          R -q -e 'd <- desc::desc_get_deps(file="DESCRIPTION"); pkgs <- unique(d$package[d$type %in% c("Depends","Imports","LinkingTo")]); pkgs <- pkgs[!is.na(pkgs) & nzchar(pkgs) & pkgs != "R"]; miss <- setdiff(pkgs, rownames(installed.packages())); if (length(miss)) install.packages(miss, repos="https://cloud.r-project.org", Ncpus=max(1L, parallel::detectCores()-1L)); miss2 <- setdiff(pkgs, rownames(installed.packages())); if (length(miss2)) {cat("Still missing after install.packages():", paste(miss2, collapse=", "), "\n"); quit(status=1)}'
 
       - name: Ensure vignette builders are installed (knitr/rmarkdown)
         shell: bash
