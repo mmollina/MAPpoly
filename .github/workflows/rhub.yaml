@@ -10,7 +10,6 @@ on:
       config:
         description: "A comma separated list of R-hub platforms to use."
         type: string
-        # More aggressive default matrix (you can still override when dispatching)
         default: "ubuntu-release,ubuntu-next,ubuntu-clang,ubuntu-gcc12,windows,macos,macos-arm64,m1-san,valgrind,clang-asan,clang-ubsan,rchk,lto"
       name:
         description: "Run name. You can leave this empty now."
@@ -19,7 +18,6 @@ on:
         description: "Unique ID. You can leave this empty now."
         type: string
 
-# Helps when GitHub access is needed (rate limits, etc.)
 env:
   GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
@@ -56,7 +54,6 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
-      # System deps to avoid pak/curl compilation failures
       - name: System deps for pak/curl
         shell: bash
         run: |
@@ -71,7 +68,6 @@ jobs:
             echo "No supported system package manager found; skipping."
           fi
 
-      # Try the canonical deps step, but allow a fallback if pak chokes (e.g., NA bug)
       - uses: r-hub/actions/setup-deps@v1
         id: setup_deps
         continue-on-error: true
@@ -79,22 +75,24 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
-      # Fallback: avoid pak::local_install_deps (this is where the NA bug often bites)
-      - name: Fallback deps install (only if setup-deps failed)
-        if: ${{ steps.setup_deps.outcome == 'failure' }}
+      - name: Ensure hard deps from DESCRIPTION are installed (Depends/Imports/LinkingTo)
         shell: bash
         run: |
-          R -q -e 'install.packages(c("remotes","rcmdcheck"), repos="https://cloud.r-project.org")'
-          R -q -e 'remotes::install_deps(dependencies = TRUE)'
-          R -q -e 'install.packages(c("knitr","rmarkdown"), repos="https://cloud.r-project.org")'
+          R -q -e 'install.packages("desc", repos="https://cloud.r-project.org")'
+          R -q -e 'd <- desc::desc_get_deps(file="DESCRIPTION"); pkgs <- unique(d$package[d$type %in% c("Depends","Imports","LinkingTo")]); pkgs <- pkgs[!is.na(pkgs) & nzchar(pkgs) & pkgs != "R"]; miss <- setdiff(pkgs, rownames(installed.packages())); if (length(miss)) install.packages(miss, repos="https://cloud.r-project.org")'
 
-      # Even when setup-deps "succeeds", it may skip Suggests on some configs.
-      # Your build requires knitr due to VignetteBuilder.
       - name: Ensure vignette builders are installed (knitr/rmarkdown)
         shell: bash
         run: |
           R -q -e 'if (!requireNamespace("knitr", quietly=TRUE)) install.packages("knitr", repos="https://cloud.r-project.org")'
           R -q -e 'if (!requireNamespace("rmarkdown", quietly=TRUE)) install.packages("rmarkdown", repos="https://cloud.r-project.org")'
+
+      - name: Fallback deps install with remotes (only if setup-deps failed)
+        if: ${{ steps.setup_deps.outcome == 'failure' }}
+        shell: bash
+        run: |
+          R -q -e 'install.packages("remotes", repos="https://cloud.r-project.org")'
+          R -q -e 'remotes::install_deps(dependencies=TRUE, upgrade="never")'
 
       - uses: r-hub/actions/run-check@v1
         with:
@@ -114,7 +112,6 @@ jobs:
     steps:
       - uses: r-hub/actions/checkout@v1
 
-      # If tcltk gets pulled in (e.g., via plot3D -> misc3d), macOS runners may need XQuartz
       - name: Install XQuartz (macOS)
         if: runner.os == 'macOS'
         run: brew install --cask xquartz
@@ -129,7 +126,6 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
-      # System deps to avoid pak/curl compilation failures
       - name: System deps for pak/curl
         if: runner.os == 'Linux'
         shell: bash
@@ -144,19 +140,24 @@ jobs:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
 
-      - name: Fallback deps install (only if setup-deps failed)
-        if: ${{ steps.setup_deps.outcome == 'failure' }}
+      - name: Ensure hard deps from DESCRIPTION are installed (Depends/Imports/LinkingTo)
         shell: bash
         run: |
-          R -q -e 'install.packages(c("remotes","rcmdcheck"), repos="https://cloud.r-project.org")'
-          R -q -e 'remotes::install_deps(dependencies = TRUE)'
-          R -q -e 'install.packages(c("knitr","rmarkdown"), repos="https://cloud.r-project.org")'
+          R -q -e 'install.packages("desc", repos="https://cloud.r-project.org")'
+          R -q -e 'd <- desc::desc_get_deps(file="DESCRIPTION"); pkgs <- unique(d$package[d$type %in% c("Depends","Imports","LinkingTo")]); pkgs <- pkgs[!is.na(pkgs) & nzchar(pkgs) & pkgs != "R"]; miss <- setdiff(pkgs, rownames(installed.packages())); if (length(miss)) install.packages(miss, repos="https://cloud.r-project.org")'
 
       - name: Ensure vignette builders are installed (knitr/rmarkdown)
         shell: bash
         run: |
           R -q -e 'if (!requireNamespace("knitr", quietly=TRUE)) install.packages("knitr", repos="https://cloud.r-project.org")'
           R -q -e 'if (!requireNamespace("rmarkdown", quietly=TRUE)) install.packages("rmarkdown", repos="https://cloud.r-project.org")'
+
+      - name: Fallback deps install with remotes (only if setup-deps failed)
+        if: ${{ steps.setup_deps.outcome == 'failure' }}
+        shell: bash
+        run: |
+          R -q -e 'install.packages("remotes", repos="https://cloud.r-project.org")'
+          R -q -e 'remotes::install_deps(dependencies=TRUE, upgrade="never")'
 
       - uses: r-hub/actions/run-check@v1
         with:
