@@ -5,29 +5,25 @@ Version: 0.4.1
 Authors@R: c(person(given = "Marcelo",
                     family = "Mollinari",
                     role = c("aut", "cre"),
-                    email = "mmollin@ncsu.edu",
+                    email = "marcelo.mollinari@proton.me",
                     comment = c(ORCID="0000-0002-7001-8498")),
             person(given = "Gabriel",
                     family = "Gesteira",
                     role = "aut",
-                    email = "gdesiqu@ncsu.edu",
                     comment = c(ORCID="0000-0002-4106-7346")),
             person(given = "Cristiane",
                     family = "Taniguti",
                     role = "aut",
-                    email = "chtaniguti@tamu.edu",
                     comment = c(ORCID="0000-0002-2021-6883")),
             person(given = "Jeekin",
                     family = "Lau",
                     role = "aut",
-                    email = "jzl0026@tamu.edu",
                     comment = c(ORCID="0000-0003-1114-6892")),
             person(given = "Oscar",
                     family = "Riera-Lizarazu",
                     role = "ctb",
-                    email = "o.riera-lizarazu@tamu.edu",
                     comment = c(ORCID="0000-0002-7477-4063")),
-            person(given = "Guilhereme",
+            person(given = "Guilherme",
                     family = "Pereira",
                     role = "ctb",
                     comment = c(ORCID="0000-0002-7106-8630")),
@@ -51,20 +47,18 @@ Authors@R: c(person(given = "Marcelo",
                     family = "Ihaka",
                      role = "cph",
                     comment = "C code for MLE optimization in src/pairwise_estimation.cpp"),
-            person(given = "R Foundation",
-                    role = "cph",
-                    comment = "C code for MLE optimization in src/pairwise_estimation.cpp"),
-            person(given = "R-core",
-                    role = "cph",
-                    comment = "C code for MLE optimization in src/pairwise_estimation.cpp"))
-Maintainer: Marcelo Mollinari <mmollin@ncsu.edu>
-Description: Construction of genetic maps in autopolyploid full-sib populations. 
+            person("R Core Team", role = "cph",
+                   comment = "Portions of C/C++ code adapted from R sources; see src/pairwise_estimation.cpp"),
+            person("R Foundation for Statistical Computing", role = "cph",
+                   comment = "Portions of C/C++ code adapted from R sources; see src/pairwise_estimation.cpp"))
+Maintainer: Marcelo Mollinari <marcelo.mollinari@proton.me>
+Description: Constructs genetic linkage maps in autopolyploid full-sib populations. 
              Uses pairwise recombination fraction estimation as the first 
              source of information to sequentially position allelic variants 
              in specific homologous chromosomes. For situations where pairwise 
              analysis has limited power, the algorithm relies on the multilocus 
              likelihood obtained through a hidden Markov model (HMM). 
-             For more detail, please see  Mollinari and Garcia (2019) 
+             Methods are described in Mollinari and Garcia (2019) 
              <doi:10.1534/g3.119.400378> and Mollinari et al. (2020) 
              <doi:10.1534/g3.119.400620>.
 License: GPL-3
@@ -94,11 +88,10 @@ Imports:
     zoo,
     plotly
 LinkingTo: Rcpp, RcppParallel
-RoxygenNote: 7.3.1
+RoxygenNote: 7.3.3
 SystemRequirements: GNU make
 Encoding: UTF-8
 Suggests:
-    testthat,
     updog,
     fitPoly,
     polymapR,

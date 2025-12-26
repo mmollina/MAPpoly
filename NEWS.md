@@ -1,3 +1,6 @@
+# MAPpoly version 0.4.2
+ - Package resubmitted to CRAN after archival due to maintainer contact update.
+ 
 # MAPpoly version 0.4.1
  - Addressed the `--use-LTO` installation failure issue
 
