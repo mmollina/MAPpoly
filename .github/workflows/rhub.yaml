@@ -59,7 +59,8 @@ jobs:
       # - ggpubr dependency chain (Fortran + BLAS/LAPACK)
       # - nloptr (CMake)
       # - openssl R package (OpenSSL headers)
-      - name: System deps for pak/curl + toolchain + cmake + openssl headers
+      # - R Markdown vignettes (Pandoc)
+      - name: System deps for pak/curl + toolchain + cmake + openssl headers + pandoc
         shell: bash
         run: |
           if command -v apt-get >/dev/null 2>&1; then
@@ -67,17 +68,20 @@ jobs:
             apt-get install -y --no-install-recommends \
               libcurl4-openssl-dev pkg-config \
               gfortran libblas-dev liblapack-dev \
-              cmake libssl-dev
+              cmake libssl-dev \
+              pandoc
           elif command -v dnf >/dev/null 2>&1; then
             dnf install -y \
               libcurl-devel pkgconf-pkg-config \
               gcc-gfortran blas-devel lapack-devel \
-              cmake openssl-devel
+              cmake openssl-devel \
+              pandoc
           elif command -v yum >/dev/null 2>&1; then
             yum install -y \
               libcurl-devel pkgconf-pkg-config \
               gcc-gfortran blas-devel lapack-devel \
-              cmake openssl-devel
+              cmake openssl-devel \
+              pandoc
           else
             echo "No supported system package manager found; skipping."
           fi
@@ -131,6 +135,7 @@ jobs:
     steps:
       - uses: r-hub/actions/checkout@v1
 
+      # If tcltk gets pulled in (e.g., via plot3D -> misc3d), macOS runners may need XQuartz
       - name: Install XQuartz (macOS)
         if: runner.os == 'macOS'
         run: brew install --cask xquartz
@@ -139,6 +144,10 @@ jobs:
         with:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
+
+      # NEW: ensure pandoc exists on runners (Windows/macOS/Linux runners)
+      - name: Install Pandoc
+        uses: r-lib/actions/setup-pandoc@v2
 
       - uses: r-hub/actions/platform-info@v1
         with:
