@@ -54,6 +54,7 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
+      # System deps to avoid pak/curl compilation failures
       - name: System deps for pak/curl
         shell: bash
         run: |
@@ -68,12 +69,19 @@ jobs:
             echo "No supported system package manager found; skipping."
           fi
 
+      # Try the canonical deps step, but allow a fallback if pak chokes
       - uses: r-hub/actions/setup-deps@v1
         id: setup_deps
         continue-on-error: true
         with:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
+
+      # NEW: run-check uses r-lib/actions/check-r-package, which needs rcmdcheck
+      - name: Ensure rcmdcheck is installed
+        shell: bash
+        run: |
+          R -q -e 'if (!requireNamespace("rcmdcheck", quietly=TRUE)) install.packages("rcmdcheck", repos="https://cloud.r-project.org")'
 
       - name: Ensure hard deps from DESCRIPTION are installed (Depends/Imports/LinkingTo)
         shell: bash
@@ -91,7 +99,7 @@ jobs:
         if: ${{ steps.setup_deps.outcome == 'failure' }}
         shell: bash
         run: |
-          R -q -e 'install.packages("remotes", repos="https://cloud.r-project.org")'
+          R -q -e 'install.packages(c("remotes","rcmdcheck"), repos="https://cloud.r-project.org")'
           R -q -e 'remotes::install_deps(dependencies=TRUE, upgrade="never")'
 
       - uses: r-hub/actions/run-check@v1
@@ -112,6 +120,7 @@ jobs:
     steps:
       - uses: r-hub/actions/checkout@v1
 
+      # If tcltk gets pulled in (e.g., via plot3D -> misc3d), macOS runners may need XQuartz
       - name: Install XQuartz (macOS)
         if: runner.os == 'macOS'
         run: brew install --cask xquartz
@@ -126,6 +135,7 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
+      # System deps to avoid pak/curl compilation failures
       - name: System deps for pak/curl
         if: runner.os == 'Linux'
         shell: bash
@@ -139,6 +149,12 @@ jobs:
         with:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
+
+      # NEW: required by run-check path that uses r-lib/actions/check-r-package
+      - name: Ensure rcmdcheck is installed
+        shell: bash
+        run: |
+          R -q -e 'if (!requireNamespace("rcmdcheck", quietly=TRUE)) install.packages("rcmdcheck", repos="https://cloud.r-project.org")'
 
       - name: Ensure hard deps from DESCRIPTION are installed (Depends/Imports/LinkingTo)
         shell: bash
@@ -156,7 +172,7 @@ jobs:
         if: ${{ steps.setup_deps.outcome == 'failure' }}
         shell: bash
         run: |
-          R -q -e 'install.packages("remotes", repos="https://cloud.r-project.org")'
+          R -q -e 'install.packages(c("remotes","rcmdcheck"), repos="https://cloud.r-project.org")'
           R -q -e 'remotes::install_deps(dependencies=TRUE, upgrade="never")'
 
       - uses: r-hub/actions/run-check@v1
