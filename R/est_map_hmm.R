@@ -106,28 +106,6 @@
 #'               fraction between the adjacent markers in the map}
 #' \item{seq.ph}{linkage phase configuration for all markers in both parents}
 #' \item{loglike}{the hmm-based multipoint likelihood}
-#'
-#' @examples
-#'     mrk.subset <- make_seq_mappoly(tetra.solcap, 1:5)
-#'     red.mrk <- elim_redundant(mrk.subset)
-#'     unique.mrks <- make_seq_mappoly(red.mrk)
-#'     subset.pairs <- est_pairwise_rf(input.seq = unique.mrks,
-#'                                   ncpus = 1,
-#'                                   verbose = TRUE)
-#'
-#'     ## Estimating subset map with a low tolerance for the E.M. procedure
-#'     ## for CRAN testing purposes
-#'     subset.map <- est_rf_hmm(input.seq = unique.mrks,
-#'                              thres = 2,
-#'                              twopt = subset.pairs,
-#'                              verbose = TRUE,
-#'                              tol = 0.1,
-#'                              est.given.0.rf = FALSE)
-#'     subset.map
-#'     ## linkage phase configuration with highest likelihood
-#'     plot(subset.map, mrk.names = TRUE, config = "best")
-#'     ## the second one
-#'     plot(subset.map, mrk.names = TRUE, config = 2)
 #' 
 #' @author Marcelo Mollinari, \email{mmollin@ncsu.edu}
 #'

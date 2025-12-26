@@ -145,29 +145,6 @@ This function first enumerates a set of linkage phase configurations
  Also, it can be quite sensible to small changes in \code{'thresh'}. 
  For a large number of markers, please see \code{\link[mappoly]{est_rf_hmm_sequential}}.
 }
-\examples{
-    mrk.subset <- make_seq_mappoly(hexafake, 1:10)
-    red.mrk <- elim_redundant(mrk.subset)
-    unique.mrks <- make_seq_mappoly(red.mrk)
-    subset.pairs <- est_pairwise_rf(input.seq = unique.mrks,
-                                  ncpus = 1,
-                                  verbose = TRUE)
-
-    ## Estimating subset map with a low tolerance for the E.M. procedure
-    ## for CRAN testing purposes
-    subset.map <- est_rf_hmm(input.seq = unique.mrks,
-                             thres = 2,
-                             twopt = subset.pairs,
-                             verbose = TRUE,
-                             tol = 0.1,
-                             est.given.0.rf = FALSE)
-    subset.map
-    ## linkage phase configuration with highest likelihood
-    plot(subset.map, mrk.names = TRUE, config = "best")
-    ## the second one
-    plot(subset.map, mrk.names = TRUE, config = 2)
-
-}
 \references{
 Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
     analysis and haplotype phasing in experimental autopolyploid

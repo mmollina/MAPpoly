@@ -1,7 +1,7 @@
 Package: mappoly
 Type: Package
 Title: Genetic Linkage Maps in Autopolyploids
-Version: 0.4.1
+Version: 0.4.2
 Authors@R: c(person(given = "Marcelo",
                     family = "Mollinari",
                     role = c("aut", "cre"),
@@ -74,7 +74,6 @@ Imports:
     ggpubr, 
     ggsci,
     rstudioapi,
-    plot3D,
     dplyr,
     crayon,
     cli,
@@ -93,6 +92,7 @@ SystemRequirements: GNU make
 Encoding: UTF-8
 Suggests:
     updog,
+    plot3D,
     fitPoly,
     polymapR,
     AGHmatrix,

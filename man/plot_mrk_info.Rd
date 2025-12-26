@@ -12,20 +12,10 @@ plot_mrk_info(input.data, mrk)
 \item{mrk}{marker name or position in the dataset}
 }
 \description{
-Plots summary statistics for a given marker
+Plots summary statistics for a given marker.
 }
 \examples{
- plot_mrk_info(tetra.solcap.geno.dist, 2680)
- plot_mrk_info(tetra.solcap.geno.dist, "solcap_snp_c2_23828")
-    
-}
-\references{
-Mollinari, M., and Garcia, A.  A. F. (2019) Linkage
-    analysis and haplotype phasing in experimental autopolyploid
-    populations with high ploidy level using hidden Markov
-    models, _G3: Genes, Genomes, Genetics_. 
-    \doi{10.1534/g3.119.400378}
-}
-\author{
-Marcelo Mollinari, \email{mmollin@ncsu.edu}
+plot_mrk_info(tetra.solcap.geno.dist, 2680)
+plot_mrk_info(tetra.solcap.geno.dist, "solcap_snp_c2_23828")
+
 }

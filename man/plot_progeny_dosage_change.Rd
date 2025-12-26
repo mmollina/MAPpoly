@@ -2,7 +2,7 @@
 % Please edit documentation in R/plot_progeny_dosage_change.R
 \name{plot_progeny_dosage_change}
 \alias{plot_progeny_dosage_change}
-\title{Display genotypes imputed or changed by the HMM chain given a global genotypic error}
+\title{Plot progeny dosage changes after HMM-based correction with a global error model}
 \usage{
 plot_progeny_dosage_change(
   map_list,
@@ -12,30 +12,63 @@ plot_progeny_dosage_change(
 )
 }
 \arguments{
-\item{map_list}{a list of multiple \code{mappoly.map.list}}
+\item{map_list}{A non-empty list of objects of class \code{mappoly.map}.}
 
-\item{error}{error rate used in global error in the `calc_genoprob_error()`}
+\item{error}{Numeric scalar. Global genotyping error rate passed to
+\code{\link[mappoly]{calc_genoprob_error}}.}
 
-\item{verbose}{if TRUE (default), current progress is shown; if FALSE, 
-no output is produced}
+\item{verbose}{Logical. If \code{TRUE} (default), progress is printed by
+underlying routines; if \code{FALSE}, suppresses progress messages where
+supported.}
 
-\item{output_corrected}{logical. if FALSE only the ggplot of the changed 
-dosage is printed, if TRUE then a new corrected dosage matrix is output.}
+\item{output_corrected}{Logical. If \code{FALSE} (default), the function only
+prints the plot and returns \code{invisible(NULL)}. If \code{TRUE}, returns
+a matrix containing marker metadata columns followed by the corrected
+dosages (individuals in columns).}
 }
 \value{
-A ggplot of the changed and imputed genotypic dosages
+If \code{output_corrected = FALSE}, returns \code{invisible(NULL)} and
+  prints a \code{ggplot}. If \code{output_corrected = TRUE}, returns a matrix
+  with columns \code{P1}, \code{P2}, \code{sequence}, \code{sequence_position},
+  followed by one column per individual containing corrected dosages.
 }
 \description{
-Outputs a graphical representation ggplot with the percent of data changed.
+Computes genotype probabilities under a global genotyping error rate, derives
+homolog probabilities, compares the most likely HMM-implied dosages to the
+original dosage matrix, and plots which entries were unchanged, imputed
+(originally missing), or changed.
+}
+\details{
+Missing dosages in \code{dat$geno.dose} are assumed to be encoded as
+\code{ploidy + 1}. The function prints a heatmap-style \code{ggplot2} tile
+plot and, optionally, returns a corrected dosage matrix with marker metadata.
+
+
+The \code{mappoly.data} object is retrieved by name from
+\code{map_list[[1]]$info$data.name}. The function:
+\enumerate{
+  \item Runs \code{calc_genoprob_error()} for each map in \code{map_list}.
+  \item Computes homolog probabilities with \code{calc_homologprob()}.
+  \item For each marker and individual, selects the \code{ploidy} most likely
+        homologs and converts them to a dosage implied by the phased map.
+  \item Compares implied dosages to \code{dat$geno.dose} and summarizes the
+        fraction of entries that were imputed (original missing) vs changed.
+  \item Produces a tile plot showing unchanged/imputed/changed cells.
+}
 }
 \examples{
-      x <- get_submap(solcap.err.map[[1]], 1:30, reestimate.rf = FALSE)   
-      plot_progeny_dosage_change(list(x), error=0.05, output_corrected=FALSE) 
-      corrected_matrix <- plot_progeny_dosage_change(list(x), error=0.05, 
-      output_corrected=FALSE) #output corrected
+\dontrun{
+x <- get_submap(solcap.err.map[[1]], 1:5, reestimate.rf = FALSE)
+
+corrected_matrix <- plot_progeny_dosage_change(list(x), error = 0.05,
+                                               output_corrected = TRUE)
+}
 
 }
+\seealso{
+\code{\link[mappoly]{calc_genoprob_error}},
+  \code{\link[mappoly]{calc_homologprob}}
+}
 \author{
-Jeekin Lau, \email{jzl0026@tamu.edu}, with optimization by Cristiane 
-Taniguti, \email{chtaniguti@tamu.edu}
+Jeekin Lau, with optimization by Cristiane Taniguti
 }
