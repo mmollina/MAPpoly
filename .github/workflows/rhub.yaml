@@ -31,10 +31,10 @@ jobs:
       platforms: ${{ steps.rhub-setup.outputs.platforms }}
 
     steps:
-    - uses: r-hub/actions/setup@v1
-      with:
-        config: ${{ github.event.inputs.config }}
-      id: rhub-setup
+      - uses: r-hub/actions/setup@v1
+        with:
+          config: ${{ github.event.inputs.config }}
+        id: rhub-setup
 
   linux-containers:
     needs: setup
@@ -56,6 +56,21 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
+      # System deps to avoid pak/curl compilation failures
+      - name: System deps for pak/curl
+        shell: bash
+        run: |
+          if command -v apt-get >/dev/null 2>&1; then
+            apt-get update
+            apt-get install -y --no-install-recommends libcurl4-openssl-dev pkg-config
+          elif command -v dnf >/dev/null 2>&1; then
+            dnf install -y libcurl-devel pkgconf-pkg-config
+          elif command -v yum >/dev/null 2>&1; then
+            yum install -y libcurl-devel pkgconf-pkg-config
+          else
+            echo "No supported system package manager found; skipping."
+          fi
+
       # Try the canonical deps step, but allow a fallback if pak chokes (e.g., NA bug)
       - uses: r-hub/actions/setup-deps@v1
         id: setup_deps
@@ -69,7 +84,7 @@ jobs:
         shell: bash
         run: |
           R -q -e 'install.packages("pak", repos="https://cloud.r-project.org")'
-          R -q -e 'deps <- pak::local_package_deps(".", dependencies = TRUE); deps <- deps[!is.na(deps)]; pak::pkg_install(c("rcmdcheck", deps))'
+          R -q -e 'pak::pkg_install("any::rcmdcheck"); pak::local_install_deps(root=".", dependencies=TRUE)'
 
       - uses: r-hub/actions/run-check@v1
         with:
@@ -99,6 +114,14 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
+      # System deps to avoid pak/curl compilation failures
+      - name: System deps for pak/curl
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends libcurl4-openssl-dev pkg-config
+
       - uses: r-hub/actions/setup-deps@v1
         id: setup_deps
         continue-on-error: true
@@ -111,7 +134,7 @@ jobs:
         shell: bash
         run: |
           R -q -e 'install.packages("pak", repos="https://cloud.r-project.org")'
-          R -q -e 'deps <- pak::local_package_deps(".", dependencies = TRUE); deps <- deps[!is.na(deps)]; pak::pkg_install(c("rcmdcheck", deps))'
+          R -q -e 'pak::pkg_install("any::rcmdcheck"); pak::local_install_deps(root=".", dependencies=TRUE)'
 
       - uses: r-hub/actions/run-check@v1
         with:
