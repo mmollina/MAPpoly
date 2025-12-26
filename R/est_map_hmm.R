@@ -108,7 +108,7 @@
 #' \item{loglike}{the hmm-based multipoint likelihood}
 #'
 #' @examples
-#'     mrk.subset <- make_seq_mappoly(hexafake, 1:10)
+#'     mrk.subset <- make_seq_mappoly(tetra.solcap, 1:5)
 #'     red.mrk <- elim_redundant(mrk.subset)
 #'     unique.mrks <- make_seq_mappoly(red.mrk)
 #'     subset.pairs <- est_pairwise_rf(input.seq = unique.mrks,

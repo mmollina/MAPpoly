@@ -13,13 +13,12 @@
 #' @return A ggplot of the changed and imputed genotypic dosages
 #'
 #' @examples
-#'       x <- get_submap(solcap.err.map[[1]], 1:30, reestimate.rf = FALSE)   
+#'       x <- get_submap(solcap.err.map[[1]], 1:10, reestimate.rf = FALSE)   
 #'       plot_progeny_dosage_change(list(x), error=0.05, output_corrected=FALSE) 
 #'       corrected_matrix <- plot_progeny_dosage_change(list(x), error=0.05, 
 #'       output_corrected=FALSE) #output corrected
 #'
-#' @author Jeekin Lau, \email{jzl0026@tamu.edu}, with optimization by Cristiane 
-#' Taniguti, \email{chtaniguti@tamu.edu}
+#' @author Jeekin Lau, with optimization by Cristiane Taniguti
 #'
 #' @import ggplot2 
 #' @import reshape2

@@ -1,10 +1,5 @@
 # R-hub's generic GitHub Actions workflow file. It's canonical location is at
 # https://github.com/r-hub/actions/blob/v1/workflows/rhub.yaml
-# You can update this file to a newer version using the rhub2 package:
-#
-# rhub::rhub_setup()
-#
-# It is unlikely that you need to modify this file manually.
 
 name: R-hub
 run-name: "${{ github.event.inputs.id }}: ${{ github.event.inputs.name || format('Manually run by {0}', github.triggering_actor) }}"
@@ -15,7 +10,8 @@ on:
       config:
         description: 'A comma separated list of R-hub platforms to use.'
         type: string
-        default: 'linux,windows,macos'
+        # More aggressive default matrix (you can still override when dispatching)
+        default: 'ubuntu-release,ubuntu-next,ubuntu-clang,ubuntu-gcc12,windows,macos,macos-arm64,m1-san,valgrind,clang-asan,clang-ubsan,rchk,lto'
       name:
         description: 'Run name. You can leave this empty now.'
         type: string
@@ -23,8 +19,11 @@ on:
         description: 'Unique ID. You can leave this empty now.'
         type: string
 
-jobs:
+# Helps pak/remotes when GitHub access is needed (private remotes, higher rate limits, etc.)
+env:
+  GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
+jobs:
   setup:
     runs-on: ubuntu-latest
     outputs:
@@ -32,7 +31,6 @@ jobs:
       platforms: ${{ steps.rhub-setup.outputs.platforms }}
 
     steps:
-    # NO NEED TO CHECKOUT HERE
     - uses: r-hub/actions/setup@v1
       with:
         config: ${{ github.event.inputs.config }}
@@ -52,14 +50,27 @@ jobs:
 
     steps:
       - uses: r-hub/actions/checkout@v1
+
       - uses: r-hub/actions/platform-info@v1
         with:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
+
+      # Try the canonical deps step, but allow a fallback if pak chokes (e.g., NA bug)
       - uses: r-hub/actions/setup-deps@v1
+        id: setup_deps
+        continue-on-error: true
         with:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
+
+      - name: Fallback deps install (only if setup-deps failed)
+        if: ${{ steps.setup_deps.outcome == 'failure' }}
+        shell: bash
+        run: |
+          R -q -e 'install.packages("pak", repos="https://cloud.r-project.org")'
+          R -q -e 'deps <- pak::local_package_deps(".", dependencies = TRUE); deps <- deps[!is.na(deps)]; pak::pkg_install(c("rcmdcheck", deps))'
+
       - uses: r-hub/actions/run-check@v1
         with:
           token: ${{ secrets.RHUB_TOKEN }}
@@ -77,18 +88,31 @@ jobs:
 
     steps:
       - uses: r-hub/actions/checkout@v1
+
       - uses: r-hub/actions/setup-r@v1
         with:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
+
       - uses: r-hub/actions/platform-info@v1
         with:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
+
       - uses: r-hub/actions/setup-deps@v1
+        id: setup_deps
+        continue-on-error: true
         with:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
+
+      - name: Fallback deps install (only if setup-deps failed)
+        if: ${{ steps.setup_deps.outcome == 'failure' }}
+        shell: bash
+        run: |
+          R -q -e 'install.packages("pak", repos="https://cloud.r-project.org")'
+          R -q -e 'deps <- pak::local_package_deps(".", dependencies = TRUE); deps <- deps[!is.na(deps)]; pak::pkg_install(c("rcmdcheck", deps))'
+
       - uses: r-hub/actions/run-check@v1
         with:
           job-config: ${{ matrix.config.job-config }}
