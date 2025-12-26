@@ -104,6 +104,11 @@ jobs:
     steps:
       - uses: r-hub/actions/checkout@v1
 
+      # If tcltk gets pulled in (e.g., via plot3D -> misc3d), macOS runners may need XQuartz
+      - name: Install XQuartz (macOS)
+        if: runner.os == 'macOS' && contains(matrix.config.label, 'macos')
+        run: brew install --cask xquartz
+
       - uses: r-hub/actions/setup-r@v1
         with:
           job-config: ${{ matrix.config.job-config }}
