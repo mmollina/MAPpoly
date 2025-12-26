@@ -54,28 +54,34 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
-      # System deps to avoid pak/curl compilation failures + toolchain for ggpubr chain (e.g., lme4)
-      - name: System deps for pak/curl + Fortran/BLAS/LAPACK
+      # System deps needed for:
+      # - pak/curl
+      # - ggpubr dependency chain (Fortran + BLAS/LAPACK)
+      # - nloptr (CMake)
+      # - openssl R package (OpenSSL headers)
+      - name: System deps for pak/curl + toolchain + cmake + openssl headers
         shell: bash
         run: |
           if command -v apt-get >/dev/null 2>&1; then
             apt-get update
             apt-get install -y --no-install-recommends \
               libcurl4-openssl-dev pkg-config \
-              gfortran libblas-dev liblapack-dev
+              gfortran libblas-dev liblapack-dev \
+              cmake libssl-dev
           elif command -v dnf >/dev/null 2>&1; then
             dnf install -y \
               libcurl-devel pkgconf-pkg-config \
-              gcc-gfortran blas-devel lapack-devel
+              gcc-gfortran blas-devel lapack-devel \
+              cmake openssl-devel
           elif command -v yum >/dev/null 2>&1; then
             yum install -y \
               libcurl-devel pkgconf-pkg-config \
-              gcc-gfortran blas-devel lapack-devel
+              gcc-gfortran blas-devel lapack-devel \
+              cmake openssl-devel
           else
             echo "No supported system package manager found; skipping."
           fi
 
-      # Try the canonical deps step, but allow a fallback if pak chokes
       - uses: r-hub/actions/setup-deps@v1
         id: setup_deps
         continue-on-error: true
@@ -83,13 +89,11 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
-      # run-check path uses r-lib/actions/check-r-package, which needs rcmdcheck
       - name: Ensure rcmdcheck is installed
         shell: bash
         run: |
           R -q -e 'if (!requireNamespace("rcmdcheck", quietly=TRUE)) install.packages("rcmdcheck", repos="https://cloud.r-project.org")'
 
-      # HARD DEPS: install Depends/Imports/LinkingTo and FAIL FAST if any remain missing
       - name: Ensure hard deps from DESCRIPTION are installed (Depends/Imports/LinkingTo)
         shell: bash
         run: |
@@ -127,7 +131,6 @@ jobs:
     steps:
       - uses: r-hub/actions/checkout@v1
 
-      # If tcltk gets pulled in (e.g., via plot3D -> misc3d), macOS runners may need XQuartz
       - name: Install XQuartz (macOS)
         if: runner.os == 'macOS'
         run: brew install --cask xquartz
@@ -142,15 +145,15 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
-      # System deps to avoid pak/curl compilation failures + toolchain for ggpubr chain (Linux runners only)
-      - name: System deps for pak/curl + Fortran/BLAS/LAPACK (Linux)
+      - name: System deps for pak/curl + toolchain + cmake + openssl headers (Linux)
         if: runner.os == 'Linux'
         shell: bash
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
             libcurl4-openssl-dev pkg-config \
-            gfortran libblas-dev liblapack-dev
+            gfortran libblas-dev liblapack-dev \
+            cmake libssl-dev
 
       - uses: r-hub/actions/setup-deps@v1
         id: setup_deps
