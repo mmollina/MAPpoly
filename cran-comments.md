@@ -1,35 +1,25 @@
-## Re-submission of MAPpoly package
+## Resubmission of MAPpoly package
 
-This is a re-submission of the MAPpoly package, previously archived because CRAN 
-was unable to reach the maintainer due to an outdated email address. 
-The maintainer email has been updated and the package is actively maintained 
-again.
+This is a resubmission of the MAPpoly package, previously archived because CRAN
+was unable to reach the maintainer due to an outdated email address.
+The maintainer email has been updated and the package is now reachable.
 
-This submission contains maintenance updates only; no major functionality changes 
+This submission contains maintenance updates only; no major functionality changes
 were introduced.
 
-Thank you for reviewing our re-submission!
+Thank you for reviewing this resubmission.
 
 ## Test environments
+* Ubuntu Linux 22.04 (via GitHub Actions): R-release, R-devel, R-oldrel-1
+* Windows Server 2022 (via GitHub Actions): R-release, R-devel
+* macOS (via GitHub Actions): R-release, R-devel (ARM64)
+* rhub (via GitHub Actions): Fedora Linux, Windows, macOS (clang-asan, valgrind)
+* Local Windows 11: R-release
 
-* Win-builder (release and devel)
+## R CMD check results on Local Windows 11
 
-## R CMD check results
-
-0 errors | 0 warnings | 2 notes
-
- - on local macOS: R 4.3.3
-   * installed size is 8.2Mb
-     sub-directories of 1Mb or more:
-       * R:      2.8Mb
-       * data:   3.0Mb
-   * GNU make is a SystemRequirements.
-
- - Checked with `--use-LTO` flag: Installation successful without any errors or warnings.
+0 errors | 0 warnings | 0 notes
 
 ## Downstream dependencies
 
-We checked 3 reverse dependencies (3 from CRAN + 0 from Bioconductor), comparing R CMD check results across CRAN and dev versions of this package.
-
- * We saw 0 new problems
- * We failed to check 0 packages
+We ran `R CMD check` on two downstream dependencies and found no issues.
