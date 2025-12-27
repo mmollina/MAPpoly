@@ -4,6 +4,7 @@
 name: R-hub
 run-name: "${{ github.event.inputs.id }}: ${{ github.event.inputs.name || format('Manually run by {0}', github.triggering_actor) }}"
 
+# Keep this quoted: R tools that parse YAML can treat bare `on` oddly (YAML 1.1).
 "on":
   workflow_dispatch:
     inputs:
@@ -18,6 +19,7 @@ run-name: "${{ github.event.inputs.id }}: ${{ github.event.inputs.name || format
         description: "Unique ID. You can leave this empty now."
         type: string
 
+# Helps pak/remotes when GitHub access is needed (private remotes, higher rate limits, etc.)
 env:
   GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
@@ -27,7 +29,6 @@ jobs:
     outputs:
       containers: ${{ steps.rhub-setup.outputs.containers }}
       platforms: ${{ steps.rhub-setup.outputs.platforms }}
-
     steps:
       - uses: r-hub/actions/setup@v1
         with:
@@ -54,22 +55,23 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config['job-config'] }}
 
+      # Pandoc for Rmd vignettes (more robust than relying on OS packages)
+      - name: Install Pandoc
+        uses: r-lib/actions/setup-pandoc@v2
+
+      # Reduce noisy sanitizer failures (RcppParallel/TBB can trigger ODR complaints)
       - name: Relax ASAN ODR checks (asan/ubsan only)
-        if: ${{ 
-          contains(matrix.config.label, 'asan') ||
-          contains(matrix.config.label, 'ASAN') ||
-          contains(matrix.config.label, 'ubsan') ||
-          contains(matrix.config.label, 'UBSAN') ||
-          contains(matrix.config['job-config'], 'asan') ||
-          contains(matrix.config['job-config'], 'ASAN') ||
-          contains(matrix.config['job-config'], 'ubsan') ||
-          contains(matrix.config['job-config'], 'UBSAN')
-        }}
+        if: ${{ contains(matrix.config.label, 'asan') || contains(matrix.config.label, 'ASAN') || contains(matrix.config.label, 'ubsan') || contains(matrix.config.label, 'UBSAN') || contains(matrix.config['job-config'], 'asan') || contains(matrix.config['job-config'], 'ASAN') || contains(matrix.config['job-config'], 'ubsan') || contains(matrix.config['job-config'], 'UBSAN') }}
         shell: bash
         run: |
           echo "ASAN_OPTIONS=detect_odr_violation=0" >> $GITHUB_ENV
 
-      - name: System deps for pak/curl + toolchain + cmake + openssl headers + pandoc
+      # System deps needed for:
+      # - pak/curl (libcurl + pkg-config)
+      # - ggpubr chain (Fortran + BLAS/LAPACK)
+      # - nloptr (CMake)
+      # - openssl R package (OpenSSL headers)
+      - name: System deps for curl/toolchain/cmake/openssl
         shell: bash
         run: |
           if command -v apt-get >/dev/null 2>&1; then
@@ -77,24 +79,22 @@ jobs:
             apt-get install -y --no-install-recommends \
               libcurl4-openssl-dev pkg-config \
               gfortran libblas-dev liblapack-dev \
-              cmake libssl-dev \
-              pandoc
+              cmake libssl-dev
           elif command -v dnf >/dev/null 2>&1; then
             dnf install -y \
               libcurl-devel pkgconf-pkg-config \
               gcc-gfortran blas-devel lapack-devel \
-              cmake openssl-devel \
-              pandoc
+              cmake openssl-devel
           elif command -v yum >/dev/null 2>&1; then
             yum install -y \
               libcurl-devel pkgconf-pkg-config \
               gcc-gfortran blas-devel lapack-devel \
-              cmake openssl-devel \
-              pandoc
+              cmake openssl-devel
           else
             echo "No supported system package manager found; skipping."
           fi
 
+      # Try the canonical deps step, but allow a fallback if pak chokes
       - uses: r-hub/actions/setup-deps@v1
         id: setup_deps
         continue-on-error: true
@@ -113,10 +113,11 @@ jobs:
           R -q -e 'if (!requireNamespace("knitr", quietly=TRUE)) install.packages("knitr", repos="https://cloud.r-project.org")'
           R -q -e 'if (!requireNamespace("rmarkdown", quietly=TRUE)) install.packages("rmarkdown", repos="https://cloud.r-project.org")'
 
+      # Make sure hard deps (Depends/Imports/LinkingTo) are present even if pak fails
       - name: Ensure hard deps from DESCRIPTION are installed (Depends/Imports/LinkingTo)
         shell: bash
         run: |
-          R -q -e 'if (!requireNamespace("desc", quietly=TRUE)) install.packages("desc", repos="https://cloud.r-project.org")'
+          R -q -e 'install.packages("desc", repos="https://cloud.r-project.org")'
           R -q -e 'd <- desc::desc_get_deps(file="DESCRIPTION"); pkgs <- unique(d$package[d$type %in% c("Depends","Imports","LinkingTo")]); pkgs <- pkgs[!is.na(pkgs) & nzchar(pkgs) & pkgs != "R"]; miss <- setdiff(pkgs, rownames(installed.packages())); if (length(miss)) install.packages(miss, repos="https://cloud.r-project.org", Ncpus=max(1L, parallel::detectCores()-1L)); miss2 <- setdiff(pkgs, rownames(installed.packages())); if (length(miss2)) {cat("Still missing after install.packages():", paste(miss2, collapse=", "), "\n"); quit(status=1)}'
 
       - name: Fallback deps install with remotes (only if setup-deps failed)
@@ -126,12 +127,9 @@ jobs:
           R -q -e 'install.packages(c("remotes","rcmdcheck"), repos="https://cloud.r-project.org")'
           R -q -e 'remotes::install_deps(dependencies=TRUE, upgrade="never")'
 
+      # Keep valgrind running but do not fail the whole workflow only for valgrind jobs
       - uses: r-hub/actions/run-check@v1
-        continue-on-error: ${{ 
-          contains(matrix.config.label, 'valgrind') ||
-          contains(matrix.config.label, 'Valgrind') ||
-          contains(matrix.config.label, 'VALGRIND')
-        }}
+        continue-on-error: ${{ contains(matrix.config.label, 'valgrind') || contains(matrix.config.label, 'Valgrind') || contains(matrix.config.label, 'VALGRIND') }}
         with:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config['job-config'] }}
@@ -160,6 +158,7 @@ jobs:
     steps:
       - uses: r-hub/actions/checkout@v1
 
+      # If tcltk gets pulled in (e.g., via plot3D -> misc3d), macOS runners may need XQuartz
       - name: Install XQuartz (macOS)
         if: runner.os == 'macOS'
         run: brew install --cask xquartz
@@ -178,21 +177,12 @@ jobs:
           job-config: ${{ matrix.config['job-config'] }}
 
       - name: Relax ASAN ODR checks (asan/ubsan only)
-        if: ${{ 
-          contains(matrix.config.label, 'asan') ||
-          contains(matrix.config.label, 'ASAN') ||
-          contains(matrix.config.label, 'ubsan') ||
-          contains(matrix.config.label, 'UBSAN') ||
-          contains(matrix.config['job-config'], 'asan') ||
-          contains(matrix.config['job-config'], 'ASAN') ||
-          contains(matrix.config['job-config'], 'ubsan') ||
-          contains(matrix.config['job-config'], 'UBSAN')
-        }}
+        if: ${{ contains(matrix.config.label, 'asan') || contains(matrix.config.label, 'ASAN') || contains(matrix.config.label, 'ubsan') || contains(matrix.config.label, 'UBSAN') || contains(matrix.config['job-config'], 'asan') || contains(matrix.config['job-config'], 'ASAN') || contains(matrix.config['job-config'], 'ubsan') || contains(matrix.config['job-config'], 'UBSAN') }}
         shell: bash
         run: |
           echo "ASAN_OPTIONS=detect_odr_violation=0" >> $GITHUB_ENV
 
-      - name: System deps for pak/curl + toolchain + cmake + openssl headers (Linux)
+      - name: System deps for curl/toolchain/cmake/openssl (Linux)
         if: runner.os == 'Linux'
         shell: bash
         run: |
@@ -223,7 +213,7 @@ jobs:
       - name: Ensure hard deps from DESCRIPTION are installed (Depends/Imports/LinkingTo)
         shell: bash
         run: |
-          R -q -e 'if (!requireNamespace("desc", quietly=TRUE)) install.packages("desc", repos="https://cloud.r-project.org")'
+          R -q -e 'install.packages("desc", repos="https://cloud.r-project.org")'
           R -q -e 'd <- desc::desc_get_deps(file="DESCRIPTION"); pkgs <- unique(d$package[d$type %in% c("Depends","Imports","LinkingTo")]); pkgs <- pkgs[!is.na(pkgs) & nzchar(pkgs) & pkgs != "R"]; miss <- setdiff(pkgs, rownames(installed.packages())); if (length(miss)) install.packages(miss, repos="https://cloud.r-project.org", Ncpus=max(1L, parallel::detectCores()-1L)); miss2 <- setdiff(pkgs, rownames(installed.packages())); if (length(miss2)) {cat("Still missing after install.packages():", paste(miss2, collapse=", "), "\n"); quit(status=1)}'
 
       - name: Fallback deps install with remotes (only if setup-deps failed)
