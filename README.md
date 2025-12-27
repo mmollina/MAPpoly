@@ -1,5 +1,4 @@
 [![R-CMD-check](https://github.com/mmollina/MAPpoly/workflows/R-CMD-check/badge.svg)](https://github.com/mmollina/mappoly/actions)
-[![AppVeyor Build Status](https://ci.appveyor.com/api/projects/status/github/mmollina/mappoly?branch=master&svg=true)](https://ci.appveyor.com/project/mmollina/mappoly)
 ![Development](https://img.shields.io/badge/development-active-blue.svg)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![codecov](https://codecov.io/github/mmollina/MAPpoly/branch/master/graphs/badge.svg)](https://app.codecov.io/github/mmollina/MAPpoly)
