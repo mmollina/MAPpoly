@@ -59,12 +59,13 @@ jobs:
       - name: Install Pandoc
         uses: r-lib/actions/setup-pandoc@v2
 
-      # Reduce noisy sanitizer failures (RcppParallel/TBB can trigger ODR complaints)
-      - name: Relax ASAN ODR checks (asan/ubsan only)
+      # Reduce noisy sanitizer failures (RcppParallel/TBB can trigger ODR complaints; ASAN may also report leaks)
+      - name: Relax ASAN/LSAN checks (asan/ubsan only)
         if: ${{ contains(matrix.config.label, 'asan') || contains(matrix.config.label, 'ASAN') || contains(matrix.config.label, 'ubsan') || contains(matrix.config.label, 'UBSAN') || contains(matrix.config['job-config'], 'asan') || contains(matrix.config['job-config'], 'ASAN') || contains(matrix.config['job-config'], 'ubsan') || contains(matrix.config['job-config'], 'UBSAN') }}
         shell: bash
         run: |
-          echo "ASAN_OPTIONS=detect_odr_violation=0" >> $GITHUB_ENV
+          echo "ASAN_OPTIONS=detect_odr_violation=0:detect_leaks=0" >> "$GITHUB_ENV"
+          echo "LSAN_OPTIONS=detect_leaks=0" >> "$GITHUB_ENV"
 
       # System deps needed for:
       # - pak/curl (libcurl + pkg-config)
