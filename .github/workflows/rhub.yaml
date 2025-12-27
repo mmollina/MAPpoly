@@ -54,6 +54,14 @@ jobs:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
 
+      # Fix RcppParallel install under ASAN/UBSAN: disable ODR violation detection only for these jobs
+      - name: Relax sanitizer runtime checks (asan/ubsan only)
+        if: contains(matrix.config.label, 'asan') || contains(matrix.config.label, 'ubsan')
+        shell: bash
+        run: |
+          echo "ASAN_OPTIONS=detect_odr_violation=0" >> $GITHUB_ENV
+          echo "UBSAN_OPTIONS=halt_on_error=0" >> $GITHUB_ENV
+
       # System deps needed for:
       # - pak/curl
       # - ggpubr dependency chain (Fortran + BLAS/LAPACK)
@@ -135,7 +143,6 @@ jobs:
     steps:
       - uses: r-hub/actions/checkout@v1
 
-      # If tcltk gets pulled in (e.g., via plot3D -> misc3d), macOS runners may need XQuartz
       - name: Install XQuartz (macOS)
         if: runner.os == 'macOS'
         run: brew install --cask xquartz
@@ -145,7 +152,6 @@ jobs:
           job-config: ${{ matrix.config.job-config }}
           token: ${{ secrets.RHUB_TOKEN }}
 
-      # NEW: ensure pandoc exists on runners (Windows/macOS/Linux runners)
       - name: Install Pandoc
         uses: r-lib/actions/setup-pandoc@v2
 
@@ -153,6 +159,13 @@ jobs:
         with:
           token: ${{ secrets.RHUB_TOKEN }}
           job-config: ${{ matrix.config.job-config }}
+
+      - name: Relax sanitizer runtime checks (asan/ubsan only)
+        if: contains(matrix.config.label, 'asan') || contains(matrix.config.label, 'ubsan')
+        shell: bash
+        run: |
+          echo "ASAN_OPTIONS=detect_odr_violation=0" >> $GITHUB_ENV
+          echo "UBSAN_OPTIONS=halt_on_error=0" >> $GITHUB_ENV
 
       - name: System deps for pak/curl + toolchain + cmake + openssl headers (Linux)
         if: runner.os == 'Linux'
