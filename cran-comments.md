@@ -13,11 +13,14 @@ Thank you for reviewing this resubmission.
 * Ubuntu Linux 22.04 (via GitHub Actions): R-release, R-devel, R-oldrel-1
 * Windows Server 2022 (via GitHub Actions): R-release, R-devel
 * macOS (via GitHub Actions): R-release, R-devel (ARM64)
-* rhub (via GitHub Actions): Fedora Linux, Windows, macOS (clang-asan, valgrind)
+* R-hub (via GitHub Actions): Fedora Linux, Windows, macOS (clang-asan, valgrind)
 * Local Windows 11: R-release
 
-## R CMD check results on Local Windows 11
+## R CMD check results
 
+There were no ERRORs or WARNINGs in any of the environments listed above.
+
+Local Windows 11 (R-release):
 0 errors | 0 warnings | 0 notes
 
 ## Downstream dependencies
